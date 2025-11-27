@@ -1,0 +1,2 @@
+/home/jacob/echovoice/more
+/home/jacob/echovoice/autism_code

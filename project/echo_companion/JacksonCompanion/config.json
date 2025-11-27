@@ -1,0 +1,40 @@
+{
+    "audio": {
+        "sample_rate": 16000,
+        "frame_size": 512,
+        "hop_size": 256
+    },
+    "vad": {
+        "rms_threshold": 0.01,
+        "zcr_threshold": 0.15,
+        "min_voiced_frames": 5
+    },
+    "asr": {
+        "fft_size": 512,
+        "window_size": 512,
+        "hop_size": 256,
+        "mel_filters": 80,
+        "embedding_dim": 256,
+        "rnn_hidden_dim": 256,
+        "vocab_size": 32
+    },
+    "crystal": {
+        "state_dim": 64,
+        "history_len": 100,
+        "learning_rate": 0.01
+    },
+    "policy": {
+        "meltdown_threshold_low": 0.4,
+        "meltdown_threshold_high": 0.8
+    },
+    "tts": {
+        "phoneme_vocab_size": 64,
+        "embedding_dim": 256,
+        "encoder_layers": 3,
+        "decoder_layers": 3,
+        "gl_iterations": 30
+    },
+    "haptics": {
+        "gain": 1.2
+    }
+}

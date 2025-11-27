@@ -1,0 +1,12 @@
+numpy
+scipy
+matplotlib
+networkx
+PyQt5
+requests
+beautifulsoup4
+quart
+quart-cors
+faiss-cpu
+scikit-learn
+torch

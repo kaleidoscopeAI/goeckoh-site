@@ -1,0 +1,13 @@
+# Minimal dependencies for packaging the companion backend + caregiver GUI
+numpy
+sounddevice
+soundfile
+librosa
+networkx
+pyttsx3
+scipy
+whisper
+plyer
+requests
+PyQt6
+tts

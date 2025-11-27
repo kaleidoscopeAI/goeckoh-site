@@ -1,0 +1,69 @@
+plugins {
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+}
+
+android {
+    namespace = "com.exocortex.neuroacoustic"
+    compileSdk = 34
+
+    defaultConfig {
+        applicationId = "com.exocortex.neuroacoustic"
+        minSdk = 26
+        targetSdk = 34
+        versionCode = 1
+        versionName = "1.0"
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+        debug {
+            minifyEnabled = false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+    packaging {
+        resources {
+            excludes += ["META-INF/LICENSE*", "META-INF/NOTICE*"]
+        }
+    }
+}
+
+dependencies {
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.localbroadcastmanager:localbroadcastmanager:1.1.0")
+
+    // Prefer local jars/aars in libs/ to allow offline builds once downloaded
+    implementation(fileTree(dir: "libs", include: ["*.jar", "*.aar"]))
+
+    // Vosk STT (remote; drop AAR in libs if offline)
+    implementation("com.alphacephei:vosk-android:0.3.47")
+
+    // The following are commented out to avoid remote fetch; use libs/ instead.
+    // implementation("com.k2fsa:sherpa-onnx-android:1.10.16")
+    // implementation("be.tarsos:dsp:2.5")
+    // implementation("com.github.pemistahl:lingua:1.1.0")
+    // implementation("com.github.gkonovalov.android-vad:webrtc:2.0.10")
+
+    // LLM via MediaPipe
+    implementation("com.google.mediapipe:tasks-genai:0.10.27")
+
+    // Math
+    implementation("org.apache.commons:commons-math3:3.6.1")
+}

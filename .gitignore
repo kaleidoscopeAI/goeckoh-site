@@ -1,0 +1,91 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pkl
+*.pyz
+*.spec
+.eggs/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.cache/
+.env
+.env.*
+.venv/
+venv/
+**/.venv/
+**/venv/
+
+# Node / JS
+node_modules/
+**/node_modules/
+dist/
+build/
+**/dist/
+**/build/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Data / binaries / archives
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+*.hprof
+*.bin
+*.exe
+*.dll
+*.so
+*.dylib
+*.key
+*.jar
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.pkg
+
+# Large generated artifacts & local assets
+pkg.zip
+speechinterventionsystem
+speechinterventionsystem.pkg
+documentsforsystem/
+workinprogress/
+workinprogress/potential/
+workinprogress/.venv/
+
+# Third-party or nested repos
+**/.git
+project/android\ echo/TarsosDSP/
+project/echo_companion/third_party/
+project/echo_companion/MegaTTS3/
+
+# Project-specific build outputs
+project/echo_companion/companion_core/dist/
+project/echo_companion/companion_core/build/
+project/echo_companion/companion_core/.venv/
+project/echo_companion/companion_core/.env
+project/echo_companion/companion_core/.mypy_cache/
+project/echo_companion/companion_core/.pytest_cache/
+
+# Android artifacts
+.gradle/
+local.properties
+project/android\ echo/java_pid*.hprof
+
+# Misc build outputs
+*.toc

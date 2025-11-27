@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "child_id": "jackson",
+  "profile_name": "Jackson Home Profile",
+  "environment_enabled": true,
+  "echo": {
+    "corrections_enabled": true,
+    "max_corrections_per_minute": 12,
+    "min_gap_between_corrections_sec": 2.0,
+    "allow_calming_scripts": true,
+    "allow_social_stories": true,
+    "night_mode_quiet_hours": {
+      "enabled": true,
+      "start_local": "20:00",
+      "end_local": "07:00",
+      "max_volume": 0.4
+    }
+  },
+  "hid": {
+    "enabled": true,
+    "mode": "suggest",
+    "allowed_actions": [
+      "keyboard_type",
+      "keyboard_combo",
+      "mouse_move",
+      "mouse_click"
+    ],
+    "rate_limit_per_minute": 10
+  },
+  "smart_devices": {
+    "enabled": true,
+    "mode": "suggest",
+    "lights": {
+      "enabled": true,
+      "rooms": {
+        "bedroom": {
+          "min_level": 0.2,
+          "max_level": 0.7,
+          "allow_color_temp_change": true
+        },
+        "living_room": {
+          "min_level": 0.3,
+          "max_level": 1.0,
+          "allow_color_temp_change": false
+        }
+      }
+    },
+    "media": {
+      "enabled": true,
+      "allow_pause_play": true,
+      "allow_mute": true,
+      "allow_content_change": false
+    },
+    "other": {
+      "white_noise": {
+        "enabled": true,
+        "min_level": 0.2,
+        "max_level": 0.8
+      }
+    }
+  },
+  "modes": {
+    "baseline": {
+      "label": "Everyday",
+      "description": "Normal operation."
+    },
+    "meltdown_support": {
+      "label": "Meltdown Mode",
+      "description": "More aggressive calming; fewer prompts.",
+      "echo_volume_multiplier": 0.8,
+      "increase_calm_scripts": true,
+      "suppress_new_demands": true
+    },
+    "school_mode": {
+      "label": "School Mode",
+      "description": "Minimal HID; no smart devices.",
+      "hid_enabled_override": false,
+      "smart_devices_enabled_override": false
+    }
+  },
+  "active_mode": "baseline",
+  "logging": {
+    "log_environment_actions": true,
+    "log_details": "summary",
+    "retain_days": 30
+  }
+}

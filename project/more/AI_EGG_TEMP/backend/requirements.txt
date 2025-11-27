@@ -1,0 +1,12 @@
+numpy
+torch
+networkx
+scikit-learn
+requests
+beautifulsoup4
+quart
+uvicorn
+faiss-cpu
+matplotlib
+seaborn
+plotly

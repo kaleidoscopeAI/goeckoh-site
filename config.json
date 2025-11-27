@@ -1,0 +1,45 @@
+{
+  "sample_rate": 16000,
+  "frame_size": 512,
+  "hop_size": 256,
+  "history_len": 32,
+  "routine": {
+    "contexts": 3,
+    "features": 4,
+    "alpha": 0.1
+  },
+  "seg": {
+    "theta_rms": 0.02,
+    "theta_zcr": 0.15,
+    "min_voiced_run": 5
+  },
+  "text": {
+    "n_fft": 1024,
+    "win_length": 800,
+    "hop_length": 200,
+    "n_mels": 40,
+    "epsilon": 1e-06
+  },
+  "asr": {
+    "hidden_size": 64,
+    "blank_id": 0,
+    "vocab": " _abcdefghijklmnopqrstuvwxyz'",
+    "weight_path": "asr_weights.npz"
+  },
+  "tts": {
+    "embedding_dim": 64,
+    "decoder_dim": 64,
+    "griffin_lim_iters": 16,
+    "max_duration": 5,
+    "weight_path": "tts_weights.npz"
+  },
+  "crystal": {
+    "D": 24,
+    "F": 14,
+    "eta": 0.05,
+    "tau_low": 0.4,
+    "tau_high": 0.8,
+    "gamma": 1.2
+  },
+  "history_window": 8
+}

@@ -1,0 +1,16 @@
+numpy
+sounddevice
+soundfile
+webrtcvad
+torch
+torchaudio
+faster-whisper
+librosa
+numba
+matplotlib
+scipy
+tqdm
+protobuf
+jinja2
+pyyaml
+rich
