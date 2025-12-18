@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Terms — GOECKOH (Go Echo)</title>
+  <meta name="description" content="Terms of use for Goeckoh (Go Echo)." />
+  <link rel="icon" href="/assets/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css" />
+  <script defer src="/script.js"></script>
+</head>
+<body>
+  <header class="header">
+    <div class="container header__inner">
+      <a class="brand" href="/" aria-label="Goeckoh home">
+        <img src="/assets/logo.png" class="brand__logo" alt="Goeckoh logo">
+        <div class="brand__text">
+          <div class="brand__name">GOECKOH</div>
+          <div class="brand__sub">pronounced “Go Echo”</div>
+        </div>
+      </a>
+      <nav class="nav">
+        <a href="/index.html#how">How it works</a>
+        <a href="/index.html#pricing">Pricing</a>
+        <a href="/privacy.html">Privacy</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/support.html">Support</a>
+      </nav>
+      <div class="header__cta">
+        <a class="btn btn--ghost" href="/index.html#pricing">Buy</a>
+      </div>
+      <button class="burger" aria-label="Open menu" aria-expanded="false" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div id="mobileMenu" class="mobileMenu" aria-hidden="true">
+      <div class="container mobileMenu__inner">
+        <a href="/index.html#how" onclick="closeMenu()">How it works</a>
+        <a href="/index.html#pricing" onclick="closeMenu()">Pricing</a>
+        <a href="/privacy.html" onclick="closeMenu()">Privacy</a>
+        <a href="/terms.html" onclick="closeMenu()">Terms</a>
+        <a href="/support.html" onclick="closeMenu()">Support</a>
+        <a class="btn btn--primary mobileMenu__btn" href="/index.html#pricing" onclick="closeMenu()">Buy & Download</a>
+      </div>
+    </div>
+  </header>
+  <main class="section">
+    <div class="container">
+      <h2>Terms of Use</h2>
+      <p class="sectionLead">
+        Launch‑ready terms to set expectations clearly. Replace bracketed fields as needed.
+      </p>
+      <div class="card" style="margin-top:16px">
+        <h3>1) Product scope</h3>
+        <p>
+          Goeckoh (“Go Echo”) is a speech support tool. It is not a medical device, does not provide medical advice,
+          and is not a substitute for professional care.
+        </p>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h3>2) Safety</h3>
+        <p>
+          You are responsible for supervising use in your home. If the user is in crisis or needs immediate help,
+          contact local emergency services.
+        </p>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h3>3) Purchases and billing</h3>
+        <p>
+          Payments are processed by Stripe. Subscription terms, renewals, and refunds (if offered) should be described on
+          the Stripe checkout page and/or in your support policy.
+        </p>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h3>4) Intellectual property</h3>
+        <p>
+          The software, branding, and materials on goeckoh.com are owned by [Your Legal Entity Name] unless otherwise stated.
+        </p>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h3>5) Limitation of liability</h3>
+        <p>
+          To the maximum extent permitted by law, Goeckoh is provided “as is” without warranties of any kind.
+          We are not liable for indirect, incidental, or consequential damages arising from use.
+        </p>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h3>6) Contact</h3>
+        <p>
+          Support: <strong>support@goeckoh.com</strong> (replace with your real support email).
+        </p>
+      </div>
+    </div>
+  </main>
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__left">
+        <div class="footerBrand">GOECKOH</div>
+        <div class="footerSub">pronounced “Go Echo”</div>
+        <div class="footerTiny">© <span id="year"></span> Goeckoh. All rights reserved.</div>
+      </div>
+      <div class="footer__right">
+        <a href="/privacy.html">Privacy</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/support.html">Support</a>
+      </div>
+    </div>
+  </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('year').textContent = new Date().getFullYear();
+    });
+  </script>
+</body>
+</html>
