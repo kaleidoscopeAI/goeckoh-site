@@ -4,25 +4,28 @@
  */
 
 :root{
-  /* Updated palette for a more professional and mature look */
-  --bg:#0a192f;
-  --bg2:#0d1f2d;
-  --text:#E0E6ED;
-  --muted:#97A6B7;
-  --line:rgba(255,255,255,.10);
-  --glass:rgba(255,255,255,.06);
-  --cyan:#35d3ff;
-  --lime:#a7f046;
-  --shadow: 0 20px 80px rgba(0,0,0,.45);
-  --radius: 18px;
+  /* Refined palette inspired by autism‑friendly websites.  
+     We switch to a dark navy base with muted teal and green accents.  
+     These colours maintain a tech feel without the harsh neon saturation of the previous design.  */
+  --bg:#0e274d;        /* primary background: dark navy */
+  --bg2:#152e57;       /* secondary background: slightly lighter navy */
+  --text:#E4EBF5;      /* base text colour: soft off‑white */
+  --muted:#8CA2C7;     /* muted text colour: pale blue‑grey */
+  --line:rgba(255,255,255,.08); /* subtle lines and borders */
+  --glass:rgba(255,255,255,.04); /* frosted glass overlay */
+  --cyan:#2BB7CC;      /* muted cyan accent for buttons and highlights */
+  --lime:#7BC67D;      /* soft green accent for secondary highlights */
+  --shadow:0 20px 60px rgba(0,0,0,.35); /* slightly softer shadow */
+  --radius:18px;
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;background:radial-gradient(circle at 20% 20%, rgba(53,211,255,.12), transparent 45%),
-                                 radial-gradient(circle at 80% 30%, rgba(167,240,70,.10), transparent 55%),
-                                 linear-gradient(180deg, var(--bg), #050b11);
+                                 radial-gradient(circle at 20% 20%, rgba(43,183,204,.10), transparent 45%),
+                                 radial-gradient(circle at 80% 30%, rgba(123,198,125,.08), transparent 55%),
+                                 linear-gradient(180deg, var(--bg), var(--bg2));
           color:var(--text);
           /* Use Inter for body text with Montserrat fallback */
-          font-family: 'Inter', 'Montserrat', system-ui, Segoe UI, Roboto, Arial, sans-serif;}
+          font-family:'Inter','Montserrat',system-ui,Segoe UI,Roboto,Arial,sans-serif;}
 a{color:inherit;text-decoration:none}
 .container{max-width:1100px;margin:0 auto;padding:0 18px}
 h1,h2,h3{font-family:'Montserrat', 'Inter', system-ui; letter-spacing:.2px}
