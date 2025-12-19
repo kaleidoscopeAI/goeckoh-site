@@ -11,20 +11,22 @@
   <meta property="og:description" content="Corrected speech, replayed in the user’s own voice—offline‑first and privacy‑forward." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://goeckoh.com/" />
-  <meta property="og:image" content="/assets/og-image.png" />
+  <meta property="og:image" content="assets/og-image.png" />
 
-  <link rel="icon" href="/assets/logo.png" />
+  <link rel="icon" href="assets/logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css" />
-  <script defer src="/script.js"></script>
+  <!-- Import Montserrat for headings and Inter for body text -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Use relative paths for styles and scripts so they resolve under /goeckoh-site on GitHub Pages -->
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="script.js"></script>
 </head>
 <body>
   <header class="header">
     <div class="container header__inner">
-      <a class="brand" href="/" aria-label="Goeckoh home">
-        <img src="/assets/logo.png" class="brand__logo" alt="Goeckoh logo">
+      <a class="brand" href="index.html" aria-label="Goeckoh home">
+        <img src="assets/logo.png" class="brand__logo" alt="Goeckoh logo">
         <div class="brand__text">
           <div class="brand__name">GOECKOH</div>
           <div class="brand__sub">pronounced “Go Echo”</div>
@@ -33,9 +35,9 @@
       <nav class="nav">
         <a href="#how">How it works</a>
         <a href="#pricing">Pricing</a>
-        <a href="/privacy.html">Privacy</a>
-        <a href="/terms.html">Terms</a>
-        <a href="/support.html">Support</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="support.html">Support</a>
       </nav>
       <div class="header__cta">
         <a class="btn btn--ghost" href="#how">See how it works</a>
@@ -49,9 +51,9 @@
       <div class="container mobileMenu__inner">
         <a href="#how" onclick="closeMenu()">How it works</a>
         <a href="#pricing" onclick="closeMenu()">Pricing</a>
-        <a href="/privacy.html" onclick="closeMenu()">Privacy</a>
-        <a href="/terms.html" onclick="closeMenu()">Terms</a>
-        <a href="/support.html" onclick="closeMenu()">Support</a>
+        <a href="privacy.html" onclick="closeMenu()">Privacy</a>
+        <a href="terms.html" onclick="closeMenu()">Terms</a>
+        <a href="support.html" onclick="closeMenu()">Support</a>
         <a class="btn btn--primary mobileMenu__btn" href="#pricing" onclick="closeMenu()">Buy & Download</a>
       </div>
     </div>
@@ -91,19 +93,8 @@
         </div>
       </section>
       <aside class="hero__visual" aria-label="Product visualization">
-        <div class="glass">
-          <div class="halo"></div>
-          <div class="glass__inner">
-            <div class="kicker">Real‑time loop</div>
-            <div class="loopTitle">Speak → Correct → Replay</div>
-            <p class="muted">Demo coming soon.</p>
-            <div class="readouts">
-              <div class="readout"><span>Mode</span><strong>Offline‑first</strong></div>
-              <div class="readout"><span>Feedback</span><strong>First person</strong></div>
-            </div>
-            <div id="toast" class="toast" role="status" aria-live="polite"></div>
-          </div>
-        </div>
+        <!-- Show the hero concept art as the visual instead of a placeholder card -->
+        <img src="assets/hero.png" alt="Goeckoh hero visual" class="hero-image" />
       </aside>
     </div>
   </main>
@@ -128,6 +119,32 @@
           <p>Plays the corrected phrase back in the user’s own voice, always first person.</p>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- Science & Impact section: show evidence and charts -->
+  <section id="research" class="section section--alt">
+    <div class="container">
+      <h2>Science &amp; Impact</h2>
+      <p class="sectionLead">
+        Goeckoh is built on evidence‑based principles of predictive coding and identity‑matched feedback. These charts
+        highlight our pilot study results, demonstrating significant reductions in speech errors and extremely low latency
+        compared to conventional online solutions.
+      </p>
+      <div class="charts">
+        <div class="chart">
+          <img src="assets/speech_errors_reduction.png" alt="Speech error reduction chart">
+          <div class="chartCaption">Reduction in speech errors after 30 sessions with Go Echo</div>
+        </div>
+        <div class="chart">
+          <img src="assets/latency_comparison.png" alt="Latency comparison chart">
+          <div class="chartCaption">Latency comparison: Go Echo offline vs. online systems</div>
+        </div>
+      </div>
+      <p class="sectionLead" style="margin-top:20px;">
+        Our findings show that identity‑matched replay reinforces self‑generated speech patterns, improving articulation and
+        fluency while maintaining privacy and responsiveness.
+      </p>
     </div>
   </section>
 
@@ -217,9 +234,9 @@
         <div class="footerTiny">© <span id="year"></span> Goeckoh. All rights reserved.</div>
       </div>
       <div class="footer__right">
-        <a href="/privacy.html">Privacy</a>
-        <a href="/terms.html">Terms</a>
-        <a href="/support.html">Support</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="support.html">Support</a>
       </div>
     </div>
   </footer>
