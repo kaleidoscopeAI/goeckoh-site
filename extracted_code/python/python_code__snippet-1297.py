@@ -1,10 +1,11 @@
-from typing import Optional
+"""Sleep strategy that waits on an event to be set."""
 
-from pip._vendor.packaging.utils import canonicalize_name
+def __init__(self, event: "threading.Event") -> None:
+    self.event = event
 
-from pip._internal.distributions.base import AbstractDistribution
-from pip._internal.index.package_finder import PackageFinder
-from pip._internal.metadata import (
-    BaseDistribution,
-    FilesystemWheel,
-    get_wheel_distribution,
+def __call__(self, timeout: typing.Optional[float]) -> None:
+    # NOTE(harlowja): this may *not* actually wait for timeout
+    # seconds if the event is set (ie this may eject out early).
+    self.event.wait(timeout=timeout)
+
+

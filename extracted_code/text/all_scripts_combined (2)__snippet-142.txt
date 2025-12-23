@@ -1,0 +1,9 @@
+cats = EVENT_TO_CATEGORIES.get(event)
+if not cats:
+    return STRATEGIES[:3]
+ordered: List[Strategy] = []
+for cat in cats:
+    ordered.extend(by_category(cat))
+return ordered or STRATEGIES[:3]
+
+

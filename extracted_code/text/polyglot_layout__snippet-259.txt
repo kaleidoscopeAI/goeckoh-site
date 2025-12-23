@@ -1,0 +1,2 @@
+  self.last_caption_text = caps["captions"][-1].get("caption", self.last_caption_text)
+

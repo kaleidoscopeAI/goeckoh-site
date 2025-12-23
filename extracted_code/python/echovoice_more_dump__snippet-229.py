@@ -1,33 +1,24 @@
-import p5 from 'p5';
+import * as math from 'mathjs';
+import fetch from 'node-fetch';
 
-const App = () => {
-  const sketch = (p: p5) => {
-    let particles: any[] = [];  // From websocket snapshot
+export class Engine {
+  // QSIN real-time ingestion
+  async qsinIngest(url: string) {
+    const res = await fetch(url);
+    const text = await res.text();
+    const vec = text.split(' ').map(w => w.length / 10);  # Simple embed
+    this.addNode([Math.random()*6, Math.random()*1, Math.random()*6], vec);  # New node from data
+  }
 
-    p.setup = () => {
-      p.createCanvas(800, 600, p.WEBGL);  // 3D
-      // WS connect to server:4000 for snapshots
-      const ws = new WebSocket('ws://localhost:4000');
-      ws.onmessage = (msg) => particles = JSON.parse(msg.data).particles;
-    };
+  bitStep() {
+    for (const n of this.nodes.values()) {
+      // Real bit flow: L0 XOR, L3 mat mul (mathjs)
+      n.e = n.e.map(b => b ^ (Math.random() < 0.01 ? 1 : 0));  # L0 mutate
+      const bitMat = math.matrix([n.e.slice(0,64), n.e.slice(64)]);  # L3 mat
+      const mul = math.multiply(bitMat, math.matrix([[1,0],[0,1]]));  # Transform
+      n.e = mul.toArray().flat();  # Propagate changes
+      // ... Up to L19: E = math.subtract(n.energy, math.multiply(n.a, math.cos(deltaPhi)))  # Physics E
+    }
+  }
 
-    p.draw = () => {
-      p.background(0);  // Starry space
-      p.orbitControl();  // 3D cam
-      particles.forEach(part => {
-        p.push();
-        p.translate(...part.pos);
-        p.fill(part.color);
-        p.sphere(part.size);  // Node sphere
-        if (part.halo) {  // Low E halo
-          p.noFill();
-          p.stroke(part.color.replace('50%', '30%'));
-          p.sphere(part.size * 1.5);  // Halo ring
-        }
-        p.pop();
-      });
-      // Dynamic evolution: mutate pos based on bonds (N-body client-side approx)
-    };
-  };
-
-  return <p5.Sketch sketch={sketch} />;
+  // ... All previous integrated

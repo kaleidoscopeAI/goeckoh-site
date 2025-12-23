@@ -1,0 +1,4 @@
+   make it truly autonomous (runs and keeps thinking/ingesting/reflecting with zero user input), and
+
+   add a node-driven avatar renderer with 18,000 controllable nodes (grid default, or it will load your ZIP spec if present).
+

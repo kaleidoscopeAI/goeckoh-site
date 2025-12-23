@@ -1,0 +1,17 @@
+left_split, right_split = [], []
+
+# Get the release segment of our versions
+left_split.append(list(itertools.takewhile(lambda x: x.isdigit(), left)))
+right_split.append(list(itertools.takewhile(lambda x: x.isdigit(), right)))
+
+# Get the rest of our versions
+left_split.append(left[len(left_split[0]) :])
+right_split.append(right[len(right_split[0]) :])
+
+# Insert our padding
+left_split.insert(1, ["0"] * max(0, len(right_split[0]) - len(left_split[0])))
+right_split.insert(1, ["0"] * max(0, len(left_split[0]) - len(right_split[0])))
+
+return (list(itertools.chain(*left_split)), list(itertools.chain(*right_split)))
+
+

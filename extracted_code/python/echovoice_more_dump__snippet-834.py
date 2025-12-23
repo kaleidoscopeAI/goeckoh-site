@@ -1,1 +1,35 @@
-Optimization: Filled annealing and parallel tempering with real energy evaluation functions (using Hamiltonian from docs) and neighbor generation.
+def get_task_details(task_id):
+    """Get detailed information about a task"""
+    # Find task in history or current task
+    task = None
+    if current_task and current_task.get("id") == task_id:
+        task = current_task
+    else:
+        for t in task_history:
+            if t.get("id") == task_id:
+                task = t
+                break
+    
+    if not task:
+        return jsonify({"error": "Task not found"}), 404
+    
+    # Prepare response based on task type and status
+    result = {
+        "id": task.get("id"),
+        "type": task.get("type"),
+        "status": task.get("status"),
+        "timestamp": task.get("timestamp")
+    }
+    
+    if task.get("type") == "ingest":
+        result["file_name"] = task.get("file_name")
+        result["file_path"] = task.get("file_path")
+        
+        if task.get("status") == "completed":
+            result["decompiled_files"] = [os.path.basename(f) for f in task.get("decompiled_files", [])]
+            result["spec_files"] = [os.path.basename(f) for f in task.get("spec_files", [])]
+            result["reconstructed_files"] = [os.path.basename(f) for f in task.get("reconstructed_files", [])]
+    
+    elif task.get("type") == "mimic":
+        result["target_language"] = task.get("target_language")
+

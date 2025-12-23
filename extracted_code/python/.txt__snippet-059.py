@@ -1,2 +1,1 @@
-class EchoCompanion:
-def __init__(self, config: CompanionConfig) -> None:
+At the top of echo_companion_gui.py, update the Flask import and add base64 + io:

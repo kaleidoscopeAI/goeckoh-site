@@ -1,0 +1,9 @@
+  }
+
+  // Other functions unchanged
+  // ...
+
+  override fun finalize() {
+      noiseSuppressor?.release()
+      sileroVad.close()
+  }

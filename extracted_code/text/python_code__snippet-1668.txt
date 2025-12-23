@@ -1,0 +1,3 @@
+VoiceEngineRTVC = None  # type: ignore
+print(f"⚠️  RTVC not available: {e}")
+

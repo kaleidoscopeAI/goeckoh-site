@@ -1,0 +1,4 @@
+  diff = np.diff(mel_spec, axis=1)
+  flux = np.sum(np.maximum(diff, 0.0), axis=0)
+  return np.concatenate(([0.0], flux))
+

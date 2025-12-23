@@ -1,7 +1,9 @@
-def make_headers(
-    keep_alive=None,
-    accept_encoding=None,
-    user_agent=None,
-    basic_auth=None,
-    proxy_basic_auth=None,
-    disable_cache=None,
+def chdir(d):
+    cwd = os.getcwd()
+    try:
+        os.chdir(d)
+        yield
+    finally:
+        os.chdir(cwd)
+
+

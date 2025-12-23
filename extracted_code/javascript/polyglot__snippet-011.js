@@ -1,3 +1,1 @@
-class AGIMathematics {
-private array $tempSubset = [];
-public function entropy(array $data): float {
+public function integrated_information(array $vec): float {

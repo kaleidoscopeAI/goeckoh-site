@@ -1,40 +1,33 @@
-    pub fn new() -> Self {
-        // Register all available processors
-        let processors: Vec<Arc<dyn UniversalProcessor>> = vec![
-            Arc::new(ChemicalProcessor::new()),
-            Arc::new(TabularProcessor),
-            Arc::new(TextGraphProcessor::new()),
-            Arc::new(ImageGraphProcessor::new()),
-            Arc::new(KnowledgeGraphProcessor::new()),
-        ];
+    pub fn new() -> Self { Self }
 
-        Self { processors }
+    fn extract_entities(&self, text: &str) -> Vec<String> {
+        // Simple word-based extraction as real NLP not available
+        text.split_whitespace()
+            .filter(|w| w.len() > 3 && w.chars().all(char::is_alphabetic))
+            .map(|w| w.to_string())
+            .collect()
     }
 
-    /// Select the best processor for a given path
-    pub async fn select_processor(&self, path: &Path) -> Option<Arc<dyn UniversalProcessor>> {
-        let mut scored: Vec<(ProcessorScore, Arc<dyn UniversalProcessor>)> = Vec::new();
+    fn build_graph(&self, entities: Vec<String>) -> MutagEntry {
+        let num_nodes = entities.len();
+        let mut x = Vec::with_capacity(num_nodes);
+        let mut edge_index = Vec::new();
+        let mut edge_attr = Vec::new();
 
-        for p in &self.processors {
-            let score = p.can_process(path).await;
-            if score.can_process {
-                scored.push((score, Arc::clone(p)));
+        for (i, _ent) in entities.iter().enumerate() {
+            // Simple feature: one-hot based on index mod 11
+            let mut features = vec![0.0; 11];
+            features[i % 11] = 1.0;
+            x.push(features);
+
+            // Chain edges
+            if i > 0 {
+                edge_index.push(vec![i - 1, i]);
+                edge_index.push(vec![i, i - 1]);
+                edge_attr.push(vec![1.0, 0.0, 0.0, 0.0]);
+                edge_attr.push(vec![1.0, 0.0, 0.0, 0.0]);
             }
         }
 
-        scored.sort_by(|(a, _), (b, _)| b.confidence.partial_cmp(&a.confidence).unwrap_or(std::cmp::Ordering::Equal));
-        scored.into_iter().next().map(|(_, p)| p)
-    }
-
-    /// Main entry: process any file into MUTAG-compatible graphs
-    pub async fn process(&self, path: &Path) -> Result<Vec<ProcessedGraph>, ProcessingError> {
-        if let Some(proc) = self.select_processor(path).await {
-            info!("Selected processor: {}", proc.processor_name());
-            proc.process_to_mutag(path).await
-        } else {
-            Err(ProcessingError::UnsupportedFormat(format!(
-                "No processor available for {:?}",
-                path
-            )))
-        }
+        MutagEntry { x, edge_index, edge_attr, y: 0 }
     }

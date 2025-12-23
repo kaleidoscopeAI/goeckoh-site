@@ -1,0 +1,8 @@
+Metamorphosis (M): Drives the node's self-adaptation and evolution.
+
+System Unravel (U): Represents a force of deconstruction or complexity management, preventing cognitive lock-in.
+
+Mimicry (S): Facilitates learning and role adaptation by modeling external agents.
+
+Stress Tensor (σi​): Represents internal cognitive tension, updated based on knowledge, awareness, and belief vectors.
+

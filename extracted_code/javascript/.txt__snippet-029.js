@@ -1,2 +1,5 @@
-private let baseURL = URL(string: "http://192.168.1.100:5000")!
-private var audioPlayer: AVAudioPlayer?
+let id = UUID()
+let phrase: String
+let attempts: Int
+let corrections: Int
+let correctionRate: Double

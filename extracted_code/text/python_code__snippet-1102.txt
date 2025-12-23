@@ -1,0 +1,5 @@
+old_csv_rows: List[List[str]],
+installed: Dict[RecordPath, RecordPath],
+changed: Set[RecordPath],
+generated: List[str],
+lib_dir: str,

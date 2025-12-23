@@ -1,0 +1,3 @@
+raise NoWayToWaitForSocketError("no select-equivalent available")
+
+

@@ -1,0 +1,1 @@
+ssl_context: ssl.SSLContext, verify_mode: ssl.VerifyMode

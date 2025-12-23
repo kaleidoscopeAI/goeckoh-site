@@ -1,0 +1,1 @@
+manager.show()  # Emits a warning for non-interactive backend.

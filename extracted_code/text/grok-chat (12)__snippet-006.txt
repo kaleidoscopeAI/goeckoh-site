@@ -1,0 +1,6 @@
+with sd.InputStream(samplerate=SAMPLE_RATE, channels=1, dtype='float32', blocksize=BLOCKSIZE, callback=audio_callback):
+    while running:
+        if len(buffer) > SAMPLE_RATE * 0.3:
+            asyncio.run_coroutine_threadsafe(process_buffer(), loop)
+        time.sleep(0.001)  # Tightest
+

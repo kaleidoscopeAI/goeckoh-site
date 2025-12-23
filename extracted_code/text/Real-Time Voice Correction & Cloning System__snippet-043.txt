@@ -1,0 +1,4 @@
+producer: Option<Producer<f32>>,
+consumer: Arc<Mutex<Consumer<f32>>>,
+fft_planner: Arc<Mutex<FftPlanner<f32>>>,
+asr_session: Session,

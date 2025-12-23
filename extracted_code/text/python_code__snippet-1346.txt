@@ -1,0 +1,10 @@
+args = make_setuptools_shim_args(setup_py_path, no_user_config=no_user_config)
+
+args += ["egg_info"]
+
+if egg_info_dir:
+    args += ["--egg-base", egg_info_dir]
+
+return args
+
+

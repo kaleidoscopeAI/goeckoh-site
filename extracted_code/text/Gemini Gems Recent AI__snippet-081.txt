@@ -1,0 +1,2 @@
+app.run_server(debug=True)  # Set debug=False for production
+

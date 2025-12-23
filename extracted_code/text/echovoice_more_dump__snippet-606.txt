@@ -1,0 +1,5 @@
+'run': {'type': 'translate', 'speed': 2.0, 'direction': [1, 0, 0]},
+'jump': {'type': 'pulse', 'intensity': 1.5, 'freq': 5},
+'think': {'type': 'rotate', 'speed': 0.5, 'axis': [0, 0, 1]},
+'chase': {'type': 'attract', 'target': 'next_shape'},
+'grow': {'type': 'scale', 'factor': 1.2},

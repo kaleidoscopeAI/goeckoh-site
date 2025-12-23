@@ -1,0 +1,10 @@
+              }
+
+              // Forward to Whisper
+              whisper.writeBuffer(cleanedSamples)
+
+              // Silero VAD: Process in 512 sample frames
+              val frameSize = 512
+              var offset = 0
+              while (offset + frameSize <= outShort.size) {
+                  val frame = outShort.copyOfRange(offset, offset +

@@ -1,0 +1,6 @@
+      } else {
+          voskModel = Model(modelPath.absolutePath)
+      }
+
+      // Init Sherpa TTS
+      val ttsModelPath = File(context.filesDir, "vits-piper-en_US-amy-

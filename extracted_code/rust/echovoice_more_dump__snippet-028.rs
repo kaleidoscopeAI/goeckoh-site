@@ -1,5 +1,8 @@
-fn print_metrics(prefix: &str, metrics: &Metrics) {
-    println!("{}  Accuracy:  {:>6.2}%", prefix, metrics.accuracy * 100.0);
-    println!("{}  Precision: {:>6.2}%", prefix, metrics.precision * 100.0);
-    println!("{}  Recall:    {:>6.2}%", prefix, metrics.recall * 100.0);
-    println!("{}  F1-Score:  {:>6.2}%", prefix, metrics.f1_score * 100.0);
+    fn from(error: ProcessingError) -> Self {
+        match error {
+            ProcessingError::InvalidFormat(s) => CrystalError::Parameter(s),
+            ProcessingError::UnsupportedFormat(s) => CrystalError::Parameter(s),
+            ProcessingError::DataError(s) => CrystalError::Data(s),
+            ProcessingError::IoError(e) => CrystalError::IO(e),
+        }
+    }

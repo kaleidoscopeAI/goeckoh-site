@@ -1,7 +1,1 @@
-    Create charts for metrics history using Chart.js.
-
-    Implement the simulation controls and parameter sliders.
-
-    Add console functionality for user interaction.
-
-We'll assume the CognitiveCrystal class is available (mocked for now).
+Computed Bij and Wij using your formulas (cosine similarities, Psi distance, ϕ(Ui , Uj ), and role-based ρ).

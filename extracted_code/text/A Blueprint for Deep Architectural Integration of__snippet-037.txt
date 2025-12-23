@@ -1,0 +1,3 @@
+- Vector space axioms
+- Inner/dot product and norms
+- Projection operators and selection functions

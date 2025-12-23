@@ -1,0 +1,6 @@
+if cls is None:
+    return auto(angular=angular)
+else:
+    return auto(cls)
+
+

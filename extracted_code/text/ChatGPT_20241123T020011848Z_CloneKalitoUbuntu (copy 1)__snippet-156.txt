@@ -1,0 +1,9 @@
+network = NodeNetwork()
+network.add_node()  # Start with a seed node
+network.simulate(steps=20)
+
+# Query the network
+print("\n--- Query Results ---")
+network.query("Object-5")
+network.query("Object-25")  # Should not exist
+

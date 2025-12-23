@@ -1,1 +1,1 @@
-for (let k = 0; k < m; k++) out[k] += this.externalInputs[base + k];
+for (let i = 0; i < N; i++) {

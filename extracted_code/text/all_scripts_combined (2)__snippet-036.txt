@@ -1,1 +1,1 @@
-The `VoiceMimic` class is responsible for:
+This class is designed to be a simple, direct interface to the TTS engine,

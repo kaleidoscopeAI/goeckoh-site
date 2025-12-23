@@ -1,1 +1,3 @@
-can be embedded in React using react-plotly.js or @plotly/react-plotly.js.
+Hotplug Support:
+Add CPU hotplug notifier to maintain per-CPU data structures.
+

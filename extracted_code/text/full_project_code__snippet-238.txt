@@ -1,0 +1,16 @@
+[
+    "ECDHE+AESGCM",
+    "ECDHE+CHACHA20",
+    "DHE+AESGCM",
+    "DHE+CHACHA20",
+    "ECDH+AESGCM",
+    "DH+AESGCM",
+    "ECDH+AES",
+    "DH+AES",
+    "RSA+AESGCM",
+    "RSA+AES",
+    "!aNULL",
+    "!eNULL",
+    "!MD5",
+    "!DSS",
+]

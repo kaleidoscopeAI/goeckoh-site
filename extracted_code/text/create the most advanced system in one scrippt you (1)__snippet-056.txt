@@ -1,0 +1,1 @@
+            2 * r_correlation * pilot_stats$SD_N1[^21_1] * pilot_stats$SD_N1[^21_2])

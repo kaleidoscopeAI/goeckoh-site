@@ -1,0 +1,1 @@
+*, bar_type: str, size: Optional[int] = None

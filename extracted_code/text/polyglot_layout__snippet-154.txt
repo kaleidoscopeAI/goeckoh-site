@@ -1,0 +1,6 @@
+   an offline translator (rule-based + phrase tables you can drop into /onbrain/lang/),
+
+   an on-device tiny Transformer (NumPy inference, no model download), or
+
+   a visual 3D node lattice to mirror focus/stress in real time,
+

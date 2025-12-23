@@ -1,0 +1,6 @@
+heart = CrystallineHeart()
+resp, _ = heart.process_input("You are bad")
+# Ensure semantic mirror works
+assert "I" in resp
+assert "bad" in resp
+assert "You" not in resp.lower()

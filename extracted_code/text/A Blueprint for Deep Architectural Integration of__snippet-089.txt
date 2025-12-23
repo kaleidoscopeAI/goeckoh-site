@@ -1,0 +1,3 @@
+- Operator correctness
+- Routing matrix properties (e.g., sparsity and normalization)
+- Global state convergence tests with fixed operators and zero noise

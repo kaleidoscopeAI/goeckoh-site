@@ -1,2 +1,1 @@
-class GeneticCode:
-def __init__(self):
+def stop(self):

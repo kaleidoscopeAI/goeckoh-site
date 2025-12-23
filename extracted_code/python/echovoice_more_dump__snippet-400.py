@@ -1,1 +1,1 @@
-def run_flask():
+def retrieve_context(self, embedded_query):

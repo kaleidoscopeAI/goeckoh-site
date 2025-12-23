@@ -1,1 +1,1 @@
-const renderer = new THREE.WebGLRenderer({ antialias: true });
+const doc = await db.doc("actuation/current").get();

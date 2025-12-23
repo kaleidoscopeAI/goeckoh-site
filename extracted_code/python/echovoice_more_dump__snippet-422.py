@@ -1,1 +1,1 @@
-async def startup():
+Baseline homeostasis keeps the system from being dominated by one state.

@@ -1,0 +1,2 @@
+  "agent_file": str(AGENT_PATH),
+  "patch_file": str(PATCH_PATH),

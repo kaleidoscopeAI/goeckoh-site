@@ -1,0 +1,36 @@
+# --- Vowels (Peterson & Barney style, Hz, approximate) ---
+"AA": {"type": "vowel", "f": [730, 1090, 2440], "dur": 0.18},  # father
+"AE": {"type": "vowel", "f": [660, 1720, 2410], "dur": 0.16},  # cat
+"AH": {"type": "vowel", "f": [640, 1190, 2390], "dur": 0.14},  # cup
+"AO": {"type": "vowel", "f": [570, 840, 2410],  "dur": 0.18},  # dog
+"EH": {"type": "vowel", "f": [530, 1840, 2480], "dur": 0.14},  # bet
+"ER": {"type": "vowel", "f": [490, 1350, 1690], "dur": 0.18},  # bird
+"IH": {"type": "vowel", "f": [390, 1990, 2550], "dur": 0.12},  # bit
+"IY": {"type": "vowel", "f": [270, 2290, 3010], "dur": 0.18},  # see
+"UH": {"type": "vowel", "f": [440, 1020, 2240], "dur": 0.14},  # book
+"UW": {"type": "vowel", "f": [300, 870, 2240],  "dur": 0.18},  # too
+
+# Liquids / glides / nasals (rough vowel-ish treatment)
+"L":  {"type": "vowel", "f": [400, 1000, 2800], "dur": 0.10},
+"R":  {"type": "vowel", "f": [350, 1200, 1800], "dur": 0.10},
+"W":  {"type": "vowel", "f": [330, 700, 2300],  "dur": 0.10},
+"Y":  {"type": "vowel", "f": [300, 2100, 3100], "dur": 0.10},
+"M":  {"type": "vowel", "f": [250, 1100, 2100], "dur": 0.12},
+"N":  {"type": "vowel", "f": [250, 1400, 2300], "dur": 0.12},
+
+# Fricatives (noise-heavy)
+"S":  {"type": "noise", "f": [3000, 5000, 7000], "dur": 0.12},
+"F":  {"type": "noise", "f": [1500, 3000, 4500], "dur": 0.10},
+"SH": {"type": "noise", "f": [2000, 4000, 6000], "dur": 0.12},
+"HH": {"type": "noise", "f": [500,  1500, 2500], "dur": 0.08},
+
+# Stops (closure + burst, simplified)
+"P":  {"type": "stop",  "f": [500, 1000, 2000], "dur": 0.06},
+"T":  {"type": "stop",  "f": [2000,3000, 4000], "dur": 0.06},
+"K":  {"type": "stop",  "f": [1500,2500,3500],  "dur": 0.06},
+"B":  {"type": "stop",  "f": [500, 1000, 2000], "dur": 0.06},
+"D":  {"type": "stop",  "f": [2000,2500,3500],  "dur": 0.06},
+"G":  {"type": "stop",  "f": [1500,2500,3500],  "dur": 0.06},
+
+# Silence
+" ":  {"type": "sil",   "f": [0,0,0],           "dur": 0.08},

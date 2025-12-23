@@ -1,14 +1,1 @@
-from . import util
-from ._collections import HTTPHeaderDict
-from .connection import BaseSSLError, HTTPException
-from .exceptions import (
-    BodyNotHttplibCompatible,
-    DecodeError,
-    HTTPError,
-    IncompleteRead,
-    InvalidChunkLength,
-    InvalidHeader,
-    ProtocolError,
-    ReadTimeoutError,
-    ResponseNotChunked,
-    SSLError,
+# All control characters from 0x00 to 0x1F *except* 0x1B.

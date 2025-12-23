@@ -1,3 +1,3 @@
-  directories are excluded from snapshots and undo cleanup. Adjust `ghost_snapshot.ignore_large_untracked_dirs` to change this
-  behavior.
+• I'm updating the header from "Crystalline AGI stack" and changing the card title from "Crystalline Heart" to "Neurocoherence
+  Lattice" by patching the relevant lines.
 

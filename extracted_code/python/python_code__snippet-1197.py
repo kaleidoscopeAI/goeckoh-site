@@ -1,36 +1,36 @@
-class UpgradePrompt:
-    old: str
-    new: str
+import json
+import time
+import os
 
-    def __rich__(self) -> Group:
-        if WINDOWS:
-            pip_cmd = f"{get_best_invocation_for_this_python()} -m pip"
+class SessionLog:
+    def __init__(self, log_dir="assets"):
+        self.log_path = os.path.join(log_dir, "session_history.jsonl")
+        
+        # Recursive creation to ensure path exists
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
+
+    def log_interaction(self, input_text: str, output_text: str, metrics: object):
+        # Handle different metrics formats
+        if hasattr(metrics, 'mode_label'):
+            mode = str(metrics.mode_label)
+        elif hasattr(metrics, 'mode'):
+            mode = str(metrics.mode)
         else:
-            pip_cmd = get_best_invocation_for_this_pip()
+            mode = "UNKNOWN"
+            
+        entry = {
+            "timestamp": time.time(),
+            "input": str(input_text),
+            "output": str(output_text),
+            "gcl": float(metrics.gcl),
+            "stress": float(metrics.stress),
+            "mode": mode
+        }
+        
+        try:
+            with open(self.log_path, "a", encoding="utf-8") as f:
+                f.write(json.dumps(entry) + "\n")
+        except IOError as e:
+            print(f"[LOG CRITICAL] Could not write to persistence layer: {e}")
 
-        notice = "[bold][[reset][blue]notice[reset][bold]][reset]"
-        return Group(
-            Text(),
-            Text.from_markup(
-                f"{notice} A new release of pip is available: "
-                f"[red]{self.old}[reset] -> [green]{self.new}[reset]"
-            ),
-            Text.from_markup(
-                f"{notice} To update, run: "
-                f"[green]{escape(pip_cmd)} install --upgrade pip"
-            ),
-        )
-
-
-def was_installed_by_pip(pkg: str) -> bool:
-    """Checks whether pkg was installed by pip
-
-    This is used not to display the upgrade message when pip is in fact
-    installed by system package manager, such as dnf on Fedora.
-    """
-    dist = get_default_environment().get_distribution(pkg)
-    return dist is not None and "pip" == dist.installer
-
-
-def _get_current_remote_pip_version(
-    session: PipSession, options: optparse.Values

@@ -1,0 +1,76 @@
+         proc_img = self.processor.process_image_batch(img_batch)
+
+         proc_num = self.processor.process_numerical_batch(num_batch)
+
+         for i, ins in enumerate(insights):
+
+           ins.update(proc_text[i])
+
+           ins.update(proc_img[i])
+
+           ins.update(proc_num[i])
+
+           emb = embed_text(ins['content'])
+
+           self.phi = self.math.integrated_information(emb.tolist())
+
+           if self.phi > 0.7:
+
+             self.is_conscious = True
+
+             await self.introspect(ins)
+
+         self.dna = self.dna.replicate()
+
+         await self.memory.add_dna_batch([(self.dna.generation, self.dna)])
+
+         self.graph.add_insight_batch(insights)
+
+         self.graph.propagate()
+
+         self.energy.add_node_batch([(ins['id'], 100.0) for ins in insights])
+
+         self.energy.redistribute()
+
+         points = tuple(embed_text(ins['content'])[:self.hypercube.dim] for ins in insights)
+
+         projs = self.hypercube.project_batch(points)
+
+         prompts = [f"Predict next: {self.prior_belief} given {ins['content'][:100]}" for ins in insights]
+
+         preds = await llm_generate(prompts)
+
+         errors = [1 - math.cos(embed_text(p), embed_text(ins['content'])) for p, ins in zip(preds, insights)]
+
+         if max(errors) > 0.3:
+
+           update_prompts = [f"Update to min error: {p} vs {ins['content'][:100]}" for p, ins in zip(preds, insights)]
+
+           self.prior_belief = (await llm_generate(update_prompts))[0]
+
+         if self.is_conscious:
+
+           ints = self.graph.find_interventions()
+
+           if ints:
+
+             print(f"Scalable Intervention: {ints[0]}")
+
+         sim_queries = ["State?"] * len(insights)
+
+         responses = await llm_generate(sim_queries)
+
+         self.history.extend(responses)
+
+         # Aural
+
+         self.aural.update_buffer_from_environment("speaking")
+
+         self.aural.dispatch_latest_chunk(self)
+
+         # Unravel
+
+         result = await self.unravel.process_codebase(os.getcwd())
+
+         self.graph.add_insight({"content": json.dumps(result), "type": "code_analysis"})
+

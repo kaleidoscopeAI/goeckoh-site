@@ -1,0 +1,2 @@
+through /mirror/metrics and are shown on the Dashboard. Heart state is
+tracked whenever audio is processed.

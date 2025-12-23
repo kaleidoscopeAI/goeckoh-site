@@ -1,0 +1,5 @@
+ "Algorithm Refinement": "Current implementation needs algorithms that produce better or more grounded and realistic output.",
+      "Reasoning Integration":"Implement rule, probabilistic, and causal mechanisms.",
+       "Decision Process":" Implement risk , decision making using strategies, evaluation based logic",
+
+   "Interactive Loop":" Data Ingestion will now process insights more regularly across different components including user defined, environment changes or system defined insights ",

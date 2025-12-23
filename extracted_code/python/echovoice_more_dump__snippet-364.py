@@ -1,1 +1,1 @@
-def _plot_3d_network(self, organic_ai):
+async def _system_status_query(self):

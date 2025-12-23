@@ -1,0 +1,7 @@
+  - NeuroAcousticMirror.kt: AudioRecord loop, WebRTC VAD, optional NoiseSuppressor, multi-lang Vosk recognizers with
+    confidence selection, prosody extraction (Tarsos), Piper TTS prosody transfer, metrics/status broadcasts.
+  - CrystallineHeart.kt: ODE lattice.
+  - GatedAGI.kt: Gemma LLM via MediaPipe, adaptive VAD tuning by GCL thresholds.
+  - ExocortexService.kt: background loop.
+  - MainActivity.kt: VAD controls (mode/silence/threshold) with persistence, start/stop, status + metrics receivers.
+  - Layout: app/src/main/res/layout/activity_main.xml.

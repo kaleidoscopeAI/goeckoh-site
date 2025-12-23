@@ -1,19 +1,33 @@
-def _parse_local_version(local: str) -> Optional[LocalType]:
-    """
-    Takes a string like abc.1.twelve and turns it into ("abc", 1, "twelve").
-    """
-    if local is not None:
-        return tuple(
-            part.lower() if not part.isdigit() else int(part)
-            for part in _local_version_separators.split(local)
-        )
-    return None
+def warn_legacy_versions_and_specifiers(package_set: PackageSet) -> None:
+    for project_name, package_details in package_set.items():
+        if isinstance(package_details.version, LegacyVersion):
+            deprecated(
+                reason=(
+                    f"{project_name} {package_details.version} "
+                    f"has a non-standard version number."
+                ),
+                replacement=(
+                    f"to upgrade to a newer version of {project_name} "
+                    f"or contact the author to suggest that they "
+                    f"release a version with a conforming version number"
+                ),
+                issue=12063,
+                gone_in="24.1",
+            )
+        for dep in package_details.dependencies:
+            if any(isinstance(spec, LegacySpecifier) for spec in dep.specifier):
+                deprecated(
+                    reason=(
+                        f"{project_name} {package_details.version} "
+                        f"has a non-standard dependency specifier {dep}."
+                    ),
+                    replacement=(
+                        f"to upgrade to a newer version of {project_name} "
+                        f"or contact the author to suggest that they "
+                        f"release a version with a conforming dependency specifiers"
+                    ),
+                    issue=12063,
+                    gone_in="24.1",
+                )
 
 
-def _cmpkey(
-    epoch: int,
-    release: Tuple[int, ...],
-    pre: Optional[Tuple[str, int]],
-    post: Optional[Tuple[str, int]],
-    dev: Optional[Tuple[str, int]],
-    local: Optional[Tuple[SubLocalType]],

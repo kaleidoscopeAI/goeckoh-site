@@ -1,0 +1,9 @@
+1921              heart_topk: List[Dict[str, Any]] = []
+1922 +            emotional_state = getattr(self, "emotional_state", EmotionalState())
+1923              return {
+     ⋮
+1931                  "heart_rust": {},
+1931 -                "emotional_state": self.emotional_state,
+1932 +                "emotional_state": emotional_state,
+1933                  "metrics": {"gcl": gcl, "mode": "FLOW", "stress": stress, "timestamp": time.time()},
+

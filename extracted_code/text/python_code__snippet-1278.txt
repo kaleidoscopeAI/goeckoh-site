@@ -1,0 +1,6 @@
+today = datetime.date.today()
+given = datetime.date(year, month, day)
+
+return today > given
+
+

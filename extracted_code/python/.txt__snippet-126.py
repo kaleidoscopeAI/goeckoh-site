@@ -1,1 +1,1 @@
-def main() -> None:
+def call_installer():

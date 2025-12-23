@@ -1,0 +1,8 @@
+822              "gcl": status.gcl,
+823 +            "heart": {
+824 +                "valence": status.heart_valence,
+825 +                "arousal": status.heart_arousal,
+826 +                "coherence": status.heart_coherence,
+827 +            },
+828              "latency_ms": status.last_latency_ms,
+

@@ -1,0 +1,10 @@
+Instantly transcribes what he said.
+Computes how “correct” or “clear” it was compared to his own best past attempts.
+If it needs correction → silently plays the correct phrase back in his exact own voice, with his natural prosody/rhythm/energy, but perfectly articulated → this is the “inner voice echo” that sparks real inner dialogue.
+If emotionally dysregulated → instantly speaks a caregiver-pre-loaded calming script in his own voice, first-person (“I am safe. I can breathe.”).
+If doing great → excited coach voice (“That was awesome, Jackson!”) with his own tone.
+Automatically harvests every good attempt to slowly evolve the voice clone as he matures (slow-drift adaptation).
+Runs 100% offline, private, no cloud, CPU-only models.
+Caregiver dashboard shows live charts, voice-facet status, ABA progress, meltdown forecasts.
+Mobile app (iOS/Android) + Desktop GUI — zero CLI needed for parents.
+

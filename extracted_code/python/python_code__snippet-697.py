@@ -1,33 +1,15 @@
-    def get_original_bases(__cls):
-        """Return the class's "original" bases prior to modification by `__mro_entries__`.
+from pip._internal.resolution.base import InstallRequirementProvider
+from pip._internal.utils.compatibility_tags import get_supported
+from pip._internal.utils.hashes import Hashes
+from pip._internal.utils.packaging import get_requirement
+from pip._internal.utils.virtualenv import running_under_virtualenv
 
-        Examples::
-
-            from typing import TypeVar, Generic
-            from pip._vendor.typing_extensions import NamedTuple, TypedDict
-
-            T = TypeVar("T")
-            class Foo(Generic[T]): ...
-            class Bar(Foo[int], float): ...
-            class Baz(list[str]): ...
-            Eggs = NamedTuple("Eggs", [("a", int), ("b", str)])
-            Spam = TypedDict("Spam", {"a": int, "b": str})
-
-            assert get_original_bases(Bar) == (Foo[int], float)
-            assert get_original_bases(Baz) == (list[str],)
-            assert get_original_bases(Eggs) == (NamedTuple,)
-            assert get_original_bases(Spam) == (TypedDict,)
-            assert get_original_bases(int) == (object,)
-        """
-        try:
-            return __cls.__orig_bases__
-        except AttributeError:
-            try:
-                return __cls.__bases__
-            except AttributeError:
-                raise TypeError(
-                    f'Expected an instance of type, not {type(__cls).__name__!r}'
-                ) from None
-
-
-# NewType is a class on Python 3.10+, making it pickleable
+from .base import Candidate, CandidateVersion, Constraint, Requirement
+from .candidates import (
+    AlreadyInstalledCandidate,
+    BaseCandidate,
+    EditableCandidate,
+    ExtrasCandidate,
+    LinkCandidate,
+    RequiresPythonCandidate,
+    as_base_candidate,

@@ -1,6 +1,7 @@
-class AudioSettings:
-    sample_rate: int = 16000
-    chunk_size: int = 2048
-    silence_rms_threshold: float = 0.01
-    vad_aggressiveness: int = 3
+class SkillProgress:
+    attempts: int = 0
+    successes: int = 0
+    current_level: int = 1          # 1–5 mastery levels
+    last_success_ts: float = 0.0
+    streak: int = 0
 

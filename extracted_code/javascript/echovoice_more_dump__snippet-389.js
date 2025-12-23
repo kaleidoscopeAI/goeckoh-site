@@ -1,1 +1,1 @@
-export function applyMetaSuccess(node: NodeState, improvementScalar: number) {
+const dir = new THREE.Vector3(

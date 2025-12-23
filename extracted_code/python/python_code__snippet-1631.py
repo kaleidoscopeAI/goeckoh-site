@@ -1,18 +1,16 @@
-class VoiceEngine:
-    def __init__(self):
-        self.use_neural = COQUI_AVAILABLE
-        if self.use_neural:
-            print("Loading AI Voice Model...")
-            # Using 'your_tts' for zero-shot cloning support
-            self.model = TTS("tts_models/multilingual/multi-dataset/your_tts", gpu=False)
+"""An abstract base class for Rich renderables.
 
-    def generate_speech_pcm(self, text: str, clone_ref_wav: str = None) -> np.ndarray:
-        try:
-            if self.use_neural and clone_ref_wav:
-                wav = self.model.tts(text=text, speaker_wav=clone_ref_wav, language="en")
-                return np.array(wav, dtype=np.float32)
-            return None
-        except Exception as e:
-            print(f"[TTS Gen Error] {e}")
-            return None
+Note that there is no need to extend this class, the intended use is to check if an
+object supports the Rich renderable protocol. For example::
+
+    if isinstance(my_object, RichRenderable):
+        console.print(my_object)
+
+"""
+
+@classmethod
+def __subclasshook__(cls, other: type) -> bool:
+    """Check if this class supports the rich render protocol."""
+    return hasattr(other, "__rich_console__") or hasattr(other, "__rich__")
+
 

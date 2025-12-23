@@ -1,1 +1,4 @@
-The Unified Nexus Intelligence framework establishes a new class of artificial general intelligence: geometric, self-regulating, affectively aware, and
+|                                                ^^^^^^^^^^^^^^^^^^^^^ unknown field
+|
+= note: available fields are: `target_acceptance_rate`, `adjustment_factor`, `window_size`
+

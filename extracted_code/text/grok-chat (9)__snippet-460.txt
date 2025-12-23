@@ -1,0 +1,3 @@
+              response = {"status": "warnings"}
+          except Exception as e:
+              logger.error("An unexpected error occurred while reading %s:

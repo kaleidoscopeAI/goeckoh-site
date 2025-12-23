@@ -1,4 +1,8 @@
-    from cosyvoice import CosyVoice
-    # Assuming load_optimus_ths_lib is available globally or within cosyvoice
-    # from some_custom_lib import load_optimus_ths_lib 
-    COSVOICE_AVAILABLE = True
+"""Renders total filesize."""
+
+def render(self, task: "Task") -> Text:
+    """Show data completed."""
+    data_size = filesize.decimal(int(task.total)) if task.total is not None else ""
+    return Text(data_size, style="progress.filesize.total")
+
+

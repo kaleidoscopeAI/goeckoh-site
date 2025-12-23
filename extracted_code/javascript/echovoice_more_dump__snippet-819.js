@@ -1,1 +1,1 @@
-function tebd_Jv(v,y): void (uses cluster FD)
+const copy = { ...n, K: n.K.slice(), D: n.D.slice(), Psi: n.Psi.slice() };

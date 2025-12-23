@@ -1,1 +1,2 @@
-export function computeModulators(node: NodeState) {
+const userId = null;
+const res = await svc.setEmotion(userId, emotion, value);

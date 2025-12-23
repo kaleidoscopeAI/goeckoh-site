@@ -1,0 +1,3 @@
+_fields_ = [("dwSize", wintypes.DWORD), ("bVisible", wintypes.BOOL)]
+
+

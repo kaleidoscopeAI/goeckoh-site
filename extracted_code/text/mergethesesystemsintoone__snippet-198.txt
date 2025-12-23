@@ -1,12 +1,18 @@
-class DependencyInfo:
-    name: str
-    version: str
-    current_version: Optional[str] = None
-    latest_version: Optional[str] = None
-    is_vulnerable: bool = False
-    vulnerability_details: Optional[str] = None
-    is_outdated: bool = False
-    upgrade_path: Optional[str] = None
-    is_deprecated: bool = False
-    alternatives: List[str] = field(default_factory=list)
+if fmax is None:
+    fmax = sr / 2.0
+mel_min = hz_to_mel(fmin)
+mel_max = hz_to_mel(fmax)
+mels = np.linspace(mel_min, mel_max, n_mels + 2)
+freqs = mel_to_hz(mels)
+fft_freqs = np.linspace(0, sr / 2.0, n_fft // 2 + 1)
+fb = np.zeros((n_mels, len(fft_freqs)), dtype=np.float32)
+for i in range(1, n_mels + 1):
+    f_left, f_center, f_right = freqs[i-1], freqs[i], freqs[i+1]
+    left_idxs = np.where((fft_freqs >= f_left) & (fft_freqs <= f_center))[0]
+    if left_idxs.size:
+        fb[i-1, left_idxs] = (fft_freqs[left_idxs] - f_left) / max(f_center - f_left, 1e-12)
+    right_idxs = np.where((fft_freqs >= f_center) & (fft_freqs <= f_right))[0]
+    if right_idxs.size:
+        fb[i-1, right_idxs] = (f_right - fft_freqs[right_idxs]) / max(f_right - f_center, 1e-12)
+return fb, fft_freqs
 

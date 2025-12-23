@@ -1,2 +1,8 @@
-# <REDACTED: potential secret detected>
+        # then this is using the implicit post release syntax (e.g. 1.0-1)
+        letter = "post"
+
+        return letter, int(number)
+
+    return None
+
 

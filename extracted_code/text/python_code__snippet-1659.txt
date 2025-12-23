@@ -1,0 +1,11 @@
+"""Comprehensive system telemetry"""
+gcl: float = 1.0                    # Global Coherence Level
+stress: float = 0.0                  # System stress
+life_intensity: float = 0.0          # Life intensity L(t)
+mode: str = "FLOW"                   # Operating mode
+emotional_coherence: float = 1.0      # EADS coherence
+quantum_coherence: float = 1.0       # Quantum stability
+memory_stability: float = 1.0        # Crystalline memory health
+hardware_coupling: float = 0.0        # Cyber-physical integration
+timestamp: float = field(default_factory=time.time)
+

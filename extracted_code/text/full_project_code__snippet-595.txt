@@ -1,0 +1,8 @@
+"""
+Just like :class:`ParseFatalException`, but thrown internally
+when an :class:`ErrorStop<And._ErrorStop>` ('-' operator) indicates
+that parsing is to stop immediately because an unbacktrackable
+syntax error has been found.
+"""
+
+

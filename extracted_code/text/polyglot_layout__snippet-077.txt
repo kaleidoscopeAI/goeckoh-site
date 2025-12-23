@@ -1,0 +1,2 @@
+  return float(np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b) + eps))
+

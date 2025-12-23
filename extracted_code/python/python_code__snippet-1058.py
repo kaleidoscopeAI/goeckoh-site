@@ -1,4 +1,1 @@
-    def callable(obj):
-        return any("__call__" in klass.__dict__ for klass in type(obj).__mro__)
-
-
+# Do not import and use main() directly! Using it directly is actively

@@ -1,0 +1,3 @@
+"""Exception base class for prompt related errors."""
+
+

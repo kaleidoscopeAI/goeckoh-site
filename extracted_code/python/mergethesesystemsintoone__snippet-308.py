@@ -1,2 +1,2 @@
-class TextProcessingUnit(ProcessingUnit):
-def init(self):
+    def execute_behaviors(self):
+

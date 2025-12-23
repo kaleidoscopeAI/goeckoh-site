@@ -1,0 +1,9 @@
+"""
+Pack object `o` and write it to `stream`
+
+See :class:`Packer` for options.
+"""
+packer = Packer(**kwargs)
+stream.write(packer.pack(o))
+
+

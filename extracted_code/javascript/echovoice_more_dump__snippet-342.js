@@ -1,4 +1,5 @@
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const projRef = doc(db, "actuation", "latestProjection");
-const unsubProj = onSnapshot(projRef, (snap) => {
+export async function runReflectionAndMetaUpdate(node: NodeState, logs: any[]) {
+let totalRegret = 0;
+let emoRegretCorrelation = 0;
+for (const t of logs) {
+const regret = Math.max(0, (t.optimalValue ?? 0) - (t.actualValue ?? 0));

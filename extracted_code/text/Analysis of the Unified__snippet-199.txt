@@ -1,0 +1,11 @@
+"""Detailed representation of an ethical violation."""
+violation_id: str
+timestamp: datetime
+principle_id: str
+severity: float
+context: Dict
+entity_id: str
+resolution_status: str = "pending"
+impact_assessment: Dict = field(default_factory=dict)
+mitigation_steps: List[str] = field(default_factory=list)
+

@@ -1,0 +1,8 @@
+  db = os.environ.get("SC_DB_PATH", str(Path.cwd() / "seed_crystal.db"))
+  agent = AvatarAgent(sqlite_path=db, frames_dir=OUT_FRAMES)
+  stop = asyncio.Event()
+  try:
+       await agent.run(stop_event=stop, fps=12)
+  except KeyboardInterrupt:
+       stop.set()
+

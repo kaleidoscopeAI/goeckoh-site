@@ -1,16 +1,18 @@
-function initCrystalVisualization(container) {
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    container.appendChild(renderer.domElement);
+class NodeState:
+    """Current state of a QSIN node"""
+    node_id: str
+    status: str = "initializing"
+    energy: float = 0.0
+    last_active: float = field(default_factory=time.time)
+    quantum_state: Optional[QuantumState] = None
+    connected_nodes: Set[str] = field(default_factory=set)
+    entangled_nodes: Set[str] = field(default_factory=set)
+    processed_tasks: int = 0
+    successful_replications: int = 0
+    total_uptime: float = 0.0
+    
+    def __post_init__(self):
+        """Initialize with defaults if needed"""
+        if self.quantum_state is None:
+            self.quantum_state = QuantumState()
 
-    // Bind nodes & bonds from crystal core
-    const nodeGeom = new THREE.SphereGeometry(0.2, 12, 12);
-    const nodeMat = new THREE.MeshPhongMaterial({ color: 0x38bdf8, transparent: true });
-    const nodesMesh = new THREE.InstancedMesh(nodeGeom, nodeMat, crystal.core.nodes.length);
-
-    scene.add(nodesMesh);
-    // … update loop attaches to crystal.core.nodes positions
-
-    return { scene, camera, renderer, nodesMesh };

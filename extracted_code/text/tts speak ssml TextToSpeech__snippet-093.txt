@@ -1,0 +1,17 @@
+                      gatedAGI.executeBasedOnGCL(gcl, correctedText)
+                  }
+              } catch (e: Exception) {
+                  Log.e("Service", "Error in loop: ${e.message}")
+              }
+          }
+      }
+      return START_STICKY
+  }
+
+  override fun onBind(intent: Intent?): IBinder? = null
+
+  override fun onDestroy() {
+      executor.shutdownNow()
+      tts.shutdown()
+      super.onDestroy()
+  }

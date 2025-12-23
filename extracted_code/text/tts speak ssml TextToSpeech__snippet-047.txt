@@ -1,0 +1,9 @@
+      // Integrate ODE over time step (e.g., dt=1.0)
+      val yOut = DoubleArray(nNodes)
+      integrator.integrate(HeartODE(), 0.0, E, 1.0, yOut)
+      yOut.copyInto(E)
+
+      // Compute GCL: Average coherence (e.g., inverse variance + harmony)
+      val mean = E.average()
+      val variance = E.map { (it - mean) * (it - mean) }.average()
+      return 1.0 / (1.0 + variance) // Normalized 0-1, high coherence =

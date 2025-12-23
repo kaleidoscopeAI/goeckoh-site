@@ -1,0 +1,11 @@
+m = re.match(r"^(.+)(\[[^\]]+\])$", path)
+extras = None
+if m:
+    path_no_extras = m.group(1)
+    extras = m.group(2)
+else:
+    path_no_extras = path
+
+return path_no_extras, extras
+
+

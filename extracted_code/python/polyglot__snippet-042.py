@@ -1,1 +1,1 @@
-def _detect_shapes(self, edges: np.ndarray) -> List:
+from sklearn.decomposition import TruncatedSVD

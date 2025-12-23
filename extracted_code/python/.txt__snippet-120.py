@@ -1,1 +1,1 @@
-def start_streaming(self) -> None:
+def write_launcher_scripts(paths: InstallPaths):

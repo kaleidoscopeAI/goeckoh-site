@@ -1,0 +1,3 @@
+if not setup_virtual_environment():
+    sys.exit(1)
+

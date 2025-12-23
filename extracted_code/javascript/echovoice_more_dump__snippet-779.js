@@ -1,1 +1,1 @@
-let db: admin.firestore.Firestore | null = null;
++export function powerIteration(

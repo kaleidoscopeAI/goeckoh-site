@@ -1,28 +1,5 @@
-class NodeType(Enum):
-    """Types of nodes in the unified AST"""
-    ROOT = auto()
-    FILE = auto()
-    MODULE = auto()
-    CLASS = auto()
-    FUNCTION = auto()
-    METHOD = auto()
-    INTERFACE = auto()
-    ENUM = auto()
-    VARIABLE = auto()
-    CONSTANT = auto()
-    IMPORT = auto()
-    EXPRESSION = auto()
-    STATEMENT = auto()
-    PARAMETER = auto()
-    RETURN = auto()
-    CONDITION = auto()
-    LOOP = auto()
-    COMMENT = auto()
-    ANNOTATION = auto()
-    DECORATOR = auto()
-    NAMESPACE = auto()
-    PROPERTY = auto()
-    OPERATOR = auto()
-    LITERAL = auto()
-    UNKNOWN = auto()
+Duplicate key rayon in Cargo.toml: We have two dependencies for rayon. Remove one of them.
+
+Module redefinitions: In src/lib.rs, we have:
+rust
 

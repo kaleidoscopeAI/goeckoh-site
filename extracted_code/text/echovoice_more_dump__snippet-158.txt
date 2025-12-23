@@ -1,1 +1,1 @@
-We are using par_iter without having rayon::iter::IntoParallelRefIterator in scope.
+Replace the TEBD stub with a small MPS/TEBD CPU implementation (with SVD using a JavaScript LAPACK binding), or

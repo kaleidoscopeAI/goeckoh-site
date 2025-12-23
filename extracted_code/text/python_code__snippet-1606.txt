@@ -1,0 +1,5 @@
+Option,
+"--no-clean",
+action="store_true",
+default=False,
+help="Don't clean up build directories.",

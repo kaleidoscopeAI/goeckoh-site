@@ -1,24 +1,24 @@
-        yield from (Tag(interpreter, "abi3", platform_) for platform_ in platforms)
-    yield from (Tag(interpreter, "none", platform_) for platform_ in platforms)
+    """Generate metadata using mechanisms described in PEP 660.
 
-    if _abi3_applies(python_version):
-        for minor_version in range(python_version[1] - 1, 1, -1):
-            for platform_ in platforms:
-                interpreter = "cp{version}".format(
-                    version=_version_nodot((python_version[0], minor_version))
-                )
-                yield Tag(interpreter, "abi3", platform_)
+    Returns the generated metadata directory.
+    """
+    metadata_tmpdir = TempDirectory(kind="modern-metadata", globally_managed=True)
+
+    metadata_dir = metadata_tmpdir.path
+
+    with build_env:
+        # Note that BuildBackendHookCaller implements a fallback for
+        # prepare_metadata_for_build_wheel/editable, so we don't have to
+        # consider the possibility that this hook doesn't exist.
+        runner = runner_with_spinner_message(
+            "Preparing editable metadata (pyproject.toml)"
+        )
+        with backend.subprocess_runner(runner):
+            try:
+                distinfo_dir = backend.prepare_metadata_for_build_editable(metadata_dir)
+            except InstallationSubprocessError as error:
+                raise MetadataGenerationFailed(package_details=details) from error
+
+    return os.path.join(metadata_dir, distinfo_dir)
 
 
-def _generic_abi() -> Iterator[str]:
-    abi = sysconfig.get_config_var("SOABI")
-    if abi:
-        yield _normalize_string(abi)
-
-
-def generic_tags(
-    interpreter: Optional[str] = None,
-    abis: Optional[Iterable[str]] = None,
-    platforms: Optional[Iterable[str]] = None,
-    *,
-    warn: bool = False,

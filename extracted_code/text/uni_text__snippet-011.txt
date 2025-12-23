@@ -1,1 +1,0 @@
-Pattern: Modular class structure (e.g. a GraphManager for Forman flow, a NodeDynamics for stochastic updates, an AffectModel for valence/arousal).

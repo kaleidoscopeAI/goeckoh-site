@@ -1,0 +1,3 @@
+MachineState.ERROR,MachineState.START,MachineState.START,     3,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,#00-07
+MachineState.ERROR,MachineState.ERROR,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ERROR,#08-0f
+MachineState.ERROR,MachineState.START,MachineState.START,MachineState.START,MachineState.START,MachineState.START,MachineState.START,MachineState.START#10-17

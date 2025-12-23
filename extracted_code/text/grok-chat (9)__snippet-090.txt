@@ -1,0 +1,8 @@
+  - New backend endpoints: /mirror/validate (latency p50/p95, GCL mean/min,
+    drift p95, gate blocks) and /mirror/reset_metrics to clear telemetry for
+    controlled runs.
+  - speech_mirror.py adds validation_summary() and reset_metrics();
+    telemetry logging remains centralized.
+  - Frontend now pulls validation summary, shows p95 latency/GCL mean, and
+    offers CSV export; continues sleek, light styling.
+

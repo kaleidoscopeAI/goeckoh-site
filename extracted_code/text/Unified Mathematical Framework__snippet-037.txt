@@ -1,0 +1,2 @@
+"Expanded 'u' -> 'you'",
+"Expanded 'pls' -> 'please'"

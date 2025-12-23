@@ -1,2 +1,2 @@
-class TextProcessingUnit(ProcessingUnit):
+class KnowledgeGraph:
 def init(self):

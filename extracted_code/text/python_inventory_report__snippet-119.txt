@@ -1,0 +1,2 @@
+doc: Core routing between Echo sensory packets, crystalline memory, thought engines,
+functions: process_sensory_packet, pull_echo_commands, pull_hid_commands, get_latest_state

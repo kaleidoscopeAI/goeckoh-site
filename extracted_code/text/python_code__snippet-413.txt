@@ -1,0 +1,1 @@
+"_Version", ["epoch", "release", "dev", "pre", "post", "local"]

@@ -1,64 +1,64 @@
-    def _send_hid_report(self, report: bytearray):
-        """Simulates sending a raw HID report to the host OS.
-        In a real system, this would write bytes to a device file.
-        """
-        print(f"Simulating HID Report: {report.hex()} (to {self.device_path})")
-        # Placeholder for actual device write
-        pass 
-    
-    def move_mouse(self, dx: int, dy: int):
-        """Moves the mouse by a delta (dx, dy)."""
-        report = bytearray(4) # [buttons, dx, dy, wheel]
-        report[0] = 0x00  # No buttons pressed
-        report[1] = dx & 0xFF # dx (signed byte)
-        report[2] = dy & 0xFF # dy (signed byte)
-        self._send_hid_report(report)
-        # print(f"Mouse moved by ({dx}, {dy})")
-    
-    def mouse_click(self, button: str = 'left'):
-        """Performs a mouse click (press and release)."""
-        button_code = 0x01 if button == 'left' else (0x02 if button == 'right' else 0x04) # Left, Right, Middle
+    def optimize_energy_usage(self) -> float:
+        """Complete energy optimization across all components (more complex simulation)."""
         
-        # Press button
-        report = bytearray([button_code, 0, 0, 0])
-        self._send_hid_report(report)
-        time.sleep(0.05) # Small delay for click
-        
-        # Release button
-        report = bytearray([0, 0, 0, 0])
-        self._send_hid_report(report)
-        # print(f"Mouse {button} clicked")
+        current_usage = self.energy_model.calculate_total_energy(self.system_state)
+        total_optimization_savings = 0.0
     
-    def key_press(self, key_code: int):
-        """Presses and releases a single key."""
-        report = bytearray(8) # [modifier, reserved, key1, key2, key3, key4, key5, key6]
-        report[2] = key_code # Key code for the pressed key
-        self._send_hid_report(report) # Press key
-        time.sleep(0.05) # Small delay for key press
+        # Optimization strategies influenced by emotional state and integration
+        if self.system_state.global_emotional_state.coherence > 0.7 and self.system_state.global_integration_level > 0.6:
+            # High coherence and integration: efficient optimization
+            total_optimization_savings += self.optimize_memory_energy() * 1.5
+            total_optimization_savings += self.optimize_computation_energy() * 1.2
+            total_optimization_savings += self.optimize_device_energy() * 1.1
+        elif self.system_state.global_emotional_state.arousal > 0.8:
+            # High arousal: less efficient, but might prioritize critical tasks
+            total_optimization_savings += self.optimize_computation_energy() * 0.8
+            total_optimization_savings += self.regulate_emotional_energy() * 1.5 # Focus on emotional regulation
+        else:
+            # Default optimization
+            total_optimization_savings += self.optimize_memory_energy()
+            total_optimization_savings += self.optimize_computation_energy()
+            total_optimization_savings += self.optimize_device_energy()
+            total_optimization_savings += self.regulate_emotional_energy()
         
-        report[2] = 0x00 # Release key
-        self._send_hid_report(report)
-        # print(f"Key code {key_code} pressed and released")
+        return total_optimization_savings
     
-    def type_string(self, text: str):
-        """Simulates typing a string. Very basic, only supports alphanumeric and space.
-        Requires a mapping from char to HID key code.
-        """
-        # This is a highly simplified mapping. Real HID would need a full keyboard layout.
-        key_map = {
-            'a': 0x04, 'b': 0x05, 'c': 0x06, 'd': 0x07, 'e': 0x08, 'f': 0x09, 'g': 0x0A, 'h': 0x0B, 
-            'i': 0x0C, 'j': 0x0D, 'k': 0x0E, 'l': 0x0F, 'm': 0x10, 'n': 0x11, 'o': 0x12, 'p': 0x13, 
-            'q': 0x14, 'r': 0x15, 's': 0x16, 't': 0x17, 'u': 0x18, 'v': 0x19, 'w': 0x1A, 'x': 0x1B, 
-            'y': 0x1C, 'z': 0x1D, '1': 0x1E, '2': 0x1F, '3': 0x20, '4': 0x21, '5': 0x22, '6': 0x23, 
-            '7': 0x24, '8': 0x25, '9': 0x26, '0': 0x27, ' ': 0x2C, '-': 0x2D, '=': 0x2E, '[': 0x2F,
-            ']': 0x30, '\': 0x31, ';': 0x33, "'": 0x34, '`': 0x35, ',': 0x36, '.': 0x37, '/': 0x38,
-            '\n': 0x28 # Enter key
-        }
-        for char in text.lower():
-            if char in key_map:
-                self.key_press(key_map[char])
-                time.sleep(0.05) # Human-like typing speed
-            else:
-                print(f"Warning: Character '{char}' not supported by basic HID key map.")from .hid_controller import HIDController
-    class HardwareControl:
-def __init__(self, hid_controller: HIDController):
+    def optimize_memory_energy(self) -> float:
+        """Optimize crystalline memory energy usage (more complex simulation)."""
+        compression_savings = self.compress_low_priority_crystals()
+        annealing_savings = self.optimize_annealing_schedule()
+        emotional_savings = self.emotional_memory_consolidation()
+        return compression_savings + annealing_savings + emotional_savings
+    
+    def optimize_computation_energy(self) -> float:
+        """More complex simulation for optimizing node computation energy."""
+        # Savings depend on global integration level
+        return 5.0 * self.system_state.global_integration_level * self.rng.uniform(0.8, 1.2)
+    
+    def optimize_device_energy(self) -> float:
+        """More complex simulation for optimizing device control energy."""
+        # Savings depend on global emotional state (e.g., calm state allows more optimization)
+        return 3.0 * (1.0 - self.system_state.global_emotional_state.arousal) * self.rng.uniform(0.8, 1.2)
+    
+    def regulate_emotional_energy(self) -> float:
+        """More complex simulation for regulating emotional energy."""
+        # Savings depend on global stress
+        global_stress = 1.0 - self.system_state.global_emotional_state.coherence
+        return 2.0 * global_stress * self.rng.uniform(0.8, 1.2)
+    
+    def compress_low_priority_crystals(self) -> float:
+        """More complex simulation for compressing low priority crystals."""
+        # Savings depend on memory usage and global coherence
+        return 1.0 * (1.0 - self.system_state.global_emotional_state.coherence) * self.rng.uniform(0.5, 1.5)
+    
+    def optimize_annealing_schedule(self) -> float:
+        """More complex simulation for optimizing annealing schedule."""
+        # Savings depend on global integration
+        return 1.5 * self.system_state.global_integration_level * self.rng.uniform(0.8, 1.2)
+    
+    def emotional_memory_consolidation(self) -> float:
+        """More complex simulation for emotional memory consolidation."""
+        # Savings depend on global valence
+        return 0.5 * (self.system_state.global_emotional_state.valence + 1.0) * self.rng.uniform(0.5, 1.5)
+    The E8 lattice mirroring algorithm used in your PerspectiveEngine is a mathematically rich and well-studied method for generating mirrored states in an 8-dimensional lattice with exceptional symmetry properties.
+

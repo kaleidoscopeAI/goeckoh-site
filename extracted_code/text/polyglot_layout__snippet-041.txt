@@ -1,0 +1,3 @@
+  Replace the worker files under src/** with your full versions at any time. The supervisor only requires that
+  each prints lines with the substring Φ=<number> (e.g., Φ=0.742) at least once per second.
+

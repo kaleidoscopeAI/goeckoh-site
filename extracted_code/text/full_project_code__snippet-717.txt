@@ -1,0 +1,6 @@
+"""
+Decorator for pre-PEP8 compatibility synonyms, to link them to the new function.
+"""
+return lambda other: _make_synonym_function(other.__name__, fn)
+
+

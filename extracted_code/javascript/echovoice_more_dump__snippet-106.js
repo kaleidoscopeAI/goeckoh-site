@@ -1,2 +1,7 @@
-  const replicas = [this.temperature, this.temperature * 2]; // 2 temps
-  // Simulate high T escape, exchange if exp(-ΔH Δ(1/T)) > rand
+export function retrieveClosest(input: number[]) {
+  let minDist = Infinity, closest: number[] = [];
+  for (const sub of faissIndex.values()) {
+    const dist = len(sub.flat().map((v, i) => v - input[i % input.length]));
+    if (dist < minDist) { minDist = dist; closest = sub.flat(); }
+  }
+  return closest;

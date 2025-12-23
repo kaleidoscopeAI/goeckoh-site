@@ -1,0 +1,7 @@
+ok a couple issues i am having . first the system is completely manual which is against the very purpose of it . it is supposed to be an autonomous
+agi. also the avatatr generation is lacking . it should be using the nodes like the zip folder i showed you implies. it controls 18000 nodes to create
+the avatar and images etc. please reflect on the contents on the the zip. the system shoul dbe interactive if the user so choses but not manditory
+for the system to work
+
+
+

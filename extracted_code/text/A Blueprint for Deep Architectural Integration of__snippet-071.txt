@@ -1,0 +1,5 @@
+- \$ P_i \$: projections selecting relevant subspaces of \$ S_k \$,
+- \$ O_i \$: operators parameterized by \$ p_i \$,
+- \$ R \$: routing,
+- \$ I_k \$: external input,
+- \$ \eta_k \$: stochastic noise.

@@ -1,0 +1,3 @@
+'x86': 'win32',
+'x64': 'win-amd64',
+'arm': 'win-arm32',

@@ -1,0 +1,4 @@
+markup: str,
+style: Union[str, Style] = "",
+emoji: bool = True,
+emoji_variant: Optional[EmojiVariant] = None,

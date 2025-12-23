@@ -1,2 +1,1 @@
-const mods = computeModulators(node);
-const allowedMods = applyRegulatoryFilter(node, mods, true);
+const currentEmotion = actuationService.getEmotionVector();

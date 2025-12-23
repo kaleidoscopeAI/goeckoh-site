@@ -1,0 +1,4 @@
+setup_py_path: str,
+global_options: Sequence[str],
+build_options: Sequence[str],
+destination_dir: str,

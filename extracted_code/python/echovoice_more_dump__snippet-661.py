@@ -1,1 +1,1 @@
-def Xi_sleep(self, S, p):
+def compute_B_W(K,D,Psi,U,roles):

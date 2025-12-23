@@ -1,0 +1,3 @@
+points.forEach((p, i) => {
+    targets[i % targets.length].position.set(...p);
+});

@@ -1,0 +1,2 @@
+integrated; mobile and desktop don’t share PPP assets; no container/CI
+packaging.

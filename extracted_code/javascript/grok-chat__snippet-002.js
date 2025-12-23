@@ -1,2 +1,0 @@
-This intervention does more than facilitate communication; it scaffolds the emergence of inner speech. Following Vygotskian developmental theory, inner speech is the internalization of external dialogue. By providing a coherent external "self-voice," the system provides the raw material for the user to construct an internal monologue, thereby enhancing executive function and emotional regulation.
-

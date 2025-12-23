@@ -1,33 +1,16 @@
-def warn_legacy_versions_and_specifiers(package_set: PackageSet) -> None:
-    for project_name, package_details in package_set.items():
-        if isinstance(package_details.version, LegacyVersion):
-            deprecated(
-                reason=(
-                    f"{project_name} {package_details.version} "
-                    f"has a non-standard version number."
-                ),
-                replacement=(
-                    f"to upgrade to a newer version of {project_name} "
-                    f"or contact the author to suggest that they "
-                    f"release a version with a conforming version number"
-                ),
-                issue=12063,
-                gone_in="24.1",
-            )
-        for dep in package_details.dependencies:
-            if any(isinstance(spec, LegacySpecifier) for spec in dep.specifier):
-                deprecated(
-                    reason=(
-                        f"{project_name} {package_details.version} "
-                        f"has a non-standard dependency specifier {dep}."
-                    ),
-                    replacement=(
-                        f"to upgrade to a newer version of {project_name} "
-                        f"or contact the author to suggest that they "
-                        f"release a version with a conforming dependency specifiers"
-                    ),
-                    issue=12063,
-                    gone_in="24.1",
-                )
+"""Abstract base class for wait strategies."""
+
+@abc.abstractmethod
+def __call__(self, retry_state: "RetryCallState") -> float:
+    pass
+
+def __add__(self, other: "wait_base") -> "wait_combine":
+    return wait_combine(self, other)
+
+def __radd__(self, other: "wait_base") -> typing.Union["wait_combine", "wait_base"]:
+    # make it possible to use multiple waits with the built-in sum function
+    if other == 0:  # type: ignore[comparison-overlap]
+        return self
+    return self.__add__(other)
 
 

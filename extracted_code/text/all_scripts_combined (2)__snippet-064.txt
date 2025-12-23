@@ -1,10 +1,11 @@
-class BehaviorSummary:
-    total: int = 0
-    anxious: int = 0
-    perseveration: int = 0
-    high_energy: int = 0
-    meltdown: int = 0
-    caregiver_reset: int = 0
-    encouragement: int = 0
+"""
+Represents the prosody of a speech segment.
+"""
+
+f0_hz: np.ndarray
+energy: np.ndarray
+frame_length: int
+hop_length: int
+sample_rate: int
 
 

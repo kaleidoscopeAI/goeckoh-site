@@ -1,1 +1,2 @@
-export default function EmotionalDial({ value, emotions = DEFAULT_EMOTIONS, onChange, onApply }: Props) {
+const N = nodes.length;
+const M = W[0].length;

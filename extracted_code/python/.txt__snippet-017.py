@@ -1,1 +1,1 @@
-def temperature(self) -> float:
+def coherence(self) -> float:

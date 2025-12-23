@@ -1,4 +1,2 @@
-1. [Speak steady "hello"] → Bubble smooths, audio clear/bright → "High coherence + valence"
-2. [Sharp "tick-tock"] → Spikes + edge/presence → "Low coherence, high arousal"  
-3. [Breathy whisper] → Rough/small + muffled → "Disrupted lattice state"
-4. "The bubble shows it. Your ears hear it. Both update every 10ms."
+traits::{DeviceTrait, HostTrait, StreamTrait},
+StreamConfig, BufferSize, SampleFormat,

@@ -1,0 +1,46 @@
+cp_value = ord(label[pos])
+
+if cp_value == 0x200c:
+
+    if pos > 0:
+        if _combining_class(ord(label[pos - 1])) == _virama_combining_class:
+            return True
+
+    ok = False
+    for i in range(pos-1, -1, -1):
+        joining_type = idnadata.joining_types.get(ord(label[i]))
+        if joining_type == ord('T'):
+            continue
+        elif joining_type in [ord('L'), ord('D')]:
+            ok = True
+            break
+        else:
+            break
+
+    if not ok:
+        return False
+
+    ok = False
+    for i in range(pos+1, len(label)):
+        joining_type = idnadata.joining_types.get(ord(label[i]))
+        if joining_type == ord('T'):
+            continue
+        elif joining_type in [ord('R'), ord('D')]:
+            ok = True
+            break
+        else:
+            break
+    return ok
+
+if cp_value == 0x200d:
+
+    if pos > 0:
+        if _combining_class(ord(label[pos - 1])) == _virama_combining_class:
+            return True
+    return False
+
+else:
+
+    return False
+
+

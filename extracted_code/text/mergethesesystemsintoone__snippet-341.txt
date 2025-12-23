@@ -1,0 +1,10 @@
+  approx = self._approximate_polygon(cnt, 0.01 * self._calculate_perimeter(cnt))  # Simplified approximation
+  num_vertices = len(approx)
+  shape_type = {3: "triangle", 4: "rectangle", 5: "pentagon", 6: "hexagon", 10: "star"}.get(len(approx), "circle")
+  if num_vertices == 4:
+      x, y, w, h = cv2.boundingRect(cnt)
+      aspect_ratio = float(w) / h
+      if 0.95 <= aspect_ratio <= 1.05:
+          shape_type = "square"
+  shapes.append({'type': 'shape', 'shape_type': shape_type, 'vertices': num_vertices, 'contour': cnt.tolist()})
+

@@ -1,0 +1,9 @@
+  F, T = X.shape; H = len(bands)
+  E = np.zeros((H, T), dtype=np.float64)
+  for h, (a, b) in enumerate(bands):
+      if b <= a: b = min(a + 1, F)
+      E[h] = X[a:b].mean(axis=0)
+  d1 = np.pad(np.diff(E, axis=1), ((0, 0), (1, 0)))
+  d2 = np.pad(np.diff(d1, axis=1), ((0, 0), (1, 0)))
+  return np.stack([E, d1, d2], axis=-1) # (H, T, 3)
+

@@ -1,0 +1,6 @@
+"class_table": ISO2022JP_CLS,
+"class_factor": 10,
+"state_table": ISO2022JP_ST,
+"char_len_table": ISO2022JP_CHAR_LEN_TABLE,
+"name": "ISO-2022-JP",
+"language": "Japanese",

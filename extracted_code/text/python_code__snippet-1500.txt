@@ -1,0 +1,21 @@
+"""
+Clean the path portion of a URL.
+"""
+if is_local_path:
+    clean_func = _clean_file_url_path
+else:
+    clean_func = _clean_url_path_part
+
+# Split on the reserved characters prior to cleaning so that
+# revision strings in VCS URLs are properly preserved.
+parts = _reserved_chars_re.split(path)
+
+cleaned_parts = []
+for to_clean, reserved in pairwise(itertools.chain(parts, [""])):
+    cleaned_parts.append(clean_func(to_clean))
+    # Normalize %xx escapes (e.g. %2f -> %2F)
+    cleaned_parts.append(reserved.upper())
+
+return "".join(cleaned_parts)
+
+

@@ -1,0 +1,10 @@
+encoding = _get_encoding_from_headers(response.headers)
+return IndexContent(
+    response.content,
+    response.headers["Content-Type"],
+    encoding=encoding,
+    url=response.url,
+    cache_link_parsing=cache_link_parsing,
+)
+
+

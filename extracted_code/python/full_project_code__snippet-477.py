@@ -1,4 +1,4 @@
-import typing
+def retry(func: WrappedFn) -> WrappedFn:
+    ...
 
-from pip._vendor.tenacity import _utils
 

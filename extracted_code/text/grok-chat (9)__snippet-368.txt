@@ -1,0 +1,5 @@
+1_jackson_0.wav: 2.9 ms
+… +9 lines
+Accuracy (echo match): 10/10
+Latency: p50=1.8 ms p95=3.1 ms
+

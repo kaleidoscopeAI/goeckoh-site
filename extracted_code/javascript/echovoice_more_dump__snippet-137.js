@@ -1,18 +1,12 @@
-fn run_evolution(config: EvolutionConfig, output_path: Option<String>) -> Result<(), CrystalError> {
-    println!("=== EMBEDDING PARAMETER EVOLUTION ===");
-    
-    let seed = config.seed.unwrap_or_else(generate_seed);
-    let graphs = load_or_process_dataset(&config.dataset_path, "https://huggingface.co/datasets/graphs-datasets/MUTAG/resolve/main/train.parquet")?;
+    We need to load the dataset. The function load_or_process_dataset is provided for this.
 
-    let best_params = evolve_embedding_parameters(&config, &graphs)?;
-    
-    println!("\nBest embedding parameters found:");
-    println!("{:#?}", best_params);
-    
-    if let Some(output_path) = &output_path {
-        let json = serde_json::to_string_pretty(&best_params)?;
-        std::fs::write(output_path, json)?;
-        info!("Best parameters exported to {}", output_path);
-    }
-    
-    Ok(())
+    Then, if evolution_generations is greater than 0, we run the evolutionary algorithm to optimize embedding parameters.
+
+    Then, we set up the annealing schedule and optional parameters (adaptive cooling, multi-objective, chemical validation).
+
+    Then, we run either k-fold or holdout validation.
+
+    Finally, we print and export the results.
+
+However, note that the load_or_process_dataset function is not yet implemented. We have to implement it.
+

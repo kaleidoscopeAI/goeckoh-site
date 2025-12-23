@@ -1,1 +1,7 @@
-Now implement each engine_Jv using local sums and directional derivatives of weights.
+Starfield: From YouTube (2D starry night) and p5 editor (CC 1: Starfield), implemented parallax stars with reset.
+Connected particles: From p5.org example (Particle class with lines if dist<thresh), added to draw for bonds (thickness=stress, color=orange if stretched).
+N-body 3D: From editor.p5js.org/Adesh_Brave (n-body copy), integrated vector accel in client for smooth anim (full server-side).
+Halo effect: From YouTube (glow with blendMode(ADD) + multiple spheres) and p5 sphere (crystal-like faces), added shininess + alpha glow.
+Aurora gradient: From YouTube (lerpColor anim) and p5 tutorial (gradients), implemented waving sin lerp blue-green-purple.
+Gemini link : Insufficient content, but prior integration (research plan for physics/neuro-symbolic/meta) already filled; no new.
+

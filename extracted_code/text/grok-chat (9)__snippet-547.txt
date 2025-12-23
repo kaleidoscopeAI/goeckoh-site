@@ -1,0 +1,3 @@
+drives real-time speech motor control; pitch/formant shifts cause immediate
+compensation, lateralized (right = spectral, left = temporal) with citations
+[web:1, web:7].

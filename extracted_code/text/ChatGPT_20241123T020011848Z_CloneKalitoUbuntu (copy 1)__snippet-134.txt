@@ -1,0 +1,1 @@
+_application.run()  # Quits when all added windows close.

@@ -1,0 +1,1 @@
+d: Dict[str, Any], expected_type: Type[T], key: str, default: Optional[T] = None

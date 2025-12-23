@@ -1,0 +1,41 @@
+"description": "A zip archive containing the complete, self-contained Kaleidoscope AI system ready to run with minimal setup.",
+"download_url": "https://github.com/yourusername/kaleidoscope_ai/releases/download/v0.1/kaleidoscope_ai.zip",
+"files": [
+  {
+    "path": "kaleidoscope_ai/utils/config.py",
+    "description": "Configuration settings, enums, and dataclasses"
+  },
+  {
+    "path": "kaleidoscope_ai/utils/validation.py",
+      "description":"Defines validation methods and data checks"
+  },
+     {
+     "path": "kaleidoscope_ai/utils/metrics.py",
+     "description":"Defines node behaviour for a local logging"
+
+   },
+
+  {
+    "path": "kaleidoscope_ai/core/__init__.py",
+     "description": "Used to create directory as a Python module"
+
+  },
+{   "path" : "kaleidoscope_ai/core/base_node.py",
+      "description": "BaseNode class definition for individual data processing entities."
+    },
+  {
+     "path":"kaleidoscope_ai/core/data_processing.py",
+   "description":"Definitions for Data types used across the entire pipeline."
+  },
+     {
+       "path":"kaleidoscope_ai/core/trait_system.py",
+        "description":"Contains all behaviours used by nodes as traits, and actions, dependencies are located here to"
+
+      },
+{ "path": "kaleidoscope_ai/core/dna/__init__.py" ,
+  "description":"makes directory as submodule."
+     }   ,
+
+{   "path":"kaleidoscope_ai/core/dna/structure.py",
+"description" : "data definitions and base trait attributes used to build new objects (new node variations"
+

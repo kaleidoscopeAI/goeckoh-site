@@ -1,0 +1,7 @@
+# Stub: Integrate fine-tuned LLM or anomaly detection here
+confidence = 0.95  # placeholder
+reason = "Low risk detected"
+allowed = confidence > 0.8
+log_action(action, confidence, reason)
+return allowed
+

@@ -1,0 +1,7 @@
+214          val results = recognizers.map { (lang, rec) ->
+215 -            val json = try { rec.finalResult } catch (_: Exception) { r
+     ec.result }
+215 +            val json = try { rec.finalResult() } catch (_: Exception) {
+      rec.result }
+216              val parsed = parseResultWithConfidence(json)
+

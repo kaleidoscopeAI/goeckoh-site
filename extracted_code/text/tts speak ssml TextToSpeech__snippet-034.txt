@@ -1,3 +1,2 @@
-  └ Error: Unable to initialize main class org.gradle.wrapper.GradleWrapperMain
-    Caused by: java.lang.NoClassDefFoundError: org/gradle/wrapper/IDownload
+# <REDACTED: potential secret detected>
 

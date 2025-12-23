@@ -1,0 +1,8 @@
+try:
+    loop = asyncio.get_event_loop()
+    if loop.is_running():
+        loop.create_task(main())
+    else:
+        asyncio.run(main())
+except RuntimeError:
+    asyncio.run(main())Polyglot AGI system

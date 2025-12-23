@@ -1,12 +1,5 @@
-  # Run wrapper using that binary:
-  cd "/home/jacob/android echo"
-  /tmp/gradle-8.3/gradle-8.3/bin/gradle wrapper --gradle-version 8.3 --distribution-type=bin
-
-  This creates ./gradlew, gradle/wrapper/*. Then run:
-
-  ./gradlew assembleDebug
-
-  (Ensure the assets are placed in app/src/main/assets/ as listed earlier.) If you can’t download, point to any existing Gradle
-  8.x install (e.g., Android Studio’s bundled gradle-8.x/bin/gradle) and run the same gradle wrapper command.
-
-
+<uses-permission android:name="android.permission.RECORD_AUDIO" />
+<application ...>
+    <activity android:name=".MainActivity" ... />
+    <service android:name=".ExocortexService" />
+</application>

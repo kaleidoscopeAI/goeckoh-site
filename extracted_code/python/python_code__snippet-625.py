@@ -1,39 +1,20 @@
-def parse_name_and_version(p):
+def _initialize(g=globals()):
+    "Set up global resource manager (deliberately not state-saved)"
+    manager = ResourceManager()
+    g['_manager'] = manager
+    g.update(
+        (name, getattr(manager, name))
+        for name in dir(manager)
+        if not name.startswith('_')
+    )
+
+
+class PkgResourcesDeprecationWarning(Warning):
     """
-    A utility method used to get name and version from a string.
+    Base class for warning about deprecations in ``pkg_resources``
 
-    From e.g. a Provides-Dist value.
-
-    :param p: A value in a form 'foo (1.0)'
-    :return: The name and version as a tuple.
+    This class is not derived from ``DeprecationWarning``, and as such is
+    visible by default.
     """
-    m = NAME_VERSION_RE.match(p)
-    if not m:
-        raise DistlibException('Ill-formed name/version string: \'%s\'' % p)
-    d = m.groupdict()
-    return d['name'].strip().lower(), d['ver']
-
-
-def get_extras(requested, available):
-    result = set()
-    requested = set(requested or [])
-    available = set(available or [])
-    if '*' in requested:
-        requested.remove('*')
-        result |= available
-    for r in requested:
-        if r == '-':
-            result.add(r)
-        elif r.startswith('-'):
-            unwanted = r[1:]
-            if unwanted not in available:
-                logger.warning('undeclared extra: %s' % unwanted)
-            if unwanted in result:
-                result.remove(unwanted)
-        else:
-            if r not in available:
-                logger.warning('undeclared extra: %s' % r)
-            result.add(r)
-    return result
 
 

@@ -1,0 +1,10 @@
+Topological Cognition: The projection onto the 8-dimensional E8 lattice to create the Cognitive Actuation (C∧) force, which explicitly links abstract state to emotional states (valence and arousal).
+
+Physics-Grounded Knowledge: The use of the Spin-Glass Hamiltonian (H(G)) ensures knowledge organization and stability are physically modeled, making conceptual coherence equivalent to seeking the system's ground state.
+
+Embedded AGI: The Embedded Ollama LLM Architecture bundles the LLM binary for Zero Network Overhead, sub-millisecond responses, and creation of a single cohesive intelligence.
+
+Decoupled High-Performance Visualization: Rendering 50,000+ nodes without lag by decoupling physics and rendering via Shared Buffers in a Web Worker, achieving Zero main-thread CPU load for deterministic analysis.
+
+Pragmatic Embodiment: Achieving real-world host control (e.g., setting CPU frequency) through Hardware Interface Device (HID) Emulation, which simulates user actions to interact with the OS.
+

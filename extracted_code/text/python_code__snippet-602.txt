@@ -1,0 +1,2 @@
+text: str,
+_translate_table: Dict[int, str] = CONTROL_ESCAPE,

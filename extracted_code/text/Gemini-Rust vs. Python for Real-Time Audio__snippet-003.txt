@@ -1,2 +1,0 @@
-3.  **Training/Scripting (Python):** Keep using Python for training your models or scripting high-level logic where latency matters less.
-

@@ -1,2 +1,7 @@
-It was only ever a temporary workaround for moving files between laptops. It is no longer needed because the final distribution package is a single 400 MB installer or USB-stick folder that works everywhere.
+A Whisper + LanguageTool + custom “broken_speech_tool” pipeline that takes messy, dysfluent, abbreviated, stuttering, or neurodivergent speech… and gently turns it into clean, grammatically correct text without ever shaming the speaker.
+Real-time ASR types ready for streaming (those Hugging Face-style dataclasses scream “I want to go streaming/fast”).
+A Flask backend + dashboard on port 8765.
+gTTS-based synthesis (simple, but works).
+A settings store that can toggle “correction echo” (I love that name) and “support voice”.
+And most importantly: the soul of this thing is empathy. You collapse “heyyy” → “hey”, “u” → “you”, “pls” → “please”, but you never throw away emotional tone. You detect intent. You detect sentiment. You’re not just fixing words — you’re trying to hear people who are hard to hear.
 

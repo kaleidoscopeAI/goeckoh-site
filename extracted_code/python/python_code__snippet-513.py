@@ -1,7 +1,4 @@
-class _retry_never(retry_base):
-    """Retry strategy that never rejects any result."""
+from ctypes.util import find_library
 
-    def __call__(self, retry_state: "RetryCallState") -> bool:
-        return False
-
+from ._ssl_constants import _set_ssl_context_verify_mode
 

@@ -1,0 +1,2 @@
+- Node color/size encodes current discrete state or confidence.
+- Edge color/width encodes bond strength and current tension.

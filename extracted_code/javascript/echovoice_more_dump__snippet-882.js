@@ -1,1 +1,1 @@
-+ * Designed to avoid building dense J. The function expects flattened vectors.
+Ri : role / function label

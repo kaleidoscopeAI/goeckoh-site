@@ -1,1 +1,5 @@
-+export class ProjectionService {
+pub processing_time_ms: u64,
+pub memory_used_kb: u64,
+pub warnings: Vec<String>,
+pub success: bool,
+pub processor_used: String,

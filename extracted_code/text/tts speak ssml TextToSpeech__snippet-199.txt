@@ -1,0 +1,11 @@
+      } else {
+          // Baseline: Default
+          mirror.tuneVAD(1, 1200, 0.5f)
+      }
+
+      when {
+          gcl < 0.5 -> {
+              Log.d("AGI", "Meltdown: Deploying calming affirmations.")
+          }
+          gcl < 0.7 -> {
+              Log.d("AGI", "Overload: Performing internal self-

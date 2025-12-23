@@ -1,0 +1,8 @@
+1260 +                        "tilt": feats.tilt,
+1261 +                        "hnr_db": feats.hnr_db,
+1262 +                        "energy": feats.energy,
+1263 +                        "zcr": feats.zcr,
+1264 +                    }
+1265 +                )
+1266              # UI deque (bounded)
+

@@ -1,0 +1,16 @@
+"""
+Create a CommandArgs object.
+"""
+command_args: CommandArgs = []
+for arg in args:
+    # Check for list instead of CommandArgs since CommandArgs is
+    # only known during type-checking.
+    if isinstance(arg, list):
+        command_args.extend(arg)
+    else:
+        # Otherwise, arg is str or HiddenText.
+        command_args.append(arg)
+
+return command_args
+
+

@@ -1,2 +1,1 @@
-for (const emotionKey in mapping) {
-const weight = mapping[emotionKey];
+const loopMs = intervalMs ?? this.timestepMs;

@@ -1,0 +1,2 @@
+  return {"ok": True, "state": orch.snapshot(), "avatar_frames_dir": str((OUT_SHAPES).absolute())}
+

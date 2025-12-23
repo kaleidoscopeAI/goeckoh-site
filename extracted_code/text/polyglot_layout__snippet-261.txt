@@ -1,0 +1,4 @@
+ Your existing UI connects to a WS labeled “connecting…”, but the backend never sent node frames—only metrics/reflections.
+ The patch above streams the actual positions—the viewer sees them immediately.
+
+

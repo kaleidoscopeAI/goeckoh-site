@@ -1,0 +1,1 @@
+sock_or_sslobj: ssl.SSLSocket | ssl.SSLObject, server_hostname: str | None

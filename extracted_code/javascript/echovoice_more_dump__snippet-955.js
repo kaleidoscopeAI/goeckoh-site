@@ -1,4 +1,3 @@
-+async function main() {
-+ const m = 64;
-+ const nodes: NodeState[] = [];
-+ for (let i = 0; i < m; i++) nodes.push(makeRandomNode(i));
+const sub = m.map(row => row.slice(0, i).concat(row.slice(i + 1)));
+const sign = i % 2 === 0 ? 1 : -1;
+sum += sign * m[0][i] * det(sub.slice(1));

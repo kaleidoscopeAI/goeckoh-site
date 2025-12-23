@@ -1,0 +1,2 @@
+setup_py_path: str,
+global_options: Sequence[str],

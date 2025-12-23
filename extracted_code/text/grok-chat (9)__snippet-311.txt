@@ -1,0 +1,2 @@
+sherpa_onnx spec None
+

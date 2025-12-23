@@ -1,14 +1,8 @@
-class Node:
-    def __init__(self, node_id, library):
-        self.node_id = node_id
-        self.library = library
-        self.capabilities = []
+object_detection_community = Community("object_detection")
 
-    def request_capability(self, capability_name):
-        resource = self.library.get_resource(capability_name)
-        if resource != "Resource not available.":
-            self.capabilities.append(capability_name)
-            self.logs.append(f"Acquired capability: {capability_name}")
-        else:
-            self.logs.append(f"Failed to acquire capability: {capability_name}")
+for node in nodes:
+    if "object_detection" in node.capabilities:
+        object_detection_community.add_member(node)
+
+object_detection_community.share_knowledge("training_data", "Annotated dataset")
 

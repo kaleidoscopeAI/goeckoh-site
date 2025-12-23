@@ -1,1 +1,4 @@
-Use asynchronous I/O and avoid blocking calls. Consider using CPU-only builds (no GPU) and optimize (e.g. reduce precision).
+|                      ^^^^^^^^^^^^^ unknown field
+|
+= note: available fields are: `element_symbol`, `electronegativity`, `valence_electrons`, `atomic_radius`, `is_metal` ... and 2 others
+

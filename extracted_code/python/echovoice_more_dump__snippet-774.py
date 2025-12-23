@@ -1,2 +1,1 @@
-The process of autonomous web crawling is defined by the flow from the highest-level state metrics (L4) to the physical hardware action (L0), all regulated by the Control Synthesis Function, G.
-
+Core Functionality: The service is a singleton class that processes text inputs asynchronously, maintaining a history of up to 10 contexts for continuity. It uses simple keyword-based NLP (expandable to full NLP in production) to detect topics from a predefined mapping (TOPIC_SHAPES), sentiment via word scoring, and complexity via lexical diversity. It then generates NodeTarget arrays for 3D rendering, with positions shaped by topic-specific functions (e.g., spiral galaxies for 'consciousness', hearts for 'love').

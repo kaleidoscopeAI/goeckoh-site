@@ -1,0 +1,2 @@
+- Allow resource sharing (e.g., memory, energy, knowledge).
+- Enable nodes to identify

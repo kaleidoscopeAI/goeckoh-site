@@ -1,0 +1,2 @@
+  name="content_summarizer_agent",
+  description="An agent that summarizes collected file contents and

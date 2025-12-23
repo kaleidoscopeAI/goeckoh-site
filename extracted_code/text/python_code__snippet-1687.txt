@@ -1,0 +1,6 @@
+"""Root-mean-square energy for silence detection."""
+if audio is None or audio.size == 0:
+    return 0.0
+return float(np.sqrt(np.mean(np.square(audio))))
+
+

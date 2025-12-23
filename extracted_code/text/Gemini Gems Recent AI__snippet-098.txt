@@ -1,0 +1,7 @@
+<div>
+  <h1>Molecular Similarity</h1>
+  <input type="text" placeholder="SMILES 1" value={smiles1} onChange={(e) => setSmiles1(e.target.value)} />
+  <input type="text" placeholder="SMILES 2" value={smiles2} onChange={(e) => setSmiles2(e.target.value)} />
+  <button onClick={calculateSimilarity}>Calculate Similarity</button>
+  {similarity!== null && <p>Similarity: {similarity}</p>}
+</div>

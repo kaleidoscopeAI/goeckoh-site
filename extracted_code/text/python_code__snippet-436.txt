@@ -1,0 +1,5 @@
+interpreter: Optional[str] = None,
+abis: Optional[Iterable[str]] = None,
+platforms: Optional[Iterable[str]] = None,
+*,
+warn: bool = False,

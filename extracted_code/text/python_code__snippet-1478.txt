@@ -1,0 +1,20 @@
+"""Parse a requirements file and yield ParsedRequirement instances.
+
+:param filename:    Path or url of requirements file.
+:param session:     PipSession instance.
+:param finder:      Instance of pip.index.PackageFinder.
+:param options:     cli options.
+:param constraint:  If true, parsing a constraint file rather than
+    requirements file.
+"""
+line_parser = get_line_parser(finder)
+parser = RequirementsFileParser(session, line_parser)
+
+for parsed_line in parser.parse(filename, constraint):
+    parsed_req = handle_line(
+        parsed_line, options=options, finder=finder, session=session
+    )
+    if parsed_req is not None:
+        yield parsed_req
+
+

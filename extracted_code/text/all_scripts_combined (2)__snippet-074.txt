@@ -1,0 +1,11 @@
+loop = asyncio.get_event_loop()
+while True:
+    try:
+        chunk = await loop.run_in_executor(None, next, sync_iter, None)
+        if chunk is None:
+            break
+        yield chunk
+    except StopIteration:
+        break
+
+

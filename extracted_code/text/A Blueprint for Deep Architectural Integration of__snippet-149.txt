@@ -1,0 +1,4 @@
+input_pattern = ApplyBitMask(BitVector_S, RoutingMask[i])
+output_bits = WeightlessNN_Verify(input_pattern)
+Accumulate_Output_Bits(output_bits)
+

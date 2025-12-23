@@ -1,0 +1,1 @@
+with register_sigint_fallback(self.quit):

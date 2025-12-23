@@ -1,5 +1,2 @@
-class Node:
-    id: int
-    pos: np.ndarray
-    fixed: bool = False
+# <REDACTED: potential secret detected>
 

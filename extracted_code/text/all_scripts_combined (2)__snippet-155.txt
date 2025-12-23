@@ -1,0 +1,4 @@
+ollama = None  # type: ignore
+HAS_OLLAMA = False
+
+

@@ -1,0 +1,5 @@
+nodeCount: 50000,
+globalCoherence: 0.5,
+emotionalField: { valence: 0.0, arousal: 0.5 },
+knowledgeCrystals: 0,
+hypotheses: []

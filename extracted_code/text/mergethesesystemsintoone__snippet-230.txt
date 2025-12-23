@@ -1,1 +1,1 @@
-store.insertStmt = await db.prepare('INSERT OR REPLACE INTO dna (gen, phi) VALUES (?, ?)');
+return """

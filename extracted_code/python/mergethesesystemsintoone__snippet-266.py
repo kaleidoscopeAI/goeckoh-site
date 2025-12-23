@@ -1,9 +1,13 @@
-def mutate(self):
-    """Evolve pattern recognition capability"""
-    if np.random.random() < self.adaptation_rate:
-        if len(self.sequence) > 3:
-            # Combine existing patterns
-            idx1, idx2 = np.random.choice(len(self.sequence), 2, replace=False)
-            new_pattern = self.sequence[idx1][:2] + self.sequence[idx2][2:]
-            self.sequence.append(new_pattern)
-            self.mutations += 1
+       self.knowledge_graph.add_node (concept ["id"], concept) #Add unique entities or patterns from all modules into memory graphs for cross model influence
+        
+      #  Applies a series of transformations using multiple different logic tools
+    insights = self.reasoning_engine.apply (concepts[0] if len (concepts) > 0 else {})
+      # decision
+    decisions = self.decision_maker.evaluate (insights)
+    self.belief_system.observe (insights) # Observe data through knowledge netowork. can do before or after decision as needed by feedback loop system.
+      
+    return {
+      "insights": insights,
+         'decisions': decisions,
+         'updated_beliefs': self.belief_system.get_probabilities()
+      }

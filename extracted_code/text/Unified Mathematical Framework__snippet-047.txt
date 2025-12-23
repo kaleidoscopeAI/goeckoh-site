@@ -1,0 +1,7 @@
+Banach Fixed-Point (voice convergence):
+‖G(x₁,⋅) − G(x₂,⋅)‖ ≤ ρ‖x₁ − x₂‖, ρ < 1
+Lyapunov Stability of emotional state:
+V̇(S) = ∇V · G(S,⋅) ≤ −α‖S−S∗‖² + β‖I‖²
+Confidence Metric (used in BehaviorMonitor):
+Confidence(t)=σ(w₁GCL(t)+w₂Emergence(t)−w₃Stress(t)+w₄Harmony(t)+w₅ΔC)
+

@@ -1,0 +1,16 @@
+  if rng is None:
+      rng = np.random.RandomState(7)
+  idx = knn_indices(E, i, k=max(1, min(k, E.shape[0]-1)))
+  vals = []
+  D = E.shape[1]
+  for _ in range(M):
+      ei = E[i] + sigma * rng.normal(0.0, 1.0, size=D)
+      ei = ei / (np.linalg.norm(ei) + 1e-9)
+      sims = []
+      for j in idx:
+          ej = E[j] + sigma * rng.normal(0.0, 1.0, size=D)
+          ej = ej / (np.linalg.norm(ej) + 1e-9)
+          sims.append(cos_sim(ei, ej))
+      vals.append(max(sims) if sims else 0.0)
+  return float(np.var(vals))
+

@@ -1,1 +1,1 @@
-- **Vector Class:** Integrate with existing `Vector` class in your codebase for consistency.
+2. In each cognitive loop iteration, generate hypotheses for each node using PerspectiveEngine, evaluate, and update if confidence passes a threshold.

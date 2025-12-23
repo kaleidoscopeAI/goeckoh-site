@@ -1,0 +1,2 @@
+    - Curiosity tension represented as a single control bit or a few bits (low-resolution count).
+    - Bit operations and logic gates decide activation of crawler engine $O_{\text{crawl}}$.

@@ -1,0 +1,3 @@
+print("[INFO] Neural Speech module missing.")
+NEURAL_AVAILABLE = False
+

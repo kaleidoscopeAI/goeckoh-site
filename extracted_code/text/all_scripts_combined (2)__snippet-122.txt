@@ -1,0 +1,15 @@
+stats = summarize(config)
+if not stats:
+    print("No attempts logged yet.")
+    return
+print(f"Metrics CSV: {config.paths.metrics_csv}")
+for phrase_id, row in stats.items():
+    rate = row.corrections / row.attempts if row.attempts else 0.0
+    print(f"{phrase_id}: attempts={row.attempts} corrections={row.corrections} correction_rate={rate:.2f}")
+if config.paths.guidance_csv.exists():
+    with config.paths.guidance_csv.open() as f:
+        guidance_events = sum(1 for _ in f) - 1
+    if guidance_events > 0:
+        print(f"Guidance events logged: {guidance_events} (see {config.paths.guidance_csv})")
+
+

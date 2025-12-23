@@ -1,125 +1,32 @@
-def run_comprehensive_demo():
-    """Run comprehensive demonstration of all integrated components"""
-    print("\n" + "="*80)
-    print("🚀 UNIFIED NEURO-ACOUSTIC AGI SYSTEM - COMPREHENSIVE DEMO")
-    print("="*80)
-    
-    # Initialize system
-    system = UnifiedNeuroAcousticSystem()
-    
-    # Test scenarios covering all components
-    test_scenarios = [
-        {
-            'name': 'Initial State Check',
-            'input': '',
-            'sensory': {'sentiment': 0.0, 'cpu_temp': 0.3, 'memory_usage': 0.4},
-            'description': 'Check baseline system state'
-        },
-        {
-            'name': 'Positive Emotional Input',
-            'input': 'I am feeling happy and excited today!',
-            'sensory': {'sentiment': 0.8, 'cpu_temp': 0.4, 'memory_usage': 0.5},
-            'description': 'Test positive emotional processing'
-        },
-        {
-            'name': 'Stress Induction',
-            'input': 'HELP THIS IS AN EMERGENCY!',
-            'sensory': {'sentiment': -0.7, 'cpu_temp': 0.8, 'memory_usage': 0.9},
-            'description': 'Test stress response and safety gating'
-        },
-        {
-            'name': 'Complex Reasoning',
-            'input': 'Can you help me understand quantum computing and consciousness?',
-            'sensory': {'sentiment': 0.3, 'cpu_temp': 0.5, 'memory_usage': 0.6},
-            'description': 'Test complex cognitive processing'
-        },
-        {
-            'name': 'Memory Retrieval Test',
-            'input': 'Remember our conversation about happiness',
-            'sensory': {'sentiment': 0.6, 'cpu_temp': 0.4, 'memory_usage': 0.5},
-            'description': 'Test memory encoding and retrieval'
-        },
-        {
-            'name': 'Emotional Regulation',
-            'input': 'I feel calm and centered now',
-            'sensory': {'sentiment': 0.2, 'cpu_temp': 0.3, 'memory_usage': 0.4},
-            'description': 'Test emotional regulation and coherence'
-        }
-    ]
-    
-    results = []
-    
-    for i, scenario in enumerate(test_scenarios, 1):
-        print(f"\n🧪 Test {i}/{len(test_scenarios)}: {scenario['name']}")
-        print(f"📝 Description: {scenario['description']}")
-        print(f"💬 Input: '{scenario['input']}'")
-        
-        # Process input
-        result = system.process_input(scenario['input'], scenario['sensory'])
-        
-        # Display results
-        print(f"🤖 Response: '{result['response_text']}'")
-        print(f"🎵 Audio Generated: {len(result['audio_data'])} samples")
-        print(f"📊 GCL: {result['metrics'].gcl:.3f}")
-        print(f"🌡️  Stress: {result['metrics'].stress:.3f}")
-        print(f"❤️  Life Intensity: {result['metrics'].life_intensity:.3f}")
-        print(f"🎭 Mode: {result['metrics'].mode}")
-        print(f"🧠 Emotional Coherence: {result['metrics'].emotional_coherence:.3f}")
-        print(f"⚛️  Quantum Coherence: {result['metrics'].quantum_coherence:.3f}")
-        print(f"💾 Memory Stability: {result['metrics'].memory_stability:.3f}")
-        print(f"🖥️  Hardware Coupling: {result['metrics'].hardware_coupling:.3f}")
-        print(f"🔒 Control Allowed: {result['control_status']['allowed']}")
-        print(f"⏱️  Processing Time: {result['processing_time']*1000:.1f}ms")
-        
-        # Show emotional state
-        emotion = result['emotional_state']
-        print(f"😊 Emotional State: Joy={emotion.joy:.2f}, Fear={emotion.fear:.2f}, "
-              f"Trust={emotion.trust:.2f}, Anger={emotion.anger:.2f}, "
-              f"Anticipation={emotion.anticipation:.2f}")
-        
-        # Show similar memories if any
-        if result['similar_memories']:
-            print(f"🧠 Similar Memories: {len(result['similar_memories'])} found")
-            for j, (mem_id, sim, mem_data) in enumerate(result['similar_memories'][:2], 1):
-                print(f"   {j}. Similarity: {sim:.3f}, Content: '{mem_data['content'][:50]}...'")
-        
-        results.append(result)
-        
-        # Small delay between tests
-        time.sleep(0.5)
-    
-    # Final system overview
-    print(f"\n{'='*80}")
-    print("📈 FINAL SYSTEM OVERVIEW")
-    print("="*80)
-    
-    final_status = system.get_system_status()
-    print(f"🧠 Final GCL: {final_status['gcl']:.3f}")
-    print(f"🌡️  Final Stress: {final_status['stress']:.3f}")
-    print(f"❤️  Final Life Intensity: {final_status['life_intensity']:.3f}")
-    print(f"🎭 Final Mode: {final_status['system_mode']}")
-    print(f"🧠 Total Memories: {final_status['memory_count']}")
-    print(f"⏱️  Total Uptime: {final_status['uptime']:.1f}s")
-    print(f"🌡️  Final Temperature: {final_status['temperature']:.3f}")
-    print(f"🔮 Consciousness Level: {final_status['consciousness_level']:.3f}")
-    
-    # Performance metrics
-    processing_times = [r['processing_time'] for r in results]
-    avg_time = np.mean(processing_times) * 1000
-    print(f"⚡ Average Processing Time: {avg_time:.1f}ms")
-    
-    # Component integration verification
-    print(f"\n🔗 COMPONENT INTEGRATION STATUS:")
-    print(f"  ✅ Crystalline Heart: {system.crystalline_heart.num_nodes} nodes active")
-    print(f"  ✅ Memory System: {len(system.memory_system.vector_index)} memories encoded")
-    print(f"  ✅ Cyber-Physical: L0-L4 control active")
-    print(f"  ✅ Molecular Quantum: {system.molecular_system.num_atoms} atoms")
-    print(f"  ✅ Voice Synthesis: {'Rust+Neural' if system.voice_engine.rust_available else 'Phoneme'}")
-    print(f"  ✅ EADS: 5D emotional vectors active")
-    print(f"  ✅ Consciousness Firewall: {'Active' if final_status['control_firewall_active'] else 'Inactive'}")
-    
-    # Shutdown system
-    system.shutdown()
-    
-    return results
+"""Context manager to capture the result of printing to the console.
+See :meth:`~rich.console.Console.capture` for how to use.
+
+Args:
+    console (Console): A console instance to capture output.
+"""
+
+def __init__(self, console: "Console") -> None:
+    self._console = console
+    self._result: Optional[str] = None
+
+def __enter__(self) -> "Capture":
+    self._console.begin_capture()
+    return self
+
+def __exit__(
+    self,
+    exc_type: Optional[Type[BaseException]],
+    exc_val: Optional[BaseException],
+    exc_tb: Optional[TracebackType],
+) -> None:
+    self._result = self._console.end_capture()
+
+def get(self) -> str:
+    """Get the result of the capture."""
+    if self._result is None:
+        raise CaptureError(
+            "Capture result is not available until context manager exits."
+        )
+    return self._result
+
 

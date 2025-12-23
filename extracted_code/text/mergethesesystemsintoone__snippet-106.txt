@@ -1,1 +1,1 @@
-class MemoryResonance:
+Fix: Define CoreLaws (node governance) and CapabilityNode (base class for nodes).

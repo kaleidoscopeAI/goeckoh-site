@@ -1,1 +1,1 @@
-const proj = this.projectToEmotion();
+export const SPECIES = [

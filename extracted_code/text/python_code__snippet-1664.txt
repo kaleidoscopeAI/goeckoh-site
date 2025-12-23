@@ -1,0 +1,3 @@
+logging.warning("vosk unavailable: %s", e)
+VOSK_AVAILABLE = False
+

@@ -1,6 +1,7 @@
-from .cells import (
-    _is_single_cell_widths,
-    cached_cell_len,
-    cell_len,
-    get_character_cell_size,
-    set_cell_size,
+def get_scheme(
+    dist_name: str,
+    user: bool = False,
+    home: Optional[str] = None,
+    root: Optional[str] = None,
+    isolated: bool = False,
+    prefix: Optional[str] = None,

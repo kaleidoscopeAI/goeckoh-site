@@ -1,0 +1,13 @@
+      } else {
+          voskModel = Model(modelPath.absolutePath)
+      }
+
+      // Init Sherpa TTS for multiple languages
+      val models = listOf(
+          "en" to "vits-piper-en_US-amy-medium.onnx",
+          "es" to "vits-piper-es_ES-mls_9972-medium.onnx",
+          "fr" to "vits-piper-fr_FR-upmc-medium.onnx"
+      )
+      models.forEach { (lang, modelName) ->
+          val ttsModelPath = File(context.filesDir, modelName).absolutePath
+          val config = OfflineTtsConfig(model = ttsModelPath, numThreads =

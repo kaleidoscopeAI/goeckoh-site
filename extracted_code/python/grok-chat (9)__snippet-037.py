@@ -1,32 +1,17 @@
-    910 +    def mirror_stream_events(self):
-    911 +        """
-    912 +        Server-Sent Events (SSE) stream of latest transcript/corrected/
-         GCL for visualizers.
-    913 +        Polls the live status every 0.5s and emits JSON payloads.
-    914 +        """
-    915 +        if not self.mirror_service:
-    916 +            return jsonify({"error": "Mirror service not available"}),
-         503
-    917 +
-    918 +        def event_stream():
-    919 +            import json
-    920 +            last_sent = None
-    921 +            while True:
-    922 +                st = self.mirror_service.status()
-    923 +                payload = {
-    924 +                    "ts": time.time(),
-    925 +                    "transcript": st.last_transcript,
-    926 +                    "corrected": st.last_corrected,
-    927 +                    "gcl": st.gcl,
-    928 +                    "phenotype_counts": st.phenotype_counts,
-    929 +                }
-    930 +                data = json.dumps(payload, ensure_ascii=False)
-    931 +                if data != last_sent:
-    932 +                    yield f"data: {data}\n\n"
-    933 +                    last_sent = data
-    934 +                time.sleep(0.5)
-    935 +
-    936 +        return self.app.response_class(event_stream(), mimetype="text/e
-         vent-stream")
-    937
+  - Words from the SSE transcript now map to themed colors and simple shapes
+    (sphere, cube, cone, torus, pyramid) based on keywords like “dog”, “car”,
+    “tree”, etc. Metadata is attached per node so you can branch on shape in
+    your Three.js rendering.
+  - This keeps the stream immediate (no extra backend calls) and makes phrases
+    like “dog chasing car” visually distinct.
+
+  Files touched:
+
+  - cognitive-nebula/agi-thought-visualizer/App.tsx (color/geometry mapping
+    added)
+
+  If you want the shapes actually rendered (e.g., swapping particle sprites for
+  meshes based on metadata.shape), I can update Visualization.tsx next to
+  instantiate the corresponding geometries.
+
 

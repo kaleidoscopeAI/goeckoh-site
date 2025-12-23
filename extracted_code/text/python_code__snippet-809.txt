@@ -1,0 +1,3 @@
+return formatdate(calendar.timegm(dt.timetuple()))
+
+

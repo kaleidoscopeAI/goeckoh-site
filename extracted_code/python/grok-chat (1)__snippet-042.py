@@ -1,1 +1,7 @@
-...HID emulation wired—emulating keyboard/mouse for legacy devices. Nodes from snippets annealed into lattice for distributed mimicry. DA system integrated for dynamic allocation. Full codebase updated, ready to mimic in real time on any hardware...
+Added from DA_system.txt: Kernel-like scheduling for AI nodes.
+Pythonfrom __future__ import annotations
+
+import numpy as np
+from typing import Dict, Literal
+from dataclasses import dataclass
+

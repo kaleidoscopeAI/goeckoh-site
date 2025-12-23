@@ -1,1 +1,0 @@
-- **SoTE Integration $G$** ≈ Crystal annealing process computing next global state from minimized energy.

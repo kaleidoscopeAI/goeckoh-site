@@ -1,0 +1,3 @@
+{'mode': 'learning', 'success': True, 'energy_used': 5, 'completion_time': 2.0},
+{'mode': 'growth', 'success': False, 'energy_used': 10, 'completion_time': 4.0},
+{'mode': 'teaching', 'success': True, 'energy_used': 8, 'completion_time': 3.0},

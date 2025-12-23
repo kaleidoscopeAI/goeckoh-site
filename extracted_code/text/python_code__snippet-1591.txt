@@ -1,0 +1,7 @@
+PipOption,
+"--cache-dir",
+dest="cache_dir",
+default=USER_CACHE_DIR,
+metavar="dir",
+type="path",
+help="Store the cache data in <dir>.",

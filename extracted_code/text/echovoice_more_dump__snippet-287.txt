@@ -1,1 +1,4 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+   * The _apply_cognitive_actuation method now calculates and returns F_kaleidoscope.
+   * This F_kaleidoscope is then passed to node.update_position, ensuring that the cognitive actuation directly
+     influences the node's physical evolution.
+

@@ -1,2 +1,0 @@
-Modify your CognitiveMachine or equivalent class to hold and use episodic memory:
-

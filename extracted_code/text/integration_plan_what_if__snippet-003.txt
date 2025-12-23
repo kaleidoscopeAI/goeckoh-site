@@ -1,0 +1,4 @@
+*   **ABA Engine Evaluation (EchoVoice/Crystal AI Refinement):** The `echovoice`'s ABA Engine triggers initial rule-based interventions (e.g., high arousal -> calming strategy). However, the `cognitive_crystal_ai`'s reasoning layers (LLM, Thought Engines) can override or refine these, selecting more nuanced, context-specific therapeutic responses.
+*   **Organic Strategy Generation:** The "Organic AI" may suggest novel strategies through its emergent properties, which are then evaluated by the LLM against ethical and therapeutic guidelines.
+*   **Goal-Oriented Action Selection:** The "master Hamiltonian" guides the overall decision-making, balancing immediate needs (regulation) with long-term developmental goals.
+

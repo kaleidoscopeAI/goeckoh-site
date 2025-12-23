@@ -1,1 +1,7 @@
-def start(self):
+async def handle_query():
+    data = await request.get_json()
+    sensor_input = data.get("sensor_input")
+    web_input = data.get("web_input")
+    result = await organic_ai.run_organic_cycle(sensor_input, web_input)
+    return jsonify({"status": "success", "message": result})
+

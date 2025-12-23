@@ -1,0 +1,6 @@
+waveform: audioBuffer,
+spectrum: frequencyData,
+f0: 220,
+energy: 0.7,
+clarity: 0.85,
+volume: 0.6

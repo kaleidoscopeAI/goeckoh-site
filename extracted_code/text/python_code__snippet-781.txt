@@ -1,0 +1,2 @@
+_truststore_SSLContext_super_class = _original_SSLContext
+_truststore_SSLContext_dunder_class = None

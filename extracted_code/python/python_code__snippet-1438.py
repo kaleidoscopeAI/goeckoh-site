@@ -1,13 +1,13 @@
-import logging
-import os
-import subprocess
-from optparse import Values
-from typing import Any, List, Optional
+@_ExtensionsSpecialForm
+def Concatenate(self, parameters):
+    """Used in conjunction with ``ParamSpec`` and ``Callable`` to represent a
+    higher order function which adds, removes or transforms parameters of a
+    callable.
 
-from pip._internal.cli.base_command import Command
-from pip._internal.cli.status_codes import ERROR, SUCCESS
-from pip._internal.configuration import (
-    Configuration,
-    Kind,
-    get_configuration_files,
-    kinds,
+    For example::
+
+       Callable[Concatenate[int, P], int]
+
+    See PEP 612 for detailed information.
+    """
+    return _concatenate_getitem(self, parameters)

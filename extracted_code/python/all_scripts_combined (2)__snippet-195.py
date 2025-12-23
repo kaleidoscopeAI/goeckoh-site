@@ -1,61 +1,51 @@
-class MeltdownRisk:
-    score: int = 0  # 0–100
-    level: str = "No data yet"
-    message: str = ""
+"""
+Extracts F0 and RMS energy envelopes from a waveform.
+"""
+if wav.ndim > 1:
+    wav = np.mean(wav, axis=1)
+wav = np.asarray(wav, dtype=np.float32)
+
+frame_length = max(int(sample_rate * frame_ms / 1000.0), 256)
+hop_length = max(int(sample_rate * hop_ms / 1000.0), 128)
+
+# 1. Pitch (F0) extraction using the YIN algorithm
+# YIN is robust and commonly used for speech processing.
+f0, voiced_flag, voiced_probs = librosa.pyin(
+    y=wav,
+    fmin=fmin_hz,
+    fmax=fmax_hz,
+    sr=sample_rate,
+    frame_length=frame_length,
+    hop_length=hop_length
+)
+# Fill NaNs in unvoiced frames with a reasonable value (e.g., median of voiced frames)
+if np.any(voiced_flag):
+    median_f0 = np.nanmedian(f0[voiced_flag])
+    f0 = np.nan_to_num(f0, nan=median_f0)
+else:
+    f0.fill(150) # Fallback to a generic pitch if no voice is detected
+
+# 2. Energy (RMS) extraction
+rms = librosa.feature.rms(
+    y=wav, frame_length=frame_length, hop_length=hop_length, center=True
+)[0]
+
+# 3. Time alignment
+times = librosa.frames_to_time(
+    np.arange(len(f0)), sr=sample_rate, hop_length=hop_length
+)
+
+# Ensure all outputs are clean float32 arrays
+f0 = f0.astype(np.float32)
+rms = np.maximum(rms, 1e-5).astype(np.float32) # Prevent log errors
+
+return ProsodyProfile(
+    f0_hz=f0,
+    energy=rms,
+    times_s=times.astype(np.float32),
+    frame_length=frame_length,
+    hop_length=hop_length,
+    sample_rate=sample_rate
+)-e 
 
 
-def _safe_bool(val: Any) -> bool:
-    if isinstance(val, bool):
-        return val
-    if isinstance(val, (int, float)):
-        return bool(val)
-    if isinstance(val, str):
-        v = val.strip().lower()
-        return v in {"1", "true", "yes", "y"}
-    return False
-
-
-def load_metrics(config: CompanionConfig) -> MetricsSnapshot:
-    path = config.paths.metrics_csv
-    if path is None or not path.exists():
-        return MetricsSnapshot()
-    rows: List[Dict[str, str]] = []
-    with path.open("r", newline="") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            rows.append(row)
-    if not rows:
-        return MetricsSnapshot()
-    total_attempts = len(rows)
-    total_corrections = sum(1 for r in rows if _safe_bool(r.get("needs_correction")))
-    last = rows[-1]
-    last_phrase = last.get("phrase_text") or ""
-    last_raw = last.get("raw_text") or ""
-    last_corrected = last.get("corrected_text") or ""
-    last_needs_correction = _safe_bool(last.get("needs_correction"))
-    overall_rate = (total_corrections / total_attempts) if total_attempts else 0.0
-    return MetricsSnapshot(
-        total_attempts=total_attempts,
-        total_corrections=total_corrections,
-        overall_rate=overall_rate,
-        last_phrase=last_phrase,
-        last_raw=last_raw,
-        last_corrected=last_corrected,
-        last_needs_correction=last_needs_correction,
-    )
-
-
-def load_guidance(config: CompanionConfig) -> List[Dict[str, str]]:
-    path = config.paths.guidance_csv
-    if path is None or not path.exists():
-        return []
-    rows: List[Dict[str, str]] = []
-    with path.open("r", newline="") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            rows.append(row)
-    return rows
-
-
-def compute_behavior_summary(
-    guidance_rows: List[Dict[str, str]], window: int = 50

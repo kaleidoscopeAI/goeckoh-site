@@ -1,1 +1,1 @@
-# add to the beginning of sys.path before attempting to import anything. This
+# which happens at import of most modules.

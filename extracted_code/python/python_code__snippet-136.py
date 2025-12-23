@@ -1,2 +1,9 @@
-from __future__ import absolute_import
+def get_platform():
+    if os.name != 'nt':
+        return get_host_platform()
+    cross_compilation_target = os.environ.get('VSCMD_ARG_TGT_ARCH')
+    if cross_compilation_target not in _TARGET_TO_PLAT:
+        return get_host_platform()
+    return _TARGET_TO_PLAT[cross_compilation_target]
+
 

@@ -1,40 +1,16 @@
-def _replace_multiple(value, needles_and_replacements):
-    def replacer(match):
-        return needles_and_replacements[match.group(0)]
+    class _UnpackSpecialForm(_ExtensionsSpecialForm, _root=True):
+        def __init__(self, getitem):
+            super().__init__(getitem)
+            self.__doc__ = _UNPACK_DOC
 
-    pattern = re.compile(
-        r"|".join([re.escape(needle) for needle in needles_and_replacements.keys()])
-    )
+    class _UnpackAlias(typing._GenericAlias, _root=True):
+        __class__ = typing.TypeVar
 
-    result = pattern.sub(replacer, value)
+    @_UnpackSpecialForm
+    def Unpack(self, parameters):
+        item = typing._type_check(parameters, f'{self._name} accepts only a single type.')
+        return _UnpackAlias(self, (item,))
 
-    return result
-
-
-def format_header_param_html5(name, value):
-    """
-    Helper function to format and quote a single header parameter using the
-    HTML5 strategy.
-
-    Particularly useful for header parameters which might contain
-    non-ASCII values, like file names. This follows the `HTML5 Working Draft
-    Section 4.10.22.7`_ and matches the behavior of curl and modern browsers.
-
-    .. _HTML5 Working Draft Section 4.10.22.7:
-        https://w3c.github.io/html/sec-forms.html#multipart-form-data
-
-    :param name:
-        The name of the parameter, a string expected to be ASCII only.
-    :param value:
-        The value of the parameter, provided as ``bytes`` or `str``.
-    :ret:
-        A unicode string, stripped of troublesome characters.
-    """
-    if isinstance(value, six.binary_type):
-        value = value.decode("utf-8")
-
-    value = _replace_multiple(value, _HTML5_REPLACEMENTS)
-
-    return u'%s="%s"' % (name, value)
-
+    def _is_unpack(obj):
+        return isinstance(obj, _UnpackAlias)
 

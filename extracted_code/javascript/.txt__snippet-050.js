@@ -1,2 +1,1 @@
-private func handleResponse(json: [String: Any]) {
-if let metrics = json["metrics"] as? [String: Any] {
+let phrase = String(message.dropFirst(prefix.count)).trimmingCharacters(in: .whitespacesAndNewlines)

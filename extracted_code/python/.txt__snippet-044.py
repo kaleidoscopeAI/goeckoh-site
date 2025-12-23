@@ -1,2 +1,1 @@
-class LocalLLM:
-def __init__(self, config: CompanionConfig) -> None:
+def speak(self, text: str, arousal: float, valence: float, T_val: float) -> None:

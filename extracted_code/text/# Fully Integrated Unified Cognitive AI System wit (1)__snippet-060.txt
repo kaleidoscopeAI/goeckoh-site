@@ -1,0 +1,1 @@
+- Apply Numba or Cython to accelerate critical compute functions: _apply_cognitive_actuation, _compute_master_state_psi.

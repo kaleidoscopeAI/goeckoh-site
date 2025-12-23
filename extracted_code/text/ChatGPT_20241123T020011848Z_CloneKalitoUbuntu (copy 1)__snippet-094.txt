@@ -1,0 +1,3 @@
+- When nodes replicate or die.
+- How energy and maturity are updated.
+- How generations interact.

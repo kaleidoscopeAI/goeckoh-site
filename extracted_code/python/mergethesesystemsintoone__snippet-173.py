@@ -1,2 +1,1 @@
-class ImageProcessingUnit(ProcessingUnit):
-def init(self):
+def validate_processing_output(output: Dict[str, Any]) -> bool:

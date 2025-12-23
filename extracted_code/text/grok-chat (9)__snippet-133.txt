@@ -1,0 +1,5 @@
+sounddevice, cross-correlates to estimate hardware round‑trip latency, and
+saves the recording to backend/.run/loopback_recording.npy.
+Run: python scripts/measure_loop_latency.py (ensure loopback cable or mic
+near speaker).
+

@@ -1,0 +1,1 @@
+  return "<html><body><h1>Seed-Crystal AGI</h1><p>Visit <code>/status</code> for state or connect to <code>/ws</code> for realtime.</p></body>

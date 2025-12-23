@@ -1,1 +1,1 @@
-def replicate_node(self, node_id: str):
+def start(self, interval_ms=1000):

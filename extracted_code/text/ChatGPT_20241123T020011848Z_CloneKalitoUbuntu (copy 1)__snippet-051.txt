@@ -1,1 +1,10 @@
-- Personalized education, using adaptive learning to tailor experiences for individuals.
+   FOR each node Ni in Network:
+       - Run Grow(Ni)
+       - Run Learn(Ni, new experiences)
+       - FOR each connection Nj of Ni:
+           - Run Communicate(Ni, Nj, Ni’s knowledge)
+       - Run CheckErrors(Ni)
+   END FOR
+
+   - Repeat EvolveNetwork on all active nodes to allow recursive growth
+

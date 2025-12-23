@@ -1,1 +1,1 @@
-Ii (t) = incoming stimulus vector (from web, user input, internal cube reflection)
+def store(self, metrics: Dict[str, Any], thought: str):

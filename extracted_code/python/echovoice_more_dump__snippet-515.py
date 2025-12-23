@@ -1,1 +1,1 @@
-<strong>Constructs</strong> — persistent conceptual points derived from node Ki. Click a point to inspect.
+This equation ties the entire system together — from emotional actuation, through node dynamics, to cognitive projection.

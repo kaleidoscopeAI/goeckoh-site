@@ -1,0 +1,5 @@
+"""
+This exception will be raised by all option processing functions if
+the type or value of the argument is not correct.
+"""
+

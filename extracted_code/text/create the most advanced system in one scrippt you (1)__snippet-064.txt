@@ -1,0 +1,1 @@
+             (1 + Condition|Subject) + (1|Trial), data=goeckoh_eeg)

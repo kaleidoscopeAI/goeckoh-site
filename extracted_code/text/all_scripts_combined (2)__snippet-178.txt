@@ -1,0 +1,8 @@
+"app_name": "Echo",
+"version": "4.0.0",
+"author": "Echo Development Team",
+"description": "Autism-tuned speech companion with crystalline emotional lattice",
+"identifier": "com.echo.companion",
+"license": "Proprietary",
+"python_version": "3.11",
+"icon_name": "echo_icon"

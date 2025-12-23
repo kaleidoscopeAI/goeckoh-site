@@ -1,13 +1,10 @@
-import math
-from functools import lru_cache
-from time import monotonic
-from typing import Iterable, List, Optional
+import logging
+from email.message import Message
+from email.parser import Parser
+from typing import Tuple
+from zipfile import BadZipFile, ZipFile
 
-from .color import Color, blend_rgb
-from .color_triplet import ColorTriplet
-from .console import Console, ConsoleOptions, RenderResult
-from .jupyter import JupyterMixin
-from .measure import Measurement
-from .segment import Segment
-from .style import Style, StyleType
+from pip._vendor.packaging.utils import canonicalize_name
+
+from pip._internal.exceptions import UnsupportedWheel
 

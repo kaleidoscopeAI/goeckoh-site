@@ -1,0 +1,3 @@
+    - WNNs operate on binary inputs using pattern matching and produce binary outputs. This maps well onto bitwise operators (logical AND, OR, XOR, majority).
+    - Associative memories store and retrieve bit patterns, functioning as content-addressable memory (CAM).
+    - Transformers and embedding engines can be approximated by binarized deep networks or quantized neural lookup tables for bitwise logic.

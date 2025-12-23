@@ -1,1 +1,1 @@
-    get_unbound_function, """Get the function out of a possibly unbound function"""
+# Define a small helper function to alias our vendored modules to the real ones

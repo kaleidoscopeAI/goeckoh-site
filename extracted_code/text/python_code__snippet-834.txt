@@ -1,0 +1,7 @@
+if label[2:4] == '--':
+    raise IDNAError('Label has disallowed hyphens in 3rd and 4th position')
+if label[0] == '-' or label[-1] == '-':
+    raise IDNAError('Label must not start or end with a hyphen')
+return True
+
+

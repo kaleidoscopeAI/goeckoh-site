@@ -1,16 +1,23 @@
-from .packages import six
-from .packages.six.moves import queue
-from .request import RequestMethods
-from .response import HTTPResponse
-from .util.connection import is_connection_dropped
-from .util.proxy import connection_requires_http_tunnel
-from .util.queue import LifoQueue
-from .util.request import set_file_position
-from .util.response import assert_header_parsing
-from .util.retry import Retry
-from .util.ssl_match_hostname import CertificateError
-from .util.timeout import Timeout
-from .util.url import Url, _encode_target
-from .util.url import _normalize_host as normalize_host
-from .util.url import get_host, parse_url
+    def assert_never(__arg: Never) -> Never:
+        """Assert to the type checker that a line of code is unreachable.
+
+        Example::
+
+            def int_or_str(arg: int | str) -> None:
+                match arg:
+                    case int():
+                        print("It's an int")
+                    case str():
+                        print("It's a str")
+                    case _:
+                        assert_never(arg)
+
+        If a type checker finds that a call to assert_never() is
+        reachable, it will emit an error.
+
+        At runtime, this throws an exception when called.
+
+        """
+        raise AssertionError("Expected code to be unreachable")
+
 

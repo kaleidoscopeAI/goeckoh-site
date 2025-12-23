@@ -1,2 +1,2 @@
-def _convolve(self, img: np.ndarray, kernel: np.ndarray) -> np.ndarray:
-from scipy.signal import convolve2d
+def _identify_topics(self, sentences: List[List[str]], num_topics: int = 3) -> List[List[str]]:
+from scipy.sparse import lil_matrix

@@ -1,1 +1,2 @@
-A — Add the projectToModulators function and the full event → episodic buffer → offline consolidation code into your ActuationService.ts (TypeScript
+const selfDelta = sigmoid(selfRaw) * 2 - 1; // map to [-1,1]
+const selfConfGain = clamp(selfRaw * 0.5 + 0.5, 0, 2);

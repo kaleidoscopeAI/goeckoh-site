@@ -1,15 +1,42 @@
-import logging
-from optparse import Values
-from typing import List
+def is_protocol(__tp: type) -> bool:
+    """Return True if the given type is a Protocol.
 
-from pip._vendor.packaging.utils import canonicalize_name
+    Example::
 
-from pip._internal.cli import cmdoptions
-from pip._internal.cli.base_command import Command
-from pip._internal.cli.req_command import SessionCommandMixin, warn_if_run_as_root
-from pip._internal.cli.status_codes import SUCCESS
-from pip._internal.exceptions import InstallationError
-from pip._internal.req import parse_requirements
-from pip._internal.req.constructors import (
-    install_req_from_line,
-    install_req_from_parsed_requirement,
+        >>> from typing_extensions import Protocol, is_protocol
+        >>> class P(Protocol):
+        ...     def a(self) -> str: ...
+        ...     b: int
+        >>> is_protocol(P)
+        True
+        >>> is_protocol(int)
+        False
+    """
+    return (
+        isinstance(__tp, type)
+        and getattr(__tp, '_is_protocol', False)
+        and __tp is not Protocol
+        and __tp is not getattr(typing, "Protocol", object())
+    )
+
+def get_protocol_members(__tp: type) -> typing.FrozenSet[str]:
+    """Return the set of members defined in a Protocol.
+
+    Example::
+
+        >>> from typing_extensions import Protocol, get_protocol_members
+        >>> class P(Protocol):
+        ...     def a(self) -> str: ...
+        ...     b: int
+        >>> get_protocol_members(P)
+        frozenset({'a', 'b'})
+
+    Raise a TypeError for arguments that are not Protocols.
+    """
+    if not is_protocol(__tp):
+        raise TypeError(f'{__tp!r} is not a Protocol')
+    if hasattr(__tp, '__protocol_attrs__'):
+        return frozenset(__tp.__protocol_attrs__)
+    return frozenset(_get_protocol_attrs(__tp))
+
+

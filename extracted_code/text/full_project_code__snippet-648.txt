@@ -1,0 +1,4 @@
+Callable[[], Any],
+Callable[[ParseResults], Any],
+Callable[[int, ParseResults], Any],
+Callable[[str, int, ParseResults], Any],

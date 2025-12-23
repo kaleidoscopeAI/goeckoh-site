@@ -1,0 +1,3 @@
+distributions: Iterable[_PackageInfo],
+list_files: bool,
+verbose: bool,

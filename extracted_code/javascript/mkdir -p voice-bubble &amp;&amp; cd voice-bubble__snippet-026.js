@@ -1,1 +1,1 @@
-const bufferSize = 1024;
+const input = e.inputBuffer.getChannelData(0);

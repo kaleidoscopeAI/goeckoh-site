@@ -1,1 +1,1 @@
-def __init__(self, dim: int = 16):
+def add_node_batch(self, nodes: List[Tuple[str, float]]):

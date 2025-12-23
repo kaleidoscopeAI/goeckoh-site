@@ -1,0 +1,4 @@
+- The system accumulates curiosity tension proportional to uncertainty $U(S_k)$,
+- Decreases curiosity tension when performance feedback occurs,
+- Keeps tension non-negative.
+

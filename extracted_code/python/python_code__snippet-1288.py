@@ -1,5 +1,13 @@
-def build_wheel_pep517(
-    name: str,
-    backend: BuildBackendHookCaller,
-    metadata_directory: str,
-    tempd: str,
+"""Retries except an exception has been raised of one or more types."""
+
+def __init__(
+    self,
+    exception_types: typing.Union[
+        typing.Type[BaseException],
+        typing.Tuple[typing.Type[BaseException], ...],
+    ] = Exception,
+) -> None:
+    self.exception_types = exception_types
+    super().__init__(lambda e: not isinstance(e, exception_types))
+
+

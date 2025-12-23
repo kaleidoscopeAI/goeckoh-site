@@ -1,10 +1,9 @@
-    from pip._vendor.rich.console import Console
+import itertools
+import os
+import shutil
+import sys
+from typing import List, Optional
 
-    console = Console()
-    console.print("Look at the title of your terminal window ^")
-    # console.print(Control((ControlType.SET_WINDOW_TITLE, "Hello, world!")))
-    for i in range(10):
-        console.set_window_title("🚀 Loading" + "." * i)
-        time.sleep(0.5)
-
+from pip._internal.cli.main import main
+from pip._internal.utils.compat import WINDOWS
 

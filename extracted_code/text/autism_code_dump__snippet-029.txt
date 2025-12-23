@@ -1,0 +1,2 @@
+HAPTICS_AVAILABLE = False
+

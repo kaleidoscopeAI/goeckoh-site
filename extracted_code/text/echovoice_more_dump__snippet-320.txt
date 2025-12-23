@@ -1,1 +1,2 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+Sphere size = A_i, color = E_i (green-red), halo = K_i, shimmer = mutation, flow = P_i, etc.
+

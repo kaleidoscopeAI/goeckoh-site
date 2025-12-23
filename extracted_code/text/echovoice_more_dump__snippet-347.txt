@@ -1,1 +1,6 @@
-Power iteration (using J·v)
+ADB control: adbkit GitHub (pure Node.js ADB client, examples for shell/input), tango-adb/example-nodejs (forward ADB to web), Midscene.js (SDK for Android control), ThunderHack tutorial (Node + ADB for phone hacks).
+MSR access safe: msr-safe GitHub (whitelisting MSRs for read/write, root needed), Intel rdmsr tool (read MSRs), but safe approx with node-os-utils (CPU usage/freq without low-level).
+Display brightness: Jabbath/node-brightness (cross-platform), YouTube tutorial (code for brightness control), Twinkle Tray (multi-monitor, Node-like).
+GPIO PWM sensors: fivdi/pigpio (PWM on any pin, Node wrapper), array-gpio (direct register access), raspi-pwm (hardware PWM), onoff (GPIO basics).
+No dangerous low-level (e.g., MSR write avoided; use safe APIs).
+

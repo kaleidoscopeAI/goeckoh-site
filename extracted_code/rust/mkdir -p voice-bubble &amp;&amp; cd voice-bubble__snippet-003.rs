@@ -1,64 +1,58 @@
-use cpal::{
-    traits::{DeviceTrait, HostTrait, StreamTrait},
-    StreamConfig, BufferSize, SampleFormat,
-};
-use ringbuf::HeapRb;
-use crossbeam::queue::SegQueue;
+use whisper_rs::{WhisperContext, SamplingStrategy};
 
-struct AudioPipeline {
-    input_stream: cpal::Stream,
-    output_stream: cpal::Stream,
-    input_queue: Arc<SegQueue<AudioFrame>>,
-    output_queue: Arc<HeapRb<f32>>,
+struct StreamingSTT {
+    ctx: WhisperContext,
+    state: WhisperState,
+    params: FullParams,
+    partial_buffer: Vec<f32>,
 }
 
-impl AudioPipeline {
-    async fn new() -> Result<Self> {
-        let host = cpal::default_host();
-        let input_device = host.default_input_device().unwrap();
-        let output_device = host.default_output_device().unwrap();
+impl StreamingSTT {
+    fn new(model_path: &str) -> Self {
+        let ctx = WhisperContext::new(model_path).unwrap();
+        let state = ctx.create_state().unwrap();
         
-        let config = StreamConfig {
-            channels: 1,
-            sample_rate: cpal::SampleRate(16000),
-            buffer_size: BufferSize::Fixed(512), // 32ms frames
-        };
+        let mut params = FullParams::new(SamplingStrategy::Greedy { best_of: 1 });
+        params.set_translate(false);
+        params.set_language(Some("en"));
+        params.set_print_special(false);
+        params.set_print_progress(false);
+        params.set_print_realtime(true);  // Enable partial results
+        params.set_no_context(true);      // Faster for streaming
         
-        // Input callback
-        let input_queue = Arc::new(SegQueue::new());
-        let input_queue_clone = input_queue.clone();
+        Self {
+            ctx,
+            state,
+            params,
+            partial_buffer: Vec::with_capacity(16000 * 30), // 30s buffer
+        }
+    }
+    
+    async fn process_chunk(&mut self, audio: &[f32]) -> Option<String> {
+        self.partial_buffer.extend_from_slice(audio);
         
-        let input_stream = input_device.build_input_stream(
-            &config,
-            move |data: &[f32], _: &cpal::InputCallbackInfo| {
-                let frame = AudioFrame::from_slice(data);
-                input_queue_clone.push(frame);
-            },
-            move |err| eprintln!("Input error: {}", err),
-            None,
-        )?;
-        
-        // Output callback
-        let output_buffer = HeapRb::<f32>::new(4096);
-        let (mut prod, cons) = output_buffer.split();
-        let output_queue = Arc::new(cons);
-        
-        let output_stream = output_device.build_output_stream(
-            &config,
-            move |data: &mut [f32], _: &cpal::OutputCallbackInfo| {
-                for sample in data.iter_mut() {
-                    *sample = prod.pop().unwrap_or(0.0);
+        // Process when we have enough audio (e.g., 500ms)
+        if self.partial_buffer.len() >= 8000 {
+            let result = self.state.full(&self.params, &self.partial_buffer).ok()?;
+            
+            // Get partial text
+            let num_segments = self.state.full_n_segments().unwrap_or(0);
+            let mut text = String::new();
+            
+            for i in 0..num_segments {
+                if let Ok(segment) = self.state.full_get_segment_text(i) {
+                    text.push_str(&segment);
                 }
-            },
-            move |err| eprintln!("Output error: {}", err),
-            None,
-        )?;
-        
-        Ok(Self {
-            input_stream,
-            output_stream,
-            input_queue,
-            output_queue,
-        })
+            }
+            
+            // Clear processed audio (keep last 1s for context)
+            let keep_len = 16000.min(self.partial_buffer.len());
+            self.partial_buffer = self.partial_buffer
+                .split_off(self.partial_buffer.len() - keep_len);
+            
+            Some(text)
+        } else {
+            None
+        }
     }
 }

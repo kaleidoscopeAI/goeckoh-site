@@ -1,0 +1,7 @@
+Your original 128-equation framework (streamlined for real-time)
+Silero VAD autism-optimized (long pauses, quiet speech, no false triggers)
+Faster-Whisper tiny (stutter/dysfluency tolerant)
+XTTS v2 voice cloning (speaks in YOUR voice)
+Real-time emotional injection into the lattice
+Fully local, offline, private, eternal
+

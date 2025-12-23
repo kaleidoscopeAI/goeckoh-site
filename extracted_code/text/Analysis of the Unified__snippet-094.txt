@@ -1,0 +1,9 @@
+R = np.array([[0.8, 0.1],[0.2,0.9]], dtype=complex)
+core = RelationalCore(R)
+p_born = core.probs_born()
+p_prod = core.probs_softlogprod(alpha=1.0,beta=3.0)
+assert abs(p_born.sum() - 1.0) < 1e-12
+assert abs(p_prod.sum() - 1.0) < 1e-12
+pc = core.probability_with_er_correction(lam=0.5, mix_mode='born')
+assert abs(pc.sum() - 1.0) < 1e-12
+

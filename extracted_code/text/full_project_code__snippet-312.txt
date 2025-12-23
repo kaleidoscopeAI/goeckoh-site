@@ -1,0 +1,6 @@
+HTTPError,
+HTTPWarning,
+MaxRetryError,
+ProtocolError,
+SSLError,
+TimeoutError,

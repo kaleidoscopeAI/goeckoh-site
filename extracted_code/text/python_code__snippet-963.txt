@@ -1,0 +1,8 @@
+"""Convert an arbitrary string to a standard 'extra' name
+
+Any runs of non-alphanumeric characters are replaced with a single '_',
+and the result is always lowercased.
+"""
+return re.sub('[^A-Za-z0-9.-]+', '_', extra).lower()
+
+

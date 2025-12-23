@@ -1,6 +1,5 @@
-from __future__ import annotations
+from .tk_gui import run_gui  # Lazy import to avoid tkinter dependency for non-GUI usage
 
-from dataclasses import dataclass, field
-from typing import Dict, List
+run_gui(config)
 
 

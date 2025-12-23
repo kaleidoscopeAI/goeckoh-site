@@ -1,1 +1,2 @@
-Now, remove the duplicate import of Rng in src/data.rs.
+// User-space computes full L0-L3 (quantum, geometry) from unpacked metrics, sends bit-packed decisions
+

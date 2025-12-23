@@ -1,1 +1,2 @@
-    from typing import Literal
+from pip._internal.vcs.versioncontrol import AuthInfo
+

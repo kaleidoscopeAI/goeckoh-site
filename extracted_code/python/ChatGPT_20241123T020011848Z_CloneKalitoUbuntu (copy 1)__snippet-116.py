@@ -1,4 +1,4 @@
-Mathematical Foundation: The seed node possesses foundational properties but lacks specialization, much like a stem cell in biology. All future growth and specialization derive from this initial state.
-
-
+           - Transmit knowledge from Ni to Nj
+           - Nj incorporates knowledge into its Memory
+           - Nj updates its Function if knowledge improves performance
 

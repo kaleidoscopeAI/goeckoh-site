@@ -1,12 +1,9 @@
-class Config:
-    base_dir: Path = Path.home() / "Jacksons_Companion_Data"
-    sample_rate: int = 16000
-    min_utterance_seconds: float = 0.4
-    silence_threshold: float = 0.01
-    silence_duration_seconds: float = 1.5
-
-    def __post_init__(self):
-        self.base_dir.mkdir(exist_ok=True)
-        (self.base_dir / "voices").mkdir(exist_ok=True)
-        (self.base_dir / "logs").mkdir(exist_ok=True)
+Always listening (VAD tuned for quiet/autistic speech – 1.2–1.8 s patience)
+Child vocalizes → raw .wav captured
+faster-whisper tiny.en → raw transcription
+LanguageTool + custom autism articulation rules → corrected text (only clarity, never changes meaning)
+VoiceCrystal (XTTS-v2 / Coqui with prosody transfer) → synthesizes corrected text using child’s exact voice + F0/energy contour from the original utterance
+Plays back instantly (<1.8 s total latency on CPU) through headphones/private speaker
+Child hears his own voice thinking the correct version → naturally repeats → loop reinforces
+If child’s repeat matches → mark as mastery → harvest as new voice facet (slow-drift adaptation)
 

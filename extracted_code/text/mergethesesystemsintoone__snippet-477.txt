@@ -1,0 +1,13 @@
+      "Core Components (base classes)":  {
+        "DataWrapper": "a generic method for any data ingestion for common workflow usage",
+         "ProcessingUnit": "Used by WikiNode objects for a specific data type with logic, with core logic methods specified based on required structure or information for specific node interactions . ",
+
+     },
+
+       "Core Algorthms": {
+           "memoryResonance & memoryField":"These complex units manage specific types of information (based on vector and phases ) providing novel patterns within simulation and a method for long and short-term storage capabilities. , allows different data patterns to connect with their spatial representation, in what is known as a frequency/pattern based 'resonance map'. also include local learning.",
+
+   "SimpleWord2Vec":" A basic version of Skipgrams/ Word2Vec without additional complex libraries, it generates  basic embedding functionality.",
+     "TfIdfVectorizer":"Basic feature extraction and processing . but the code in class handles its processing with a TF idf logic"
+,"TopicModel" : "Uses Basic  matrix operation using svd techniques for topic model for classification purposes, used for semantic structure extraction on word representations for high information tasks",
+

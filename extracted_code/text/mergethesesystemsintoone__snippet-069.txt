@@ -1,1 +1,2 @@
-class DataWrapper:
+analyze_code_task: Analyzes code structure and sentiment using analyze_text_structure and classify_text.
+summarize_code_task: Summarizes code files using summarize_text and saves results to a JSON file.

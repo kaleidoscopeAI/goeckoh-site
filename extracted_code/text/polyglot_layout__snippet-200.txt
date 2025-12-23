@@ -1,0 +1,2 @@
+  "manifest_subset": str(manifest_json),
+  "summary_markdown": str(summary_md)

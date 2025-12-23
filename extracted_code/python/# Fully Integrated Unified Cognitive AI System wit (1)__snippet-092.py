@@ -1,3 +1,1 @@
-- **Frontend React Components:** Create multiple Plotly charts and a canvas displaying dynamic thought images updated from backend JSON data via WebSockets or polling.
-
-
+- Add **Causal and Explainable Reasoning** tracing to track symbolic causal chains from input to decision paths, emotional shifts, and outputs.

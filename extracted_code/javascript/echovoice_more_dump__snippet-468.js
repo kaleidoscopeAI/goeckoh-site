@@ -1,1 +1,1 @@
-const constructKeys = Object.keys(node.constructs);
+const actuationInjection = mapEToSpecies(E, W_actuation); // returns species-dimension array

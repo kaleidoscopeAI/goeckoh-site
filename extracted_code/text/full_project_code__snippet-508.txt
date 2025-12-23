@@ -1,0 +1,4 @@
+'NORMAL':     ['', 'Roman', 'Book', 'Normal', 'Regular', 'Medium'],
+'ITALIC':     ['Oblique', 'Italic'],
+'BOLD':       ['Bold'],
+'BOLDITALIC': ['Bold Oblique', 'Bold Italic'],

@@ -1,0 +1,1 @@
+guidance_rows: List[Dict[str, str]], window: int = 50

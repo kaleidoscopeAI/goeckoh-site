@@ -1,0 +1,4 @@
+CONFIG.behavior.correction_echo_enabled = bool(store.data.get("correction_echo_enabled", True))
+CONFIG.behavior.support_voice_enabled = bool(store.data.get("support_voice_enabled", False))
+
+

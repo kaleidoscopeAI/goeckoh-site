@@ -1,0 +1,9 @@
+var nativeHandle: Long = 0
+
+external fun nativeCreate(): Long
+external fun nativeFree()
+external fun nativeProcess(inL: ShortArray, inH: ShortArray?, outL: ShortArray, outH: ShortArray?): Int
+
+init {
+    nativeHandle = nativeCreate()
+}

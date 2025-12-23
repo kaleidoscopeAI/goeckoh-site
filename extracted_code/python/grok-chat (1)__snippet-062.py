@@ -1,14 +1,20 @@
-def simulate_audio_input():
-    # Simulate user speech input
-    return input("Speak (type phrase): ").strip()
+class DeepReasoningCore:
+    def __init__(self):
+        self.rules = {
+            "anxious": "Breathe deeply... calm waves flow.",
+            "happy": "Great energy... keep shining.",
+            "neutral": "Steady path... proceed mindfully."
+        }
 
-def correct_speech(text):
-    # Simple heuristic correction (expand rules)
-    text = text.lower().capitalize()
-    text = text.replace("i is", "I am")
-    return text
-
-def compute_gcl(emotions):
-    # Global Coherence Level: Mean coherence from emotions
-    return sum(math.tanh(e) for e in emotions) / len(emotions) if emotions else 0.0
+    def reason(self, input_text, gcl):
+        if gcl < 0.3:
+            return "GCL low... resting state."  # Gated low
+        elif gcl < 0.7:
+            return "Partial insight: " + random.choice(list(self.rules.values()))  # Medium
+        else:
+            # Full reasoning: Simple response
+            for key in self.rules:
+                if key in input_text.lower():
+                    return self.rules[key]
+            return "Deep thought: Echoing your intent."
 

@@ -1,64 +1,56 @@
-class VoiceMimic:
-    """
-    A low-level wrapper for the Coqui XTTS voice cloning and synthesis engine.
-    """
-    def __init__(self, config: SpeechModelSettings, device: str = "cpu"):
-        self.config = config
-        self.device = device
-        self.tts: Optional[TTS] = None
-        self.current_ref_path: Optional[str] = None
+class ExpressionGear:
+    """High-level gear for generating expressive speech."""
+    tts_engine: VoiceMimic
+    audio_cfg: AudioSettings
+    voice_profile: VoiceProfile
+    inner_volume_scale: float = 0.5
+    coach_volume_scale: float = 1.1
 
-        if not _HAS_TTS:
-            raise RuntimeError("TTS library is not installed. Voice synthesis is disabled.")
+    def _apply_mode_acoustics(self, wav: np.ndarray, mode: Mode) -> np.ndarray:
+        """Applies acoustic effects based on the speech mode."""
+        if mode == "inner":
+            return (wav * self.inner_volume_scale).astype(np.float32)
+        elif mode == "coach":
+            return (wav * self.coach_volume_scale).astype(np.float32)
+        return wav
 
-        print(f"[VoiceMimic] Loading TTS model: {config.tts_model_name} on {self.device}...")
-        try:
-            self.tts = TTS(model_name=config.tts_model_name, progress_bar=False).to(self.device)
-            if config.tts_voice_clone_reference and config.tts_voice_clone_reference.exists():
-                self.current_ref_path = str(config.tts_voice_clone_reference)
-                print(f"[VoiceMimic] Using default voice reference: {self.current_ref_path}")
-        except Exception as e:
-            raise RuntimeError(f"Failed to load Coqui TTS model. Error: {e}")
-
-    def update_voiceprint(self, wav_path: Path) -> bool:
+    def express(self, decision: AgentDecision, audio_info: Optional[Information]) -> Optional[Information]:
         """
-        Updates the reference audio file for voice cloning.
-        Returns True if the path is valid, False otherwise.
+        Generates speech based on an agent's decision.
+        Returns an Information object with the final audio, or None.
         """
-        if wav_path.exists() and wav_path.is_file():
-            self.current_ref_path = str(wav_path)
-            return True
-        print(f"[VoiceMimic] Warning: Voice reference path not found: {wav_path}")
-        return False
+        text_to_speak = decision.target_text
+        if not text_to_speak:
+            return None
 
-    def synthesize(self, text: str) -> np.ndarray:
-        """
-        Synthesizes audio from text using the current voiceprint.
-        """
-        if not self.tts:
-            print("[VoiceMimic] Error: TTS model not loaded.")
-            return np.array([], dtype=np.float32)
-            
-        if not text:
-            return np.array([], dtype=np.float32)
+        # 1. Select a voice reference for cloning
+        ref_path = self.voice_profile.pick_reference()
+        if ref_path:
+            self.tts_engine.update_voiceprint(ref_path)
+        
+        # 2. Synthesize the base waveform
+        base_wav = self.tts_engine.synthesize(text_to_speak)
+        if base_wav.size == 0:
+            return None
 
-        if not self.current_ref_path:
-            print("[VoiceMimic] Warning: No voice reference set. Using default speaker.")
-            # Fallback to default TTS without cloning
-            wav = self.tts.tts(text=text, speaker=self.tts.speakers[0], language=self.tts.languages[0])
-        else:
+        # 3. Apply prosody transfer if a source is available
+        final_wav = base_wav
+        if audio_info and isinstance(audio_info.payload, AudioData):
+            prosody_source_wav = audio_info.payload.waveform
+            prosody_source_sr = audio_info.payload.sample_rate
             try:
-                # Use XTTS voice cloning
-                wav = self.tts.tts(
-                    text=text,
-                    speaker_wav=self.current_ref_path,
-                    language="en" # XTTS requires a language hint
-                )
+                prosody = extract_prosody(prosody_source_wav, prosody_source_sr)
+                final_wav = apply_prosody_to_tts(base_wav, self.audio_cfg.sample_rate, prosody)
             except Exception as e:
-                print(f"[VoiceMimic] TTS synthesis failed: {e}. Falling back to default speaker.")
-                # Fallback on error
-                wav = self.tts.tts(text=text, speaker=self.tts.speakers[0], language=self.tts.languages[0])
+                print(f"Warning: Prosody transfer failed. Using base TTS. Error: {e}")
 
-        return np.array(wav, dtype=np.float32)-e 
+        # 4. Apply mode-specific acoustics
+        final_wav = self._apply_mode_acoustics(final_wav, decision.mode)
+
+        return Information(
+            payload=AudioData(waveform=final_wav, sample_rate=self.audio_cfg.sample_rate),
+            source_gear="ExpressionGear",
+            metadata={"decision": decision}
+        )-e 
 
 

@@ -1,0 +1,3 @@
+"""Returns all the memory resonances in the field."""
+return list(self.resonances.values())
+

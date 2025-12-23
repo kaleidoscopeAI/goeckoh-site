@@ -1,0 +1,4 @@
+_truststore_SSLContext_super_class = object
+_truststore_SSLContext_dunder_class = _original_SSLContext
+
+

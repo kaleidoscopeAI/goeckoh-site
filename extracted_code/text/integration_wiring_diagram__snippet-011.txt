@@ -1,0 +1,2 @@
+*   The `echo_gui.py` (customtkinter) would be integrated as a sub-module or specialized view within the `cognitive_crystal_ai` React/Three.js frontend. This is complex and might require `customtkinter` to render to a web canvas, or a separate electron-like wrapper. This is less ideal.
+

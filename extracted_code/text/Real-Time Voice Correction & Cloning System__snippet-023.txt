@@ -1,0 +1,6 @@
+name="correction_agent",
+instruction="""Analyze the input text and convert all third-person pronouns to first-person.
+Maintain the emotional intent but correct grammar for immediate speech.
+Return ONLY JSON matching the schema.""",
+output_schema=SpeechSchema,
+output_key="corrected_speech" # Automatically added to session state [cite: 159, 353]

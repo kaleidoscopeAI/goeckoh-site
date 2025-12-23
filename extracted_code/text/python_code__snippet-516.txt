@@ -1,0 +1,11 @@
+"""A prompt that returns a str.
+
+Example:
+    >>> name = Prompt.ask("Enter your name")
+
+
+"""
+
+response_type = str
+
+

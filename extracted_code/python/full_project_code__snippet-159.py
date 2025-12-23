@@ -1,3 +1,5 @@
-* `cryptography`_ (minimum 1.3.4, from pyopenssl)
-* `idna`_ (minimum 2.0, from cryptography)
+        import pip._vendor.urllib3.contrib.pyopenssl as pyopenssl
+        pyopenssl.inject_into_urllib3()
+    except ImportError:
+        pass
 

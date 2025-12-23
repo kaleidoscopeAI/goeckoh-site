@@ -1,8 +1,32 @@
-def analyze(self, insight: Dict) -> Dict[str, float]:
-      risks = {}
-      if insight.get ("confidence", 1.0) < 0.5:
-          risks ["low_confidence"] = self.risk_factors ["low_confidence"]
-      if insight.get("energy_cost", 0.0) > 10:
-        risks["high_energy_cost"] = self.risk_factors["high_energy_cost"]
-   
-      return risks
+class SystemInfo:
+    root_path: str
+    system_type: SystemType
+    primary_language: LanguageType
+    other_languages: List[LanguageType] = field(default_factory=list)
+    files: Dict[str, CodeFile] = field(default_factory=dict)
+    dependencies: Dict[str, DependencyInfo] = field(default_factory=dict)
+    entry_points: List[str] = field(default_factory=list)
+    config_files: List[str] = field(default_factory=list)
+    database_info: Dict[str, Any] = field(default_factory=dict)
+    api_endpoints: List[str] = field(default_factory=list)
+    vulnerabilities: List[str] = field(default_factory=list)
+    dependencies_graph: Optional[nx.DiGraph] = None
+    file_count: int = 0
+    code_size: int = 0
+    
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "root_path": self.root_path,
+            "system_type": self.system_type.name,
+            "primary_language": self.primary_language.name,
+            "other_languages": [lang.name for lang in self.other_languages],
+            "entry_points": self.entry_points,
+            "config_files": self.config_files,
+            "database_info": self.database_info,
+            "api_endpoints": self.api_endpoints,
+            "vulnerabilities": self.vulnerabilities,
+            "file_count": self.file_count,
+            "code_size": self.code_size,
+            "dependencies": {k: {"name": v.name, "version": v.version} for k, v in self.dependencies.items()},
+        }
+

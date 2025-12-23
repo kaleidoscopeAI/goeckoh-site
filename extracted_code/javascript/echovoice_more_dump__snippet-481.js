@@ -1,1 +1,1 @@
-const geom = new THREE.BufferGeometry();
+onApply={() => console.log("User 2 applied changes")}

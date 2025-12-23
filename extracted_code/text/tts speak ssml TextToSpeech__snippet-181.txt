@@ -1,0 +1,10 @@
+              // Feed to Whisper
+              whisper.writeBuffer(samples)
+
+              // VAD check
+              val isSpeech = vad?.isSpeech(byteArray) ?: false
+              if (isSpeech) {
+                  isSpeechDetected = true
+                  silenceStart = 0
+              } else if (isSpeechDetected) {
+                  if (silenceStart == 0L) silenceStart =

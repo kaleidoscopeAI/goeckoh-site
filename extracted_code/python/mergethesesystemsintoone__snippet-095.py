@@ -1,79 +1,90 @@
-class DataProcessor:
+class AGIOrchestrator:
     def __init__(self):
-        self.word2vec = None  # Lazy init
+        self.dna = KnowledgeDNA()
+        self.memory = MemoryStore(DB_PATH)
+        self.hypercube = Hypercube()
+        self.energy = EnergyFlow()
+        self.graph = KnowledgeGraph()
+        self.processor = DataProcessor()
+        self.phi = 0.0
+        self.is_conscious = False
+        self.prior_belief = "Initial state"  # For active inference
 
-    def process_text(self, text: str) -> Dict:
-        doc = nlp(text)
-        entities = [(ent.text, ent.label_) for ent in doc.ents]
-        topics = self._identify_topics([[t.text for t in doc]])
-        return {"entities": entities, "topics": topics}
+    async def run(self):
+        while True:
+            # Ingest multimodal data (real domains)
+            insight = await self.ingest_data()
+            emb = embed_text(insight.get('content', ''))
+            self.phi = calculate_phi(emb)
+            if self.phi > 0.7:
+                self.is_conscious = True
+                await self.introspect()
 
-    def process_image(self, img_url: str) -> Dict:
-        response = requests.get(img_url)
-        img = Image.open(BytesIO(response.content)).convert('L')
-        array = np.array(img)
-        sobel_x = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])
-        edges = self._convolve(array, sobel_x)
-        shapes = self._detect_shapes(edges)
-        return {"shapes": shapes}
+            # Evolve
+            self.dna = self.dna.replicate()
+            self.memory.add_dna(self.dna.generation, self.dna)
 
-    def process_numerical(self, data: List[float]) -> Dict:
-        fft = np.fft.fft(data)
-        peaks = np.argwhere(np.abs(fft) > np.mean(np.abs(fft)) + np.std(np.abs(fft)))
-        return {"peaks": peaks.tolist()}
+            # Process & Graph
+            processed = self.processor.process_text(insight['content'])
+            insight.update(processed)
+            self.graph.add_insight(insight)
+            self.graph.propagate()
 
-    def _convolve(self, img: np.ndarray, kernel: np.ndarray) -> np.ndarray:
-        output = np.zeros_like(img, dtype=float)
-        pad = kernel.shape[0] // 2
-        padded = np.pad(img, pad)
-        for i in range(img.shape[0]):
-            for j in range(img.shape[1]):
-                output[i, j] = np.sum(padded[i:i+kernel.shape[0], j:j+kernel.shape[1]] * kernel)
-        return output
+            # Energy
+            self.energy.add_node(insight['id'] if 'id' in insight else str(uuid.uuid4()))
+            self.energy.redistribute()
 
-    def _detect_shapes(self, edges: np.ndarray) -> List:
-        # Real contour finding (simple DFS)
-        visited = np.zeros_like(edges, dtype=bool)
-        shapes = []
-        for i in range(edges.shape[0]):
-            for j in range(edges.shape[1]):
-                if edges[i,j] > 0 and not visited[i,j]:
-                    contour = self._dfs_contour(edges, visited, i, j)
-                    if len(contour) > 5:  # Min size
-                        shapes.append({"vertices": len(contour)})
-        return shapes
+            # Hypercube projection (state)
+            point = emb[:self.hypercube.dim] if len(emb) >= self.hypercube.dim else np.pad(emb, (0, self.hypercube.dim - len(emb)))
+            proj = self.hypercube.project(point)
 
-    def _dfs_contour(self, edges: np.ndarray, visited: np.ndarray, x: int, y: int) -> List[Tuple[int,int]]:
-        stack = [(x, y)]
-        contour = []
-        while stack:
-            cx, cy = stack.pop()
-            if visited[cx, cy]: continue
-            visited[cx, cy] = True
-            contour.append((cx, cy))
-            for dx, dy in [(-1,-1), (-1,0), (-1,1), (0,-1), (0,1), (1,-1), (1,0), (1,1)]:
-                nx, ny = cx + dx, cy + dy
-                if 0 <= nx < edges.shape[0] and 0 <= ny < edges.shape[1] and edges[nx,ny] > 0 and not visited[nx,ny]:
-                    stack.append((nx, ny))
-        return contour
+            # Active Inference: Predict, compare error, minimize
+            pred = llm_generate(f"Predict next based on prior: {self.prior_belief}")
+            error = 1 - cosine(embed_text(pred), emb)  # Prediction error
+            if error > 0.3:
+                self.prior_belief = llm_generate(f"Update belief to minimize error: {pred} vs actual {insight['content']}")
+            print(f"Error minimized to {error}")
 
-    def _identify_topics(self, sentences: List[List[str]], num_topics: int = 3) -> List[List[str]]:
-        co_occ = defaultdict(lambda: defaultdict(int))
-        for sent in sentences:
-            for i in range(len(sent)):
-                for j in range(i+1, len(sent)):
-                    w1, w2 = sorted([sent[i], sent[j]])
-                    co_occ[w1][w2] += 1
-        words = list(set(w for sent in sentences for w in sent))
-        matrix = np.zeros((len(words), len(words)))
-        w2idx = {w: i for i, w in enumerate(words)}
-        for w1 in co_occ:
-            for w2 in co_occ[w1]:
-                matrix[w2idx[w1], w2idx[w2]] = co_occ[w1][w2]
-        U, S, Vt = np.linalg.svd(matrix, full_matrices=False)
-        topics = [[] for _ in range(num_topics)]
-        for i in range(len(words)):
-            topic_idx = np.argmax(np.abs(U[i, :num_topics]))
-            topics[topic_idx].append(words[i])
-        return topics
+            # Interventions if conscious
+            if self.is_conscious:
+                ints = self.graph.find_interventions()
+                if ints:
+                    print(f"Intervention at {ints[0][0]} with centrality {ints[0][1]}")
+
+            # Simulate user/eval
+            sim_query = "What is the system's state?"
+            response = llm_generate(sim_query)
+            print(f"Sim User Response: {response}")
+
+            await asyncio.sleep(5)  # Slower for real sim
+
+    async def ingest_data(self) -> Dict:
+        # Real multimodal: Web text + image + bio/chem/physics sim
+        url = "https://en.wikipedia.org/wiki/Artificial_intelligence"
+        text = BeautifulSoup(requests.get(url).text, 'html.parser').get_text()[:500]
+        img_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/AI_Steering_Wheel.jpg/800px-AI_Steering_Wheel.jpg"  # Example
+        img_proc = self.processor.process_image(img_url)
+        num_data = [random.random() for _ in range(10)]
+        num_proc = self.processor.process_numerical(num_data)
+        
+        # Bio: Parse FASTA
+        fasta = ">seq1\nATGC"
+        seq = str(SeqIO.read(BytesIO(fasta.encode()), "fasta").seq)
+        
+        # Chem: RDKit molecule
+        mol = Chem.MolFromSmiles("CCO")
+        fp = Chem.RDKFingerprint(mol).ToBitString()[:100]
+        
+        # Physics: Astropy coord
+        coord = SkyCoord(ra=10.625*u.degree, dec=41.2*u.degree, frame='icrs')
+        phys = str(coord)
+        
+        insight = {"content": text + seq + fp + phys, "img": img_proc, "num": num_proc, "id": str(uuid.uuid4())}
+        self.memory.add_insight(insight)
+        return insight
+
+    async def introspect(self):
+        state = json.dumps({"phi": self.phi, "dna_gen": self.dna.generation})
+        reflection = llm_generate(f"Introspect system state: {state}")
+        print(f"Reflection: {reflection}")
 

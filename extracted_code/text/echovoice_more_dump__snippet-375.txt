@@ -1,2 +1,4 @@
-# <REDACTED: potential secret detected>
-
+node_feature_dim: usize,
+edge_feature_dim: usize,
+atom_encoder: AtomEncoder,
+bond_encoder: BondEncoder,

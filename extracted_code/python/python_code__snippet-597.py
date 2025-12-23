@@ -1,1 +1,2 @@
-    from logging.config import BaseConfigurator, valid_ident
+    import imp as _imp
+

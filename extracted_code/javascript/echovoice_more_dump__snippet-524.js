@@ -1,1 +1,1 @@
-const remoteE = this._sanitizeAndClampVector(data.e);
+const e2 = powerIterationSymmetric(CovCopy, 500, 1e-9);

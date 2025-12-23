@@ -1,0 +1,17 @@
+"appId": "com.kaleidoscope.embedded",
+"productName": "Kaleidoscope Embedded",
+"directories": {
+  "output": "dist-electron"
+},
+"files": [
+  "dist/**/*",
+  "node_modules/**/*",
+  "ollama-binaries/**/*"
+],
+"extraResources": [
+  {
+    "from": "ollama-binaries",
+    "to": "ollama",
+    "filter": ["**/*"]
+  }
+]

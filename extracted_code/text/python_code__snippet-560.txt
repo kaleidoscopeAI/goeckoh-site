@@ -1,0 +1,21 @@
+"""Retrieves the current input mode of a console's input buffer
+or the current output mode of a console screen buffer.
+
+Args:
+    std_handle (wintypes.HANDLE): A handle to the console input buffer or the console screen buffer.
+
+Raises:
+    LegacyWindowsError: If any error occurs while calling the Windows console API.
+
+Returns:
+    int: Value representing the current console mode as documented at
+        https://docs.microsoft.com/en-us/windows/console/getconsolemode#parameters
+"""
+
+console_mode = wintypes.DWORD()
+success = bool(_GetConsoleMode(std_handle, console_mode))
+if not success:
+    raise LegacyWindowsError("Unable to get legacy Windows Console Mode")
+return console_mode.value
+
+

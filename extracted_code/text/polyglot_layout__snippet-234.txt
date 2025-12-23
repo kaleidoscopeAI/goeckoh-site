@@ -1,0 +1,8 @@
+              for i, w in zip(ids, wts):
+                  score[i] = score.get(i, 0.0) + float(w); denom += float(w)
+      if denom > 0:
+          for i in list(score.keys()): score[i] /= denom
+      top = sorted(score.items(), key=lambda x: -x[1])[:top_k]
+      top_ids = [i for i, _ in top]
+      phrases = [kw(id2sum.get(i, ""), 10) for i in top_ids]
+      cap = {"t_start_frame": t0, "t_end_frame": t1, "top_ids": top_ids, "weights": [float(w) for _, w in top], "caption": "; ".join([p for p

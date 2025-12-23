@@ -1,0 +1,7 @@
+"""Represents the current state of a node."""
+energy: float = 100.0
+memory_usage: float = 0.0
+data_processed: int = 0
+last_replication: float = 0.0
+status: str = "Idle"
+

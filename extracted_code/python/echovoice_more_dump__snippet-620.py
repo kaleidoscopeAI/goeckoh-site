@@ -1,1 +1,1 @@
-(Rk )ij = # of k-length paths from i to j
+def Upsilon_cryst(self, S, p):

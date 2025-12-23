@@ -1,2 +1,6 @@
-# Full Mathematical Framework — every equation from bit level to highest system level (mirrored / paired equations included) Below is a single, self-contained mathematical
-compendium that starts from bit-level numeric representation and proceeds up through node engines, LLM/transformer mathematics, reinforcement learning, environment
+import { useEffect, useState } from "react";
+import { initializeApp } from "firebase/app";
+import { getFirestore, doc, onSnapshot } from "firebase/firestore";
+export function useActuation(firebaseConfig: any) {
+const [projection, setProjection] = useState<{ts:number, n:number, m:number, data:number[]}|null>(null);
+const [nodeMods, setNodeMods] = useState<Record<string, any>>({});

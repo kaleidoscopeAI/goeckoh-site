@@ -1,0 +1,13 @@
+"""
+Converts text to a simple, canonical form for comparison.
+- Lowercases the text.
+- Removes common punctuation.
+- Strips leading/trailing whitespace.
+"""
+if not text:
+    return ""
+text = text.lower()
+# Remove punctuation using a regular expression
+text = re.sub(r'[^\w\s]', '', text)
+return text.strip()
+

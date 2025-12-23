@@ -1,0 +1,2 @@
+running_under_virtualenv,
+virtualenv_no_global,

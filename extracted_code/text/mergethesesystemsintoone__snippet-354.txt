@@ -1,0 +1,2 @@
+raise TypeError("Data chunk does not have 'data_type' or 'data' keys")
+

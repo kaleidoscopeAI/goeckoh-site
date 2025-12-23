@@ -1,157 +1,174 @@
-class RemoteNotFoundError(Exception):
-    pass
+"""Defines characters to render boxes.
 
+┌─┬┐ top
+│ ││ head
+├─┼┤ head_row
+│ ││ mid
+├─┼┤ row
+├─┼┤ foot_row
+│ ││ foot
+└─┴┘ bottom
 
-class RemoteNotValidError(Exception):
-    def __init__(self, url: str):
-        super().__init__(url)
-        self.url = url
+Args:
+    box (str): Characters making up box.
+    ascii (bool, optional): True if this box uses ascii characters only. Default is False.
+"""
 
+def __init__(self, box: str, *, ascii: bool = False) -> None:
+    self._box = box
+    self.ascii = ascii
+    line1, line2, line3, line4, line5, line6, line7, line8 = box.splitlines()
+    # top
+    self.top_left, self.top, self.top_divider, self.top_right = iter(line1)
+    # head
+    self.head_left, _, self.head_vertical, self.head_right = iter(line2)
+    # head_row
+    (
+        self.head_row_left,
+        self.head_row_horizontal,
+        self.head_row_cross,
+        self.head_row_right,
+    ) = iter(line3)
 
-class RevOptions:
+    # mid
+    self.mid_left, _, self.mid_vertical, self.mid_right = iter(line4)
+    # row
+    self.row_left, self.row_horizontal, self.row_cross, self.row_right = iter(line5)
+    # foot_row
+    (
+        self.foot_row_left,
+        self.foot_row_horizontal,
+        self.foot_row_cross,
+        self.foot_row_right,
+    ) = iter(line6)
+    # foot
+    self.foot_left, _, self.foot_vertical, self.foot_right = iter(line7)
+    # bottom
+    self.bottom_left, self.bottom, self.bottom_divider, self.bottom_right = iter(
+        line8
+    )
 
+def __repr__(self) -> str:
+    return "Box(...)"
+
+def __str__(self) -> str:
+    return self._box
+
+def substitute(self, options: "ConsoleOptions", safe: bool = True) -> "Box":
+    """Substitute this box for another if it won't render due to platform issues.
+
+    Args:
+        options (ConsoleOptions): Console options used in rendering.
+        safe (bool, optional): Substitute this for another Box if there are known problems
+            displaying on the platform (currently only relevant on Windows). Default is True.
+
+    Returns:
+        Box: A different Box or the same Box.
     """
-    Encapsulates a VCS-specific revision to install, along with any VCS
-    install options.
+    box = self
+    if options.legacy_windows and safe:
+        box = LEGACY_WINDOWS_SUBSTITUTIONS.get(box, box)
+    if options.ascii_only and not box.ascii:
+        box = ASCII
+    return box
 
-    Instances of this class should be treated as if immutable.
+def get_plain_headed_box(self) -> "Box":
+    """If this box uses special characters for the borders of the header, then
+    return the equivalent box that does not.
+
+    Returns:
+        Box: The most similar Box that doesn't use header-specific box characters.
+            If the current Box already satisfies this criterion, then it's returned.
+    """
+    return PLAIN_HEADED_SUBSTITUTIONS.get(self, self)
+
+def get_top(self, widths: Iterable[int]) -> str:
+    """Get the top of a simple box.
+
+    Args:
+        widths (List[int]): Widths of columns.
+
+    Returns:
+        str: A string of box characters.
     """
 
-    def __init__(
-        self,
-        vc_class: Type["VersionControl"],
-        rev: Optional[str] = None,
-        extra_args: Optional[CommandArgs] = None,
-    ) -> None:
-        """
-        Args:
-          vc_class: a VersionControl subclass.
-          rev: the name of the revision to install.
-          extra_args: a list of extra options.
-        """
-        if extra_args is None:
-            extra_args = []
+    parts: List[str] = []
+    append = parts.append
+    append(self.top_left)
+    for last, width in loop_last(widths):
+        append(self.top * width)
+        if not last:
+            append(self.top_divider)
+    append(self.top_right)
+    return "".join(parts)
 
-        self.extra_args = extra_args
-        self.rev = rev
-        self.vc_class = vc_class
-        self.branch_name: Optional[str] = None
+def get_row(
+    self,
+    widths: Iterable[int],
+    level: Literal["head", "row", "foot", "mid"] = "row",
+    edge: bool = True,
+) -> str:
+    """Get the top of a simple box.
 
-    def __repr__(self) -> str:
-        return f"<RevOptions {self.vc_class.name}: rev={self.rev!r}>"
+    Args:
+        width (List[int]): Widths of columns.
 
-    @property
-    def arg_rev(self) -> Optional[str]:
-        if self.rev is None:
-            return self.vc_class.default_arg_rev
+    Returns:
+        str: A string of box characters.
+    """
+    if level == "head":
+        left = self.head_row_left
+        horizontal = self.head_row_horizontal
+        cross = self.head_row_cross
+        right = self.head_row_right
+    elif level == "row":
+        left = self.row_left
+        horizontal = self.row_horizontal
+        cross = self.row_cross
+        right = self.row_right
+    elif level == "mid":
+        left = self.mid_left
+        horizontal = " "
+        cross = self.mid_vertical
+        right = self.mid_right
+    elif level == "foot":
+        left = self.foot_row_left
+        horizontal = self.foot_row_horizontal
+        cross = self.foot_row_cross
+        right = self.foot_row_right
+    else:
+        raise ValueError("level must be 'head', 'row' or 'foot'")
 
-        return self.rev
+    parts: List[str] = []
+    append = parts.append
+    if edge:
+        append(left)
+    for last, width in loop_last(widths):
+        append(horizontal * width)
+        if not last:
+            append(cross)
+    if edge:
+        append(right)
+    return "".join(parts)
 
-    def to_args(self) -> CommandArgs:
-        """
-        Return the VCS-specific command arguments.
-        """
-        args: CommandArgs = []
-        rev = self.arg_rev
-        if rev is not None:
-            args += self.vc_class.get_base_rev_args(rev)
-        args += self.extra_args
+def get_bottom(self, widths: Iterable[int]) -> str:
+    """Get the bottom of a simple box.
 
-        return args
+    Args:
+        widths (List[int]): Widths of columns.
 
-    def to_display(self) -> str:
-        if not self.rev:
-            return ""
+    Returns:
+        str: A string of box characters.
+    """
 
-        return f" (to revision {self.rev})"
-
-    def make_new(self, rev: str) -> "RevOptions":
-        """
-        Make a copy of the current instance, but with a new rev.
-
-        Args:
-          rev: the name of the revision for the new object.
-        """
-        return self.vc_class.make_rev_options(rev, extra_args=self.extra_args)
-
-
-class VcsSupport:
-    _registry: Dict[str, "VersionControl"] = {}
-    schemes = ["ssh", "git", "hg", "bzr", "sftp", "svn"]
-
-    def __init__(self) -> None:
-        # Register more schemes with urlparse for various version control
-        # systems
-        urllib.parse.uses_netloc.extend(self.schemes)
-        super().__init__()
-
-    def __iter__(self) -> Iterator[str]:
-        return self._registry.__iter__()
-
-    @property
-    def backends(self) -> List["VersionControl"]:
-        return list(self._registry.values())
-
-    @property
-    def dirnames(self) -> List[str]:
-        return [backend.dirname for backend in self.backends]
-
-    @property
-    def all_schemes(self) -> List[str]:
-        schemes: List[str] = []
-        for backend in self.backends:
-            schemes.extend(backend.schemes)
-        return schemes
-
-    def register(self, cls: Type["VersionControl"]) -> None:
-        if not hasattr(cls, "name"):
-            logger.warning("Cannot register VCS %s", cls.__name__)
-            return
-        if cls.name not in self._registry:
-            self._registry[cls.name] = cls()
-            logger.debug("Registered VCS backend: %s", cls.name)
-
-    def unregister(self, name: str) -> None:
-        if name in self._registry:
-            del self._registry[name]
-
-    def get_backend_for_dir(self, location: str) -> Optional["VersionControl"]:
-        """
-        Return a VersionControl object if a repository of that type is found
-        at the given directory.
-        """
-        vcs_backends = {}
-        for vcs_backend in self._registry.values():
-            repo_path = vcs_backend.get_repository_root(location)
-            if not repo_path:
-                continue
-            logger.debug("Determine that %s uses VCS: %s", location, vcs_backend.name)
-            vcs_backends[repo_path] = vcs_backend
-
-        if not vcs_backends:
-            return None
-
-        # Choose the VCS in the inner-most directory. Since all repository
-        # roots found here would be either `location` or one of its
-        # parents, the longest path should have the most path components,
-        # i.e. the backend representing the inner-most repository.
-        inner_most_repo_path = max(vcs_backends, key=len)
-        return vcs_backends[inner_most_repo_path]
-
-    def get_backend_for_scheme(self, scheme: str) -> Optional["VersionControl"]:
-        """
-        Return a VersionControl object or None.
-        """
-        for vcs_backend in self._registry.values():
-            if scheme in vcs_backend.schemes:
-                return vcs_backend
-        return None
-
-    def get_backend(self, name: str) -> Optional["VersionControl"]:
-        """
-        Return a VersionControl object or None.
-        """
-        name = name.lower()
-        return self._registry.get(name)
+    parts: List[str] = []
+    append = parts.append
+    append(self.bottom_left)
+    for last, width in loop_last(widths):
+        append(self.bottom * width)
+        if not last:
+            append(self.bottom_divider)
+    append(self.bottom_right)
+    return "".join(parts)
 
 

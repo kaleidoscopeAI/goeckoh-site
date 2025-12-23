@@ -1,12 +1,10 @@
-from typing import Any
+import datetime
 
 
-def load_ipython_extension(ip: Any) -> None:  # pragma: no cover
-    # prevent circular import
-    from pip._vendor.rich.pretty import install
-    from pip._vendor.rich.traceback import install as tr_install
+def today_is_later_than(year: int, month: int, day: int) -> bool:
+    today = datetime.date.today()
+    given = datetime.date(year, month, day)
 
-    install()
-    tr_install()
+    return today > given
 
 

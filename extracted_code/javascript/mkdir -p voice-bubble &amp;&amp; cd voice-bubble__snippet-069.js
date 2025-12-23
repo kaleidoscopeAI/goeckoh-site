@@ -1,17 +1,28 @@
-    for (let i = 0; i < ch.length; i++) {
-      const x = ch[i];
-      this.ring[this.writeIdx] = x;
-      this.writeIdx = (this.writeIdx + 1) % this.win;
-    
-      this.samplesSince++;
-      if (this.samplesSince >= this.hop) {
-        this.samplesSince = 0;
-        const frame = this._snapshotFrame();
-        const feat = this._extract(frame);
-        feat.dt = this.dt;
-        this.port.postMessage(feat);
-      }
+for (let i = 0; i < frame.length; i++) frame[i] -= mean;
+
+    // Energy + ZCR
+    let sumSq = 0;
+    let zc = 0;
+    let prev = frame[0];
+    for (let i = 0; i < frame.length; i++) {
+      const x = frame[i];
+      sumSq += x * x;
+      if ((x >= 0 && prev < 0) || (x < 0 && prev >= 0)) zc++;
+      prev = x;
     }
-    return true;
+    const rms = Math.sqrt(sumSq / frame.length);
+    const energy = clamp(rms * 3.2, 0, 1);
+    const zcr = clamp(zc / frame.length, 0, 1);
+    
+    // Pitch via YIN
+    const f0 = this._yinPitch(frame, 80, 400);
+    
+    // HNR estimate
+    const hnr = this._estimateHNR(frame, f0);
+    
+    // Spectral tilt
+    const tilt = this._spectralTilt(frame);
+    
+    return { energy, f0, zcr, hnr, tilt };
     }
 

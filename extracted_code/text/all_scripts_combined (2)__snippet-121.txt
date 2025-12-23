@@ -1,0 +1,5 @@
+data = DataStore(config)
+for phrase in data.list_phrases():
+    print(f"{phrase.phrase_id}: '{phrase.text}' -> {phrase.audio_file}")
+
+

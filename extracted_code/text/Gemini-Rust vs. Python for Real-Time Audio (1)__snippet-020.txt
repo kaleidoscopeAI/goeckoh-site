@@ -1,0 +1,8 @@
+// We use a flat vector for memory locality (cache friendliness).
+// Accessing node (r, c) maps to index [r * COLS + c].
+positions: SVector<f32, N_NODES>,
+velocities: SVector<f32, N_NODES>,
+
+// Cached gradients for the 4-step Runge-Kutta solver (if needed),
+// or simple accumulators for Symplectic Euler.
+forces: SVector<f32, N_NODES>,

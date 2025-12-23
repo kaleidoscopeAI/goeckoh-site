@@ -1,6 +1,9 @@
-def user_state_path(
-    appname: str | None = None,
-    appauthor: str | None | Literal[False] = None,
-    version: str | None = None,
-    roaming: bool = False,  # noqa: FBT001, FBT002
-    ensure_exists: bool = False,  # noqa: FBT001, FBT002
+from __future__ import annotations
+
+from datetime import date, datetime, time, timedelta, timezone, tzinfo
+from functools import lru_cache
+import re
+from typing import Any
+
+from ._types import ParseFloat
+

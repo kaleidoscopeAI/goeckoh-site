@@ -1,3 +1,1 @@
-from string import ascii_letters
-from typing import List, Optional
-
+# The change from Latin1 is that we explicitly look for extended characters

@@ -1,1 +1,2 @@
-  - Resolve cross-import issues and ensure modularity.
+  - Highlight key insights from the shared knowledge pool and their impact on node behaviors.
+

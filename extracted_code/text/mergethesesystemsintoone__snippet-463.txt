@@ -1,0 +1,7 @@
+   "Complex Data Interaction":"While we can intake all data, not all components have data ingestion defined, this would make sure all components and not just individual methods process each new piece of data at a relevant stage,  it will also connect knowledge across domains based on type ",
+       "Full Network Management":" While we handle connection information we will be further expanding nodes relationships dynamically using similarity of concepts",
+
+    "Enhanced Pattern evolution with data validation feedback loop":" Will improve feedback into all nodes based on error prediction in results and adjust scores accordingly."
+
+
+     ],

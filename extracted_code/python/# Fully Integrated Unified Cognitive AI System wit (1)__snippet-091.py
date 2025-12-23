@@ -1,3 +1,1 @@
-- It randomly selects one root vector from the 240 roots of the E8 lattice.
-- It reflects the projected vector across that root vector using the reflection formula
-
+- Integrate **real, multimodal sensorimotor feedback** streaming into cognitive fields from cameras, microphones, touch, and hardware health sensors.

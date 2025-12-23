@@ -1,1 +1,2 @@
-This module previously handled import compatibility issues
+    from .console import Console, ConsoleOptions, RenderableType, RenderResult
+

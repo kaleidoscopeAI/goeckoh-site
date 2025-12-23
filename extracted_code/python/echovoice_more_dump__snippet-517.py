@@ -1,1 +1,1 @@
-1. Replace the deterministic Wconstruct with an online learner that adapts masks from reflection/regret logs (gradient-based; CPU Adam optimizer).
+E(t): emotional actuation vector, produced from user input or collaborative Firestore state.

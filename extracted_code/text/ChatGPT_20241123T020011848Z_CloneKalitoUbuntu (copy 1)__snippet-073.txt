@@ -1,0 +1,7 @@
+NEUTRAL = "neutral"
+ALERT = "alert"
+CURIOUS = "curious"
+FOCUSED = "focused"
+SOCIAL = "social"
+CONSERVATIVE = "conservative"
+

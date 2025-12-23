@@ -1,2 +1,3 @@
-This document contains the consolidated implementation of the Unified Organic AI system. The code is CPU-friendly, deterministic when seeds are provided, dependency-minimal, and organized into a package layout. The code below has been reviewed and adjusted to fix previously identified issues and to ensure consistent behavior across modules.
-
+RealTime = 1,
+BestEffort = 2,
+Idle = 3,

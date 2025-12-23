@@ -1,2 +1,4 @@
-# <REDACTED: potential secret detected>
+id: int
+pos: np.ndarray
+fixed: bool = False
 

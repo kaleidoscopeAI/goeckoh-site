@@ -1,2 +1,4 @@
-# <REDACTED: potential secret detected>
+                           r'(\.(post|r|rev)(\d+)?)?([._-]?(dev)(\d+)?)?'
+                           r'(\+([a-zA-Z\d]+(\.[a-zA-Z\d]+)?))?$', re.I)
+
 

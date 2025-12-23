@@ -1,11 +1,13 @@
-    20  } from '../src/services/api';
-       ⋮
-    30    const [heart, setHeart] = useState<any>(null);
-    31 +  const [validation, setValidation] = useState<any>(null);
-    32
-       ⋮
-    60          setFragments(fr.fragments || []);
-    61 +        const v = await getMirrorValidation();
-    62 +        setValidation(v.summary || null);
-    63        } catch (err) {
+    17 -    from goeckoh_ctypes_wrapper import CrystallineHeartEngine  # type: i
+        gnore
+    17 +    from goeckoh_ctypes_wrapper import CrystallineHeartEngine, VoiceSynt
+        hesizerEngine  # type: ignore
+    18      HEART_AVAILABLE = True
+    19 +    RUST_VC_AVAILABLE = True
+    20  except Exception:
+    21      CrystallineHeartEngine = None  # type: ignore
+    22 +    VoiceSynthesizerEngine = None  # type: ignore
+    23      HEART_AVAILABLE = False
+    24 +    RUST_VC_AVAILABLE = False
+    25
 

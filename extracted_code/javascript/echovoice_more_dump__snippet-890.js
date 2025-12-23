@@ -1,2 +1,2 @@
-+ const y2: number[][] = new Array(m);
-+ for (let i = 0; i < m; i++) {
+The relax_step function applies a physics-based force simulation where nodes move to minimize the total tension in the network.
+

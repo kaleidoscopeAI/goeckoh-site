@@ -1,0 +1,42 @@
+    Blank values are allowed
+
+    >>> vrp('')
+    >>> bool(warned)
+    False
+
+    Non-string values are not.
+
+    >>> vrp(None)
+    Traceback (most recent call last):
+    ...
+    AttributeError: ...
+    """
+    invalid = (
+        os.path.pardir in path.split(posixpath.sep)
+        or posixpath.isabs(path)
+        or ntpath.isabs(path)
+    )
+    if not invalid:
+        return
+
+    msg = "Use of .. or absolute path in a resource path is not allowed."
+
+    # Aggressively disallow Windows absolute paths
+    if ntpath.isabs(path) and not posixpath.isabs(path):
+        raise ValueError(msg)
+
+    # for compatibility, warn; in future
+    # raise ValueError(msg)
+    issue_warning(
+        msg[:-1] + " and will raise exceptions in a future release.",
+        DeprecationWarning,
+    )
+
+def _get(self, path):
+    if hasattr(self.loader, 'get_data'):
+        return self.loader.get_data(path)
+    raise NotImplementedError(
+        "Can't perform this operation for loaders without 'get_data()'"
+    )
+
+

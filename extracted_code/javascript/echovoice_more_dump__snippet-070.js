@@ -1,1 +1,1 @@
-# update usage mapping function later expects consciousness state; keep rest
+Ci (t): consumption by tasks (function of activity).

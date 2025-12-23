@@ -1,0 +1,3 @@
+       Construct in Orchestrator.__init__.
+
+       Call self.avatar.update(self.hbits, self.sfield, self.last_caption_text) each tick.

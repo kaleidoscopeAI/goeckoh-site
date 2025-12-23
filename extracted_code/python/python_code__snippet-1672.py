@@ -1,4 +1,5 @@
-    def audio_rms(_audio):  # type: ignore
-        return 0.0
+from pip._vendor.rich import print
 
-# Local package integrations (prefer these when available)
+print(Padding("Hello, World", (2, 4), style="on blue"))
+
+

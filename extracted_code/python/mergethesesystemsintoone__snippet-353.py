@@ -1,1 +1,7 @@
-def validate_processing_output(output: Dict[str, Any]) -> bool:
+    def _extract_concrete_patterns(self, data: any) -> List[Dict]:
+
+
+
+        
+
+

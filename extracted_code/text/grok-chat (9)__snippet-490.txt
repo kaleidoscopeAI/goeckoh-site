@@ -1,0 +1,2 @@
+  session_service = InMemorySessionService()
+  session = await session_service.create_session(app_name=APP_NAME,

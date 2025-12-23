@@ -1,0 +1,6 @@
+Option,
+"--check-build-dependencies",
+dest="check_build_deps",
+action="store_true",
+default=False,
+help="Check the build dependencies when PEP517 is used.",

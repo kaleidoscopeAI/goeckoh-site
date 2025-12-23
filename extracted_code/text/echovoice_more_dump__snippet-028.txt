@@ -1,1 +1,1 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+1. Implement scheduleSync using WorkManager and provide UI onboarding flows for the permissions (WRITE_SETTINGS, Accessibility, Device Admin).

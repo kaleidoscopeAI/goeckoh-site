@@ -1,0 +1,26 @@
+# Initialize Python nodes
+python_nodes = [
+    PythonNode(i, {"trait_1": random.random()}, energy=random.uniform(5, 15))
+    for i in range(5)
+]
+
+# Initialize C nodes
+c_node = CNodeManager.create_c_node()
+
+# Simulate Node Tasks and Actions
+for _ in range(3):
+    for node in python_nodes:
+        node.perform_task()
+
+    CNodeManager.perform_engrained_action(c_node)
+
+    EnergyManager.redistribute_energy(python_nodes)
+
+    data_dumps = [node.dump_data() for node in python_nodes]
+    insights = KaleidoscopeEngine.process_data_dumps(data_dumps)
+
+    logging.info("--- Iteration Completed ---")
+
+# Start the dashboard
+Dashboard.create_dashboard(insights, python_nodes)
+

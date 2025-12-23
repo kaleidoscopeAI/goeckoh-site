@@ -1,0 +1,3 @@
+      elif event.actions and event.actions.transfer_to_agent:
+          personality_name = event.actions.transfer_to_agent
+          console.print(f"\n[blue][bold italic]Delegating to agent:

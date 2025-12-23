@@ -1,0 +1,6 @@
+size: int,
+suffixes: Iterable[str],
+base: int,
+*,
+precision: Optional[int] = 1,
+separator: Optional[str] = " ",

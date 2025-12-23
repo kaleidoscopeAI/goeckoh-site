@@ -1,0 +1,5 @@
+225              return corrected_text
+226 +
+227 +# Backwards-compatible alias with a more scientific name.
+228 +NeurocoherenceLattice = CrystallineHeart
+

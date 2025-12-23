@@ -1,0 +1,1 @@
+      val config = TtsConfig(model = ttsModelPath, numThreads = 1, debug =

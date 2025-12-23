@@ -1,1 +1,1 @@
-# Prepare context from embeddings
+def get_visualization_data():

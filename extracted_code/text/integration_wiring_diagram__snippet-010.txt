@@ -1,0 +1,4 @@
+*   `VoiceCrystal` (in `echo_prime.py`): Synthesizes speech with prosody transfer using `Coqui TTS`.
+*   `sounddevice` (Python library): Plays audio to the child.
+*   **Data Out:** Child's response (audio -> sensory input), internal state changes.
+

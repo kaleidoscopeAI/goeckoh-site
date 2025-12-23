@@ -1,0 +1,8 @@
+"""Adds a weighted edge between two nodes."""
+if node1 not in self.nodes:
+  self.add_node(node1)
+if node2 not in self.nodes:
+  self.add_node (node2)
+
+self.edges[node1].append((node2, weight))
+

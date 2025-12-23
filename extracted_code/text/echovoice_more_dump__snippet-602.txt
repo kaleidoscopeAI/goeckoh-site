@@ -1,0 +1,8 @@
+global _lib
+if _lib is None:
+    load_rust()
+arr = np.ascontiguousarray(states.astype(np.float64).ravel())
+ptr = arr.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
+n_states, dim = states.shape
+return int(_lib.parallel_tempering(ptr, n_states, dim))
+

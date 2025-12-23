@@ -1,0 +1,6 @@
+raise OSError(
+    "Only OS X 10.8 and newer are supported, not %s.%s"
+    % (version_info[0], version_info[1])
+)
+
+

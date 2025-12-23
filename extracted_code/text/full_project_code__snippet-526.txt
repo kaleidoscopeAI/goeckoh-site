@@ -1,0 +1,4 @@
+"""Escape & and < for Pango Markup."""
+return text.translate(table)
+
+

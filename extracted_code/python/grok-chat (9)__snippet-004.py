@@ -1,3 +1,4 @@
-  files). These directories are excluded from snapshots and undo cleanup. Adjust
-  `ghost_snapshot.ignore_large_untracked_dirs` to change this behavior.
+  arousal, valence, stress, and a sleek GCL sparkline using real data instead of
+  synthetic fallback. The backend will store GCL history with timestamps and
+  compute a 32-bin average from 1024 heart nodes, ensuring lightweight payloads.
 

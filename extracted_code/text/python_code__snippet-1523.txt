@@ -1,0 +1,5 @@
+requirements: Iterable[InstallRequirement],
+wheel_cache: WheelCache,
+verify: bool,
+build_options: List[str],
+global_options: List[str],

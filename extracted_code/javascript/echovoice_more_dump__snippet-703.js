@@ -1,1 +1,1 @@
-const scale = baseScale * (1 + Math.log(1 + Math.abs(c.activation)));
+function view2D(v: Vec, m: number, d_N: number): Float64Array[][] { /* return helper views */ }

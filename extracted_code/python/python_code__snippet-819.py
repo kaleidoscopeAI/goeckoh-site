@@ -1,2 +1,4 @@
-def GetConsoleScreenBufferInfo(
-    std_handle: wintypes.HANDLE,
+def rmtree(
+    dir: str,
+    ignore_errors: bool = False,
+    onexc: Optional[OnExc] = None,

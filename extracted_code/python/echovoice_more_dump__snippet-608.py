@@ -1,1 +1,2 @@
-(Aᵏ)ᵢⱼ = # of k-paths from i to j
+class SuperNodeManager:
+def __init__(self):

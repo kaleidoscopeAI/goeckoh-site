@@ -1,1 +1,2 @@
-logging.warning("Could not connect to Ollama, using simulated responses")
+# <REDACTED: potential secret detected>
+

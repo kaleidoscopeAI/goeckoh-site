@@ -1,65 +1,67 @@
-import networkx as nx
-import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
+import numpy as np
 import random
 
-class MirroredDNA:
+class LearningNode:
+    def __init__(self, node_id, parent_id=None, dna=None, knowledge_base=None):
+        self.node_id = node_id
+        self.parent_id = parent_id  # Track the parent node
+        self.dna = dna if dna else np.random.rand(5)  # Node DNA (randomized or inherited)
+        self.knowledge_base = knowledge_base if knowledge_base else []  # Knowledge repository
+        self.resources = {"memory": 0.5, "energy": 1.0}  # Initial resources
+        self.thresholds = {"memory": 0.8, "energy": 0.2}  # Replication thresholds
+
+    def learn(self, new_data):
+        """Simulate learning and knowledge storage."""
+        self.knowledge_base.append(new_data)
+        self.resources["memory"] += 0.1  # Simulate memory usage
+        self.resources["energy"] -= 0.05  # Simulate energy expenditure
+        print(f"Node {self.node_id}: Learned - {new_data}")
+
+    def replicate(self, node_id_counter):
+        """Replicate the node with inherited DNA and partial knowledge."""
+        child_dna = self.dna.copy()  # Inherit DNA
+        child_knowledge = random.sample(self.knowledge_base, k=min(3, len(self.knowledge_base)))  # Share partial knowledge
+        print(f"Node {self.node_id}: Replicating to create Node {node_id_counter}")
+        return LearningNode(node_id=node_id_counter, parent_id=self.node_id, dna=child_dna, knowledge_base=child_knowledge)
+
+    def check_thresholds(self):
+        """Check if thresholds for replication are reached."""
+        return (
+            self.resources["memory"] >= self.thresholds["memory"]
+            or self.resources["energy"] <= self.thresholds["energy"]
+        )
+
+# Node Network to manage multiple nodes
+class NodeNetwork:
     def __init__(self):
-        self.left_strand = nx.Graph()
-        self.right_strand = nx.Graph()
-        self.shared_hub = []
-        self.step = 0
+        self.nodes = []
+        self.node_id_counter = 1  # Unique ID for nodes
 
-    def add_node(self, node_id, strand="left"):
-        if strand == "left":
-            self.left_strand.add_node(node_id)
-        else:
-            self.right_strand.add_node(node_id)
+    def add_node(self, parent_id=None):
+        """Add a new node to the network."""
+        new_node = LearningNode(node_id=self.node_id_counter, parent_id=parent_id)
+        self.nodes.append(new_node)
+        self.node_id_counter += 1
 
-    def add_edge(self, node1, node2, strand="left"):
-        if strand == "left":
-            self.left_strand.add_edge(node1, node2)
-        else:
-            self.right_strand.add_edge(node1, node2)
+    def simulate(self, steps=20):
+        """Simulate the network over multiple steps."""
+        for step in range(steps):
+            print(f"\n--- Step {step} ---")
+            new_nodes = []
+            for node in self.nodes:
+                node.learn(f"Data-{step}")  # Simulate learning
 
-    def update(self):
-        """Simulate network updates and information sharing."""
-        # Update left strand
-        self.add_node(self.step, "left")
-        if self.step > 0:
-            self.add_edge(self.step, self.step - 1, "left")
+                if node.check_thresholds():
+                    # Replicate if thresholds are reached
+                    new_nodes.append(node.replicate(self.node_id_counter))
+                    self.node_id_counter += 1
 
-        # Update right strand (mirroring left with a slight delay)
-        self.add_node(self.step, "right")
-        if self.step > 0:
-            self.add_edge(self.step, self.step - 1, "right")
+            # Add new nodes to the network
+            self.nodes.extend(new_nodes)
 
-        # Share information via the hub
-        shared_data = f"Node {self.step} data"
-        self.shared_hub.append(shared_data)
-        print(f"Shared Hub Updated: {self.shared_hub}")
-
-        self.step += 1
-
-    def visualize(self):
-        """Animate the mirrored DNA network."""
-        fig, ax = plt.subplots(1, 1, figsize=(10, 8))
-
-        def _animate(frame):
-            ax.clear()
-            self.update()
-
-            # Draw the strands
-            nx.draw(self.left_strand, ax=ax, pos=nx.spring_layout(self.left_strand), with_labels=True, node_size=700, node_color="blue", edge_color="lightblue")
-            nx.draw(self.right_strand, ax=ax, pos=nx.spring_layout(self.right_strand), with_labels=True, node_size=700, node_color="green", edge_color="lightgreen")
-
-            # Simulate the shared hub
-            ax.set_title(f"Mirrored DNA Simulation - Step {frame}")
-
-        ani = FuncAnimation(fig, _animate, frames=50, interval=500, repeat=False)
-        plt.show()
-
+# Run the simulation
 if __name__ == "__main__":
-    dna_network = MirroredDNA()
-    dna_network.visualize()
+    network = NodeNetwork()
+    network.add_node()  # Start with a seed node
+    network.simulate(steps=20)
 

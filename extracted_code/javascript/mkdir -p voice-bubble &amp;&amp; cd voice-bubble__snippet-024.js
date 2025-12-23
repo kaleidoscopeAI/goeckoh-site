@@ -1,1 +1,1 @@
-async function startAudio() {
+const bufferSize = 1024;

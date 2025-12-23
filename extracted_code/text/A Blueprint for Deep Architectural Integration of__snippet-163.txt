@@ -1,0 +1,4 @@
+- Bitwise operations (AND, OR, XOR, shifts) map to single CPU instructions.
+- Packing state into `u64` arrays enables SIMD parallelism.
+- Low memory and compute footprint suited for embedded or general-purpose CPUs.
+

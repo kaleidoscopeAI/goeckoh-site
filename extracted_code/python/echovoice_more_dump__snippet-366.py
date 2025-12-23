@@ -1,1 +1,1 @@
-def _plot_emotional_state(self, emotional_field):
+async def _web_search_query(self, query_text):

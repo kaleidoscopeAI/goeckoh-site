@@ -1,0 +1,4 @@
+link: Link,
+download_dir: str,
+hashes: Optional[Hashes],
+warn_on_hash_mismatch: bool = True,

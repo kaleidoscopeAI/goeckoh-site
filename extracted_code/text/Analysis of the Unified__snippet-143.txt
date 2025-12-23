@@ -1,0 +1,8 @@
+this.nodeCount = nodeCount;
+this.quantumStates = Array.from({ length: nodeCount }, () => ({
+  phase: Math.random() * Math.PI * 2,
+  coherence: 0.5
+}));
+
+this.ollamaEngine = new EmbeddedOllamaEngine();
+this.initializeOllama();

@@ -1,6 +1,2 @@
-Collecting scipy>=1.6.0 (from scikit-learn)
-  Using cached scipy-1.14.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (60 kB)
-Collecting joblib>=1.2.0 (from scikit-learn)
-  Using cached joblib-1.4.2-py3-none-any.whl.metadata (5.4 kB)
-Collecting threadpoolctl>=3.1.0 (from scikit-learn)
-  Using cached threadpoolctl-3.5.0-py3-none-any.whl.metadata (13 kB)
+Update `knowledge_pool.py` to import `EnhancedSharedKnowledgePool` from `shared_utilities.py` instead of having a direct dependency on `reflection_analysis.py`.
+

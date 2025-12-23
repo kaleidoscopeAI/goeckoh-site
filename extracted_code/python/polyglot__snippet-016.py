@@ -1,2 +1,1 @@
-class KnowledgeProcessor:
-def __init__(self) -> None:
+def evolve_network(self, steps: int = 1):

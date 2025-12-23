@@ -1,2 +1,1 @@
-class AGIOrchestrator:
-def __init__(self, redis: aioredis.Redis):
+async def _fetch_url(self, session: aiohttp.ClientSession, url: str) -> str:

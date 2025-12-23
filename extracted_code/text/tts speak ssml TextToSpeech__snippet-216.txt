@@ -1,0 +1,3 @@
+              val cleanedSamples = FloatArray(samples.size)
+              for (i in outShort.indices) {
+                  cleanedSamples[i] = outShort[i].toFloat() /

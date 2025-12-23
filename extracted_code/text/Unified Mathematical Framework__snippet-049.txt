@@ -1,0 +1,12 @@
+id: str
+name: str                  # e.g. "Morning Wake-Up"
+type: RoutineType = "daily"
+trigger_time: str           # "07:00" or "20:30"
+message_base: str           # Base message template (uses child voice, first-person where possible)
+weather_adjustments: dict[str, str] = None  # e.g. {"rainy": " and take the red umbrella"}
+disruption_note_key: str = None             # if present, appends today's note
+repeat_days: list[str] = None               # ["Mon", "Tue", ...] or None = every day
+enabled: bool = True
+last_triggered: str = ""    # ISO date of last run (for medication tracking)
+
+

@@ -1,21 +1,22 @@
-class DynamicResourceManager:
-    def __init__(self):
-        self.resource_threshold = 0.5
+import json
+import os
 
-    def allocate_resources(self, nodes):
-        """Balance resources across all nodes."""
-        total_energy = sum(node.energy for node in nodes)
-        average_energy = total_energy / len(nodes)
+class NodeBackupRecovery:
+    def __init__(self, backup_dir="backups"):
+        self.backup_dir = backup_dir
+        os.makedirs(self.backup_dir, exist_ok=True)
 
-        for node in nodes:
-            if node.energy < average_energy * self.resource_threshold:
-                node.energy += 0.1
-            else:
-                node.energy -= 0.05
+    def backup_node(self, node):
+        """Backup node state to a file."""
+        backup_file = os.path.join(self.backup_dir, f"{node.id}.json")
+        with open(backup_file, "w") as f:
+            json.dump(node.status(), f)
 
-    def monitor_resources(self, nodes):
-        return {
-            "Average Energy": sum(node.energy for node in nodes) / len(nodes),
-            "Node Count": len(nodes)
-        }
+    def restore_node(self, node_id):
+        """Restore node state from a file."""
+        backup_file = os.path.join(self.backup_dir, f"{node_id}.json")
+        if os.path.exists(backup_file):
+            with open(backup_file, "r") as f:
+                return json.load(f)
+        return None
 

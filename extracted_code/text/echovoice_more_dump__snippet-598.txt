@@ -1,0 +1,4 @@
+html = self.crawler.fetch("https://example.com")
+if html:
+    text = BeautifulSoup(html, 'html.parser').get_text()
+    self.processIngestedData(text.split('\n'), "web_data")  # Split for story flow

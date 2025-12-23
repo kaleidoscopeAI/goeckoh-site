@@ -1,0 +1,3 @@
+/usr/local/bin/ollama pull llama3:8b && \
+fg
+

@@ -1,0 +1,6 @@
+id: str
+category: SkillCategory
+title: str
+paragraphs: list[str]           # Uses {child_name} and other placeholders
+visual_cues: list[str] = field(default_factory=list)  # Optional image descriptions for GUI
+

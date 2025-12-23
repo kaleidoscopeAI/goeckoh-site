@@ -1,0 +1,4 @@
+"""Add documentation to a function."""
+func.__doc__ = doc
+
+

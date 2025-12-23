@@ -1,0 +1,11 @@
+parser = argparse.ArgumentParser(description="The Scepter: Master control for the UNI AI ecosystem.")
+parser.add_argument("target", help="The IP address of the target UNI instance (e.g., 192.168.1.10).")
+parser.add_argument("command", choices=["PAUSE", "RESUME", "SET_GOVERNOR"], help="The master command to execute.")
+parser.add_argument("--value", help="An optional value for commands that require one (e.g., 'performance' for SET_GOVERNOR).")
+parser.add_argument("--keyfile", default="genesis.key", help="Path to the Genesis Key file.")
+
+args = parser.parse_args()
+
+master_key = read_genesis_key(args.keyfile)
+send_master_command(args.target, master_key, args.command, args.value)
+

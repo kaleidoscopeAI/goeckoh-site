@@ -1,1 +1,1 @@
-const sum = nodes.reduce((acc, node, i) => acc + node.K * this.W[i][j], 0);
+for (let i = 0; i < nodes.length; i++) {

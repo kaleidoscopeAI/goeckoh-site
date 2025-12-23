@@ -1,0 +1,2 @@
+mirror_metrics.jsonl, prints p50/p95 latency/playback, GCL, drift; plotting
+is opt-in via PLOT=1 to avoid numpy/matplotlib issues.

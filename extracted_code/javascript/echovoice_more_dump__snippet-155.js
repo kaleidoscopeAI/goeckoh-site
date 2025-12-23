@@ -1,5 +1,2 @@
-let processed = runtime.block_on(engine.process(p)).map_err(|e| {
-    match e {
-        ProcessingError::InvalidFormat(s) => CrystalError::Parameter(format!("Invalid format: {}", s)),
-        // ... etc.
-    }
+    = note: expected function signature `fn(std::result::Result<_, walkdir::Error>) -> _`
+               found function signature `fn(std::result::Result<_, universal_engine::error::Error>) -> _`

@@ -1,0 +1,5 @@
+"""Raised when there is something wrong with a given URL input."""
+
+pass
+
+

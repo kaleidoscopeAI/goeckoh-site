@@ -1,33 +1,90 @@
-    from importlib.resources import path as get_path, read_text
+import re
 
-    _CACERT_CTX = None
-    _CACERT_PATH = None
 
-    def where() -> str:
-        # This is slightly terrible, but we want to delay extracting the
-        # file in cases where we're inside of a zipimport situation until
-        # someone actually calls where(), but we don't want to re-extract
-        # the file on every call of where(), so we'll do it once then store
-        # it in a global variable.
-        global _CACERT_CTX
-        global _CACERT_PATH
-        if _CACERT_PATH is None:
-            # This is slightly janky, the importlib.resources API wants you
-            # to manage the cleanup of this file, so it doesn't actually
-            # return a path, it returns a context manager that will give
-            # you the path when you enter it and will do any cleanup when
-            # you leave it. In the common case of not needing a temporary
-            # file, it will just return the file system location and the
-            # __exit__() is a no-op.
-            #
-            # We also have to hold onto the actual context manager, because
-            # it will do the cleanup whenever it gets garbage collected, so
-            # we will also store that at the global level as well.
-            _CACERT_CTX = get_path("pip._vendor.certifi", "cacert.pem")
-            _CACERT_PATH = str(_CACERT_CTX.__enter__())
+class EndOfText(RuntimeError):
+    """
+    Raise if end of text is reached and the user
+    tried to call a match function.
+    """
 
-        return _CACERT_PATH
 
-    def contents() -> str:
-        return read_text("pip._vendor.certifi", "cacert.pem", encoding="ascii")
+class Scanner:
+    """
+    Simple scanner
+
+    All method patterns are regular expression strings (not
+    compiled expressions!)
+    """
+
+    def __init__(self, text, flags=0):
+        """
+        :param text:    The text which should be scanned
+        :param flags:   default regular expression flags
+        """
+        self.data = text
+        self.data_length = len(text)
+        self.start_pos = 0
+        self.pos = 0
+        self.flags = flags
+        self.last = None
+        self.match = None
+        self._re_cache = {}
+
+    def eos(self):
+        """`True` if the scanner reached the end of text."""
+        return self.pos >= self.data_length
+    eos = property(eos, eos.__doc__)
+
+    def check(self, pattern):
+        """
+        Apply `pattern` on the current position and return
+        the match object. (Doesn't touch pos). Use this for
+        lookahead.
+        """
+        if self.eos:
+            raise EndOfText()
+        if pattern not in self._re_cache:
+            self._re_cache[pattern] = re.compile(pattern, self.flags)
+        return self._re_cache[pattern].match(self.data, self.pos)
+
+    def test(self, pattern):
+        """Apply a pattern on the current position and check
+        if it patches. Doesn't touch pos.
+        """
+        return self.check(pattern) is not None
+
+    def scan(self, pattern):
+        """
+        Scan the text for the given pattern and update pos/match
+        and related fields. The return value is a boolean that
+        indicates if the pattern matched. The matched value is
+        stored on the instance as ``match``, the last value is
+        stored as ``last``. ``start_pos`` is the position of the
+        pointer before the pattern was matched, ``pos`` is the
+        end position.
+        """
+        if self.eos:
+            raise EndOfText()
+        if pattern not in self._re_cache:
+            self._re_cache[pattern] = re.compile(pattern, self.flags)
+        self.last = self.match
+        m = self._re_cache[pattern].match(self.data, self.pos)
+        if m is None:
+            return False
+        self.start_pos = m.start()
+        self.pos = m.end()
+        self.match = m.group()
+        return True
+
+    def get_char(self):
+        """Scan exactly one char."""
+        self.scan('.')
+
+    def __repr__(self):
+        return '<%s %d/%d>' % (
+            self.__class__.__name__,
+            self.pos,
+            self.data_length
+        )
+
 

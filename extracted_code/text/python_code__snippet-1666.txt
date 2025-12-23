@@ -1,0 +1,2 @@
+print("⚠️  Rust engine not compiled - Using Python synthesis")
+

@@ -1,0 +1,5 @@
+      if hbits is not None: cap["H_bits"] = float(hbits)
+      if sfield is not None: cap["S_field"] = float(sfield)
+      caps.append(cap); t0 += stride
+  return {"captions": caps, "meta": {"window": window, "stride": stride, "top_k": top_k}}
+

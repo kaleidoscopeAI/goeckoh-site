@@ -1,27 +1,39 @@
-        "Inspect information available from package indexes.",
-    ),
-    "wheel": CommandInfo(
-        "pip._internal.commands.wheel",
-        "WheelCommand",
-        "Build wheels from your requirements.",
-    ),
-    "hash": CommandInfo(
-        "pip._internal.commands.hash",
-        "HashCommand",
-        "Compute hashes of package archives.",
-    ),
-    "completion": CommandInfo(
-        "pip._internal.commands.completion",
-        "CompletionCommand",
-        "A helper command used for command completion.",
-    ),
-    "debug": CommandInfo(
-        "pip._internal.commands.debug",
-        "DebugCommand",
-        "Show information useful for debugging.",
-    ),
-    "help": CommandInfo(
-        "pip._internal.commands.help",
-        "HelpCommand",
-        "Show help for commands.",
-    ),
+class _RequiredForm(_ExtensionsSpecialForm, _root=True):
+    def __getitem__(self, parameters):
+        item = typing._type_check(parameters,
+                                  f'{self._name} accepts only a single type.')
+        return typing._GenericAlias(self, (item,))
+
+Required = _RequiredForm(
+    'Required',
+    doc="""A special typing construct to mark a key of a total=False TypedDict
+    as required. For example:
+
+        class Movie(TypedDict, total=False):
+            title: Required[str]
+            year: int
+
+        m = Movie(
+            title='The Matrix',  # typechecker error if key is omitted
+            year=1999,
+        )
+
+    There is no runtime checking that a required key is actually provided
+    when instantiating a related TypedDict.
+    """)
+NotRequired = _RequiredForm(
+    'NotRequired',
+    doc="""A special typing construct to mark a key of a TypedDict as
+    potentially missing. For example:
+
+        class Movie(TypedDict):
+            title: str
+            year: NotRequired[int]
+
+        m = Movie(
+            title='The Matrix',  # typechecker error if key is omitted
+            year=1999,
+        )
+    """)
+
+

@@ -1,1 +1,1 @@
-import { DEFAULT_P, DEFAULT_PARAMS } from "../config/emotionDefaults";
+import { Node, EmotionalVector } from "../types";

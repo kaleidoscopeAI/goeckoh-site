@@ -1,0 +1,15 @@
+"""
+Calculates the centrality of nodes in the knowledge graph.
+"""
+if method == 'degree':
+    centrality = nx.degree_centrality(self.graph)
+elif method == 'betweenness':
+    centrality = nx.betweenness_centrality(self.graph)
+elif method == 'closeness':
+    centrality = nx.closeness_centrality(self.graph)
+elif method == 'eigenvector':
+    centrality = nx.eigenvector_centrality(self.graph, max_iter=1000)
+else:
+    raise ValueError(f"Invalid centrality method: {method}")
+return centrality
+

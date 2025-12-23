@@ -1,1 +1,2 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+// Implement for small dim
+return 1; // Placeholder

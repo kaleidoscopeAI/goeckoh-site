@@ -1,0 +1,29 @@
+          if any(k in text.lower() for k in ["why","because","explain","how"]):
+              pieces.append("I’ll explain step-by-step, then summarize.")
+          elif any(k in text.lower() for k in ["solve","=", "integrate","differentiate","derivative","limit"]):
+              pieces.append("See the math result and explanation above.")
+          else:
+              pieces.append("Combining the most relevant known facts with a logical sequence to address your request.")
+          return {"ok":True,"res":"\n".join(pieces),"weight":0.5,"tag":"compose"}
+
+      r_math, r_plan, r_comp = await asyncio.gather(math_task(), logic_task(), compose_task())
+
+      # 3) Score & merge
+      candidates=[r for r in [r_math,r_plan,r_comp] if r["ok"]]
+      best = max(candidates, key=lambda r:r["weight"]) if candidates else {"res":"(no solver matched)", "tag":"none", "weight":0.0}
+      label = label_for(lang)
+      answer = f"{label}: {best['res']}"
+
+      # 4) Log trace
+      self.mem.log(self.state.tick, "think", {"lang":lang,"query":text,"selected":best["tag"]})
+      await self.bus.pub({"type":"think","data":{"tick":self.state.tick,"lang":lang,"selected":best["tag"]}})
+
+      return {
+          "ok": True,
+          "lang": lang,
+          "selected": best["tag"],
+          "answer": answer,
+          "context_ids": top_ids,
+          "context_sims": top_sims,
+      }
+

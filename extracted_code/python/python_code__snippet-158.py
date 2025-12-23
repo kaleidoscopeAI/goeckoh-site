@@ -1,16 +1,81 @@
-def load_cdll(name, macos10_16_path):
-    """Loads a CDLL by name, falling back to known path on 10.16+"""
-    try:
-        # Big Sur is technically 11 but we use 10.16 due to the Big Sur
-        # beta being labeled as 10.16.
-        if version_info >= (10, 16):
-            path = macos10_16_path
+    class SupportsInt(Protocol):
+        """An ABC with one abstract method __int__."""
+        __slots__ = ()
+
+        @abc.abstractmethod
+        def __int__(self) -> int:
+            pass
+
+    @runtime_checkable
+    class SupportsFloat(Protocol):
+        """An ABC with one abstract method __float__."""
+        __slots__ = ()
+
+        @abc.abstractmethod
+        def __float__(self) -> float:
+            pass
+
+    @runtime_checkable
+    class SupportsComplex(Protocol):
+        """An ABC with one abstract method __complex__."""
+        __slots__ = ()
+
+        @abc.abstractmethod
+        def __complex__(self) -> complex:
+            pass
+
+    @runtime_checkable
+    class SupportsBytes(Protocol):
+        """An ABC with one abstract method __bytes__."""
+        __slots__ = ()
+
+        @abc.abstractmethod
+        def __bytes__(self) -> bytes:
+            pass
+
+    @runtime_checkable
+    class SupportsIndex(Protocol):
+        __slots__ = ()
+
+        @abc.abstractmethod
+        def __index__(self) -> int:
+            pass
+
+    @runtime_checkable
+    class SupportsAbs(Protocol[T_co]):
+        """
+        An ABC with one abstract method __abs__ that is covariant in its return type.
+        """
+        __slots__ = ()
+
+        @abc.abstractmethod
+        def __abs__(self) -> T_co:
+            pass
+
+    @runtime_checkable
+    class SupportsRound(Protocol[T_co]):
+        """
+        An ABC with one abstract method __round__ that is covariant in its return type.
+        """
+        __slots__ = ()
+
+        @abc.abstractmethod
+        def __round__(self, ndigits: int = 0) -> T_co:
+            pass
+
+
+def _ensure_subclassable(mro_entries):
+    def inner(func):
+        if sys.implementation.name == "pypy" and sys.version_info < (3, 9):
+            cls_dict = {
+                "__call__": staticmethod(func),
+                "__mro_entries__": staticmethod(mro_entries)
+            }
+            t = type(func.__name__, (), cls_dict)
+            return functools.update_wrapper(t(), func)
         else:
-            path = find_library(name)
-        if not path:
-            raise OSError  # Caught and reraised as 'ImportError'
-        return CDLL(path, use_errno=True)
-    except OSError:
-        raise_from(ImportError("The library %s failed to load" % name), None)
+            func.__mro_entries__ = mro_entries
+            return func
+    return inner
 
 

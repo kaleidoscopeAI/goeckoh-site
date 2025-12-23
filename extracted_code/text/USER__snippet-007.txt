@@ -1,0 +1,3 @@
+               $(WEBRTC_SRC)/modules/audio_processing/ns/nsx_core.cc \
+               $(WEBRTC_SRC)/modules/audio_processing/ns/nsx_core_c.cc \
+               # Add other necessary WebRTC NS source files

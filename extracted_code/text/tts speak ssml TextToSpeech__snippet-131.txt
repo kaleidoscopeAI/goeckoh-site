@@ -1,0 +1,19 @@
+          gcl > 0.7 -> "Perform baseline analysis for: $task"
+          else -> "Reflect on: $task"
+      }
+      return try {
+          llmInference!!.generateResponse(prompt)
+      } catch (e: Exception) {
+          Log.e("AGI", "Inference error: ${e.message}")
+          "Reasoning failed"
+      }
+  }
+
+  fun executeBasedOnGCL(gcl: Double, input: String) {
+      Log.d("AGI", "GCL: $gcl, Input: $input")
+      when {
+          gcl < 0.5 -> {
+              Log.d("AGI", "Meltdown: Deploying calming affirmations.")
+          }
+          gcl < 0.7 -> {
+              Log.d("AGI", "Overload: Performing internal self-

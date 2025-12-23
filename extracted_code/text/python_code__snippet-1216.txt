@@ -1,0 +1,5 @@
+if meth is None:
+    meth = logger.debug
+meth("Could not fetch URL %s: %s - skipping", link, reason)
+
+

@@ -1,0 +1,8 @@
+          }
+          else -> {
+              val result = performDeepReasoning(input, gcl)
+              Log.d("AGI", "Result: $result")
+              // In production, act on result, e.g., automate tasks
+          }
+      }
+  }

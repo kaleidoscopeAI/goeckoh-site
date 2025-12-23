@@ -1,7 +1,16 @@
-  for (const n of this.nodes.values()) {
-    // L0: flip with XOR noise
-    n.e = n.e.map(b => b ^ (Math.random() < 0.01 ? 1 : 0));
-    // L1: pack to float, change sign bit if v <0
-    if (n.v < 0) n.e[0] = 1 - n.e[0];
-    // L2: vec add noise, L3 mat mul transform, etc. (integrated in semanticStep)
-  }
+    fn new() -> Self {
+        Self
+    }
+
+    fn encode(&self, bond_type: u8) -> Vec<f64> {
+        let mut features = vec![0.0; 4];
+        
+        match bond_type {
+            1 => features[0] = 1.0, // Single
+            2 => features[1] = 1.0, // Double
+            3 => features[2] = 1.0, // Triple
+            _ => features[3] = 1.0, // Other/aromatic
+        }
+
+        features
+    }

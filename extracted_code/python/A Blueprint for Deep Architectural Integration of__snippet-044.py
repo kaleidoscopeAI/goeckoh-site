@@ -1,2 +1,2 @@
-The detailed explanation of the requested layers (6 to 12) from the mathematical framework for the cognitive system follows, enriched with the theoretical grounding found in modern research on contractive dynamical systems and graph theory.
-
+    - The number \$ (R^k)_{ij} \$ denotes the total weight/number of paths of length \$ k \$ from engine \$ i \$ to \$ j \$.
+    - This is crucial in reasoning about information propagation depth and influences in the network.

@@ -1,1 +1,7 @@
-# draws it from left to right. The text itself when ordered naturally is read
+from .langrussianmodel import (
+    IBM855_RUSSIAN_MODEL,
+    IBM866_RUSSIAN_MODEL,
+    ISO_8859_5_RUSSIAN_MODEL,
+    KOI8_R_RUSSIAN_MODEL,
+    MACCYRILLIC_RUSSIAN_MODEL,
+    WINDOWS_1251_RUSSIAN_MODEL,

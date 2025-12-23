@@ -1,1 +1,10 @@
-/** Update emotion vector based on driver input using Euler integration */
+1. Input/Torque Check: Sense environmental data and compute Semantic Torque τ. If τ>τmax​, initiate LLM Reflection (external step).
+2. Emotional Flow: Integrate the Emotional Chemical Flow ODEs (C(t)) using RK4. Update the Hamiltonian weight coefficients λbit​ and λpos​ based on C(t).1
+3. Thought Engines: Integrate the state ODEs for Perspective (bi​), Speculation (hi​), Kaleidoscope (κi​), and Mirror (μi​) using RK4.1
+4. Hamiltonian Forces: Compute the Position Gradient ∇xi​​H to determine the current physical force Fi​ acting on each node.1
+5. Position Update: Integrate the node positions xi​ using a Symplectic Integrator (Leap-frog) to ensure numerical stability over the conservative part of the dynamics.1
+6. Bit Update: Update the symbolic state Ei​ (or pk(i)​) by proposing Metropolis-Hastings flips (discrete) or applying gradient ascent (probabilistic), using the current annealing temperature T(t).1
+7. Consolidation/Sleep (Periodic): If scheduled, perform maintenance: run bond pruning and execute the three-part crystallization checks on nodes.1
+8. Quantum/Density Matrix (If enabled): Apply the Lindblad / Trotter step to the density matrix ρ to model decoherence.1
+9. Diagnostics: Compute and log the current total Hamiltonian H, the Geometric Curvature (via FRF), the Semantic Torque τ, and the Integrated Information estimate (Φ).1
+

@@ -1,1 +1,0 @@
-- Profile backend computational hotspots and optimize critical routines (e.g., transformer inference, clustering) using JIT compilation (Numba) or C++ extensions.

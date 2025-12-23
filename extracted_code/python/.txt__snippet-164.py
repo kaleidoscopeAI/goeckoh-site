@@ -1,1 +1,0 @@
-- The phone is a thin remote client; no cloud calls from iOS.

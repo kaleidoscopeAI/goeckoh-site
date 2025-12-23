@@ -1,0 +1,2 @@
+- Parses the words and analyzes textual clues (e.g., sentence structure, nearby words, and common meanings).
+- Suggests likely interpretations: "Food item" or "Heated canine."

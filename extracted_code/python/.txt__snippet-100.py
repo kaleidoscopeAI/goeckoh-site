@@ -1,1 +1,1 @@
-def step(self, audio: np.ndarray, transcript: str) -> Dict[str, Any]:
+- @Published currentPracticePhrase: String → shared hint from Game → Echo

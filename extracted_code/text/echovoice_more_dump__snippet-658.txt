@@ -1,0 +1,13 @@
+ws = websocket._get_current_object()
+core.register_ws(ws)
+try:
+    while True:
+        msg = await ws.receive()
+        # simple echo or control
+        if msg == 'ping':
+            await ws.send(json.dumps({'type': 'pong'}))
+except asyncio.CancelledError:
+    pass
+except Exception as e:
+    logging.info(f'WS closed: {e}')
+

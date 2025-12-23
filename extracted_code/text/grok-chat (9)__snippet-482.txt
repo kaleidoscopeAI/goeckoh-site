@@ -1,0 +1,1 @@
+  "No summary" is used as a placeholder. Links are generated as GitHub URLs

@@ -1,0 +1,1 @@
+"RequestHistory", ["method", "url", "error", "status", "redirect_location"]

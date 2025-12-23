@@ -1,16 +1,13 @@
-class EmotionalState:
-    """5D Emotional Vector for EADS (Emotional Actuation Dial System)"""
-    joy: float = 0.0      # Positive affect
-    fear: float = 0.0      # Threat response
-    trust: float = 0.5     # Safety/receptivity
-    anger: float = 0.0     # Confrontation energy
-    anticipation: float = 0.0  # Novelty seeking
-    
-    def to_vector(self) -> np.ndarray:
-        return np.array([self.joy, self.fear, self.trust, 
-                        self.anger, self.anticipation], dtype=np.float32)
-    
-    @classmethod
-    def from_vector(cls, vec: np.ndarray):
-        return cls(*vec.tolist())
+"""A descriptor to get/set a style attribute bit."""
+
+__slots__ = ["bit"]
+
+def __init__(self, bit_no: int) -> None:
+    self.bit = 1 << bit_no
+
+def __get__(self, obj: "Style", objtype: Type["Style"]) -> Optional[bool]:
+    if obj._set_attributes & self.bit:
+        return obj._attributes & self.bit != 0
+    return None
+
 

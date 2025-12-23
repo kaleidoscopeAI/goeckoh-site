@@ -1,1 +1,1 @@
-const animate = () => {
+const speciesInputs = mapEToSpecies(e, numSpecies);

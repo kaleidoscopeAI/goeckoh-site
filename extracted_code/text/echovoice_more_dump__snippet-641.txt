@@ -1,0 +1,10 @@
+# deterministic pseudo-encoder for reproducibility
+rnd = np.frombuffer(text.encode('utf8'), dtype=np.uint8)
+h = np.zeros(dims, dtype=float)
+for i, v in enumerate(rnd):
+    h[i % dims] += (v + 1) * 0.001
+# normalize
+n = np.linalg.norm(h) + 1e-12
+return h / n
+
+

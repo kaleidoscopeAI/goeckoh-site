@@ -1,0 +1,6 @@
+target_url = link.url.split("#", 1)[0]
+resp = session.get(target_url, headers=HEADERS, stream=True)
+raise_for_status(resp)
+return resp
+
+

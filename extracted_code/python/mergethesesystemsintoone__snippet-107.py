@@ -1,13 +1,13 @@
-async def root():
-    return HTMLResponse("""
-    <!DOCTYPE html>
-    <html><body><h1>Final AGI</h1>
-    <div id="root"></div>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script type="text/babel">
-        const App = () => <div>Groundbreaking AGI - Phi: {Math.random().toFixed(2)} | History: {Math.floor(Math.random()*1000)}</div>;
-        ReactDOM.render(<App />, document.getElementById('root'));
-    </script></body></html>
-    """)
+class EmergentPatternDetector:
+    def __init__(self, network: EmergentIntelligenceNetwork):
+        self.network = network
+        self.patterns = []
+
+    def detect_patterns(self):
+        cycles = list(nx.simple_cycles(self.network.graph))
+        if cycles:
+            self.patterns.append({"type": "cycle", "length": len(cycles[0])})
+
+    def get_emergent_properties(self) -> Dict:
+        return {"emergent_intelligence_score": random.random(), "patterns": self.patterns}
 

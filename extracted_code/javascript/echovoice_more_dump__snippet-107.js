@@ -1,2 +1,5 @@
-const avgV = frame.particles.reduce((sum, p) => sum + p.v, 0) / frame.particles.length;
-const fromC = p5.color(avgV > 0 ? 120 : 0, 100, 100, 50); // Green/red valence
+  const highT = this.temperature * 2;
+  const highSnap = {...this.snapshot()}; // Simulate high T step
+  const deltaH = this.computeH() - highSnap.stats.totalH;
+  const pSwap = Math.exp(-deltaH * (1/this.temperature - 1/highT));
+  if (Math.random() < pSwap) this.loadSnapshot(highSnap); // Exchange

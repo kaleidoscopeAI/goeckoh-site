@@ -1,1 +1,1 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+We are given a code snippet that sets up a Cognitive Crystal simulation with integration to Ollama and visualization using Three.js.

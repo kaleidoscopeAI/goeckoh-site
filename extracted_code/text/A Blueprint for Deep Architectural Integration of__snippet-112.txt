@@ -1,0 +1,4 @@
+- Crawling stays focused and relevant.
+- Information ingested meets quality, safety, and copyright standards.
+- Resource use is controlled, safeguarding system responsiveness.
+- Integration with the existing knowledge base supports smooth crystallization and use of new external data.

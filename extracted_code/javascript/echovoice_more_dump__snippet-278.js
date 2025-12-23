@@ -1,1 +1,2 @@
-const maturityFactor = clamp(node.maturity, 0, 1);
+const mods = computeModulators(nodeState).
+const allowedMods = applyRegulatoryFilter(nodeState, mods, valueLayerOk = true).

@@ -1,173 +1,83 @@
-from collections import defaultdict
-from itertools import chain
-from operator import itemgetter
-from typing import Dict, Iterable, List, Optional, Tuple
-
-from .align import Align, AlignMethod
-from .console import Console, ConsoleOptions, RenderableType, RenderResult
-from .constrain import Constrain
-from .measure import Measurement
-from .padding import Padding, PaddingDimensions
-from .table import Table
-from .text import TextType
-from .jupyter import JupyterMixin
+def version_info_to_nodot(version_info: Tuple[int, ...]) -> str:
+    # Only use up to the first two numbers.
+    return "".join(map(str, version_info[:2]))
 
 
-class Columns(JupyterMixin):
-    """Display renderables in neat columns.
-
-    Args:
-        renderables (Iterable[RenderableType]): Any number of Rich renderables (including str).
-        width (int, optional): The desired width of the columns, or None to auto detect. Defaults to None.
-        padding (PaddingDimensions, optional): Optional padding around cells. Defaults to (0, 1).
-        expand (bool, optional): Expand columns to full width. Defaults to False.
-        equal (bool, optional): Arrange in to equal sized columns. Defaults to False.
-        column_first (bool, optional): Align items from top to bottom (rather than left to right). Defaults to False.
-        right_to_left (bool, optional): Start column from right hand side. Defaults to False.
-        align (str, optional): Align value ("left", "right", or "center") or None for default. Defaults to None.
-        title (TextType, optional): Optional title for Columns.
-    """
-
-    def __init__(
-        self,
-        renderables: Optional[Iterable[RenderableType]] = None,
-        padding: PaddingDimensions = (0, 1),
-        *,
-        width: Optional[int] = None,
-        expand: bool = False,
-        equal: bool = False,
-        column_first: bool = False,
-        right_to_left: bool = False,
-        align: Optional[AlignMethod] = None,
-        title: Optional[TextType] = None,
-    ) -> None:
-        self.renderables = list(renderables or [])
-        self.width = width
-        self.padding = padding
-        self.expand = expand
-        self.equal = equal
-        self.column_first = column_first
-        self.right_to_left = right_to_left
-        self.align: Optional[AlignMethod] = align
-        self.title = title
-
-    def add_renderable(self, renderable: RenderableType) -> None:
-        """Add a renderable to the columns.
-
-        Args:
-            renderable (RenderableType): Any renderable object.
-        """
-        self.renderables.append(renderable)
-
-    def __rich_console__(
-        self, console: Console, options: ConsoleOptions
-    ) -> RenderResult:
-        render_str = console.render_str
-        renderables = [
-            render_str(renderable) if isinstance(renderable, str) else renderable
-            for renderable in self.renderables
+def _mac_platforms(arch: str) -> List[str]:
+    match = _osx_arch_pat.match(arch)
+    if match:
+        name, major, minor, actual_arch = match.groups()
+        mac_version = (int(major), int(minor))
+        arches = [
+            # Since we have always only checked that the platform starts
+            # with "macosx", for backwards-compatibility we extract the
+            # actual prefix provided by the user in case they provided
+            # something like "macosxcustom_". It may be good to remove
+            # this as undocumented or deprecate it in the future.
+            "{}_{}".format(name, arch[len("macosx_") :])
+            for arch in mac_platforms(mac_version, actual_arch)
         ]
-        if not renderables:
-            return
-        _top, right, _bottom, left = Padding.unpack(self.padding)
-        width_padding = max(left, right)
-        max_width = options.max_width
-        widths: Dict[int, int] = defaultdict(int)
-        column_count = len(renderables)
-
-        get_measurement = Measurement.get
-        renderable_widths = [
-            get_measurement(console, options, renderable).maximum
-            for renderable in renderables
-        ]
-        if self.equal:
-            renderable_widths = [max(renderable_widths)] * len(renderable_widths)
-
-        def iter_renderables(
-            column_count: int,
-        ) -> Iterable[Tuple[int, Optional[RenderableType]]]:
-            item_count = len(renderables)
-            if self.column_first:
-                width_renderables = list(zip(renderable_widths, renderables))
-
-                column_lengths: List[int] = [item_count // column_count] * column_count
-                for col_no in range(item_count % column_count):
-                    column_lengths[col_no] += 1
-
-                row_count = (item_count + column_count - 1) // column_count
-                cells = [[-1] * column_count for _ in range(row_count)]
-                row = col = 0
-                for index in range(item_count):
-                    cells[row][col] = index
-                    column_lengths[col] -= 1
-                    if column_lengths[col]:
-                        row += 1
-                    else:
-                        col += 1
-                        row = 0
-                for index in chain.from_iterable(cells):
-                    if index == -1:
-                        break
-                    yield width_renderables[index]
-            else:
-                yield from zip(renderable_widths, renderables)
-            # Pad odd elements with spaces
-            if item_count % column_count:
-                for _ in range(column_count - (item_count % column_count)):
-                    yield 0, None
-
-        table = Table.grid(padding=self.padding, collapse_padding=True, pad_edge=False)
-        table.expand = self.expand
-        table.title = self.title
-
-        if self.width is not None:
-            column_count = (max_width) // (self.width + width_padding)
-            for _ in range(column_count):
-                table.add_column(width=self.width)
-        else:
-            while column_count > 1:
-                widths.clear()
-                column_no = 0
-                for renderable_width, _ in iter_renderables(column_count):
-                    widths[column_no] = max(widths[column_no], renderable_width)
-                    total_width = sum(widths.values()) + width_padding * (
-                        len(widths) - 1
-                    )
-                    if total_width > max_width:
-                        column_count = len(widths) - 1
-                        break
-                    else:
-                        column_no = (column_no + 1) % column_count
-                else:
-                    break
-
-        get_renderable = itemgetter(1)
-        _renderables = [
-            get_renderable(_renderable)
-            for _renderable in iter_renderables(column_count)
-        ]
-        if self.equal:
-            _renderables = [
-                None
-                if renderable is None
-                else Constrain(renderable, renderable_widths[0])
-                for renderable in _renderables
-            ]
-        if self.align:
-            align = self.align
-            _Align = Align
-            _renderables = [
-                None if renderable is None else _Align(renderable, align)
-                for renderable in _renderables
-            ]
-
-        right_to_left = self.right_to_left
-        add_row = table.add_row
-        for start in range(0, len(_renderables), column_count):
-            row = _renderables[start : start + column_count]
-            if right_to_left:
-                row = row[::-1]
-            add_row(*row)
-        yield table
+    else:
+        # arch pattern didn't match (?!)
+        arches = [arch]
+    return arches
 
 
+def _custom_manylinux_platforms(arch: str) -> List[str]:
+    arches = [arch]
+    arch_prefix, arch_sep, arch_suffix = arch.partition("_")
+    if arch_prefix == "manylinux2014":
+        # manylinux1/manylinux2010 wheels run on most manylinux2014 systems
+        # with the exception of wheels depending on ncurses. PEP 599 states
+        # manylinux1/manylinux2010 wheels should be considered
+        # manylinux2014 wheels:
+        # https://www.python.org/dev/peps/pep-0599/#backwards-compatibility-with-manylinux2010-wheels
+        if arch_suffix in {"i686", "x86_64"}:
+            arches.append("manylinux2010" + arch_sep + arch_suffix)
+            arches.append("manylinux1" + arch_sep + arch_suffix)
+    elif arch_prefix == "manylinux2010":
+        # manylinux1 wheels run on most manylinux2010 systems with the
+        # exception of wheels depending on ncurses. PEP 571 states
+        # manylinux1 wheels should be considered manylinux2010 wheels:
+        # https://www.python.org/dev/peps/pep-0571/#backwards-compatibility-with-manylinux1-wheels
+        arches.append("manylinux1" + arch_sep + arch_suffix)
+    return arches
+
+
+def _get_custom_platforms(arch: str) -> List[str]:
+    arch_prefix, arch_sep, arch_suffix = arch.partition("_")
+    if arch.startswith("macosx"):
+        arches = _mac_platforms(arch)
+    elif arch_prefix in ["manylinux2014", "manylinux2010"]:
+        arches = _custom_manylinux_platforms(arch)
+    else:
+        arches = [arch]
+    return arches
+
+
+def _expand_allowed_platforms(platforms: Optional[List[str]]) -> Optional[List[str]]:
+    if not platforms:
+        return None
+
+    seen = set()
+    result = []
+
+    for p in platforms:
+        if p in seen:
+            continue
+        additions = [c for c in _get_custom_platforms(p) if c not in seen]
+        seen.update(additions)
+        result.extend(additions)
+
+    return result
+
+
+def _get_python_version(version: str) -> PythonVersion:
+    if len(version) > 1:
+        return int(version[0]), int(version[1:])
+    else:
+        return (int(version[0]),)
+
+
+def _get_custom_interpreter(
+    implementation: Optional[str] = None, version: Optional[str] = None

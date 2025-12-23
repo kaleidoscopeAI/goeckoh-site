@@ -1,1 +1,1 @@
-const spriteGroup = new THREE.Group();
+function Jv(v):

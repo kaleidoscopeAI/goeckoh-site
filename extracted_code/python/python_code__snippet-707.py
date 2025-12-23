@@ -1,1 +1,5 @@
-#: * Key: Value as derived from the file name of a distro release file,
+from pip._internal.utils.packaging import get_requirement
+
+from .base import Candidate, Requirement
+from .factory import Factory
+

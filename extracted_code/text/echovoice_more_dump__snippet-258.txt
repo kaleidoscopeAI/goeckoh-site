@@ -1,1 +1,1 @@
-export class ActuationService {
+  Exploration Noise (T): The magnitude and polarity of E are directly mapped to the annealing temperature T. A high 

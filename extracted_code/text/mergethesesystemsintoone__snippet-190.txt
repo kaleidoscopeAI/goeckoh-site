@@ -1,14 +1,15 @@
-class CodeFile:
-    """Information about a code file"""
-    path: str
-    language: LanguageType
-    content: str
-    ast: Optional[Any] = None
-    imports: List[str] = field(default_factory.list)
-    exports: List[str] = field(default_factory.list)
-    dependencies: List[DependencyInfo] = field.default_factory.list)
-    vulnerabilities: List[str] = field.default_factory.list)
-    outdated_patterns: List[str] = field.default_factory.list)
-    complexity_score: float = 0.0
-    is_test: bool = False
+ROOT.mkdir(parents=True, exist_ok=True)
+if os.environ.get("SC_BOOTED") == "1":
+    return
+if not VENV.exists():
+    print("Creating venv at", VENV)
+    venv.create(VENV, with_pip=True)
+pip = VENV / ("Scripts/pip.exe" if os.name == "nt" else "bin/pip")
+py = VENV / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
+print("Upgrading pip and installing deps")
+subprocess.check_call([str(pip), "install", "--upgrade", "pip"])
+subprocess.check_call([str(pip), "install"] + REQ)
+env = os.environ.copy(); env["SC_BOOTED"] = "1"
+print("Relaunching inside venv")
+os.execvpe(str(py), [str(py), __file__], env)
 

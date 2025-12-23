@@ -1,0 +1,2 @@
+ Rust voice path is active, then validate p95 latency against target with
+ the new script.

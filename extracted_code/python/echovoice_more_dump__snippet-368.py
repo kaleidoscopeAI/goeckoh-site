@@ -1,1 +1,1 @@
-def _plot_system_metrics(self, metrics_history):
+async def _discover_urls(self, query, max_results):

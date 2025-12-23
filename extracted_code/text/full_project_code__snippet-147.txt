@@ -1,0 +1,18 @@
+"""Get folder for a CSIDL name that does not exist as an environment variable."""
+if csidl_name == "CSIDL_PERSONAL":
+    return os.path.join(os.path.normpath(os.environ["USERPROFILE"]), "Documents")  # noqa: PTH118
+
+if csidl_name == "CSIDL_DOWNLOADS":
+    return os.path.join(os.path.normpath(os.environ["USERPROFILE"]), "Downloads")  # noqa: PTH118
+
+if csidl_name == "CSIDL_MYPICTURES":
+    return os.path.join(os.path.normpath(os.environ["USERPROFILE"]), "Pictures")  # noqa: PTH118
+
+if csidl_name == "CSIDL_MYVIDEO":
+    return os.path.join(os.path.normpath(os.environ["USERPROFILE"]), "Videos")  # noqa: PTH118
+
+if csidl_name == "CSIDL_MYMUSIC":
+    return os.path.join(os.path.normpath(os.environ["USERPROFILE"]), "Music")  # noqa: PTH118
+return None
+
+

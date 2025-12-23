@@ -1,6 +1,3 @@
-class LLMProvider(str, Enum):
-    """Supported LLM providers"""
-    LLAMACPP_PYTHON = "llamacpp_python"
-    LLAMACPP_API = "llamacpp_api"
-    OLLAMA = "ollama"
+    if not steps: steps = ["Clarify intent","Retrieve relevant facts","Draft candidate answer","Critique and improve","Produce final answer"]
+    return steps
 

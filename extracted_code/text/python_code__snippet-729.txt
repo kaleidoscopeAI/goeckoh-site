@@ -1,0 +1,3 @@
+return (f"array({_object.typecode!r}, [", "])", f"array({_object.typecode!r})")
+
+

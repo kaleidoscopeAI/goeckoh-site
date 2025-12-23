@@ -1,0 +1,9 @@
+"""Raised when a socket timeout error occurs.
+
+Catching this error will catch both :exc:`ReadTimeoutErrors
+<ReadTimeoutError>` and :exc:`ConnectTimeoutErrors <ConnectTimeoutError>`.
+"""
+
+pass
+
+

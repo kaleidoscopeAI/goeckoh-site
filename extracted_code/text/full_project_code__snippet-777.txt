@@ -1,0 +1,5 @@
+"class_table": EUCKR_CLS,
+"class_factor": 4,
+"state_table": EUCKR_ST,
+"char_len_table": EUCKR_CHAR_LEN_TABLE,
+"name": "EUC-KR",

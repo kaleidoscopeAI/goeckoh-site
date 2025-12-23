@@ -1,9 +1,16 @@
-def simulate_audio_input():
-    return input("Speak (type phrase): ").strip()
+class DeepReasoningCore:
+    def __init__(self):
+        self.strategies = {
+            "green": ["Excited guidance: Great job, let's build on that!"],
+            "yellow": ["Simple affirm: You're doing well."],
+            "red": ["Calm script: Breathe deep... I am safe."]
+        }
 
-def correct_to_first_person(text):
-    # Heuristic: Enforce "I/my" (expand rules)
-    text = re.sub(r"\byou\b", "I", text, flags=re.IGNORECASE)
-    text = re.sub(r"\byour\b", "my", text, flags=re.IGNORECASE)
-    return text.capitalize()
+    def execute(self, text, gcl):
+        if gcl > 0.7:  # GREEN
+            return random.choice(self.strategies["green"])
+        elif gcl > 0.4:  # YELLOW
+            return random.choice(self.strategies["yellow"])
+        else:  # RED
+            return random.choice(self.strategies["red"])
 

@@ -1,18 +1,4 @@
-class PatternStrand:
-    """DNA-like structure for pattern recognition"""
-    sequence: List[str] = field(default_factory=list)
-    strength: float = 0.0
-    mutations: int = 0
-    activation_threshold: float = 0.5
-    adaptation_rate: float = 0.1
-
-    def mutate(self):
-        """Evolve pattern recognition capability"""
-        if np.random.random() < self.adaptation_rate:
-            if len(self.sequence) > 3:
-                # Combine existing patterns
-                idx1, idx2 = np.random.choice(len(self.sequence), 2, replace=False)
-                new_pattern = self.sequence[idx1][:2] + self.sequence[idx2][2:]
-                self.sequence.append(new_pattern)
-                self.mutations += 1
-
+Task Persistence/Recovery: The current _load_tasks only loads completed/failed tasks and uses a dummy function (lambda: None). A more robust recovery system would need a way to re-associate the actual task functions (perhaps by storing function names or using a task registry) and potentially resume or reschedule tasks that were PENDING or RUNNING when the manager last shut down.
+LLMProcessor Location: If this task manager is part of the larger "Rebuilt_AI_System_with_GPT" project, you might want to import the LLMProcessor from its module file (modules/LLMProcessor.py) instead of defining it again within this script, to avoid code duplication. If this script is standalone, then including it is fine.
+Retry Logic: The Task dataclass has retry parameters, but the _run_task method in the scheduler doesn't currently implement the logic to retry failed tasks using retry_count, max_retries, and retry_delay.
+Error Handling within Tasks: The analyze_code_task and summarize_code_task could benefit from internal try-except blocks to handle file reading errors more gracefully before the scheduler catches exceptions.

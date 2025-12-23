@@ -1,0 +1,7 @@
+<ErrorBoundary>
+  <ThemeProvider>
+    <MobileOptimized>
+      <AppContent />
+    </MobileOptimized>
+  </ThemeProvider>
+</ErrorBoundary>

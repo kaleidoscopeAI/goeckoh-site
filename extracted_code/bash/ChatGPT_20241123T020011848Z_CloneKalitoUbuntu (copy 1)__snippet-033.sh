@@ -1,9 +1,5 @@
-# Install fdupes (if not already installed)
-sudo apt install fdupes -y
-
-# Find duplicates in the project directory
-fdupes -r /path/to/project > duplicates.txt
-
-# Remove duplicates interactively (be careful to avoid accidental deletions)
-fdupes -r -d /path/to/project
+mkdir -p /path/to/project/modules
+mv /path/to/project/code/advanced_learning_mechanism/*.py /path/to/project/modules
+mv /path/to/project/code/advanced_learning_mechanism/enhanced*.py /path/to/project/modules
+mv /path/to/project/code/autonomous\ capabilities\ and\ intagation/advanced*.py /path/to/project/modules
 

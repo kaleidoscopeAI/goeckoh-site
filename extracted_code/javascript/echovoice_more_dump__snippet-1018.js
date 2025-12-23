@@ -1,2 +1,2 @@
- : The control synthesis function that maps the relational state to hardware actions.
-
+let root = kernel::kobject::KObject::new();
+// Add tunable parameters for thresholds

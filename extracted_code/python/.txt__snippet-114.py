@@ -1,1 +1,1 @@
-def _log_and_metrics(
+def copy_mobile_sources(paths: InstallPaths):

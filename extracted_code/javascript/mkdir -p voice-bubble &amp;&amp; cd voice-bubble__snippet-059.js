@@ -1,2 +1,2 @@
-let lastT = performance.now();
-function tick(now) {
+const dtSec = dtMs / 1000;
+

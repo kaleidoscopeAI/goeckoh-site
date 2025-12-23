@@ -1,1 +1,2 @@
-1. Starting Small with Core Capabilities: Begin with a small, manageable set of foundational tasks and allow the AI to build from there. This allows you to test and refine its ability to self-improve before expanding its scope.
+As each node reaches capacity (experience threshold), it generates a new node. Because growth is exponential, the network expands rapidly from the original seed, ensuring scalability without added complexity. Exponential growth demonstrates that the AI can expand in a manner akin to biological systems, allowing rapid network scaling without centralized control.
+

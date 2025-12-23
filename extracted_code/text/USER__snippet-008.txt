@@ -1,0 +1,4 @@
+if (handle != 0) {
+    auto* ns = reinterpret_cast<webrtc::NoiseSuppressor*>(handle);
+    delete ns;
+}

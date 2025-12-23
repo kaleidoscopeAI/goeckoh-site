@@ -1,0 +1,9 @@
+  v=np.zeros(D,dtype=np.float64)
+  for g in ngrams(text,1,4):
+      x=sha_to_u64(g)
+      d=u_hash(x,D=D)
+      s=sign_hash(sha_to_u64(g,"sign"))
+      v[d]+=s
+  nrm=np.linalg.norm(v)+1e-9
+  return v/nrm
+

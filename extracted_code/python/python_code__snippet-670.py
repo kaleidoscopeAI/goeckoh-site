@@ -1,56 +1,36 @@
-    class _Immutable:
-        """Mixin to indicate that object should not be copied."""
-        __slots__ = ()
+class UpgradePrompt:
+    old: str
+    new: str
 
-        def __copy__(self):
-            return self
+    def __rich__(self) -> Group:
+        if WINDOWS:
+            pip_cmd = f"{get_best_invocation_for_this_python()} -m pip"
+        else:
+            pip_cmd = get_best_invocation_for_this_pip()
 
-        def __deepcopy__(self, memo):
-            return self
+        notice = "[bold][[reset][blue]notice[reset][bold]][reset]"
+        return Group(
+            Text(),
+            Text.from_markup(
+                f"{notice} A new release of pip is available: "
+                f"[red]{self.old}[reset] -> [green]{self.new}[reset]"
+            ),
+            Text.from_markup(
+                f"{notice} To update, run: "
+                f"[green]{escape(pip_cmd)} install --upgrade pip"
+            ),
+        )
 
-    class ParamSpecArgs(_Immutable):
-        """The args for a ParamSpec object.
 
-        Given a ParamSpec object P, P.args is an instance of ParamSpecArgs.
+def was_installed_by_pip(pkg: str) -> bool:
+    """Checks whether pkg was installed by pip
 
-        ParamSpecArgs objects have a reference back to their ParamSpec:
+    This is used not to display the upgrade message when pip is in fact
+    installed by system package manager, such as dnf on Fedora.
+    """
+    dist = get_default_environment().get_distribution(pkg)
+    return dist is not None and "pip" == dist.installer
 
-        P.args.__origin__ is P
 
-        This type is meant for runtime introspection and has no special meaning to
-        static type checkers.
-        """
-        def __init__(self, origin):
-            self.__origin__ = origin
-
-        def __repr__(self):
-            return f"{self.__origin__.__name__}.args"
-
-        def __eq__(self, other):
-            if not isinstance(other, ParamSpecArgs):
-                return NotImplemented
-            return self.__origin__ == other.__origin__
-
-    class ParamSpecKwargs(_Immutable):
-        """The kwargs for a ParamSpec object.
-
-        Given a ParamSpec object P, P.kwargs is an instance of ParamSpecKwargs.
-
-        ParamSpecKwargs objects have a reference back to their ParamSpec:
-
-        P.kwargs.__origin__ is P
-
-        This type is meant for runtime introspection and has no special meaning to
-        static type checkers.
-        """
-        def __init__(self, origin):
-            self.__origin__ = origin
-
-        def __repr__(self):
-            return f"{self.__origin__.__name__}.kwargs"
-
-        def __eq__(self, other):
-            if not isinstance(other, ParamSpecKwargs):
-                return NotImplemented
-            return self.__origin__ == other.__origin__
-
+def _get_current_remote_pip_version(
+    session: PipSession, options: optparse.Values

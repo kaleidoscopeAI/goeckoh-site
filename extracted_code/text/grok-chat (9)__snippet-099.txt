@@ -1,0 +1,18 @@
+ 99          self._latency_budget_ms = float(os.environ.get("GOECKOH_MIRROR_
+     LATENCY_MS", "350"))
+100 +        self._latency_target_p95_ms = float(os.environ.get("GOECKOH_LAT
+     ENCY_P95_TARGET", str(self._latency_budget_ms)))
+101          self._fast_tts_fallback = os.environ.get("GOECKOH_MIRROR_FAST_F
+     ALLBACK", "").lower() not in (
+    ⋮
+173          self._last_latency_ms: float = 0.0
+174 +        self._last_playback_latency_ms: float = 0.0
+175          self._start_ts: float = time.time()
+    ⋮
+245                      "latency_p95_ms": self._percentile(latencies, 95.0)
+     ,
+246 +                    "playback_latency_ms": float(self._last_playback_la
+     tency_ms),
+247                      "gcl_mean": float(sum(gcls) / len(gcls)) if gcls el
+     se 0.0,
+

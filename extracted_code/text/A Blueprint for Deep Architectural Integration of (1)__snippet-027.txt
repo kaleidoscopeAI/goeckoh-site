@@ -1,1 +1,0 @@
-- In the critical inner loops, consider selectively using `unsafe` code for bounds skipping and pointer arithmetic after careful benchmarking.

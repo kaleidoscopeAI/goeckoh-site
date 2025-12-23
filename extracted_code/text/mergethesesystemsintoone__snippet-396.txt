@@ -1,0 +1,6 @@
+  proofs = []
+  for theorem in self.theorems:
+      if self._theorem_applicable(concept, rule_results, theorem ["premises"]):
+         proofs.append({'theorem_id': theorem['id'], 'conclusion': theorem ["conclusion"] (concept, rule_results) })
+  return proofs
+

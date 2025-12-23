@@ -1,280 +1,209 @@
-    from mock import MagicMock, Mock, patch
-
-from ..ansitowin32 import AnsiToWin32, StreamWrapper
-from ..win32 import ENABLE_VIRTUAL_TERMINAL_PROCESSING
-from .utils import osname
+from .johabfreq import JOHAB_TO_EUCKR_ORDER_TABLE
 
 
-class StreamWrapperTest(TestCase):
+class CharDistributionAnalysis:
+    ENOUGH_DATA_THRESHOLD = 1024
+    SURE_YES = 0.99
+    SURE_NO = 0.01
+    MINIMUM_DATA_THRESHOLD = 3
 
-    def testIsAProxy(self):
-        mockStream = Mock()
-        wrapper = StreamWrapper(mockStream, None)
-        self.assertTrue( wrapper.random_attr is mockStream.random_attr )
+    def __init__(self) -> None:
+        # Mapping table to get frequency order from char order (get from
+        # GetOrder())
+        self._char_to_freq_order: Tuple[int, ...] = tuple()
+        self._table_size = 0  # Size of above table
+        # This is a constant value which varies from language to language,
+        # used in calculating confidence.  See
+        # http://www.mozilla.org/projects/intl/UniversalCharsetDetection.html
+        # for further detail.
+        self.typical_distribution_ratio = 0.0
+        self._done = False
+        self._total_chars = 0
+        self._freq_chars = 0
+        self.reset()
 
-    def testDelegatesWrite(self):
-        mockStream = Mock()
-        mockConverter = Mock()
-        wrapper = StreamWrapper(mockStream, mockConverter)
-        wrapper.write('hello')
-        self.assertTrue(mockConverter.write.call_args, (('hello',), {}))
+    def reset(self) -> None:
+        """reset analyser, clear any state"""
+        # If this flag is set to True, detection is done and conclusion has
+        # been made
+        self._done = False
+        self._total_chars = 0  # Total characters encountered
+        # The number of characters whose frequency order is less than 512
+        self._freq_chars = 0
 
-    def testDelegatesContext(self):
-        mockConverter = Mock()
-        s = StringIO()
-        with StreamWrapper(s, mockConverter) as fp:
-            fp.write(u'hello')
-        self.assertTrue(s.closed)
+    def feed(self, char: Union[bytes, bytearray], char_len: int) -> None:
+        """feed a character with known length"""
+        if char_len == 2:
+            # we only care about 2-bytes character in our distribution analysis
+            order = self.get_order(char)
+        else:
+            order = -1
+        if order >= 0:
+            self._total_chars += 1
+            # order is valid
+            if order < self._table_size:
+                if 512 > self._char_to_freq_order[order]:
+                    self._freq_chars += 1
 
-    def testProxyNoContextManager(self):
-        mockStream = MagicMock()
-        mockStream.__enter__.side_effect = AttributeError()
-        mockConverter = Mock()
-        with self.assertRaises(AttributeError) as excinfo:
-            with StreamWrapper(mockStream, mockConverter) as wrapper:
-                wrapper.write('hello')
+    def get_confidence(self) -> float:
+        """return confidence based on existing data"""
+        # if we didn't receive any character in our consideration range,
+        # return negative answer
+        if self._total_chars <= 0 or self._freq_chars <= self.MINIMUM_DATA_THRESHOLD:
+            return self.SURE_NO
 
-    def test_closed_shouldnt_raise_on_closed_stream(self):
-        stream = StringIO()
-        stream.close()
-        wrapper = StreamWrapper(stream, None)
-        self.assertEqual(wrapper.closed, True)
-
-    def test_closed_shouldnt_raise_on_detached_stream(self):
-        stream = TextIOWrapper(StringIO())
-        stream.detach()
-        wrapper = StreamWrapper(stream, None)
-        self.assertEqual(wrapper.closed, True)
-
-class AnsiToWin32Test(TestCase):
-
-    def testInit(self):
-        mockStdout = Mock()
-        auto = Mock()
-        stream = AnsiToWin32(mockStdout, autoreset=auto)
-        self.assertEqual(stream.wrapped, mockStdout)
-        self.assertEqual(stream.autoreset, auto)
-
-    @patch('colorama.ansitowin32.winterm', None)
-    @patch('colorama.ansitowin32.winapi_test', lambda *_: True)
-    def testStripIsTrueOnWindows(self):
-        with osname('nt'):
-            mockStdout = Mock()
-            stream = AnsiToWin32(mockStdout)
-            self.assertTrue(stream.strip)
-
-    def testStripIsFalseOffWindows(self):
-        with osname('posix'):
-            mockStdout = Mock(closed=False)
-            stream = AnsiToWin32(mockStdout)
-            self.assertFalse(stream.strip)
-
-    def testWriteStripsAnsi(self):
-        mockStdout = Mock()
-        stream = AnsiToWin32(mockStdout)
-        stream.wrapped = Mock()
-        stream.write_and_convert = Mock()
-        stream.strip = True
-
-        stream.write('abc')
-
-        self.assertFalse(stream.wrapped.write.called)
-        self.assertEqual(stream.write_and_convert.call_args, (('abc',), {}))
-
-    def testWriteDoesNotStripAnsi(self):
-        mockStdout = Mock()
-        stream = AnsiToWin32(mockStdout)
-        stream.wrapped = Mock()
-        stream.write_and_convert = Mock()
-        stream.strip = False
-        stream.convert = False
-
-        stream.write('abc')
-
-        self.assertFalse(stream.write_and_convert.called)
-        self.assertEqual(stream.wrapped.write.call_args, (('abc',), {}))
-
-    def assert_autoresets(self, convert, autoreset=True):
-        stream = AnsiToWin32(Mock())
-        stream.convert = convert
-        stream.reset_all = Mock()
-        stream.autoreset = autoreset
-        stream.winterm = Mock()
-
-        stream.write('abc')
-
-        self.assertEqual(stream.reset_all.called, autoreset)
-
-    def testWriteAutoresets(self):
-        self.assert_autoresets(convert=True)
-        self.assert_autoresets(convert=False)
-        self.assert_autoresets(convert=True, autoreset=False)
-        self.assert_autoresets(convert=False, autoreset=False)
-
-    def testWriteAndConvertWritesPlainText(self):
-        stream = AnsiToWin32(Mock())
-        stream.write_and_convert( 'abc' )
-        self.assertEqual( stream.wrapped.write.call_args, (('abc',), {}) )
-
-    def testWriteAndConvertStripsAllValidAnsi(self):
-        stream = AnsiToWin32(Mock())
-        stream.call_win32 = Mock()
-        data = [
-            'abc\033[mdef',
-            'abc\033[0mdef',
-            'abc\033[2mdef',
-            'abc\033[02mdef',
-            'abc\033[002mdef',
-            'abc\033[40mdef',
-            'abc\033[040mdef',
-            'abc\033[0;1mdef',
-            'abc\033[40;50mdef',
-            'abc\033[50;30;40mdef',
-            'abc\033[Adef',
-            'abc\033[0Gdef',
-            'abc\033[1;20;128Hdef',
-        ]
-        for datum in data:
-            stream.wrapped.write.reset_mock()
-            stream.write_and_convert( datum )
-            self.assertEqual(
-               [args[0] for args in stream.wrapped.write.call_args_list],
-               [ ('abc',), ('def',) ]
+        if self._total_chars != self._freq_chars:
+            r = self._freq_chars / (
+                (self._total_chars - self._freq_chars) * self.typical_distribution_ratio
             )
+            if r < self.SURE_YES:
+                return r
 
-    def testWriteAndConvertSkipsEmptySnippets(self):
-        stream = AnsiToWin32(Mock())
-        stream.call_win32 = Mock()
-        stream.write_and_convert( '\033[40m\033[41m' )
-        self.assertFalse( stream.wrapped.write.called )
+        # normalize confidence (we don't want to be 100% sure)
+        return self.SURE_YES
 
-    def testWriteAndConvertCallsWin32WithParamsAndCommand(self):
-        stream = AnsiToWin32(Mock())
-        stream.convert = True
-        stream.call_win32 = Mock()
-        stream.extract_params = Mock(return_value='params')
-        data = {
-            'abc\033[adef':         ('a', 'params'),
-            'abc\033[;;bdef':       ('b', 'params'),
-            'abc\033[0cdef':        ('c', 'params'),
-            'abc\033[;;0;;Gdef':    ('G', 'params'),
-            'abc\033[1;20;128Hdef': ('H', 'params'),
-        }
-        for datum, expected in data.items():
-            stream.call_win32.reset_mock()
-            stream.write_and_convert( datum )
-            self.assertEqual( stream.call_win32.call_args[0], expected )
+    def got_enough_data(self) -> bool:
+        # It is not necessary to receive all data to draw conclusion.
+        # For charset detection, certain amount of data is enough
+        return self._total_chars > self.ENOUGH_DATA_THRESHOLD
 
-    def test_reset_all_shouldnt_raise_on_closed_orig_stdout(self):
-        stream = StringIO()
-        converter = AnsiToWin32(stream)
-        stream.close()
+    def get_order(self, _: Union[bytes, bytearray]) -> int:
+        # We do not handle characters based on the original encoding string,
+        # but convert this encoding string to a number, here called order.
+        # This allows multiple encodings of a language to share one frequency
+        # table.
+        return -1
 
-        converter.reset_all()
 
-    def test_wrap_shouldnt_raise_on_closed_orig_stdout(self):
-        stream = StringIO()
-        stream.close()
-        with \
-            patch("colorama.ansitowin32.os.name", "nt"), \
-            patch("colorama.ansitowin32.winapi_test", lambda: True):
-                converter = AnsiToWin32(stream)
-        self.assertTrue(converter.strip)
-        self.assertFalse(converter.convert)
+class EUCTWDistributionAnalysis(CharDistributionAnalysis):
+    def __init__(self) -> None:
+        super().__init__()
+        self._char_to_freq_order = EUCTW_CHAR_TO_FREQ_ORDER
+        self._table_size = EUCTW_TABLE_SIZE
+        self.typical_distribution_ratio = EUCTW_TYPICAL_DISTRIBUTION_RATIO
 
-    def test_wrap_shouldnt_raise_on_missing_closed_attr(self):
-        with \
-            patch("colorama.ansitowin32.os.name", "nt"), \
-            patch("colorama.ansitowin32.winapi_test", lambda: True):
-                converter = AnsiToWin32(object())
-        self.assertTrue(converter.strip)
-        self.assertFalse(converter.convert)
+    def get_order(self, byte_str: Union[bytes, bytearray]) -> int:
+        # for euc-TW encoding, we are interested
+        #   first  byte range: 0xc4 -- 0xfe
+        #   second byte range: 0xa1 -- 0xfe
+        # no validation needed here. State machine has done that
+        first_char = byte_str[0]
+        if first_char >= 0xC4:
+            return 94 * (first_char - 0xC4) + byte_str[1] - 0xA1
+        return -1
 
-    def testExtractParams(self):
-        stream = AnsiToWin32(Mock())
-        data = {
-            '':               (0,),
-            ';;':             (0,),
-            '2':              (2,),
-            ';;002;;':        (2,),
-            '0;1':            (0, 1),
-            ';;003;;456;;':   (3, 456),
-            '11;22;33;44;55': (11, 22, 33, 44, 55),
-        }
-        for datum, expected in data.items():
-            self.assertEqual(stream.extract_params('m', datum), expected)
 
-    def testCallWin32UsesLookup(self):
-        listener = Mock()
-        stream = AnsiToWin32(listener)
-        stream.win32_calls = {
-            1: (lambda *_, **__: listener(11),),
-            2: (lambda *_, **__: listener(22),),
-            3: (lambda *_, **__: listener(33),),
-        }
-        stream.call_win32('m', (3, 1, 99, 2))
-        self.assertEqual(
-            [a[0][0] for a in listener.call_args_list],
-            [33, 11, 22] )
+class EUCKRDistributionAnalysis(CharDistributionAnalysis):
+    def __init__(self) -> None:
+        super().__init__()
+        self._char_to_freq_order = EUCKR_CHAR_TO_FREQ_ORDER
+        self._table_size = EUCKR_TABLE_SIZE
+        self.typical_distribution_ratio = EUCKR_TYPICAL_DISTRIBUTION_RATIO
 
-    def test_osc_codes(self):
-        mockStdout = Mock()
-        stream = AnsiToWin32(mockStdout, convert=True)
-        with patch('colorama.ansitowin32.winterm') as winterm:
-            data = [
-                '\033]0\x07',                      # missing arguments
-                '\033]0;foo\x08',                  # wrong OSC command
-                '\033]0;colorama_test_title\x07',  # should work
-                '\033]1;colorama_test_title\x07',  # wrong set command
-                '\033]2;colorama_test_title\x07',  # should work
-                '\033]' + ';' * 64 + '\x08',       # see issue #247
-            ]
-            for code in data:
-                stream.write(code)
-            self.assertEqual(winterm.set_title.call_count, 2)
+    def get_order(self, byte_str: Union[bytes, bytearray]) -> int:
+        # for euc-KR encoding, we are interested
+        #   first  byte range: 0xb0 -- 0xfe
+        #   second byte range: 0xa1 -- 0xfe
+        # no validation needed here. State machine has done that
+        first_char = byte_str[0]
+        if first_char >= 0xB0:
+            return 94 * (first_char - 0xB0) + byte_str[1] - 0xA1
+        return -1
 
-    def test_native_windows_ansi(self):
-        with ExitStack() as stack:
-            def p(a, b):
-                stack.enter_context(patch(a, b, create=True))
-            # Pretend to be on Windows
-            p("colorama.ansitowin32.os.name", "nt")
-            p("colorama.ansitowin32.winapi_test", lambda: True)
-            p("colorama.win32.winapi_test", lambda: True)
-            p("colorama.winterm.win32.windll", "non-None")
-            p("colorama.winterm.get_osfhandle", lambda _: 1234)
 
-            # Pretend that our mock stream has native ANSI support
-            p(
-                "colorama.winterm.win32.GetConsoleMode",
-                lambda _: ENABLE_VIRTUAL_TERMINAL_PROCESSING,
-            )
-            SetConsoleMode = Mock()
-            p("colorama.winterm.win32.SetConsoleMode", SetConsoleMode)
+class JOHABDistributionAnalysis(CharDistributionAnalysis):
+    def __init__(self) -> None:
+        super().__init__()
+        self._char_to_freq_order = EUCKR_CHAR_TO_FREQ_ORDER
+        self._table_size = EUCKR_TABLE_SIZE
+        self.typical_distribution_ratio = EUCKR_TYPICAL_DISTRIBUTION_RATIO
 
-            stdout = Mock()
-            stdout.closed = False
-            stdout.isatty.return_value = True
-            stdout.fileno.return_value = 1
+    def get_order(self, byte_str: Union[bytes, bytearray]) -> int:
+        first_char = byte_str[0]
+        if 0x88 <= first_char < 0xD4:
+            code = first_char * 256 + byte_str[1]
+            return JOHAB_TO_EUCKR_ORDER_TABLE.get(code, -1)
+        return -1
 
-            # Our fake console says it has native vt support, so AnsiToWin32 should
-            # enable that support and do nothing else.
-            stream = AnsiToWin32(stdout)
-            SetConsoleMode.assert_called_with(1234, ENABLE_VIRTUAL_TERMINAL_PROCESSING)
-            self.assertFalse(stream.strip)
-            self.assertFalse(stream.convert)
-            self.assertFalse(stream.should_wrap())
 
-            # Now let's pretend we're on an old Windows console, that doesn't have
-            # native ANSI support.
-            p("colorama.winterm.win32.GetConsoleMode", lambda _: 0)
-            SetConsoleMode = Mock()
-            p("colorama.winterm.win32.SetConsoleMode", SetConsoleMode)
+class GB2312DistributionAnalysis(CharDistributionAnalysis):
+    def __init__(self) -> None:
+        super().__init__()
+        self._char_to_freq_order = GB2312_CHAR_TO_FREQ_ORDER
+        self._table_size = GB2312_TABLE_SIZE
+        self.typical_distribution_ratio = GB2312_TYPICAL_DISTRIBUTION_RATIO
 
-            stream = AnsiToWin32(stdout)
-            SetConsoleMode.assert_called_with(1234, ENABLE_VIRTUAL_TERMINAL_PROCESSING)
-            self.assertTrue(stream.strip)
-            self.assertTrue(stream.convert)
-            self.assertTrue(stream.should_wrap())
+    def get_order(self, byte_str: Union[bytes, bytearray]) -> int:
+        # for GB2312 encoding, we are interested
+        #  first  byte range: 0xb0 -- 0xfe
+        #  second byte range: 0xa1 -- 0xfe
+        # no validation needed here. State machine has done that
+        first_char, second_char = byte_str[0], byte_str[1]
+        if (first_char >= 0xB0) and (second_char >= 0xA1):
+            return 94 * (first_char - 0xB0) + second_char - 0xA1
+        return -1
+
+
+class Big5DistributionAnalysis(CharDistributionAnalysis):
+    def __init__(self) -> None:
+        super().__init__()
+        self._char_to_freq_order = BIG5_CHAR_TO_FREQ_ORDER
+        self._table_size = BIG5_TABLE_SIZE
+        self.typical_distribution_ratio = BIG5_TYPICAL_DISTRIBUTION_RATIO
+
+    def get_order(self, byte_str: Union[bytes, bytearray]) -> int:
+        # for big5 encoding, we are interested
+        #   first  byte range: 0xa4 -- 0xfe
+        #   second byte range: 0x40 -- 0x7e , 0xa1 -- 0xfe
+        # no validation needed here. State machine has done that
+        first_char, second_char = byte_str[0], byte_str[1]
+        if first_char >= 0xA4:
+            if second_char >= 0xA1:
+                return 157 * (first_char - 0xA4) + second_char - 0xA1 + 63
+            return 157 * (first_char - 0xA4) + second_char - 0x40
+        return -1
+
+
+class SJISDistributionAnalysis(CharDistributionAnalysis):
+    def __init__(self) -> None:
+        super().__init__()
+        self._char_to_freq_order = JIS_CHAR_TO_FREQ_ORDER
+        self._table_size = JIS_TABLE_SIZE
+        self.typical_distribution_ratio = JIS_TYPICAL_DISTRIBUTION_RATIO
+
+    def get_order(self, byte_str: Union[bytes, bytearray]) -> int:
+        # for sjis encoding, we are interested
+        #   first  byte range: 0x81 -- 0x9f , 0xe0 -- 0xfe
+        #   second byte range: 0x40 -- 0x7e,  0x81 -- oxfe
+        # no validation needed here. State machine has done that
+        first_char, second_char = byte_str[0], byte_str[1]
+        if 0x81 <= first_char <= 0x9F:
+            order = 188 * (first_char - 0x81)
+        elif 0xE0 <= first_char <= 0xEF:
+            order = 188 * (first_char - 0xE0 + 31)
+        else:
+            return -1
+        order = order + second_char - 0x40
+        if second_char > 0x7F:
+            order = -1
+        return order
+
+
+class EUCJPDistributionAnalysis(CharDistributionAnalysis):
+    def __init__(self) -> None:
+        super().__init__()
+        self._char_to_freq_order = JIS_CHAR_TO_FREQ_ORDER
+        self._table_size = JIS_TABLE_SIZE
+        self.typical_distribution_ratio = JIS_TYPICAL_DISTRIBUTION_RATIO
+
+    def get_order(self, byte_str: Union[bytes, bytearray]) -> int:
+        # for euc-JP encoding, we are interested
+        #   first  byte range: 0xa0 -- 0xfe
+        #   second byte range: 0xa1 -- 0xfe
+        # no validation needed here. State machine has done that
+        char = byte_str[0]
+        if char >= 0xA0:
+            return 94 * (char - 0xA1) + byte_str[1] - 0xA1
+        return -1
 
 

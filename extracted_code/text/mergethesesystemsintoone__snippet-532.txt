@@ -1,0 +1,15 @@
+# Simulated data
+data_chunk = {
+    "features": np.random.rand(200, 20),  # 200 samples with 20 features each
+    "labels": np.random.randint(2, size=200)  # Binary labels
+}
+
+# Initialize and use the engine
+qe = QuantumEngine(model_type="RandomForest", scaler_type="MinMaxScaler")
+qe.initialize()
+insights = qe.process_data(data_chunk)
+print("Generated Insights:")
+print("\n".join(insights))
+qe.shutdown()
+
+

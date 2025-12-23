@@ -1,1 +1,2 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+// ... Previous physics/evolution
+this.deviceCtrl.mapToHardware(this);  // L4: Consciousness to hardware

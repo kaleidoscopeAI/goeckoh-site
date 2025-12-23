@@ -1,0 +1,18 @@
+assert lookup('utf-8').name == 'utf-8'
+assert lookup('Utf-8').name == 'utf-8'
+assert lookup('UTF-8').name == 'utf-8'
+assert lookup('utf8').name == 'utf-8'
+assert lookup('utf8').name == 'utf-8'
+assert lookup('utf8 ').name == 'utf-8'
+assert lookup(' \r\nutf8\t').name == 'utf-8'
+assert lookup('u8') is None  # Python label.
+assert lookup('utf-8 ') is None  # Non-ASCII white space.
+
+assert lookup('US-ASCII').name == 'windows-1252'
+assert lookup('iso-8859-1').name == 'windows-1252'
+assert lookup('latin1').name == 'windows-1252'
+assert lookup('LATIN1').name == 'windows-1252'
+assert lookup('latin-1') is None
+assert lookup('LATİN1') is None  # ASCII-only case insensitivity.
+
+

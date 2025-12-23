@@ -1,0 +1,4 @@
+"""Get fields for an attrs object."""
+return _attr_module.fields(type(obj)) if _has_attrs else []
+
+

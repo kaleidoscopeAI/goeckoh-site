@@ -1,2 +1,7 @@
-# all users that are considering importing and using main() directly.
-
+'pre': 'c',
+'preview': 'c',
+'-': 'final-',
+'rc': 'c',
+'dev': '@',
+'': None,
+'.': None,

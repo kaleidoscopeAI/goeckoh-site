@@ -1,2 +1,2 @@
-pub fn register_cpu(core_id: i32, owner_mode: bool) {
-let mut r = CPU_REGISTRY.lock().unwrap();
+let path: JavaString = jni::strings::JavaString::from(path_j);
+let val: JavaString = jni::strings::JavaString::from(value_j);

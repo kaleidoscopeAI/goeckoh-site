@@ -1,0 +1,44 @@
+235
+236 +      {/* Heart snapshot */}
+237 +      <Card>
+238 +        <div className="flex flex-col md:flex-row md:items-center md:ju
+     stify-between gap-6">
+239 +          <div>
+240 +            <div className="text-xs text-slate-400 uppercase tracking-w
+     ide mb-1">Crystalline Heart</div>
+241 +            <div className="text-lg font-semibold text-brand-black lead
+     ing-tight">{heartMode || 'Unknown'}</div>
+242 +            <div className="text-sm text-slate-500">
+243 +              Stress {heartStress !== undefined ? heartStress.toFixed(3
+     ) : '—'} · Arousal {heartEmo.arousal !== undefined ? heartEmo.arousal.t
+     oFixed?.(3) : '—'} · Valence {heartEmo.valence !== undefined ? heartEmo
+     .valence.toFixed?.(3) : '—'}
+244 +            </div>
+245 +          </div>
+246 +          <div className="flex-1">
+247 +            <div className="text-xs text-slate-400 mb-2">Lattice profil
+     e (downsampled)</div>
+248 +            <div className="w-full h-14 rounded-xl bg-slate-50 border b
+     order-slate-200 overflow-hidden flex">
+249 +              {heartSample.length ? heartSample.map((v: number, i: numb
+     er) => {
+250 +                const norm = Math.max(-1, Math.min(1, v));
+251 +                const hue = norm > 0 ? '34,197,94' : '239,68,68'; // gr
+     een vs red
+252 +                const alpha = Math.min(0.9, Math.abs(norm));
+253 +                return (
+254 +                  <div
+255 +                    key={i}
+256 +                    style={{ flex: 1, background: `linear-gradient(180d
+     eg, rgba(${hue},${alpha}) 0%, rgba(241,245,249,0) 90%)` }}
+257 +                  />
+258 +                );
+259 +              }) : <div className="text-sm text-slate-400 px-3 py-4">No
+      lattice data yet.</div>}
+260 +            </div>
+261 +          </div>
+262 +        </div>
+263 +      </Card>
+264 +
+265        {/* Fragments selection */}
+

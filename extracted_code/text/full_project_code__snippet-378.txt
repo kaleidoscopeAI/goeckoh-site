@@ -1,0 +1,19 @@
+"""
+Iterate over fields.
+
+Supports list of (k, v) tuples and dicts, and lists of
+:class:`~urllib3.fields.RequestField`.
+
+"""
+if isinstance(fields, dict):
+    i = six.iteritems(fields)
+else:
+    i = iter(fields)
+
+for field in i:
+    if isinstance(field, RequestField):
+        yield field
+    else:
+        yield RequestField.from_tuples(*field)
+
+

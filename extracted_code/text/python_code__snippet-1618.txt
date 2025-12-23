@@ -1,0 +1,10 @@
+Option,
+"--use-deprecated",
+dest="deprecated_features_enabled",
+metavar="feature",
+action="append",
+default=[],
+choices=[
+    "legacy-resolver",
+],
+help=("Enable deprecated functionality, that will be removed in the future."),

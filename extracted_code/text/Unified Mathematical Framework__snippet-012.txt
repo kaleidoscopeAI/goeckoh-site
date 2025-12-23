@@ -1,7 +1,8 @@
-class SkillProgress:
-    attempts: int = 0
-    successes: int = 0
-    current_level: int = 1          # 1–5 mastery levels
-    last_success_ts: float = 0.0
-    streak: int = 0
+Fast, even cadence
+Perfect diction
+No filler words
+No repetitions
+No “uh… um… like… y’know”
+No atypical prosody (monotone, sing-song, too loud, too quiet)
+No dysfluent rhythm
 

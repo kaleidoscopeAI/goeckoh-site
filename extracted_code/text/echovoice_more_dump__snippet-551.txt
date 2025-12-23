@@ -1,0 +1,11 @@
+with open('swarm_update.asm', 'w') as f:
+    f.write(ASSEMBLY_SWARM_UPDATE)
+os.system('nasm -f elf64 swarm_update.asm -o swarm_update.o')
+os.system('gcc -shared -o swarm_update.so swarm_update.o')
+try:
+    swarm_module = ctypes.CDLL('./swarm_update.so')
+    _has_swarm_update = True
+except:
+    _has_swarm_update = False
+
+

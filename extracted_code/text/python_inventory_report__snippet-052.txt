@@ -1,0 +1,2 @@
+doc: Voice guidance that turns the companion into a calming friend.
+classes: GuidanceScript, GuidanceCoach

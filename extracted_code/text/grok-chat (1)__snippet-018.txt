@@ -1,7 +1,6 @@
-class ABAProgress:
-    attempts: int = 0
-    successes: int = 0
-    current_level: int = 1
-    streak: int = 0
-    last_success_ts: float = 0.0
+class GuidanceEvent:
+    timestamp: float
+    event_type: EventType
+    title: str
+    message: str
 

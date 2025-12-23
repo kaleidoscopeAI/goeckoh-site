@@ -1,1 +1,1 @@
-const rim = new THREE.DirectionalLight(0x88aaff, 0.7);
+const bubble = new THREE.Mesh(geo, material);

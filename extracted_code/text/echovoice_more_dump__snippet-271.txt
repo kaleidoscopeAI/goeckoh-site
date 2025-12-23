@@ -1,1 +1,3 @@
-export class MetaOptimizer {
+  Explainability: Decision-making can be traced back to explicit symbolic links and logical rules within the KG.
+
+  Factual Consistency: The KG acts as a validator, checking neural predictions against structured facts, mitigating 

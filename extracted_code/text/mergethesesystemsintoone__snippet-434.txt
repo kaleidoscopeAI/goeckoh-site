@@ -1,0 +1,7 @@
+avg_amp = np.mean (all_amplitudes)
+std_amp = np.std (all_amplitudes)
+self.amplitude_bounds = (
+     max (0.01, avg_amp 3 * std_amp),
+     min (20, avg_amp + 3 * std_amp) # Scale and bound for max and minimum based on environment.
+)
+

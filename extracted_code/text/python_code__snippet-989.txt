@@ -1,0 +1,7 @@
+return (
+    path.lower().endswith('.egg')
+    and os.path.isfile(path)
+    and zipfile.is_zipfile(path)
+)
+
+

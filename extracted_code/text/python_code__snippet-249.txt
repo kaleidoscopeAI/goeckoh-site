@@ -1,0 +1,14 @@
+"""
+Return all distribution names known by an index.
+:param url: The URL of the index.
+:return: A list of all known distribution names.
+"""
+if url is None:
+    url = DEFAULT_INDEX
+client = ServerProxy(url, timeout=3.0)
+try:
+    return client.list_packages()
+finally:
+    client('close')()
+
+

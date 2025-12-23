@@ -1,0 +1,8 @@
+hop_length = int(sample_rate * (hop_ms / 1000.0))
+f0, voiced_flag, _ = librosa.pyin(wav, fmin=f0_min, fmax=f0_max, sr=sample_rate, frame_length=hop_length * 4, hop_length=hop_length)
+f0[np.isnan(f0)] = 0.0
+
+energy = librosa.feature.rms(y=wav, frame_length=hop_length * 4, hop_length=hop_length)[0]
+
+return ProsodyProfile(f0_hz=f0, energy=energy)
+

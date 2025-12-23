@@ -1,0 +1,4 @@
+- A **provably bounded, implementable stochastic cognitive system model,**
+- **Mathematically guaranteed stability under noise and delays,**
+- **Practical mechanisms for resource-limited, safe, and adaptive curiosity-driven cognition.**
+

@@ -1,15 +1,13 @@
-from collections import defaultdict
+import matplotlib.pyplot as plt
+import networkx as nx
 
-class MessagingBus:
-    def __init__(self):
-        self.topics = defaultdict(list)
+def visualize_node_growth(nodes):
+    graph = nx.Graph()
+    for node in nodes:
+        graph.add_node(node.node_id)
+        for topic in node.knowledge:
+            graph.add_edge(node.node_id, topic)
 
-    def publish(self, topic, data):
-        self.topics[topic].append(data)
-
-    def consume(self):
-        for topic, messages in self.topics.items():
-            if messages:
-                return topic, messages.pop(0)
-        return None, None
+    nx.draw(graph, with_labels=True, node_color="skyblue", font_weight="bold")
+    plt.show()
 

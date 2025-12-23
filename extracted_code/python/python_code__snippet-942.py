@@ -1,23 +1,15 @@
-class TerminalTheme:
-    """A color theme used when exporting console content.
+import logging
+import os
+import shutil
+from optparse import Values
+from typing import List
 
-    Args:
-        background (Tuple[int, int, int]): The background color.
-        foreground (Tuple[int, int, int]): The foreground (text) color.
-        normal (List[Tuple[int, int, int]]): A list of 8 normal intensity colors.
-        bright (List[Tuple[int, int, int]], optional): A list of 8 bright colors, or None
-            to repeat normal intensity. Defaults to None.
-    """
-
-    def __init__(
-        self,
-        background: _ColorTuple,
-        foreground: _ColorTuple,
-        normal: List[_ColorTuple],
-        bright: Optional[List[_ColorTuple]] = None,
-    ) -> None:
-        self.background_color = ColorTriplet(*background)
-        self.foreground_color = ColorTriplet(*foreground)
-        self.ansi_colors = Palette(normal + (bright or normal))
-
-
+from pip._internal.cache import WheelCache
+from pip._internal.cli import cmdoptions
+from pip._internal.cli.req_command import RequirementCommand, with_cleanup
+from pip._internal.cli.status_codes import SUCCESS
+from pip._internal.exceptions import CommandError
+from pip._internal.operations.build.build_tracker import get_build_tracker
+from pip._internal.req.req_install import (
+    InstallRequirement,
+    check_legacy_setup_py_options,

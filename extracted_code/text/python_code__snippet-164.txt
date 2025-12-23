@@ -1,7 +1,2 @@
-class CERT_ENHKEY_USAGE(Structure):
-    _fields_ = (
-        ("cUsageIdentifier", DWORD),
-        ("rgpszUsageIdentifier", POINTER(LPSTR)),
-    )
-
-
+(?:\.[0-9](?:_?[0-9])*)?         # optional fractional part
+(?:[eE][+-]?[0-9](?:_?[0-9])*)?  # optional exponent part

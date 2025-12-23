@@ -1,0 +1,5 @@
+if len(label) > (254 if trailing_dot else 253):
+    return False
+return True
+
+

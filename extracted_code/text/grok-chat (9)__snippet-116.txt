@@ -1,0 +1,11 @@
+822
+823 -        self._speak(corrected, input_rms=rms, refractory_padding_s=refr
+     actory_padding_s)
+823 +        proc_ms, play_ms = self._speak(corrected, input_rms=rms, refrac
+     tory_padding_s=refractory_padding_s)
+824          with self._lock:
+825 -            self._last_latency_ms = float((time.time() - t0) * 1000.0)
+825 +            self._last_latency_ms = float(proc_ms)
+826 +            self._last_playback_latency_ms = float(play_ms)
+827              self._metric_total_utts += 1
+

@@ -1,0 +1,2 @@
+  model=config.model,
+  instruction="""You are an expert in analyzing code repositories and

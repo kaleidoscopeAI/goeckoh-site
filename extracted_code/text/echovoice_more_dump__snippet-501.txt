@@ -1,2 +1,4 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+ |         ^^^^^^^^^^^^^^^^^ `Metrics` does not have this field
+ |
+ = note: all struct fields are already assigned
 

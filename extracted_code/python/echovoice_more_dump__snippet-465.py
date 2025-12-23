@@ -1,1 +1,1 @@
-import { DEFAULT_P, DEFAULT_PARAMS } from "../config/emotionDefaults";
+import { EVector, EmotionName, DEFAULT_EMOTIONS } from "./actuationService";

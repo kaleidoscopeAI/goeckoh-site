@@ -1,0 +1,3 @@
+return {LV(m.groups()[0]) for m in _VERSION_PATTERN.finditer(s)}
+
+

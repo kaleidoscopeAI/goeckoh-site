@@ -1,1 +1,1 @@
-def _plot_memory_lattice(self, lattice):
+async def _memory_query(self, query_text):

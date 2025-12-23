@@ -1,0 +1,5 @@
+type: PragmaticType
+confidence: float
+adjusted_text: str  # Rephrased for clarity if needed
+social_intent: str  # e.g., "request help", "express frustration"
+

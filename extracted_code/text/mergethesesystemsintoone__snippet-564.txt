@@ -1,0 +1,16 @@
+parser = argparse.ArgumentParser(description="UnravelAI Task Manager")
+parser.add_argument("--input", "-i", help="Input directory")
+parser.add_argument("--target", "-t", help="Target language")
+parser.add_argument("--secure", action="store_true")
+args = parser.parse_args()
+
+manager = UnravelAITaskManager()
+if args.input:
+    extra_tasks = ["security"] if args.secure else []
+    task_ids = manager.create_unravel_tasks(args.input, args.target, extra_tasks)
+    print(f"Created {len(task_ids)} tasks")
+    manager.run()
+    print("Task execution completed")
+else:
+    print("Use --input to specify a codebase.")
+

@@ -1,0 +1,6 @@
+Option,
+"--no-index",
+dest="no_index",
+action="store_true",
+default=False,
+help="Ignore package index (only looking at --find-links URLs instead).",

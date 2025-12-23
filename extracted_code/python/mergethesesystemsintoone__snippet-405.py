@@ -1,18 +1,11 @@
-class PatternStrand:
-    """DNA-like structure for pattern recognition"""
-    sequence: List[str] = field(default_factory=list)
-    strength: float = 0.0
-    mutations: int = 0
-    activation_threshold: float = 0.5
-    adaptation_rate: float = 0.1
+def resources(cpu_percent: float = 25.0, memory_percent: float = 10.0):
+    """
+    Decorator to specify resource requirements for a task
+    
+    Args:
 
-    def mutate(self):
-        """Evolve pattern recognition capability"""
-        if np.random.random() < self.adaptation_rate:
-            if len(self.sequence) > 3:
-                # Combine existing patterns
-                idx1, idx2 = np.random.choice(len(self.sequence), 2, replace=False)
-                new_pattern = self.sequence[idx1][:2] + self.sequence[idx2][2:]
-                self.sequence.append(new_pattern)
-                self.mutations += 1
+
+
+
+It looks like you've shared a portion of code involving a ResourceMonitor class and an OptimizedTaskScheduler class, which manage system resources and task scheduling with resource awareness. However, it seems the code snippet is incomplete (e.g., missing imports like threading, queue, and definitions for Task, TaskPriority, TaskStatus, TaskResult, etc.). I’ll assume this is meant to enhance the previous unravel_ai_task_manager.py script or serve as a standalone component.
 

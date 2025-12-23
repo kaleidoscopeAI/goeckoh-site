@@ -1,19 +1,16 @@
-import json
-import logging
-from optparse import Values
-from typing import TYPE_CHECKING, Generator, List, Optional, Sequence, Tuple, cast
+class _UnpackSpecialForm(_ExtensionsSpecialForm, _root=True):
+    def __init__(self, getitem):
+        super().__init__(getitem)
+        self.__doc__ = _UNPACK_DOC
 
-from pip._vendor.packaging.utils import canonicalize_name
+class _UnpackAlias(typing._GenericAlias, _root=True):
+    __class__ = typing.TypeVar
 
-from pip._internal.cli import cmdoptions
-from pip._internal.cli.req_command import IndexGroupCommand
-from pip._internal.cli.status_codes import SUCCESS
-from pip._internal.exceptions import CommandError
-from pip._internal.index.collector import LinkCollector
-from pip._internal.index.package_finder import PackageFinder
-from pip._internal.metadata import BaseDistribution, get_environment
-from pip._internal.models.selection_prefs import SelectionPreferences
-from pip._internal.network.session import PipSession
-from pip._internal.utils.compat import stdlib_pkgs
-from pip._internal.utils.misc import tabulate, write_output
+@_UnpackSpecialForm
+def Unpack(self, parameters):
+    item = typing._type_check(parameters, f'{self._name} accepts only a single type.')
+    return _UnpackAlias(self, (item,))
+
+def _is_unpack(obj):
+    return isinstance(obj, _UnpackAlias)
 

@@ -1,2 +1,0 @@
-> > I'm now determining how the Rust core will expose its functionalities. I'm focusing on creating a clear, C-compatible API as the primary entry point. I've shifted my attention to automation for cross-compilation, especially vital for mobile. I'm recommending `uniFFI` or similar tools for the FFI bridge, and I'm comparing the use of `cpal` versus native audio libraries for the best approach. I'm also mapping the data flow from the user interaction, through the UI, to the Rust engine and ultimately to the audio hardware.
-

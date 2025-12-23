@@ -1,1 +1,7 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+entropy = lambda d: -np.sum(d * np.log(d + 1e-12)) if np.sum(d) > 0 else 0
+probs = np.abs(data) / (np.sum(np.abs(data)) + 1e-12)
+sys_ent = entropy(probs)
+parts = 2
+part_ent = sum(entropy(probs[i::parts]) / parts for i in range(parts))
+return max(0, sys_ent - part_ent)
+

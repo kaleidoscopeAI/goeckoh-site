@@ -1,0 +1,2 @@
+"NamedDiagram",
+[("name", str), ("diagram", typing.Optional[railroad.DiagramItem]), ("index", int)],

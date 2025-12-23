@@ -1,0 +1,9 @@
+if _try_qutip:
+    try:
+        qrho = qt.Qobj(rho)
+        return float(qt.entropy_vn(qrho))
+    except Exception:
+        return entropy_vn_from_rho(rho)
+else:
+    return entropy_vn_from_rho(rho)
+

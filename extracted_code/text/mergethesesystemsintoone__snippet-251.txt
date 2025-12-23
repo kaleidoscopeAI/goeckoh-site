@@ -1,2 +1,4 @@
-class Hypercube:
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+agi = AGIOrchestrator(redis)
+asyncio.run(agi.run())
+
+#!/usr/bin/env python3

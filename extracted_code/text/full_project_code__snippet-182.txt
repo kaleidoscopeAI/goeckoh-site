@@ -1,0 +1,4 @@
+MovedAttribute("addbase", "urllib", "urllib.response"),
+MovedAttribute("addclosehook", "urllib", "urllib.response"),
+MovedAttribute("addinfo", "urllib", "urllib.response"),
+MovedAttribute("addinfourl", "urllib", "urllib.response"),

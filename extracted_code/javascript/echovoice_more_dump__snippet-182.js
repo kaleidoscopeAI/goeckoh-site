@@ -1,9 +1,6 @@
-    pub async fn can_spend(&self, amount: f64) -> bool {
-        let mut spent = self.daily_spent.lock().await;
-        *spent + amount <= self.max_daily_limit
+if let Some(task) = Task::from_pid(packet.pid) {
+    let task_ptr = task.as_ptr() as *mut task_struct;
+    if task_ptr.is_null() {
+        continue;
     }
-    
-    pub async fn record_transaction(&self, tx: Transaction) -> Result<(), TransactionError> {
-        self.validate_transaction(&tx).await?;
-        self.execute_transaction(tx).await
-    }
+    // ... rest of code

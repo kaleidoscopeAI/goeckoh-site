@@ -1,1 +1,2 @@
-console.log(\nInterrupt signal (${signal}) received. Shutting down gracefully...);
+const text = 'Artificial Intelligence evolves';
+const vec = embedText(text);

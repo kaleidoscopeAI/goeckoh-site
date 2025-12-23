@@ -1,78 +1,50 @@
-class EchoCompanion:
-    """
-    Orchestrates the SpeechLoop and provides an API for external interfaces
-    like the Flask dashboard or mobile clients.
-    """
+"""
+Extracts F0 and RMS energy envelopes from a waveform.
+"""
+if wav.ndim > 1:
+    wav = np.mean(wav, axis=1)
+wav = np.asarray(wav, dtype=np.float32)
 
-    settings: SystemSettings = field(default_factory=load_settings)
-    speech_loop: SpeechLoop = field(init=False)
-    _loop_task: asyncio.Task | None = None
-    _metrics_cache: Dict[str, Any] = field(default_factory=dict)
+frame_length = max(int(sample_rate * frame_ms / 1000.0), 256)
+hop_length = max(int(sample_rate * hop_ms / 1000.0), 128)
 
-    def __post_init__(self) -> None:
-        self.speech_loop = SpeechLoop(settings=self.settings)
-        # Start the speech loop in a separate thread/task for continuous operation
-        # For simplicity, we'll start it here directly, but in a real app
-        # you'd manage this with a proper asyncio event loop.
-        # self.start_loop() # This will be called externally by the main entry point
+# 1. Pitch (F0) extraction using the YIN algorithm
+# YIN is robust and commonly used for speech processing.
+f0, voiced_flag, voiced_probs = librosa.pyin(
+    y=wav,
+    fmin=fmin_hz,
+    fmax=fmax_hz,
+    sr=sample_rate,
+    frame_length=frame_length,
+    hop_length=hop_length
+)
+# Fill NaNs in unvoiced frames with a reasonable value (e.g., median of voiced frames)
+if np.any(voiced_flag):
+    median_f0 = np.nanmedian(f0[voiced_flag])
+    f0 = np.nan_to_num(f0, nan=median_f0)
+else:
+    f0.fill(150) # Fallback to a generic pitch if no voice is detected
 
-    async def start_loop(self) -> None:
-        """Starts the main speech processing loop."""
-        if not self._loop_task or self._loop_task.done():
-            self._loop_task = asyncio.create_task(self.speech_loop.run())
-            print("[EchoCompanion] Speech loop started.")
+# 2. Energy (RMS) extraction
+rms = librosa.feature.rms(
+    y=wav, frame_length=frame_length, hop_length=hop_length, center=True
+)[0]
 
-    async def stop_loop(self) -> None:
-        """Stops the main speech processing loop."""
-        if self._loop_task:
-            self._loop_task.cancel()
-            await asyncio.gather(self._loop_task, return_exceptions=True)
-            self._loop_task = None
-            print("[EchoCompanion] Speech loop stopped.")
+# 3. Time alignment
+times = librosa.frames_to_time(
+    np.arange(len(f0)), sr=sample_rate, hop_length=hop_length
+)
 
-    def get_latest_metrics(self) -> Dict[str, Any]:
-        """Returns the latest metrics for the dashboard."""
-        # This is a simplified cache for demonstration.
-        # In a real system, SpeechLoop would push updates or expose a stream.
-        latest_attempt = self.speech_loop.metrics_logger.tail(limit=1)
-        if latest_attempt:
-            record = latest_attempt[0]
-            # Fetch heart state from the speech loop
-            heart_state = self.speech_loop.heart.step(np.array([])) # dummy audio for state
-            self._metrics_cache = {
-                "timestamp_iso": record.timestamp.isoformat(),
-                "raw_text": record.raw_text,
-                "corrected_text": record.corrected_text,
-                "arousal": heart_state.get("arousal_raw", 0.0),
-                "valence": heart_state.get("emotions", np.array([0,0]))[0,1] if "emotions" in heart_state else 0.0, # Placeholder
-                "temperature": heart_state.get("T", 0.0),
-                "coherence": heart_state.get("coherence", 0.0),
-            }
-        return self._metrics_cache
+# Ensure all outputs are clean float32 arrays
+f0 = f0.astype(np.float32)
+rms = np.maximum(rms, 1e-5).astype(np.float32) # Prevent log errors
 
-    def get_phrase_stats(self) -> Dict[str, Any]:
-        """Returns statistics about phrase correction for the dashboard."""
-        # This will be more complex, involving parsing the metrics CSV
-        # For now, return dummy data or process what's available
-        stats: Dict[str, Dict[str, Any]] = {}
-        for record in self.speech_loop.metrics_logger.tail(limit=100):
-            phrase = record.phrase_text or "<empty>"
-            if phrase not in stats:
-                stats[phrase] = {"attempts": 0, "corrections": 0, "correction_rate": 0.0}
-            stats[phrase]["attempts"] += 1
-            if record.needs_correction:
-                stats[phrase]["corrections"] += 1
-            stats[phrase]["correction_rate"] = stats[phrase]["corrections"] / stats[phrase]["attempts"]
-        return stats
-
-    async def process_utterance_for_mobile(self, audio_np: np.ndarray) -> Dict[str, Any]:
-        """
-        Processes an audio utterance received from a mobile client.
-        This bypasses the microphone stream and directly feeds into _handle_utterance.
-        """
-        print("[EchoCompanion] Processing mobile utterance...")
-        await self.speech_loop._handle_utterance(audio_np)
-        return {"status": "processed", "latest_metrics": self.get_latest_metrics()}
-
-
+return ProsodyProfile(
+    f0_hz=f0,
+    energy=rms,
+    times_s=times.astype(np.float32),
+    frame_length=frame_length,
+    hop_length=hop_length,
+    sample_rate=sample_rate
+)
 

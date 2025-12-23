@@ -1,0 +1,3 @@
+- $G$ is contractive in $S_k$ (with factor $\alpha < 1$).
+- The curiosity update is contractive (ensured by $\rho < 1$ and bounded inputs).
+- Hugging Face engines have bounded outputs (enforced via clipping and prompt design).

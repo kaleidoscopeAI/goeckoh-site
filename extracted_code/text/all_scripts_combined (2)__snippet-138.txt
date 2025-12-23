@@ -1,0 +1,114 @@
+Strategy(
+    category="sensory_tools",
+    title="Sensory Toolkit",
+    description=(
+        "Offer weighted blankets, noise-canceling headphones, fidgets, or stress balls to reduce sensory overload "
+        "before/after stressful events."
+    ),
+    cues=["sensory overload", "loud spaces", "preparation"],
+),
+Strategy(
+    category="predictable_routines",
+    title="Visual Schedules + Safe Spaces",
+    description=(
+        "Keep a predictable daily rhythm with visual schedules and a designated calm corner so transitions feel safe."
+    ),
+    cues=["transitions", "school prep", "bedtime"],
+),
+Strategy(
+    category="social_stories",
+    title="Social Stories & Visual Scripts",
+    description=(
+        "Use short narratives or picture cards to preview upcoming changes, medical visits, or social interactions."
+    ),
+    cues=["appointments", "community outings"],
+),
+Strategy(
+    category="collaboration",
+    title="Parent-Teacher Sync",
+    description=(
+        "Share progress between caregivers, teachers, and therapists weekly so supports stay consistent across home/school."
+    ),
+    cues=["IEP planning", "new routines"],
+),
+Strategy(
+    category="mindfulness",
+    title="Mindfulness + Breath Work",
+    description=(
+        "Guide the child through deep breathing, grounding games, or short mindfulness stories to lower anxiety spikes."
+    ),
+    cues=["early meltdown signs", "evenings"],
+),
+Strategy(
+    category="meltdown_first_aid",
+    title="Meltdown First Aid Plan",
+    description=(
+        "Watch for early warning signs (withdrawal, pacing, louder stims), dim lights, remove extra stimuli, and offer "
+        "preferred sensory tools."
+    ),
+    cues=["meltdown", "de-escalation"],
+),
+Strategy(
+    category="movement_breaks",
+    title="Heavy Work / Movement Breaks",
+    description=(
+        "Schedule wall pushes, trampoline jumps, obstacle courses, or resistance band games to release energy before learning blocks."
+    ),
+    cues=["hyperactivity", "pre-lesson"],
+),
+Strategy(
+    category="therapeutic_programs",
+    title="CBT / ACT / Mindfulness Programs",
+    description=(
+        "Coordinate with clinicians to implement CBT, ACT, or mindfulness curricula that build flexible thinking and acceptance."
+    ),
+    cues=["therapy goals", "general anxiety"],
+),
+Strategy(
+    category="personalization",
+    title="Interest-Based Learning Moments",
+    description=(
+        "Observe the child's passions and fold them into routines (e.g., dinosaur bath stories, train-themed schedules) to keep engagement high."
+    ),
+    cues=["motivation", "daily hygiene"],
+),
+Strategy(
+    category="communication",
+    title="Plain-Language Modeling & PECS",
+    description=(
+        "Use short, literal instructions, model speech during routines, and personalize PECS boards with household photos to support expressive language."
+    ),
+    cues=["communication goals", "nonverbal support"],
+),
+Strategy(
+    category="social_skills",
+    title="Structured Turn-Taking & Social Groups",
+    description=(
+        "Turn board games, sibling play, and park visits into chances to practice sharing, waiting, and using polite requests; supplement with social skills groups."
+    ),
+    cues=["playdates", "community outings"],
+),
+Strategy(
+    category="education_advocacy",
+    title="Prepared IEP Advocacy",
+    description=(
+        "Document wins and challenges, arrive at IEP meetings with specific goals, and communicate professionally to secure OT, speech, or classroom supports."
+    ),
+    cues=["school meetings", "progress reviews"],
+),
+Strategy(
+    category="aba_supports",
+    title="ABA & Respite Exploration",
+    description=(
+        "Consult ABA providers for individualized programs targeting self-care, play, or feeding skills, and leverage respite services to recharge caregivers."
+    ),
+    cues=["new skill targets", "caregiver burnout"],
+),
+Strategy(
+    category="caregiver_self_care",
+    title="Caregiver Self-Care & Respite",
+    description=(
+        "Schedule breaks, join support groups, and utilize respite offerings so you can remain a calm, effective advocate for your child."
+    ),
+    cues=["caregiver stress", "fatigue"],
+),

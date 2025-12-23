@@ -1,0 +1,6 @@
+if type(t) is tuple:
+    return type(obj) in t
+else:
+    return type(obj) is t
+
+

@@ -1,0 +1,8 @@
+Cognitive Energy (history).
+
+Uncertainty Distribution (current iteration histogram).
+
+Resonance Network (using networkx).
+
+Iteration Times (history).
+

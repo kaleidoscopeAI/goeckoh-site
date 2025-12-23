@@ -1,8 +1,2 @@
-async def shutdown():
-    agi.pool.close()
-    agi.pool.join()
-    if redis:
-        await redis.close()
-    loop = asyncio.get_running_loop()
-    await loop.shutdown_asyncgens()
-
+class MCMCSampler:
+def init(self, burn_in: int = 100, sample_interval: int = 10):

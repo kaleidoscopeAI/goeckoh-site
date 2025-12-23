@@ -1,0 +1,2 @@
+await cognitive_system.cognitive_cycle()  # Initial cycle
+

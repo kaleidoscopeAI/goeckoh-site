@@ -1,0 +1,20 @@
+"kaleidoscope_ai/engines/": {
+  "status":"implemented",
+      "description" : "Defines unique mechanisms for information management using multi agent collaboration based upon rulesets,  and specific node parameters."
+    ,
+      "submodules": [
+         "__init__.py":{  "status":"implemented", "description":"Makes the engines module accessible"},
+         "kaleidoscope_engine.py": {"status":"implemented","description" : "This implements insight refinement through data reorganization for the AGI system. Prioritizes consensus. and is guided by rule matching."} ,
+          "mirror_engine.py": {"status":"implemented", "description" :"implements and provides 'out of the box thinking through unusual combinations or less reinforced paths using entropy"}
+        ]
+},
+"kaleidoscope_ai/simulations/":{
+  "status": "implemented",
+     "description" : "contains implementation to simulat different behaviour modes within a framework as needed . example provided is for text. images etc are intended for the node processors",
+     "submodules": [
+       "__init__.py" :{  "status": "implemented", "description":"Makes this a submodule."},
+      "wiki_learning_network.py" :{  "status":"implemented" , "description":"includes implementations of both wikinode network and specific methods."},
+           "environment.py" :{ "status":"implemented",  "description": "handles the dynamic enviorment simulation, data feed."} ,
+
+      "h5n1_simulation.py": {"status":"omitted","description": "(placeholder)"}
+         ]

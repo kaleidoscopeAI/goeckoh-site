@@ -1,0 +1,3 @@
+- Power calc for target N_analyze.
+- Recruit = N_analyze / (1 - dropout_rate).
+- E.g., target N=20, 20% dropout → recruit **25**.

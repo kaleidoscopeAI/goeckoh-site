@@ -1,0 +1,2 @@
+              # Create a new LlmResponse with the cleaned content
+              # Use .model_copy(deep=True) to ensure you're not trying to

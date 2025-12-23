@@ -1,0 +1,16 @@
+buf = []
+for c in char_list:
+    if len(c) == 1:
+        if buf and buf[-1][1] == chr(ord(c)-1):
+            buf[-1] = (buf[-1][0], c)
+        else:
+            buf.append((c, c))
+    else:
+        buf.append((c, c))
+for a, b in buf:
+    if a == b:
+        yield a
+    else:
+        yield '%s-%s' % (a, b)
+
+

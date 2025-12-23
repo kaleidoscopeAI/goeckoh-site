@@ -1,0 +1,5 @@
+app = GoeckohUniversal("assets/reference_voice.wav")
+app.main_loop()
+
+
+

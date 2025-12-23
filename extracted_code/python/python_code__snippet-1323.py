@@ -1,137 +1,251 @@
-            requirements from pyproject.toml,
-            name of PEP 517 backend,
-            requirements we should check are installed after setting
-                up the build environment
-            directory paths to import the backend from (backend-path),
-                relative to the project root.
-        )
+"""
+Represents a set of distributions installed on a path (typically sys.path).
+"""
+
+def __init__(self, path=None, include_egg=False):
     """
-    has_pyproject = os.path.isfile(pyproject_toml)
-    has_setup = os.path.isfile(setup_py)
+    Create an instance from a path, optionally including legacy (distutils/
+    setuptools/distribute) distributions.
+    :param path: The path to use, as a list of directories. If not specified,
+                 sys.path is used.
+    :param include_egg: If True, this instance will look for and return legacy
+                        distributions as well as those based on PEP 376.
+    """
+    if path is None:
+        path = sys.path
+    self.path = path
+    self._include_dist = True
+    self._include_egg = include_egg
 
-    if not has_pyproject and not has_setup:
-        raise InstallationError(
-            f"{req_name} does not appear to be a Python project: "
-            f"neither 'setup.py' nor 'pyproject.toml' found."
-        )
+    self._cache = _Cache()
+    self._cache_egg = _Cache()
+    self._cache_enabled = True
+    self._scheme = get_scheme('default')
 
-    if has_pyproject:
-        with open(pyproject_toml, encoding="utf-8") as f:
-            pp_toml = tomli.loads(f.read())
-        build_system = pp_toml.get("build-system")
+def _get_cache_enabled(self):
+    return self._cache_enabled
+
+def _set_cache_enabled(self, value):
+    self._cache_enabled = value
+
+cache_enabled = property(_get_cache_enabled, _set_cache_enabled)
+
+def clear_cache(self):
+    """
+    Clears the internal cache.
+    """
+    self._cache.clear()
+    self._cache_egg.clear()
+
+def _yield_distributions(self):
+    """
+    Yield .dist-info and/or .egg(-info) distributions.
+    """
+    # We need to check if we've seen some resources already, because on
+    # some Linux systems (e.g. some Debian/Ubuntu variants) there are
+    # symlinks which alias other files in the environment.
+    seen = set()
+    for path in self.path:
+        finder = resources.finder_for_path(path)
+        if finder is None:
+            continue
+        r = finder.find('')
+        if not r or not r.is_container:
+            continue
+        rset = sorted(r.resources)
+        for entry in rset:
+            r = finder.find(entry)
+            if not r or r.path in seen:
+                continue
+            try:
+                if self._include_dist and entry.endswith(DISTINFO_EXT):
+                    possible_filenames = [
+                        METADATA_FILENAME, WHEEL_METADATA_FILENAME,
+                        LEGACY_METADATA_FILENAME
+                    ]
+                    for metadata_filename in possible_filenames:
+                        metadata_path = posixpath.join(
+                            entry, metadata_filename)
+                        pydist = finder.find(metadata_path)
+                        if pydist:
+                            break
+                    else:
+                        continue
+
+                    with contextlib.closing(pydist.as_stream()) as stream:
+                        metadata = Metadata(fileobj=stream,
+                                            scheme='legacy')
+                    logger.debug('Found %s', r.path)
+                    seen.add(r.path)
+                    yield new_dist_class(r.path,
+                                         metadata=metadata,
+                                         env=self)
+                elif self._include_egg and entry.endswith(
+                        ('.egg-info', '.egg')):
+                    logger.debug('Found %s', r.path)
+                    seen.add(r.path)
+                    yield old_dist_class(r.path, self)
+            except Exception as e:
+                msg = 'Unable to read distribution at %s, perhaps due to bad metadata: %s'
+                logger.warning(msg, r.path, e)
+                import warnings
+                warnings.warn(msg % (r.path, e), stacklevel=2)
+
+def _generate_cache(self):
+    """
+    Scan the path for distributions and populate the cache with
+    those that are found.
+    """
+    gen_dist = not self._cache.generated
+    gen_egg = self._include_egg and not self._cache_egg.generated
+    if gen_dist or gen_egg:
+        for dist in self._yield_distributions():
+            if isinstance(dist, InstalledDistribution):
+                self._cache.add(dist)
+            else:
+                self._cache_egg.add(dist)
+
+        if gen_dist:
+            self._cache.generated = True
+        if gen_egg:
+            self._cache_egg.generated = True
+
+@classmethod
+def distinfo_dirname(cls, name, version):
+    """
+    The *name* and *version* parameters are converted into their
+    filename-escaped form, i.e. any ``'-'`` characters are replaced
+    with ``'_'`` other than the one in ``'dist-info'`` and the one
+    separating the name from the version number.
+
+    :parameter name: is converted to a standard distribution name by replacing
+                     any runs of non- alphanumeric characters with a single
+                     ``'-'``.
+    :type name: string
+    :parameter version: is converted to a standard version string. Spaces
+                        become dots, and all other non-alphanumeric characters
+                        (except dots) become dashes, with runs of multiple
+                        dashes condensed to a single dash.
+    :type version: string
+    :returns: directory name
+    :rtype: string"""
+    name = name.replace('-', '_')
+    return '-'.join([name, version]) + DISTINFO_EXT
+
+def get_distributions(self):
+    """
+    Provides an iterator that looks for distributions and returns
+    :class:`InstalledDistribution` or
+    :class:`EggInfoDistribution` instances for each one of them.
+
+    :rtype: iterator of :class:`InstalledDistribution` and
+            :class:`EggInfoDistribution` instances
+    """
+    if not self._cache_enabled:
+        for dist in self._yield_distributions():
+            yield dist
     else:
-        build_system = None
+        self._generate_cache()
 
-    # The following cases must use PEP 517
-    # We check for use_pep517 being non-None and falsey because that means
-    # the user explicitly requested --no-use-pep517.  The value 0 as
-    # opposed to False can occur when the value is provided via an
-    # environment variable or config file option (due to the quirk of
-    # strtobool() returning an integer in pip's configuration code).
-    if has_pyproject and not has_setup:
-        if use_pep517 is not None and not use_pep517:
-            raise InstallationError(
-                "Disabling PEP 517 processing is invalid: "
-                "project does not have a setup.py"
-            )
-        use_pep517 = True
-    elif build_system and "build-backend" in build_system:
-        if use_pep517 is not None and not use_pep517:
-            raise InstallationError(
-                "Disabling PEP 517 processing is invalid: "
-                "project specifies a build backend of {} "
-                "in pyproject.toml".format(build_system["build-backend"])
-            )
-        use_pep517 = True
+        for dist in self._cache.path.values():
+            yield dist
 
-    # If we haven't worked out whether to use PEP 517 yet,
-    # and the user hasn't explicitly stated a preference,
-    # we do so if the project has a pyproject.toml file
-    # or if we cannot import setuptools or wheels.
+        if self._include_egg:
+            for dist in self._cache_egg.path.values():
+                yield dist
 
-    # We fallback to PEP 517 when without setuptools or without the wheel package,
-    # so setuptools can be installed as a default build backend.
-    # For more info see:
-    # https://discuss.python.org/t/pip-without-setuptools-could-the-experience-be-improved/11810/9
-    # https://github.com/pypa/pip/issues/8559
-    elif use_pep517 is None:
-        use_pep517 = (
-            has_pyproject
-            or not importlib.util.find_spec("setuptools")
-            or not importlib.util.find_spec("wheel")
-        )
+def get_distribution(self, name):
+    """
+    Looks for a named distribution on the path.
 
-    # At this point, we know whether we're going to use PEP 517.
-    assert use_pep517 is not None
+    This function only returns the first result found, as no more than one
+    value is expected. If nothing is found, ``None`` is returned.
 
-    # If we're using the legacy code path, there is nothing further
-    # for us to do here.
-    if not use_pep517:
-        return None
+    :rtype: :class:`InstalledDistribution`, :class:`EggInfoDistribution`
+            or ``None``
+    """
+    result = None
+    name = name.lower()
+    if not self._cache_enabled:
+        for dist in self._yield_distributions():
+            if dist.key == name:
+                result = dist
+                break
+    else:
+        self._generate_cache()
 
-    if build_system is None:
-        # Either the user has a pyproject.toml with no build-system
-        # section, or the user has no pyproject.toml, but has opted in
-        # explicitly via --use-pep517.
-        # In the absence of any explicit backend specification, we
-        # assume the setuptools backend that most closely emulates the
-        # traditional direct setup.py execution, and require wheel and
-        # a version of setuptools that supports that backend.
+        if name in self._cache.name:
+            result = self._cache.name[name][0]
+        elif self._include_egg and name in self._cache_egg.name:
+            result = self._cache_egg.name[name][0]
+    return result
 
-        build_system = {
-            "requires": ["setuptools>=40.8.0"],
-            "build-backend": "setuptools.build_meta:__legacy__",
-        }
+def provides_distribution(self, name, version=None):
+    """
+    Iterates over all distributions to find which distributions provide *name*.
+    If a *version* is provided, it will be used to filter the results.
 
-    # If we're using PEP 517, we have build system information (either
-    # from pyproject.toml, or defaulted by the code above).
-    # Note that at this point, we do not know if the user has actually
-    # specified a backend, though.
-    assert build_system is not None
+    This function only returns the first result found, since no more than
+    one values are expected. If the directory is not found, returns ``None``.
 
-    # Ensure that the build-system section in pyproject.toml conforms
-    # to PEP 518.
+    :parameter version: a version specifier that indicates the version
+                        required, conforming to the format in ``PEP-345``
 
-    # Specifying the build-system table but not the requires key is invalid
-    if "requires" not in build_system:
-        raise MissingPyProjectBuildRequires(package=req_name)
-
-    # Error out if requires is not a list of strings
-    requires = build_system["requires"]
-    if not _is_list_of_str(requires):
-        raise InvalidPyProjectBuildRequires(
-            package=req_name,
-            reason="It is not a list of strings.",
-        )
-
-    # Each requirement must be valid as per PEP 508
-    for requirement in requires:
+    :type name: string
+    :type version: string
+    """
+    matcher = None
+    if version is not None:
         try:
-            Requirement(requirement)
-        except InvalidRequirement as error:
-            raise InvalidPyProjectBuildRequires(
-                package=req_name,
-                reason=f"It contains an invalid requirement: {requirement!r}",
-            ) from error
+            matcher = self._scheme.matcher('%s (%s)' % (name, version))
+        except ValueError:
+            raise DistlibException('invalid name or version: %r, %r' %
+                                   (name, version))
 
-    backend = build_system.get("build-backend")
-    backend_path = build_system.get("backend-path", [])
-    check: List[str] = []
-    if backend is None:
-        # If the user didn't specify a backend, we assume they want to use
-        # the setuptools backend. But we can't be sure they have included
-        # a version of setuptools which supplies the backend. So we
-        # make a note to check that this requirement is present once
-        # we have set up the environment.
-        # This is quite a lot of work to check for a very specific case. But
-        # the problem is, that case is potentially quite common - projects that
-        # adopted PEP 518 early for the ability to specify requirements to
-        # execute setup.py, but never considered needing to mention the build
-        # tools themselves. The original PEP 518 code had a similar check (but
-        # implemented in a different way).
-        backend = "setuptools.build_meta:__legacy__"
-        check = ["setuptools>=40.8.0"]
+    for dist in self.get_distributions():
+        # We hit a problem on Travis where enum34 was installed and doesn't
+        # have a provides attribute ...
+        if not hasattr(dist, 'provides'):
+            logger.debug('No "provides": %s', dist)
+        else:
+            provided = dist.provides
 
-    return BuildSystemDetails(requires, backend, check, backend_path)
+            for p in provided:
+                p_name, p_ver = parse_name_and_version(p)
+                if matcher is None:
+                    if p_name == name:
+                        yield dist
+                        break
+                else:
+                    if p_name == name and matcher.match(p_ver):
+                        yield dist
+                        break
+
+def get_file_path(self, name, relative_path):
+    """
+    Return the path to a resource file.
+    """
+    dist = self.get_distribution(name)
+    if dist is None:
+        raise LookupError('no distribution named %r found' % name)
+    return dist.get_resource_path(relative_path)
+
+def get_exported_entries(self, category, name=None):
+    """
+    Return all of the exported entries in a particular category.
+
+    :param category: The category to search for entries.
+    :param name: If specified, only entries with that name are returned.
+    """
+    for dist in self.get_distributions():
+        r = dist.exports
+        if category in r:
+            d = r[category]
+            if name is not None:
+                if name in d:
+                    yield d[name]
+            else:
+                for v in d.values():
+                    yield v
 
 

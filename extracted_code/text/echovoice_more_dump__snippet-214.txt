@@ -1,1 +1,1 @@
-Real-time streaming: push projections Ei (t) to users for UI; compress using PCA/UMAP for bandwidth.
+3. The method of claim 1, where novelty is computed using L2 distance in a d-dimensional embedding and arousal ∈[0,1].

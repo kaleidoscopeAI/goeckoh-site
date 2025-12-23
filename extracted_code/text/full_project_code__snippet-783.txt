@@ -1,0 +1,5 @@
+"class_table": EUCTW_CLS,
+"class_factor": 7,
+"state_table": EUCTW_ST,
+"char_len_table": EUCTW_CHAR_LEN_TABLE,
+"name": "x-euc-tw",

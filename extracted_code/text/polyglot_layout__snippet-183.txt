@@ -1,0 +1,10 @@
+               "relpath": row["relpath"],
+               "signal": tag,
+               "pattern": pattern,
+               "snippet": snippet
+           })
+           if len(signal_results) >= hits_limit:
+               break
+       if len(signal_results) >= hits_limit:
+           break
+

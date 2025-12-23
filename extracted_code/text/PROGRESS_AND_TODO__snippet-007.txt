@@ -1,0 +1,3 @@
+*   `audio_features.py`: Computes MFCC-based audio embeddings for non-speech sounds.
+*   `voice_timbre.py`: Manages `jackson_auto_timbre.wav` for Phonemic/Prosodic Patching (PPP), allowing the TTS to adapt to any vocalizations.
+*   `trigger_engine.py`: Implements the "Guardian Lexicon" for mapping non-verbal audio patterns to first-person phrases via guardian-labeled triggers.

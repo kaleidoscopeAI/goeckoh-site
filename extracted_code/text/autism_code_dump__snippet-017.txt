@@ -1,0 +1,14 @@
+"""Top-level configuration for the KQBC agent.
+
+``child_id`` is an internal identifier for the child.
+``child_name`` is the name displayed in the UI.  ``caregiver_name``
+allows the dashboard and GUI to greet the caregiver personally.
+``paths`` holds filesystem locations for metrics and guidance logs.
+"""
+
+child_id: str = field(default="child_001")
+child_name: str = field(default="Jackson")
+caregiver_name: str = field(default="Molly")
+paths: Paths = field(default_factory=Paths)
+
+

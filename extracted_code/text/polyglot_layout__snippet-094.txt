@@ -1,0 +1,6 @@
+      cur.execute("""CREATE TABLE IF NOT EXISTS reflections (id INTEGER PRIMARY KEY AUTOINCREMENT, ts REAL, tick INTEGER, text TEXT)""")
+      cur.execute("""CREATE TABLE IF NOT EXISTS suggestions (id INTEGER PRIMARY KEY AUTOINCREMENT, ts REAL, tick INTEGER, json TEXT)""")
+      cur.execute("""CREATE TABLE IF NOT EXISTS docs (id INTEGER PRIMARY KEY AUTOINCREMENT, ts REAL, url TEXT, title TEXT, text TEXT)""")
+      cur.execute("""CREATE TABLE IF NOT EXISTS facets (id INTEGER PRIMARY KEY, summary TEXT)""")
+      cur.execute("""CREATE TABLE IF NOT EXISTS embeddings (id INTEGER PRIMARY KEY, vec BLOB)""")
+      cur.execute("""CREATE TABLE IF NOT EXISTS energetics (id INTEGER PRIMARY KEY AUTOINCREMENT, ts REAL, tick INTEGER, sigma REAL, hbits

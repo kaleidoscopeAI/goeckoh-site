@@ -1,0 +1,6 @@
+:Short names: %s
+:Filenames:   %s
+:MIME types:  %s
+
+%s
+

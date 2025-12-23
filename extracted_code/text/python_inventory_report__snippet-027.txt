@@ -1,0 +1,3 @@
+doc: Backward compatibility config shim.
+functions: _load_config
+classes: CompanionConfig

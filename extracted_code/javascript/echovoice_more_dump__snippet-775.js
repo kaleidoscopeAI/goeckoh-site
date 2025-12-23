@@ -1,1 +1,1 @@
-for (let sIdx = 0; sIdx < pvec.length; sIdx++) {
+const mirrorScale = lambdaPhi * 1.0;

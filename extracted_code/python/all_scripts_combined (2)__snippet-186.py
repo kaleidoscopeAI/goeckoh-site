@@ -1,26 +1,25 @@
-from __future__ import annotations
+"""Handles the conversion of textual knowledge into speech"""
 
-import numpy as np
-import torch
-from faster_whisper import WhisperModel
+def __init__(self):
+    self.voice_cache: Dict[str, str] = {}  # Cache for synthesized speech files
 
-from core.settings import SpeechSettings
-
-
-class STT:
+def synthesize(self, text: str, language: str = "en") -> str:
     """
-    Speech-to-Text using faster-whisper.
+    Converts text to speech and saves the audio to a file.
+    Returns the path to the audio file.
     """
+    if text in self.voice_cache:
+        return self.voice_cache[text]
 
-    def __init__(self, settings: SpeechSettings):
-        self.settings = settings
-        self.model = WhisperModel(
-            self.settings.whisper_model, device="cpu", compute_type="int8"
-        )
+    try:
+        tts = gTTS(text=text, lang=language)
+        file_path = f"speech_{hash(text)}.mp3"
+        tts.save(file_path)
+        self.voice_cache[text] = file_path
+        return file_path
+    except Exception as e:
+        raise RuntimeError(f"Speech synthesis failed: {e}")
 
-    def transcribe(self, audio_chunk: np.ndarray) -> str:
-        """
-        Transcribes an audio chunk and returns the text.
-        """
-        segments, _ = self.model.transcribe(audio_chunk, vad_filter=False)
-        return "".join(s.text for s in segments).strip()
+def clear_cache(self):
+    """Clears the voice cache"""
+    self.voice_cache.clear()

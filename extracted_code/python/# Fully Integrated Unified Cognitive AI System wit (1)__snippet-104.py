@@ -1,1 +1,7 @@
-- **Safety and Ethics:** Build continuous ethical validation layers and human-in-the-loop overrides from Phase 2 onward.
+# ...
+def iterate(self):
+    self.env.fluctuate()
+    for node in self.nodes:
+        node.vector = update_node_vector_fast(node.vector, self.env.temperature, node.tension)
+        # Additional node updates
+        node.normalize()

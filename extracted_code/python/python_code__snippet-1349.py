@@ -1,14 +1,14 @@
-def _onerror_ignore(*_args: Any) -> None:
-    pass
+def parse(self, s):
+    return _legacy_key(s)
+
+@property
+def is_prerelease(self):
+    result = False
+    for x in self._parts:
+        if (isinstance(x, string_types) and x.startswith('*') and
+                x < '*final'):
+            result = True
+            break
+    return result
 
 
-def _onerror_reraise(*_args: Any) -> None:
-    raise
-
-
-def rmtree_errorhandler(
-    func: FunctionType,
-    path: Path,
-    exc_info: Union[ExcInfo, BaseException],
-    *,
-    onexc: OnExc = _onerror_reraise,

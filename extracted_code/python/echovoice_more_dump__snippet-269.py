@@ -1,35 +1,32 @@
-class GradientFlow:
-    """Optimizes the continuous (vector) part of the state."""
-    def __init__(self, hamiltonian: SemanticHamiltonian, lr: float = 0.1) -> None:
-        self.ham = hamiltonian
-        self.lr = float(lr)
+fn load_or_process_dataset(path: &str, url: &str) -> Result<Vec<Graph>, CrystalError> {
+    ensure_dataset_exists(path, url)?;
+    let p = Path::new(path);
+    let ext = p.extension().and_then(|os| os.to_str()).unwrap_or("");
 
-    def step(self, state: HybridState, dt: float) -> None:
-        grads = self.ham.analytic_gradient(state)
-        for n, g in grads.items():
-            arr = np.asarray(state.x[n]).astype(float)
-            state.x[n] = (arr - dt * self.lr * g).astype(float)
-
-class MetropolisEngine:
-    """Optimizes the discrete (bit-string) part of the state via simulated annealing."""
-    def __init__(self, hamiltonian: SemanticHamiltonian, anneal_fn: Callable[[int], float]) -> None:
-        self.ham = hamiltonian
-        self.anneal_fn = anneal_fn
-        self.t: int = 0
-
-    def step(self, state: HybridState) -> None:
-        T = float(self.anneal_fn(self.t))
-        node_id = random.choice(list(state.E.keys()))
-        bit_dim = int(np.asarray(state.E[node_id]).size)
-        bit_idx = random.randrange(bit_dim)
-        
-        delta = self.ham.delta_energy_for_bitflip(state, node_id, bit_idx)
-        
-        accept_prob = min(1.0, math.exp(-delta / (T + 1e-12)))
-        if random.random() < accept_prob:
-            arr = np.asarray(state.E[node_id]).astype(int).copy()
-            arr[bit_idx] = 1 - int(arr[bit_idx])
-            state.E[node_id] = arr
-            
-        self.t += 1
-        
+    if ext == "parquet" {
+        load_mutag_dataset(path)
+    } else {
+        let engine = UniversalMutagEngine::new();
+        let runtime = tokio::runtime::Runtime::new().unwrap();
+        let processed = runtime.block_on(engine.process(p)).map_err(|e| CrystalError::Parameter(format!("Processing error: {:?}", e)))?;
+        processed.into_iter().map(|pg| {
+            Graph {
+                x: pg.mutag_entry.x,
+                edge_index: pg.mutag_entry.edge_index,
+                edge_attr: pg.mutag_entry.edge_attr,
+                y: pg.mutag_entry.y,
+                // Assume ChemicalFeatures maps from ChemicalProperties
+                chemical_features: pg.metadata.chemical_properties.map(|cp| ChemicalFeatures {
+                    molecular_weight: cp.molecular_weight,
+                    formula: cp.formula,
+                    // Map other fields accordingly
+                    // Assuming similar struct
+                    smiles: cp.smiles,
+                    atom_types: cp.atom_types,
+                    bond_types: cp.bond_types,
+                    ring_count: cp.ring_count,
+                    is_aromatic: cp.is_aromatic,
+                }),
+            }
+        }).collect()
+    }

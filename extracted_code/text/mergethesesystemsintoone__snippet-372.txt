@@ -1,0 +1,23 @@
+"""Adapts frequency and amplitude bounds based on global statistics."""
+all_frequencies = [r.frequency for r in global_stats.get("resonances", {}).values()]
+all_amplitudes = [r.amplitude for r in global_stats.get("resonances", {}).values()]
+
+if all_frequencies:
+    avg_freq = np.mean(all_frequencies)
+    std_freq = np.std(all_frequencies)
+    self.frequency_bounds = (
+        max(-10, avg_freq - 3 * std_freq),
+        min(10, avg_freq + 3 * std_freq)
+    )
+
+if all_amplitudes:
+    avg_amp = np.mean(all_amplitudes)
+    std_amp = np.std(all_amplitudes)
+    self.amplitude_bounds = (
+        max(0.01, avg_amp - 3 * std_amp),
+        min(20, avg_amp + 3 * std_amp)
+    )
+
+# Apply bounds with a learning rate
+self.frequency = np.clip(self.frequency, self.frequency_bounds[0], self.frequency_bounds[1])
+self.amplitude = np.clip(self.amplitude, self.amplitude_bounds[0], self.amplitude_bounds[1])

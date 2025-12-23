@@ -1,1 +1,1 @@
-def reset(self):
+def temperature(self) -> float:

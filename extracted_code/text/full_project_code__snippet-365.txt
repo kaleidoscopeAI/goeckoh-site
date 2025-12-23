@@ -1,0 +1,12 @@
+if "," in mode:
+    return MultiDecoder(mode)
+
+if mode == "gzip":
+    return GzipDecoder()
+
+if brotli is not None and mode == "br":
+    return BrotliDecoder()
+
+return DeflateDecoder()
+
+

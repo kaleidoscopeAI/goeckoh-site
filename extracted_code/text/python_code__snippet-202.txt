@@ -1,2 +1,3 @@
-# <REDACTED: potential secret detected>
+"""Attempt to read or write metadata fields that are conflictual."""
+
 

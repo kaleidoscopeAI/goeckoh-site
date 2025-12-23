@@ -1,2 +1,1 @@
-> lets implement code in place of using dependency to make this a more self reliant system
-
+export class OfflineMetaOptimizer {

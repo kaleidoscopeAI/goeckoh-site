@@ -1,2 +1,2 @@
-Please try this, and let me know if there are adjustments you’d like to see. Thank you for your patience; I’ll be here to support you as you test it.
+Yes, exactly. In this setup, the "resources" can represent any form of data or input that nodes need to function and grow—like nutrients in a natural ecosystem. Here’s how you might think of the resources in a more concrete way:
 

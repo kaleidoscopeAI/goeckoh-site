@@ -1,1 +1,2 @@
-Unravel** – entropy / deconstruction dynamics * **Mimicry** – learning from peers and sources * **Red/Blue Cyber AI** – adversarial/self-defensive reasoning * **Web
+def mutate(self):
+def mm(v, var=0.1, lo=0.001, hi=1.0):

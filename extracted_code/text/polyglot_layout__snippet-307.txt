@@ -1,0 +1,2 @@
+      con = sqlite3.connect(self.path); cur = con.cursor()
+      cur.execute("""CREATE TABLE IF NOT EXISTS states (id INTEGER PRIMARY KEY AUTOINCREMENT, ts REAL, tick INTEGER, tension REAL, energy

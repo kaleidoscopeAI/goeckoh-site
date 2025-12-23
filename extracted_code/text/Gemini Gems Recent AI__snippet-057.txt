@@ -1,0 +1,1 @@
+	process_frame()	Generates visual_anomaly Insight objects.

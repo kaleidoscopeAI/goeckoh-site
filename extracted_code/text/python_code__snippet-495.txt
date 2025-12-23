@@ -1,0 +1,3 @@
+print(generate('http://encoding.spec.whatwg.org/encodings.json'))
+
+

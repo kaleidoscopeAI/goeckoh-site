@@ -1,0 +1,24 @@
+      swirl = 0.2 + 1.0*S
+      noise = 0.02 + 0.15*(1.0 - S)
+      damp = 0.86 + 0.08*H
+
+      sid = self._hash_str(caption_text or "") % 99991
+      target = self._target_field(sid)
+
+      P = self.pos; V = self.vel
+      F_spring = k_spring*(target - P)
+      sw = np.stack([-P[:,1], P[:,0], 0*P[:,2]], axis=1).astype(np.float32) * swirl
+      F = F_spring + sw + noise*np.random.normal(0,1.0,P.shape).astype(np.float32)
+
+      V = damp*V + 0.03*F
+      P = P + V
+      np.clip(P, -1.0, 1.0, out=P)
+
+      self.pos, self.vel = P, V
+      with self._lock:
+          self._bytes = struct.pack("<I", self.n) + P.astype(np.float32).tobytes()
+
+  def frame_bytes(self) -> Optional[bytes]:
+      with self._lock:
+          return self._bytes
+

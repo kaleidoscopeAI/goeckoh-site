@@ -1,0 +1,5 @@
+- Develop complete Rust libraries encapsulating bitwise cognitive state updates, routing, curiosity logic, and transformers integration.
+- Design simulation experiments including multi-scale uncertainty, parameter adaptation, and info quality feedback loops.
+- Explore hardware acceleration via SIMD and FPGA implementation of core bit operators.
+- Draft formal convergence and stability proofs tuned to actual implementation parameter ranges.
+

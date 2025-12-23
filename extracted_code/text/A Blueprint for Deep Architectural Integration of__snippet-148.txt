@@ -1,0 +1,3 @@
+    - Inference of routing weights and engine parameters by setting or clearing bits in memory arrays.
+    - Reinforcement learning implemented as bit-flip patterns encouraged by reward signals.
+

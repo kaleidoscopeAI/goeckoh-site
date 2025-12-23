@@ -1,1 +1,2 @@
-def __post_init__(self) -> None:
+class SpeechProcessor:
+def __init__(self, config: CompanionConfig) -> None:

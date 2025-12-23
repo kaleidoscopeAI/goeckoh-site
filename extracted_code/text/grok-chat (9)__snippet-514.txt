@@ -1,0 +1,3 @@
+      asyncio.run(call_agent_async(query))
+
+  console.print("[bold green]:white_check_mark: llms.txt generation

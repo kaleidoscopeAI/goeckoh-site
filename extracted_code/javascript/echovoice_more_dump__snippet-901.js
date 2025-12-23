@@ -1,1 +1,1 @@
-const mirrorScale = lambdaPhi * 1.0;
+// A simple function to test the C library integration

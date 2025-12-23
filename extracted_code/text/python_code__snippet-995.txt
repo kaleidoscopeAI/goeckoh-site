@@ -1,0 +1,8 @@
+"""
+Yield ``Requirement`` objects for each specification in `strs`.
+
+`strs` must be a string, or a (possibly-nested) iterable thereof.
+"""
+return map(Requirement, join_continuation(map(drop_comment, yield_lines(strs))))
+
+

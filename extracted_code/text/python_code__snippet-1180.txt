@@ -1,0 +1,9 @@
+issue_url = "https://github.com/pypa/pip/issues/10151"
+message = (
+    "Value for %s does not match. Please report this to <%s>"
+    "\ndistutils: %s"
+    "\nsysconfig: %s"
+)
+logger.log(_MISMATCH_LEVEL, message, key, issue_url, old, new)
+
+

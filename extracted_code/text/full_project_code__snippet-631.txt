@@ -1,0 +1,1 @@
+Regex(r"/\*(?:[^*]|\*(?!/))*") + "*/" | dbl_slash_comment

@@ -1,0 +1,2 @@
+- Task queue: \$ \mathcal{C}(t) \$
+- Scheduler: maximize \$ \sum_{q \in \mathcal{R}} \frac{\pi(q)}{\kappa(q)} \$

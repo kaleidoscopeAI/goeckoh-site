@@ -1,13 +1,11 @@
-class QuantumBit:
-    def __init__(self, p_real=0.5, p_imag=0.5):
-        self.real = p_real
-        self.imag = p_imag
+"""Optimizes the continuous (vector) part of the state."""
+def __init__(self, hamiltonian: SemanticHamiltonian, lr: float = 0.1) -> None:
+    self.ham = hamiltonian
+    self.lr = float(lr)
 
-    def measure(self):
-        prob = self.real ** 2 + self.imag ** 2
-        return 1 if random.random() < prob else 0
-
-    def entangle(self, other):
-        self.real, other.real = (self.real + other.real) / 2, (self.real + other.real) / 2
-        self.imag, other.imag = (self.imag + other.imag) / 2, (self.imag + other.imag) / 2
+def step(self, state: HybridState, dt: float) -> None:
+    grads = self.ham.analytic_gradient(state)
+    for n, g in grads.items():
+        arr = np.asarray(state.x[n]).astype(float)
+        state.x[n] = (arr - dt * self.lr * g).astype(float)
 

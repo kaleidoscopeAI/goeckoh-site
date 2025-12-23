@@ -1,0 +1,40 @@
+"""Handle file upload for ingestion"""
+# Check if file was uploaded
+if 'file' not in request.files:
+    return jsonify({"error": "No file part"}), 400
+
+file = request.files['file']
+
+# Check if file was selected
+if file.filename == '':
+    return jsonify({"error": "No file selected"}), 400
+
+# Check if file is allowed
+if not file or not allowed_file(file.filename):
+    return jsonify({"error": "File type not allowed"}), 400
+
+# Save file
+filename = secure_filename(file.filename)
+file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+file.save(file_path)
+
+# Create task
+task_id = str(uuid.uuid4())
+task = {
+    "id": task_id,
+    "type": "ingest",
+    "file_path": file_path,
+    "file_name": filename,
+    "status": "queued",
+    "timestamp": time.time()
+}
+
+# Add to queue
+task_queue.put(task)
+
+return jsonify({
+    "status": "success",
+    "message": f"File {filename} uploaded and queued for ingestion",
+    "task_id": task_id
+})
+

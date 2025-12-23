@@ -1,2 +1,1 @@
-  - Each node actively learns from its environment (simulated here as random data).
-  - This learning drive is encoded as a core function.
+  - A central "thought hub" acts as a meta-layer, synthesizing knowledge from across nodes and mirroring systems.

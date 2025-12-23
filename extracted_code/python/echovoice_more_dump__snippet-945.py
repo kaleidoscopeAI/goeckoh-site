@@ -1,1 +1,8 @@
-valence, total curvature, etc. These charts update over time; use websockets or periodic fetch from FastAPI to push new data points to the
+• Goal: Establish the basic CQICS architecture, implement core components in a simplified form, and achieve basic information flow within a simulated environment.
+• Tasks:
+    ◦ Develop a small set of initial Specialized Modules (SMs) using standard techniques (e.g., convolutional neural networks for simple visual input, recurrent networks for sequence processing, basic rule-based systems for simple actions).
+    ◦ Implement a rudimentary Global Workspace (GW) mechanism, perhaps as a shared memory buffer or a low-dimensional shared latent space where SM outputs can be placed and read.38 Implement a simple broadcasting protocol (e.g., all SMs read the GW content at each time step).
+    ◦ Create a basic simulated environment and a Grounding Interface (GI) that allows SMs to receive simple sensory data from the environment and execute basic actions within it. Existing simulation platforms or integration frameworks like HIVE 33 or Simio 34 could potentially be adapted or used for inspiration.
+    ◦ Represent the connectivity between SMs and the GW as a graph. Implement functions to compute basic discrete Ricci curvature (e.g., using GraphRicciCurvature 14) on this graph to perform initial topological analysis.
+    ◦ Focus on achieving stable simulation loops, demonstrating that information can flow from sensory SMs, through the GW, to action SMs, resulting in basic agent behavior in the environment.
+• Evaluation: Assess the stability of the simulation, verify information flow pathways, perform initial Ricci curvature analysis of the static network, and observe basic agent responsiveness to environmental stimuli.

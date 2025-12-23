@@ -1,14 +1,15 @@
-async def ws_updates():
-    ws = websocket._get_current_object()
-    core.register_ws(ws)
-    try:
-        while True:
-            msg = await ws.receive()
-            # simple echo or control
-            if msg == 'ping':
-                await ws.send(json.dumps({'type': 'pong'}))
-    except asyncio.CancelledError:
-        pass
-    except Exception as e:
-        logging.info(f'WS closed: {e}')
+def run_agi_system():
+    cube = CognitiveCube()
+    transformer = ReflectionTransformer()
+
+    for epoch in range(50):
+        cube.iterate()
+        supernodes = cube.cluster_supernodes()
+
+        for sn in supernodes:
+            sn.reflect(transformer)
+
+        print(f"Epoch {epoch} complete. {len(supernodes)} supernodes refined.")
+
+    print("System stabilized: emergent digital entities formed.")
 

@@ -1,0 +1,3 @@
+new_state = profile.update_state(conditions)
+print(f"Conditions: {conditions}, New Emotional State: {new_state.name}")
+

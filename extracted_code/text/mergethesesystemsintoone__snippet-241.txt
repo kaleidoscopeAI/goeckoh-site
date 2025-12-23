@@ -1,1 +1,1 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+   "transformers", "torch", "bitsandbytes", "huggingface-hub", "Pillow", "rdkit", "astropy", "biopython"]

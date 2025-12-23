@@ -1,0 +1,15 @@
+<div class="panel">
+  <div style="display:flex; gap:8px; align-items:center; margin-bottom:6px;">
+     <span class="small">3D Avatar</span>
+     <span class="small" id="state">connecting…</span>
+  </div>
+  <div id="canvas"></div>
+</div>
+<div class="panel">
+  <h2>Console</h2>
+  <div id="log" class="code" style="height:45vh; overflow:auto"></div>
+  <div style="margin-top:10px; display:flex; gap:8px;">
+     <button class="btn" id="speak">Speak last caption</button>
+     <button class="btn" id="seed">Add local seed</button>
+  </div>
+  <p class="small" style="margin-top:8px;">Open <span class="code">/status</span> or <span class="code">/recent</span> for data. The system

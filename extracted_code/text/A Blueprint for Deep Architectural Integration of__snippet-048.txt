@@ -1,0 +1,2 @@
+- **Sparse computation mode** that calculates ΔE on the fly in O(degree) per node per flip.
+- **Dense counters** that maintain neighbor statistics for O(1) ΔE but require larger memory.

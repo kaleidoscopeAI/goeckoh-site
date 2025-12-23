@@ -1,0 +1,2 @@
+- This formalizes dissipation of system energy and bounded influence of inputs.
+

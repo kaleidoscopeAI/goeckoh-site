@@ -1,0 +1,85 @@
+"""Detects programming languages from file content and extensions"""
+
+def __init__(self):
+    """Initialize language detector"""
+    self.extension_map = {
+        ".py": LanguageType.PYTHON,
+        ".js": LanguageType.JAVASCRIPT,
+        ".jsx": LanguageType.JAVASCRIPT,
+        ".ts": LanguageType.TYPESCRIPT,
+        ".tsx": LanguageType.TYPESCRIPT,
+        ".java": LanguageType.JAVA,
+        ".cs": LanguageType.CSHARP,
+        ".cpp": LanguageType.CPP,
+        ".cc": LanguageType.CPP,
+        ".cxx": LanguageType.CPP,
+        ".c": LanguageType.CPP,
+        ".h": LanguageType.CPP,
+        ".hpp": LanguageType.CPP,
+        ".rb": LanguageType.RUBY,
+        ".php": LanguageType.PHP,
+        ".go": LanguageType.GO,
+        ".rs": LanguageType.RUST,
+        ".swift": LanguageType.SWIFT,
+        ".kt": LanguageType.KOTLIN
+    }
+
+    self.shebang_patterns = {
+        r"^\s*#!.*python": LanguageType.PYTHON,
+        r"^\s*#!.*node": LanguageType.JAVASCRIPT,
+        r"^\s*#!.*ruby": LanguageType.RUBY,
+        r"^\s*#!.*php": LanguageType.PHP
+    }
+
+    self.content_patterns = {
+        r"import\s+[a-zA-Z0-9_]+|from\s+[a-zA-Z0-9_\.]+\s+import": LanguageType.PYTHON,
+        r"require\s*\(\s*['\"][a-zA-Z0-9_\-\.\/]+['\"]\s*\)|import\s+[a-zA-Z0-9_]+\s+from": LanguageType.JAVASCRIPT,
+        r"import\s+{\s*[a-zA-Z0-9_,\s]+\s*}\s+from|interface\s+[a-zA-Z0-9_]+": LanguageType.TYPESCRIPT,
+        r"public\s+class|import\s+java\.": LanguageType.JAVA,
+        r"namespace\s+[a-zA-Z0-9_\.]+|using\s+[a-zA-Z0-9_\.]+;": LanguageType.CSHARP,
+        r"#include\s*<[a-zA-Z0-9_\.]+>|#include\s*\"[a-zA-Z0-9_\.]+\"": LanguageType.CPP,
+        r"require\s+['\"][a-zA-Z0-9_\-\.\/]+['\"]\s*|def\s+[a-zA-Z0-9_]+\s*\(": LanguageType.RUBY,
+        r"<\?php|namespace\s+[a-zA-Z0-9_\\]+;": LanguageType.PHP,
+        r"package\s+[a-zA-Z0-9_]+|func\s+[a-zA-Z0-9_]+\s*\(": LanguageType.GO,
+        r"use\s+[a-zA-Z0-9_:]+|fn\s+[a-zA-Z0-9_]+\s*\(": LanguageType.RUST,
+        r"import\s+[a-zA-Z0-9_\.]+|class\s+[a-zA-Z0-9_]+\s*:": LanguageType.SWIFT,
+        r"package\s+[a-zA-Z0-9_\.]+|fun\s+[a-zA-Z0-9_]+\s*\(": LanguageType.KOTLIN
+    }
+
+def detect_language(self, file_path: str, content: Optional[str] = None) -> LanguageType:
+    """
+    Detect the programming language of a file
+
+    Args:
+        file_path: Path to the file
+        content: Optional file content
+
+    Returns:
+        Detected language type
+    """
+    # Try by extension first
+    ext = os.path.splitext(file_path)[1].lower()
+    if ext in self.extension_map:
+        return self.extension_map[ext]
+
+    # If no content provided, try to read it
+    if content is None:
+        try:
+            with open(file_path, 'r', errors='ignore') as f:
+                content = f.read()
+        except Exception as e:
+            logger.warning(f"Could not read {file_path}: {str(e)}")
+            return LanguageType.UNKNOWN
+
+    # Try by shebang
+    for pattern, lang in self.shebang_patterns.items():
+        if re.search(pattern, content, re.MULTILINE):
+            return lang
+
+    # Try by content patterns
+    for pattern, lang in self.content_patterns.items():
+        if re.search(pattern, content, re.MULTILINE):
+            return lang
+
+    return LanguageType.UNKNOWN
+

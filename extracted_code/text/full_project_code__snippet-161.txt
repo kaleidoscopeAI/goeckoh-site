@@ -1,0 +1,7 @@
+string_types = (str,)
+integer_types = (int,)
+class_types = (type,)
+text_type = str
+binary_type = bytes
+
+MAXSIZE = sys.maxsize

@@ -1,0 +1,5 @@
+abi = sysconfig.get_config_var("SOABI")
+if abi:
+    yield _normalize_string(abi)
+
+

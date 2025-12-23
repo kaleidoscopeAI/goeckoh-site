@@ -1,0 +1,51 @@
+    """
+    Detect shapes in the image using basic edge detection and analysis.
+    This is a simplified, self-developed version without using cv2.
+    """
+    try:
+        img_array = np.array(image.convert('L'))  # Convert to grayscale
+        patterns = []
+
+        # Basic Edge Detection (Sobel Operator)
+        sobel_x = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])
+        sobel_y = np.array([[-1, -2, -1], [0, 0, 0], [1, 2, 1]])
+
+        edges_x = self._convolve(img_array, sobel_x)
+        edges_y = self._convolve(img_array, sobel_y)
+        edges = np.sqrt(edges_x**2 + edges_y**2)
+
+        # Simple Thresholding (replace with a more robust method if needed)
+        threshold = np.mean(edges) + np.std(edges)  # Example threshold
+        binary_edges = (edges > threshold).astype(np.uint8) * 255
+
+        # Find Contours (simplified approach - replace with a proper contour finding algorithm)
+        contours = self._find_contours(binary_edges)
+
+        for cnt in contours:
+            # Approximate the contour with a polygon
+            perimeter = self._calculate_perimeter(cnt)
+            approx = self._approximate_polygon(cnt, 0.02 * perimeter)  # Simplified approximation
+            num_vertices = len(approx)
+
+            # Classify shapes based on the number of vertices
+            if num_vertices == 3:
+                shape_type = "triangle"
+            elif num_vertices == 4:
+                shape_type = "rectangle"  # Placeholder, you'd need more logic to distinguish rectangles and squares
+            elif num_vertices > 4:
+                shape_type = "polygon"
+            else:
+                shape_type = "unknown"
+
+            patterns.append({
+                'type': 'shape',
+                'shape_type': shape_type,
+                'vertices': num_vertices,
+                'contour': cnt  # Store contour points
+            })
+
+        return patterns
+    except Exception as e:
+        print(f"Error in _detect_shapes: {e}")
+        return []
+

@@ -1,1 +1,1 @@
-- **Memory Queries**: Search and retrieval from crystalline memory
+def __init__(self, ai_system):

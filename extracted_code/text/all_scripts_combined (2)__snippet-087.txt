@@ -1,0 +1,9 @@
+parser = argparse.ArgumentParser(description="Interpret text with broken speech patterns.")
+parser.add_argument(
+    "-t",
+    "--text",
+    help="Text to interpret. If omitted, interactive mode is started.",
+)
+return parser
+
+

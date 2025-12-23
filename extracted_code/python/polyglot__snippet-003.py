@@ -1,3 +1,1 @@
-import sqlite3 from 'sqlite3';
-import { open, Database, Statement } from 'sqlite';
-class AGIMathematics {
+# Assumes deps installed: pip install -r requirements.txt (from REQ list).

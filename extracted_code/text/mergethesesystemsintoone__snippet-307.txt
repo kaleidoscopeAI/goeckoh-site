@@ -1,0 +1,3 @@
+"""Adds a theorem to the theorem prover."""
+self.theorems.append(theorem)
+

@@ -1,1 +1,8 @@
-You’re right — you asked for the full thing. Below is a complete, CPU-only, self-contained integration package you can drop into a TypeScript project. It
+curiosity: 0.7,
+confusion: 0.3,
+coherence: 0.5,
+arousal: 0.4,
+valence: 0.6,
+dominance: 0.5,
+certainty: 0.5,
+resonance: 0.6,

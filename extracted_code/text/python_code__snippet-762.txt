@@ -1,0 +1,7 @@
+_fields_ = (
+    ("cbSize", DWORD),
+    ("dwFlags", DWORD),
+    ("pvExtraPolicyPara", c_void_p),
+)
+
+

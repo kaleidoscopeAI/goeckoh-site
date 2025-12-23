@@ -1,0 +1,4 @@
+            (1 + Condition|Subject) + (1|Trial),
+            data = erp_data,
+            control = lmerControl(optimizer = "bobyqa"))
+

@@ -1,23 +1,30 @@
-    from pip._vendor.rich.console import Console, Group
-    from pip._vendor.rich.highlighter import ReprHighlighter
-    from pip._vendor.rich.panel import Panel
+    """Creates an InstallRequirement from a name, which might be a
+    requirement, directory containing 'setup.py', filename, or URL.
 
-    highlighter = ReprHighlighter()
-    console = Console()
+    :param line_source: An optional string describing where the line is from,
+        for logging purposes in case of an error.
+    """
+    parts = parse_req_from_line(name, line_source)
 
-    panel = Panel(
-        Group(
-            Align.left(highlighter("align='left'")),
-            Align.center(highlighter("align='center'")),
-            Align.right(highlighter("align='right'")),
-        ),
-        width=60,
-        style="on dark_blue",
-        title="Align",
+    return InstallRequirement(
+        parts.requirement,
+        comes_from,
+        link=parts.link,
+        markers=parts.markers,
+        use_pep517=use_pep517,
+        isolated=isolated,
+        global_options=global_options,
+        hash_options=hash_options,
+        config_settings=config_settings,
+        constraint=constraint,
+        extras=parts.extras,
+        user_supplied=user_supplied,
     )
 
-    console.print(
-        Align.center(panel, vertical="middle", style="on red", height=console.height)
-    )
 
-
+def install_req_from_req_string(
+    req_string: str,
+    comes_from: Optional[InstallRequirement] = None,
+    isolated: bool = False,
+    use_pep517: Optional[bool] = None,
+    user_supplied: bool = False,

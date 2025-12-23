@@ -1,0 +1,5 @@
+use_user_site: Optional[bool],
+prefix_path: Optional[str] = None,
+target_dir: Optional[str] = None,
+root_path: Optional[str] = None,
+isolated_mode: bool = False,

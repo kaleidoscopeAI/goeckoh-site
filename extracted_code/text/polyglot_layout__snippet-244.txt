@@ -1,0 +1,3 @@
+  task = getattr(app.state, "avatar_task", None)
+  if task: task.cancel()
+

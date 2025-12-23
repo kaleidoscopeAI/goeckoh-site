@@ -1,2 +1,11 @@
-The code you've shared is from a speech intervention / augmentation system (likely designed for people with speech difficulties, aphasia, dysarthria, heavy accent, or very abbreviated/broken informal speech). It combines real-time speech recognition, text normalization/cleanup, grammar correction, and text-to-speech feedback.
+class Paths:
+    base: Path = Path.home() / "EchoCrystal"
+    voices_dir: Path = base / "voices"
+    logs_dir: Path = base / "logs"
+    metrics_csv: Path = logs_dir / "aba_progress.csv"
+
+    def __post_init__(self):
+        self.base.mkdir(exist_ok=True)
+        self.voices_dir.mkdir(exist_ok=True)
+        self.logs_dir.mkdir(exist_ok=True)
 

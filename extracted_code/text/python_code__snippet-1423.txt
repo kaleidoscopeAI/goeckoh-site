@@ -1,0 +1,7 @@
+logger.info("vendored library versions:")
+
+vendor_txt_versions = create_vendor_txt_map()
+with indent_log():
+    show_actual_vendor_versions(vendor_txt_versions)
+
+

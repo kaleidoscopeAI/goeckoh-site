@@ -1,5 +1,11 @@
-class Module_six_moves_urllib_robotparser(_LazyModule):
-
-    """Lazy loading of moved objects in six.moves.urllib_robotparser"""
+try:
+    char: str | None = src[pos]
+except IndexError:
+    char = None
+if char == "#":
+    return skip_until(
+        src, pos + 1, "\n", error_on=ILLEGAL_COMMENT_CHARS, error_on_eof=False
+    )
+return pos
 
 

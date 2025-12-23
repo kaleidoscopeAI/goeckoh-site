@@ -1,0 +1,24 @@
+ 93          silenceDurationSeekBar.progress = sharedPrefs.getInt("silence_ms", 1200) / 100
+ 94 +        silenceValueText.text = "${silenceDurationSeekBar.progress * 100} ms"
+ 95
+    ⋮
+ 97          vadThresholdSeekBar.progress = (sharedPrefs.getFloat("vad_threshold", 0.5f) * 100).toInt()
+ 98 +        thresholdValueText.text = String.format("%.2f", vadThresholdSeekBar.progress / 100f)
+ 99 +
+100 +        silenceDurationSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+101 +            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+102 +                silenceValueText.text = "${progress * 100} ms"
+103 +            }
+104 +            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+105 +            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+106 +        })
+107 +
+108 +        vadThresholdSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+109 +            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+110 +                thresholdValueText.text = String.format("%.2f", progress / 100f)
+111 +            }
+112 +            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+113 +            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+114 +        })
+115
+

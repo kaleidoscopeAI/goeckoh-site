@@ -1,0 +1,1 @@
+- Replace synthetic lattice dynamics with a validated 1024-node ODE model

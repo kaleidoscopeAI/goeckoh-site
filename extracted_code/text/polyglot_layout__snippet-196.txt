@@ -1,0 +1,6 @@
+  if hits >= 400:
+       break
+  root = E_A if row["root"] == E_A.name else E_B
+  path = root / row["relpath"]
+  # Skip binary-ish files by extension
+  if row["ext"] in

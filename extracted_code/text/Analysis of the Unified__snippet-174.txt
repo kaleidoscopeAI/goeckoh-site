@@ -1,0 +1,8 @@
+Node Accumulation: Nodes (Ni​), which have DNA-like structures, ingest data and accumulate knowledge.
+
+Crystallization: When a node's knowledge exceeds a threshold, its information is "crystallized" into a KnowledgeGraph. This process explicitly includes PII (Personally Identifiable Information) redaction for safety.
+
+SuperNode Formation: Enough Nodes merge to form a SuperNode, synthesizing high-dimensional features, aggregating knowledge, and identifying gaps/tasks.
+
+The Cube: SuperNodes connect to form the final, self-organizing structure, The Cube, which acts as the central intelligence for cross-domain reasoning.
+

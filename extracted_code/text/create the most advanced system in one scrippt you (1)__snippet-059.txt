@@ -1,0 +1,7 @@
+select(all_of(c(n_col, icc_cols))) %>%
+filter(grepl("older|elderly|OA|65", X1, ignore.case=TRUE)) %>%
+mutate(
+  ICC_amplitude = as.numeric(X2),
+  N = as.numeric(X1)
+)
+

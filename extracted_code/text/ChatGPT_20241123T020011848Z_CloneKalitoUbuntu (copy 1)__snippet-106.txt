@@ -1,0 +1,4 @@
+- Add
+  - Nodes start with a basic theme (e.g., Titanic metaphor) but adapt based on discovered knowledge paths.
+  - Use
+- Build a

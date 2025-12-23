@@ -1,1 +1,2 @@
-let out = env.new_float_array(outv.len() as i32).unwrap();
+pub fn apply_qubits_to_cpu(env: &JNIEnv, core_id: i32, qubits_j: JFloatArray) -> jfloatArray {
+let len = match env.get_array_length(qubits_j) {

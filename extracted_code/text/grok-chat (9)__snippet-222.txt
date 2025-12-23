@@ -1,0 +1,5 @@
+> goeckoh@0.0.0 build
+… +14 lines
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 8.58s
+

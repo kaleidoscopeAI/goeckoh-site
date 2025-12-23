@@ -1,6 +1,1 @@
-const e = feat.energy;
-const z = feat.zcr;
-const hnr = feat.hnr;
-const tilt = feat.tilt;
-const f0 = feat.f0;
-
+const spike = clamp((z - 0.02) / 0.18, 0, 1);

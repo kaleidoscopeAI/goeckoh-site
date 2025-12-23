@@ -1,0 +1,2 @@
+functions: ensure_venv_and_reexec, write_wav_mono16, stft_mag, sha_to_u64, u_hash, sign_hash, ngrams, embed_text, cos_sim, knn_idx, mc_var, stability, anneal_sigma, ring_edges, energetics, synth_signal, default_maps, label_for, home, teach, status, frame
+classes: Memory, MathSolver, LogicPlanner, Retriever, AvatarSynth, Broadcaster, BrainState, Brain

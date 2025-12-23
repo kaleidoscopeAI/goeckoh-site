@@ -1,2 +1,1 @@
-class EchoCompanion:
-def __init__(self, cfg: CompanionConfig) -> None:
+def create_layout(paths: InstallPaths):

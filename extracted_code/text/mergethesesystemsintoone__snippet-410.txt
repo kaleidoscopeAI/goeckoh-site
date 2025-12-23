@@ -1,0 +1,7 @@
+  """Calculates the probability of a given state."""
+  total_prob = 1.0
+  for node_id, value in state.items():
+     node_prob = network.nodes[node_id].get("strength", 0.0)
+     total_prob *= (value * node_prob + (1 - value) * (1 - node_prob))
+  return total_prob
+

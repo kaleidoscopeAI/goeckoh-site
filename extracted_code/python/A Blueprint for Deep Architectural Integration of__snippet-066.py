@@ -1,1 +1,2 @@
-    - Illustrative examples from neuroscience and machine learning
+- Prove that the system remains stable with bounded deviation from $S^*$, typically:
+

@@ -1,0 +1,12 @@
+  excluded_files = {'__init__'}
+  included_extensions = {'.md', '.py'}
+
+  directory_map: dict[str, list[str]] = {}
+  try:
+      for root, subdirs, files in os.walk(repo_path):
+
+          # Modify subdirs in place so that os.walk() sees changes directly
+          subdirs[:] = [d for d in subdirs if d not in excluded_dirs]
+          for file in files:
+              if (any(file.endswith(ext) for ext in included_extensions)
+                      and not any(file.startswith(ext) for ext in

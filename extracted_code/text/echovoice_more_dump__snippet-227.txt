@@ -1,1 +1,1 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+  throw new Error("Messages array cannot be empty.");

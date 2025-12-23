@@ -1,43 +1,50 @@
-Pythonfrom __future__ import annotations
+class SpeechLoop:
+    config: CompanionConfig = CONFIG
 
-import numpy as np
-import sounddevice as sd
-import queue
-from faster_whisper import WhisperModel
-from typing import Optional, Tuple
+    def __post_init__(self) -> None:
+        self.processor = SpeechProcessor(self.config.speech)
+        self.data = DataStore(self.config.paths)
+        self.monitor = BehaviorMonitor()
+        self.advisor = StrategyAdvisor()
 
-class SpeechRecognizer:
-    def __init__(self, model_size: str = "small.en", vad_threshold: float = 0.45, min_silence_ms: int = 1200):
-        self.model = WhisperModel(model_size, device="cpu", compute_type="int8")
-        self.q = queue.Queue()
-        self.stop = False
-        self.vad_threshold = vad_threshold
-        self.min_silence_ms = min_silence_ms
-        self.sample_rate = 16000
+        profile_dir = self.config.paths.voices_dir / "profile"
+        self.voice_profile = VoiceProfile(base_dir=profile_dir)
+        self.voice_profile.load_existing()
 
-    def callback(self, indata: np.ndarray, *args):
-        self.q.put(indata.flatten())
+        self.voice_crystal = VoiceCrystal(
+            tts=VoiceMimic(self.config.speech),
+            profile=self.voice_profile,
+            config=VoiceCrystalConfig(sample_rate=self.config.audio.sample_rate),
+        )
 
-    def start(self):
-        threading.Thread(target=self._listen, daemon=True).start()
+        self.inner_voice = InnerVoiceEngine(
+            voice=self.voice_crystal,
+            data_store=self.data,
+        )
 
-    def _listen(self):
-        with sd.InputStream(samplerate=self.sample_rate, channels=1, dtype='float32', callback=self.callback):
-            while not self.stop:
-                sd.sleep(100)
+        self.recognizer = SpeechRecognizer(model_size=self.config.speech.whisper_model)  # New STT
+        self.recognizer.start()
 
-    def transcribe_chunk(self) -> Optional[Tuple[str, np.ndarray]]:
-        try:
-            audio = self.q.get(timeout=0.1)
-        except queue.Empty:
-            return None
+    async def run(self) -> None:
+        print("Starting real-time voice mimicry loop with STT...")
+        while True:
+            result = self.recognizer.transcribe_chunk()
+            if result is None:
+                await asyncio.sleep(0.1)
+                continue
 
-        # Simple VAD
-        rms = np.sqrt(np.mean(audio**2))
-        if rms < self.vad_threshold:
-            return None
+            raw, audio_chunk = result
 
-        segments, _ = self.model.transcribe(audio, vad_filter=True, vad_parameters={"threshold": self.vad_threshold, "min_silence_duration_ms": self.min_silence_ms})
-        text = " ".join(s.text for s in segments).strip()
-        return text, audio if text else None
+            # Process as before
+            tmpdir = tempfile.mkdtemp()
+            tmp_path = Path(tmpdir) / "attempt.wav"
+            sf.write(tmp_path, audio_chunk, self.config.audio.sample_rate)
+
+            corrected = await self.processor.process(audio_chunk, tmp_path, self.config.audio.sample_rate)  # Assuming process returns corrected
+
+            normalized_attempt = raw.strip().lower()
+
+            # ... (phrase matching, scoring, echo logic as before)
+
+            await asyncio.sleep(0.1)  # Throttle
 

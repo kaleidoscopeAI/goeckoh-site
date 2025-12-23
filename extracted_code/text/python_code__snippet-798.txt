@@ -1,0 +1,10 @@
+for i, importer in enumerate(sys.meta_path):
+    # Here's some real nastiness: Another "instance" of the six module might
+    # be floating around. Therefore, we can't use isinstance() to check for
+    # the six meta path importer, since the other six instance will have
+    # inserted an importer with different class.
+    if (type(importer).__name__ == "_SixMetaPathImporter" and
+            importer.name == __name__):
+        del sys.meta_path[i]
+        break
+del i, importer

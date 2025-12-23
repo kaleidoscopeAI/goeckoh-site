@@ -1,0 +1,14 @@
+if not text:
+    return ""
+try:
+    text = RE_YOU.sub('I', text)
+    text = RE_WANT.sub('want', text)
+    text = RE_IS.sub('am', text)
+    text = RE_HAS.sub('have', text)
+    matches = TOOL.check(text)
+    corrected = language_tool_python.utils.correct(text, matches)
+    return corrected
+except Exception as e:
+    logger.error(f"Correction error: {e}")
+    return text
+

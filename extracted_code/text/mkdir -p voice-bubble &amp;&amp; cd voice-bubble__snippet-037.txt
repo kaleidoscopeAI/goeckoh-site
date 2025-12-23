@@ -1,1 +1,0 @@
-    - Modern macOS, Windows, or Linux machines using Core Audio / WASAPI / ALSA with 128–256 sample buffers at 44.1–48 kHz can usually achieve <100–150 ms round-trip with optimized code and exclusive/low-latency modes.

@@ -1,0 +1,2 @@
+       if any(k in s.lower() for k in ["design","build","create","implement"]):
+           steps += ["Clarify requirements","Sketch architecture","List modules & interfaces","Draft algorithm","Test on cases","Refine edge-

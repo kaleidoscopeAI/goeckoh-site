@@ -1,0 +1,5 @@
+  "The system will be implemented using Python and standard, open-source libraries.",
+  "No external AI models or frameworks (like TensorFlow, PyTorch) will be used.",
+  "Advanced features like image processing and real-time data streaming will be simulated or simplified for this implementation.",
+  "The system will focus on demonstrating core concepts rather than production-ready performance and scalability."
+]

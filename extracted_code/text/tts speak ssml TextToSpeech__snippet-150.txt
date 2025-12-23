@@ -1,0 +1,3 @@
+              val energy = calculateRMS(shortBuffer)
+              if (energy < 0.01) {
+                  if (silenceStart == 0L) silenceStart =

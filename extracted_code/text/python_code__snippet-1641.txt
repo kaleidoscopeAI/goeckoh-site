@@ -1,0 +1,7 @@
+BadCommand,
+CommandError,
+DiagnosticPipError,
+InstallationError,
+NetworkConnectionError,
+PreviousBuildDirError,
+UninstallationError,

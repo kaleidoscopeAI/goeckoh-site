@@ -1,1 +1,0 @@
-interactions approximate quantum amplitude behaviors using classical computation, enabling superposed hypothesis generation and probabilistic

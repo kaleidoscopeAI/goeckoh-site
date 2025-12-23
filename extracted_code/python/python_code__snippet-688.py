@@ -1,15 +1,6 @@
-    class _UnpackAlias(typing._GenericAlias, _root=True):
-        __class__ = typing.TypeVar
+    from pip._vendor.resolvelib.providers import Preference
+    from pip._vendor.resolvelib.resolvers import RequirementInformation
 
-    class _UnpackForm(_ExtensionsSpecialForm, _root=True):
-        def __getitem__(self, parameters):
-            item = typing._type_check(parameters,
-                                      f'{self._name} accepts only a single type.')
-            return _UnpackAlias(self, (item,))
+    PreferenceInformation = RequirementInformation[Requirement, Candidate]
 
-    Unpack = _UnpackForm('Unpack', doc=_UNPACK_DOC)
-
-    def _is_unpack(obj):
-        return isinstance(obj, _UnpackAlias)
-
-
+    _ProviderBase = AbstractProvider[Requirement, Candidate, str]

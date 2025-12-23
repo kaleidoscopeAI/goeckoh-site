@@ -1,123 +1,95 @@
-def rehash(path: str, blocksize: int = 1 << 20) -> Tuple[str, str]:
-    """Return (encoded_digest, length) for path using hashlib.sha256()"""
-    h, length = hash_file(path, blocksize)
-    digest = "sha256=" + urlsafe_b64encode(h.digest()).decode("latin1").rstrip("=")
-    return (digest, str(length))
+class Colors:
+    CYAN = '\033[96m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
 
+def print_status(msg, type="INFO"):
+    prefix = {
+        "INFO": "[*]",
+        "OK": f"{Colors.GREEN}[+]{Colors.ENDC}",
+        "WARN": f"{Colors.YELLOW}[!]{Colors.ENDC}",
+        "ERR": f"{Colors.FAIL}[x]{Colors.ENDC}"
+    }.get(type, "[?]")
+    print(f"{prefix} {msg}")
 
-def csv_io_kwargs(mode: str) -> Dict[str, Any]:
-    """Return keyword arguments to properly open a CSV file
-    in the given mode.
+def check_rust_toolchain():
+    print_status("Checking Rust installation...")
+    try:
+        subprocess.run(["cargo", "--version"], check=True, stdout=subprocess.PIPE)
+        print_status("Rust compiler found.", "OK")
+        return True
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        print_status("Rust not found. Install via https://rustup.rs/", "ERR")
+        return False
+
+def build_rust_extension():
     """
-    return {"mode": mode, "newline": "", "encoding": "utf-8"}
-
-
-def fix_script(path: str) -> bool:
-    """Replace #!python with #!/path/to/python
-    Return True if file was changed.
+    Compiles the bio_audio Rust crate into a shared library accessible by Python.
     """
-    # XXX RECORD hashes will need to be updated
-    assert os.path.isfile(path)
+    print_status("Building Physics Kernel (bio_audio)...", "INFO")
+    
+    os_type = platform.system()
+    target_dir = os.path.join(os.getcwd(), "bio_audio", "target", "release")
+    root_dir = os.getcwd()
+    
+    # 1. Run Cargo Build
+    try:
+        os.chdir("bio_audio")
+        cmd = ["cargo", "build", "--release"]
+        subprocess.run(cmd, check=True)
+        os.chdir(root_dir)
+    except subprocess.CalledProcessError:
+        print_status("Compilation Failed.", "ERR")
+        return False
 
-    with open(path, "rb") as script:
-        firstline = script.readline()
-        if not firstline.startswith(b"#!python"):
-            return False
-        exename = sys.executable.encode(sys.getfilesystemencoding())
-        firstline = b"#!" + exename + os.linesep.encode("ascii")
-        rest = script.read()
-    with open(path, "wb") as script:
-        script.write(firstline)
-        script.write(rest)
-    return True
-
-
-def wheel_root_is_purelib(metadata: Message) -> bool:
-    return metadata.get("Root-Is-Purelib", "").lower() == "true"
-
-
-def get_entrypoints(dist: BaseDistribution) -> Tuple[Dict[str, str], Dict[str, str]]:
-    console_scripts = {}
-    gui_scripts = {}
-    for entry_point in dist.iter_entry_points():
-        if entry_point.group == "console_scripts":
-            console_scripts[entry_point.name] = entry_point.value
-        elif entry_point.group == "gui_scripts":
-            gui_scripts[entry_point.name] = entry_point.value
-    return console_scripts, gui_scripts
-
-
-def message_about_scripts_not_on_PATH(scripts: Sequence[str]) -> Optional[str]:
-    """Determine if any scripts are not on PATH and format a warning.
-    Returns a warning message if one or more scripts are not on PATH,
-    otherwise None.
-    """
-    if not scripts:
-        return None
-
-    # Group scripts by the path they were installed in
-    grouped_by_dir: Dict[str, Set[str]] = collections.defaultdict(set)
-    for destfile in scripts:
-        parent_dir = os.path.dirname(destfile)
-        script_name = os.path.basename(destfile)
-        grouped_by_dir[parent_dir].add(script_name)
-
-    # We don't want to warn for directories that are on PATH.
-    not_warn_dirs = [
-        os.path.normcase(os.path.normpath(i)).rstrip(os.sep)
-        for i in os.environ.get("PATH", "").split(os.pathsep)
-    ]
-    # If an executable sits with sys.executable, we don't warn for it.
-    #     This covers the case of venv invocations without activating the venv.
-    not_warn_dirs.append(
-        os.path.normcase(os.path.normpath(os.path.dirname(sys.executable)))
-    )
-    warn_for: Dict[str, Set[str]] = {
-        parent_dir: scripts
-        for parent_dir, scripts in grouped_by_dir.items()
-        if os.path.normcase(os.path.normpath(parent_dir)) not in not_warn_dirs
-    }
-    if not warn_for:
-        return None
-
-    # Format a message
-    msg_lines = []
-    for parent_dir, dir_scripts in warn_for.items():
-        sorted_scripts: List[str] = sorted(dir_scripts)
-        if len(sorted_scripts) == 1:
-            start_text = f"script {sorted_scripts[0]} is"
-        else:
-            start_text = "scripts {} are".format(
-                ", ".join(sorted_scripts[:-1]) + " and " + sorted_scripts[-1]
-            )
-
-        msg_lines.append(
-            f"The {start_text} installed in '{parent_dir}' which is not on PATH."
-        )
-
-    last_line_fmt = (
-        "Consider adding {} to PATH or, if you prefer "
-        "to suppress this warning, use --no-warn-script-location."
-    )
-    if len(msg_lines) == 1:
-        msg_lines.append(last_line_fmt.format("this directory"))
+    # 2. Locate and Move Artifact
+    # Windows: .dll -> .pyd
+    # Linux/Mac: .so / .dylib -> .so
+    
+    src_name = ""
+    dest_name = ""
+    
+    if os_type == "Windows":
+        src_name = "bio_audio.dll"
+        dest_name = "bio_audio.pyd"
+    elif os_type == "Darwin": # Mac
+        src_name = "libbio_audio.dylib"
+        dest_name = "bio_audio.so"
+    else: # Linux
+        src_name = "libbio_audio.so"
+        dest_name = "bio_audio.so"
+        
+    src_path = os.path.join(target_dir, src_name)
+    dest_path = os.path.join(root_dir, dest_name)
+    
+    if os.path.exists(src_path):
+        shutil.copy2(src_path, dest_path)
+        print_status(f"Kernel linked: {dest_name}", "OK")
+        return True
     else:
-        msg_lines.append(last_line_fmt.format("these directories"))
+        print_status(f"Artifact not found at {src_path}", "ERR")
+        return False
 
-    # Add a note if any directory starts with ~
-    warn_for_tilde = any(
-        i[0] == "~" for i in os.environ.get("PATH", "").split(os.pathsep) if i
-    )
-    if warn_for_tilde:
-        tilde_warning_msg = (
-            "NOTE: The current PATH contains path(s) starting with `~`, "
-            "which may not be expanded by all applications."
-        )
-        msg_lines.append(tilde_warning_msg)
+def main():
+    print(f"{Colors.CYAN}=== NEURO-ACOUSTIC EXOCORTEX LAUNCHER ==={Colors.ENDC}")
+    
+    # 1. Environment Check
+    if not check_rust_toolchain():
+        print_status("Cannot build kernel. Continuing with mocks is possible but not recommended.", "WARN")
+        time.sleep(2)
+    else:
+        # 2. Build Rust Kernel
+        if not os.path.exists("bio_audio.so") and not os.path.exists("bio_audio.pyd"):
+            success = build_rust_extension()
+            if not success:
+                print_status("Using Python-only mode.", "WARN")
 
-    # Returns the formatted multiline message
-    return "\n".join(msg_lines)
+    # 3. Launch GUI
+    print_status("Initializing Crystalline Heart...", "INFO")
+    try:
+        subprocess.run([sys.executable, "gui_main.py"])
+    except KeyboardInterrupt:
+        print_status("Shutdown complete.", "OK")
 
-
-def _normalized_outrows(
-    outrows: Iterable[InstalledCSVRow],

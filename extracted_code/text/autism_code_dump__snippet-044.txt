@@ -1,0 +1,5 @@
+if raw_text.strip().lower() == corrected_text.strip().lower():
+    return None
+return f"I am getting better at saying: {corrected_text.strip()}"
+
+

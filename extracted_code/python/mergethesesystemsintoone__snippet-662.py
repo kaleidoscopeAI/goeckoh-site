@@ -1,20 +1,13 @@
-import os
-import sys
-import time
-import uuid
-import json
-import logging
-import asyncio
-import traceback
-from typing import Dict, List, Any, Optional, Union, Callable, Awaitable
-from enum import Enum, auto
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-import multiprocessing
-from concurrent.futures import ThreadPoolExecutor
-import queue
-import threading
-import signal
-import psutil
-from pathlib import Path
+data_type: str  # e.g., \"text\", \"image\", \"numerical\", \"audio\", \"video\"
+data: Any
+metadata: Dict[str, Any] = field(default_factory=dict)
+
+def get_data(self) -> Any:
+    return self.data
+
+def get_metadata(self, key: str, default: Any = None) -> Any:
+    return self.metadata.get(key, default)
+
+def set_metadata(self, key: str, value: Any):
+    self.metadata[key] = value
 

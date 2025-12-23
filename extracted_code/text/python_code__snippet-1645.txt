@@ -1,0 +1,27 @@
+synth = VoiceMapSynth(sr=44100)
+
+# Approximate "HELLO WORLD"
+raw_phonemes = ["HH", "EH", "L", "OW", " ", "W", "ER", "L", "D"]
+# Map OW -> AO, keep others in-range of PHONEME_MAP
+phonemes = []
+for ph in raw_phonemes:
+    if ph == "OW":
+        phonemes.append("AO")
+    else:
+        phonemes.append(ph)
+
+profile_male = {
+    "f0": 110.0,        # pitch
+    "tract_scale": 1.0, # anatomy
+    "jitter": 0.004,
+    "shimmer": 0.03,
+    "breath": 0.03,
+    "speed": 1.0,
+    "intonation": 18.0,
+}
+
+audio = synth.synthesize(phonemes, profile_male)
+wavfile.write("hello_world_synth.wav", 44100, (audio * 32767).astype(np.int16))
+print("Wrote hello_world_synth.wav in current directory.")
+
+

@@ -1,1 +1,1 @@
-async def add_dna_batch(self, dnas: List[Tuple[int, KnowledgeDNA]]):
+async def add_edge_batch(self, edges: List[Tuple[str, str, float]]):

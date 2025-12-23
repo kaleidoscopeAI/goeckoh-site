@@ -1,0 +1,13 @@
+    """Performs Markov Chain Monte Carlo sampling on the Bayesian Network."""
+    samples = []
+    current_state = self._initialize_state(network)
+
+    for i in range (num_samples):
+        for node_id in network.nodes:
+            new_state = self._propose_state(current_state, node_id)
+            acceptance_prob = self._calculate_acceptance_probability(current_state, new_state, network)
+            if random.random() < acceptance_prob:
+               current_state = new_state
+        if i > self.burn_in and (i - self.burn_in) % self.sample_interval == 0:
+            samples.append (current_state.copy())
+    return samples

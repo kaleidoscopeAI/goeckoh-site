@@ -1,0 +1,7 @@
+args = make_setuptools_shim_args(
+    setup_py_path, global_options=global_options, unbuffered_output=True
+)
+args += ["clean", "--all"]
+return args
+
+

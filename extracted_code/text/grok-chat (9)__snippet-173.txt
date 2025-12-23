@@ -1,0 +1,4 @@
+2597              'gcl_ts': getattr(self.crystalline_heart, "gcl_ts", []),
+2598 +            'heart_rust': heart_rust,
+2599              'aba_metrics': {
+

@@ -1,2 +1,9 @@
-# <REDACTED: potential secret detected>
+- The system's core is a `HybridState` containing both continuous (vector) and
+  discrete (bit-string) data for a network of nodes.
+- A `SemanticHamiltonian` defines the system's total "energy," quantifying
+  its cognitive stress and incoherence.
+- A `MetropolisEngine` uses simulated annealing to optimize the discrete bit
+  states, allowing the system to find globally optimal configurations.
+- A `GradientFlow` engine optimizes the continuous vector states via
+  gradient descent.
 

@@ -1,0 +1,2 @@
+*   `types.py`: Defines `AvatarFrame` data structure and default frame generation.
+*   `controller.py`: Maps Heart and Brain metrics to avatar visual properties (positions, colors, sizes).

@@ -1,0 +1,9 @@
+    self.pattern_dna = KnowledgeDNA()
+    self.pattern_memory = defaultdict(list)
+    self.cluster_threshold = 0.7
+    self.word2vec_model = None  # Placeholder for custom word2vec model
+    self.lda_model = None  # Placeholder for custom LDA model
+    self.vectorizer = None  # Placeholder for vectorizer
+   # self.nlp = spacy.load("en_core_web_sm")
+    #self.feature_extractor = ViTFeatureExtractor.from_pretrained('google/vit-base-patch16-224')
+

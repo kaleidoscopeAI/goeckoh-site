@@ -1,42 +1,114 @@
-def run_demo(num_steps: int = 100):
-    """Demonstrate the unified system"""
-    print("Initializing Echo V4.0 System...")
-    system = EchoV4System()
-    
-    print("Running simulation...\n")
-    
-    for step in range(num_steps):
-        # Simulate varying sensory input
-        t = step / 10.0
-        
-        # Stress wave (simulates periodic challenges)
-        stress_wave = 0.3 + 0.2 * np.sin(t)
-        
-        sensory_input = {
-            'audio_rms': stress_wave,
-            'text_sentiment': 0.5 + 0.3 * np.cos(t * 0.5),
-            'external_arousal': 0.4 + 0.1 * np.sin(t * 2.0)
-        }
-        
-        # Update system
-        metrics = system.step(sensory_input)
-        
-        # Print status every 20 steps
-        if step % 20 == 0:
-            print(f"\n{system.get_summary()}")
-            print(f"\nCurrent Metrics:")
-            for key, value in metrics.items():
-                if isinstance(value, (int, float)):
-                    print(f"  {key:20s}: {value:+.4f}")
-                else:
-                    print(f"  {key:20s}: {value}")
-    
-    print("\n" + "=" * 60)
-    print("Simulation complete.")
-    print("\nLife Intensity Trajectory:")
-    life_vals = list(system.life_history)
-    for i, L in enumerate(life_vals[-20:]):
-        bar = "█" * int(50 * (L + 1) / 2)  # Map [-1,1] to bar
-        print(f"  t={len(life_vals)-20+i:3d}: {L:+.3f} {bar}")
+"""An error, that presents diagnostic information to the user.
+
+This contains a bunch of logic, to enable pretty presentation of our error
+messages. Each error gets a unique reference. Each error can also include
+additional context, a hint and/or a note -- which are presented with the
+main error message in a consistent style.
+
+This is adapted from the error output styling in `sphinx-theme-builder`.
+"""
+
+reference: str
+
+def __init__(
+    self,
+    *,
+    kind: 'Literal["error", "warning"]' = "error",
+    reference: Optional[str] = None,
+    message: Union[str, Text],
+    context: Optional[Union[str, Text]],
+    hint_stmt: Optional[Union[str, Text]],
+    note_stmt: Optional[Union[str, Text]] = None,
+    link: Optional[str] = None,
+) -> None:
+    # Ensure a proper reference is provided.
+    if reference is None:
+        assert hasattr(self, "reference"), "error reference not provided!"
+        reference = self.reference
+    assert _is_kebab_case(reference), "error reference must be kebab-case!"
+
+    self.kind = kind
+    self.reference = reference
+
+    self.message = message
+    self.context = context
+
+    self.note_stmt = note_stmt
+    self.hint_stmt = hint_stmt
+
+    self.link = link
+
+    super().__init__(f"<{self.__class__.__name__}: {self.reference}>")
+
+def __repr__(self) -> str:
+    return (
+        f"<{self.__class__.__name__}("
+        f"reference={self.reference!r}, "
+        f"message={self.message!r}, "
+        f"context={self.context!r}, "
+        f"note_stmt={self.note_stmt!r}, "
+        f"hint_stmt={self.hint_stmt!r}"
+        ")>"
+    )
+
+def __rich_console__(
+    self,
+    console: Console,
+    options: ConsoleOptions,
+) -> RenderResult:
+    colour = "red" if self.kind == "error" else "yellow"
+
+    yield f"[{colour} bold]{self.kind}[/]: [bold]{self.reference}[/]"
+    yield ""
+
+    if not options.ascii_only:
+        # Present the main message, with relevant context indented.
+        if self.context is not None:
+            yield _prefix_with_indent(
+                self.message,
+                console,
+                prefix=f"[{colour}]×[/] ",
+                indent=f"[{colour}]│[/] ",
+            )
+            yield _prefix_with_indent(
+                self.context,
+                console,
+                prefix=f"[{colour}]╰─>[/] ",
+                indent=f"[{colour}]   [/] ",
+            )
+        else:
+            yield _prefix_with_indent(
+                self.message,
+                console,
+                prefix="[red]×[/] ",
+                indent="  ",
+            )
+    else:
+        yield self.message
+        if self.context is not None:
+            yield ""
+            yield self.context
+
+    if self.note_stmt is not None or self.hint_stmt is not None:
+        yield ""
+
+    if self.note_stmt is not None:
+        yield _prefix_with_indent(
+            self.note_stmt,
+            console,
+            prefix="[magenta bold]note[/]: ",
+            indent="      ",
+        )
+    if self.hint_stmt is not None:
+        yield _prefix_with_indent(
+            self.hint_stmt,
+            console,
+            prefix="[cyan bold]hint[/]: ",
+            indent="      ",
+        )
+
+    if self.link is not None:
+        yield ""
+        yield f"Link: {self.link}"
 
 

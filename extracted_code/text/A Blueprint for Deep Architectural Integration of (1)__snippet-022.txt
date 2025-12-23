@@ -1,2 +1,0 @@
-- The **Graph Laplacian** \$ L = D - R \$ is constructed using the degree matrix \$ D \$ where \$ D_{ii} = \sum_j R_{ij} \$. The **connectivity** of the graph is captured spectrally: the second smallest eigenvalue of \$ L \$, called the **algebraic connectivity** or **Fiedler value** \$ \lambda_2(L) \$, is positive if and only if the graph is connected:
-

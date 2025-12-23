@@ -1,0 +1,5 @@
+- Add
+  - Direct peer-to-peer
+  - Broadcast communication
+  - Hierarchical communication
+- Introduce

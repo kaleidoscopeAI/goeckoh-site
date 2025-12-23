@@ -1,1 +1,2 @@
-    from pip._vendor.urllib3.contrib import pyopenssl
+    from tornado.concurrent import Future
+

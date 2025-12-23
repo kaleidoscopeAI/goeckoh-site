@@ -1,0 +1,4 @@
+  x = np.asarray(list(samples), dtype=np.float32).clip(-1, 1)
+  y = (x * 32767.0).astype(np.int16)
+  wavfile.write(str(path), sr, y)
+

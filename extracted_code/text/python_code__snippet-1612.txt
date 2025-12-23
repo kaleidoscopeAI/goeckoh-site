@@ -1,0 +1,8 @@
+Option,
+"--require-hashes",
+dest="require_hashes",
+action="store_true",
+default=False,
+help="Require a hash to check each requirement against, for "
+"repeatable installs. This option is implied when any package in a "
+"requirements file has a --hash option.",

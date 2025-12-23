@@ -1,7 +1,4 @@
-def feedback_review(self):
-    for related_node_id, annotations in self.synapses.items():
-        # Compare annotations and update
-        if related_node_id in self.synapses:
-            annotations.update(self.synapses[related_node_id])
-            self.logs.append(f"Feedback loop refined annotations with Node {related_node_id}.")
+def handle_replication_failure(self, error_message):
+    self.logs.append(f"Replication failed: {error_message}")
+    self.resources["energy"] += 0.1  # Recover some resources
 

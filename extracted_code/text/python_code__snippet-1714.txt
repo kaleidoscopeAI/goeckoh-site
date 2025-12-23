@@ -1,0 +1,27 @@
+"""Autocorrelation-based F0 per frame."""
+T, L = frames.shape
+f0 = np.zeros(T, dtype=np.float32)
+for i in range(T):
+    frame = frames[i]
+    if not np.any(frame):
+        continue
+    autocorr = np.correlate(frame, frame, mode="full")[L - 1 :]
+    max_val = np.max(autocorr)
+    if max_val <= 0:
+        continue
+    autocorr = autocorr / (max_val + 1e-6)
+    peaks, _ = find_peaks(autocorr, height=0.2)
+    if peaks.size < 2:
+        continue
+    lags = np.diff(peaks)
+    if lags.size == 0:
+        continue
+    avg_lag = float(np.median(lags))
+    if avg_lag <= 0:
+        continue
+    f0_val = sr / avg_lag
+    if fmin <= f0_val <= fmax:
+        f0[i] = f0_val
+return f0
+
+

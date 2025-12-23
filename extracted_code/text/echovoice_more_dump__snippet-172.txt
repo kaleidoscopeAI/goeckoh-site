@@ -1,2 +1,5 @@
-Important: We are using ES6 classes and modern JavaScript features.
+class Spec:
+    SelFn = Callable[["HybridState", int], Sequence[int]]
+    OperatorCallable = Callable[[Any, dict], Any]
+    GateFn = Callable[[float], float]
 

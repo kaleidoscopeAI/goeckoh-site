@@ -1,0 +1,3 @@
+HTTPSConnection = DummyConnection  # noqa: F811
+
+

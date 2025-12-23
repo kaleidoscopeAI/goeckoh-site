@@ -1,0 +1,2 @@
+- Nodes with surplus resources temporarily lend computational power to those in need.
+- This mimics the dynamic resource allocation of VMs.

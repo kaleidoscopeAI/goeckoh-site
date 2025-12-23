@@ -1,1 +1,5 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+# Simulate X search tool; in production, integrate with actual API or tool.
+# For demo, hardcode or use requests to X API if available.
+# Here, placeholder returns dummy URLs.
+return [f"https://example.com/post/{i}" for i in range(limit)]
+

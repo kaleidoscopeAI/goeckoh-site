@@ -1,2 +1,7 @@
-# <REDACTED: potential secret detected>
-
+"fastapi==0.115.5",
+"uvicorn==0.32.0",
+"requests==2.32.3",
+"beautifulsoup4==4.12.3",
+"numpy==1.26.4",
+"networkx==3.3",
+"starlette==0.41.3"

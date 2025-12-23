@@ -1,10 +1,32 @@
-import logging
-from optparse import Values
-from typing import List
+def get_original_bases(__cls):
+    """Return the class's "original" bases prior to modification by `__mro_entries__`.
 
-from pip._internal.cli.base_command import Command
-from pip._internal.cli.status_codes import ERROR, SUCCESS
-from pip._internal.operations.check import (
-    check_package_set,
-    create_package_set_from_installed,
-    warn_legacy_versions_and_specifiers,
+    Examples::
+
+        from typing import TypeVar, Generic
+        from pip._vendor.typing_extensions import NamedTuple, TypedDict
+
+        T = TypeVar("T")
+        class Foo(Generic[T]): ...
+        class Bar(Foo[int], float): ...
+        class Baz(list[str]): ...
+        Eggs = NamedTuple("Eggs", [("a", int), ("b", str)])
+        Spam = TypedDict("Spam", {"a": int, "b": str})
+
+        assert get_original_bases(Bar) == (Foo[int], float)
+        assert get_original_bases(Baz) == (list[str],)
+        assert get_original_bases(Eggs) == (NamedTuple,)
+        assert get_original_bases(Spam) == (TypedDict,)
+        assert get_original_bases(int) == (object,)
+    """
+    try:
+        return __cls.__orig_bases__
+    except AttributeError:
+        try:
+            return __cls.__bases__
+        except AttributeError:
+            raise TypeError(
+                f'Expected an instance of type, not {type(__cls).__name__!r}'
+            ) from None
+
+

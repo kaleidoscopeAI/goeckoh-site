@@ -1,0 +1,6 @@
+self.values = {
+        "truth": 0.9,
+        "novelty": 0.7,
+        "efficiency": 0.8,
+        "coherence": 0.6
+    }

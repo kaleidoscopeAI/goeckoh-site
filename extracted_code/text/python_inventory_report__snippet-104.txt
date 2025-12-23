@@ -1,0 +1,2 @@
+functions: ensure_venv_and_reexec, write_wav_mono16, stft_mag, make_bands, head_features, sha_to_u64, u_hash, sign_hash, ngrams, embed_text, cos_sim, knn_idx, mc_var, stability, anneal_sigma, expected_cos_noise, ring_edges, energetics, _u32, _rng, _palette, _avatar_svg, synth_voice_from_memory, spectral_stats, mouth_curvature, coherence_score, label_for, home, teach, status, recent, persona_avatar, persona_layout, persona_say, metrics_coherence
+classes: Memory, FormalMap, TinyController, MathSolver, LogicPlanner, Retriever, Broadcaster, BrainState, OnBrain

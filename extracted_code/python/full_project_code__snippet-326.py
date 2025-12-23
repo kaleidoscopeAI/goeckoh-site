@@ -1,3 +1,1 @@
-import sys
-from unittest import TestCase, main, skipUnless
-
+    from unittest.mock import MagicMock, Mock, patch

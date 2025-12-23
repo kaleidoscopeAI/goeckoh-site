@@ -1,0 +1,17 @@
+_fields_ = (
+    ("cbSize", DWORD),
+    ("hRestrictedRoot", HCERTSTORE),
+    ("hRestrictedTrust", HCERTSTORE),
+    ("hRestrictedOther", HCERTSTORE),
+    ("cAdditionalStore", DWORD),
+    ("rghAdditionalStore", c_void_p),
+    ("dwFlags", DWORD),
+    ("dwUrlRetrievalTimeout", DWORD),
+    ("MaximumCachedCertificates", DWORD),
+    ("CycleDetectionModulus", DWORD),
+    ("hExclusiveRoot", HCERTSTORE),
+    ("hExclusiveTrustedPeople", HCERTSTORE),
+    ("dwExclusiveFlags", DWORD),
+)
+
+

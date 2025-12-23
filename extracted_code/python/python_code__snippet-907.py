@@ -1,494 +1,424 @@
-    """Read bytes from a file while tracking progress.
+def looks_like_ci() -> bool:
+    """
+    Return whether it looks like pip is running under CI.
+    """
+    # We don't use the method of checking for a tty (e.g. using isatty())
+    # because some CI systems mimic a tty (e.g. Travis CI).  Thus that
+    # method doesn't provide definitive information in either direction.
+    return any(name in os.environ for name in CI_ENVIRONMENT_VARIABLES)
 
-    Args:
-        path (Union[str, PathLike[str], BinaryIO]): The path to the file to read, or a file-like object in binary mode.
-        mode (str): The mode to use to open the file. Only supports "r", "rb" or "rt".
-        buffering (int): The buffering strategy to use, see :func:`io.open`.
-        encoding (str, optional): The encoding to use when reading in text mode, see :func:`io.open`.
-        errors (str, optional): The error handling strategy for decoding errors, see :func:`io.open`.
-        newline (str, optional): The strategy for handling newlines in text mode, see :func:`io.open`
-        total: (int, optional): Total number of bytes to read. Must be provided if reading from a file handle. Default for a path is os.stat(file).st_size.
-        description (str, optional): Description of task show next to progress bar. Defaults to "Reading".
-        auto_refresh (bool, optional): Automatic refresh, disable to force a refresh after each iteration. Default is True.
-        transient: (bool, optional): Clear the progress on exit. Defaults to False.
-        console (Console, optional): Console to write to. Default creates internal Console instance.
-        refresh_per_second (float): Number of times per second to refresh the progress information. Defaults to 10.
-        style (StyleType, optional): Style for the bar background. Defaults to "bar.back".
-        complete_style (StyleType, optional): Style for the completed bar. Defaults to "bar.complete".
-        finished_style (StyleType, optional): Style for a finished bar. Defaults to "bar.finished".
-        pulse_style (StyleType, optional): Style for pulsing bars. Defaults to "bar.pulse".
-        disable (bool, optional): Disable display of progress.
-        encoding (str, optional): The encoding to use when reading in text mode.
 
-    Returns:
-        ContextManager[BinaryIO]: A context manager yielding a progress reader.
+def user_agent() -> str:
+    """
+    Return a string representing the user agent.
+    """
+    data: Dict[str, Any] = {
+        "installer": {"name": "pip", "version": __version__},
+        "python": platform.python_version(),
+        "implementation": {
+            "name": platform.python_implementation(),
+        },
+    }
 
+    if data["implementation"]["name"] == "CPython":
+        data["implementation"]["version"] = platform.python_version()
+    elif data["implementation"]["name"] == "PyPy":
+        pypy_version_info = sys.pypy_version_info  # type: ignore
+        if pypy_version_info.releaselevel == "final":
+            pypy_version_info = pypy_version_info[:3]
+        data["implementation"]["version"] = ".".join(
+            [str(x) for x in pypy_version_info]
+        )
+    elif data["implementation"]["name"] == "Jython":
+        # Complete Guess
+        data["implementation"]["version"] = platform.python_version()
+    elif data["implementation"]["name"] == "IronPython":
+        # Complete Guess
+        data["implementation"]["version"] = platform.python_version()
+
+    if sys.platform.startswith("linux"):
+        from pip._vendor import distro
+
+        linux_distribution = distro.name(), distro.version(), distro.codename()
+        distro_infos: Dict[str, Any] = dict(
+            filter(
+                lambda x: x[1],
+                zip(["name", "version", "id"], linux_distribution),
+            )
+        )
+        libc = dict(
+            filter(
+                lambda x: x[1],
+                zip(["lib", "version"], libc_ver()),
+            )
+        )
+        if libc:
+            distro_infos["libc"] = libc
+        if distro_infos:
+            data["distro"] = distro_infos
+
+    if sys.platform.startswith("darwin") and platform.mac_ver()[0]:
+        data["distro"] = {"name": "macOS", "version": platform.mac_ver()[0]}
+
+    if platform.system():
+        data.setdefault("system", {})["name"] = platform.system()
+
+    if platform.release():
+        data.setdefault("system", {})["release"] = platform.release()
+
+    if platform.machine():
+        data["cpu"] = platform.machine()
+
+    if has_tls():
+        import _ssl as ssl
+
+        data["openssl_version"] = ssl.OPENSSL_VERSION
+
+    setuptools_dist = get_default_environment().get_distribution("setuptools")
+    if setuptools_dist is not None:
+        data["setuptools_version"] = str(setuptools_dist.version)
+
+    if shutil.which("rustc") is not None:
+        # If for any reason `rustc --version` fails, silently ignore it
+        try:
+            rustc_output = subprocess.check_output(
+                ["rustc", "--version"], stderr=subprocess.STDOUT, timeout=0.5
+            )
+        except Exception:
+            pass
+        else:
+            if rustc_output.startswith(b"rustc "):
+                # The format of `rustc --version` is:
+                # `b'rustc 1.52.1 (9bc8c42bb 2021-05-09)\n'`
+                # We extract just the middle (1.52.1) part
+                data["rustc_version"] = rustc_output.split(b" ")[1].decode()
+
+    # Use None rather than False so as not to give the impression that
+    # pip knows it is not being run under CI.  Rather, it is a null or
+    # inconclusive result.  Also, we include some value rather than no
+    # value to make it easier to know that the check has been run.
+    data["ci"] = True if looks_like_ci() else None
+
+    user_data = os.environ.get("PIP_USER_AGENT_USER_DATA")
+    if user_data is not None:
+        data["user_data"] = user_data
+
+    return "{data[installer][name]}/{data[installer][version]} {json}".format(
+        data=data,
+        json=json.dumps(data, separators=(",", ":"), sort_keys=True),
+    )
+
+
+class LocalFSAdapter(BaseAdapter):
+    def send(
+        self,
+        request: PreparedRequest,
+        stream: bool = False,
+        timeout: Optional[Union[float, Tuple[float, float]]] = None,
+        verify: Union[bool, str] = True,
+        cert: Optional[Union[str, Tuple[str, str]]] = None,
+        proxies: Optional[Mapping[str, str]] = None,
+    ) -> Response:
+        pathname = url_to_path(request.url)
+
+        resp = Response()
+        resp.status_code = 200
+        resp.url = request.url
+
+        try:
+            stats = os.stat(pathname)
+        except OSError as exc:
+            # format the exception raised as a io.BytesIO object,
+            # to return a better error message:
+            resp.status_code = 404
+            resp.reason = type(exc).__name__
+            resp.raw = io.BytesIO(f"{resp.reason}: {exc}".encode("utf8"))
+        else:
+            modified = email.utils.formatdate(stats.st_mtime, usegmt=True)
+            content_type = mimetypes.guess_type(pathname)[0] or "text/plain"
+            resp.headers = CaseInsensitiveDict(
+                {
+                    "Content-Type": content_type,
+                    "Content-Length": stats.st_size,
+                    "Last-Modified": modified,
+                }
+            )
+
+            resp.raw = open(pathname, "rb")
+            resp.close = resp.raw.close
+
+        return resp
+
+    def close(self) -> None:
+        pass
+
+
+class _SSLContextAdapterMixin:
+    """Mixin to add the ``ssl_context`` constructor argument to HTTP adapters.
+
+    The additional argument is forwarded directly to the pool manager. This allows us
+    to dynamically decide what SSL store to use at runtime, which is used to implement
+    the optional ``truststore`` backend.
     """
 
-    columns: List["ProgressColumn"] = (
-        [TextColumn("[progress.description]{task.description}")] if description else []
-    )
-    columns.extend(
-        (
-            BarColumn(
-                style=style,
-                complete_style=complete_style,
-                finished_style=finished_style,
-                pulse_style=pulse_style,
-            ),
-            DownloadColumn(),
-            TimeRemainingColumn(),
+    def __init__(
+        self,
+        *,
+        ssl_context: Optional["SSLContext"] = None,
+        **kwargs: Any,
+    ) -> None:
+        self._ssl_context = ssl_context
+        super().__init__(**kwargs)
+
+    def init_poolmanager(
+        self,
+        connections: int,
+        maxsize: int,
+        block: bool = DEFAULT_POOLBLOCK,
+        **pool_kwargs: Any,
+    ) -> "PoolManager":
+        if self._ssl_context is not None:
+            pool_kwargs.setdefault("ssl_context", self._ssl_context)
+        return super().init_poolmanager(  # type: ignore[misc]
+            connections=connections,
+            maxsize=maxsize,
+            block=block,
+            **pool_kwargs,
         )
-    )
-    progress = Progress(
-        *columns,
-        auto_refresh=auto_refresh,
-        console=console,
-        transient=transient,
-        get_time=get_time,
-        refresh_per_second=refresh_per_second or 10,
-        disable=disable,
-    )
-
-    reader = progress.open(
-        file,
-        mode=mode,
-        buffering=buffering,
-        encoding=encoding,
-        errors=errors,
-        newline=newline,
-        total=total,
-        description=description,
-    )
-    return _ReadContext(progress, reader)  # type: ignore[return-value, type-var]
 
 
-class ProgressColumn(ABC):
-    """Base class for a widget to use in progress display."""
+class HTTPAdapter(_SSLContextAdapterMixin, _BaseHTTPAdapter):
+    pass
 
-    max_refresh: Optional[float] = None
 
-    def __init__(self, table_column: Optional[Column] = None) -> None:
-        self._table_column = table_column
-        self._renderable_cache: Dict[TaskID, Tuple[float, RenderableType]] = {}
-        self._update_time: Optional[float] = None
+class CacheControlAdapter(_SSLContextAdapterMixin, _BaseCacheControlAdapter):
+    pass
 
-    def get_table_column(self) -> Column:
-        """Get a table column, used to build tasks table."""
-        return self._table_column or Column()
 
-    def __call__(self, task: "Task") -> RenderableType:
-        """Called by the Progress object to return a renderable for the given task.
+class InsecureHTTPAdapter(HTTPAdapter):
+    def cert_verify(
+        self,
+        conn: ConnectionPool,
+        url: str,
+        verify: Union[bool, str],
+        cert: Optional[Union[str, Tuple[str, str]]],
+    ) -> None:
+        super().cert_verify(conn=conn, url=url, verify=False, cert=cert)
 
-        Args:
-            task (Task): An object containing information regarding the task.
 
-        Returns:
-            RenderableType: Anything renderable (including str).
+class InsecureCacheControlAdapter(CacheControlAdapter):
+    def cert_verify(
+        self,
+        conn: ConnectionPool,
+        url: str,
+        verify: Union[bool, str],
+        cert: Optional[Union[str, Tuple[str, str]]],
+    ) -> None:
+        super().cert_verify(conn=conn, url=url, verify=False, cert=cert)
+
+
+class PipSession(requests.Session):
+    timeout: Optional[int] = None
+
+    def __init__(
+        self,
+        *args: Any,
+        retries: int = 0,
+        cache: Optional[str] = None,
+        trusted_hosts: Sequence[str] = (),
+        index_urls: Optional[List[str]] = None,
+        ssl_context: Optional["SSLContext"] = None,
+        **kwargs: Any,
+    ) -> None:
         """
-        current_time = task.get_time()
-        if self.max_refresh is not None and not task.completed:
+        :param trusted_hosts: Domains not to emit warnings for when not using
+            HTTPS.
+        """
+        super().__init__(*args, **kwargs)
+
+        # Namespace the attribute with "pip_" just in case to prevent
+        # possible conflicts with the base class.
+        self.pip_trusted_origins: List[Tuple[str, Optional[int]]] = []
+
+        # Attach our User Agent to the request
+        self.headers["User-Agent"] = user_agent()
+
+        # Attach our Authentication handler to the session
+        self.auth = MultiDomainBasicAuth(index_urls=index_urls)
+
+        # Create our urllib3.Retry instance which will allow us to customize
+        # how we handle retries.
+        retries = urllib3.Retry(
+            # Set the total number of retries that a particular request can
+            # have.
+            total=retries,
+            # A 503 error from PyPI typically means that the Fastly -> Origin
+            # connection got interrupted in some way. A 503 error in general
+            # is typically considered a transient error so we'll go ahead and
+            # retry it.
+            # A 500 may indicate transient error in Amazon S3
+            # A 502 may be a transient error from a CDN like CloudFlare or CloudFront
+            # A 520 or 527 - may indicate transient error in CloudFlare
+            status_forcelist=[500, 502, 503, 520, 527],
+            # Add a small amount of back off between failed requests in
+            # order to prevent hammering the service.
+            backoff_factor=0.25,
+        )  # type: ignore
+
+        # Our Insecure HTTPAdapter disables HTTPS validation. It does not
+        # support caching so we'll use it for all http:// URLs.
+        # If caching is disabled, we will also use it for
+        # https:// hosts that we've marked as ignoring
+        # TLS errors for (trusted-hosts).
+        insecure_adapter = InsecureHTTPAdapter(max_retries=retries)
+
+        # We want to _only_ cache responses on securely fetched origins or when
+        # the host is specified as trusted. We do this because
+        # we can't validate the response of an insecurely/untrusted fetched
+        # origin, and we don't want someone to be able to poison the cache and
+        # require manual eviction from the cache to fix it.
+        if cache:
+            secure_adapter = CacheControlAdapter(
+                cache=SafeFileCache(cache),
+                max_retries=retries,
+                ssl_context=ssl_context,
+            )
+            self._trusted_host_adapter = InsecureCacheControlAdapter(
+                cache=SafeFileCache(cache),
+                max_retries=retries,
+            )
+        else:
+            secure_adapter = HTTPAdapter(max_retries=retries, ssl_context=ssl_context)
+            self._trusted_host_adapter = insecure_adapter
+
+        self.mount("https://", secure_adapter)
+        self.mount("http://", insecure_adapter)
+
+        # Enable file:// urls
+        self.mount("file://", LocalFSAdapter())
+
+        for host in trusted_hosts:
+            self.add_trusted_host(host, suppress_logging=True)
+
+    def update_index_urls(self, new_index_urls: List[str]) -> None:
+        """
+        :param new_index_urls: New index urls to update the authentication
+            handler with.
+        """
+        self.auth.index_urls = new_index_urls
+
+    def add_trusted_host(
+        self, host: str, source: Optional[str] = None, suppress_logging: bool = False
+    ) -> None:
+        """
+        :param host: It is okay to provide a host that has previously been
+            added.
+        :param source: An optional source string, for logging where the host
+            string came from.
+        """
+        if not suppress_logging:
+            msg = f"adding trusted host: {host!r}"
+            if source is not None:
+                msg += f" (from {source})"
+            logger.info(msg)
+
+        parsed_host, parsed_port = parse_netloc(host)
+        if parsed_host is None:
+            raise ValueError(f"Trusted host URL must include a host part: {host!r}")
+        if (parsed_host, parsed_port) not in self.pip_trusted_origins:
+            self.pip_trusted_origins.append((parsed_host, parsed_port))
+
+        self.mount(
+            build_url_from_netloc(host, scheme="http") + "/", self._trusted_host_adapter
+        )
+        self.mount(build_url_from_netloc(host) + "/", self._trusted_host_adapter)
+        if not parsed_port:
+            self.mount(
+                build_url_from_netloc(host, scheme="http") + ":",
+                self._trusted_host_adapter,
+            )
+            # Mount wildcard ports for the same host.
+            self.mount(build_url_from_netloc(host) + ":", self._trusted_host_adapter)
+
+    def iter_secure_origins(self) -> Generator[SecureOrigin, None, None]:
+        yield from SECURE_ORIGINS
+        for host, port in self.pip_trusted_origins:
+            yield ("*", host, "*" if port is None else port)
+
+    def is_secure_origin(self, location: Link) -> bool:
+        # Determine if this url used a secure transport mechanism
+        parsed = urllib.parse.urlparse(str(location))
+        origin_protocol, origin_host, origin_port = (
+            parsed.scheme,
+            parsed.hostname,
+            parsed.port,
+        )
+
+        # The protocol to use to see if the protocol matches.
+        # Don't count the repository type as part of the protocol: in
+        # cases such as "git+ssh", only use "ssh". (I.e., Only verify against
+        # the last scheme.)
+        origin_protocol = origin_protocol.rsplit("+", 1)[-1]
+
+        # Determine if our origin is a secure origin by looking through our
+        # hardcoded list of secure origins, as well as any additional ones
+        # configured on this PackageFinder instance.
+        for secure_origin in self.iter_secure_origins():
+            secure_protocol, secure_host, secure_port = secure_origin
+            if origin_protocol != secure_protocol and secure_protocol != "*":
+                continue
+
             try:
-                timestamp, renderable = self._renderable_cache[task.id]
-            except KeyError:
-                pass
+                addr = ipaddress.ip_address(origin_host or "")
+                network = ipaddress.ip_network(secure_host)
+            except ValueError:
+                # We don't have both a valid address or a valid network, so
+                # we'll check this origin against hostnames.
+                if (
+                    origin_host
+                    and origin_host.lower() != secure_host.lower()
+                    and secure_host != "*"
+                ):
+                    continue
             else:
-                if timestamp + self.max_refresh > current_time:
-                    return renderable
+                # We have a valid address and network, so see if the address
+                # is contained within the network.
+                if addr not in network:
+                    continue
 
-        renderable = self.render(task)
-        self._renderable_cache[task.id] = (current_time, renderable)
-        return renderable
+            # Check to see if the port matches.
+            if (
+                origin_port != secure_port
+                and secure_port != "*"
+                and secure_port is not None
+            ):
+                continue
 
-    @abstractmethod
-    def render(self, task: "Task") -> RenderableType:
-        """Should return a renderable object."""
+            # If we've gotten here, then this origin matches the current
+            # secure origin and we should return True
+            return True
 
-
-class RenderableColumn(ProgressColumn):
-    """A column to insert an arbitrary column.
-
-    Args:
-        renderable (RenderableType, optional): Any renderable. Defaults to empty string.
-    """
-
-    def __init__(
-        self, renderable: RenderableType = "", *, table_column: Optional[Column] = None
-    ):
-        self.renderable = renderable
-        super().__init__(table_column=table_column)
-
-    def render(self, task: "Task") -> RenderableType:
-        return self.renderable
-
-
-class SpinnerColumn(ProgressColumn):
-    """A column with a 'spinner' animation.
-
-    Args:
-        spinner_name (str, optional): Name of spinner animation. Defaults to "dots".
-        style (StyleType, optional): Style of spinner. Defaults to "progress.spinner".
-        speed (float, optional): Speed factor of spinner. Defaults to 1.0.
-        finished_text (TextType, optional): Text used when task is finished. Defaults to " ".
-    """
-
-    def __init__(
-        self,
-        spinner_name: str = "dots",
-        style: Optional[StyleType] = "progress.spinner",
-        speed: float = 1.0,
-        finished_text: TextType = " ",
-        table_column: Optional[Column] = None,
-    ):
-        self.spinner = Spinner(spinner_name, style=style, speed=speed)
-        self.finished_text = (
-            Text.from_markup(finished_text)
-            if isinstance(finished_text, str)
-            else finished_text
-        )
-        super().__init__(table_column=table_column)
-
-    def set_spinner(
-        self,
-        spinner_name: str,
-        spinner_style: Optional[StyleType] = "progress.spinner",
-        speed: float = 1.0,
-    ) -> None:
-        """Set a new spinner.
-
-        Args:
-            spinner_name (str): Spinner name, see python -m rich.spinner.
-            spinner_style (Optional[StyleType], optional): Spinner style. Defaults to "progress.spinner".
-            speed (float, optional): Speed factor of spinner. Defaults to 1.0.
-        """
-        self.spinner = Spinner(spinner_name, style=spinner_style, speed=speed)
-
-    def render(self, task: "Task") -> RenderableType:
-        text = (
-            self.finished_text
-            if task.finished
-            else self.spinner.render(task.get_time())
-        )
-        return text
-
-
-class TextColumn(ProgressColumn):
-    """A column containing text."""
-
-    def __init__(
-        self,
-        text_format: str,
-        style: StyleType = "none",
-        justify: JustifyMethod = "left",
-        markup: bool = True,
-        highlighter: Optional[Highlighter] = None,
-        table_column: Optional[Column] = None,
-    ) -> None:
-        self.text_format = text_format
-        self.justify: JustifyMethod = justify
-        self.style = style
-        self.markup = markup
-        self.highlighter = highlighter
-        super().__init__(table_column=table_column or Column(no_wrap=True))
-
-    def render(self, task: "Task") -> Text:
-        _text = self.text_format.format(task=task)
-        if self.markup:
-            text = Text.from_markup(_text, style=self.style, justify=self.justify)
-        else:
-            text = Text(_text, style=self.style, justify=self.justify)
-        if self.highlighter:
-            self.highlighter.highlight(text)
-        return text
-
-
-class BarColumn(ProgressColumn):
-    """Renders a visual progress bar.
-
-    Args:
-        bar_width (Optional[int], optional): Width of bar or None for full width. Defaults to 40.
-        style (StyleType, optional): Style for the bar background. Defaults to "bar.back".
-        complete_style (StyleType, optional): Style for the completed bar. Defaults to "bar.complete".
-        finished_style (StyleType, optional): Style for a finished bar. Defaults to "bar.finished".
-        pulse_style (StyleType, optional): Style for pulsing bars. Defaults to "bar.pulse".
-    """
-
-    def __init__(
-        self,
-        bar_width: Optional[int] = 40,
-        style: StyleType = "bar.back",
-        complete_style: StyleType = "bar.complete",
-        finished_style: StyleType = "bar.finished",
-        pulse_style: StyleType = "bar.pulse",
-        table_column: Optional[Column] = None,
-    ) -> None:
-        self.bar_width = bar_width
-        self.style = style
-        self.complete_style = complete_style
-        self.finished_style = finished_style
-        self.pulse_style = pulse_style
-        super().__init__(table_column=table_column)
-
-    def render(self, task: "Task") -> ProgressBar:
-        """Gets a progress bar widget for a task."""
-        return ProgressBar(
-            total=max(0, task.total) if task.total is not None else None,
-            completed=max(0, task.completed),
-            width=None if self.bar_width is None else max(1, self.bar_width),
-            pulse=not task.started,
-            animation_time=task.get_time(),
-            style=self.style,
-            complete_style=self.complete_style,
-            finished_style=self.finished_style,
-            pulse_style=self.pulse_style,
+        # If we've gotten to this point, then the origin isn't secure and we
+        # will not accept it as a valid location to search. We will however
+        # log a warning that we are ignoring it.
+        logger.warning(
+            "The repository located at %s is not a trusted or secure host and "
+            "is being ignored. If this repository is available via HTTPS we "
+            "recommend you use HTTPS instead, otherwise you may silence "
+            "this warning and allow it anyway with '--trusted-host %s'.",
+            origin_host,
+            origin_host,
         )
 
+        return False
 
-class TimeElapsedColumn(ProgressColumn):
-    """Renders time elapsed."""
+    def request(self, method: str, url: str, *args: Any, **kwargs: Any) -> Response:
+        # Allow setting a default timeout on a session
+        kwargs.setdefault("timeout", self.timeout)
+        # Allow setting a default proxies on a session
+        kwargs.setdefault("proxies", self.proxies)
 
-    def render(self, task: "Task") -> Text:
-        """Show time elapsed."""
-        elapsed = task.finished_time if task.finished else task.elapsed
-        if elapsed is None:
-            return Text("-:--:--", style="progress.elapsed")
-        delta = timedelta(seconds=int(elapsed))
-        return Text(str(delta), style="progress.elapsed")
-
-
-class TaskProgressColumn(TextColumn):
-    """Show task progress as a percentage.
-
-    Args:
-        text_format (str, optional): Format for percentage display. Defaults to "[progress.percentage]{task.percentage:>3.0f}%".
-        text_format_no_percentage (str, optional): Format if percentage is unknown. Defaults to "".
-        style (StyleType, optional): Style of output. Defaults to "none".
-        justify (JustifyMethod, optional): Text justification. Defaults to "left".
-        markup (bool, optional): Enable markup. Defaults to True.
-        highlighter (Optional[Highlighter], optional): Highlighter to apply to output. Defaults to None.
-        table_column (Optional[Column], optional): Table Column to use. Defaults to None.
-        show_speed (bool, optional): Show speed if total is unknown. Defaults to False.
-    """
-
-    def __init__(
-        self,
-        text_format: str = "[progress.percentage]{task.percentage:>3.0f}%",
-        text_format_no_percentage: str = "",
-        style: StyleType = "none",
-        justify: JustifyMethod = "left",
-        markup: bool = True,
-        highlighter: Optional[Highlighter] = None,
-        table_column: Optional[Column] = None,
-        show_speed: bool = False,
-    ) -> None:
-
-        self.text_format_no_percentage = text_format_no_percentage
-        self.show_speed = show_speed
-        super().__init__(
-            text_format=text_format,
-            style=style,
-            justify=justify,
-            markup=markup,
-            highlighter=highlighter,
-            table_column=table_column,
-        )
-
-    @classmethod
-    def render_speed(cls, speed: Optional[float]) -> Text:
-        """Render the speed in iterations per second.
-
-        Args:
-            task (Task): A Task object.
-
-        Returns:
-            Text: Text object containing the task speed.
-        """
-        if speed is None:
-            return Text("", style="progress.percentage")
-        unit, suffix = filesize.pick_unit_and_suffix(
-            int(speed),
-            ["", "×10³", "×10⁶", "×10⁹", "×10¹²"],
-            1000,
-        )
-        data_speed = speed / unit
-        return Text(f"{data_speed:.1f}{suffix} it/s", style="progress.percentage")
-
-    def render(self, task: "Task") -> Text:
-        if task.total is None and self.show_speed:
-            return self.render_speed(task.finished_speed or task.speed)
-        text_format = (
-            self.text_format_no_percentage if task.total is None else self.text_format
-        )
-        _text = text_format.format(task=task)
-        if self.markup:
-            text = Text.from_markup(_text, style=self.style, justify=self.justify)
-        else:
-            text = Text(_text, style=self.style, justify=self.justify)
-        if self.highlighter:
-            self.highlighter.highlight(text)
-        return text
-
-
-class TimeRemainingColumn(ProgressColumn):
-    """Renders estimated time remaining.
-
-    Args:
-        compact (bool, optional): Render MM:SS when time remaining is less than an hour. Defaults to False.
-        elapsed_when_finished (bool, optional): Render time elapsed when the task is finished. Defaults to False.
-    """
-
-    # Only refresh twice a second to prevent jitter
-    max_refresh = 0.5
-
-    def __init__(
-        self,
-        compact: bool = False,
-        elapsed_when_finished: bool = False,
-        table_column: Optional[Column] = None,
-    ):
-        self.compact = compact
-        self.elapsed_when_finished = elapsed_when_finished
-        super().__init__(table_column=table_column)
-
-    def render(self, task: "Task") -> Text:
-        """Show time remaining."""
-        if self.elapsed_when_finished and task.finished:
-            task_time = task.finished_time
-            style = "progress.elapsed"
-        else:
-            task_time = task.time_remaining
-            style = "progress.remaining"
-
-        if task.total is None:
-            return Text("", style=style)
-
-        if task_time is None:
-            return Text("--:--" if self.compact else "-:--:--", style=style)
-
-        # Based on https://github.com/tqdm/tqdm/blob/master/tqdm/std.py
-        minutes, seconds = divmod(int(task_time), 60)
-        hours, minutes = divmod(minutes, 60)
-
-        if self.compact and not hours:
-            formatted = f"{minutes:02d}:{seconds:02d}"
-        else:
-            formatted = f"{hours:d}:{minutes:02d}:{seconds:02d}"
-
-        return Text(formatted, style=style)
-
-
-class FileSizeColumn(ProgressColumn):
-    """Renders completed filesize."""
-
-    def render(self, task: "Task") -> Text:
-        """Show data completed."""
-        data_size = filesize.decimal(int(task.completed))
-        return Text(data_size, style="progress.filesize")
-
-
-class TotalFileSizeColumn(ProgressColumn):
-    """Renders total filesize."""
-
-    def render(self, task: "Task") -> Text:
-        """Show data completed."""
-        data_size = filesize.decimal(int(task.total)) if task.total is not None else ""
-        return Text(data_size, style="progress.filesize.total")
-
-
-class MofNCompleteColumn(ProgressColumn):
-    """Renders completed count/total, e.g. '  10/1000'.
-
-    Best for bounded tasks with int quantities.
-
-    Space pads the completed count so that progress length does not change as task progresses
-    past powers of 10.
-
-    Args:
-        separator (str, optional): Text to separate completed and total values. Defaults to "/".
-    """
-
-    def __init__(self, separator: str = "/", table_column: Optional[Column] = None):
-        self.separator = separator
-        super().__init__(table_column=table_column)
-
-    def render(self, task: "Task") -> Text:
-        """Show completed/total."""
-        completed = int(task.completed)
-        total = int(task.total) if task.total is not None else "?"
-        total_width = len(str(total))
-        return Text(
-            f"{completed:{total_width}d}{self.separator}{total}",
-            style="progress.download",
-        )
-
-
-class DownloadColumn(ProgressColumn):
-    """Renders file size downloaded and total, e.g. '0.5/2.3 GB'.
-
-    Args:
-        binary_units (bool, optional): Use binary units, KiB, MiB etc. Defaults to False.
-    """
-
-    def __init__(
-        self, binary_units: bool = False, table_column: Optional[Column] = None
-    ) -> None:
-        self.binary_units = binary_units
-        super().__init__(table_column=table_column)
-
-    def render(self, task: "Task") -> Text:
-        """Calculate common unit for completed and total."""
-        completed = int(task.completed)
-
-        unit_and_suffix_calculation_base = (
-            int(task.total) if task.total is not None else completed
-        )
-        if self.binary_units:
-            unit, suffix = filesize.pick_unit_and_suffix(
-                unit_and_suffix_calculation_base,
-                ["bytes", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"],
-                1024,
-            )
-        else:
-            unit, suffix = filesize.pick_unit_and_suffix(
-                unit_and_suffix_calculation_base,
-                ["bytes", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"],
-                1000,
-            )
-        precision = 0 if unit == 1 else 1
-
-        completed_ratio = completed / unit
-        completed_str = f"{completed_ratio:,.{precision}f}"
-
-        if task.total is not None:
-            total = int(task.total)
-            total_ratio = total / unit
-            total_str = f"{total_ratio:,.{precision}f}"
-        else:
-            total_str = "?"
-
-        download_status = f"{completed_str}/{total_str} {suffix}"
-        download_text = Text(download_status, style="progress.download")
-        return download_text
-
-
-class TransferSpeedColumn(ProgressColumn):
-    """Renders human readable transfer speed."""
-
-    def render(self, task: "Task") -> Text:
-        """Show data transfer speed."""
-        speed = task.finished_speed or task.speed
-        if speed is None:
-            return Text("?", style="progress.data.speed")
-        data_speed = filesize.decimal(int(speed))
-        return Text(f"{data_speed}/s", style="progress.data.speed")
-
-
-class ProgressSample(NamedTuple):
-    """Sample of progress for a given time."""
-
-    timestamp: float
-    """Timestamp of sample."""
-    completed: float
-    """Number of steps completed."""
+        # Dispatch the actual request
+        return super().request(method, url, *args, **kwargs)
 
 

@@ -1,1 +1,1 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+  qsin.snapshot: Transmits the full network state, used primarily for client initialization, re-connection, or 

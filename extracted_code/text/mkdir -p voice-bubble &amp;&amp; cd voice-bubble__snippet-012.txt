@@ -1,10 +1,3 @@
-HIGH PRIORITY (this week):
-1. Nail down ASD inclusion criteria + screening tools
-2. Write 1-page EEG preprocessing protocol 
-3. Record Goeckoh loopback latency on 3 target phones
-4. Contact local EEG lab for rate card/availability
-
-MEDIUM (pre-IRB):
-1. OSF pre-registration (full analysis plan)
-2. Pilot N=4 (1 session each) for effect size confirmation
-3. Clinician co-investigator (safety monitoring)
+1. Apply WASM fix → refresh → speak → lattice physics
+2. Add UI → toggle Monitor → **hear valence shaping** 
+3. Screenshot 3 states → clinician PDF done

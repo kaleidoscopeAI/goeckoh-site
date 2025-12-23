@@ -1,0 +1,6 @@
+"""An individual layout render."""
+
+region: Region
+render: List[List[Segment]]
+
+

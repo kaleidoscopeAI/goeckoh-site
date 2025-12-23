@@ -1,0 +1,3 @@
+AUDIO_AVAILABLE = False
+print("🔇 SoundDevice not available - Silent mode")
+

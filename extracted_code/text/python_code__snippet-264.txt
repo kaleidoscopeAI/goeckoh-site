@@ -1,0 +1,1 @@
+ABI = ABI.replace('cpython-', 'cp').split('-')[0]

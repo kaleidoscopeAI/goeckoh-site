@@ -1,0 +1,1 @@
+      if (requestCode == RECORD_REQUEST_CODE && grantResults.isNotEmpty()

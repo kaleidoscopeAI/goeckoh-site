@@ -1,0 +1,3 @@
+doc: Tkinter GUI for the KQBC agent.
+functions: _safe_bool, load_metrics, load_guidance, compute_behavior_summary, compute_meltdown_risk, run_gui
+classes: MetricsSnapshot, BehaviorSummary, MeltdownRisk, CompanionGUI

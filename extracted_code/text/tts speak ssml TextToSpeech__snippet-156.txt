@@ -1,0 +1,6 @@
+          ttsMap[lang] = OfflineTts(config)
+      }
+
+      // Init Whisper
+      whisper = Whisper(context)
+      val modelPath = File(context.filesDir, "whisper-

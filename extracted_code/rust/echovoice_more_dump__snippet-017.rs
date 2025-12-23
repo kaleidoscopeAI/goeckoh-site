@@ -1,1 +1,1 @@
-pub extern "system" fn Java_com_kaleidoscope_body_DeviceHAL_nativeVerifySecurity(
+fn try_write_sysfs(path: &str, value: String) -> Result<(), String> {

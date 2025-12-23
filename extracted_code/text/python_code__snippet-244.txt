@@ -1,0 +1,2 @@
+fsencode = os.fsencode
+fsdecode = os.fsdecode

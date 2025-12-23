@@ -1,0 +1,1 @@
+- Platforms like TensorFlow Distributed or PyTorch Lightning allow multi-node learning and efficient use of resources.

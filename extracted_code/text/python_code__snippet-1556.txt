@@ -1,0 +1,7 @@
+Option,
+"-v",
+"--verbose",
+dest="verbose",
+action="count",
+default=0,
+help="Give more output. Option is additive, and can be used up to 3 times.",

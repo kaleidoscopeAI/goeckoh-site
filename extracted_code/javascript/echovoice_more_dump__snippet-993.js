@@ -1,2 +1,11 @@
-+const app = express();
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+let p = Path::new(path);
+if p.exists() {
+    return Ok(());
+}
+if let Some(parent) = p.parent() {
+    fs::create_dir_all(parent)?;
+}
+let mut file = fs::File::create(path)?;
+let mut resp = reqwest::blocking::get(url)?;
+resp.copy_to(&mut file)?;
+Ok(())

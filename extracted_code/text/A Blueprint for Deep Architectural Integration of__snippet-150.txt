@@ -1,0 +1,4 @@
+- The **PLASTIC neural networks** and **weightless neural networks (WNNs)** described by James A. Anderson leverage RAM-based bitwise associative mechanisms for cognitive tasks.
+- The **CLARION architecture** blends symbolic and subsymbolic levels with bitwise feature activations controlling rule-based reasoning.
+- The **binarized neural networks (BNNs)** used for hardware-efficient deep learning provide a modern inspiration for bit-level transformer approximations.
+

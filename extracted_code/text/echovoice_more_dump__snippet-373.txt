@@ -1,1 +1,3 @@
-// simple Euler-like per-node update using engine deltas (deterministic small step)
+pub confidence: f64,  // 0.0 to 1.0
+pub can_process: bool,
+pub estimated_quality: f64, // 0.0 to 1.0

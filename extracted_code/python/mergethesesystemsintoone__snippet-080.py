@@ -1,10 +1,9 @@
-class PatternStrand:
-    sequence: List[str] = field(default_factory=list)
-    strength: float = 0.0
-    adaptation_rate: float = 0.1
+class Hypercube:
+    def __init__(self, dim: int = 512):
+        self.dim = dim
+        self.graph = nx.hypercube_graph(dim)
 
-    def mutate(self):
-        if random.random() < self.adaptation_rate and self.sequence:
-            idx = random.randint(0, len(self.sequence)-1)
-            self.sequence[idx] = ''.join(random.choice('ATCG') for _ in range(4))  # Real DNA-like mutation
+    def project(self, point: np.ndarray) -> np.ndarray:
+        pca = PCA(n_components=3)
+        return pca.fit_transform(point.reshape(1, -1))[0]
 

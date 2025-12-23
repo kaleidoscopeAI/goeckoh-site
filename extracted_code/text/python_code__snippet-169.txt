@@ -1,17 +1,9 @@
-class SSL_EXTRA_CERT_CHAIN_POLICY_PARA(Structure):
-    _fields_ = (
-        ("cbSize", DWORD),
-        ("dwAuthType", DWORD),
-        ("fdwChecks", DWORD),
-        ("pwszServerName", LPCWSTR),
+sign = 1 if sign_str == "+" else -1
+return timezone(
+    timedelta(
+        hours=sign * int(hour_str),
+        minutes=sign * int(minute_str),
     )
-
-
-class CERT_CHAIN_POLICY_PARA(Structure):
-    _fields_ = (
-        ("cbSize", DWORD),
-        ("dwFlags", DWORD),
-        ("pvExtraPolicyPara", c_void_p),
-    )
+)
 
 

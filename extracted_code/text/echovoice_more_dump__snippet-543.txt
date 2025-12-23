@@ -1,0 +1,24 @@
+# Parse arguments
+parser = argparse.ArgumentParser(description="QSIN Node")
+parser.add_argument("--config", help="Path to config JSON file")
+args = parser.parse_args()
+
+# Load config
+if args.config and os.path.exists(args.config):
+    with open(args.config, 'r') as f:
+        config_data = json.load(f)
+    config = QSINConfig.from_dict(config_data)
+else:
+    # Use default config
+    config = QSINConfig()
+
+# Create and run node
+node = QSINNode(config)
+
+try:
+    await node.run()
+except KeyboardInterrupt:
+    logger.info("Shutting down...")
+finally:
+    node.stop()
+

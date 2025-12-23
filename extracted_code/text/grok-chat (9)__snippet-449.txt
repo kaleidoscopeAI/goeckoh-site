@@ -1,0 +1,2 @@
+  model=config.model,
+  instruction="""You are a specialist in reading files. Your job is to run

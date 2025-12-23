@@ -1,0 +1,8 @@
+if not text:
+    return 0
+codes = [ord(c) for c in text]
+hist = [codes.count(i) for i in set(codes)]
+total = sum(hist)
+p = [h / total for h in hist]
+return -sum(pi * math.log(pi + 1e-10) for pi in p) if p else 0
+

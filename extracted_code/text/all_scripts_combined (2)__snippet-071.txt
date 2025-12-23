@@ -1,0 +1,5 @@
+"""High level behavior knobs parents can toggle."""
+
+correction_echo_enabled: bool = True
+
+

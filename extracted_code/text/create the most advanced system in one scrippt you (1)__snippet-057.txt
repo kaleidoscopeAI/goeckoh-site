@@ -1,0 +1,3 @@
+age_group == "younger" ~ 0.65,  # ICC 0.8-0.9
+age_group == "older" ~ 0.55,    # ICC 0.7-0.8  
+TRUE ~ 0.60                     # Mixed

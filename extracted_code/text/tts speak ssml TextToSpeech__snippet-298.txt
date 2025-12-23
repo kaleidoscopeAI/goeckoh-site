@@ -1,0 +1,5 @@
+FAILURE: Build completed with 2 failures.
+… +32 lines
+
+BUILD FAILED in 3s
+

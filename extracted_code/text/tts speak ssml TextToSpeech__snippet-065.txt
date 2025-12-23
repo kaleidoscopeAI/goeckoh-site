@@ -1,0 +1,5 @@
+          .replace(Regex("\\byour\\b", RegexOption.IGNORE_CASE), "my")
+          .replace(Regex("\\bhe\\b", RegexOption.IGNORE_CASE), "I")
+          .replace(Regex("\\bshe\\b", RegexOption.IGNORE_CASE), "I")
+          .replace(Regex("\\bthey\\b", RegexOption.IGNORE_CASE), "I")
+          .replace(Regex("\\bwant\\b", RegexOption.IGNORE_CASE), "want") //

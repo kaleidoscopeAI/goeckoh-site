@@ -1,0 +1,5 @@
+"class_table": UCS2BE_CLS,
+"class_factor": 6,
+"state_table": UCS2BE_ST,
+"char_len_table": UCS2BE_CHAR_LEN_TABLE,
+"name": "UTF-16BE",

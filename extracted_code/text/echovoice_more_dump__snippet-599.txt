@@ -1,0 +1,12 @@
+html = self.crawler.fetch("https://example.com")
+if html:
+    text = BeautifulSoup(html, 'html.parser').get_text()
+    for sent in re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', text):
+        context = analyze_text(sent)  # As before
+        image_url = await self.dual_engine.lookup_images(" ".join(context['topics'] + context['verbs']))
+        points = self.dual_engine.analyze_image(image_url)
+        # Update targets with points
+        for i, t in enumerate(partialTargets):
+            t.position = new THREE.Vector3(*points[i % len(points)])
+        # Apply verbs as before
+

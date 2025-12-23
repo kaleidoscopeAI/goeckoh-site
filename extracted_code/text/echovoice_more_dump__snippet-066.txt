@@ -1,1 +1,1 @@
-device-state and internal-state using cryptographic commitments + entropy checks. Put this in native/src/security.rs:
+This engine intelligently explores changes to the discrete bit-strings (state.E) using a simulated annealing algorithm. It randomly proposes flipping a single bit and then decides whether to accept the change based on two factors: the change in energy (delta) and the system's "temperature" (T). This allows the system to occasionally make "uphill" moves to escape bad solutions (local minima) and find truly optimal states.

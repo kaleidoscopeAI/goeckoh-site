@@ -1,2 +1,39 @@
-we have yet to test. that is crucial obviously. in order to do that we need to structure it all to run in real time from the start of one node. somehow we have to find a way to incorporate all of this into thebase foundation of said node as well as an "if this than that" triggering functionality. we dont want the first node to get shell shocked persay by having it try to accomplish everything all at once. unless we have perfection in our code the code could bottle neck the first node. ill need a mathmatically equation that is fool proof that the node can interpet along side the code in order to give it a binary understanding of its objective 
+class DynamicWeights:
+    """Adaptive weights that adjust based on conditions"""
+    growth: float = 0.3
+    efficiency: float = 0.3
+    knowledge: float = 0.4
+    adaptation_rate: float = 0.1
+    history: Dict[str, List[float]] = field(default_factory=lambda: {
+        'growth': [],
+        'efficiency': [],
+        'knowledge': []
+    })
+
+    def adapt_to_conditions(self, environment_state: Dict, node_state: Dict):
+        """Dynamically adjust weights based on conditions"""
+        # Calculate pressure factors
+        energy_pressure = 1 - (node_state['energy'] / node_state['max_energy'])
+        growth_pressure = 1 - len(node_state['connections']) / 10
+        knowledge_pressure = 1 - len(node_state['knowledge_base']) / 100
+
+        # Adjust weights based on pressures
+        self.efficiency = min(0.6, self.efficiency + energy_pressure * self.adaptation_rate)
+        self.growth = min(0.6, self.growth + growth_pressure * self.adaptation_rate)
+        self.knowledge = min(0.6, self.knowledge + knowledge_pressure * self.adaptation_rate)
+
+        # Normalize weights
+        total = self.growth + self.efficiency + self.knowledge
+        self.growth /= total
+        self.efficiency /= total
+        self.knowledge /= total
+
+        # Record history
+        self._record_weights()
+
+    def _record_weights(self):
+        """Record weight history for analysis"""
+        self.history['growth'].append(self.growth)
+        self.history['efficiency'].append(self.efficiency)
+        self.history['knowledge'].append(self.knowledge)
 

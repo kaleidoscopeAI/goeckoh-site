@@ -1,2 +1,1 @@
-def replaceHTMLEntity(): ...
-
+    from functools import cached_property

@@ -1,2 +1,3 @@
-const candidates = samplePrioritized(episodicBuffer, numSamples);
-for (const item of candidates) {
+export function computeModulators(node: NodeState): Modulators {
+const s = node.species;
+const m = s.length;

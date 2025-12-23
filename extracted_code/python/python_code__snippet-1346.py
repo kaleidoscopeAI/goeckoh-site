@@ -1,10 +1,45 @@
-from pip._vendor.packaging.requirements import Requirement
-from pip._vendor.pyproject_hooks import BuildBackendHookCaller
-from pip._vendor.tenacity import retry, stop_after_delay, wait_fixed
+"""
+Try to suggest a semantic form for a version for which
+_suggest_normalized_version couldn't come up with anything.
+"""
+result = s.strip().lower()
+for pat, repl in _REPLACEMENTS:
+    result = pat.sub(repl, result)
+if not result:
+    result = '0.0.0'
 
-from pip import __version__
-from pip._internal.exceptions import CommandError, ExternallyManagedEnvironment
-from pip._internal.locations import get_major_minor_version
-from pip._internal.utils.compat import WINDOWS
-from pip._internal.utils.virtualenv import running_under_virtualenv
+# Now look for numeric prefix, and separate it out from
+# the rest.
+# import pdb; pdb.set_trace()
+m = _NUMERIC_PREFIX.match(result)
+if not m:
+    prefix = '0.0.0'
+    suffix = result
+else:
+    prefix = m.groups()[0].split('.')
+    prefix = [int(i) for i in prefix]
+    while len(prefix) < 3:
+        prefix.append(0)
+    if len(prefix) == 3:
+        suffix = result[m.end():]
+    else:
+        suffix = '.'.join([str(i) for i in prefix[3:]]) + result[m.end():]
+        prefix = prefix[:3]
+    prefix = '.'.join([str(i) for i in prefix])
+    suffix = suffix.strip()
+if suffix:
+    # import pdb; pdb.set_trace()
+    # massage the suffix.
+    for pat, repl in _SUFFIX_REPLACEMENTS:
+        suffix = pat.sub(repl, suffix)
+
+if not suffix:
+    result = prefix
+else:
+    sep = '-' if 'dev' in suffix else '+'
+    result = prefix + sep + suffix
+if not is_semver(result):
+    result = None
+return result
+
 

@@ -1,3 +1,1 @@
-from flask import Flask, render_template, request, jsonify, send_from_directory, redirect, url_for
-from werkzeug.utils import secure_filename
-
+Pattern: Implement a function optimize_decision(weights) that builds a QUBO from the current affective/recall state, runs annealing, and

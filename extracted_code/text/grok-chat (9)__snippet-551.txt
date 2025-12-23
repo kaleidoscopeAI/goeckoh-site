@@ -1,0 +1,4 @@
+       snr|latency|tts|asr|sherpa|coqui|xtts in .
+Search rg --files -g '*speech_mirror*' -g '*gcl_gate*' -g '*mirror*' backend
+Read speech_mirror.py
+

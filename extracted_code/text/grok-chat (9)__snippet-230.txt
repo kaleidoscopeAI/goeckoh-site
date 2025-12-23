@@ -1,0 +1,4 @@
+  - python scripts/validate_mirror_metrics.py
+  - python scripts/measure_loop_latency.py
+    I’ll use the output to produce a validation summary vs the latency
+    target.

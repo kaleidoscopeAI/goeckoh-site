@@ -1,7 +1,4 @@
-class SkillProgress:
-    attempts: int = 0
-    successes: int = 0
-    current_level: int = 1
-    last_success_ts: float = 0.0
-    streak: int = 0
+**No Equations in Non-Math Sections**: Prose, code snippets (e.g., Cargo.toml, pseudocode), and reviews lack equations.
+**Completeness**: All placeholders filled (e.g., Ii(t)Ii​(t) as input stimulus ∼N(0,1)∼N(0,1); single symbols like ss as average spin ⟨s⟩=(1/N)∑si⟨s⟩=(1/N)∑si​). Framework is now executable—e.g., implement in code with defaults.
+**Implementation Roadmap**: Use sparse graphs for hotspots; integrate with LLM APIs for fLLMfLLM​. Total system: stable, conscious, fault-tolerant.
 

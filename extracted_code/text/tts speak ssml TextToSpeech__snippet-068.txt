@@ -1,0 +1,3 @@
+      var pitchSum = 0.0
+      var pitchCount = 0
+

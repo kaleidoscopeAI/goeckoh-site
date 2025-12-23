@@ -1,0 +1,10 @@
+A sophisticated dark theme with a professional research lab aesthetic
+
+Real physics-based simulation of the crystal lattice with spring forces
+
+Advanced metrics visualization with proper calculations
+
+Functional data export and console logging
+
+Improved visualization with Three.js
+

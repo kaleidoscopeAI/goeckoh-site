@@ -1,2 +1,12 @@
-Attach to: class Swarm: (assuming self.agents is a list of EvolutionaryAgent objects).
+Graph node ID handling:
+In src/graph.rs, replace id with idx in the add_node method.
+
+CrystalError variants:
+Replace non-existent Data variant with appropriate error variants like msg.
+
+Unreachable code:
+Remove the unreachable code after todo!() macro in src/data.rs.
+
+Atomic float usage:
+Fix the atomic float operation in src/optimizer.rs:
 

@@ -1,16 +1,35 @@
+import itertools
+import numpy as np
 from vector import Vector
 
-class EmotionalState:
-    def __init__(self, valence=0.0, arousal=0.0, coherence=0.0):
-        self.valence = valence
-        self.arousal = arousal
-        self.coherence = coherence
+class E8Lattice:
+    def __init__(self):
+        self.roots = self.generate_roots()
 
-class CompleteNode:
-    def __init__(self, id, position: Vector, energy=0.0, awareness=0.0, knowledge=0.0, emotional_state=None):
-        self.id = id
-        self.position = position
-        self.energy = energy
-        self.awareness = awareness
-        self.knowledge = knowledge
-        self.emotional_state = emotional_state or EmotionalState()
+    def generate_roots(self):
+        roots = []
+        for i, j in itertools.combinations(range(8), 2):
+            for s1 in [-1, 1]:
+                for s2 in [-1, 1]:
+                    root = [0]*8
+                    root[i] = s1
+                    root[j] = s2
+                    roots.append(Vector(root))
+
+        for signs in itertools.product([-0.5, 0.5], repeat=8):
+            if sum(1 for s in signs if s < 0) % 2 == 0:
+                roots.append(Vector(signs))
+
+        return roots
+
+    def reflect(self, v: Vector, alpha: Vector) -> Vector:
+        dot_va = v.dot(alpha)
+        dot_aa = alpha.dot(alpha)
+        scale = 2 * dot_va / dot_aa
+        return v - (alpha * scale)
+
+    def mirror_state(self, vector_3d: Vector) -> Vector:
+        vector_8d = Vector(list(vector_3d.components) + [0.0] * 5)
+        root = np.random.choice(self.roots)
+        reflected = self.reflect(vector_8d, root)
+        return Vector(reflected.components[:3])

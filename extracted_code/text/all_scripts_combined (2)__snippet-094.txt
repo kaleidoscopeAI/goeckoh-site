@@ -1,0 +1,8 @@
+"""Outputs of inference for the Automatic Speech Recognition task"""
+
+text: str
+"""The recognized text."""
+chunks: Optional[List[AutomaticSpeechRecognitionOutputChunk]] = None
+"""When returnTimestamps is enabled, chunks contains a list of audio chunks identified by
+the model.
+"""

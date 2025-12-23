@@ -1,0 +1,3 @@
+- Cognitive state $S_k \in \mathbb{R}^n$ is quantized to fixed-bit vectors $\tilde{S_k} \in \{0,1\}^{n \times m}$ (e.g., 16-bit fixed point per feature).
+- Curiosity tension is simplified to a bit $b_k \in \{0,1\}$ activated by thresholded weighted sum with performance feedback:
+

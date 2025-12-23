@@ -1,1 +1,2 @@
-from an audio signal. It acts as the "limbic system" interface, translating
+## Building from Source
+

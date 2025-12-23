@@ -1,2 +1,1 @@
-from .structures import LookupDict
-
+    from typing import Literal, Protocol, runtime_checkable

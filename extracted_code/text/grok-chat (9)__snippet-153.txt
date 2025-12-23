@@ -1,0 +1,2 @@
+records, cross-correlates, saves recording). Run it to get hardware
+round‑trip latency.

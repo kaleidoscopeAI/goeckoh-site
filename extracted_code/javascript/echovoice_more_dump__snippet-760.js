@@ -1,2 +1,1 @@
-const N = 200;
-const nodes = Array.from({ length: N }).map((_,i) => ({ id: i, Ki: (Math.random() - 0.5) * 0.2 }));
+for (let j = 0; j < block; j++) out[i * block + j] = mat[i][j];

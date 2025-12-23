@@ -1,6 +1,6 @@
-from pip._internal.utils.subprocess import runner_with_spinner_message
-from pip._internal.utils.temp_dir import TempDirectory
+"""Wait strategy that doesn't wait at all before retrying."""
+
+def __init__(self) -> None:
+    super().__init__(0)
 
 
-def generate_metadata(
-    build_env: BuildEnvironment, backend: BuildBackendHookCaller, details: str

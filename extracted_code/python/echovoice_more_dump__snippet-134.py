@@ -1,10 +1,10 @@
 package com.kaleidoscope.body
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Paint
+import android.opengl.GLES20
+import android.opengl.GLSurfaceView
 import android.util.AttributeSet
-import android.view.View
-import kotlin.math.cos
+import javax.microedition.khronos.egl.EGLConfig
+import javax.microedition.khronos.opengles.GL10
 import kotlin.math.sin
-import kotlin.random.Random
-class LivingCubeView @JvmOverloads constructor(
+class GLCubeView(context: Context, attrs: AttributeSet? = null) : GLSurfaceView(context, attrs) {
+private val renderer: CubeRenderer

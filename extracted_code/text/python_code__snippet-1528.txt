@@ -1,0 +1,5 @@
+r"^git version "  # Prefix.
+r"(\d+)"  # Major.
+r"\.(\d+)"  # Dot, minor.
+r"(?:\.(\d+))?"  # Optional dot, patch.
+r".*$"  # Suffix, including any pre- and post-release segments we don't care about.

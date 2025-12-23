@@ -1,0 +1,7 @@
+vertices: np.ndarray,
+profile: VoiceProfile,
+attempt_feat: AttemptFeatures,
+t_idx: int,
+layout: Optional[Dict[str, Any]] = None,
+*,
+base_radius: Optional[float] = None,

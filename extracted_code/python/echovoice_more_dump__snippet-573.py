@@ -1,1 +1,1 @@
-Wi,j (t) → this.W[i][j] (from ProjectionService)
+(Aᵏ)ᵢⱼ = # of k-paths from i to j

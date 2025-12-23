@@ -1,1 +1,0 @@
-- Verify with simulations using numerical integrators or discrete update rules.

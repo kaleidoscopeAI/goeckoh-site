@@ -1,1 +1,1 @@
-for (let k = 0; k < m; k++) out[k] = 0;
+for (let i = 0; i < N; i++) this.S[i] = Sbackup[i] + k1[i] * (dt / 2);

@@ -1,0 +1,4 @@
+if (arr) {
+    free(arr->data);
+    free(arr);
+}

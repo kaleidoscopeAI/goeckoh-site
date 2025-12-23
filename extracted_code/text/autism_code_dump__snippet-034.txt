@@ -1,0 +1,8 @@
+(r"\byou're\b", "I'm"),
+(r"\byou are\b", "I am"),
+(r"\byou've\b", "I've"),
+(r"\byou will\b", "I will"),
+(r"\byou'll\b", "I'll"),
+(r"\byou\b", "I"),
+(r"\byour\b", "my"),
+(r"\byours\b", "mine"),

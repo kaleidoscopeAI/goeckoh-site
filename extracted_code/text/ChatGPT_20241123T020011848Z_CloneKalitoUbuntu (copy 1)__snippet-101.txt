@@ -1,0 +1,1 @@
+- Create scenarios where mirrored nodes must adapt to a dynamic environment collectively.

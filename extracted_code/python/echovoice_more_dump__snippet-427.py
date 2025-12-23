@@ -1,1 +1,1 @@
-async def autonomous_loop():
+Update nodeState.species from this.S (or maintain direct reference).

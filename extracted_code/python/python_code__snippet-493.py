@@ -1,4 +1,1 @@
-def retry(func: WrappedFn) -> WrappedFn:
-    ...
-
-
+    from typing import Protocol

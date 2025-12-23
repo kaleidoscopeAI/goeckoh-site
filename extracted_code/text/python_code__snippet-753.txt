@@ -1,0 +1,6 @@
+_fields_ = (
+    ("dwType", DWORD),
+    ("Usage", CERT_ENHKEY_USAGE),
+)
+
+

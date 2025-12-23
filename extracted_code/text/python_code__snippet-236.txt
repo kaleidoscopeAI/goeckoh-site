@@ -1,12 +1,2 @@
-class PsiState:
-    """
-    Unified state Ψ_t = (world, body, self_model, history, emotion)
-    Echo V4 Core integration
-    """
-    t: int = 0
-    world: Dict[str, Any] = field(default_factory=dict)
-    body: Dict[str, float] = field(default_factory=dict)
-    self_model: Dict[str, Any] = field(default_factory=dict)
-    history_hashes: List[int] = field(default_factory=list)
-    emotion: np.ndarray = field(default_factory=lambda: np.zeros(5, dtype=np.float32))
+               get_executable, get_platform, in_venv)
 

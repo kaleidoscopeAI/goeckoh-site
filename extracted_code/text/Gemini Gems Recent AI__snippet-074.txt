@@ -1,0 +1,2 @@
+Output('molecular-cube', 'figure'),
+Input('cube-data', 'children') #Cube data stored as JSON

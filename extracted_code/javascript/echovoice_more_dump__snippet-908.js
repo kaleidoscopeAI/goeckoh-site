@@ -1,3 +1,2 @@
-+ for (let i = 0; i < D; i++) v[i] /= nrm;
-+ let lambdaOld = 0;
-+ for (let it = 0; it < maxIter; it++) {
+• Superposed OU Processes: A system can be modeled as a sum or combination of multiple independent OU processes, each potentially having different parameters ((\theta_i, \mu_i, \sigma_i)).24 This allows for modeling complex dynamics where different components or dimensions of the Cube adapt at different rates or towards different equilibrium points, reflecting a multifaceted adaptive landscape. Parameter estimation for such superposed models often involves analyzing the autocorrelation function of the observed time series.24
+• Lévy-Driven OU Processes: Replacing the Brownian motion (dW_t) with a Lévy process (dL_t) allows for the incorporation of jumps or sudden shifts in the system's state.25 This could model abrupt changes in understanding, paradigm shifts, or the impact of significant, unexpected events in the data stream. Gamma processes and Inverse-Gaussian processes are examples of Lévy processes used in this context.25

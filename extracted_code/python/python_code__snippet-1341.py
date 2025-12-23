@@ -1,17 +1,10 @@
-import errno
-import itertools
-import logging
-import os.path
-import tempfile
-import traceback
-from contextlib import ExitStack, contextmanager
-from pathlib import Path
-from typing import (
-    Any,
-    Callable,
-    Dict,
-    Generator,
-    List,
-    Optional,
-    TypeVar,
-    Union,
+# In Python 3.6, _frozen_importlib -> _frozen_importlib_external
+try:
+    import _frozen_importlib_external as _fi
+except ImportError:
+    import _frozen_importlib as _fi
+_finder_registry[_fi.SourceFileLoader] = ResourceFinder
+_finder_registry[_fi.FileFinder] = ResourceFinder
+# See issue #146
+_finder_registry[_fi.SourcelessFileLoader] = ResourceFinder
+del _fi

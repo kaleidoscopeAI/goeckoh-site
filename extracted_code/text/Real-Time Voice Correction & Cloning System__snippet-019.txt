@@ -1,0 +1,2 @@
+name="VoiceCoordinator",
+sub_agents=[correction_agent]

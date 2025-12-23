@@ -1,0 +1,4 @@
+phrase = loop.record_phrase(args.text, args.seconds)
+print(f"Recorded phrase '{phrase.text}' as {phrase.audio_file}")
+
+

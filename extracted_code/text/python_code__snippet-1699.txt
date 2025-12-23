@@ -1,0 +1,3 @@
+return float(np.clip(x, lo, hi))
+
+

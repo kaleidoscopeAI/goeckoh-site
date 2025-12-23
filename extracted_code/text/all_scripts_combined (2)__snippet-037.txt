@@ -1,1 +1,2 @@
-This class is designed to be a simple, direct interface to the TTS engine,
+# <REDACTED: potential secret detected>
+

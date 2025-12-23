@@ -1,0 +1,4 @@
+585          self._asr_helper = None
+586 +        self._asr_backend = None  # 'sherpa' or 'vosk'
+587
+

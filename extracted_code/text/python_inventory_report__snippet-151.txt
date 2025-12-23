@@ -1,0 +1,2 @@
+functions: mock_extract_embedding
+classes: DefaultAudioConfig, DefaultModelPaths, DefaultConfig, VoiceCrystal

@@ -1,4 +1,4 @@
-    from knowledge_pool import EnhancedSharedKnowledgePool
-  File "/home/studio/Desktop/node-demo/knowledge_pool.py", line 3, in <module>
-    from knowledge_pool import EnhancedSharedKnowledgePool
-ImportError: cannot import name 'EnhancedSharedKnowledgePool' from partially initialized module 'knowledge_pool' (most likely due to a circular import) (/home/studio/Desktop/node-demo/knowledge_pool.py)
+I'll remake the `knowledge_pool.py`, `reflection_analysis.py`, and `core_demo.py` from scratch with the shared functionality separated out as discussed. This should eliminate the circular dependency and ensure smooth functionality.
+
+
+

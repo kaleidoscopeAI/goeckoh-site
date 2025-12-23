@@ -1,0 +1,29 @@
+"""
+Return whether a built InstallRequirement can be stored in the persistent
+wheel cache, assuming the wheel cache is available, and _should_build()
+has determined a wheel needs to be built.
+"""
+if req.editable or not req.source_dir:
+    # never cache editable requirements
+    return False
+
+if req.link and req.link.is_vcs:
+    # VCS checkout. Do not cache
+    # unless it points to an immutable commit hash.
+    assert not req.editable
+    assert req.source_dir
+    vcs_backend = vcs.get_backend_for_scheme(req.link.scheme)
+    assert vcs_backend
+    if vcs_backend.is_immutable_rev_checkout(req.link.url, req.source_dir):
+        return True
+    return False
+
+assert req.link
+base, ext = req.link.splitext()
+if _contains_egg_info(base):
+    return True
+
+# Otherwise, do not cache.
+return False
+
+

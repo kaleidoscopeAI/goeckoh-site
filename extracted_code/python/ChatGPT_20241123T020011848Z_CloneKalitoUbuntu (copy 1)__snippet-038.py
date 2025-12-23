@@ -1,63 +1,42 @@
-# enhanced_adaptive_node.py
-
-from dataclasses import dataclass, field
-from typing import Dict, List, Tuple
+import uuid
 import time
-import numpy as np
-import networkx as nx
-from sklearn.cluster import DBSCAN
-from emotional_profile import EmotionalProfile
-from reflection_analysis import SelfReflection
-from resource_manager import ResourceManager
-from multi_factor_confidence import MultiFactorConfidence
-from shared_knowledge_pool import EnhancedSharedKnowledgePool
+import random
 
-@dataclass
-class EnhancedAdaptiveNode:
-    """Unified node with adaptive, reflective, and emotional intelligence."""
-    id: str
-    emotional_profile: EmotionalProfile = field(default_factory=EmotionalProfile)
-    self_reflection: SelfReflection = field(default_factory=SelfReflection)
-    resource_manager: ResourceManager = field(default_factory=ResourceManager)
-    confidence_calculator: MultiFactorConfidence = field(default_factory=MultiFactorConfidence)
-    shared_pool: EnhancedSharedKnowledgePool = field(default_factory=EnhancedSharedKnowledgePool)
-    energy: float = 100.0
-    max_energy: float = 100.0
-    action_log: List[Dict] = field(default_factory=list)
+class Node:
+    def __init__(self):
+        self.id = str(uuid.uuid4())
+        self.maturity = 0.01
+        self.energy = 1.0
+        self.knowledge = {}
+        self.connections = set()
+        self.generation = 0
 
-    def get_state(self) -> Dict:
-        """Provide current state for analysis."""
+    def learn(self, data):
+        """Learn from given data and grow maturity."""
+        knowledge_gain = len(data) * 0.01
+        self.knowledge.update(data)
+        self.maturity += knowledge_gain
+        self.energy -= knowledge_gain * 0.05
+
+    def share_resources(self, target_node):
+        """Share resources like energy or knowledge."""
+        energy_transfer = min(0.1, self.energy * 0.2)
+        if self.energy > energy_transfer:
+            self.energy -= energy_transfer
+            target_node.energy += energy_transfer
+
+    def adapt(self):
+        """Adapt energy usage based on maturity."""
+        self.energy -= 0.01 * self.maturity
+        if self.energy < 0.2:
+            self.energy += random.uniform(0.1, 0.3)  # Simulate optimization
+
+    def status(self):
         return {
-            'energy': self.energy,
-            'emotional_state': self.emotional_profile.current_state.name,
-            'knowledge_base': len(self.shared_pool.patterns)
+            "ID": self.id,
+            "Maturity": self.maturity,
+            "Energy": self.energy,
+            "Knowledge Size": len(self.knowledge),
+            "Connections": len(self.connections)
         }
-
-    def process_input(self, data: Dict, context: Dict) -> Dict:
-        """Integrated processing for all components."""
-        # Update emotional state
-        self.emotional_profile.update_state(context)
-
-        # Allocate resources based on current state
-        allocated_energy = self.resource_manager.allocate_resources(self.energy, 'active', self.emotional_profile.current_state)
-        
-        # Calculate confidence of data
-        confidence = self.confidence_calculator.calculate_confidence(data, context)
-
-        # Store action result
-        result = {
-            'mode': 'active',
-            'energy_used': allocated_energy,
-            'confidence': confidence,
-            'emotional_state': self.emotional_profile.current_state.name
-        }
-        self.action_log.append(result)
-
-        # Periodic reflection and knowledge update
-        if len(self.action_log) >= 5:
-            insights = self.self_reflection.reflect(self.action_log, self.get_state())
-            self.shared_pool.add_insight(insights)
-            self.action_log.clear()
-
-        return result
 

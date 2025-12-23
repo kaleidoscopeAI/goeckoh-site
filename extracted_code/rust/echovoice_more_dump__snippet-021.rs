@@ -1,1 +1,1 @@
-pub fn owner_write_sysfs(path: &str, value: &str) -> Result<(), String> {
+pub extern "system" fn Java_com_kaleidoscope_body_DeviceHAL_nativeOwnerWriteSysfs(

@@ -1,1 +1,1 @@
-def transcribe(self, audio: np.ndarray) -> str:
+def listening_loop(self):

@@ -1,0 +1,15 @@
+// Deterministic Kiki spikes
+float kiki = uSpikeAmount * hash3d(position * 10.0);
+
+// Idle jitter
+float jitter = 0.5 * sin(uTime * 13.0) + 0.5 * sin(uTime * 23.0);
+
+// Total displacement
+float offset = aRadius + 0.1 * jitter + kiki;
+
+vec3 newPos = position + normal * offset;
+
+vRoughness = uRoughness;
+vMetalness = uMetalness;
+
+gl_Position = projectionMatrix * modelViewMatrix * vec4(newPos, 1.0);

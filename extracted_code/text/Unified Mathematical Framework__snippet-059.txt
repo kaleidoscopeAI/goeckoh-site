@@ -1,0 +1,8 @@
+STT: faster-whisper tiny.en (CPU-only, best accuracy)
+Text correction: LanguageTool + custom articulation fixes
+Voice cloning/synthesis: Coqui TTS / XTTS-v2 with prosody transfer (best quality 2025)
+Audio comparison: DTW + Librosa feature matching for mastery detection
+VAD: Silero VAD (autism-tuned thresholds)
+GUI: KivyMD (native, beautiful, works on Windows/macOS/Linux/Android/iOS/Raspberry Pi)
+All other modules (ABA, routines, emotion, safety) integrated but secondary to the core echo loop
+

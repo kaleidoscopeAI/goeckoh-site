@@ -1,0 +1,4 @@
+- Combines results: "Hot dog" is stored as "food item" based on textual and visual alignment.
+
+
+

@@ -1,0 +1,8 @@
+      dispatcher.addAudioProcessor(pitchShift)
+
+      // Adjust volume
+      val gain = prosody.volume * 2.0
+      val gainProcessor = GainProcessor(gain)
+      dispatcher.addAudioProcessor(gainProcessor)
+
+      val processedBuffer = FloatArray(samples.size * 2) // Extra space for

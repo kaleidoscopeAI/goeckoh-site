@@ -1,0 +1,1 @@
+verification paths for STT/TTS/LLM assets.

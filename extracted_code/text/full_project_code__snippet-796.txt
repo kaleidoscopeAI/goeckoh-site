@@ -1,0 +1,26 @@
+MachineState.ERROR,MachineState.START,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,     12,   10,#00-07
+     9,     11,     8,     7,     6,     5,     4,    3,#08-0f
+MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,#10-17
+MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,#18-1f
+MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,#20-27
+MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,#28-2f
+MachineState.ERROR,MachineState.ERROR,     5,     5,     5,     5,MachineState.ERROR,MachineState.ERROR,#30-37
+MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,#38-3f
+MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,     5,     5,     5,MachineState.ERROR,MachineState.ERROR,#40-47
+MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,#48-4f
+MachineState.ERROR,MachineState.ERROR,     7,     7,     7,     7,MachineState.ERROR,MachineState.ERROR,#50-57
+MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,#58-5f
+MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,     7,     7,MachineState.ERROR,MachineState.ERROR,#60-67
+MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,#68-6f
+MachineState.ERROR,MachineState.ERROR,     9,     9,     9,     9,MachineState.ERROR,MachineState.ERROR,#70-77
+MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,#78-7f
+MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,     9,MachineState.ERROR,MachineState.ERROR,#80-87
+MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,#88-8f
+MachineState.ERROR,MachineState.ERROR,    12,    12,    12,    12,MachineState.ERROR,MachineState.ERROR,#90-97
+MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,#98-9f
+MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,    12,MachineState.ERROR,MachineState.ERROR,#a0-a7
+MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,#a8-af
+MachineState.ERROR,MachineState.ERROR,    12,    12,    12,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,#b0-b7
+MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,#b8-bf
+MachineState.ERROR,MachineState.ERROR,MachineState.START,MachineState.START,MachineState.START,MachineState.START,MachineState.ERROR,MachineState.ERROR,#c0-c7
+MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR #c8-cf

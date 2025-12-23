@@ -1,2 +1,2 @@
-python3 /home/studio/Desktop/node-demo/resource_management_demo.py
+python3 /home/studio/Desktop/node-demo/adaptive_threshold_demo.py
 

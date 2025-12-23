@@ -1,17 +1,15 @@
-class SystemMetrics:
-    """Enhanced metrics with ABA and autism-specific measures"""
-    gcl: float = 1.0
-    stress: float = 0.0
-    life_intensity: float = 0.0
-    mode: str = "FLOW"
-    emotional_coherence: float = 1.0
-    quantum_coherence: float = 1.0
-    memory_stability: float = 1.0
-    hardware_coupling: float = 0.0
-    # ABA-specific metrics
-    aba_success_rate: float = 0.0
-    skill_mastery_level: int = 1
-    sensory_regulation: float = 1.0
-    processing_pause_respect: float = 1.0
-    timestamp: float = field(default_factory=time.time)
+if ' ' in executable:
+    # make sure we quote only the executable in case of env
+    # for example /usr/bin/env "/dir with spaces/bin/jython"
+    # instead of "/usr/bin/env /dir with spaces/bin/jython"
+    # otherwise whole
+    if executable.startswith('/usr/bin/env '):
+        env, _executable = executable.split(' ', 1)
+        if ' ' in _executable and not _executable.startswith('"'):
+            executable = '%s "%s"' % (env, _executable)
+    else:
+        if not executable.startswith('"'):
+            executable = '"%s"' % executable
+return executable
+
 

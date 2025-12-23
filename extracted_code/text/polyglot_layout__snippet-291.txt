@@ -1,0 +1,5 @@
+  t = m.get("tension", 0.0)
+  if t < 0.015: return {"k_scale": 1.08, "rest_scale": 0.98}
+  if t > 0.050: return {"k_scale": 0.95, "rest_scale": 1.03}
+  return {"k_scale": 1.00, "rest_scale": 1.00}
+

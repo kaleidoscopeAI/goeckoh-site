@@ -1,0 +1,4 @@
+Backend: Save the Python code as app.py. Install the necessary libraries: pip install Flask rdkit-pypi. Run: python app.py.
+
+Frontend: Save the JavaScript code as App.js (or in a React project). You'll need a React development environment set up (Create React App is the easiest). Run: npm start.
+

@@ -1,19 +1,11 @@
-  const suggestions = await llm.suggest(reflections);
-  for (const id in suggestions) {
-    const delta = suggestions[id];
-    const predictedDE = Math.random() * 0.2 - 0.1; // Mock ΔE; real: finite diff
-    if (predictedDE > 0) {
-      // Flag for speculation
-      const snap = engine.snapshot();
-      const specResp = await fetch(process.env.SPEC_WORKER_URL + '/speculate', {
-        method: 'POST',
-        body: JSON.stringify({ snapshot: snap, target_node: id, suggested_delta: delta })
-      });
-      const { fold_delta, accepted } = await specResp.json();
-      if (accepted) {
-        applyDelta(id, fold_delta); // Function to apply clipped delta
-      }
-    } else {
-      applyDelta(id, delta);
-    }
-  }
+export function computeCovariance(data: number[][]): number[][] {
+  if (data.length < 2) return data[0].map(() => data[0].map(() => 0));
+  const dim = data[0].length;
+  const mean = new Array(dim).fill(0);
+  data.forEach(row => row.forEach((v, j) => mean[j] += v / data.length));
+  let cov = new Array(dim).fill(0).map(() => new Array(dim).fill(0));
+  data.forEach(row => {
+    const dev = row.map((v, j) => v - mean[j]);
+    cov = matrixAdd(cov, outer(dev, dev));
+  });
+  return matrixScale(cov, 1 / (data.length - 1));

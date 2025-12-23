@@ -1,1 +1,1 @@
-for (let i = 0; i < this.externalInputs.length; i++) this.externalInputs[i] *= 0.9;
+for (let k = 0; k < r.idx.length; k++) {

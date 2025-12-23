@@ -1,14 +1,17 @@
-from io import BytesIO
-import logging
-import os
-import re
-import struct
-import sys
-import time
-from zipfile import ZipInfo
+    from pip._vendor import requests
 
-from .compat import sysconfig, detect_encoding, ZipFile
-from .resources import finder
-from .util import (FileOperator, get_export_entry, convert_path,
-                   get_executable, get_platform, in_venv)
+    from pip._vendor.cachecontrol.cache import BaseCache
+    from pip._vendor.cachecontrol.controller import CacheController
+    from pip._vendor.cachecontrol.heuristics import BaseHeuristic
+    from pip._vendor.cachecontrol.serialize import Serializer
 
+
+def CacheControl(
+    sess: requests.Session,
+    cache: BaseCache | None = None,
+    cache_etags: bool = True,
+    serializer: Serializer | None = None,
+    heuristic: BaseHeuristic | None = None,
+    controller_class: type[CacheController] | None = None,
+    adapter_class: type[CacheControlAdapter] | None = None,
+    cacheable_methods: Collection[str] | None = None,

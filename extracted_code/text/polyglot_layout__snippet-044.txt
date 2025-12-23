@@ -1,0 +1,7 @@
+  ring/consensus.db:
+
+       snapshots(ts TEXT, source TEXT, phi REAL, gen INTEGER, conscious INTEGER)
+
+       consensus(ts TEXT, phi REAL)
+
+

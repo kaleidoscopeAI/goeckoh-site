@@ -1,0 +1,4 @@
+"""Unsupported python version according to Requires-Python package
+metadata."""
+
+

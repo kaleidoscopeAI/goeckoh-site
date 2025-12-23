@@ -1,1 +1,3 @@
-Selecting previously unselected package python3-setuptools-whl.
+E: Unable to locate package rocm-dkms
+E: Unable to locate package rocm-libs
+E: Unable to locate package miopen-hip

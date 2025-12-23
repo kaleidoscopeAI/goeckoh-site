@@ -1,0 +1,19 @@
+          product_params: Optional[Dict[str, float]] = None) -> np.ndarray:
+"""
+mix in [0,1]: 0 => pure Born (sum), 1 => pure product variant.
+method_product: 'product'|'geom'|'softlogprod'
+product_params: dict passed to probs_softlogprod (alpha,beta)
+"""
+p_born = probs_born(R)
+if method_product == "product":
+    p_prod = probs_product(R)
+elif method_product == "geom":
+    p_prod = probs_geometric(R)
+else:
+    pp = product_params or {}
+    p_prod = probs_softlogprod(R, alpha=float(pp.get("alpha", 1.0)), beta=float(pp.get("beta", 1.0)))
+# convex mix
+mix = float(np.clip(mix, 0.0, 1.0))
+p = (1.0 - mix) * p_born + mix * p_prod
+return normalize_vector(p)
+

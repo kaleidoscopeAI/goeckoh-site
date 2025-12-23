@@ -1,0 +1,9 @@
+"""
+Return whether it looks like pip is running under CI.
+"""
+# We don't use the method of checking for a tty (e.g. using isatty())
+# because some CI systems mimic a tty (e.g. Travis CI).  Thus that
+# method doesn't provide definitive information in either direction.
+return any(name in os.environ for name in CI_ENVIRONMENT_VARIABLES)
+
+

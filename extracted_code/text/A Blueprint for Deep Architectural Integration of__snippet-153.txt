@@ -1,0 +1,5 @@
+- Modern CPUs implement bitwise operations (AND, OR, XOR, NOT, shifts) as fundamental single-cycle instructions executed at hardware level by the Arithmetic Logic Unit (ALU).[^56_6]
+- Bitwise parallelism allows 64 or 128 bits to be processed simultaneously using standard integers (`u64`, `u128`) or SIMD registers.
+- Bitwise pattern matching and masking can encode neural activations, routing decisions, and curiosity state with extreme efficiency on such hardware.
+
+

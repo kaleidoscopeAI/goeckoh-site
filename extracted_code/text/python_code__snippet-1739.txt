@@ -1,0 +1,4 @@
+# This check helps if the script is imported, though it's meant to be run directly
+main()
+
+

@@ -1,0 +1,9 @@
+      for u,v,data in self.G.edges(data=True):
+          b: Bond = data['bond']
+          pu = self.G.nodes[u]['node'].pos; pv = self.G.nodes[v]['node'].pos
+          L = float(np.linalg.norm(pv - pu))
+          tension += abs(L - b.rest)
+          energy += 0.5 * b.k * (L - b.rest)**2
+      m = max(1, self.G.number_of_edges())
+      return {"tension": tension/m, "energy": energy/m, "size": self.G.number_of_nodes()}
+

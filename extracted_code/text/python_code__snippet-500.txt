@@ -1,0 +1,13 @@
+"""
+Encode a single string.
+
+:param input: An Unicode string.
+:param encoding: An :class:`Encoding` object or a label string.
+:param errors: Type of error handling. See :func:`codecs.register`.
+:raises: :exc:`~exceptions.LookupError` for an unknown encoding label.
+:return: A byte string.
+
+"""
+return _get_encoding(encoding).codec_info.encode(input, errors)[0]
+
+

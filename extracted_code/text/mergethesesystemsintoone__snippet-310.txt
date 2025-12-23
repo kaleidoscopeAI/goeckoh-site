@@ -1,0 +1,6 @@
+"""Checks if a concept matches a condition."""
+for key, value in condition.items():
+    if concept.get(key) != value:
+        return False
+return True
+

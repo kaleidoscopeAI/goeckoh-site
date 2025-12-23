@@ -1,83 +1,55 @@
-class AGIStatus:
-    """A lightweight snapshot of the AGI state for display purposes."""
+class ExpressionGear:
+    """High-level gear for generating expressive speech."""
+    tts_engine: VoiceMimic
+    audio_cfg: AudioSettings
+    voice_profile: VoiceProfile
+    inner_volume_scale: float = 0.5
+    coach_volume_scale: float = 1.1
 
-    freq_GHz: float = 0.0
-    temp_C: float = 0.0
-    DA: float = 0.0
-    Ser: float = 0.0
-    NE: float = 0.0
-    coherence: float = 0.0
-    awareness: float = 0.0
-    phi_proxy: float = 0.0
+    def _apply_mode_acoustics(self, wav: np.ndarray, mode: Mode) -> np.ndarray:
+        """Applies acoustic effects based on the speech mode."""
+        if mode == "inner":
+            return (wav * self.inner_volume_scale).astype(np.float32)
+        elif mode == "coach":
+            return (wav * self.coach_volume_scale).astype(np.float32)
+        return wav
 
-
-class KQBCAgent:
-    """Agent wrapper around the unified AGI system.
-
-    Each instance owns an ``AGISystem`` and maintains the last log item
-    returned from its step function.  The agent provides two main
-    methods: ``evaluate_correction`` determines whether an utterance
-    requires correction, and ``update_state`` feeds the utterance into
-    the AGI and stores the resulting log.  Callers can retrieve a
-    simple status dict via ``get_status`` for use in the GUI.
-    """
-
-    def __init__(self, config: Optional[CompanionConfig] = None, similarity_threshold: float = 0.78) -> None:
-        self.config = config or CompanionConfig()
-        self.agi = AGISystem()
-        self.similarity_threshold = similarity_threshold
-        self.last_log: Optional[Dict[str, object]] = None
-
-    def _string_similarity(self, a: str, b: str) -> float:
-        """Compute a simple similarity ratio between two strings.
-
-        This uses Python's built-in ``difflib.SequenceMatcher`` which
-        returns a value between 0 and 1 where 1 indicates identical
-        strings.  It is sufficient for short phrases and avoids any
-        heavy ML dependencies.
+    def express(self, decision: AgentDecision, audio_info: Optional[Information]) -> Optional[Information]:
         """
-        return SequenceMatcher(None, a.strip().lower(), b.strip().lower()).ratio()
-
-    def evaluate_correction(self, target_phrase: str, child_utterance: str) -> bool:
-        """Return True if the utterance differs substantially from the target.
-
-        The default implementation computes a simple similarity ratio and
-        compares it against ``self.similarity_threshold``.  If the ratio
-        falls below the threshold the method returns True to indicate a
-        correction should be suggested.
+        Generates speech based on an agent's decision.
+        Returns an Information object with the final audio, or None.
         """
-        similarity = self._string_similarity(target_phrase, child_utterance)
-        return similarity < self.similarity_threshold
+        text_to_speak = decision.target_text
+        if not text_to_speak:
+            return None
 
-    def update_state(self, user_input: str) -> None:
-        """Step the AGI system with the given user input.
+        # 1. Select a voice reference for cloning
+        ref_path = self.voice_profile.pick_reference()
+        if ref_path:
+            self.tts_engine.update_voiceprint(ref_path)
+        
+        # 2. Synthesize the base waveform
+        base_wav = self.tts_engine.synthesize(text_to_speak)
+        if base_wav.size == 0:
+            return None
 
-        The AGI maintains an internal time and hardware state; each call
-        polls sensors, updates thought engines, emotional chemistry and
-        relational links, selects an action and logs the result.  The
-        resulting log is stored on the agent for later retrieval.
-        """
-        log_item = self.agi.step(user_input=user_input)
-        self.last_log = log_item
+        # 3. Apply prosody transfer if a source is available
+        final_wav = base_wav
+        if audio_info and isinstance(audio_info.payload, AudioData):
+            prosody_source_wav = audio_info.payload.waveform
+            prosody_source_sr = audio_info.payload.sample_rate
+            try:
+                prosody = extract_prosody(prosody_source_wav, prosody_source_sr)
+                final_wav = apply_prosody_to_tts(base_wav, self.audio_cfg.sample_rate, prosody)
+            except Exception as e:
+                print(f"Warning: Prosody transfer failed. Using base TTS. Error: {e}")
 
-    def get_status(self) -> AGIStatus:
-        """Return the current AGI status as a plain dataclass.
+        # 4. Apply mode-specific acoustics
+        final_wav = self._apply_mode_acoustics(final_wav, decision.mode)
 
-        If the agent has not yet been updated, returns default values.
-        """
-        if self.last_log is None:
-            return AGIStatus()
-        hw = self.last_log.get("hw", {})
-        emotion = self.last_log.get("emotion", {})
-        consciousness = self.last_log.get("consciousness", {})
-        return AGIStatus(
-            freq_GHz=float(hw.get("freq_GHz", 0.0)),
-            temp_C=float(hw.get("temp_C", 0.0)),
-            DA=float(emotion.get("DA", 0.0)),
-            Ser=float(emotion.get("Ser", 0.0)),
-            NE=float(emotion.get("NE", 0.0)),
-            coherence=float(consciousness.get("coherence", 0.0)),
-            awareness=float(consciousness.get("awareness", 0.0)),
-            phi_proxy=float(consciousness.get("phi_proxy", 0.0)),
+        return Information(
+            payload=AudioData(waveform=final_wav, sample_rate=self.audio_cfg.sample_rate),
+            source_gear="ExpressionGear",
+            metadata={"decision": decision}
         )
 

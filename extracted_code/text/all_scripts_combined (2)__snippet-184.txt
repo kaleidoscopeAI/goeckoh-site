@@ -1,0 +1,6 @@
+    
+    with open(dirs["DEBIAN"] / "control", "w") as f:
+        f.write(control_content)
+
+    # Create .desktop file
+    desktop_content = f'''[Desktop Entry]

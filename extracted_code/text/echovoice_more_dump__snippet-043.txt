@@ -1,1 +1,2 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+package com.kaleidoscope.body
+data class SystemState(

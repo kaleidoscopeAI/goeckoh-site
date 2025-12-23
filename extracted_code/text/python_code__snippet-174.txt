@@ -1,5 +1,3 @@
-class Module_six_moves_urllib_parse(_LazyModule):
-
-    """Lazy loading of moved objects in six.moves.urllib_parse"""
+"""An error raised if a document is not valid TOML."""
 
 

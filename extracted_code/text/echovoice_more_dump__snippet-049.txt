@@ -1,1 +1,1 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+Sketch proof: take derivative of V using ODEs above, show negative contributions dominate positive ones under parameter inequalities (provide exact

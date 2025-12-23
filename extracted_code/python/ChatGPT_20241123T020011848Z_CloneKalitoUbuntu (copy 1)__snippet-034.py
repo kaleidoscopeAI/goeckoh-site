@@ -1,16 +1,18 @@
-# resource_management_demo.py
-from resource_manager import ResourceManager
-from emotional_profile import EmotionalState
+# emotional_state_demo.py
+from emotional_profile import EmotionalProfile, EmotionalState
 
-# Initialize ResourceManager
-resource_manager = ResourceManager()
+# Initialize EmotionalProfile
+profile = EmotionalProfile()
 
-# Test allocation under different emotional states
-energy_available = 50.0
-modes = ['survival', 'learning', 'growth', 'teaching']
+# Define conditions for testing state changes
+test_conditions = [
+    {'energy_ratio': 0.2, 'threat_level': 0.8, 'uncertainty': 0.7},
+    {'energy_ratio': 0.7, 'threat_level': 0.3, 'uncertainty': 0.4},
+    {'energy_ratio': 0.5, 'threat_level': 0.6, 'uncertainty': 0.8}
+]
 
-for mode in modes:
-    for state in EmotionalState:
-        allocation = resource_manager.allocate_resources(energy_available, mode, state)
-        print(f"Mode: {mode}, State: {state.name}, Allocated Energy: {allocation}")
+# Test state updates
+for conditions in test_conditions:
+    new_state = profile.update_state(conditions)
+    print(f"Conditions: {conditions}, New Emotional State: {new_state.name}")
 

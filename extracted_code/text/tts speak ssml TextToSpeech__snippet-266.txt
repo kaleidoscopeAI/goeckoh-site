@@ -1,0 +1,8 @@
+      at com.android.build.gradle.internal.plugins.VersionCheckPlugin.apply(VersionCheckPlugin.kt:47)
+      at com.android.build.gradle.internal.plugins.VersionCheckPlugin.apply(VersionCheckPlugin.kt:35)
+      at org.gradle.api.internal.plugins.ImperativeOnlyPluginTarget.applyImperative(ImperativeOnlyPluginTarget.java:42)
+      at org.gradle.api.internal.plugins.RuleBasedPluginTarget.applyImperative(RuleBasedPluginTarget.java:50)
+      at org.gradle.api.internal.plugins.DefaultPluginManager.addPlugin(DefaultPluginManager.java:165)
+      at org.gradle.api.internal.plugins.DefaultPluginManager.access$200(DefaultPluginManager.java:47)
+      at org.gradle.api.internal.plugins.DefaultPluginManager$AddPluginBuildOperation.run(DefaultPluginManager.java:252)
+      at

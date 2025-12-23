@@ -1,0 +1,10 @@
+Graph Representation: Principles are stored in a networkx.DiGraph() to track dependencies and relationships (e.g., beneficence to non_maleficence).
+
+Context-Aware Weighting: The effective weight of a principle is dynamically modified by the _calculate_context_weight function, which multiplies the base weight by a factor based on the current environment context:
+Effective Weight=Principle Weight×Context Factor
+
+Compliance Evaluation: The final score is calculated using a weighted average of compliance scores for all principles, including adjustments for related principles found via graph traversal:
+Compliance=1+∑Edge WeightBase Compliance+∑(Edge Weight×Related Score)​
+
+Adaptation: After an action, the principle's success_rate is updated, and the system uses update_learning to adjust the principle's confidence and context_sensitivity based on the outcome feedback.
+

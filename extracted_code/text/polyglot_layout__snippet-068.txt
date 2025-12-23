@@ -1,0 +1,6 @@
+  midi = hz_to_midi(f)
+  valid = (midi > 0)
+  midi_valid = midi[valid]
+  S_valid = S[valid, :]
+  midi_rounded = np.round(midi_valid).astype(int)
+

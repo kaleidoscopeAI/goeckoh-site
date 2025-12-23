@@ -1,0 +1,5 @@
+  Args:
+      repo_path: The absolute path to the repository to scan.
+
+  Returns:
+      A dictionary with "status" (success/failure) and "files" (a list of

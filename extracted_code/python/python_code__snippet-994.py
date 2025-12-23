@@ -1,17 +1,13 @@
-    import sys
-
-    from pip._vendor.rich.columns import Columns
-    from pip._vendor.rich.console import Console
-
-    console = Console(record=True)
-
-    columns = Columns(
-        (f":{name}: {name}" for name in sorted(EMOJI.keys()) if "\u200D" not in name),
-        column_first=True,
-    )
-
-    console.print(columns)
-    if len(sys.argv) > 1:
-        console.save_html(sys.argv[1])
+    """Get value from dictionary and verify expected type."""
+    if key not in d:
+        return default
+    value = d[key]
+    if not isinstance(value, expected_type):
+        raise DirectUrlValidationError(
+            f"{value!r} has unexpected type for {key} (expected {expected_type})"
+        )
+    return value
 
 
+def _get_required(
+    d: Dict[str, Any], expected_type: Type[T], key: str, default: Optional[T] = None

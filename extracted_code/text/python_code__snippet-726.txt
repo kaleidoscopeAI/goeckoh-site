@@ -1,0 +1,7 @@
+"""isinstance can fail in rare cases, for example types with no __class__"""
+try:
+    return isinstance(obj, class_or_tuple)
+except Exception:
+    return False
+
+

@@ -1,0 +1,4 @@
+"""Collapse more than two repeated letters (heyyy -> heyy)."""
+return re.sub(r"(.)\1{2,}", r"\1\1", word)
+
+

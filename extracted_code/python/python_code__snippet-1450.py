@@ -1,17 +1,15 @@
-    from pip._internal.metadata.base import DistributionVersion
+class _UnpackAlias(typing._GenericAlias, _root=True):
+    __class__ = typing.TypeVar
 
-    class _DistWithLatestInfo(BaseDistribution):
-        """Give the distribution object a couple of extra fields.
+class _UnpackForm(_ExtensionsSpecialForm, _root=True):
+    def __getitem__(self, parameters):
+        item = typing._type_check(parameters,
+                                  f'{self._name} accepts only a single type.')
+        return _UnpackAlias(self, (item,))
 
-        These will be populated during ``get_outdated()``. This is dirty but
-        makes the rest of the code much cleaner.
-        """
+Unpack = _UnpackForm('Unpack', doc=_UNPACK_DOC)
 
-        latest_version: DistributionVersion
-        latest_filetype: str
+def _is_unpack(obj):
+    return isinstance(obj, _UnpackAlias)
 
-    _ProcessedDists = Sequence[_DistWithLatestInfo]
-
-
-from pip._vendor.packaging.version import parse
 

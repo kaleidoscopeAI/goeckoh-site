@@ -1,18 +1,22 @@
-class KnowledgeDNA:
-    text_patterns: List[PatternStrand] = field(default_factory=list)
-    visual_patterns: List[VisualStrand] = field(default_factory=list)
-    mutation_rate: float = 0.01
-    generation: int = 0
+class KnowledgeGraph:
+    def __init__(self):
+        self.graph = nx.DiGraph()
 
-    def replicate(self) -> 'KnowledgeDNA':
-        new_dna = KnowledgeDNA(mutation_rate=self.mutation_rate, generation=self.generation + 1)
-        for p in self.text_patterns:
-            new_p = PatternStrand(p.sequence[:], p.strength, p.adaptation_rate)
-            new_p.mutate()
-            new_dna.text_patterns.append(new_p)
-        for v in self.visual_patterns:
-            new_v = VisualStrand(v.feature_patterns.copy(), v.mutation_rate)
-            new_v.evolve(np.random.randn(10, 10))  # Real features
-            new_dna.visual_patterns.append(new_v)
-        return new_dna
+    def add_insight(self, insight: Dict):
+        node_id = str(uuid.uuid4())
+        self.graph.add_node(node_id, **insight)
+        for other in list(self.graph.nodes):
+            sim = 1 - cosine(embed_text(insight.get('content', '')), embed_text(self.graph.nodes[other].get('content', '')))
+            if sim > 0.5:
+                self.graph.add_edge(other, node_id, weight=sim)
+
+    def propagate(self):
+        for node in list(self.graph.nodes):
+            for succ in list(self.graph.successors(node)):
+                if 'content' in self.graph.nodes[succ] and 'content' in self.graph.nodes[node]:
+                    self.graph.nodes[succ]['content'] += " | " + self.graph.nodes[node]['content'][:100]  # Real merge
+
+    def find_interventions(self):
+        betweenness = nx.betweenness_centrality(self.graph)
+        return sorted(betweenness.items(), key=lambda x: x[1], reverse=True)[:5]  # Top 5 critical
 

@@ -1,2 +1,1 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
-
+self.cur.executemany("INSERT OR REPLACE INTO dna VALUES (?, ?)", data)

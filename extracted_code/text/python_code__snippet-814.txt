@@ -1,0 +1,7 @@
+"""A base class for all exceptions raised by this module.
+
+Exceptions derived by this class should all be handled in this module. Any
+bubbling pass the resolver should be treated as a bug.
+"""
+
+

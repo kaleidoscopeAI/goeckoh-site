@@ -1,0 +1,1 @@
+loopback probe script, and validation endpoints remain.

@@ -1,0 +1,5 @@
+if len(label) > 63:
+    return False
+return True
+
+

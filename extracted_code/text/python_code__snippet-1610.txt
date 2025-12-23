@@ -1,0 +1,21 @@
+"""Given a value spelled "algo:digest", append the digest to a list
+pointed to in a dict by the algo name."""
+if not parser.values.hashes:
+    parser.values.hashes = {}
+try:
+    algo, digest = value.split(":", 1)
+except ValueError:
+    parser.error(
+        f"Arguments to {opt_str} must be a hash name "
+        "followed by a value, like --hash=sha256:"
+        "abcde..."
+    )
+if algo not in STRONG_HASHES:
+    parser.error(
+        "Allowed hash algorithms for {} are {}.".format(
+            opt_str, ", ".join(STRONG_HASHES)
+        )
+    )
+parser.values.hashes.setdefault(algo, []).append(digest)
+
+

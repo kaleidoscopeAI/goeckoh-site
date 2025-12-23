@@ -1,0 +1,10 @@
+"""Returns a summary of the node's metrics."""
+return {
+    "node_id": self.node_id,
+    "creation_time": self.creation_time.isoformat(),
+    "total_processed_data": self.total_processed_data,
+    "total_energy_consumed": self.total_energy_consumed,
+    "running_stats": self.running_stats,
+    "last_updated": datetime.now().isoformat()
+}
+

@@ -1,1 +1,1 @@
-const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 2000);
+<EmotionalDial value={e} onChange={setE} onApply={() => console.log("User 1 applied changes")} />

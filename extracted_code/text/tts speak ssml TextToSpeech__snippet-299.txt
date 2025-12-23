@@ -1,0 +1,8 @@
+40          resources {
+41 -            excludes += setOf(
+42 -                "META-INF/LICENSE*",
+43 -                "META-INF/NOTICE*"
+44 -            )
+41 +            excludes += ["META-INF/LICENSE*", "META-INF/NOTICE*"]
+42          }
+

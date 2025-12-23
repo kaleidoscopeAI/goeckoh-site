@@ -1,43 +1,16 @@
-from optparse import Values
-from typing import List
+"""
+Return a single named information item from the distro release file
+data source of the current OS distribution.
 
-from pip._internal.cli.base_command import Command
-from pip._internal.cli.status_codes import SUCCESS
-from pip._internal.exceptions import CommandError
+Parameters:
 
+* ``attribute`` (string): Key of the information item.
 
-class HelpCommand(Command):
-    """Show help for commands"""
+Returns:
 
-    usage = """
-      %prog <command>"""
-    ignore_require_venv = True
-
-    def run(self, options: Values, args: List[str]) -> int:
-        from pip._internal.commands import (
-            commands_dict,
-            create_command,
-            get_similar_commands,
-        )
-
-        try:
-            # 'pip help' with no args is handled by pip.__init__.parseopt()
-            cmd_name = args[0]  # the command we need help for
-        except IndexError:
-            return SUCCESS
-
-        if cmd_name not in commands_dict:
-            guess = get_similar_commands(cmd_name)
-
-            msg = [f'unknown command "{cmd_name}"']
-            if guess:
-                msg.append(f'maybe you meant "{guess}"')
-
-            raise CommandError(" - ".join(msg))
-
-        command = create_command(cmd_name)
-        command.parser.print_help()
-
-        return SUCCESS
+* (string): Value of the information item, if the item exists.
+            The empty string, if the item does not exist.
+"""
+return _distro.uname_attr(attribute)
 
 

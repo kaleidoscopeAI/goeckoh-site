@@ -1,0 +1,2 @@
+loop = SpeechLoop()
+asyncio.run(loop.run())

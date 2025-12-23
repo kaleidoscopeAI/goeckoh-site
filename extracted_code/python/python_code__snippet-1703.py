@@ -1,26 +1,77 @@
-class EmotionalState:
-    """Enhanced 5D Emotional Vector with ABA integration"""
-    joy: float = 0.0
-    fear: float = 0.0
-    trust: float = 0.5
-    anger: float = 0.0
-    anticipation: float = 0.0
-    # ABA-specific emotional states
-    anxiety: float = 0.0
-    focus: float = 0.0
-    overwhelm: float = 0.0
-    
-    def to_vector(self) -> np.ndarray:
-        return np.array([self.joy, self.fear, self.trust, 
-                        self.anger, self.anticipation, self.anxiety,
-                        self.focus, self.overwhelm], dtype=np.float32)
-    
-    @classmethod
-    def from_vector(cls, vec: np.ndarray):
-        if len(vec) >= 8:
-            return cls(*vec[:8])
-        elif len(vec) >= 5:
-            return cls(*vec[:5], 0.0, 0.0, 0.0)
+"""Verify the cert_chain from the server using Windows APIs."""
+pCertContext = None
+hIntermediateCertStore = CertOpenStore(CERT_STORE_PROV_MEMORY, 0, None, 0, None)
+try:
+    # Add intermediate certs to an in-memory cert store
+    for cert_bytes in cert_chain[1:]:
+        CertAddEncodedCertificateToStore(
+            hIntermediateCertStore,
+            X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
+            cert_bytes,
+            len(cert_bytes),
+            CERT_STORE_ADD_USE_EXISTING,
+            None,
+        )
+
+    # Cert context for leaf cert
+    leaf_cert = cert_chain[0]
+    pCertContext = CertCreateCertificateContext(
+        X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, leaf_cert, len(leaf_cert)
+    )
+
+    # Chain params to match certs for serverAuth extended usage
+    cert_enhkey_usage = CERT_ENHKEY_USAGE()
+    cert_enhkey_usage.cUsageIdentifier = 1
+    cert_enhkey_usage.rgpszUsageIdentifier = (c_char_p * 1)(OID_PKIX_KP_SERVER_AUTH)
+    cert_usage_match = CERT_USAGE_MATCH()
+    cert_usage_match.Usage = cert_enhkey_usage
+    chain_params = CERT_CHAIN_PARA()
+    chain_params.RequestedUsage = cert_usage_match
+    chain_params.cbSize = sizeof(chain_params)
+    pChainPara = pointer(chain_params)
+
+    if ssl_context.verify_flags & ssl.VERIFY_CRL_CHECK_CHAIN:
+        chain_flags = CERT_CHAIN_REVOCATION_CHECK_CHAIN
+    elif ssl_context.verify_flags & ssl.VERIFY_CRL_CHECK_LEAF:
+        chain_flags = CERT_CHAIN_REVOCATION_CHECK_END_CERT
+    else:
+        chain_flags = 0
+
+    try:
+        # First attempt to verify using the default Windows system trust roots
+        # (default chain engine).
+        _get_and_verify_cert_chain(
+            ssl_context,
+            None,
+            hIntermediateCertStore,
+            pCertContext,
+            pChainPara,
+            server_hostname,
+            chain_flags=chain_flags,
+        )
+    except ssl.SSLCertVerificationError:
+        # If that fails but custom CA certs have been added
+        # to the SSLContext using load_verify_locations,
+        # try verifying using a custom chain engine
+        # that trusts the custom CA certs.
+        custom_ca_certs: list[bytes] | None = ssl_context.get_ca_certs(
+            binary_form=True
+        )
+        if custom_ca_certs:
+            _verify_using_custom_ca_certs(
+                ssl_context,
+                custom_ca_certs,
+                hIntermediateCertStore,
+                pCertContext,
+                pChainPara,
+                server_hostname,
+                chain_flags=chain_flags,
+            )
         else:
-            return cls()
+            raise
+finally:
+    CertCloseStore(hIntermediateCertStore, 0)
+    if pCertContext:
+        CertFreeCertificateContext(pCertContext)
+
 

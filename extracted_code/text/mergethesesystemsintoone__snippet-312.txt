@@ -1,0 +1,4 @@
+"""Adds a node to the network."""
+if node_id not in self.nodes:
+    self.nodes[node_id] = data if data else {}
+

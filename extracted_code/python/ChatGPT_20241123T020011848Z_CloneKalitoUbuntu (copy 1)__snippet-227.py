@@ -1,2 +1,4 @@
-  command 'python3' from deb python3
-  command 'python' from deb python-is-python3
+    - Node A crawls content from Wikipedia on topic X.
+    - Node B gathers annotated images related to topic X from image APIs.
+  - Implementation
+    - Assign

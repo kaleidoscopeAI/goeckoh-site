@@ -1,1 +1,1 @@
-let data = try Data(contentsOf: url)
+function notifyApp(message) {

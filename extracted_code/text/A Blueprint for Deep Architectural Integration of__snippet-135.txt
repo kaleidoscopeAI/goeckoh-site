@@ -1,0 +1,7 @@
+- **Model Handling**: Models are converted to GGUF format and quantized for efficiency (e.g., Q4_K_M). They are loaded via llama.cpp in C++ or Rust.
+- **Engine Implementation**: Each Hugging Face engine $O_{\text{HF}}$ implements the `ThoughtEngine` trait. For example:
+    - Input: $O_{\text{HF}}$ receives a projected state $P_i[X_k]$, which includes $b_k$ and other state elements. This input is decoded into a prompt (e.g., via template filling).
+    - Output: The model generates text, which is encoded back into a vector (e.g., via embedding or structured parsing) for integration into $S_{k+1}$.
+- **Stability**: Outputs are bounded to maintain Lipschitz continuity (e.g., by clipping embeddings to $[-1, 1]$).
+
+

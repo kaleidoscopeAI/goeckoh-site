@@ -1,0 +1,6 @@
+  detected as a Git repository, otherwise, relative local paths are used.
+
+  Args:
+      repo_path: The absolute path to the root of the repository to scan.
+      output_path: Optional. The absolute path to save the llms.txt file.
+                   If not provided, it will be saved in a `temp` directory

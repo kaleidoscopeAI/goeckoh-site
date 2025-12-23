@@ -1,0 +1,2 @@
+params: Vec<f64>,
+operator: Box<dyn Fn(&Vec<f64>, &Vec<f64>) -> Vec<f64>>,

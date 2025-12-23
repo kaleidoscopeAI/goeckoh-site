@@ -1,0 +1,3 @@
+whisper_model: str = "small.en"
+tts_model_name: str = "tts_models/multilingual/multi-dataset/xtts_v2"
+

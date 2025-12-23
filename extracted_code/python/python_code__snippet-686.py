@@ -1,3 +1,11 @@
-    def _is_unpack(obj):
-        return get_origin(obj) is Unpack
-
+import collections
+import math
+from typing import (
+    TYPE_CHECKING,
+    Dict,
+    Iterable,
+    Iterator,
+    Mapping,
+    Sequence,
+    TypeVar,
+    Union,

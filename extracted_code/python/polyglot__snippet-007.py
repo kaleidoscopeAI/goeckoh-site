@@ -1,1 +1,2 @@
-def lazy_import(module_name):
+class AGIMathematics:
+def __init__(self) -> None:

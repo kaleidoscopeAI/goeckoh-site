@@ -1,0 +1,2 @@
+// Simple state for a low-pass filter
+prev_sample: f32,

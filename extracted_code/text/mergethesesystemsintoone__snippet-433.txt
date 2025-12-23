@@ -1,0 +1,7 @@
+avg_freq = np.mean (all_frequencies)
+std_freq = np.std (all_frequencies)
+self.frequency_bounds = (
+        max (-10, avg_freq 3 * std_freq), # dynamicly adpat the frequncy by some dynamic percentage
+        min (10, avg_freq + 3 * std_freq)
+    )
+

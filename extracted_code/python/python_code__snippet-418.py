@@ -1,6 +1,6 @@
-import warnings
+import re
+from functools import lru_cache
+from typing import Callable, List
 
-from pip._vendor import urllib3
-
-from .exceptions import RequestsDependencyWarning
+from ._cell_widths import CELL_WIDTHS
 

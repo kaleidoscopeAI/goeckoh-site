@@ -1,0 +1,3 @@
+     "graph_structure":"Base functions for creation, storage of a knowledge graph, allows edge/ node data interactions " ,
+     "node_traits" : " The core driver for evolution or self-determination across a multi dimensional scope to create specialized node functions and also to prioritize information. with parameters like , learning rates, and  behaviour control traits in methods.",
+

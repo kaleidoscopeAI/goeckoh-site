@@ -1,0 +1,4 @@
+NORMAL              = 0x00 # dim text, dim background
+BRIGHT              = 0x08 # bright text, dim background
+BRIGHT_BACKGROUND   = 0x80 # dim text, bright background
+

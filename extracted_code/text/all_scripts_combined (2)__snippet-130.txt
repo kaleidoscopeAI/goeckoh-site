@@ -1,0 +1,14 @@
+<meta charset="utf-8" />
+<title>Speech Companion • Care Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  :root {
+    color-scheme: dark;
+  }
+  .glass {
+    background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.22), transparent 55%),
+                radial-gradient(circle at bottom right, rgba(99, 102, 241, 0.18), transparent 55%);
+  }
+</style>

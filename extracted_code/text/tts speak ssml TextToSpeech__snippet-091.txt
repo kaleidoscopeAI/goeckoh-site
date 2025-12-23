@@ -1,0 +1,10 @@
+          // In production, add download logic or instructions
+      } else {
+          statusText.text = "System Initialized"
+      }
+  }
+
+  override fun onDestroy() {
+      tts.shutdown()
+      super.onDestroy()
+  }

@@ -1,0 +1,9 @@
+"""Checks whether pkg was installed by pip
+
+This is used not to display the upgrade message when pip is in fact
+installed by system package manager, such as dnf on Fedora.
+"""
+dist = get_default_environment().get_distribution(pkg)
+return dist is not None and "pip" == dist.installer
+
+

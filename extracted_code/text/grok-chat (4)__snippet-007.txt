@@ -1,0 +1,6 @@
+id: str
+category: SkillCategory
+title: str
+paragraphs: list[str]           # first-person, positive, literal
+visual_cues: list[str] = field(default_factory=list)  # for GUI display
+

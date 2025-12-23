@@ -1,0 +1,2 @@
+p95 budget (<50–100 ms), and a richer 1024-node ODE surfacing in the API/UI (currently downsampled/summary only).
+

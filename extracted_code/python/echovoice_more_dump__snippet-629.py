@@ -1,2 +1,1 @@
-def mutate(self):
-def mm(v, var=0.1, lo=0.001, hi=1.0):
+def compute_jacobian(self, S, P, R, I, Q, epsilon=1e-6):

@@ -1,0 +1,4 @@
+self.harmonics = []
+self.interference_pattern = None
+self._update_interference()
+

@@ -1,0 +1,6 @@
+InconsistentCandidate,
+RequirementsConflicted,
+ResolutionError,
+ResolutionImpossible,
+ResolutionTooDeep,
+Resolver,

@@ -1,0 +1,15 @@
+    The ``<div>``'s CSS class can be set by the `cssclass` option.
+
+    If the `linenos` option is set to ``"table"``, the ``<pre>`` is
+    additionally wrapped inside a ``<table>`` which has one row and two
+    cells: one containing the line numbers and one containing the code.
+    Example:
+
+    .. sourcecode:: html
+
+        <div class="highlight" >
+        <table><tr>
+          <td class="linenos" title="click to toggle"
+            onclick="with (this.firstChild.style)
+                     { display = (display == '') ? 'none' : '' }">
+            <pre>1

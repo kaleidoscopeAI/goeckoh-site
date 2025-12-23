@@ -1,0 +1,18 @@
+if sys.version_info[0] >= 3:
+    # needs to be a text stream
+    stream = codecs.getwriter('utf-8')(stream)
+cp = configparser.ConfigParser()
+for k, v in exports.items():
+    # TODO check k, v for valid values
+    cp.add_section(k)
+    for entry in v.values():
+        if entry.suffix is None:
+            s = entry.prefix
+        else:
+            s = '%s:%s' % (entry.prefix, entry.suffix)
+        if entry.flags:
+            s = '%s [%s]' % (s, ', '.join(entry.flags))
+        cp.set(k, entry.name, s)
+cp.write(stream)
+
+

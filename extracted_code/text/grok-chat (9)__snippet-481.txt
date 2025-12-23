@@ -1,0 +1,1 @@
+  For each file, it generates a Markdown link with its summary. If a

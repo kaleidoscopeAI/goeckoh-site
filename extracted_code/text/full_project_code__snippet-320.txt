@@ -1,0 +1,4 @@
+_protocol_to_min_max[ssl.PROTOCOL_TLSv1] = (
+    SecurityConst.kTLSProtocol1,
+    SecurityConst.kTLSProtocol1,
+)

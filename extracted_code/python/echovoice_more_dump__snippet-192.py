@@ -1,187 +1,151 @@
-   2. Cognitive Actuation (`F_Kaleidoscope`): Refining how the F_Kaleidoscope force from E8 Lattice Mirroring
-      influences the system. Instead of directly modifying the emotional vector, it will now contribute more directly
-      to the node's physical dynamics, aligning with its role as a cognitive force in the Master State Evolution
-      Equation.
+import { NodeState, Edge, Vec3 } from "./types";
+import { randomUUID } from "crypto";
 
-  I will start by modifying umaa/node.py to implement the RK4 integration for both internal state and position
-  updates. This will also involve adding a mass attribute to the Node class.
- ╭───────────────────────────────────────────────────────────────────────────────────────────────────────────╮
- │ ✓  Edit umaa_v3/umaa/node.py: from .core_math import Vector,... => from .core_math import Vector,...      │
- │                                                                                                           │
- │    ... first 63 lines hidden ...                                                                          │
- │     70 +     k2_E = self._dE_dt(self.E + 0.5 * dt * k1_E, self.A + 0.5 * dt * k1_A, self.K + 0.5 * dt *   │
- │        k1_K, self.CF, stochasticity)                                                                      │
- │     71 +     k2_A = self._dA_dt(self.E + 0.5 * dt * k1_E, self.A + 0.5 * dt * k1_A, self.K + 0.5 * dt *   │
- │        k1_K, self.CF, stochasticity)                                                                      │
- │     72 +     k2_K = self._dK_dt(self.E + 0.5 * dt * k1_E, self.A + 0.5 * dt * k1_A, self.K + 0.5 * dt *   │
- │        k1_K, self.CF, stochasticity)                                                                      │
- │     73                                                                                                    │
- │     74 +     k3_E = self._dE_dt(self.E + 0.5 * dt * k2_E, self.A + 0.5 * dt * k2_A, self.K + 0.5 * dt *   │
- │        k2_K, self.CF, stochasticity)                                                                      │
- │     75 +     k3_A = self._dA_dt(self.E + 0.5 * dt * k2_E, self.A + 0.5 * dt * k2_A, self.K + 0.5 * dt *   │
- │        k2_K, self.CF, stochasticity)                                                                      │
- │     76 +     k3_K = self._dK_dt(self.E + 0.5 * dt * k2_E, self.A + 0.5 * dt * k2_A, self.K + 0.5 * dt *   │
- │        k2_K, self.CF, stochasticity)                                                                      │
- │     77 +                                                                                                  │
- │     78 +     k4_E = self._dE_dt(self.E + dt * k3_E, self.A + dt * k3_A, self.K + dt * k3_K, self.CF,      │
- │        stochasticity)                                                                                     │
- │     79 +     k4_A = self._dA_dt(self.E + dt * k3_E, self.A + dt * k3_A, self.K + dt * k3_K, self.CF,      │
- │        stochasticity)                                                                                     │
- │     80 +     k4_K = self._dK_dt(self.E + dt * k3_E, self.A + dt * k3_A, self.K + dt * k3_K, self.CF,      │
- │        stochasticity)                                                                                     │
- │     81 +                                                                                                  │
- │     82 +     self.E += (dt / 6.0) * (k1_E + 2 * k2_E + 2 * k3_E + k4_E)                                   │
- │     83 +     self.A += (dt / 6.0) * (k1_A + 2 * k2_A + 2 * k3_A + k4_A)                                   │
- │     84 +     self.K += (dt / 6.0) * (k1_K + 2 * k2_K + 2 * k3_K + k4_K)                                   │
- │     85 +                                                                                                  │
- │     86       self.E = max(0.0, min(1.0, self.E))                                                          │
- │     87       self.A = max(0.0, min(1.0, self.A))                                                          │
- │     88       self.K = max(0.0, min(1.0, self.K))                                                          │
- │     89                                                                                                    │
- │     63 - def update_position(self, dt, all_nodes):                                                        │
- │     64 -     # Section 4: Physical State Evolution (Kinematics)                                           │
- │     65 -     F_physical = Vector([0.0] * len(self.r))                                                     │
- │     66 -     F_emotional = Vector([0.0] * len(self.r))                                                    │
- │    ═════════════════════════════════════════════════════════════════════════════════════════════════════  │
- │     90 + def _d_position_dt(self, r, v, all_nodes, F_kaleidoscope):                                       │
- │     91 +     F_physical = Vector([0.0] * len(r))                                                          │
- │     92 +     F_emotional = Vector([0.0] * len(r))                                                         │
- │     93                                                                                                    │
- │     94       # F_physical: Simple repulsive force from other nodes                                        │
- │     95       for other_node in all_nodes:                                                                 │
- │     96           if other_node.id == self.id: continue                                                    │
- │     97                                                                                                    │
- │     72 -         direction = other_node.r - self.r                                                        │
- │    ═════════════════════════════════════════════════════════════════════════════════════════════════════  │
- │     98 +         direction = other_node.r - r # Use current r for force calculation                       │
- │     99           distance_sq = direction.norm_sq()                                                        │
- │     74 -         if distance_sq == 0: continue # Avoid division by zero if nodes overlap                  │
- │    ═════════════════════════════════════════════════════════════════════════════════════════════════════  │
- │    100 +         if distance_sq == 0: continue                                                            │
- │    101           distance = math.sqrt(distance_sq)                                                        │
- │    102                                                                                                    │
- │    103           if distance < self.repulsion_range:                                                      │
- │     78 -             # Repulsion force inversely proportional to distance                                 │
- │    ═════════════════════════════════════════════════════════════════════════════════════════════════════  │
- │    104               repulsion_magnitude = self.repulsion_strength / distance_sq                          │
- │    105               F_physical = F_physical + (direction * (-repulsion_magnitude / distance))            │
- │    106                                                                                                    │
- │     82 -     # F_emotional: Influenced by epsilon vector (e.g., curiosity drives movement)                │
- │     83 -     # Example: epsilon[0] (curiosity) could drive random exploration                             │
- │     84 -     # epsilon[1] (stress) could dampen movement                                                  │
- │     85 -     random_movement = Vector([self.rng.gauss(0, 1.0) for _ in range(len(self.r))])               │
- │    ═════════════════════════════════════════════════════════════════════════════════════════════════════  │
- │    107 +     # F_emotional: Influenced by epsilon vector                                                  │
- │    108 +     random_movement = Vector([self.rng.gauss(0, 1.0) for _ in range(len(r))])                    │
- │    109       F_emotional = F_emotional + (random_movement * (self.emotional_force_strength * self         │
- │          .epsilon[0]))                                                                                    │
- │     87 -     F_emotional = F_emotional + (self.v * (-self.emotional_force_strength * self.epsilon[1])) #  │
- │        Stress dampens velocity                                                                            │
- │    ═════════════════════════════════════════════════════════════════════════════════════════════════════  │
- │    110 +     F_emotional = F_emotional + (v * (-self.emotional_force_strength * self.epsilon[1])) #       │
- │        Stress dampens velocity                                                                            │
- │    111                                                                                                    │
- │     89 -     total_force = F_physical + F_emotional                                                       │
- │    ═════════════════════════════════════════════════════════════════════════════════════════════════════  │
- │    112 +     total_force = F_physical + F_emotional + F_kaleidoscope # Add F_kaleidoscope here            │
- │    113                                                                                                    │
- │     91 -     # Simple Euler integration for position and velocity                                         │
- │     92 -     self.v = self.v + (total_force * dt) # Assuming mass=1                                       │
- │     93 -     self.r = self.r + (self.v * dt)                                                              │
- │    ═════════════════════════════════════════════════════════════════════════════════════════════════════  │
- │    114 +     return v, total_force * (1.0 / self.mass) # Returns velocity and acceleration                │
- │    115                                                                                                    │
- │    116 + def update_position(self, dt, all_nodes, F_kaleidoscope: Vector = None):                         │
- │    117 +     if F_kaleidoscope is None:                                                                   │
- │    118 +         F_kaleidoscope = Vector([0.0] * len(self.r))                                             │
- │    119 +                                                                                                  │
- │    120 +     # RK4 integration for position and velocity                                                  │
- │    121 +     # k1 = (v, a)                                                                                │
- │    122 +     k1_v, k1_a = self._d_position_dt(self.r, self.v, all_nodes, F_kaleidoscope)                  │
- │    123 +     k1_r = self.v                                                                                │
- │    124 +                                                                                                  │
- │    125 +     # k2 = (v + 0.5*dt*k1_a, a_at_half_step)                                                     │
- │    126 +     r_half_k1 = self.r + (k1_r * (0.5 * dt))                                                     │
- │    127 +     v_half_k1 = self.v + (k1_a * (0.5 * dt))                                                     │
- │    128 +     k2_v, k2_a = self._d_position_dt(r_half_k1, v_half_k1, all_nodes, F_kaleidoscope)            │
- │    129 +     k2_r = v_half_k1                                                                             │
- │    130 +                                                                                                  │
- │    131 +     # k3 = (v + 0.5*dt*k2_a, a_at_half_step)                                                     │
- │    132 +     r_half_k2 = self.r + (k2_r * (0.5 * dt))                                                     │
- │    133 +     v_half_k2 = self.v + (k2_a * (0.5 * dt))                                                     │
- │    134 +     k3_v, k3_a = self._d_position_dt(r_half_k2, v_half_k2, all_nodes, F_kaleidoscope)            │
- │    135 +     k3_r = v_half_k2                                                                             │
- │    136 +                                                                                                  │
- │    137 +     # k4 = (v + dt*k3_a, a_at_full_step)                                                         │
- │    138 +     r_full_k3 = self.r + (k3_r * dt)                                                             │
- │    139 +     v_full_k3 = self.v + (k3_a * dt)                                                             │
- │    140 +     k4_v, k4_a = self._d_position_dt(r_full_k3, v_full_k3, all_nodes, F_kaleidoscope)            │
- │    141 +     k4_r = v_full_k3                                                                             │
- │    142 +                                                                                                  │
- │    143 +     self.r = self.r + ((k1_r + (k2_r * 2.0) + (k3_r * 2.0) + k4_r) * (dt / 6.0))                 │
- │    144 +     self.v = self.v + ((k1_a + (k2_a * 2.0) + (k3_a * 2.0) + k4_a) * (dt / 6.0))                 │
- │    145 +                                                                                                  │
- │    146   def __repr__(self):                                                                              │
- │    147       return f"Node(id={self.id}, E={self.E:.2f}, A={self.A:.2f}, K={self.K:.2f}, r={self.r})"     │
- ╰───────────────────────────────────────────────────────────────────────────────────────────────────────────╯
- ╭─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
- │ ✓  Edit umaa_v3/umaa/kaleidoscope_engine.py:     def _apply_cognitive_actua... =>     def _apply_cognitive_actua... │
- │                                                                                                                     │
- │     41           psi_components.extend(node.r.components)                                                           │
- │     42       self.Psi = Vector(psi_components)                                                                      │
- │     43                                                                                                              │
- │     44 - def _apply_cognitive_actuation(self, node: Node):                                                          │
- │     44 + def _apply_cognitive_actuation(self, node: Node) -> Vector:                                                │
- │     45       # Implements the C^Psi term from the Master State Evolution Equation                                   │
- │     46       # Involves E8 Lattice Mirroring and FKaleidoscope                                                      │
- │     47                                                                                                              │
- │     48 -     # 1. Apply E8 Lattice Mirroring to the node's position (r)                                             │
- │     48 +     # 1. Project 3D state to 8D and apply E8 Lattice Mirroring                                             │
- │     49       psi_mirror_3d = self.e8_lattice.mirror_state(node.r)                                                   │
- │     50                                                                                                              │
- │     51       # 2. Calculate FKaleidoscope = k_mirror * (Psi_mirror - Psi)                                           │
- │     52 -     # Here, Psi is the master state, but for node-level actuation, we use node.r as the local              │
- │        Psi                                                                                                          │
- │     53 -     # and psi_mirror_3d as the Psi_mirror for this node's context.                                         │
- │     52 +     # This force acts on the node's physical position                                                      │
- │     53       F_kaleidoscope = (psi_mirror_3d - node.r) * self.k_mirror                                              │
- │     54                                                                                                              │
- │     56 -     # 3. Update node's emotional state or other parameters based on this force                             │
- │     57 -     # For simplicity, let FKaleidoscope directly influence emotional vector                                │
- │     58 -     # This is a placeholder for a more complex interaction                                                 │
- │     55 +     # 3. Update node's emotional state based on the magnitude of this force                                │
- │     56 +     # For simplicity, a strong FKaleidoscope might increase emotional intensity                            │
- │     57 +     magnitude = F_kaleidoscope.norm()                                                                      │
- │     58       for i in range(len(node.epsilon.components)):                                                          │
- │     60 -         node.epsilon[i] += F_kaleidoscope[i % len(F_kaleidoscope)] * self.C_operator_strength *            │
- │        self.dt                                                                                                      │
- │     61 -         # Clamp epsilon components                                                                         │
- │     59 +         node.epsilon[i] += magnitude * self.C_operator_strength * self.dt * self.rng.uniform(-             │
- │        0.1, 0.1)                                                                                                    │
- │     60           node.epsilon[i] = max(0.0, min(1.0, node.epsilon[i]))                                              │
- │     61                                                                                                              │
- │     62 +     return F_kaleidoscope                                                                                  │
- │     63 +                                                                                                            │
- │     64   def _update_knowledge_graph(self, node: Node, new_data_text: str = None):                                  │
- │     65       # Implements Neuro-Symbolic Memory Substrate integration                                               │
- │     66       # When a node's K (Knowledge/Coherence) state changes, update KG                                       │
- │    ═════════════════════════════════════════════════════════════════════════════════════════════════════            │
- │     92           for node in self.nodes:                                                                            │
- │     93               node.update_internal_state(self.dt)                                                            │
- │     94                                                                                                              │
- │     95 -         # 2. Apply Cognitive Actuation (C^Psi) to each node                                                │
- │     96 -         for node in self.nodes:                                                                            │
- │     97 -             self._apply_cognitive_actuation(node)                                                          │
- │     95 +         # 2. Apply Cognitive Actuation (C^Psi) to each node and collect F_kaleidoscope                     │
- │     96 +         F_kaleidoscopes = {node.id: self._apply_cognitive_actuation(node) for node in self                 │
- │        .nodes}                                                                                                      │
- │     97                                                                                                              │
- │     98           # 3. Update each node's physical position                                                          │
- │     99           for node in self.nodes:                                                                            │
- │    101 -             node.update_position(self.dt, self.nodes)                                                      │
- │    100 +             F_kaleidoscope_for_node = F_kaleidoscopes.get(node.id, Vector([0.0] * len(node.r)))            │
- │    101 +             node.update_position(self.dt, self.nodes, F_kaleidoscope_for_node)                             │
- │    102                                                                                                              │
- │    103           # 4. Update the Knowledge Graph based on node states                                               │
- │    104           for i, node in enumerate(self.nodes):                                                              │
- ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+function add(a: Vec3, b: Vec3): Vec3 { return [a[0]+b[0], a[1]+b[1], a[2]+b[2]]; }
+function sub(a: Vec3, b: Vec3): Vec3 { return [a[0]-b[0], a[1]-b[1], a[2]-b[2]]; }
+function scale(a: Vec3, s: number): Vec3 { return [a[0]*s, a[1]*s, a[2]*s]; }
+function len(a: Vec3) { return Math.sqrt(a[0]*a[0]+a[1]*a[1]+a[2]*a[2]); }
+function normalize(a: Vec3) { const L = len(a)||1; return [a[0]/L, a[1]/L, a[2]/L]; }
+function zeros(): Vec3 { return [0,0,0]; }
+function gaussian(): number { return Math.random() * 2 - 1; } // Approx for noise
+
+export class Engine {
+  nodes: Map<string, NodeState> = new Map();
+  edges: Edge[] = [];
+  dt = 0.016;
+  damping = 0.9;
+  k_bond_default = 8.0;
+  bond_rest_default = 1.6;
+  D = 16; // Filled placeholder
+  eta_sem = 0.18;
+  mutation_sigma_default = 0.02;
+  llm_eta = 0.06;
+  replicate_lambda = 8.0;
+  knowledge_decay = 0.995;
+  theta_K = 0.4; // Thresholds for replication
+  theta_A = 0.2;
+  theta_E = 0.1;
+  max_nodes = 1000; // Safety limit
+
+  constructor() {}
+
+  addNode(pos?: Vec3, sem?: number[]): NodeState {
+    if (this.nodes.size >= this.max_nodes) throw new Error("Max nodes reached");
+    const id = randomUUID();
+    const p: Vec3 = pos ?? [(Math.random()-0.5)*6, (Math.random()-0.5)*1, (Math.random()-0.5)*6];
+    const s = sem ?? new Array(this.D).fill(0).map(gaussian);
+    const n: NodeState = {
+      id, pos: p, vel: [0,0,0], mass: 1, energy: 0, K: Math.random()*0.5+0.1, A: 0.2,
+      sem: s, mutation_sigma: this.mutation_sigma_default, repProb: 0, neighbors: []
+    };
+    this.nodes.set(id, n);
+    return n;
+  }
+
+  addEdge(a: string, b: string, k?: number, L?: number) {
+    const e = {a, b, k: k ?? this.k_bond_default, L: L ?? this.bond_rest_default};
+    this.edges.push(e);
+    const na = this.nodes.get(a), nb = this.nodes.get(b);
+    if (na && !na.neighbors.includes(b)) na.neighbors.push(b);
+    if (nb && !nb.neighbors.includes(a)) nb.neighbors.push(a);
+  }
+
+  computeForces(): Map<string, Vec3> {
+    const forces = new Map<string, Vec3>();
+    for (const [id, n] of this.nodes) forces.set(id, [0, -0.01, 0]); // Gravity
+    for (const e of this.edges) {
+      const na = this.nodes.get(e.a), nb = this.nodes.get(e.b);
+      if (!na || !nb) continue;
+      const r = sub(na.pos, nb.pos);
+      const dist = len(r) + 1e-9;
+      const u = normalize(r);
+      const mag = -e.k * (dist - e.L);
+      const fij = scale(u, mag);
+      forces.set(na.id, add(forces.get(na.id)!, fij));
+      forces.set(nb.id, sub(forces.get(nb.id)!, fij));
+    }
+    return forces;
+  }
+
+  stepPhysics() {
+    const F = this.computeForces();
+    for (const [id, n] of this.nodes) {
+      const Fi = F.get(id)!;
+      const acc = scale(Fi, 1 / n.mass);
+      n.pos = add(n.pos, add(scale(n.vel, this.dt), scale(acc, 0.5 * this.dt * this.dt)));
+    }
+    const F2 = this.computeForces();
+    for (const [id, n] of this.nodes) {
+      const a1 = scale(F.get(id)!, 1 / n.mass);
+      const a2 = scale(F2.get(id)!, 1 / n.mass);
+      n.vel = scale(add(n.vel, scale(add(a1, a2), 0.5 * this.dt)), this.damping);
+    }
+  }
+
+  computeEnergiesAndAttention() {
+    for (const n of this.nodes.values()) {
+      let E = 0;
+      for (const e of this.edges) {
+        if (e.a === n.id || e.b === n.id) {
+          const other = this.nodes.get(e.a === n.id ? e.b : e.a)!;
+          const r = len(sub(n.pos, other.pos));
+          const dl = r - e.L;
+          E += 0.5 * e.k * dl * dl;
+        }
+      }
+      n.energy = E;
+      n.K *= this.knowledge_decay;
+    }
+    const raw = Array.from(this.nodes.values()).map(n => 6 * n.energy + 2 * n.K + gaussian() * 0.02);
+    const maxv = Math.max(...raw);
+    const exps = raw.map(v => Math.exp(v - maxv));
+    const sum = exps.reduce((a, b) => a + b, 0) || 1;
+    let idx = 0;
+    for (const n of this.nodes.values()) {
+      n.A = exps[idx++] / sum;
+      const ell = this.replicate_lambda * ((n.K - this.theta_K) + (n.A - this.theta_A) - (n.energy - this.theta_E));
+      n.repProb = 1 / (1 + Math.exp(-ell));
+      if (n.repProb > Math.random()) this.replicate(n);
+    }
+  }
+
+  semanticStep() {
+    const newS = new Map<string, number[]>();
+    for (const [id, n] of this.nodes) newS.set(id, n.sem.slice());
+    for (const [id, n] of this.nodes) {
+      const neigh = n.neighbors;
+      const accum = new Array(this.D).fill(0);
+      for (const j of neigh) {
+        const sj = this.nodes.get(j)!.sem;
+        for (let d = 0; d < this.D; d++) accum[d] += (sj[d] - n.sem[d]) / Math.max(1, neigh.length);
+      }
+      const out = newS.get(id)!;
+      for (let d = 0; d < this.D; d++) out[d] = n.sem[d] + this.eta_sem * accum[d] + gaussian() * n.mutation_sigma;
+    }
+    for (const [id, arr] of newS) this.nodes.get(id)!.sem = arr;
+  }
+
+  replicate(n: NodeState) {
+    const newPos = add(n.pos, scale([gaussian(), gaussian(), gaussian()], 0.5));
+    const newSem = n.sem.map(v => v + gaussian() * 0.05);
+    const newN = this.addNode(newPos, newSem);
+    for (const neigh of n.neighbors.slice(0, Math.floor(n.neighbors.length / 2))) {
+      this.addEdge(newN.id, neigh);
+    }
+  }
+
+  step() {
+    this.stepPhysics();
+    this.computeEnergiesAndAttention();
+    this.semanticStep();
+  }
+
+  snapshot() {
+    return {
+      nodes: Array.from(this.nodes.values()).map(n => ({
+        id: n.id, pos: n.pos, vel: n.vel, E: n.energy, K: n.K, A: n.A, sem_head: n.sem.slice(0, 4), repProb: n.repProb
+      })),
+      edges: this.edges.map(e => [e.a, e.b, {k: e.k, L: e.L}]),
+      stats: { totalEnergy: Array.from(this.nodes.values()).reduce((sum, n) => sum + n.energy, 0) }
+    };
+  }

@@ -1,0 +1,11 @@
+"""
+Monkey-patch urllib3 with SecureTransport-backed SSL-support.
+"""
+util.SSLContext = SecureTransportContext
+util.ssl_.SSLContext = SecureTransportContext
+util.HAS_SNI = HAS_SNI
+util.ssl_.HAS_SNI = HAS_SNI
+util.IS_SECURETRANSPORT = True
+util.ssl_.IS_SECURETRANSPORT = True
+
+

@@ -1,0 +1,4 @@
+for (int k = 0; k < 3; k++) {
+    // Simple geometric force component proportional to the scalar force and displacement
+    out_derivative[k] = scalar_force * (pos_j[k] - pos_i[k]);
+}

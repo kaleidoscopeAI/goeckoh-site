@@ -1,0 +1,3 @@
+Output('similarity-results', 'children'),
+Input('find-similar-quantum-button', 'n_clicks'),
+State('smiles-input', 'value')

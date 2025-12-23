@@ -1,0 +1,12 @@
+├── cli (2).py
+├── config (2).py
+├── config (3).py
+├── config (4).py
+├── config (5).py
+├── echo_installer_package(1).py
+├── echo_v4_complete (2).py
+├── __init__ (2).py
+├── __init__ (3).py
+├── speech_loop (2).py
+└── tk_gui (2).py
+

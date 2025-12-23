@@ -1,18 +1,29 @@
-class QuantumAwareCodeAnalyzer:
-    def __init__(self, dimensions: int = 4):
-        self.dimensions = dimensions
-        self.file_metrics = {}
+class GNNOracle(torch.nn.Module):
+    def __init__(self, input_dim: int) -> None:
+        super().__init__()
+        self.net = torch.nn.Sequential(
+            torch.nn.Linear(input_dim, 128),
+            torch.nn.ReLU(),
+            torch.nn.Linear(128, 128),
+            torch.nn.ReLU(),
+            torch.nn.Linear(128, 1),
+            torch.nn.Tanh(),
+        )
 
-    def analyze_file(self, file_path: str) -> str:
-        with open(file_path, 'r', errors='ignore') as f:
-            code = f.read()
-        node_id = str(hash(code))
-        self.file_metrics[node_id] = {"centrality": random.random()}
-        return node_id
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return self.net(x)
 
-    def analyze_dependencies(self, code_files: List[str]):
-        pass
+class RLPolicy(torch.nn.Module):
+    def __init__(self, input_dim: int, n_actions: int) -> None:
+        super().__init__()
+        self.net = torch.nn.Sequential(
+            torch.nn.Linear(input_dim, 128),
+            torch.nn.ReLU(),
+            torch.nn.Linear(128, 128),
+            torch.nn.ReLU(),
+            torch.nn.Linear(128, n_actions),
+        )
 
-    def get_analysis_report(self) -> Dict:
-        return {"file_metrics": self.file_metrics}
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return torch.nn.functional.softmax(self.net(x), dim=-1)
 

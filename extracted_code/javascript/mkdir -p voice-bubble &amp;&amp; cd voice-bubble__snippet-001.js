@@ -1,2 +1,4 @@
-This whitepaper, as written, is already strong enough to function as a serious technical manifesto and anchor document for Goeckoh, both scientifically and architecturally.[^9_1]
-
+function clamp(x, a, b) { return Math.max(a, Math.min(b, x)); }
+function lerp(a, b, t) { return a + (b - a) * t; }
+function smoothstep(edge0, edge1, x) {
+const t = clamp((x - edge0) / (edge1 - edge0), 0, 1);

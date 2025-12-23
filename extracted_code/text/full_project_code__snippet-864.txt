@@ -1,0 +1,1 @@
+re.split(r",\s*", make_headers(accept_encoding=True)["accept-encoding"])

@@ -1,1 +1,2 @@
-for (let i = 0; i < node.D.length; i++) out.D[i] += w * (nb.D[i] - node.D[i]);
++ const auditFile = path.join(W_DIR, `audit_log.jsonl`);
++ const record = { id, approver, ts: Date.now() };

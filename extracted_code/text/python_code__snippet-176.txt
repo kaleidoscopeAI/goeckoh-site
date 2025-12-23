@@ -1,5 +1,8 @@
-class Module_six_moves_urllib_request(_LazyModule):
-
-    """Lazy loading of moved objects in six.moves.urllib_request"""
+try:
+    while src[pos] in chars:
+        pos += 1
+except IndexError:
+    pass
+return pos
 
 

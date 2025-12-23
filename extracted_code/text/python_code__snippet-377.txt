@@ -1,0 +1,12 @@
+"""
+Return the build number of the current OS distribution, as a string,
+if provided.
+Otherwise, the empty string is returned. The build number is the third part
+of the dot-separated version string.
+
+For a description of the *best* parameter, see the :func:`distro.version`
+method.
+"""
+return _distro.build_number(best)
+
+

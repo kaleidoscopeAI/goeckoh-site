@@ -1,32 +1,25 @@
-    from importlib.resources import as_file, files
-
-    _CACERT_CTX = None
-    _CACERT_PATH = None
-
-    def where() -> str:
-        # This is slightly terrible, but we want to delay extracting the file
-        # in cases where we're inside of a zipimport situation until someone
-        # actually calls where(), but we don't want to re-extract the file
-        # on every call of where(), so we'll do it once then store it in a
-        # global variable.
-        global _CACERT_CTX
-        global _CACERT_PATH
-        if _CACERT_PATH is None:
-            # This is slightly janky, the importlib.resources API wants you to
-            # manage the cleanup of this file, so it doesn't actually return a
-            # path, it returns a context manager that will give you the path
-            # when you enter it and will do any cleanup when you leave it. In
-            # the common case of not needing a temporary file, it will just
-            # return the file system location and the __exit__() is a no-op.
-            #
-            # We also have to hold onto the actual context manager, because
-            # it will do the cleanup whenever it gets garbage collected, so
-            # we will also store that at the global level as well.
-            _CACERT_CTX = as_file(files("pip._vendor.certifi").joinpath("cacert.pem"))
-            _CACERT_PATH = str(_CACERT_CTX.__enter__())
-
-        return _CACERT_PATH
-
-    def contents() -> str:
-        return files("pip._vendor.certifi").joinpath("cacert.pem").read_text(encoding="ascii")
-
+from .distro import (
+    NORMALIZED_DISTRO_ID,
+    NORMALIZED_LSB_ID,
+    NORMALIZED_OS_ID,
+    LinuxDistribution,
+    __version__,
+    build_number,
+    codename,
+    distro_release_attr,
+    distro_release_info,
+    id,
+    info,
+    like,
+    linux_distribution,
+    lsb_release_attr,
+    lsb_release_info,
+    major_version,
+    minor_version,
+    name,
+    os_release_attr,
+    os_release_info,
+    uname_attr,
+    uname_info,
+    version,
+    version_parts,

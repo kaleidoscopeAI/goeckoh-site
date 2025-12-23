@@ -1,12 +1,23 @@
-    Hybrid State Representation: Each node possesses a hybrid state, combining continuous properties (like vector embeddings for knowledge K or spatial position x) and discrete properties (like binary bit-strings E or assigned roles R). The HybridState class in crystal_ai_os_full_system.py formalizes this concept.
+1.  **Bit-Level Crystallization (from crystal_ai_os_full_system.py):**
+    - The system's core is a `HybridState` containing both continuous (vector) and
+      discrete (bit-string) data for a network of nodes.
+    - A `SemanticHamiltonian` defines the system's total "energy," quantifying
+      its cognitive stress and incoherence.
+    - A `MetropolisEngine` uses simulated annealing to optimize the discrete bit
+      states, allowing the system to find globally optimal configurations.
+    - A `GradientFlow` engine optimizes the continuous vector states via
+      gradient descent.
 
-    Energy Minimization Dynamics: The system's behavior and learning process are driven by the physical principle of minimizing a global energy function, defined by a Semantic Hamiltonian. This function quantifies the system's total stress, incoherence, and error. The system evolves using:
+2.  **Ollama LLM Integration (from cognitive_crystal_system.py):**
+    - A `CognitiveEngine` orchestrates the system.
+    - Periodically, it reflects on its own state, creating a summary prompt.
+    - It calls a simulated `reflect_with_ollama` function to generate a
+      high-level textual "thought" about its current condition.
 
-        Gradient Flow: To smoothly adjust the continuous vector states.
-
-        Metropolis Annealing: To intelligently flip bits in the discrete states, allowing the system to escape local minima and find better configurations.
-
-    Reflection and Reasoning Loop: Higher-level thought is achieved through a reflective process. The system can cluster nodes into supernodes, summarize their state, and use a transformer model (ReflectionTransformer) or an external LLM (llm_reflection) to reason about that state and guide its evolution.
-
-    Multi-Layered Abstraction: The project is designed with multiple layers, from low-level bit-wise operations to high-level applications and user interfaces.
+3.  **Visual Crystallization (from UnifiedCognitiveSystem.js):**
+    - A `Visualizer` class directly implements the 3D embedding logic from the
+      React frontend.
+    - It takes the AI's textual "thought" and transforms it into a set of 3D
+      coordinates for a particle cloud, simulating the emergent "thought-form."
+    - Instead of rendering, it reports descriptive statistics of the visual state.
 

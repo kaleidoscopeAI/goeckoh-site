@@ -1,0 +1,3 @@
+whisper_model: str = "base.en"
+tts_model: str = "tts_models/en/vctk/vits"
+

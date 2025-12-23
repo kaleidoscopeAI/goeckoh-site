@@ -1,0 +1,12 @@
+"""Compute an ns-package subpath for a filesystem or zipfile importer"""
+
+subpath = os.path.join(path_item, packageName.split('.')[-1])
+normalized = _normalize_cached(subpath)
+for item in module.__path__:
+    if _normalize_cached(item) == normalized:
+        break
+else:
+    # Only return the path if it's not already there
+    return subpath
+
+

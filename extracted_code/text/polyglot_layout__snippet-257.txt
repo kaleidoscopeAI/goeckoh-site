@@ -1,0 +1,5 @@
+ An Avatar18k engine (18,000 nodes, spring+swirl+noise dynamics tied to H_bits & S_field, and shaped by the last caption hash).
+ A binary WebSocket endpoint at /avatar that streams frames at ~10 FPS.
+ Binary frame format: [uint32_le N] + [N*3 float32_le positions] in [-1,1].
+
+

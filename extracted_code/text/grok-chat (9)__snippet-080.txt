@@ -1,0 +1,4 @@
+harvests) via a centralized _record_telemetry; added optional
+GOECKOH_MIRROR_LOG_ALL flag, ensures JSONL logging by default at
+backend/.run/mirror_metrics.jsonl, and keeps telemetry/harvest logs in one
+place.

@@ -1,0 +1,11 @@
+r"""^
+# Optional user, e.g. 'git@'
+(\w+@)?
+# Server, e.g. 'github.com'.
+([^/:]+):
+# The server-side path. e.g. 'user/project.git'. Must start with an
+# alphanumeric character so as not to be confusable with a Windows paths
+# like 'C:/foo/bar' or 'C:\foo\bar'.
+(\w[^:]*)
+$""",
+re.VERBOSE,

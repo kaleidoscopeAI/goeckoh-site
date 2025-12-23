@@ -1,0 +1,26 @@
+groups: List[List[bool]] = [[]]
+
+for marker in markers:
+    assert isinstance(marker, (list, tuple, str))
+
+    if isinstance(marker, list):
+        groups[-1].append(_evaluate_markers(marker, environment))
+    elif isinstance(marker, tuple):
+        lhs, op, rhs = marker
+
+        if isinstance(lhs, Variable):
+            lhs_value = _get_env(environment, lhs.value)
+            rhs_value = rhs.value
+        else:
+            lhs_value = lhs.value
+            rhs_value = _get_env(environment, rhs.value)
+
+        groups[-1].append(_eval_op(lhs_value, op, rhs_value))
+    else:
+        assert marker in ["and", "or"]
+        if marker == "or":
+            groups.append([])
+
+return any(all(item) for item in groups)
+
+

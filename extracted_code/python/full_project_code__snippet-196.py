@@ -1,4 +1,9 @@
-import argparse
+def where() -> str:
+    return DEBIAN_CA_CERTS_PATH
 
-from pip._vendor.certifi import contents, where
+
+def contents() -> str:
+    with open(where(), "r", encoding="ascii") as data:
+        return data.read()
+
 

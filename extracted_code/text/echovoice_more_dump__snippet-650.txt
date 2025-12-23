@@ -1,0 +1,10 @@
+parser = argparse.ArgumentParser()
+parser.add_argument('--steps', type=int, default=200, help='simulation steps')
+parser.add_argument('--nodes', type=int, default=32, help='number of nodes')
+parser.add_argument('--seed', type=int, default=0, help='random seed')
+args = parser.parse_args()
+
+cfg = Config()
+run_simulation(args.steps, args.nodes, cfg, seed=args.seed)
+
+

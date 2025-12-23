@@ -1,1 +1,1 @@
-const e2 = powerIterationSymmetric(CovCopy, 500, 1e-9);
+const doc = await db.collection("projection_w_versions").doc(id).get();

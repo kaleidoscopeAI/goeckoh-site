@@ -1,0 +1,5 @@
+"""Calculates the Metropolis acceptance probability."""
+current_prob = self._calculate_state_probability(current_state, network)
+new_prob = self._calculate_state_probability(new_state, network)
+return min(1, new_prob / current_prob) if current_prob > 0 else 1.0
+

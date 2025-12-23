@@ -1,0 +1,4 @@
+  """Write mono PCM16 wav safely."""
+  x = np.asarray(list(samples), dtype=np.float32)
+  if x.size == 0: x = np.zeros(1, dtype=np.float32)
+

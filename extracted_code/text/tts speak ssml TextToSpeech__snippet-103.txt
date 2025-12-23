@@ -1,0 +1,5 @@
+      val shortArray = ShortArray(audioBytes.size / 2)
+      java.nio.ByteBuffer.wrap(audioBytes).asShortBuffer().get(shortArray)
+      val volume = calculateRMS(shortArray)
+
+      val arousal = ((avgPitch / 150.0) + (pitchVariance / 50.0) + (volume

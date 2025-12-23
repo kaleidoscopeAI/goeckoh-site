@@ -1,2 +1,2 @@
-package com.kaleidoscope.body
-data class ConsciousState(val awareness: Float, val valence: Float, val coherence: Float)
+readme += "To enable true owner-mode capabilities (stronger hardware control) you must provision the app as a Device Owner using Android
+Enterprise provisioning (QR code provisioning during device setup) or by using an OEM provisioning flow. A sample provisioning JSON is included

@@ -1,1 +1,6 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+This class is the heart of the system because it translates the abstract state of the AI—its knowledge, relationships, and structure—into a single, quantifiable energy value (E). The AI's primary goal is to minimize this energy. It's groundbreaking because it unifies two different kinds of information into one equation:
+
+    Continuous Data: The semantic meaning held in floating-point vectors (state.x).
+
+    Discrete Data: The symbolic, logical structure held in bit-strings (state.E).
+

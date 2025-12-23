@@ -1,3 +1,2 @@
-  └ Search def _speak in speech_mirror.py
-    Read speech_mirror.py
+  I'll run it from the repo root with the correct path.
 

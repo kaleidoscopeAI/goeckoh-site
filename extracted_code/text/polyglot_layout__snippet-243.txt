@@ -1,0 +1,9 @@
+  # Core orchestrator
+  asyncio.create_task(orch.run())
+  # Start 18k-node avatar agent
+  try:
+       agent = AvatarAgent(sqlite_path=DB_PATH, frames_dir=OUT_SHAPES)
+       app.state.avatar_task = asyncio.create_task(agent.run(fps=12))
+  except Exception as e:
+       print("Avatar agent failed to start:", e)
+

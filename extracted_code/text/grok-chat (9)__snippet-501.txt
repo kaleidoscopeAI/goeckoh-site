@@ -1,0 +1,3 @@
+  content = Content(role="user", parts=[Part(text=query)])
+  runner = await setup_session_and_runner()
+  events = runner.run_async(user_id=USER_ID, session_id=SESSION_ID,

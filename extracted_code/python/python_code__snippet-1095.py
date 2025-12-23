@@ -1,12 +1,5 @@
-from __future__ import annotations
+import io
+import numpy as np
+import threading
 
-import logging
-from argparse import ArgumentParser
-from typing import TYPE_CHECKING
-
-from pip._vendor import requests
-
-from pip._vendor.cachecontrol.adapter import CacheControlAdapter
-from pip._vendor.cachecontrol.cache import DictCache
-from pip._vendor.cachecontrol.controller import logger
-
+# Try to import advanced TTS, fallback to standard

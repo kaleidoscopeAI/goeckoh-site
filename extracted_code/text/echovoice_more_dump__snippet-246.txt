@@ -1,1 +1,7 @@
-Perfect. The next step is to replace the placeholder sparse math with a GPU-accelerated implementation using WebGPU. This will give you orders-of-
+• Discrete Ricci Curvature: Analyzes network topology in the CSA, identifying integration hubs and bottlenecks to guide Φ approximations.
+• Ricci Flow: Dynamically adapts network connections, simulating structural plasticity across SMs and GW.
+• Tensor Networks (TNs): Represents high-dimensional states (e.g., Φ-structures, GW content) efficiently, using algorithms like Belief Propagation for optimization.
+• Numerical PDE/SDE Solvers: Simulates continuous and stochastic dynamics for system-environment interactions via the GI.
+• Neurosymbolic AI: Grounds internal symbols in external knowledge graphs (KGs) through the GI, enhancing meaning and accuracy.
+• Real-time Data Integration: Links the GI to external data streams, enabling real-time environmental interaction.
+• Machine Learning: Implements SM functions, GW learning, and MC policies, forming the computational foundation.

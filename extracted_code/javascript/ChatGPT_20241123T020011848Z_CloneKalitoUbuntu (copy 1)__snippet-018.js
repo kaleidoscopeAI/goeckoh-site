@@ -1,2 +1,1 @@
-4. Emotional and Contextual Adaptation Over Cycles: Graphs showing changes in virtual "emotional" states of nodes across cycles, as a function of environmental stimuli and internal state adaptations.
-
+4. User Interface and API Design: Developing a user interface that can communicate the AI’s status, goals, and learning outcomes in an intuitive way will be key. An AI OS might require a novel API to let developers build applications that can interface directly with the underlying AI systems.

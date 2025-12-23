@@ -1,2 +1,1 @@
-+ for (let i = 0; i < out.K.length; i++) out.K[i] *= lambdaM;
-+ for (let i = 0; i < out.D.length; i++) out.D[i] *= lambdaM;
+- **Contraction Mapping**: The global function **G** was designed to be a contraction mapping. In a simplified example with **G(S, O, R, I) = A S

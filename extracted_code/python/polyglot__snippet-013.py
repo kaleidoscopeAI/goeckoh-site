@@ -1,1 +1,2 @@
-def forward(self, x: torch.Tensor) -> torch.Tensor:
+class KnowledgeProcessor:
+def __init__(self) -> None:

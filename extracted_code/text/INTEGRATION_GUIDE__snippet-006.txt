@@ -1,0 +1,6 @@
+if (voiceData && isActive) {
+  updateMetrics(
+    voiceData.metrics.clarity,
+    voiceData.metrics.fluency
+  );
+}

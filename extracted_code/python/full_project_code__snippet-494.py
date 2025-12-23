@@ -1,11 +1,8 @@
-def retry(
-    sleep: t.Callable[[t.Union[int, float]], None] = sleep,
-    stop: "StopBaseT" = stop_never,
-    wait: "WaitBaseT" = wait_none(),
-    retry: "RetryBaseT" = retry_if_exception_type(),
-    before: t.Callable[["RetryCallState"], None] = before_nothing,
-    after: t.Callable[["RetryCallState"], None] = after_nothing,
-    before_sleep: t.Optional[t.Callable[["RetryCallState"], None]] = None,
-    reraise: bool = False,
-    retry_error_cls: t.Type["RetryError"] = RetryError,
-    retry_error_callback: t.Optional[t.Callable[["RetryCallState"], t.Any]] = None,
+import sys
+
+if sys.version_info >= (3, 8):  # pragma: no cover (py38+)
+    from typing import Literal
+else:  # pragma: no cover (py38+)
+    from pip._vendor.typing_extensions import Literal
+
+

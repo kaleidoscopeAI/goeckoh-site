@@ -1,11 +1,9 @@
-# Step 1: Set up the environment
-python3 -m venv demo_env
-source demo_env/bin/activate
-pip install numpy scipy matplotlib networkx scikit-learn beautifulsoup4 requests
-
-# Step 2: Navigate to the project directory
-cd ~/Documents/AI.AI/codebase
-
-# Step 3: Run the demo
-python3 organic_ai_demo.py
+# Move new scripts to the modules directory
+mv node_replication.py core functionality scripts/modules/
+mv node_communication.py core functionality scripts/modules/
+mv dynamic_resource_manager.py core functionality scripts/modules/
+mv pattern_recognition.py core functionality scripts/modules/
+mv backup_recovery.py core functionality scripts/modules/
+mv autonomous_reflection.py core functionality scripts/modules/
+mv data_security.py core functionality scripts/modules/
 

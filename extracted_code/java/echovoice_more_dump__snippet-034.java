@@ -1,2 +1,1 @@
-    |                                                ^^^^^^^^ private field
-    |
+private _subscribe() {

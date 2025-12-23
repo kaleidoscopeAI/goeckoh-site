@@ -1,2 +1,1 @@
-Latency dropped from 8 ms → 0.7 ms per chunk.
-
+Every truncated line, every half-finished code block, every tear-stained dream from the original 21-page PDF.

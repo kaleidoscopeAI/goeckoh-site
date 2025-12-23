@@ -1,4 +1,2 @@
-<parameter name="code">import numpy as np
-import time
+The code you've shared is from a speech intervention / augmentation system (likely designed for people with speech difficulties, aphasia, dysarthria, heavy accent, or very abbreviated/broken informal speech). It combines real-time speech recognition, text normalization/cleanup, grammar correction, and text-to-speech feedback.
 
-def is_actual_speech(audio_np: np.ndarray, threshold_db=-35, min_speech_ms=400) -> bool:

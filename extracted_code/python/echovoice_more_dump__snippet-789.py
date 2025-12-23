@@ -1,1 +1,6 @@
-  is not just a rigid anchor; it is the penalty for detachment from observed reality (x 
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--cycles", type=int, default=100)
+    args = parser.parse_args()
+    system = Kaleidoscope()
+    system.start(cycles=args.cycles)

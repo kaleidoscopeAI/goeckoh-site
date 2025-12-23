@@ -1,0 +1,12 @@
+arr = np.asarray(bit_array).astype(np.uint8).ravel()
+if arr.size == 0:
+    return np.zeros(0, dtype=np.uint64)
+pad = (-arr.size) % _WORD_BITS
+if pad > 0:
+    arr = np.concatenate([arr, np.zeros(pad, dtype=np.uint8)])
+arr_bits = arr.reshape(-1, _WORD_BITS)
+# packbits returns bytes (per row) in big-endian or little; we use little
+bytes_rows = np.packbits(arr_bits, axis=1, bitorder='little')
+words = np.frombuffer(bytes_rows.tobytes(), dtype=np.uint64)
+return words
+

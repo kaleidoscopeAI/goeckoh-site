@@ -1,0 +1,19 @@
+2543          heart_sample = []
+2544 +        heart_topk = []
+2545          heart_rust = {}
+     ⋮
+2553                  heart_sample = nodes.tolist()
+2554 +            # Top-k activation (by absolute value) to surface richer state
+2555 +            flat = nodes.flatten()
+2556 +            topk_idx = np.argpartition(np.abs(flat), -32)[-32:]
+2557 +            sorted_idx = topk_idx[np.argsort(-np.abs(flat[topk_idx]))]
+2558 +            heart_topk = [{"index": int(i), "value": float(flat[i])} for i in sorted_idx]
+2559          except Exception:
+2560              heart_sample = []
+2561 +            heart_topk = []
+2562          # Optional: expose Rust heart snapshot if available (best-effort)
+     ⋮
+2590              'heart_sample': heart_sample,
+2591 +            'heart_topk': heart_topk,
+2592              'gcl_history': getattr(self.crystalline_heart, "gcl_history", []),
+

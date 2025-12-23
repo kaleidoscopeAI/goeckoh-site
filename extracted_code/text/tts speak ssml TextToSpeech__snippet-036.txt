@@ -1,0 +1,2 @@
+fun onUpdateReceived(message: String)
+fun onDataReceived(samples: FloatArray)

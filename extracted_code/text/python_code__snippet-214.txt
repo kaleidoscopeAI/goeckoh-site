@@ -1,1 +1,1 @@
-# Ignore warning raised when using --trusted-host.
+name.lower().replace("-", "_"): name for name in _ALL_FIELDS

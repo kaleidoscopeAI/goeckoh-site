@@ -1,1 +1,1 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+- Application class `KaleidoscopeApp` exposes a global context for native calls.

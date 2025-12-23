@@ -1,1 +1,5 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+"""Represents the complete state of the AI's mind."""
+E: Dict[int, np.ndarray]  # Discrete bit-string states
+x: Dict[int, np.ndarray]  # Continuous vector states
+metadata: Dict[str, Any] = field(default_factory=dict)
+

@@ -1,15 +1,19 @@
-import contextlib
-import ctypes
-import platform
-import ssl
-import typing
-from ctypes import (
-    CDLL,
-    POINTER,
-    c_bool,
-    c_char_p,
-    c_int32,
-    c_long,
-    c_uint32,
-    c_ulong,
-    c_void_p,
+import logging
+import os.path
+import pathlib
+import re
+import urllib.parse
+import urllib.request
+from typing import List, Optional, Tuple
+
+from pip._internal.exceptions import BadCommand, InstallationError
+from pip._internal.utils.misc import HiddenText, display_path, hide_url
+from pip._internal.utils.subprocess import make_command
+from pip._internal.vcs.versioncontrol import (
+    AuthInfo,
+    RemoteNotFoundError,
+    RemoteNotValidError,
+    RevOptions,
+    VersionControl,
+    find_path_to_project_root_from_repo_root,
+    vcs,

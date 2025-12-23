@@ -1,0 +1,6 @@
+- \$ G \$ is the original operator on the cognitive state with input $I_k$,
+- $I_{crawl}$ is the crawler’s contribution (bounded embedding output),
+- $H$ updates curiosity tension based on stimulation and feedback,
+- $\text{Perf}$ is performance feedback signal decreasing curiosity.
+
+

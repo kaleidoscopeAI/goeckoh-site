@@ -1,1 +1,1 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+  state is updated using a first-order exponential filter modulated by the ingestion learning rate η 

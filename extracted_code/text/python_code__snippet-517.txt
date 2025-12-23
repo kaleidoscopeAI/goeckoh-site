@@ -1,0 +1,11 @@
+"""A prompt that returns an integer.
+
+Example:
+    >>> burrito_count = IntPrompt.ask("How many burritos do you want to order")
+
+"""
+
+response_type = int
+validate_error_message = "[prompt.invalid]Please enter a valid integer number"
+
+

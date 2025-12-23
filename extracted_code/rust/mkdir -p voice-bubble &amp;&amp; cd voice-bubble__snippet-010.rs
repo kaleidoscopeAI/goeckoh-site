@@ -1,22 +1,11 @@
-use bytes::Bytes;
-
-struct AudioFrame {
-    data: Bytes,  // Zero-copy buffer
-    timestamp: u64,
-}
-
-impl AudioFrame {
-    fn from_slice(slice: &[f32]) -> Self {
-        let bytes: Vec<u8> = unsafe {
-            std::slice::from_raw_parts(
-                slice.as_ptr() as *const u8,
-                slice.len() * std::mem::size_of::<f32>(),
-            )
-        }.to_vec();
-        
-        Self {
-            data: Bytes::from(bytes),
-            timestamp: std::time::Instant::now().elapsed().as_micros() as u64,
-        }
+// Build script for Android
+// build.rs
+fn main() {
+    println!("cargo:rustc-link-lib=log");
+    println!("cargo:rustc-link-lib=aaudio");
+    
+    // Cross-compile instructions
+    if std::env::var("TARGET").unwrap().contains("android") {
+        println!("cargo:rustc-env=ANDROID_NDK=/path/to/ndk");
     }
 }

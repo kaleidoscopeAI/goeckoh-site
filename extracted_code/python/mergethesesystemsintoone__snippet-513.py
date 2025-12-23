@@ -1,78 +1,15 @@
-from dataclasses import dataclass, field
+def __init__(self):
+    self._subs: List[asyncio.Queue] = []
 
-from typing import Dict, List, Set, Optional, Tuple
+def subscribe(self):
+    q = asyncio.Queue(maxsize=200)
+    self._subs.append(q)
+    return q
 
-import networkx as nx
-
-import numpy as np
-
-from datetime import datetime
-
-import uuid
-
-
-
-
-class DomainNode:
-
-
-
-
-
-
-
-
-
-
-
-
-class ClusterManager:
-
-
-
-
-    def __init__(self):
-
-
-
-
-
-
-
-    def create_domain_node(self, insight: Dict[str, Any]) -> DomainNode:
-
-
-
-
-
-
-        
-
-
-
-
-
-
-
-        
-
-
-
-
-
-
-
-        
-
-
-
-
-    def _extract_domain(self, data: StandardizedData) -> str:
-
-
-
-
-
-
-
+async def publish(self, msg: Dict[str, Any]):
+    for q in list(self._subs):
+        try:
+            await q.put(msg)
+        except asyncio.QueueFull:
+            pass
 

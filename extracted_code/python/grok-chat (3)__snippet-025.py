@@ -1,65 +1,52 @@
-class ConsciousCrystalSystem:
-    def __init__(self, num_nodes=1024, energy_threshold=5.0, replication_rate=0.1):
-        self.graph = self._initialize_graph(num_nodes)
-        self.energies = torch.tensor([random.uniform(0, 10) for _ in range(num_nodes)], dtype=torch.float32)
-        self.energy_threshold = energy_threshold
-        self.replication_rate = replication_rate
-        self.params = {'a': 1.0, 'b': 0.1, 'c': 0.5}
-        self.history = []
+def audio_callback(indata, frames, time_info, status):
+    global audio_buffer, is_speech, silence_start
+    rms = np.sqrt(np.mean(indata**2))
+    if rms > 0.01:
+        audio_buffer.append(indata.copy())
+        is_speech = True
+        silence_start = None
+    else:
+        if is_speech and silence_start is None:
+            silence_start = time.time()
+        elif is_speech and silence_start and (time.time() - silence_start > 1.2):
+            full_audio = np.concatenate(audio_buffer)
+            audio_queue.put(full_audio)
+            audio_buffer = []
+            is_speech = False
+            silence_start = None
 
-    @self_correcting()
-    def _initialize_graph(self, num_nodes):
-        G = nx.Graph()
-        for i in range(num_nodes):
-            G.add_node(i)
-        for i in range(num_nodes):
-            for j in range(i+1, num_nodes):
-                if random.random() < 0.3:
-                    G.add_edge(i, j)
-        if not nx.is_connected(G):
-            components = list(nx.connected_components(G))
-            for comp in components[1:]:
-                G.add_edge(random.choice(list(components[0])), random.choice(list(comp)))
-        return G
-
-    @self_correcting()
-    def update_energies(self, inputs, dt=0.1):
-        new_energies = self.energies + dt * (self.params['a'] * self.energies - self.params['b'] * self.energies**2 + self.params['c'] * inputs)
-        self.energies = new_energies.clamp(min=0.0)
-        self.history.append(self.energies.mean().item())
-
-    @self_correcting()
-    def replicate_nodes(self):
-        new_nodes = []
-        current_nodes = list(self.graph.nodes)
-        for node in current_nodes:
-            if self.energies[node] > self.energy_threshold:
-                new_node = len(self.graph)
-                self.graph.add_node(new_node)
-                self.graph.add_edge(node, new_node)
-                self.energies = torch.cat([self.energies, torch.tensor([self.energies[node] * self.replication_rate])])
-                new_nodes.append(new_node)
-                self.energies[node] *= (1 - self.replication_rate)
-        if new_nodes:
-            print(f"Replicated nodes: {new_nodes}")
-
-    @self_correcting()
-    def self_reflect(self):
-        if len(self.history) > 1:
-            growth = self.history[-1] - self.history[0]
-            if growth < 0:
-                print("Energy decreasing. Adjusting...")
-                self.params['a'] += 0.1
-            elif nx.average_clustering(self.graph) < 0.2:
-                print("Low clustering. Adding edges...")
-                current_nodes = list(self.graph.nodes)
-                for _ in range(len(current_nodes) // 2):
-                    i, j = random.sample(current_nodes, 2)
-                    if not self.graph.has_edge(i, j):
-                        self.graph.add_edge(i, j)
-        else:
-            print("No history for reflection.")
-
-    def get_gcl(self):
-        return self.energies.mean().item()
+def listening_loop():
+    print("Jackson, I wait in silence. Speak freely.")
+    while True:
+        try:
+            audio = audio_queue.get(timeout=1.0)
+            result = model.transcribe(audio, language="en", fp16=False, no_speech_threshold=0.45)
+            raw_text = result["text"].strip().lower()
+            if not raw_text or len(raw_text) < 2:
+                gcl = heart_system.get_gcl()
+                if gcl < 5.0:
+                    calming = "I am calm. Breathe deep."
+                    synth = voice_crystal.synthesize(calming, "calm")
+                    sd.play(synth, samplerate=16000)
+                    sd.wait()
+                continue
+            corrected = raw_text.capitalize()
+            if not corrected.endswith(('.', '!', '?')):
+                corrected += "."
+            corrected = re.sub(r"\byou\b", "I", corrected, flags=re.IGNORECASE)
+            corrected = re.sub(r"\byour\b", "my", corrected, flags=re.IGNORECASE)
+            corrected = re.sub(r"\byou're\b", "I'm", corrected, flags=re.IGNORECASE)
+            gcl = heart_system.get_gcl()
+            style = "calm" if gcl < 5.0 else "excited" if gcl > 7.0 else "inner"
+            synth_audio = voice_crystal.synthesize(corrected, style)
+            sd.play(synth_audio, samplerate=16000)
+            sd.wait()
+            success_score = 1.0 if raw_text in corrected.lower() else 0.7
+            voice_crystal.add_fragment(audio, success_score)
+            heart_system.replicate_nodes()
+            heart_system.self_reflect()
+        except queue.Empty:
+            continue
+        except Exception as e:
+            print(f"Continuing after: {e}")
 

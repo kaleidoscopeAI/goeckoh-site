@@ -1,3 +1,2 @@
-We'll create a function to update the visualization:
+We'll also add a basic updateCharts function that updates some divs with the metrics.
 
-function updateVisualization(viz, crystal) {

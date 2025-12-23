@@ -1,2 +1,2 @@
-python3 /home/studio/Desktop/node-demo/emotional_state_demo.py
+python3 /home/studio/Desktop/node-demo/confidence_calculation_demo.py
 

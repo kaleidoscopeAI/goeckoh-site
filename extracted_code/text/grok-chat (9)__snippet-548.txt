@@ -1,0 +1,2 @@
+noise: constant properties (hum, white noise).
+

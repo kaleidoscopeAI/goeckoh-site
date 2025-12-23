@@ -1,4 +1,7 @@
-    import bio_audio
-    # Prefer the modern BioAcousticEngine exported by rust_core
-    if hasattr(bio_audio, "BioAcousticEngine"):
-        RUST_AVAILABLE = True
+from typing import Literal
+
+from pip._vendor.requests import PreparedRequest
+from pip._vendor.urllib3 import HTTPResponse
+
+from pip._vendor.cachecontrol.cache import BaseCache
+

@@ -1,1 +1,1 @@
-* Learns from peers, historical logs, or external sources
+def process(self, data: List[float]):

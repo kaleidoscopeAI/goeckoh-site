@@ -1,13 +1,25 @@
-import wikipediaapi
+import networkx as nx
+import matplotlib.pyplot as plt
 
-def crawl_and_learn(node, topic):
-    wiki = wikipediaapi.Wikipedia('en')
-    page = wiki.page(topic)
+class MirroredNetwork:
+    def __init__(self):
+        self.graph = nx.Graph()
+        self.nodes = {}
 
-    if page.exists():
-        annotations = {"summary": page.summary[:200], "keywords": topic}
-        node.learn({topic: annotations})
-        node.logs.append(f"Crawled Wikipedia for topic: {topic}")
-    else:
-        node.logs.append(f"Wikipedia page for topic: {topic} does not exist.")
+    def add_node(self, node):
+        self.graph.add_node(node.node_id)
+        self.nodes[node.node_id] = node
+
+    def add_edge(self, node1_id, node2_id):
+        self.graph.add_edge(node1_id, node2_id)
+
+    def visualize(self):
+        nx.draw(self.graph, with_labels=True, node_size=500, font_size=10, node_color="skyblue")
+        plt.show()
+
+    def sync_nodes(self, node1_id, node2_id):
+        node1 = self.nodes[node1_id]
+        node2 = self.nodes[node2_id]
+        node1.communicate(node2)
+        node2.communicate(node1)
 

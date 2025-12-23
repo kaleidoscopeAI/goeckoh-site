@@ -1,1 +1,1 @@
-No central SystemUpgrader class or function to orchestrate the upgrade process (e.g., upgrade_system(system_info, config)).
+if (norm > 0) for (let i = 0; i < dim; i++) v[i] /= norm;

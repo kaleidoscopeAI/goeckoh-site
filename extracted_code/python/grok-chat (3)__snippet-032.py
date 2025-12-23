@@ -1,23 +1,15 @@
-def self_correcting(max_retries: int = 3, delay: float = 1.0):
-    """
-    Decorator: retry a function a few times before giving up.
-    Prints soft errors, then raises RuntimeError on persistent failure.
-    """
-    def decorator(func):
-        def wrapper(*args, **kwargs):
-            last_exc: Optional[Exception] = None
-            for attempt in range(max_retries):
-                try:
-                    return func(*args, **kwargs)
-                except Exception as e:
-                    last_exc = e
-                    print(
-                        f"[SELF-CORRECT] Error in {func.__name__}: {e}. "
-                        f"Retrying {attempt + 1}/{max_retries}..."
-                    )
-                    time.sleep(delay)
-            raise RuntimeError(
-                f"Failed after {max_retries} retries in {func.__name__}"
-            ) from last_exc
-        return wrapper
-    return decorator
+import time
+import threading
+import queue
+import tempfile
+import os
+import re
+from pathlib import Path
+import numpy as np
+import sounddevice as sd
+import librosa
+import soundfile as sf
+import torch
+import whisper
+import pyttsx3
+from scipy.signal import butter, lfilter

@@ -1,13 +1,5 @@
-class _EditableInfo(NamedTuple):
-    requirement: str
-    comments: List[str]
+import numpy as np
+import math
+from dataclasses import dataclass
+from goeckoh.persistence.session_persistence import SessionLog
 
-
-def freeze(
-    requirement: Optional[List[str]] = None,
-    local_only: bool = False,
-    user_only: bool = False,
-    paths: Optional[List[str]] = None,
-    isolated: bool = False,
-    exclude_editable: bool = False,
-    skip: Container[str] = (),

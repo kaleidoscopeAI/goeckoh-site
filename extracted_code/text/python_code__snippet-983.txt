@@ -1,0 +1,2 @@
+register_namespace_handler(pkgutil.ImpImporter, file_ns_handler)
+

@@ -1,0 +1,8 @@
+  n = int(seconds * sr); out = []
+  for i in range(n):
+      t = i / sr
+      a = a_fn(t); m = m_fn(t); rho = rho_fn(t); fc = max(5.0, fc_fn(t))
+      y = a * (1.0 + beta * math.sin(2.0 * math.pi * m * t)) * math.sin(2.0 * math.pi * fc * t + alpha * math.sin(2.0 * math.pi * rho * t))
+      out.append(y)
+  return out
+

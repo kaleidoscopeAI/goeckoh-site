@@ -1,0 +1,11 @@
+# simple Bell-like 2x2
+R = np.zeros((2,2), dtype=complex)
+R[0,0] = 1.0/np.sqrt(2)
+R[1,1] = 1.0/np.sqrt(2)
+core = RelationalCore(R)
+rhoS = core.rho_S()
+assert rhoS.shape == (2,2)
+S = core.entanglement_entropy()
+# for Bell pair S = ln(2)
+assert abs(S - np.log(2)) < 1e-8
+

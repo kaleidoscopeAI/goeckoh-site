@@ -1,12 +1,8 @@
-    def Concatenate(self, parameters):
-        """Used in conjunction with ``ParamSpec`` and ``Callable`` to represent a
-        higher order function which adds, removes or transforms parameters of a
-        callable.
+from collections import defaultdict
+from logging import getLogger
+from typing import Any, DefaultDict
 
-        For example::
+from pip._vendor.resolvelib.reporters import BaseReporter
 
-           Callable[Concatenate[int, P], int]
+from .base import Candidate, Requirement
 
-        See PEP 612 for detailed information.
-        """
-        return _concatenate_getitem(self, parameters)

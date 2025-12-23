@@ -1,8 +1,9 @@
-import os
+"""Wait strategy that waits a fixed amount of time between each retry."""
 
-from pip._vendor.pyproject_hooks import BuildBackendHookCaller
+def __init__(self, wait: _utils.time_unit_type) -> None:
+    self.wait_fixed = _utils.to_seconds(wait)
 
-from pip._internal.build_env import BuildEnvironment
-from pip._internal.exceptions import (
-    InstallationSubprocessError,
-    MetadataGenerationFailed,
+def __call__(self, retry_state: "RetryCallState") -> float:
+    return self.wait_fixed
+
+

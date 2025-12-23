@@ -1,14 +1,23 @@
-    12 +- Neurocoherence Lattice (renamed from “Crystalline Heart”) now exposes
-        a downsampled lattice profile and GCL history in `/status` for transpare
-        ncy.
-    13
-       ⋮
-    15  - No empirical validation pipeline: no logged benchmarks for loop latenc
-        y, N1/APE proxies, or inner-speech emergence metrics.
-    15 -- Crystalline Heart is stubbed; no visible 1024-node ODE lattice outputs
-         in the API or UI.
-    16 +- Neurocoherence Lattice still simplified; no validated 1024-node ODE dy
-        namics surfaced beyond downsampled profile.
-    17  - Rust audio kernel (`audio_kernel/`) not wired into speech mirror; curr
-        ent loop is pure Python + sounddevice.
+    889 +    def mirror_validate(self):
+    890 +        """Lightweight validation summary: latency, GCL, drift."""
+    891 +        if not self.mirror_service:
+    892 +            return jsonify({"available": False}), 200
+    893 +        try:
+    894 +            summary = self.mirror_service.validation_summary()
+    895 +            return jsonify({"success": True, "summary": summary})
+    896 +        except Exception as e:
+    897 +            return jsonify({"success": False, "error": str(e)}), 500
+    898 +
+    899 +    def mirror_reset_metrics(self):
+    900 +        """Reset telemetry for controlled validation runs."""
+    901 +        if not self.mirror_service:
+    902 +            return jsonify({"success": False, "error": "Mirror service
+         not available"}), 503
+    903 +        try:
+    904 +            self.mirror_service.reset_metrics()
+    905 +            return jsonify({"success": True})
+    906 +        except Exception as e:
+    907 +            return jsonify({"success": False, "error": str(e)}), 500
+    908
+
 

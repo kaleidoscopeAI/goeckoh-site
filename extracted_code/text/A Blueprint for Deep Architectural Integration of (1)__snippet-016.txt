@@ -1,3 +1,0 @@
-- The system employs **simulated annealing with a Metropolis algorithm**, using a carefully designed temperature schedule and acceptance probabilities.
-
-

@@ -1,22 +1,35 @@
-def get_requirement(req_string: str) -> Requirement:
-    """Construct a packaging.Requirement object with caching"""
-    # Parsing requirement strings is expensive, and is also expected to happen
-    # with a low diversity of different arguments (at least relative the number
-    # constructed). This method adds a cache to requirement object creation to
-    # minimize repeated parsing of the same string to construct equivalent
-    # Requirement objects.
-    return Requirement(req_string)
+def __init__(self):
+    self.impure_wheels = {}
+    self.libs = {}
 
+def add(self, pathname, extensions):
+    self.impure_wheels[pathname] = extensions
+    self.libs.update(extensions)
 
-def safe_extra(extra: str) -> NormalizedExtra:
-    """Convert an arbitrary string to a standard 'extra' name
+def remove(self, pathname):
+    extensions = self.impure_wheels.pop(pathname)
+    for k, v in extensions:
+        if k in self.libs:
+            del self.libs[k]
 
-    Any runs of non-alphanumeric characters are replaced with a single '_',
-    and the result is always lowercased.
+def find_module(self, fullname, path=None):
+    if fullname in self.libs:
+        result = self
+    else:
+        result = None
+    return result
 
-    This function is duplicated from ``pkg_resources``. Note that this is not
-    the same to either ``canonicalize_name`` or ``_egg_link_name``.
-    """
-    return cast(NormalizedExtra, re.sub("[^A-Za-z0-9.-]+", "_", extra).lower())
+def load_module(self, fullname):
+    if fullname in sys.modules:
+        result = sys.modules[fullname]
+    else:
+        if fullname not in self.libs:
+            raise ImportError('unable to find extension for %s' % fullname)
+        result = _load_dynamic(fullname, self.libs[fullname])
+        result.__loader__ = self
+        parts = fullname.rsplit('.', 1)
+        if len(parts) > 1:
+            result.__package__ = parts[0]
+    return result
 
 

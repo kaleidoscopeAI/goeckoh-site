@@ -1,0 +1,11 @@
+"""
+Returns the version of the running interpreter.
+"""
+version = _get_config_var("py_version_nodot", warn=warn)
+if version:
+    version = str(version)
+else:
+    version = _version_nodot(sys.version_info[:2])
+return version
+
+

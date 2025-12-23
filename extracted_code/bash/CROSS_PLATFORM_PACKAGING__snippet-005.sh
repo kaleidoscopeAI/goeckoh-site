@@ -1,1 +1,1 @@
-./package_android.sh
+./package_android.sh debug

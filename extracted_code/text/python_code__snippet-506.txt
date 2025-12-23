@@ -1,0 +1,7 @@
+name='x-user-defined',
+encode=Codec().encode,
+decode=Codec().decode,
+incrementalencoder=IncrementalEncoder,
+incrementaldecoder=IncrementalDecoder,
+streamreader=StreamReader,
+streamwriter=StreamWriter,

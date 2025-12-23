@@ -1,50 +1,80 @@
-    # simple way to get the Latin alphabet pages from Wikipedia through
-    # the API, so for now we just support Cyrillic.
-    "Serbian": Language(
-        name="Serbian",
-        iso_code="sr",
-        alphabet="АБВГДЂЕЖЗИЈКЛЉМНЊОПРСТЋУФХЦЧЏШабвгдђежзијклљмнњопрстћуфхцчџш",
-        charsets=["ISO-8859-5", "WINDOWS-1251", "MacCyrillic", "IBM855"],
-        wiki_start_pages=["Главна_страна"],
-    ),
-    "Thai": Language(
-        name="Thai",
-        iso_code="th",
-        use_ascii=False,
-        charsets=["ISO-8859-11", "TIS-620", "CP874"],
-        alphabet="กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรฤลฦวศษสหฬอฮฯะัาำิีึืฺุู฿เแโใไๅๆ็่้๊๋์ํ๎๏๐๑๒๓๔๕๖๗๘๙๚๛",
-        wiki_start_pages=["หน้าหลัก"],
-    ),
-    "Turkish": Language(
-        name="Turkish",
-        iso_code="tr",
-        # Q, W, and X are not used by Turkish
-        use_ascii=False,
-        charsets=["ISO-8859-3", "ISO-8859-9", "WINDOWS-1254"],
-        alphabet="abcçdefgğhıijklmnoöprsştuüvyzâîûABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZÂÎÛ",
-        wiki_start_pages=["Ana_Sayfa"],
-    ),
-    "Vietnamese": Language(
-        name="Vietnamese",
-        iso_code="vi",
-        use_ascii=False,
-        # Windows-1258 is the only common 8-bit
-        # Vietnamese encoding supported by Python.
-        # From Wikipedia:
-        # For systems that lack support for Unicode,
-        # dozens of 8-bit Vietnamese code pages are
-        # available.[1] The most common are VISCII
-        # (TCVN 5712:1993), VPS, and Windows-1258.[3]
-        # Where ASCII is required, such as when
-        # ensuring readability in plain text e-mail,
-        # Vietnamese letters are often encoded
-        # according to Vietnamese Quoted-Readable
-        # (VIQR) or VSCII Mnemonic (VSCII-MNEM),[4]
-        # though usage of either variable-width
-        # scheme has declined dramatically following
-        # the adoption of Unicode on the World Wide
-        # Web.
-        charsets=["WINDOWS-1258"],
-        alphabet="aăâbcdđeêghiklmnoôơpqrstuưvxyAĂÂBCDĐEÊGHIKLMNOÔƠPQRSTUƯVXY",
-        wiki_start_pages=["Chữ_Quốc_ngữ"],
-    ),
+from typing import Union
+
+from .chardistribution import SJISDistributionAnalysis
+from .codingstatemachine import CodingStateMachine
+from .enums import MachineState, ProbingState
+from .jpcntx import SJISContextAnalysis
+from .mbcharsetprober import MultiByteCharSetProber
+from .mbcssm import SJIS_SM_MODEL
+
+
+class SJISProber(MultiByteCharSetProber):
+    def __init__(self) -> None:
+        super().__init__()
+        self.coding_sm = CodingStateMachine(SJIS_SM_MODEL)
+        self.distribution_analyzer = SJISDistributionAnalysis()
+        self.context_analyzer = SJISContextAnalysis()
+        self.reset()
+
+    def reset(self) -> None:
+        super().reset()
+        self.context_analyzer.reset()
+
+    @property
+    def charset_name(self) -> str:
+        return self.context_analyzer.charset_name
+
+    @property
+    def language(self) -> str:
+        return "Japanese"
+
+    def feed(self, byte_str: Union[bytes, bytearray]) -> ProbingState:
+        assert self.coding_sm is not None
+        assert self.distribution_analyzer is not None
+
+        for i, byte in enumerate(byte_str):
+            coding_state = self.coding_sm.next_state(byte)
+            if coding_state == MachineState.ERROR:
+                self.logger.debug(
+                    "%s %s prober hit error at byte %s",
+                    self.charset_name,
+                    self.language,
+                    i,
+                )
+                self._state = ProbingState.NOT_ME
+                break
+            if coding_state == MachineState.ITS_ME:
+                self._state = ProbingState.FOUND_IT
+                break
+            if coding_state == MachineState.START:
+                char_len = self.coding_sm.get_current_charlen()
+                if i == 0:
+                    self._last_char[1] = byte
+                    self.context_analyzer.feed(
+                        self._last_char[2 - char_len :], char_len
+                    )
+                    self.distribution_analyzer.feed(self._last_char, char_len)
+                else:
+                    self.context_analyzer.feed(
+                        byte_str[i + 1 - char_len : i + 3 - char_len], char_len
+                    )
+                    self.distribution_analyzer.feed(byte_str[i - 1 : i + 1], char_len)
+
+        self._last_char[0] = byte_str[-1]
+
+        if self.state == ProbingState.DETECTING:
+            if self.context_analyzer.got_enough_data() and (
+                self.get_confidence() > self.SHORTCUT_THRESHOLD
+            ):
+                self._state = ProbingState.FOUND_IT
+
+        return self.state
+
+    def get_confidence(self) -> float:
+        assert self.distribution_analyzer is not None
+
+        context_conf = self.context_analyzer.get_confidence()
+        distrib_conf = self.distribution_analyzer.get_confidence()
+        return max(context_conf, distrib_conf)
+
+

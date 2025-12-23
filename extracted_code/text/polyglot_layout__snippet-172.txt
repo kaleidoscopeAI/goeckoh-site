@@ -1,0 +1,5 @@
+ A background loop runs forever: every few ticks it ingests any new .txt/.md/.html dropped into onbrain_auto/inbox/, then anneals memory, sonifies,
+ updates the avatar, and renders frames/GIFs.
+
+ This keeps going whether or not anyone opens the UI or calls /think.
+

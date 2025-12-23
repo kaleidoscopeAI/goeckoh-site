@@ -1,0 +1,3 @@
+  project_summary = doc_summaries.pop("project", None)
+
+  ####### More code...

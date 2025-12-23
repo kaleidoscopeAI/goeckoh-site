@@ -1,1 +1,4 @@
-If desired, more detailed step-by-step proofs or applied examples from the literature can be provided next.
+# detailed step-by-step proofs and examples from the literature
+
+Here is a detailed step-by-step proof outline for key results in contractive dynamical systems, along with illustrative examples taken from foundational literature:
+

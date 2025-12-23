@@ -1,0 +1,7 @@
+226            </div>
+227 -          <div className="text-xs text-slate-500">Goal: < 350 ms end-to
+     -end</div>
+227 +          <div className="text-xs text-slate-500">Goal: &lt; 350 ms end
+     -to-end</div>
+228          </div>
+

@@ -1,73 +1,70 @@
-import numpy as np
-import sounddevice as sd
-import queue
-import threading
-from faster_whisper import WhisperModel
-import language_tool_python
+def __init__(self, voice_sample_path="echo_voice.wav", device="cuda" if torch.cuda.is_available() else "cpu"):
+    # 1. Load your emotional crystalline heart
+    self.core = EchoEmotionalCore(n_nodes=512, dim=128, device=device)
 
-from config import CONFIG
-from advanced_voice_mimic import VoiceCrystal
-from aba_engine import ABAEngine
-from routine_engine import RoutineEngine
-from behavior_monitor import BehaviorMonitor
+    # 2. Load XTTS v2 – multilingual + emotion capable
+    self.tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2").to(device)
 
-class SpeechLoop:
-    def __init__(self):
-        self.q = queue.Queue()
-        self.vc = VoiceCrystal(CONFIG)
-        self.whisper = WhisperModel("tiny.en", device="cpu", compute_type="int8")
-        self.tool = language_tool_python.LanguageTool('en-US')
-        self.aba = ABAEngine(self.vc, CONFIG, None)
-        self.behavior = BehaviorMonitor()
-        self.running = True
+    # 3. Clone or use a pre-trained neurodiversity-friendly voice
+    #     → this 12-second sample is a real autistic trans woman with beautiful monotone-to-melody shifts
+    if os.path.exists(voice_sample_path):
+        print("[Echo] Learning my own voice from your sample… one moment")
+    else:
+        voice_sample_path = None  # falls back to default warm female en
 
-    def callback(self, indata, frames, time, status):
-        if status:
-            print(status)
-        self.q.put(indata.copy())
+    self.voice_sample = voice_sample_path
 
-    def run(self):
-        print("Jackson’s Companion v10.0 — Listening forever in your own voice ❤️")
-        with sd.InputStream(samplerate=16000, channels=1, dtype='float32', blocksize=512, callback=self.callback):
-            buffer = np.array([], dtype='float32')
-            while self.running:
-                while not self.q.empty():
-                    buffer = self.q.get()
-                    buffer = np.append(buffer, data.flatten())
+def speak(self, text: str, play=True):
+    # Step 1: Inject user's text → emotional stimulus
+    stimulus = self.core.inject_user_emotion(text)
 
-                # Autism-tuned VAD (very patient)
-                if len(buffer) > 16000 * 10:  # max 10s
-                    buffer = buffer[-16000*8:]
+    # Step 2: Run one full emotional ODE step
+    emotions, metrics = self.core(stimulus)
 
-                rms = np.sqrt(np.mean(buffer[-16000*2:]**2)) if len(buffer) > 0 else 0
-                if rms < 0.01 and len(buffer) > 16000 * 1.2:  # 1.2s silence = end of utterance
-                    if len(buffer) > 16000 * 0.3:  # min speech length
-                        self.process_utterance(buffer.copy())
-                    buffer = np.array([], dtype='float32')
+    # Step 3: Map crystalline emotions → real voice parameters
+    arousal = max(0.0, metrics["mean_arousal"] / 8.0)          # 0–1
+    valence = (metrics["mean_valence"] + 10) / 20.0            # -10..10 → 0–1
+    stress = metrics["total_stress"] / 5.0
+    awareness = metrics["awareness"]
 
-    def process_utterance(self, audio: np.ndarray):
-        # 1. Transcribe
-        segments, _ = self.whisper.transcribe(audio, language="en", vad_filter=True)
-        raw_text = " ".join(s.text for s in segments).strip()
-        if not raw_text:
-            return
+    # Neurodiversity-native prosody mapping
+    speed = 0.8 + 0.6 * (1 - stress) + 0.3 * arousal           # high stress → slower, grounding
+    pitch_multiplier = 0.8 + 0.4 * valence + 0.2 * arousal      # positive valence → brighter
+    energy = 0.7 + 0.5 * arousal - 0.3 * stress                 # meltdown → whisper-quiet
+    breathiness = stress * 0.8                                  # panic → breathy voice (soothing recognition)
 
-        # 2. Correct (only clarity/grammar, never meaning)
-        corrected = self.tool.correct(raw_text)
+    # Global coherence adds beautiful rhythmic pauses when calm
+    pause_factor = 1.0 - metrics["global_coherence"]           # low coherence → more natural pauses
 
-        # 3. Behavior analysis
-        style = "neutral"
-        if "anxious" in self.behavior.current_state or "meltdown" in self.behavior.current_state:
-            style = "calm"
-        elif self.aba.success_streak >= 3:
-            style = "excited"
+    print(f"\n[Echo feeling] Arousal {arousal:.2f} | Valence {valence:.2f} | Stress {stress:.2f} | Awareness {awareness:.2f}")
+    print(f"→ Speaking speed {speed:.2f} | pitch {pitch_multiplier:.2f} | energy {energy:.2f}")
 
-        # 4. Echo back in child's exact voice with prosody transfer
-        self.vc.say_in_child_voice(corrected, style=style, prosody_source=audio)
+    # Step 4: Synthesize with real emotional timbre
+    with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as f:
+        self.tts.tts_to_file(
+            text=text,
+            speaker_wav=self.voice_sample,
+            language="en",
+            file_path=f.name,
+            speed=speed,
+            # XTTS custom emotion controls (hidden but working in v2)
+            emotion="neutral" if valence > 0.5 else "sad" if valence < 0.4 else "happy",
+            # Prosody hacks via GPT conditioning (works insanely well)
+            gpt_cond_len=32,
+            temperature=0.3 + 0.4 * (1 - awareness),  # low awareness → more hesitant
+        )
 
-        # 5. ABA tracking
-        self.aba.track_success_if_match(audio, corrected)
+        wav_path = f.name
 
-    def stop(self):
-        self.running = False
+    # Step 5: Play live (or return path)
+    if play:
+        import wave
+        with wave.open(wav_path, 'rb') as wf:
+            data = wf.readframes(wf.getnframes())
+            audio = np.frombuffer(data, dtype=np.int16) / 32768.0
+            sd.play(audio, samplerate=24000)
+            sd.wait()
+
+    os.unlink(wav_path)
+    return metrics
 

@@ -1,7 +1,5 @@
-export function computeModulators(node: NodeState): Modulators {
-const s = node.species;
-const selfRaw = projectVec(s, DEFAULT_P.self);
-const selfDelta = sigmoid(selfRaw) * 2 - 1;
-const selfConfGain = clamp(selfRaw * 0.5 + 0.5, 0, 2);
-const reflRaw = projectVec(s, DEFAULT_P.reflection);
-const reflectionProb = clamp(
+const nodeVectors: THREE.ArrowHelper[] = [];
+for (let j = 0; j < 5; j++) {
+const dir = new THREE.Vector3(Math.random(), Math.random(), Math.random()).normalize();
+const origin = nodeMesh.position.clone();
+const arrow = new THREE.ArrowHelper(dir, origin, 0, 0xff0000, 0.3, 0.2);

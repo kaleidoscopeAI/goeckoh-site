@@ -1,4 +1,2 @@
-class VoiceCrystalConfig:
-    sample_rate: int
-    inner_volume_scale: float = 0.55
+# <REDACTED: potential secret detected>
 

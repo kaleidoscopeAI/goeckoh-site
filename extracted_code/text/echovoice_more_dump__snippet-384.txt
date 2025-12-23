@@ -1,1 +1,5 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+pub x: Vec<Vec<f64>>,
+pub edge_index: Vec<Vec<usize>>,
+pub edge_attr: Vec<Vec<f64>>,
+pub y: i32,
+pub chemical_features: Option<ChemicalFeatures>,

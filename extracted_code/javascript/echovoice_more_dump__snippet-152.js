@@ -1,2 +1,2 @@
-But note: the ensure_dataset_exists function already checks for existence and downloads, so we can just call it for parquet if we have a URL.
+Now, note that the ensure_dataset_exists function might return an error if the download fails. We don't change that.
 

@@ -1,0 +1,7 @@
+SupportsInt = typing.SupportsInt
+SupportsFloat = typing.SupportsFloat
+SupportsComplex = typing.SupportsComplex
+SupportsBytes = typing.SupportsBytes
+SupportsIndex = typing.SupportsIndex
+SupportsAbs = typing.SupportsAbs
+SupportsRound = typing.SupportsRound

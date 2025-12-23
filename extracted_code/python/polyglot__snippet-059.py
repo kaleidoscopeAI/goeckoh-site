@@ -1,1 +1,1 @@
-def add_insight_batch(self, insights: List[Dict]):
+def embed_text(text: str) -> np.ndarray:

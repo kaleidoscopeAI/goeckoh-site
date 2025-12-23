@@ -1,2 +1,2 @@
-Auto-loaded from server/persisted_w/w_active.json at startup.
-Can be modified via parameter sweeps from GUI.
++import { NodeState } from "../types";
++import { stressDelta, mirrorDelta, specDelta, mimicryDelta, unravelUpdate } from "./engineEquations";

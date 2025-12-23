@@ -1,17 +1,14 @@
-# reflection_analysis.py
+# knowledge_pool.py
+from typing import Dict
 from shared_utilities import EnhancedSharedKnowledgePool
 
-class SelfReflection:
-    """Self-reflection mechanism for performance analysis"""
+class KnowledgePoolManager:
+    """Manager for handling shared knowledge pools"""
     
     def __init__(self):
         self.shared_pool = EnhancedSharedKnowledgePool()
-        self.reflection_interval = 100  # Actions between reflections
-
-    def reflect(self, actions: list) -> dict:
-        """Perform self-reflection and generate insights"""
-        # Placeholder self-reflection process
-        return {
-            "insights": "Reflection completed on recent actions."
-        }
+        
+    def add_to_pool(self, pattern_data: Dict, confidence: float):
+        """Add pattern data to the shared pool"""
+        self.shared_pool.add_pattern(pattern_data, confidence)
 

@@ -1,0 +1,6 @@
+# quadratic on misalignment magnitude
+if node.Phi is None:
+    return 0.0
+return np.linalg.norm(node.Phi) ** 2
+
+

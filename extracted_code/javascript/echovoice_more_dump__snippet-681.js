@@ -1,1 +1,1 @@
-for (const lg of opts.logs) {
+const payload = {

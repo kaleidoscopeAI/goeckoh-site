@@ -1,2 +1,4 @@
-If it is a separate crate, then we must change the import to:
+    Each bond is represented by two points (from node1 to node2).
+
+    We will update the positions attribute of the LineSegments geometry every frame.
 

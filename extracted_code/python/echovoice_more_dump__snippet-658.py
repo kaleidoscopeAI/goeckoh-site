@@ -1,1 +1,1 @@
-def Upsilon_cryst(self, S, p):
+# node colors from state

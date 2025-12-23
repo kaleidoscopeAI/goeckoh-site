@@ -1,0 +1,3 @@
+print("\nCrystal active. Mirror ready.")
+while True:
+    time.sleep(1)

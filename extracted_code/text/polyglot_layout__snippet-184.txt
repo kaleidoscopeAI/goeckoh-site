@@ -1,0 +1,12 @@
+  root = E_A if r["root"] == E_A.name else E_B
+  p = root / r["relpath"]
+  if p.name.lower().startswith("readme") and p.is_file():
+      try:
+          lines = p.read_text(encoding="utf-8", errors="ignore").splitlines()[:120]
+          readme_snippets.append({
+               "root": r["root"],
+               "relpath": r["relpath"],
+               "snippet": "\n".join(lines)
+          })
+      except Exception:
+          pass

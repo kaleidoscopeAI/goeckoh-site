@@ -1,13 +1,10 @@
-    import logging
+def is_expandable(obj: Any) -> bool:
+    """Check if an object may be expanded by pretty print."""
+    return (
+        _safe_isinstance(obj, _CONTAINERS)
+        or (is_dataclass(obj))
+        or (hasattr(obj, "__rich_repr__"))
+        or _is_attr_object(obj)
+    ) and not isclass(obj)
 
-    from pip._vendor.tenacity import RetryCallState
 
-
-def before_sleep_nothing(retry_state: "RetryCallState") -> None:
-    """Before call strategy that does nothing."""
-
-
-def before_sleep_log(
-    logger: "logging.Logger",
-    log_level: int,
-    exc_info: bool = False,

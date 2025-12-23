@@ -1,4 +1,2 @@
-import numpy as np
-import scipy.signal as signal
-import scipy.io.wavfile as wavfile
-import random
+class OmniSynth:
+    def **init**(self, sr=44100):

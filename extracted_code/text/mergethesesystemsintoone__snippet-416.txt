@@ -1,0 +1,6 @@
+"""Initializes the Cognitive Engine with a reasoning, decision, knowledge and a belief system"""
+self.reasoning_engine = RuleEngine() #ReasoningEngine() is basic implementation, must be fully updated as specified later.
+self.knowledge_graph = KnowledgeGraph()
+self.decision_maker = DecisionEngine() #Decision engine to help evaluate concepts
+self.belief_system = BayesianNetwork () # Belief network helps improve reasoning through observations over time
+

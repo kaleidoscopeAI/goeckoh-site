@@ -1,0 +1,13 @@
+# Use ~/Application Support/pip, if the directory exists.
+path = _appdirs.user_data_dir(appname, appauthor=False, roaming=roaming)
+if os.path.isdir(path):
+    return path
+
+# Use a Linux-like ~/.config/pip, by default.
+linux_like_path = "~/.config/"
+if appname:
+    linux_like_path = os.path.join(linux_like_path, appname)
+
+return os.path.expanduser(linux_like_path)
+
+

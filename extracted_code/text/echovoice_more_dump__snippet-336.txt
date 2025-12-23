@@ -1,2 +1,6 @@
-# <REDACTED: potential secret detected>
+├── Dockerfile
+├── package.json  # Add p5, @types/p5
+├── tsconfig.json
+└── src/
+    └── App.tsx  # p5 sketch for particles
 

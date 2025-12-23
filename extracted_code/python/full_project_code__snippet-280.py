@@ -1,5 +1,7 @@
-from .exceptions import *
-from .actions import *
-from .results import ParseResults, _ParseResultsWithOffset
-from .unicode import pyparsing_unicode
-
+def _default_success_debug_action(
+    instring: str,
+    startloc: int,
+    endloc: int,
+    expr: "ParserElement",
+    toks: ParseResults,
+    cache_hit: bool = False,

@@ -1,2 +1,3 @@
-def __init__(self, config: CompanionConfig) -> None:
-import torch
+import Foundation
+import Combine
+final class AppState: ObservableObject {

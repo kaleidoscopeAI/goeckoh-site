@@ -1,0 +1,18 @@
+"""
+Finds concepts related to the given concept in the knowledge graph using BFS.
+"""
+related_concepts = []
+if concept in self.graph:
+    # Perform a breadth-first search to find related concepts within the specified depth
+    bfs_tree = nx.bfs_tree(self.graph, source=concept, depth_limit=depth)
+    for neighbor in bfs_tree.nodes():
+        if neighbor != concept:
+            # Calculate a relevance score based on the path length
+            try:
+                path_length = nx.shortest_path_length(self.graph, source=concept, target=neighbor)
+                relevance_score = 1 / path_length if path_length > 0 else 0
+                related_concepts.append((neighbor, relevance_score))
+            except nx.NetworkXNoPath:
+                print(f"No path found between {concept} and {neighbor}")
+return related_concepts
+

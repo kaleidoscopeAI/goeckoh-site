@@ -1,112 +1,100 @@
-import uuid
-import time
-import random
-import numpy as np
-from collections import deque
-from dataclasses import dataclass, field
-from typing import Optional, Dict, Any, List
-import json
-from core.genetic_code import GeneticCode
+def __init__(self, vector_size: int = 100, window: int = 5, min_count: int = 1, subsampling_threshold: float = 1e-3, negative_samples: int = 5):
+    self.vector_size = vector_size
+    self.window = window
+    self.min_count = min_count
+    self.subsampling_threshold = subsampling_threshold
+    self.negative_samples = negative_samples
+    self.corpus = []
+    self.vocabulary = set()
+    self.word_counts = defaultdict(int)
+    self.word_vectors = {}  # Word embeddings (target words)
+    self.context_vectors = {} # Context word embeddings
 
-class NodeState:
-    """Represents the current state of a node."""
-    energy: float = 100.0
-    memory_usage: float = 0.0
-    data_processed: int = 0
-    last_replication: float = 0.0
-    status: str = "Idle"
+def train(self, sentences: List[List[str]]):
+    """Trains the word embedding model on a list of sentences."""
+    self.corpus = sentences
+    self._build_vocabulary()
+    self._initialize_vectors()
+    self._train_model()
 
-class Node:
-    def __init__(self, node_id: Optional[str] = None, dna: Optional[GeneticCode] = None, parent_id: Optional[str] = None):
-        self.node_id = node_id or str(uuid.uuid4())
-        self.parent_id = parent_id
-        self.dna = dna or GeneticCode()  # Initialize with default or provided DNA
-        self.birth_time = time.time()
-        self.state = NodeState(energy=self.dna.initial_energy)
-        self.memory = deque(maxlen=self.dna.memory_capacity)
-        self.knowledge_base: Dict[str, List] = {}
-        self.connections: Set[str] = set()
-        self.logs = []  # For basic logging
-        self.task_queue = [] # Task queue for each node
+def update(self, sentences: List[List[str]]):
+    """Updates the model with new sentences, adding to the vocabulary and retraining."""
+    self.corpus.extend(sentences)
+    self._build_vocabulary()
+    self._train_model()
 
-    def process_data(self, data: Any):
-        """Processes a given data unit, consuming energy."""
-        if self.state.energy <= 0:
-            self.log_event("Failed to process data: Insufficient energy.")
-            self.state.status = "Inactive"
-            return False
+def _build_vocabulary(self):
+    """Builds vocabulary and word counts from the corpus."""
+    self.vocabulary = set()
+    self.word_counts = defaultdict(int)
+    for sentence in self.corpus:
+        for word in sentence:
+            self.word_counts[word] += 1
 
-        # Simulate data processing
-        print(f"Node {self.node_id} processing: {data}")
-        self.state.energy -= self.dna.energy_consumption_rate  # Consume energy
-        self.state.data_processed += 1
-
-        # Generate an insight based on processed data
-        if isinstance(data, dict) and "task" in data:
-            task = data["task"]
-            if task not in self.knowledge_base:
-                self.knowledge_base[task] = []
-
-            # Simulate insight generation
-            timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
-            insight = {
-                "timestamp": timestamp,
-                "insight": f"Insight generated from task '{task}' at {timestamp}."
-            }
-            self.knowledge_base[task].append(insight)
-
-            # Update memory usage based on data size
-            self.state.memory_usage += (len(json.dumps(data)) + len(json.dumps(insight))) / 1024  # in KB
-
-        # Store data in memory
-        self.memory.append(data)
-
-        # Update last activity time
-        self.state.last_activity = time.time()
-        self.state.status = "Active"
-
-        return True
-
-    def replicate(self):
-        """Replicates the node with a chance of mutation."""
-        if self.state.energy >= self.dna.replication_threshold and len(self.memory) >= self.dna.min_memory_for_replication:
-            new_dna = self.dna.mutate()
-            child_node = Node(dna=new_dna, parent_id=self.node_id)
-            child_node.state.energy = self.state.energy / 2
-            self.state.energy /= 2
-            self.state.last_replication = time.time()
-            self.log_event(f"Node {self.node_id} replicated. New node: {child_node.node_id}")
-            return child_node
-        else:
-            self.log_event(f"Node {self.node_id} does not meet replication criteria.")
-            return None
-
-    def log_event(self, event: str):
-        """Logs an event with a timestamp."""
-        timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
-        self.logs.append(f"{timestamp} - {event}")
-
-    def get_status(self) -> Dict:
-        """Returns the current status of the node."""
-        return {
-            "node_id": self.node_id,
-            "parent_id": self.parent_id,
-            "dna": self.dna,
-            "energy": self.state.energy,
-            "memory_usage": self.state.memory_usage,
-            "data_processed": self.state.data_processed,
-            "last_replication": self.state.last_replication,
-            "status": self.state.status,
-            "knowledge_base": self.knowledge_base
+    # Subsampling of frequent words
+    if self.subsampling_threshold > 0:
+        self.vocabulary = {
+            word for word in self.word_counts
+            if self.word_counts[word] >= self.min_count and
+            (self.word_counts[word] / len(self.corpus)) < self.subsampling_threshold or
+            random.random() < (1 - np.sqrt(self.subsampling_threshold / (self.word_counts[word] / len(self.corpus))))
         }
+    else:
+        self.vocabulary = {word for word in self.word_counts if self.word_counts[word] >= self.min_count}
 
-    def should_replicate(self) -> bool:
-        """Determine if a node should replicate based on energy and knowledge."""
-        return self.state.energy > self.dna.replication_threshold and len(self.knowledge_base) > 5
+def _initialize_vectors(self):
+    """Initializes word vectors randomly."""
+    for word in self.vocabulary:
+        self.word_vectors[word] = np.random.uniform(-0.5, 0.5, self.vector_size)
+        self.context_vectors[word] = np.random.uniform(-0.5, 0.5, self.vector_size)
 
-    def receive_task(self, task: Dict[str, Any]):
-        """Receives a task and adds it to the task queue."""
-        self.task_queue.append(task)
-        self.log_event(f"Node {self.node_id} received task: {task['data_id']}")
+def _train_model(self):
+  """Trains the word embedding model using a simplified negative sampling approach."""
+  for sentence in self.corpus:
+      for i, target_word in enumerate(sentence):
+          if target_word not in self.vocabulary:
+              continue
 
+          # Get context words within the window
+          context_words = sentence[max(0, i - self.window): i] + sentence[i + 1: min(len(sentence), i + self.window + 1)]
+          for context_word in context_words:
+              if context_word not in self.vocabulary:
+                  continue
+
+              # Negative sampling
+              negative_samples = self._get_negative_samples(context_word)
+
+              # Update vectors
+              self._update_vectors(target_word, context_word, negative_samples)
+
+def _get_negative_samples(self, context_word: str) -> List[str]:
+    """Samples negative words for a given context word."""
+    not_negative_words = set(context_word)
+    negative_samples = []
+    while len(negative_samples) < self.negative_samples:
+        sample = random.choice(list(self.vocabulary - not_negative_words))
+        if sample != context_word:
+            negative_samples.append(sample)
+    return negative_samples
+
+def _update_vectors(self, target_word: str, context_vector: np.ndarray, label: int, learning_rate: float):
+    """Updates word vectors based on positive and negative samples."""
+    try:
+        context_vector = self.context_vectors[context_word]
+        target_vector = self.word_vectors[target_word]
+        score = np.dot(target_vector, context_vector)
+        prob = 1 / (1 + np.exp(-score))
+    except KeyError:
+        return  # Do not train for unknown word vectors
+
+    # Calculate the gradient
+    gradient = learning_rate * (label - prob) * context_vector
+
+    # Update the word vectors
+    self.word_vectors[target_word] += gradient
+    context_vector -= learning_rate * (label - prob) * self.word_vectors[target_word]  # Update context vector
+
+def get_vector(self, word: str) -> Optional[np.ndarray]:
+    """Returns the word vector for a given word."""
+    return self.word_vectors.get(word)
 

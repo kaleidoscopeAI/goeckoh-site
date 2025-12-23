@@ -1,0 +1,3 @@
+candidates: List[InstallationCandidate],
+hashes: Optional[Hashes],
+project_name: str,

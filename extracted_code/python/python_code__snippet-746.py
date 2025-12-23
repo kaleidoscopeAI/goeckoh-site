@@ -1,16 +1,6 @@
-import logging
-import platform
-import sys
-import sysconfig
-from importlib.machinery import EXTENSION_SUFFIXES
-from typing import (
-    Dict,
-    FrozenSet,
-    Iterable,
-    Iterator,
-    List,
-    Optional,
-    Sequence,
-    Tuple,
-    Union,
-    cast,
+from pip._internal.utils.subprocess import runner_with_spinner_message
+from pip._internal.utils.temp_dir import TempDirectory
+
+
+def generate_metadata(
+    build_env: BuildEnvironment, backend: BuildBackendHookCaller, details: str

@@ -1,0 +1,7 @@
+if implementation is None:
+    implementation = interpreter_name()
+if version is None:
+    version = interpreter_version()
+return f"{implementation}{version}"
+
+

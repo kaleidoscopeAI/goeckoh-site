@@ -1,0 +1,4 @@
+pub valence: f32,    
+pub arousal: f32,    
+pub coherence: f32,  
+pub is_stable: bool, 

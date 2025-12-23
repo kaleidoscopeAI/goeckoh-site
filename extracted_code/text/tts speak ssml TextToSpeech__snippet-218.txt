@@ -1,0 +1,22 @@
+                          recorder.stop()
+                          whisper.start()
+                          logAndBroadcastVadMetrics()
+                          break
+                      }
+                  }
+
+                  offset += frameSize
+              }
+
+              // Collect for prosody: Append cleaned byte buffer
+              val byteArray = ByteArray(outShort.size * 2)
+              ByteBuffer.wrap(byteArray).asShortBuffer().put(outShort)
+              audioBuffer.write(byteArray)
+          }
+      })
+
+      recorder.start()
+  }
+
+  private fun logAndBroadcastVadMetrics() {
+      val avgLatency = if (totalFrames > 0) vadLatencySum / totalFrames

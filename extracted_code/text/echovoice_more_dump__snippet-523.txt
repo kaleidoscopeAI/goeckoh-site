@@ -1,0 +1,4 @@
+crystal.core.nodes: array of nodes with positions (x, y, z)
+
+crystal.core.bonds: array of bonds, each bond is [index1, index2]
+

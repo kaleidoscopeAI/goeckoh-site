@@ -1,0 +1,3 @@
+ are fed into the bubble_synthesizer.py. This generates control curves that are broadcast via WebSocket by the
+ visual_engine_bridge.py to a web-based bubble_viewer.html for 3D rendering. This process does not block the audio playback.
+

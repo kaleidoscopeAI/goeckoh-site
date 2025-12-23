@@ -1,0 +1,4 @@
+attempts: int = 0
+corrections: int = 0
+
+

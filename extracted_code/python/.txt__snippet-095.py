@@ -1,1 +1,4 @@
-def _fallback_response(self, prompt: str) -> str:
+(updated to bridge messages from game.html)
+import SwiftUI
+import WebKit
+final class GameWebViewCoordinator: NSObject, WKScriptMessageHandler {

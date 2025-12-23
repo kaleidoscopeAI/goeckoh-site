@@ -1,4 +1,0 @@
-class VoiceCrystalConfig:
-    sample_rate: int
-    inner_volume_scale: float = 0.55
-

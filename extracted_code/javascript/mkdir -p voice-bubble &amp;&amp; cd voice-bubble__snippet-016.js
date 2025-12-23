@@ -1,9 +1,4 @@
-let audioCtx = null;
-let mediaStream = null;
-let sourceNode = null;
-let analyzerNode = null;
-let workletNode = null;
-let processorNode = null;
+function setStatus(s) { UI.status.textContent = s; }
+function fmt(x, d=3) { return Number.isFinite(x) ? x.toFixed(d) : "—"; }
 
-let running = false;
-
+function updateUI() {

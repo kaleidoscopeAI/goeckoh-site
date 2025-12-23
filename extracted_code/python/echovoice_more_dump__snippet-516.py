@@ -1,2 +1,2 @@
-import { ProjectionService } from "./services/projectionService";
-const projection = new ProjectionService({ constructs: [...], persistenceDecay: 0.94, seed: 42 });
+Auto-loaded from server/persisted_w/w_active.json at startup.
+Can be modified via parameter sweeps from GUI.

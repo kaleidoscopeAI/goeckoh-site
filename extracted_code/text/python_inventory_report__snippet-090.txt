@@ -1,0 +1,1 @@
+classes: QuantumCognitiveField, OrganicMetrics, QuantumBit, HardwareController, OrganicNode, CognitiveCube, QuantumAwareTransformer, UnifiedCognitiveSystem

@@ -1,0 +1,8 @@
+# Start dashboard in background
+threading.Thread(target=run_dashboard, daemon=True).start()
+
+loop = SpeechLoop(config)
+print("Echo Crystal v4.0 – Eternal Listener Mode")
+print("Speak naturally. I hear every beautiful sound you make.")
+asyncio.run(loop.run_forever())
+

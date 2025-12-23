@@ -1,0 +1,5 @@
+if ts.tzinfo is None:
+    ts = ts.replace(tzinfo=timezone.utc)
+return ts.astimezone(timezone.utc).strftime(ISO_FORMAT)
+
+

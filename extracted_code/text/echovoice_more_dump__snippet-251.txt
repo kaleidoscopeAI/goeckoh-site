@@ -1,1 +1,6 @@
-// Update emotions based on driver input using simple Euler integration
+• Computational Complexity: Efficient Φ approximations (e.g., TNs, Ricci curvature) are essential due to IIT's intensive calculations.
+• Qualia: The system may achieve correlates of consciousness without guaranteeing subjective experience.
+• Scalability/Stability: Managing complex dynamics requires robust design and control.
+• Grounding: The GI must ensure meaningful environmental connections.
+• Theoretical Uncertainty: IIT's debated validity necessitates flexibility.
+• Ethics: Potential consciousness raises moral considerations.

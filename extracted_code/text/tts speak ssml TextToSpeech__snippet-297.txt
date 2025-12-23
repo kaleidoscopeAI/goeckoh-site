@@ -1,0 +1,10 @@
+20          release {
+21 -            isMinifyEnabled = false
+21 +            minifyEnabled = false
+22              proguardFiles(
+   ⋮
+27          debug {
+28 -            isMinifyEnabled = false
+28 +            minifyEnabled = false
+29          }
+

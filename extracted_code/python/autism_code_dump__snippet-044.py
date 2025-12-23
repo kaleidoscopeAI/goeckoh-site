@@ -1,46 +1,18 @@
-class APIServerHandler(BaseHTTPRequestHandler):
-    def _send_json(self, code: int, payload: Dict[str, Any]):
-        self.send_response(code)
-        self.send_header("Content-Type", "application/json")
-        self.end_headers()
-        self.wfile.write(json.dumps(payload).encode("utf-8"))
-
-    def do_GET(self):
-        global RUNNING
-        if self.path == "/health":
-            self._send_json(200, {"status": "ok", "running": RUNNING})
-        elif self.path == "/kill":
-            RUNNING = False
-            self._send_json(200, {"status": "stopping"})
-        elif self.path == "/wipe":
-            for p in (ATTEMPTS_CSV, GUIDANCE_CSV):
+def self_correcting(max_retries: int = 3, delay: float = 1.0):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            last_exc: Optional[Exception] = None
+            for attempt in range(max_retries):
                 try:
-                    if p.exists():
-                        p.unlink()
-                except Exception:
-                    pass
-            for wav in VOICES_DIR.glob("*.wav"):
-                try:
-                    wav.unlink()
-                except Exception:
-                    pass
-            self._send_json(200, {"status": "wiped"})
-        else:
-            self._send_json(404, {"error": "not found"})
+                    return func(*args, **kwargs)
+                except Exception as e:
+                    last_exc = e
+                    print(f"[SELF-CORRECT] Error in {func.__name__}: {e}. Retrying {attempt + 1}/{max_retries}...")
+                    time.sleep(delay)
+            raise RuntimeError(f"Failed after {max_retries} retries in {func.__name__}") from last_exc
 
-    def log_message(self, format, *args):
-        return  # silence default HTTP logging
+        return wrapper
 
-
-class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
-    daemon_threads = True
-
-
-def start_api_server(host: str = "127.0.0.1", port: int = 8081):
-    server = ThreadedHTTPServer((host, port), APIServerHandler)
-    t = threading.Thread(target=server.serve_forever, daemon=True)
-    t.start()
-    print(f"[API] http://{host}:{port} (kill: /kill, wipe: /wipe)")
-    return server
+    return decorator
 
 

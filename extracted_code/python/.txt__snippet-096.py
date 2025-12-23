@@ -1,1 +1,2 @@
-def embed(self, text: str, dim: int) -> np.ndarray:
+private func handleMessage(_ message: String) {
+// Messages from JS: "startEcho", "openParent", "openEcho", "phrase:..."

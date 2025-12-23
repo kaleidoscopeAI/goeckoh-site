@@ -1,1 +1,1 @@
-export const DEFAULT_P: Record<string, number[]> = {
+const N = g.n * cfg.speciesCount;

@@ -1,0 +1,3 @@
+print("[WARN] Rust kernel 'bio_audio' not found. Using fallback synthesis.")
+RUST_AVAILABLE = False
+

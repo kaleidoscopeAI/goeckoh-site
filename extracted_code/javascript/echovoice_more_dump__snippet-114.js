@@ -1,7 +1,12 @@
-export function retrieveClosest(input: number[]) {
-  let minDist = Infinity, closest: number[] = [];
-  for (const sub of faissIndex.values()) {
-    const dist = len(sub.flat().map((v, i) => v - input[i % input.length]));
-    if (dist < minDist) { minDist = dist; closest = sub.flat(); }
-  }
-  return closest;
+    fn detect_chemical_content(&self, content: &str) -> bool {
+        let chemical_indicators = [
+            "V2000", "V3000", // MDL format indicators
+            "ATOM", "BOND", "HETATM", // PDB format
+            r"^\s*\d+\s*$", // XYZ format (number of atoms)
+            r"[A-Z][a-z]?\s+[-+]?\d*\.?\d+\s+[-+]?\d*\.?\d+\s+[-+]?\d*\.?\d+", // Atomic coordinates
+        ];
+
+        chemical_indicators.iter().any(|&pattern| {
+            regex::Regex::new(pattern).unwrap().is_match(content)
+        })
+    }

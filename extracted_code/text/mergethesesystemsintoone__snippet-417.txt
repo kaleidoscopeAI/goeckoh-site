@@ -1,0 +1,64 @@
+    dmax = 0
+    index = 0
+    for i in range (1, len(contour) -1 ):
+      d = self._perpendicular_distance(contour[i], contour[0], contour[-1])
+      if d > dmax:
+        index = i
+        dmax = d
+
+    # If max distance is greater than epsilon recursively process the next levels otherwise simply grab begin and end
+  if dmax > epsilon:
+    results1 = self._approximate_polygon(contour[:index +1], epsilon)
+    results2 = self._approximate_polygon(contour[index:], epsilon)
+
+        # build out resuls based on combining previous recursion of all subsets until lowest common base is reaches which returns an edge.
+    results = results1[: -1] + results2[:-1]
+
+  else:
+     results = [contour[0], contour[-1]] # returning ends once lower bound reachd
+
+  return results
+
+
+def _perpendicular_distance (self, point, start, end):
+  x0, y0 = point
+  x1, y1 = start
+  x2, y2 = end
+
+  if x1 == x2 and y1 == y2:
+     return math.hypot (x0 - x1, y0- y1)
+  else:
+     return abs ((x2-x1) * (y1 -y0) (x1 - x0) * (y2- y1)) / math.hypot(x2- x1, y2-y1)
+
+def _analyze_textures(self, image: Image.Image) -> List[Dict]:
+    """
+    Analyze textures using statistical measures on pixel neighborhoods.
+    """
+    try:
+      img_array = np.array(image.convert('L')) # Ensure it's grascale
+      patterns = []
+
+        # Basic LBP Calculation (Iterates through each neighborhood window on an array)
+      for i in range(1, img_array.shape[0] - 1):
+        for j in range (1, img_array.shape [1] -1) :
+              neighborhood = img_array [i-1:i+2, j-1:j+2]  # Creates small matrix around pixell
+              patterns.append( {
+              'type' : "texture",
+            'mean' : np.mean(neighborhood).item(),
+                'variance': np.var(neighborhood).item(), #  Variance - how pixel varies relative to average intensity 
+                'entropy': self._calculate_entropy (neighborhood).item () # Calculate Shannon's entopy as degree of randomenss within an area
+
+        }  )
+
+      return patterns
+    except Exception as e:
+          print (f"Error in_analyze_textures: {e}")
+          return []
+
+def _calculate_entropy(self, region: np.ndarray) -> float:
+    """Calculates the entropy of a given region."""
+    hist, _ = np.histogram(region.flatten(), bins=np.arange(257)) # Bins set 0 - 257
+    probs = hist / np.sum (hist)
+    entropy = -np.sum([p * np.log2(p) if p > 0 else 0 for p in probs]) # Base-2 to provide a log result for bits, sum of probability to calculate entropy as information
+    return float(entropy)
+

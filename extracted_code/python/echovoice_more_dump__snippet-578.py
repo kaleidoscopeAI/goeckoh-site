@@ -1,1 +1,1 @@
-If speculative deltas are sampled from bounded distribution with finite variance (\sigma^2) and coefficient (\gamma) small, the stochastic
+damped integration. The result is a minimal but fully realized 2-engine system that demonstrates the hierarchy from low-level primitives (e.g., IEEE

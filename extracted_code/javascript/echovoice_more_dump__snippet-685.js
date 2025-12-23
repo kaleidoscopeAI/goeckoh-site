@@ -1,1 +1,1 @@
-const svc = service ?? new ProjectionService(cfg);
+const payload = JSON.parse(fs.readFileSync(pendingFile, "utf8"));

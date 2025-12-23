@@ -1,0 +1,6 @@
+vertices=vertices,           # [N, 3] mesh positions
+profile=profile,             # Child's identity
+attempt_feat=attempt,        # Acoustic features
+t_idx=t_idx,                 # Current frame
+layout={"voice_field": voice_field},  # Optional pre-computed field
+base_radius=1.0

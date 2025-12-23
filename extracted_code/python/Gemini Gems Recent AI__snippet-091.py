@@ -1,13 +1,6 @@
-def add_molecule():
-    smiles = request.json.get('smiles')
-    mol = Chem.MolFromSmiles(smiles)
-    if mol:
-        existing_molecule = Molecule.query.filter_by(smiles=smiles).first()
-        if existing_molecule:
-            return jsonify({'message': 'Molecule already exists'}), 400
-        new_molecule = Molecule(smiles)
-        db.session.add(new_molecule)
-        db.session.commit()
-        return jsonify({'message': 'Molecule added'}), 201
-    return jsonify({'message': 'Invalid SMILES'}), 400
+def get_similarity():
+    smiles1 = request.json.get('smiles1')
+    smiles2 = request.json.get('smiles2')
+    similarity = cube.calculate_similarity(smiles1, smiles2)
+    return jsonify({'similarity': similarity})
 

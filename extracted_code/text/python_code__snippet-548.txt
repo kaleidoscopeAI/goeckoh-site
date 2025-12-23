@@ -1,0 +1,4 @@
+size: int,
+*,
+precision: Optional[int] = 1,
+separator: Optional[str] = " ",

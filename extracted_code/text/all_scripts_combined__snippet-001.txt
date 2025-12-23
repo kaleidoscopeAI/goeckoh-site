@@ -1,1 +1,7 @@
-python -m autism_code.cli run
+class AgentDecision:
+    """Payload for an AGI Seed's decision."""
+    action: str # e.g., "ECHO", "REGULATE", "LEARN"
+    target_text: Optional[str] = None
+    prosody_source: Optional[np.ndarray] = None
+    mode: str = "inner" # "inner", "outer", "coach"
+

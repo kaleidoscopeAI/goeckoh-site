@@ -1,0 +1,2 @@
+  * Ubuntu: `sudo apt install portaudio19-dev ffmpeg`
+  * Mac: `brew install portaudio ffmpeg`

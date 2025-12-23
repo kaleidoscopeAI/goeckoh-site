@@ -1,1 +1,2 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+this.computeNBody();  // Cosmic evolution
+// ... All other: FRF, Teff, torque, etc.

@@ -1,7 +1,4 @@
-    from pip._vendor.rich.console import Console
+from typing import Tuple
 
-    c = Console()
-    c.print("[on blue]Hello", justify="right")
-    c.log("[on blue]hello", justify="right")
-
+from pip._internal.utils.misc import splitext
 

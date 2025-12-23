@@ -1,1 +1,4 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+pub x: Vec<Vec<f64>>,           // Node feature matrix [num_nodes, num_node_features]
+pub edge_index: Vec<Vec<usize>>, // Edge connectivity [2, num_edges] 
+pub edge_attr: Vec<Vec<f64>>,   // Edge feature matrix [num_edges, num_edge_features]
+pub y: i32,                     // Graph label (0 or 1 for binary classification)

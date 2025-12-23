@@ -1,0 +1,8 @@
+PythonVersion,
+Tag,
+compatible_tags,
+cpython_tags,
+generic_tags,
+interpreter_name,
+interpreter_version,
+mac_platforms,

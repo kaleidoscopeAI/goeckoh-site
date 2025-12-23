@@ -1,1 +1,0 @@
-- Frontend components: React/Three.js visualization using instanced rendering for thousands of nodes, dynamic edges, UI overlay for metrics and thoughts, Plotly-based dashboards for live charts, and full touch/mobile/PWA support with OrbitControls and responsive UI.

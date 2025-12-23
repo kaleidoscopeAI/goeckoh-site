@@ -1,0 +1,16 @@
+925          self._refractory_until = time.time() + duration_s + float(refra
+     ctory_padding_s)
+926 +        t_play_start = time.time()
+927          try:
+928              sd.play(audio, samplerate=playback_sr, device=self._output_
+     device, blocking=True)
+929 +            self._last_playback_latency_ms = float((time.time() - t_pla
+     y_start) * 1000.0)
+930          except Exception:
+    ⋮
+936              sd.play(audio_rs, samplerate=input_sr, device=self._output_
+     device, blocking=True)
+937 +            self._last_playback_latency_ms = float((time.time() - t_pla
+     y_start) * 1000.0)
+938
+

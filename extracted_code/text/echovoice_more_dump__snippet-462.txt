@@ -1,18 +1,3 @@
-class Node:
-    id: int
-    X: np.ndarray  # low-level observation/action vector
-    S: float  # confidence scalar
-    E: float  # energy scalar
-    K: np.ndarray  # knowledge embedding
-    Psi: np.ndarray  # perspective embedding
-    U: np.ndarray  # unravel vector
-    M: np.ndarray  # mimicry embedding
-    R: str  # role: 'red'|'blue'|'crawler'|'analyzer'
-    D: np.ndarray  # data embedding
-
-    # runtime / derived
-    sigma: Optional[np.ndarray] = field(default=None)
-    Phi: Optional[np.ndarray] = field(default=None)
-    Spec: Optional[np.ndarray] = field(default=None)
-
-
+cpu_threshold_bits: u64,   // BIT_MASK_13 * 80% ~ (1<<13)*0.8
+mem_threshold_bits: u64,
+io_threshold_bits: u64,

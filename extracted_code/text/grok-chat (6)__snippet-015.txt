@@ -1,7 +1,0 @@
-class VoiceSample:
-    path: Path
-    style: Style
-    rms: float
-    duration_s: float
-    added_ts: float
-

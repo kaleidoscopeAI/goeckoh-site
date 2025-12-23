@@ -1,0 +1,7 @@
+    The 3D panel was blank because no avatar frames were streamed to it. (We sent metrics, not node positions.)
+
+    Some flows still assumed manual seeding (e.g., “Add Wikipedia seed”) rather than always-on ingest.
+    “No-API” promise was diluted by optional online pieces being treated as required (e.g., downloads/models).
+    Avatar generation originally used node dynamics, but the UI didn’t reflect that live feed.
+
+

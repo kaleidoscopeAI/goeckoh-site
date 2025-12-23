@@ -1,0 +1,4 @@
+""":returns: pictures path tied to the user"""
+return PlatformDirs().user_pictures_path
+
+

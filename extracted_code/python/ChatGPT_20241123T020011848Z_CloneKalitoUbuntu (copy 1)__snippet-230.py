@@ -1,2 +1,8 @@
-  command 'python3' from deb python3
-  command 'python' from deb python-is-python3
+  - Thought arises from the interplay between:
+    - External acquisition
+    - Internal reflection
+    - Sharing and collaboration
+  - Alignment
+
+
+

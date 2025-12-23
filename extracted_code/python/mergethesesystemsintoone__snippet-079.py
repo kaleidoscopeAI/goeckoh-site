@@ -1,10 +1,18 @@
-def ensure_venv():
-    if os.environ.get("AGI_BOOTED") != "1":
-        if not VENV.exists():
-            venv.create(VENV, with_pip=True)
-        pip = str(VENV / "bin/pip")
-        subprocess.run([pip, "install"] + REQ)
-        env = os.environ.copy()
-        env["AGI_BOOTED"] = "1"
-        os.execve(str(VENV / "bin/python"), [str(VENV / "bin/python"), __file__], env)
+class MemoryStore:
+    def __init__(self, path: str):
+        self.con = sqlite3.connect(path)
+        self.cur = self.con.cursor()
+        self.cur.execute("CREATE TABLE IF NOT EXISTS dna (gen INTEGER PRIMARY KEY, dna TEXT)")
+        self.cur.execute("CREATE TABLE IF NOT EXISTS insights (id INTEGER PRIMARY KEY, data TEXT)")
+
+    def add_dna(self, gen: int, dna: KnowledgeDNA):
+        self.cur.execute("INSERT INTO dna VALUES (?, ?)", (gen, json.dumps(dna.__dict__)))
+        self.con.commit()
+
+    def get_latest_dna(self) -> KnowledgeDNA:
+        self.cur.execute("SELECT dna FROM dna ORDER BY gen DESC LIMIT 1")
+        row = self.cur.fetchone()
+        if row:
+            return KnowledgeDNA(**json.loads(row[0]))
+        return KnowledgeDNA()
 

@@ -1,2 +1,2 @@
-let tempDir = FileManager.default.temporaryDirectory
-let fileURL = tempDir.appendingPathComponent("utterance.wav")
+function nextPrompt() {
+const idx = Math.floor(Math.random() * phrases.length);

@@ -1,1 +1,9 @@
-frontend/src/App.tsx (Real p5.js sketch: 3D particles with clusters/haloes, dynamic from snapshots; inspired by Starfield , 100k particles )
+def speculate(snapshot: dict, mode: str = 'default'):
+    if mode == 'drug':
+        mol = Chem.MolFromSmiles(snapshot['smiles'])  # Node as molecule
+        AllChem.Compute2DCoords(mol)
+        ff = AllChem.MMFFGetMoleculeForceField(mol)  # Real stress
+        energy = ff.CalcEnergy()  # Tension E
+        return {"energy": energy, "accepted": energy < 10}  # Threshold
+    # ... Previous FRF/SDE
+

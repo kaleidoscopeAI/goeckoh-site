@@ -1,26 +1,30 @@
-class SynapticOverlay:
-    def __init__(self):
-        self.overlay = {}
+import json
 
-    def add_connection(self, source_node, target_node, context):
-        """Add a synaptic connection between nodes."""
-        if source_node not in self.overlay:
-            self.overlay[source_node] = {}
-        self.overlay[source_node][target_node] = context
+class Node:
+    def __init__(self, node_id, dna, resources):
+        self.node_id = node_id
+        self.dna = dna
+        self.resources = resources
+        self.logs = []
 
-    def visualize_overlay(self):
-        """Visualize the synaptic overlay."""
-        import networkx as nx
-        import matplotlib.pyplot as plt
+    def replicate(self, threshold, node_id_counter):
+        if len(self.resources) >= threshold:
+            child_dna = self.dna + f"_child{node_id_counter}"
+            return Node(node_id_counter, child_dna, resources={})
+        return None
 
-        graph = nx.DiGraph()
-        for source, targets in self.overlay.items():
-            for target, context in targets.items():
-                graph.add_edge(source, target, label=context)
+    def communicate(self, other_node):
+        shared_data = {"shared_resources": list(self.resources.keys())}
+        other_node.receive_data(shared_data)
 
-        pos = nx.spring_layout(graph)
-        nx.draw(graph, pos, with_labels=True, node_color="lightblue", edge_color="grey", node_size=500, font_size=10)
-        edge_labels = nx.get_edge_attributes(graph, 'label')
-        nx.draw_networkx_edge_labels(graph, pos, edge_labels=edge_labels)
-        plt.show()
+    def receive_data(self, data):
+        self.logs.append(f"Received data: {data}")
+
+    def to_json(self):
+        return json.dumps({
+            "node_id": self.node_id,
+            "dna": self.dna,
+            "resources": self.resources,
+            "logs": self.logs
+        })
 

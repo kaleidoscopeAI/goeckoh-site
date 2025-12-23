@@ -1,2 +1,3 @@
-# <REDACTED: potential secret detected>
+return _SEMVER_RE.match(s)
+
 

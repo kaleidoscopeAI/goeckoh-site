@@ -1,0 +1,32 @@
+               # Autonomous ingest
+               if self.tick % AUTONOMOUS_INGEST_EVERY == 0:
+                   doc_id = self._ingest_local() or (self._ingest_online() if ALLOW_ONLINE else None)
+                   if doc_id:
+                       await self.bus.publish({"type":"ingest","data":{"doc_id":int(doc_id)}})
+
+               # Reflection + adjust + anneal pipeline
+               if self.tick % SC_REFLECT_EVERY == 0:
+                   ref = make_reflection(self.tick, m); self.mem.add_reflection(self.tick, ref)
+                   await self.bus.publish({"type":"reflection","data":{"tick":self.tick,"text":ref}})
+                   r = ask_ollama_refine(m, ref)
+                   adjust = r["adjust"]; self.mem.add_suggestion(self.tick, adjust)
+                   # apply to cube
+                   ks = float(adjust.get("k_scale",1.0)); rs = float(adjust.get("rest_scale",1.0))
+                   ks = max(0.25, min(ks, 4.0)); rs = max(0.5, min(rs, 1.5))
+                   for _,_,data in self.cube.G.edges(data=True):
+                       b: Bond = data["bond"]; b.k *= ks; b.rest *= rs
+                   await self.bus.publish({"type":"suggestion","data":{"tick":self.tick, **adjust, "heuristic": not r.get("ok")}})
+
+                   out = self._anneal_and_process()
+                   if out:
+                       await self.bus.publish({"type":"energetics","data":{"tick":self.tick, **out["energetics"], "sigma": self.sigma}})
+                       if out["caption"]:
+                           await self.bus.publish({"type":"caption","data":{"tick":self.tick, **out["caption"]}})
+
+               # Update avatar every tick regardless of UI
+               self.avatar.update(self.hbits, self.sfield, self.last_caption_text)
+
+          except Exception as e:
+              await self.bus.publish({"type":"error","data":{"tick":self.tick, "error": str(e), "trace": traceback.format_exc()}})
+          await asyncio.sleep(SC_TICK_SEC)
+

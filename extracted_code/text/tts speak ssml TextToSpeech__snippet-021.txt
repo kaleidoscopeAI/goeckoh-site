@@ -1,1 +1,57 @@
-// Note: Updated production-ready implementation with tunable VAD using android-vad library (WebRTC VAD).
+  > Could not find method register() for arguments [clean, class org.gradle.api.tasks.Delete,
+  build_cpmqdh1of0jdi9f2bmwk55ae3$_run_closure2@48b6869d] on task set of type
+  org.gradle.api.internal.tasks.DefaultTaskContainer.
+
+  * Try:
+  Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output. Run with
+  --scan to get full insights.
+
+  * Get more help at https://help.gradle.org
+
+  BUILD FAILED in 59s
+  ~/android echo > gradle --scan                        took 1m 1s at 01:01:26 AM
+  openjdk version "21.0.8" 2025-07-15
+  OpenJDK Runtime Environment (build 21.0.8+9-Ubuntu-0ubuntu124.04.1)
+  OpenJDK 64-Bit Server VM (build 21.0.8+9-Ubuntu-0ubuntu124.04.1, mixed mode, sharing)
+  Download https://plugins.gradle.org/m2/com/gradle/build-scan-plugin/1.10.3/build-scan-plugin-1.10.3.pom
+  Download https://plugins.gradle.org/m2/com/android/tools/build/transform-api/2.0.0-deprecated-use-gradle-api/transform-api-
+  2.0.0-deprecated-use-gradle-api.pom
+  Download https://plugins.gradle.org/m2/com/android/tools/build/transform-api/2.0.0-deprecated-use-gradle-api/transform-api-
+  2.0.0-deprecated-use-gradle-api.jar
+  Download https://plugins.gradle.org/m2/com/gradle/build-scan-plugin/1.10.3/build-scan-plugin-1.10.3.jar
+
+  FAILURE: Build failed with an exception.
+
+  * Where:
+  Build file '/home/jacob/android echo/build.gradle' line: 21
+
+  * What went wrong:
+  A problem occurred evaluating root project 'NeuroAcousticExocortex'.
+  > Could not find method register() for arguments [clean, class org.gradle.api.tasks.Delete,
+  build_cpmqdh1of0jdi9f2bmwk55ae3$_run_closure2@2e99c2d8] on task set of type
+  org.gradle.api.internal.tasks.DefaultTaskContainer.
+
+  * Try:
+  Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output. Run with
+  --scan to get full insights.
+
+  * Get more help at https://help.gradle.org
+
+  BUILD FAILED in 19s
+
+  Publishing a build scan to scans.gradle.com requires accepting the Terms of Service defined at https://scans.gradle.com/
+  terms-of-service. Do you accept these terms? [yes, no]
+  yes
+  Gradle Cloud Services license agreement accepted.
+
+  Publishing build scan...
+  https://gradle.com/s/futtjk7ekwrrg
+
+  ~/android echo >                                      took 2m 5s at 01:04:07 AM
+
+
+
+
+
+
+

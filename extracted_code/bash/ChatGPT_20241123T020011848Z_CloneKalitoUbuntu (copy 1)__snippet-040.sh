@@ -1,2 +1,2 @@
-sudo apt install tree -y
+export PYTHONPATH="${PYTHONPATH}:/path/to/project"
 

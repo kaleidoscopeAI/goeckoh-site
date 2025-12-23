@@ -1,0 +1,9 @@
+"""Construct a packaging.Requirement object with caching"""
+# Parsing requirement strings is expensive, and is also expected to happen
+# with a low diversity of different arguments (at least relative the number
+# constructed). This method adds a cache to requirement object creation to
+# minimize repeated parsing of the same string to construct equivalent
+# Requirement objects.
+return Requirement(req_string)
+
+

@@ -1,2 +1,1 @@
-class RLPolicy(torch.nn.Module):
-def __init__(self, input_dim: int, n_actions: int) -> None:
+def process_web_content(self, content: Dict[str, str]) -> Optional[List[Dict[str, str]]]:

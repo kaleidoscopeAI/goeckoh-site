@@ -1,2 +1,6 @@
-Core Architecture:Nodes: The system operates as a network of specialized nodes (TextNode, VisualNode, DataSimulationNode) managed by a NodeManager and orchestrated by AdvancedOrchestrator. Nodes process specific data types (text, images, numerical data) using capabilities defined in CapabilityNode.
-
+s = "".join(ch for ch in s.lower())
+grams = []
+for n in range(n_min, n_max+1):
+    for i in range(len(s)-n+1):
+        grams.append(s[i:i+n])
+return grams

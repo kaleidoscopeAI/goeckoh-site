@@ -1,0 +1,5 @@
+814          if isinstance(obj, np.ndarray):
+815 -            return obj.tolist()
+815 +            return self._to_jsonable(obj.tolist())
+816          if isinstance(obj, Enum):
+

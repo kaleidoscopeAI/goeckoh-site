@@ -1,9 +1,12 @@
-import sys
-import textwrap
-from optparse import Values
-from typing import List
+"""ExtType represents ext type in msgpack."""
 
-from pip._internal.cli.base_command import Command
-from pip._internal.cli.status_codes import SUCCESS
-from pip._internal.utils.misc import get_prog
+def __new__(cls, code, data):
+    if not isinstance(code, int):
+        raise TypeError("code must be int")
+    if not isinstance(data, bytes):
+        raise TypeError("data must be bytes")
+    if not 0 <= code <= 127:
+        raise ValueError("code must be 0~127")
+    return super(ExtType, cls).__new__(cls, code, data)
+
 

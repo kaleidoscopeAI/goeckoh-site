@@ -1,7 +1,7 @@
-# Extract
+# Extract and run directly
 tar -xzf goeckoh-system-1.0.0.tar.gz
 cd goeckoh-system-1.0.0
-
-# Install
-./install.sh                    # To /opt/goeckoh (requires sudo)
-./install.sh ~/goeckoh          # To user directory (no sudo)
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+./bin/launch_bubble_system.sh gui

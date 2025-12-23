@@ -1,0 +1,16 @@
+"""
+This enum represents the different language filters we can apply to a
+``UniversalDetector``.
+"""
+
+NONE = 0x00
+CHINESE_SIMPLIFIED = 0x01
+CHINESE_TRADITIONAL = 0x02
+JAPANESE = 0x04
+KOREAN = 0x08
+NON_CJK = 0x10
+ALL = 0x1F
+CHINESE = CHINESE_SIMPLIFIED | CHINESE_TRADITIONAL
+CJK = CHINESE | JAPANESE | KOREAN
+
+

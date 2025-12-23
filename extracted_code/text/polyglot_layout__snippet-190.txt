@@ -1,0 +1,10 @@
+  if not zip_path.exists():
+       return False, f"Missing: {zip_path}", 0
+  try:
+       with zipfile.ZipFile(zip_path, 'r') as z:
+           count = 0
+           for m in z.infolist():
+               target = dest_dir / m.filename
+               # prevent zip slip
+               if not str(target.resolve()).startswith(str(dest_dir.resolve())):
+

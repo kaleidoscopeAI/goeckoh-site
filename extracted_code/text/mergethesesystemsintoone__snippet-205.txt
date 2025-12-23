@@ -1,1 +1,4 @@
-class AGIMathematics {
+RAW = "raw"
+GEL = "gel"
+CRYSTAL = "crystal"
+

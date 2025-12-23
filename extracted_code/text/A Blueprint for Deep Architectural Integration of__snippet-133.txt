@@ -1,0 +1,3 @@
+- The original $G$ is contractive in $S_k$ (with contraction factor $\alpha < 1$),
+- $I_{\text{crawl}}$ is Lipschitz continuous in $c_k$ (with Lipschitz constant $L_c$),
+- $h$ is contractive in $c_k$ (with contraction factor $\rho < 1$).

@@ -1,0 +1,4 @@
+967                      "gcl": st.gcl,
+968 +                    "heart_topk": getattr(st, "heart_topk", None),
+969                      "phenotype_counts": st.phenotype_counts,
+

@@ -1,0 +1,6 @@
+KaleidoscopeEngine: Includes MemoryGear and LogicPath objects and manages the CrystallizationChamber for aggregating current_insights into a perfect_node.
+
+PerspectiveEngine: Drives the speculative generation of hypotheses, ensuring the system continually explores alternate perspectives and counterfactuals.
+
+Pattern Alignment: The system calculates a pattern_alignment_score between any two nodes based on the ratio of common patterns in their memory sets to the total patterns, facilitating coherent SuperNode formation.
+

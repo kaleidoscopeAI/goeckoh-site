@@ -1,1 +1,1 @@
-def reset(self) -> None:
+def get_latest_metrics(self) -> Dict[str, Any]:

@@ -1,0 +1,3 @@
+- One node contextualizes "hotdog" from textual Wikipedia crawls.
+- Another node analyzes images from search engines to classify attributes (e.g., "round bun, meat cylinder" or "ears, fur, tail").
+- Together, they build a shared but unique library of hotdog-related data.

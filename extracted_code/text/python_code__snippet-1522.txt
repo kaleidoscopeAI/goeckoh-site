@@ -1,0 +1,16 @@
+clean_args = make_setuptools_clean_args(
+    req.setup_py_path,
+    global_options=global_options,
+)
+
+logger.info("Running setup.py clean for %s", req.name)
+try:
+    call_subprocess(
+        clean_args, command_desc="python setup.py clean", cwd=req.source_dir
+    )
+    return True
+except Exception:
+    logger.error("Failed cleaning build dir for %s", req.name)
+    return False
+
+

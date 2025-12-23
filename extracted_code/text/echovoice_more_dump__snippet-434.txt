@@ -1,1 +1,6 @@
-Computed Bij and Wij using your formulas (cosine similarities, Psi distance, ϕ(Ui , Uj ), and role-based ρ).
+|                   ^^                   --------- this is an iterator with items of type `(&(usize, usize), &{float})`
+|                   |
+|                   expected `usize`, found `&_`
+|
+= note:   expected type `usize`
+        found reference `&_`

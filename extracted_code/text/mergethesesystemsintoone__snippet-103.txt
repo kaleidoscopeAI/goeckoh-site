@@ -1,2 +1,8 @@
-A very comprehensive documentation style is enforced using block comments ( “ “ “ for multiple line ) to provide insights on functionality
+class TaskResult:
+    """Result of a task execution"""
+    success: bool
+    data: Any = None
+    error: Optional[str] = None
+    duration: float = 0.0
+    resource_usage: Dict[str, Any] = field(default_factory=dict)
 

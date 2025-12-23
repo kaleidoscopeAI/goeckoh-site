@@ -1,4 +1,4 @@
-  terminfo/74 (268 files), 3 more. These directories are excluded from snapshots
-  and undo cleanup. Adjust `ghost_snapshot.ignore_large_untracked_dirs` to
-  change this behavior.
+• The logs showing old text indicate the app is still running the installed package version instead of local edits, despite
+  running from the backend directory where local code should take precedence; possible causes include namespace package
+  conflicts or a missing server restart after route changes.
 

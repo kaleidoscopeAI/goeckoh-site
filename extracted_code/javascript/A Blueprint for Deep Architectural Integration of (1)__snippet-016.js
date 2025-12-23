@@ -1,1 +1,0 @@
-- Let $f(x) = -x + W \sigma(x)$, where $W$ is synaptic connectivity matrix and $\sigma$ is activation function with slope ≤ 1.

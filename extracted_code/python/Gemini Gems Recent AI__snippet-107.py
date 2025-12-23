@@ -1,12 +1,44 @@
-def get_features():
-    smiles = request.json.get('smiles')
-    mol = Chem.MolFromSmiles(smiles)
-    if mol:
-        features = cube.calculate_features(mol)
-        if features is not None:
-            scaled_features = cube.scale_features(features)
-            return jsonify({'features': scaled_features.tolist()})  # Send scaled features
-        else:
-            return jsonify({'error': 'Invalid molecule'}), 400
-    return jsonify({'error': 'Invalid SMILES'}), 400
+def __init__(self, input_dim: int = 5, hidden_dim: int = 16, output_dim: int = 1):
+
+    super().__init__()
+
+    if not torch or not GCNConv:
+
+        logging.error("PyTorch or PyTorch Geometric missing, GNN disabled")
+
+        self.is_enabled = False
+
+        return
+
+    self.is_enabled = True
+
+    self.conv1 = GCNConv(input_dim, hidden_dim)
+
+    self.conv2 = GCNConv(hidden_dim, output_dim)
+
+
+def forward(self, x, edge_index):
+
+    if not self.is_enabled:
+
+        return None
+
+    try:
+
+        x = self.conv1(x, edge_index)
+
+        x = F.relu(x)
+
+        x = F.dropout(x, p=0.5, training=self.training)
+
+        x = self.conv2(x, edge_index)
+
+        return x
+
+    except Exception as e:
+
+        logging.error(f"GNN forward failed: {e}")
+
+        return None
+
 

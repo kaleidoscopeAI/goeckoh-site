@@ -1,35 +1,21 @@
-class ExocortexService : Service() {
-    private lateinit var neuroAcousticMirror: NeuroAcousticMirror
-    private lateinit var crystallineHeart: CrystallineHeart
-    private lateinit var gatedAGI: GatedAGI
-    private val executor = Executors.newSingleThreadExecutor()
+private lateinit var neuroAcousticMirror: NeuroAcousticMirror
+private lateinit var crystallineHeart: CrystallineHeart
+private lateinit var gatedAGI: GatedAGI
 
-    override fun onCreate() {
-        super.onCreate()
-        neuroAcousticMirror = NeuroAcousticMirror(this)
-        crystallineHeart = CrystallineHeart(1024)
-        gatedAGI = GatedAGI(this, crystallineHeart)
-    }
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    // Initialize components
+    neuroAcousticMirror = NeuroAcousticMirror(this)
+    crystallineHeart = CrystallineHeart(1024)
+    gatedAGI = GatedAGI(crystallineHeart)
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        executor.execute {
-            while (true) {
-                try {
-                    neuroAcousticMirror.listenAndProcess { correctedText, prosody ->
-                        val gcl = crystallineHeart.updateAndGetGCL(prosody.arousal, prosody.volume, prosody.pitchVariance)
-                        gatedAGI.executeBasedOnGCL(gcl, correctedText)
-                    }
-                } catch (e: Exception) {
-                    Log.e("Service", "Error: ${e.message}")
-                }
+    // Start listening loop in background
+    Executors.newSingleThreadExecutor().execute {
+        while (true) {
+            neuroAcousticMirror.listenAndProcess { correctedText, prosody ->
+                val gcl = crystallineHeart.updateAndGetGCL(prosody.arousal) // Update Heart with vocal arousal
+                gatedAGI.executeBasedOnGCL(gcl, correctedText)
             }
         }
-        return START_STICKY
     }
-
-    override fun onBind(intent: Intent?): IBinder? = null
-
-    override fun onDestroy() {
-        executor.shutdownNow()
-        super.onDestroy()
-    }
+}

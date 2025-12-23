@@ -1,1 +1,1 @@
-function stopAudio() {
+function extractFeatures(frame, sr) {

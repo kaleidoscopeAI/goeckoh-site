@@ -1,2 +1,2 @@
-# <REDACTED: potential secret detected>
+uvicorn.run(app, host=HOST, port=PORT)
 

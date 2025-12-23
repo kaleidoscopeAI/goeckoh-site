@@ -1,0 +1,39 @@
+; Arguments passed in:
+; RDI - pointer to agent position array
+; RSI - pointer to agent velocity array
+; RDX - pointer to best position array
+; RCX - number of dimensions
+; XMM0 - inertia weight
+; XMM1 - cognitive coefficient
+; XMM2 - social coefficient
+
+push    rbp
+mov     rbp, rsp
+push    r12
+push    r13
+push    r14
+
+; Save parameters
+mov     r12, rdi        ; agent position
+mov     r13, rsi        ; agent velocity
+mov     r14, rdx        ; best position
+mov     r10, rcx        ; dimensions counter
+
+; Prepare scalar constants in vector registers
+movsd   xmm3, xmm0      ; inertia weight
+movsd   xmm4, xmm1      ; cognitive coefficient
+movsd   xmm5, xmm2      ; social coefficient
+
+; Get random values for cognitive and social components
+; (We'd normally call random functions, but for simplicity
+; we're using constants in this assembly example)
+mov     eax, 0x3F000000  ; ~0.5 in single precision
+movd    xmm6, eax
+cvtss2sd xmm6, xmm6      ; convert to double
+mov     eax, 0x3F400000  ; ~0.75 in single precision
+movd    xmm7, eax
+cvtss2sd xmm7, xmm7      ; convert to double
+
+; Update each dimension
+xor     rcx, rcx        ; dimension index
+

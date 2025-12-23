@@ -1,29 +1,21 @@
-from core_node import Node
-
-class NodeReplication:
+class DynamicResourceManager:
     def __init__(self):
-        self.nodes = [Node()]
+        self.resource_threshold = 0.5
 
-    def replicate_node(self, parent_node):
-        """Replicate a node based on maturity threshold."""
-        if parent_node.maturity > 1.0 and parent_node.energy > 0.5:
-            child_node = Node()
-            child_node.generation = parent_node.generation + 1
-            child_node.knowledge = parent_node.knowledge.copy()  # Inherit knowledge
-            child_node.energy = parent_node.energy * 0.5  # Share energy
-            parent_node.energy *= 0.5  # Retain half energy
-            self.nodes.append(child_node)
-            return child_node
-        return None
+    def allocate_resources(self, nodes):
+        """Balance resources across all nodes."""
+        total_energy = sum(node.energy for node in nodes)
+        average_energy = total_energy / len(nodes)
 
-    def manage_replication(self):
-        """Iterate through nodes and manage replication."""
-        for node in self.nodes:
-            self.replicate_node(node)
+        for node in nodes:
+            if node.energy < average_energy * self.resource_threshold:
+                node.energy += 0.1
+            else:
+                node.energy -= 0.05
 
-    def get_status(self):
+    def monitor_resources(self, nodes):
         return {
-            "Total Nodes": len(self.nodes),
-            "Generations": len(set(node.generation for node in self.nodes))
+            "Average Energy": sum(node.energy for node in nodes) / len(nodes),
+            "Node Count": len(nodes)
         }
 

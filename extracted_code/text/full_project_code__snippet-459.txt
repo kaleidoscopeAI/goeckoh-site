@@ -1,0 +1,1 @@
+Number, Punctuation, Generic, Other, Error, Whitespace

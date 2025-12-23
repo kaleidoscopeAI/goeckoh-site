@@ -1,5 +1,4 @@
-• I'm prioritizing using the Rust lattice via an optional env var flag while
-  keeping the Python lattice for now due to FFI limits, and updating the
-  validation script to conditionally import matplotlib to avoid failures when
-  plotting isn't required.
+• I'm considering adding a simple hook from the speech_mirror transcript to the
+  visualizer via WebSocket or HTTP post, pending a quick review of the
+  cognitive-nebula folder to confirm details and scope.
 

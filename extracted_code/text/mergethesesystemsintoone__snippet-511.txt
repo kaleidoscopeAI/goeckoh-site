@@ -1,0 +1,31 @@
+# ... existing initialization code ...
+
+# Initialize Chatbot
+chatbot = ChatbotInterface()
+
+# ... rest of the main loop ...
+
+# Start chatbot interaction after simulation
+print("Chatbot interface started. Type 'exit' to quit.")
+while True:
+    user_input = input("You: ")
+    if user_input.lower() == 'exit':
+        break
+    response = chatbot.respond(user_input)
+    print("Kaleidoscope:", response)
+
+# ... cleanup and shutdown code ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+

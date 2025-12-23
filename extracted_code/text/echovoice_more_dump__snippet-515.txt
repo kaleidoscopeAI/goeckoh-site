@@ -1,0 +1,7 @@
+element_symbol: atomic_number.to_string(),
+electronegativity: 0.0,
+valence_electrons: 0,
+atomic_radius: 0.0,
+is_metal: false,
+mass: 0.0,
+electron_affinity: 0.0,

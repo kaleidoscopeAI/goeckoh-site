@@ -1,8 +1,11 @@
-# Set the Python path
-export PYTHONPATH="${PYTHONPATH}:~/Documents/AI.AI/codebase"
+# Step 1: Set up the environment
+python3 -m venv demo_env
+source demo_env/bin/activate
+pip install numpy scipy matplotlib networkx scikit-learn beautifulsoup4 requests
 
-# Run test scripts
-python3 "core functionality scripts/main_scripts/master_ai_systems.py"
-python3 "core functionality scripts/test/functional_ai_demo.py"
-python3 "core functionality scripts/test/organic_ai_demo.py"
+# Step 2: Navigate to the project directory
+cd ~/Documents/AI.AI/codebase
+
+# Step 3: Run the demo
+python3 organic_ai_demo.py
 

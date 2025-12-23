@@ -1,0 +1,5 @@
+      val samples = generatedAudio.samples // FloatArray
+      val ttsSampleRate = generatedAudio.sampleRate
+
+      // Post-process for prosody transfer
+      val dispatcher = AudioDispatcherFactory.fromFloatArray(samples,

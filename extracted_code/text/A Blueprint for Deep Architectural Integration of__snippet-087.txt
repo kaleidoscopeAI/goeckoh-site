@@ -1,0 +1,7 @@
+engines: Vec<Engine>,
+routing: Vec<Vec<f64>>,
+global_state: Vec<f64>,
+threshold: f64,
+noise_level: f64,
+learning_rate_param: f64,
+learning_rate_route: f64,

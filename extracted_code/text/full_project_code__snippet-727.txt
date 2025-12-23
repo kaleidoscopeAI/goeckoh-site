@@ -1,0 +1,3 @@
+windll = None
+SetConsoleTextAttribute = lambda *_: None
+winapi_test = lambda *_: None

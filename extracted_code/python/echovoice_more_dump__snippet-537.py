@@ -1,3 +1,2 @@
-// poll constructs timeseries from service (subscribe)
-const unsub = service.subscribe((constructs) => {
-const now = Date.now();
+import { EmotionalVector } from "../types";
+let currentE: EmotionalVector = {

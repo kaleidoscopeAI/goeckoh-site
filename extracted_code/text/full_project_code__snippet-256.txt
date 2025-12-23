@@ -1,0 +1,6 @@
+ssl = None
+
+class BaseSSLError(BaseException):
+    pass
+
+

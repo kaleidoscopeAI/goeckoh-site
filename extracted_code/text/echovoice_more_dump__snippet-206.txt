@@ -1,1 +1,1 @@
-class UnifiedOrganicAI:
+For “quantum_write” registers, treat them as a memory-mapped interface: your backend can expose a Python class QuantumRegister with .write() and

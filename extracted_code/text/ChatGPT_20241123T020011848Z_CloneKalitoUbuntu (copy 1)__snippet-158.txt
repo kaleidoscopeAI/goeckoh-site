@@ -1,0 +1,1 @@
+- If knowledge (description or image) is too similar to existing knowledge, the node discards or flags it.

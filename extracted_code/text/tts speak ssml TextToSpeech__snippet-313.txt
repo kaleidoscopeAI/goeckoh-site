@@ -1,0 +1,1 @@
+implementation(files("libs/<artifact>.jar")) / implementation(files("libs/<artifact>.aar")).

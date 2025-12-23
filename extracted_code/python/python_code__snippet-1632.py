@@ -1,10 +1,14 @@
-from __future__ import annotations
-from dataclasses import dataclass
-from pathlib import Path
-from typing import Tuple
+from pip._vendor.rich.text import Text
 
-import numpy as np
-import librosa
-import soundfile as sf
+t = Text()
+print(isinstance(Text, RichRenderable))
+print(isinstance(t, RichRenderable))
+
+class Foo:
+    pass
+
+f = Foo()
+print(isinstance(f, RichRenderable))
+print(isinstance("", RichRenderable))
 
 

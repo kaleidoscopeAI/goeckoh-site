@@ -1,11 +1,4 @@
-import sys
-from functools import lru_cache
-from marshal import dumps, loads
-from random import randint
-from typing import Any, Dict, Iterable, List, Optional, Type, Union, cast
-
-from . import errors
-from .color import Color, ColorParseError, ColorSystem, blend_rgb
-from .repr import Result, rich_repr
-from .terminal_theme import DEFAULT_TERMINAL_THEME, TerminalTheme
+from pip._internal.utils.misc import ensure_dir, normalize_path
+from pip._internal.utils.temp_dir import TempDirectory
+from pip._internal.wheel_builder import build, should_build_for_wheel_command
 

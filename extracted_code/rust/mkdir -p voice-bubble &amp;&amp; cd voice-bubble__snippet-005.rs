@@ -1,46 +1,60 @@
-use piper_rs::{Piper, Voice, AudioOutput};
+use tokio::sync::mpsc;
 
-struct VoiceCloningTTS {
-    piper: Piper,
-    current_voice: Voice,
-    sample_rate: u32,
+struct EchoSystem {
+    audio_pipeline: AudioPipeline,
+    stt: StreamingSTT,
+    tts: VoiceCloningTTS,
+    vad: SileroVAD,
+    prediction_engine: PredictionEngine,
+    
+    // Communication channels
+    audio_tx: mpsc::Sender<AudioFrame>,
+    text_tx: mpsc::Sender<String>,
+    tts_tx: mpsc::Sender<String>,
 }
 
-impl VoiceCloningTTS {
-    async fn new(voice_path: &str) -> Self {
-        let piper = Piper::new().expect("Failed to create Piper");
-        let voice = Voice::from_file(voice_path).expect("Failed to load voice");
-        let sample_rate = voice.sample_rate();
+impl EchoSystem {
+    async fn run(mut self) {
+        let (audio_tx, mut audio_rx) = mpsc::channel(100);
+        let (text_tx, mut text_rx) = mpsc::channel(100);
+        let (tts_tx, mut tts_rx) = mpsc::channel(100);
         
-        Self {
-            piper,
-            current_voice: voice,
-            sample_rate,
-        }
-    }
-    
-    async fn synthesize_streaming(&self, text: &str) -> Vec<f32> {
-        let mut synthesizer = self.piper
-            .synthesize_streaming(&self.current_voice, text)
-            .expect("Failed to synthesize");
+        self.audio_tx = audio_tx;
+        self.text_tx = text_tx;
+        self.tts_tx = tts_tx;
         
-        let mut audio_buffer = Vec::new();
+        // Start audio ingestion task
+        tokio::spawn(async move {
+            while let Some(frame) = self.audio_pipeline.input_queue.pop() {
+                if self.vad.is_speech(&frame) {
+                    self.audio_tx.send(frame).await.unwrap();
+                }
+            }
+        });
         
-        while let Some(audio_chunk) = synthesizer.next().await {
-            let floats: Vec<f32> = audio_chunk
-                .iter()
-                .map(|&sample| sample as f32 / 32768.0)
-                .collect();
-            audio_buffer.extend(floats);
-        }
+        // STT processing task
+        let stt_task = tokio::spawn(async move {
+            while let Some(frame) = audio_rx.recv().await {
+                if let Some(text) = self.stt.process_chunk(&frame.samples).await {
+                    self.text_tx.send(text).await.unwrap();
+                }
+            }
+        });
         
-        audio_buffer
-    }
-    
-    fn clone_voice(&mut self, reference_audio: &[f32]) {
-        // Note: Piper doesn't support voice cloning natively
-        // This would require a custom model like F5-TTS compiled to Rust
-        // For now, we load a pre-trained voice
-        unimplemented!("Real-time voice cloning requires custom Rust bindings for F5-TTS/VITS");
+        // Predictive text + TTS task
+        let tts_task = tokio::spawn(async move {
+            while let Some(text) = text_rx.recv().await {
+                // Get prediction
+                let prediction = self.prediction_engine.predict(&text);
+                
+                // Synthesize
+                let audio = self.tts.synthesize_streaming(&prediction).await;
+                
+                // Queue for playback
+                self.audio_pipeline.output_queue.push_slice(&audio);
+            }
+        });
+        
+        tokio::join!(stt_task, tts_task);
     }
 }

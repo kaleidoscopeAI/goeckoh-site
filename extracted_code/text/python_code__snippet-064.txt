@@ -1,2 +1,6 @@
-# <REDACTED: potential secret detected>
+class _MovedItems(_LazyModule):
+
+    """Lazy loading of moved objects"""
+    __path__ = []  # mark as package
+
 

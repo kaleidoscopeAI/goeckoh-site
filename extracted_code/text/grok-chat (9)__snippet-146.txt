@@ -1,0 +1,2 @@
+set GOECKOH_USE_RUST_VC=1 to exercise the low-latency Rust LPC/PSOLA path.
+Start script documents the flag.

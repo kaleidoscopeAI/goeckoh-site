@@ -1,1 +1,3 @@
-formulating decision variables into a QUBO whose linear coefficients are biased by episodic valence retrieved from the lattice; and
+H as in spec; forces F_ij from ∇H.
+Transformation: bits/positions → evolved states.
+

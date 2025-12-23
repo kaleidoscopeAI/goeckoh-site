@@ -1,1 +1,1 @@
-sudo ./install.sh /opt/goeckoh
+update-desktop-database ~/.local/share/applications/

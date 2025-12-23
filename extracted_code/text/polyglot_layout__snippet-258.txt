@@ -1,0 +1,28 @@
+       self.shape_id = sid
+       target = self._target_field(sid)
+
+       # forces: spring to target + swirl + noise
+       P = self.pos; V = self.vel
+       F_spring = k_spring*(target - P)
+       # swirl around z (simple)
+       sw = np.stack([-P[:,1], P[:,0], 0*P[:,2]], axis=1).astype(np.float32) * swirl
+       F = F_spring + sw + noise*np.random.normal(0,1.0,P.shape).astype(np.float32)
+
+       V = damp*V + 0.03*F
+       P = P + V
+       # keep inside cube
+       np.clip(P, -1.0, 1.0, out=P)
+
+       self.pos, self.vel = P, V
+
+       # pack binary: [uint32 N] + [N*3 float32]
+       with self._lock:
+           self._bytes = struct.pack("<I", self.n) + P.astype(np.float32).tobytes()
+
+  def frame_bytes(self) -> bytes | None:
+      with self._lock:
+          return self._bytes
+
+
+
+

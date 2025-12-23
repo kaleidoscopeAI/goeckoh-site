@@ -1,0 +1,21 @@
+"""Get file and optionally check its hash."""
+# If a download dir is specified, is the file already there and valid?
+already_downloaded_path = None
+if download_dir:
+    already_downloaded_path = _check_download_dir(link, download_dir, hashes)
+
+if already_downloaded_path:
+    from_path = already_downloaded_path
+else:
+    from_path = link.file_path
+
+# If --require-hashes is off, `hashes` is either empty, the
+# link's embedded hash, or MissingHashes; it is required to
+# match. If --require-hashes is on, we are satisfied by any
+# hash in `hashes` matching: a URL-based or an option-based
+# one; no internet-sourced hash will be in `hashes`.
+if hashes:
+    hashes.check_against_path(from_path)
+return File(from_path, None)
+
+

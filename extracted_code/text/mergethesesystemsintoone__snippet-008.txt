@@ -1,5 +1,4 @@
-class Phase(Enum):
-    RAW = "raw"
-    GEL = "gel"
-    CRYSTAL = "crystal"
+class Trait:
+    name: str
+    value: float = 0.5
 

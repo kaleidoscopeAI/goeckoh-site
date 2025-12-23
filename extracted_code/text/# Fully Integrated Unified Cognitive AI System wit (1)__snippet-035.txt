@@ -1,0 +1,5 @@
+- Install backend dependencies (using python virtualenv or conda recommended).
+- Launch backend server.
+- Install frontend dependencies.
+- Launch frontend development server or build static production site.
+

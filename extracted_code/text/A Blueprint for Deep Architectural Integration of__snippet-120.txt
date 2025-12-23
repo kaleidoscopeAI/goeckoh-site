@@ -1,0 +1,5 @@
+url_frontier: PriorityUrlFrontier,
+politeness_policy: PolitenessPolicy,
+summarizer: Arc<HuggingFaceThoughtEngine>,
+knowledge_base: Arc<KnowledgeGraph>,
+max_depth: usize,

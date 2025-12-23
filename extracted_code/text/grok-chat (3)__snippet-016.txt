@@ -1,0 +1,6 @@
+try:
+    system = ConsciousCrystalSystem()
+    system.simulate(steps=20)
+except Exception as e:
+    print(f"[FATAL] Critical system error: {e}. Initiating shutdown.")
+    sys.exit(1)

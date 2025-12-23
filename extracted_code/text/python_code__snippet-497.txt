@@ -1,0 +1,5 @@
+'iso-8859-8-i': 'iso-8859-8',
+'x-mac-cyrillic': 'mac-cyrillic',
+'macintosh': 'mac-roman',
+'windows-874': 'cp874'}
+

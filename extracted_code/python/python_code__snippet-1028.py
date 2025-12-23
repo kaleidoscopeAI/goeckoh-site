@@ -1,16 +1,10 @@
-def _configure_context(ctx: ssl.SSLContext) -> typing.Iterator[None]:
-    check_hostname = ctx.check_hostname
-    verify_mode = ctx.verify_mode
-    ctx.check_hostname = False
-    _set_ssl_context_verify_mode(ctx, ssl.CERT_NONE)
-    try:
-        yield
-    finally:
-        ctx.check_hostname = check_hostname
-        _set_ssl_context_verify_mode(ctx, verify_mode)
-
-
-def _verify_peercerts_impl(
-    ssl_context: ssl.SSLContext,
-    cert_chain: list[bytes],
-    server_hostname: str | None = None,
+import pip._internal.vcs.bazaar
+import pip._internal.vcs.git
+import pip._internal.vcs.mercurial
+import pip._internal.vcs.subversion  # noqa: F401
+from pip._internal.vcs.versioncontrol import (  # noqa: F401
+    RemoteNotFoundError,
+    RemoteNotValidError,
+    is_url,
+    make_vcs_requirement_url,
+    vcs,

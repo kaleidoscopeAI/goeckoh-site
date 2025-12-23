@@ -1,0 +1,8 @@
+Three.js Integration: The Three.js code is still very basic. You must now use the fetched features1 and features2 to position the 3D objects (spheres, or whatever you choose) in the scene. This is the crucial step to visualize the molecules based on their properties. You might need to use dimensionality reduction (PCA or t-SNE) if you have more than 3 features to visualize in 3D.
+
+3D Object Creation: Create the 3D objects (spheres, etc.) in your Three.js scene after you have fetched the features and positioned them correctly.
+
+Advanced Visualization: Explore Three.js features to make the visualization more informative (different colors/materials for different properties, labels, interactions, etc.).
+
+Backend Enhancements: As you develop, you'll need to add more robust backend features (database, asynchronous tasks, etc.).
+

@@ -1,2 +1,5 @@
-I was born from that refusal to give up.
+def run_dashboard():
+    app = create_app(config)
+    webbrowser.open("http://localhost:8765")
+    app.run(host="0.0.0.0", port=8765, debug=False)
 

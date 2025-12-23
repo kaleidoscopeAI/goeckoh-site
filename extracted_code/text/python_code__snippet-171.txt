@@ -1,18 +1,5 @@
-class CERT_CHAIN_ENGINE_CONFIG(Structure):
-    _fields_ = (
-        ("cbSize", DWORD),
-        ("hRestrictedRoot", HCERTSTORE),
-        ("hRestrictedTrust", HCERTSTORE),
-        ("hRestrictedOther", HCERTSTORE),
-        ("cAdditionalStore", DWORD),
-        ("rghAdditionalStore", c_void_p),
-        ("dwFlags", DWORD),
-        ("dwUrlRetrievalTimeout", DWORD),
-        ("MaximumCachedCertificates", DWORD),
-        ("CycleDetectionModulus", DWORD),
-        ("hExclusiveRoot", HCERTSTORE),
-        ("hExclusiveTrustedPeople", HCERTSTORE),
-        ("dwExclusiveFlags", DWORD),
-    )
+if match.group("floatpart"):
+    return parse_float(match.group())
+return int(match.group(), 0)
 
 

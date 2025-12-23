@@ -1,0 +1,2 @@
+return intranges_contain(ord(cp), idnadata.scripts[script])
+

@@ -1,1 +1,4 @@
-# in-process. If you understand and accept the implications of using pip
+                    r'(-[a-z0-9]+(\.[a-z0-9-]+)*)?'
+                    r'(\+[a-z0-9]+(\.[a-z0-9-]+)*)?$', re.I)
+
+

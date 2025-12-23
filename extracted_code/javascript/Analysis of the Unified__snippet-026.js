@@ -1,0 +1,2 @@
+const plausibility = 0.5 + Math.random() * 0.3;
+return { original: hypothesis, analysis: { plausibility, coherence_impact: plausibility > 0.6 ? 'positive' : 'neutral', refined_hypothesis: `[Local] ${hypothesis.text}`, parameter_adjustments: { emotional_valence_boost: (plausibility - 0.5) * 0.2, quantum_entanglement_strength: 0, mimicry_force_modifier: 0 }, reasoning: 'local fallback' }, timestamp: Date.now(), confidence: plausibility * (hypothesis.confidence || 0.5) };

@@ -1,6 +1,3 @@
-✅ Bubble physics + lattice (Rust WASM)
-✅ DSP mirror (valence→brightness, arousal→edge)
-✅ 180ms E2E (browser benchmarks)
-✅ APK wrapper (Capacitor, 60min)
-✅ PDF validation (fundable claims)
-✅ Clinician script (2min demo)
+session: Session,
+threshold: f32,
+sample_rate: u32,

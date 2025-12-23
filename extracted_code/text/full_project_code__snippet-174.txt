@@ -1,0 +1,3 @@
+MovedAttribute("URLError", "urllib2", "urllib.error"),
+MovedAttribute("HTTPError", "urllib2", "urllib.error"),
+MovedAttribute("ContentTooShortError", "urllib", "urllib.error"),

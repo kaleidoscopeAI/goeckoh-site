@@ -1,0 +1,16 @@
+"""Check if the value is Debian's APT-controlled dist-packages.
+
+Debian's ``distutils.sysconfig.get_python_lib()`` implementation returns the
+default package path controlled by APT, but does not patch ``sysconfig`` to
+do the same. This is similar to the bug worked around in ``get_scheme()``,
+but here the default is ``deb_system`` instead of ``unix_local``. Ultimately
+we can't do anything about this Debian bug, and this detection allows us to
+skip the warning when needed.
+"""
+if not _looks_like_debian_scheme():
+    return False
+if value == "/usr/lib/python3/dist-packages":
+    return True
+return False
+
+

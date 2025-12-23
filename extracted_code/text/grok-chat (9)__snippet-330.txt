@@ -1,0 +1,5 @@
+teeth","social_story":"Let's focus on one thing at a time. How about we try brush
+… +90 lines
+{"energy":0.5,"pitch_mean":120.0,"pitch_std":20.0}}}},"vad_status":{"is_speech":false,"pause_analysis":
+{},"should_transcribe":true},"voice_style":"neutral"},"success":true}
+

@@ -1,15 +1,12 @@
-def __post_init__(self):
-    self._validate()
-    self._initialize_metadata()
-
-def _validate(self):
-    if not 0 <= self.value <= 1:
-        raise ValueError(f"Trait value must be between 0 and 1, got {self.value}")
-    if not 0 <= self.plasticity <= 1:
-        raise ValueError(f"Plasticity must be between 0 and 1, got {self.plasticity}")
-
-def _initialize_metadata(self):
-    self.history = []
-    self.adaptation_score = 1.0
-    self.last_update = 0
-    self.interaction_strength = {}
+def evaluate(self, insight: Dict) -> float:
+    """Evaluates an insight against the defined values."""
+    score = 0.0
+    if insight.get("type") == "logical_result":
+        score += self.values["truth"] * insight.get("validity", 0.0)
+    if insight.get("type") == "new_pattern":
+        score += self.values["novelty"] * insight.get("uniqueness", 0.0)
+    if insight.get("type") == "optimization":
+        score += self.values["efficiency"] * insight.get("efficiency_gain", 0.0)
+    if insight.get("type") == "merged_insight":
+        score += self.values["coherence"] * insight.get("coherence_score", 0.0)
+    return score

@@ -1,0 +1,2 @@
+(formerly ‘Crystalline Heart’)” with a compatibility alias
+NeurocoherenceLattice = CrystallineHeart.

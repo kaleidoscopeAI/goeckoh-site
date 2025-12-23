@@ -1,87 +1,26 @@
-def code_to_chars(code):
-    return CSI + str(code) + 'm'
+    from pip._vendor.rich.console import Console
 
-def set_title(title):
-    return OSC + '2;' + title + BEL
+    console = Console()
+    layout = Layout()
 
-def clear_screen(mode=2):
-    return CSI + str(mode) + 'J'
+    layout.split_column(
+        Layout(name="header", size=3),
+        Layout(ratio=1, name="main"),
+        Layout(size=10, name="footer"),
+    )
 
-def clear_line(mode=2):
-    return CSI + str(mode) + 'K'
+    layout["main"].split_row(Layout(name="side"), Layout(name="body", ratio=2))
 
+    layout["body"].split_row(Layout(name="content", ratio=2), Layout(name="s2"))
 
-class AnsiCodes(object):
-    def __init__(self):
-        # the subclasses declare class attributes which are numbers.
-        # Upon instantiation we define instance attributes, which are the same
-        # as the class attributes but wrapped with the ANSI escape sequence
-        for name in dir(self):
-            if not name.startswith('_'):
-                value = getattr(self, name)
-                setattr(self, name, code_to_chars(value))
+    layout["s2"].split_column(
+        Layout(name="top"), Layout(name="middle"), Layout(name="bottom")
+    )
 
+    layout["side"].split_column(Layout(layout.tree, name="left1"), Layout(name="left2"))
 
-class AnsiCursor(object):
-    def UP(self, n=1):
-        return CSI + str(n) + 'A'
-    def DOWN(self, n=1):
-        return CSI + str(n) + 'B'
-    def FORWARD(self, n=1):
-        return CSI + str(n) + 'C'
-    def BACK(self, n=1):
-        return CSI + str(n) + 'D'
-    def POS(self, x=1, y=1):
-        return CSI + str(y) + ';' + str(x) + 'H'
+    layout["content"].update("foo")
 
+    console.print(layout)
 
-class AnsiFore(AnsiCodes):
-    BLACK           = 30
-    RED             = 31
-    GREEN           = 32
-    YELLOW          = 33
-    BLUE            = 34
-    MAGENTA         = 35
-    CYAN            = 36
-    WHITE           = 37
-    RESET           = 39
-
-    # These are fairly well supported, but not part of the standard.
-    LIGHTBLACK_EX   = 90
-    LIGHTRED_EX     = 91
-    LIGHTGREEN_EX   = 92
-    LIGHTYELLOW_EX  = 93
-    LIGHTBLUE_EX    = 94
-    LIGHTMAGENTA_EX = 95
-    LIGHTCYAN_EX    = 96
-    LIGHTWHITE_EX   = 97
-
-
-class AnsiBack(AnsiCodes):
-    BLACK           = 40
-    RED             = 41
-    GREEN           = 42
-    YELLOW          = 43
-    BLUE            = 44
-    MAGENTA         = 45
-    CYAN            = 46
-    WHITE           = 47
-    RESET           = 49
-
-    # These are fairly well supported, but not part of the standard.
-    LIGHTBLACK_EX   = 100
-    LIGHTRED_EX     = 101
-    LIGHTGREEN_EX   = 102
-    LIGHTYELLOW_EX  = 103
-    LIGHTBLUE_EX    = 104
-    LIGHTMAGENTA_EX = 105
-    LIGHTCYAN_EX    = 106
-    LIGHTWHITE_EX   = 107
-
-
-class AnsiStyle(AnsiCodes):
-    BRIGHT    = 1
-    DIM       = 2
-    NORMAL    = 22
-    RESET_ALL = 0
 

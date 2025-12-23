@@ -1,0 +1,5 @@
+for idx, snap in enumerate(list(snapshots)[-n:]):
+    # run deterministic analysis on snapshot for testing
+    meanr = np.mean(np.linalg.norm(snap, axis=1))
+    print(idx, meanr)
+

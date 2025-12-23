@@ -1,8 +1,13 @@
-import collections
-import itertools
-import re
-import warnings
-from typing import Callable, Iterator, List, Optional, SupportsInt, Tuple, Union
+class _EditableInfo(NamedTuple):
+    requirement: str
+    comments: List[str]
 
-from ._structures import Infinity, InfinityType, NegativeInfinity, NegativeInfinityType
 
+def freeze(
+    requirement: Optional[List[str]] = None,
+    local_only: bool = False,
+    user_only: bool = False,
+    paths: Optional[List[str]] = None,
+    isolated: bool = False,
+    exclude_editable: bool = False,
+    skip: Container[str] = (),

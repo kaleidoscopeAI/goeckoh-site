@@ -1,0 +1,4 @@
+""":returns: videos directory tied to the user"""
+return PlatformDirs().user_videos_dir
+
+

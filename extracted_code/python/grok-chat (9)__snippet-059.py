@@ -1,4 +1,6 @@
-  terminfo/74 (268 files), 3 more. These directories are excluded from snapshots
-  and undo cleanup. Adjust `ghost_snapshot.ignore_large_untracked_dirs` to
-  change this behavior.
+    961 +    def list_routes(self):
+    962 +        routes = sorted([r.rule for r in self.app.url_map.iter_rules()])
+    963 +        return jsonify({"routes": routes})
+    964 +
+    965      # ---------------- ASR single-shot endpoint -----------------
 

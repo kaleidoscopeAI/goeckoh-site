@@ -1,0 +1,5 @@
+"""urllib3 encountered an error when trying to rewind a body"""
+
+pass
+
+

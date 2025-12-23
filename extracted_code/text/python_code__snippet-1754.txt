@@ -1,0 +1,5 @@
+gcl: float
+stress: float
+mode_label: str
+gui_color: tuple
+

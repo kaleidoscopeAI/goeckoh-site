@@ -1,0 +1,12 @@
+uncertainty = compute_uncertainty(S)
+performance = compute_performance_feedback()
+
+c = max(0, rho * c + alpha * uncertainty - sigma * performance)
+
+if c > threshold:
+    I_crawl = O_crawl.process(c)
+    S = update_global_state(S, I_crawl)
+else:
+    S = update_global_state(S)
+
+log_state(S, c)

@@ -1,4 +1,2 @@
-const m = this.cfg.speciesCount;
-const base = nodeIdx * m;
-const decayBase = 0.1;
-for (let k = 0; k < m; k++) {
+const controls = new OrbitControls(camera, renderer.domElement);
+const light = new THREE.DirectionalLight(0xffffff, 1.2);

@@ -1,40 +1,89 @@
-from typing import Optional
+"""
+Resource finder for file system resources.
+"""
 
-from pip._internal.models.direct_url import ArchiveInfo, DirectUrl, DirInfo, VcsInfo
-from pip._internal.models.link import Link
-from pip._internal.utils.urls import path_to_url
-from pip._internal.vcs import vcs
+if sys.platform.startswith('java'):
+    skipped_extensions = ('.pyc', '.pyo', '.class')
+else:
+    skipped_extensions = ('.pyc', '.pyo')
 
+def __init__(self, module):
+    self.module = module
+    self.loader = getattr(module, '__loader__', None)
+    self.base = os.path.dirname(getattr(module, '__file__', ''))
 
-def direct_url_as_pep440_direct_reference(direct_url: DirectUrl, name: str) -> str:
-    """Convert a DirectUrl to a pip requirement string."""
-    direct_url.validate()  # if invalid, this is a pip bug
-    requirement = name + " @ "
-    fragments = []
-    if isinstance(direct_url.info, VcsInfo):
-        requirement += "{}+{}@{}".format(
-            direct_url.info.vcs, direct_url.url, direct_url.info.commit_id
-        )
-    elif isinstance(direct_url.info, ArchiveInfo):
-        requirement += direct_url.url
-        if direct_url.info.hash:
-            fragments.append(direct_url.info.hash)
+def _adjust_path(self, path):
+    return os.path.realpath(path)
+
+def _make_path(self, resource_name):
+    # Issue #50: need to preserve type of path on Python 2.x
+    # like os.path._get_sep
+    if isinstance(resource_name, bytes):    # should only happen on 2.x
+        sep = b'/'
     else:
-        assert isinstance(direct_url.info, DirInfo)
-        requirement += direct_url.url
-    if direct_url.subdirectory:
-        fragments.append("subdirectory=" + direct_url.subdirectory)
-    if fragments:
-        requirement += "#" + "&".join(fragments)
-    return requirement
+        sep = '/'
+    parts = resource_name.split(sep)
+    parts.insert(0, self.base)
+    result = os.path.join(*parts)
+    return self._adjust_path(result)
+
+def _find(self, path):
+    return os.path.exists(path)
+
+def get_cache_info(self, resource):
+    return None, resource.path
+
+def find(self, resource_name):
+    path = self._make_path(resource_name)
+    if not self._find(path):
+        result = None
+    else:
+        if self._is_directory(path):
+            result = ResourceContainer(self, resource_name)
+        else:
+            result = Resource(self, resource_name)
+        result.path = path
+    return result
+
+def get_stream(self, resource):
+    return open(resource.path, 'rb')
+
+def get_bytes(self, resource):
+    with open(resource.path, 'rb') as f:
+        return f.read()
+
+def get_size(self, resource):
+    return os.path.getsize(resource.path)
+
+def get_resources(self, resource):
+    def allowed(f):
+        return (f != '__pycache__' and not
+                f.endswith(self.skipped_extensions))
+    return set([f for f in os.listdir(resource.path) if allowed(f)])
+
+def is_container(self, resource):
+    return self._is_directory(resource.path)
+
+_is_directory = staticmethod(os.path.isdir)
+
+def iterator(self, resource_name):
+    resource = self.find(resource_name)
+    if resource is not None:
+        todo = [resource]
+        while todo:
+            resource = todo.pop(0)
+            yield resource
+            if resource.is_container:
+                rname = resource.name
+                for name in resource.resources:
+                    if not rname:
+                        new_name = name
+                    else:
+                        new_name = '/'.join([rname, name])
+                    child = self.find(new_name)
+                    if child.is_container:
+                        todo.append(child)
+                    else:
+                        yield child
 
 
-def direct_url_for_editable(source_dir: str) -> DirectUrl:
-    return DirectUrl(
-        url=path_to_url(source_dir),
-        info=DirInfo(editable=True),
-    )
-
-
-def direct_url_from_link(
-    link: Link, source_dir: Optional[str] = None, link_is_in_wheel_cache: bool = False

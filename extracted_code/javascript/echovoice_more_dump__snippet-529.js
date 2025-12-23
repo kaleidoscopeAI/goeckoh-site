@@ -1,2 +1,1 @@
-const v = clamp(value);
-const patch: Partial<EVector> = { [emotion]: v } as Partial<EVector>;
+const histPt: ConstructHistoryPoint = { t, x: c.coord.x, y: c.coord.y, activation: c.activation };

@@ -1,0 +1,5 @@
+- Produce a simulation environment (Python/Rust) for numerical stability and performance testing.
+- Generate documentation or a formal whitepaper.
+- Prepare tailored parameter-tuning scripts for implementation on target hardware.
+- Help organize academic presentation/publication materials.
+

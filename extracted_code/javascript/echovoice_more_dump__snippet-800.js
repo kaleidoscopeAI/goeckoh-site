@@ -1,1 +1,1 @@
-console.log("Admin rollback requested:", id, "by", user);
+for (let j = 0; j < J; j++) {

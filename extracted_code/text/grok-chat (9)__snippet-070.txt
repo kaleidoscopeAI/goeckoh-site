@@ -1,0 +1,1 @@
+real lattice outputs surfaced to API/UI.

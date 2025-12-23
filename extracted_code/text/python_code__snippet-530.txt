@@ -1,0 +1,3 @@
+text: str = ""
+style: Optional[Style] = None
+is_control: bool = False

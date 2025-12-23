@@ -1,0 +1,1 @@
+\%(cp)s@tok{#1}\expandafter\%(cp)s@toks\fi}

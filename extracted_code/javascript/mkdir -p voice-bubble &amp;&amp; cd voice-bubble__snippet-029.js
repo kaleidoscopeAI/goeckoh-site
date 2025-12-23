@@ -1,1 +1,1 @@
-const out = e.outputBuffer.getChannelData(0);
+function stopAudio() {

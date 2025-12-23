@@ -1,0 +1,4 @@
+"kaleidoscope_engine": "Generates novel and integrated insights by spinning and merging concepts. It prioritizes common or stable/valid results.",
+"mirror_engine": "This enging evaluates more extreme possibilities by exploring the network via diverse non weighted metrics.  prioritizing random connections, noise injection.",
+"MemoryField with MemoryResonance": "Quantum Inspired memory unit for storing dynamic resonant states"
+}

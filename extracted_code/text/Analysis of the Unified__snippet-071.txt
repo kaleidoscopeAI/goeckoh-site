@@ -1,0 +1,13 @@
+"""
+Numerically stable soft-product:
+logscore_i = alpha * sum_j log(|R_ij|^2)
+p_i ∝ exp(beta * logscore_i)
+alpha controls power (0 -> uniform, 1 -> product), beta controls sharpness.
+"""
+I = np.abs(R) ** 2
+logs = np.sum(safe_log(I), axis=1) * float(alpha)
+# stabilize:
+logs = logs - np.max(logs)
+ex = np.exp(beta * logs)
+return normalize_vector(ex)
+

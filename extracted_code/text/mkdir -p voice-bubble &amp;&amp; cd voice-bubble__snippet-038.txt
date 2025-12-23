@@ -1,5 +1,0 @@
-    - iOS devices since ~iPhone XR/11 with `PlayAndRecord` + low buffer sizes are typically capable of sub-150 ms round-trip audio when using native APIs and avoiding heavy background load.
-    - Mid/high-tier Android devices on recent Snapdragon SoCs with low-latency audio paths (AAudio or well-tuned OpenSL ES) and native code can also target <300 ms; the practical limit depends on OEM audio stack quality.
-- Practical rule: treat 150–200 ms as a design target to give headroom; profile end-to-end on each target class of device rather than relying on nominal specs.
-
-

@@ -1,0 +1,1 @@
+~17 ms p50 / ~280–450 ms p95 on my last runs; general speech will be slower but still realtime-ish for short turns.

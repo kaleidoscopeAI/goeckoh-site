@@ -1,0 +1,3 @@
+{
+  "Architectural Innovations" : {
+      "Biomimetic Node Structure": "Nodes use dynamic adaptation (DNA Traits), and have a built-in energy mechanic, encouraging realistic simulations with constraints (memory)",

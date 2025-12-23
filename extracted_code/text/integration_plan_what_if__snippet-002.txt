@@ -1,0 +1,8 @@
+*   **Emotional Integration:** The initial `echovoice` arousal/valence feeds into the `cognitive_crystal_ai`'s "Emotional Mathematics" module, which now processes a richer array of sensory and internal state data.
+*   **Node Metabolism:** Emotional intensity and other stimuli feed the "Organic Nodes," influencing their energy, replication, and mutation rates. The `echovoice`'s Crystalline Heart's current state influences the overall "global field" of the node network.
+*   **Crystalline Memory Encoding:** Transcribed text, emotional state, ABA interventions, and environmental context are encoded and integrated into the "Crystalline Memory" lattice. This memory is emotionally tagged and continuously "annealed" for optimal recall.
+*   **Thought Engines Activation:**
+    *   **Perspective Engine:** Analyzes current situation (text, emotion, context) against Crystalline Memory to infer child's perspective and potential needs.
+    *   **Kaleidoscope Engine:** Generates novel responses or interventions by exploring "thought pathways" in the node network, driven by the child's current state and therapeutic goals.
+*   **LLM Self-Reflection:** The integrated LLM is used for internal monologue, reasoning about current state, evaluating strategy effectiveness, and planning future actions based on the "Thought Engine" outputs and Crystalline Memory.
+

@@ -1,1 +1,1 @@
-goodness from advanced_voice_mimic.py.
+def __post_init__(self) -> None:

@@ -1,3 +1,8 @@
-import pprint
-from typing import Tuple, Any, Dict, Set, List
+    from pip._vendor.pyparsing import Word, alphas
+
+    # define grammar of a greeting
+    greet = Word(alphas) + "," + Word(alphas) + "!"
+
+    hello = "Hello, World!"
+    print(hello, "->", greet.parse_string(hello))
 

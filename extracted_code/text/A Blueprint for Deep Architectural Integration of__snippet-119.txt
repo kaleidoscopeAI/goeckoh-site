@@ -1,0 +1,5 @@
+\item \textbf{Prioritized URL Frontier}: URLs prioritized by source credibility, topical relevance, and freshness.
+\item \textbf{Politeness Policy}: Adherence to robots.txt, domain-specific rate-limiting to prevent overloading.
+\item \textbf{Focused Crawling}: Semantic classifiers keep crawling on-topic, avoiding content drift.
+\item \textbf{Data Preprocessing Pipeline}: HTML cleansing, main content extraction, and summarization via \(O_{\text{LLM}}\).
+\item \textbf{Embedding Output}: Final processed information embedded into fixed-size vectors injected into the global cognitive state.

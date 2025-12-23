@@ -1,0 +1,8 @@
+Input as Torque: A web-ingested fact acts as a "shift" or "torque" on a gear.
+
+Embedding Generation: The input is immediately transformed into a Transformer Embedding, which serves as the intermediate coupler.
+
+Propagation: This embedding's torque ripples outward, propagating as Energy, Probability, and Resonance across the gear train, influencing the massive drive wheels (The Cube).
+
+Bit-Level Mechanics: The entire process is grounded in bit-level mechanics and Fourier transfer functions, ensuring quantum-consistency (probabilities emerge via relational bidirectionality) and physics-grounded behavior.
+

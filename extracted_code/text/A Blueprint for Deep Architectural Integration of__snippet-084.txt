@@ -1,0 +1,7 @@
+engines: Vec<Engine>,            // Collection of thought engines
+routing: Matrix,                 // Routing matrix R with size N_eq x N_eq
+global_state: Vector,            // Global state S_k
+threshold: f64,                  // Threshold theta for routing condition
+noise_level: f64,                // Noise sigma for stochasticity
+learning_rate_param: f64,        // Learning rate for parameters
+learning_rate_route: f64,        // Learning rate for routing weights

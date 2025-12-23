@@ -1,2 +1,2 @@
-- Emphasize why these limitations prevent traditional AI from achieving fully autonomous growth and adaptation.
+Ok.  First we need to explain how it separates itself from others ai models
 

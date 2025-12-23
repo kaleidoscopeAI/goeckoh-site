@@ -1,0 +1,1 @@
+- Use numpy arrays for node states and batch update wherever possible to leverage SIMD/vector instructions.

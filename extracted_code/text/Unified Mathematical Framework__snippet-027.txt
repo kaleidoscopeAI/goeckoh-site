@@ -1,0 +1,3 @@
+echo = Echo(voice_sample="my_voice.wav")  # Your real voice here
+echo.start()
+

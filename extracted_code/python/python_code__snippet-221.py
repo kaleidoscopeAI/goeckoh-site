@@ -1,21 +1,35 @@
-def escape_tex(text, commandprefix):
-    return text.replace('\\', '\x00'). \
-                replace('{', '\x01'). \
-                replace('}', '\x02'). \
-                replace('\x00', r'\%sZbs{}' % commandprefix). \
-                replace('\x01', r'\%sZob{}' % commandprefix). \
-                replace('\x02', r'\%sZcb{}' % commandprefix). \
-                replace('^', r'\%sZca{}' % commandprefix). \
-                replace('_', r'\%sZus{}' % commandprefix). \
-                replace('&', r'\%sZam{}' % commandprefix). \
-                replace('<', r'\%sZlt{}' % commandprefix). \
-                replace('>', r'\%sZgt{}' % commandprefix). \
-                replace('#', r'\%sZsh{}' % commandprefix). \
-                replace('%', r'\%sZpc{}' % commandprefix). \
-                replace('$', r'\%sZdl{}' % commandprefix). \
-                replace('-', r'\%sZhy{}' % commandprefix). \
-                replace("'", r'\%sZsq{}' % commandprefix). \
-                replace('"', r'\%sZdq{}' % commandprefix). \
-                replace('~', r'\%sZti{}' % commandprefix)
+        from ._cmsgpack import Packer, unpackb, Unpacker
+    except ImportError:
+        from .fallback import Packer, unpackb, Unpacker
+
+
+def pack(o, stream, **kwargs):
+    """
+    Pack object `o` and write it to `stream`
+
+    See :class:`Packer` for options.
+    """
+    packer = Packer(**kwargs)
+    stream.write(packer.pack(o))
+
+
+def packb(o, **kwargs):
+    """
+    Pack object `o` and return packed bytes
+
+    See :class:`Packer` for options.
+    """
+    return Packer(**kwargs).pack(o)
+
+
+def unpack(stream, **kwargs):
+    """
+    Unpack an object from `stream`.
+
+    Raises `ExtraData` when `stream` contains extra bytes.
+    See :class:`Unpacker` for options.
+    """
+    data = stream.read()
+    return unpackb(data, **kwargs)
 
 

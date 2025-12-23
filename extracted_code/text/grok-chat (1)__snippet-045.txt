@@ -1,0 +1,8 @@
+sample_rate: int
+inner_volume_scale: float = 0.55
+coach_volume_scale: float = 1.2
+inner_lowpass_window_ms: float = 18.0
+coach_compression_ratio: float = 0.8
+prosody_strength_pitch: float = 1.0
+prosody_strength_energy: float = 1.0
+

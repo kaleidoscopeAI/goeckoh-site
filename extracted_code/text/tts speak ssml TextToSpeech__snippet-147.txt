@@ -1,0 +1,6 @@
+          ttsMap[lang] = OfflineTts(config)
+      }
+  }
+
+  fun listenAndProcess(callback: (String, Prosody) -> Unit) {
+      if (models.isEmpty() || ContextCompat.checkSelfPermission(context,

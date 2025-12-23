@@ -1,2 +1,1 @@
-# <REDACTED: potential secret detected>
-
+// - Assumes Whisper class supports live mode as per repo (writeBuffer for streaming).

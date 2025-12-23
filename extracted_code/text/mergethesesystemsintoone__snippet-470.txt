@@ -1,0 +1,6 @@
+     },
+     {
+  "Information Exchange ":"Implements processes to route , generate and evaluate data in systems and allows different aspects to be updated using system outputs for continous improvement.",
+
+     },
+

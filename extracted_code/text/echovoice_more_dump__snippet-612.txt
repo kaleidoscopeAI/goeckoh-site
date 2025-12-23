@@ -1,0 +1,25 @@
+if (rho->n != N * N) {
+    fprintf(stderr, "Error: Density matrix size mismatch for purity calculation.\n");
+    return 0.0;
+}
+
+double purity = 0.0;
+// Purity = Sum_{i,j} rho_{ij} * rho_{ji}
+// We compute Tr(rho * rho), where rho is N x N
+// This is mathematically equivalent to Sum_k rho_kk where rho = rho * rho.
+// However, a common simplification for Tr(rho^2) in a flattened array:
+// Purity = Sum_{i=0}^{N*N-1} |rho_i|^2 if rho is the vectorization of rho.
+// For the actual matrix product Tr(rho*rho), we calculate:
+
+// We will use the definition: Tr(A*B) = Sum_{i,j} A_{ij} * B_{ji}
+// Since rho is Hermitian, we calculate Sum_{i,j} rho_{ij} * rho_{ji} (Tr(rho^2))
+for (int i = 0; i < N; i++) {
+    for (int j = 0; j < N; j++) {
+        // rho_ij is at index (i*N + j)
+        double complex rho_ij = rho->data[i * N + j];
+        // rho_ji is at index (j*N + i)
+        double complex rho_ji = rho->data[j * N + i];
+        purity += creal(rho_ij * rho_ji);
+    }
+}
+return purity;

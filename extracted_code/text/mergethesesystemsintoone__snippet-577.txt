@@ -1,0 +1,3 @@
+logger.error(f"Failed to load configuration: {str(e)}")
+config = {}
+

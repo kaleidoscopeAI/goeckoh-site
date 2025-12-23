@@ -1,1 +1,7 @@
-// RK4 step using node.externalInput
+   * The C functions apply_H_operator_c and apply_A_operator_c (and their Python fallbacks) are currently generic
+     placeholders. The v3.0 specification mentions −i[H^,Ψ] and A^Ψ but does not provide their explicit
+     mathematical form.
+   * Improvement: To properly implement these, a more detailed mathematical definition of the H^
+     (Conservative/Internal Dynamics) and A^ (Non-Conservative/Dissipation) operators would be required. Without
+     further specification, any implementation would be speculative.
+

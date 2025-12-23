@@ -1,1 +1,1 @@
-function initCrystalVisualization(container) {
+const app = initializeApp(firebaseConfig);

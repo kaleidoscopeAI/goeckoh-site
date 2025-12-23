@@ -1,0 +1,3 @@
+      audioBuffer.reset()
+
+      // Set up recorder listener to detect silence (implement VAD in

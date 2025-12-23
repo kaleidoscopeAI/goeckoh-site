@@ -1,0 +1,4 @@
+cohens_d = round(d_raw, 3),
+hedges_g = round(d_hedges, 3),
+rm_f = round(f_rm, 3),
+power_n_80 = round(qnorm(0.8)^2 / f_rm^2 + 2, 0)  # Approx N for power=0.8

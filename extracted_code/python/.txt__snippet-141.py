@@ -1,1 +1,1 @@
-def base_url(self) -> str:
+# copy game.html from iOS bundle if present

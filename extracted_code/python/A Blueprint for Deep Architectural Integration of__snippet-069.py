@@ -1,2 +1,2 @@
-# Of course. Integrating autonomous web crawling transforms the system from a passive processor into an active, information-seeking agent. This addition must be done in a way that respects the core principles of stability, modularity, and cognitive integration.
+The Web Crawler is not a separate utility; it is a first-class **Thought Engine** (`O_crawl`) within the architecture. Its purpose is to satisfy information deficits identified by other engines, driven by a homeostatic impulse for knowledge. It translates high-level, semantic "curiosity" from the Kaleidoscope and Perspective engines into concrete information-gathering actions.
 

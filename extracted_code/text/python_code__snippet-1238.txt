@@ -1,0 +1,5 @@
+func: FunctionType,
+path: Path,
+exc_info: Union[ExcInfo, BaseException],
+*,
+onexc: OnExc = _onerror_reraise,

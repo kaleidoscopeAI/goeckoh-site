@@ -1,0 +1,3 @@
+"""Raised when a distribution cannot be found to satisfy a requirement"""
+
+

@@ -1,0 +1,2 @@
+- Compute policy gradient ∇ log π(w_ij | S_k)
+- Update weights w_ij += η * r_k * gradient

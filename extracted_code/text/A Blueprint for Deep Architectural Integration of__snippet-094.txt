@@ -1,0 +1,3 @@
+- Runs benchmarks multiple times with statistical significance.
+- Provides detailed reports including variance and confidence intervals.
+- Guards against common benchmarking pitfalls like compiler optimizations removing the benchmarked code.

@@ -1,14 +1,3 @@
-import email.message
-import importlib.metadata
-import os
-import pathlib
-import zipfile
-from typing import (
-    Collection,
-    Dict,
-    Iterable,
-    Iterator,
-    Mapping,
-    Optional,
-    Sequence,
-    cast,
+    import bio_audio
+    if hasattr(bio_audio, "BioAcousticEngine") or hasattr(bio_audio, "BioEngine"):
+        RUST_AVAILABLE = True

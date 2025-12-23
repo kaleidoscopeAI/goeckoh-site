@@ -1,0 +1,3 @@
+return w * (popcount(xor(ei, ej)) / d)
+
+

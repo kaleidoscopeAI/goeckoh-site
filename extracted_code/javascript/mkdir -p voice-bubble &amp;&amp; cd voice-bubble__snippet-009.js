@@ -1,1 +1,1 @@
-const ambient = new THREE.AmbientLight(0xffffff, 0.7);
+const rim = new THREE.DirectionalLight(0x88aaff, 0.7);

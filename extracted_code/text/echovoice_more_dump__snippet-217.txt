@@ -1,1 +1,5 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+• (X_t): The state of the process at time (t). Within the Cube X System, this could represent the value along one dimension, or a projection of the overall system state.
+• (\mu): The long-term mean or equilibrium level. This is the value towards which the process tends to revert.
+• (\theta): The rate or speed of mean reversion ((\theta > 0)). A higher (\theta) indicates a stronger pull back towards (\mu), signifying faster adaptation or stabilization.
+• (\sigma): The volatility or noise intensity ((\sigma \ge 0)). This parameter scales the magnitude of the random fluctuations affecting the process.
+• (dW_t): An increment of a standard Wiener process (Brownian motion), representing the source of randomness or noise.

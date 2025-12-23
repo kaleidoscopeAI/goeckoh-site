@@ -1,0 +1,3 @@
+- condition A: real-time self-voice playback (your Goeckoh loop),
+- condition B: delayed self-voice (e.g., 600–800 ms),
+- condition C: matched external voice.

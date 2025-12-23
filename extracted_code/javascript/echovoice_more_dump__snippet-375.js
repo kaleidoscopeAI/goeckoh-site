@@ -1,1 +1,1 @@
-export const DEFAULT_P: Record<string, number[]> = {
+console.log("CPU-only cognitive-emotional system running...");

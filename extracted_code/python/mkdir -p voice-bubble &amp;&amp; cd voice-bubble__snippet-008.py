@@ -1,1 +1,1 @@
-Bit-level knowledge injection from molecular fingerprints (e.g., ECFP({1024})):
+Copy/paste this into your terminal from the project root (same folder as index.html):

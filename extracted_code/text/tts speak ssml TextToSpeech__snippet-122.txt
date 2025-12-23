@@ -1,0 +1,2 @@
+      var samples = generatedAudio.samples // Assume float[]
+      val ttsSampleRate = generatedAudio.sampleRate // Assume 16000 or

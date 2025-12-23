@@ -1,1 +1,3 @@
-• Basic Graph Visualization: The system visualizes the network using networkx and matplotlib.
+A simple graph visualization using matplotlib (for now; can be extended to Plotly or Bokeh in the future).
+A functional but simplified Web interface using Streamlit
+

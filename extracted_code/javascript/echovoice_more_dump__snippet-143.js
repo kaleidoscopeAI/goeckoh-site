@@ -1,4 +1,2 @@
-fn export_results(summary: &RunSummary, path: &str) -> Result<(), CrystalError> {
-    let json = serde_json::to_string_pretty(summary)?;
-    std::fs::write(path, json)?;
-    Ok(())
+But note: the ensure_dataset_exists function already checks for existence and downloads, so we can just call it for parquet if we have a URL.
+

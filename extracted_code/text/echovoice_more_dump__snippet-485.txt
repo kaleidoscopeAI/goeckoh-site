@@ -1,1 +1,4 @@
-it qualifies as a new class of artificial general intelligence,
+|             ^^^^^^^^^^^^^ `ChemicalFeatures` does not have this field
+|
+= note: available fields are: `element_symbol`, `electronegativity`, `valence_electrons`, `atomic_radius`, `is_metal` ... and 2 others
+

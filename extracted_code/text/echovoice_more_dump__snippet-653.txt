@@ -1,0 +1,7 @@
+url: str
+text: str
+embedding: Optional[np.ndarray] = None
+links: List[str] = field(default_factory=list)
+timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat() + 'Z')
+score: float = 0.0
+

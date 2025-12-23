@@ -1,0 +1,2 @@
+functions: enforce_first_person, hash_embedding
+classes: LocalLLM, EchoCrystallineHeart, Echo

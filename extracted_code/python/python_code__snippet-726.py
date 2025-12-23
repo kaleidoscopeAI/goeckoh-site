@@ -1,35 +1,17 @@
-        from ._cmsgpack import Packer, unpackb, Unpacker
-    except ImportError:
-        from .fallback import Packer, unpackb, Unpacker
+def req_error_context(req_description: str) -> Generator[None, None, None]:
+    try:
+        yield
+    except InstallationError as e:
+        message = f"For req: {req_description}. {e.args[0]}"
+        raise InstallationError(message) from e
 
 
-def pack(o, stream, **kwargs):
-    """
-    Pack object `o` and write it to `stream`
-
-    See :class:`Packer` for options.
-    """
-    packer = Packer(**kwargs)
-    stream.write(packer.pack(o))
-
-
-def packb(o, **kwargs):
-    """
-    Pack object `o` and return packed bytes
-
-    See :class:`Packer` for options.
-    """
-    return Packer(**kwargs).pack(o)
-
-
-def unpack(stream, **kwargs):
-    """
-    Unpack an object from `stream`.
-
-    Raises `ExtraData` when `stream` contains extra bytes.
-    See :class:`Unpacker` for options.
-    """
-    data = stream.read()
-    return unpackb(data, **kwargs)
-
-
+def install_wheel(
+    name: str,
+    wheel_path: str,
+    scheme: Scheme,
+    req_description: str,
+    pycompile: bool = True,
+    warn_script_location: bool = True,
+    direct_url: Optional[DirectUrl] = None,
+    requested: bool = False,

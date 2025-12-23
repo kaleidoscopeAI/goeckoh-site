@@ -1,0 +1,8 @@
+sess: requests.Session,
+cache: BaseCache | None = None,
+cache_etags: bool = True,
+serializer: Serializer | None = None,
+heuristic: BaseHeuristic | None = None,
+controller_class: type[CacheController] | None = None,
+adapter_class: type[CacheControlAdapter] | None = None,
+cacheable_methods: Collection[str] | None = None,

@@ -1,0 +1,5 @@
+core = KaleidoscopeCore()
+print(core.ingest_software("test.bin"))
+print(core.mimic_software(["test.bin.spec"], "python"))
+sys.exit(main())
+

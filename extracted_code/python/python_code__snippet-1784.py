@@ -1,7 +1,16 @@
-from kivymd.app import MDApp
-from kivymd.uix.screen import MDScreen
-from kivy.lang import Builder
-from kivy.clock import Clock
-from kivy.properties import StringProperty, ColorProperty
-import threading
+"""Provider that returns nothing for all requests"""
+
+module_path = None
+
+_isdir = _has = lambda self, path: False
+
+def _get(self, path):
+    return ''
+
+def _listdir(self, path):
+    return []
+
+def __init__(self):
+    pass
+
 

@@ -1,0 +1,2 @@
+  json.dump(manifest_rows[:5000], f, indent=2)
+

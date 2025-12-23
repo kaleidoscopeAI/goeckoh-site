@@ -1,0 +1,2 @@
+_EXCLUDED_ATTRS.add("__type_params__")
+

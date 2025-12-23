@@ -1,1 +1,0 @@
-- **UI Overlay:** React overlay displays metrics, model thoughts, loading state, and user prompt input. Metrics are fetched live from `/status`.

@@ -1,1 +1,6 @@
-Power = f(α, N_subjects, conditions, ε, f, corr)
+✅ Energy (RMS) → bubble scale + emissive glow
+✅ f0 (80-400Hz YIN) → dynamic pitch-based color mapping  
+✅ ZCR → spiky vertex displacement (kiki/bouba)
+✅ HNR → material roughness (noisy=rough, periodic=smooth)
+✅ Spectral tilt → metalness (bright=metallic, dark=muffled)
+✅ dt → frame timing validation (<50ms target)

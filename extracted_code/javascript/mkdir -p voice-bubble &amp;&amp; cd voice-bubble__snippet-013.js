@@ -1,1 +1,3 @@
-const bubble = new THREE.Mesh(geo, material);
+function resize() {
+const w = UI.canvas.clientWidth;
+const h = UI.canvas.clientHeight;

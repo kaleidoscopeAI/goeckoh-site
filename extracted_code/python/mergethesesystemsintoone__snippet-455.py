@@ -1,18 +1,10 @@
-class PatternStrand:
-    """DNA-like structure for pattern recognition"""
-    sequence: List[str] = field(default_factory=list)
-    strength: float = 0.0
-    mutations: int = 0
-    activation_threshold: float = 0.5
-    adaptation_rate: float = 0.1
-
-    def mutate(self):
-        """Evolve pattern recognition capability"""
-        if np.random.random() < self.adaptation_rate:
-            if len(self.sequence) > 3:
-                # Combine existing patterns
-                idx1, idx2 = np.random.choice(len(self.sequence), 2, replace=False)
-                new_pattern = self.sequence[idx1][:2] + self.sequence[idx2][2:]
-                self.sequence.append(new_pattern)
-                self.mutations += 1
+def enhanced_process_software(db, analysis_id):
+    process_software(db, analysis_id)
+    analysis = db.query(Analysis).filter(Analysis.id == analysis_id).first()
+    for file_path in analysis.decompiled_paths:
+        result = file_analyzer.analyze_file(file_path)
+        text_result = text_node.process(result["file_path"])
+        messages = [LLMMessage(role="user", content=f"Summarize:\n{text_result}")]
+        summary = llm_service.generate(messages).content
+        pattern_recognizer.recognize_patterns({"cycle": 1, "data": summary})
 

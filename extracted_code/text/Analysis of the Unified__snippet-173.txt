@@ -1,0 +1,4 @@
+Mechanism: The HardwareControl class simulates user actions via Human Interface Device (HID) emulation.
+
+Function: Instead of low-level driver access, the AI executes simulated user actions (typing, mouse clicks) to interact with the OS to, for example, change CPU frequency, display gamma, or control network QoS.
+

@@ -1,0 +1,11 @@
+name="ProstheticLogic",
+model="gemini-2.0-flash-nano", # Can use local LLM shim here
+instruction="""
+Act as a speech prosthetic.
+1. Listen to the input transcription.
+2. Convert all pronouns to First Person ('I', 'My').
+3. Remove stuttering or hesitation.
+4. Output ONLY JSON.
+""",
+output_schema=VoiceCommand,
+output_key="voice_data" # Saves to session state [cite: 352]

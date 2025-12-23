@@ -1,0 +1,5 @@
+ Adds Pillow to your bootstrap requirements (for PNG output).
+ Starts the avatar agent automatically on FastAPI startup (no user action needed).
+
+ Adds a tiny HTML home showing the latest avatar frame.
+

@@ -1,0 +1,14 @@
+"""
+Make sure a link is fully quoted.
+For example, if ' ' occurs in the URL, it will be replaced with "%20",
+and without double-quoting other characters.
+"""
+# Split the URL into parts according to the general structure
+# `scheme://netloc/path;parameters?query#fragment`.
+result = urllib.parse.urlparse(url)
+# If the netloc is empty, then the URL refers to a local filesystem path.
+is_local_path = not result.netloc
+path = _clean_url_path(result.path, is_local_path=is_local_path)
+return urllib.parse.urlunparse(result._replace(path=path))
+
+

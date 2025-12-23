@@ -1,16 +1,16 @@
-from __future__ import absolute_import
+def load_cdll(name, macos10_16_path):
+    """Loads a CDLL by name, falling back to known path on 10.16+"""
+    try:
+        # Big Sur is technically 11 but we use 10.16 due to the Big Sur
+        # beta being labeled as 10.16.
+        if version_info >= (10, 16):
+            path = macos10_16_path
+        else:
+            path = find_library(name)
+        if not path:
+            raise OSError  # Caught and reraised as 'ImportError'
+        return CDLL(path, use_errno=True)
+    except OSError:
+        raise_from(ImportError("The library %s failed to load" % name), None)
 
-import platform
-from ctypes import (
-    CDLL,
-    CFUNCTYPE,
-    POINTER,
-    c_bool,
-    c_byte,
-    c_char_p,
-    c_int32,
-    c_long,
-    c_size_t,
-    c_uint32,
-    c_ulong,
-    c_void_p,
+

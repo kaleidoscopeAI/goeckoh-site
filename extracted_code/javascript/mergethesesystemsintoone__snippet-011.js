@@ -1,1 +1,1 @@
-_load_tasks skips pending/running tasks due to function serialization issues.
+Enhance task persistence with a function registry.

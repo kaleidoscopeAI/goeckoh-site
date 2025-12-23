@@ -1,33 +1,8 @@
-async fn main() -> anyhow::Result<()> {
-    // Initialize logging
-    tracing_subscriber::fmt::init();
-    
-    let config = Config::load().await?;
-    let db_pool = DbPool::connect(&config.database_url).await?;
-    
-    // Initialize AI services
-    let nlp_service = NlpService::new(config.bert_model_path);
-    let email_client = EmailClient::new(config.smtp_config);
-    
-    // Create shared application state
-    let app_state = Arc::new(AppState {
-        config,
-        db_pool,
-        nlp_service,
-        email_client,
-        opportunity_queue: Mutex::new(Vec::new()),
-    });
+    We must ensure that the Task::from_pid function is safe and returns a valid task if possible.
 
-    // Start background tasks
-    let state_clone = app_state.clone();
-    tokio::spawn(async move {
-        OpportunityCrawler::new(state_clone)
-            .run()
-            .await
-            .expect("Crawler failed");
-    });
+    We must ensure that the set_user_nice and other functions are called with valid parameters.
 
-    // Start REST API
-    api::serve(app_state).await?;
+    We must ensure that the try_to_free_mem_cgroup_pages is called with valid parameters and in the right context.
 
-    Ok(())
+    We note that the kernel module must be built with the appropriate configuration.
+

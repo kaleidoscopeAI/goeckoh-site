@@ -1,0 +1,11 @@
+"""
+Collects global statistics about the memory field.
+"""
+# Example: Calculate average frequency and amplitude
+frequencies = [r.frequency for r in self.resonances.values()]
+amplitudes = [r.amplitude for r in self.resonances.values()]
+
+avg_frequency = np.mean(frequencies) if frequencies else 0
+avg_amplitude = np.mean(amplitudes) if amplitudes else 0
+
+# Placeholder for pattern

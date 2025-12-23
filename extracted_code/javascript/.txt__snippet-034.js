@@ -1,2 +1,2 @@
-private func handleResponse(json: [String: Any]) {
-if let metrics = json["metrics"] as? [String: Any] {
+function renderPhrases() {
+const container = document.getElementById("phrase-buttons");

@@ -1,9 +1,9 @@
-# Run the core demo
-python3 /path/to/project/demos/core_demo.py
+# Install fdupes (if not already installed)
+sudo apt install fdupes -y
 
-# Run an advanced functionality demo
-python3 /path/to/project/demos/functional_ai_demo.py
+# Find duplicates in the project directory
+fdupes -r /path/to/project > duplicates.txt
 
-# Run visualization demo
-python3 /path/to/project/demos/interactive_graph_demo.py
+# Remove duplicates interactively (be careful to avoid accidental deletions)
+fdupes -r -d /path/to/project
 

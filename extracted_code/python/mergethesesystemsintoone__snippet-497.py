@@ -1,32 +1,8 @@
-    def connect_to(self, other_node: BaseNode) -> bool:
-
-
-
-
-
-
-
-
-
-    def get_state(self) -> Dict[str, Any]:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    def __del__(self):
-
-
-
-
-
+def __init__(self): self._subs: List[asyncio.Queue]=[]
+def subscribe(self):
+    q=asyncio.Queue(maxsize=200); self._subs.append(q); return q
+async def pub(self, msg:Dict[str,Any]):
+    for q in list(self._subs):
+        try: await q.put(msg)
+        except asyncio.QueueFull: pass
 

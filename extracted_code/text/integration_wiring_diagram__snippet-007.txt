@@ -1,0 +1,8 @@
+*   `sounddevice` (Python library): Captures raw audio.
+*   `faster_whisper` (Python library): Transcribes audio to text.
+*   `CrystallineHeart` (in `echo_prime.py`): Performs initial audio-based emotional analysis (arousal/valence).
+*   **Data Out:**
+    *   Text (User utterance)
+    *   Emotional Intensity (arousal, valence)
+    *   Raw Audio (for optional deeper analysis by CCA backend)
+

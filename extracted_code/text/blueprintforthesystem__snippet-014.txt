@@ -1,0 +1,3 @@
+   * Input: Corrected Text (str) and the child's Voice Profile assets.
+   * Output: Synthesized, cloned audio (np.ndarray).
+

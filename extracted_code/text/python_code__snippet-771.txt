@@ -1,0 +1,7 @@
+DWORD,
+LPCVOID,
+DWORD,
+DWORD,
+LPWSTR,
+DWORD,
+c_void_p,

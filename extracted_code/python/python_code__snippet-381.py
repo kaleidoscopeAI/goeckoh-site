@@ -1,3 +1,4 @@
-from .codingstatemachinedict import CodingStateMachineDict
-from .enums import MachineState
+import sys
+from dataclasses import dataclass
+
 

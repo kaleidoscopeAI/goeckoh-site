@@ -1,36 +1,26 @@
-    from .console import ConsoleRenderable
+import logging
+import os.path
+import re
+import shutil
+from typing import Iterable, List, Optional, Tuple
 
-    # always skip rich generated jupyter renderables or None values
-    if _safe_isinstance(value, JupyterRenderable) or value is None:
-        return None
+from pip._vendor.packaging.utils import canonicalize_name, canonicalize_version
+from pip._vendor.packaging.version import InvalidVersion, Version
 
-    console = console or get_console()
+from pip._internal.cache import WheelCache
+from pip._internal.exceptions import InvalidWheelFilename, UnsupportedWheel
+from pip._internal.metadata import FilesystemWheel, get_wheel_distribution
+from pip._internal.models.link import Link
+from pip._internal.models.wheel import Wheel
+from pip._internal.operations.build.wheel import build_wheel_pep517
+from pip._internal.operations.build.wheel_editable import build_wheel_editable
+from pip._internal.operations.build.wheel_legacy import build_wheel_legacy
+from pip._internal.req.req_install import InstallRequirement
+from pip._internal.utils.logging import indent_log
+from pip._internal.utils.misc import ensure_dir, hash_file
+from pip._internal.utils.setuptools_build import make_setuptools_clean_args
+from pip._internal.utils.subprocess import call_subprocess
+from pip._internal.utils.temp_dir import TempDirectory
+from pip._internal.utils.urls import path_to_url
+from pip._internal.vcs import vcs
 
-    with console.capture() as capture:
-        # certain renderables should start on a new line
-        if _safe_isinstance(value, ConsoleRenderable):
-            console.line()
-        console.print(
-            value
-            if _safe_isinstance(value, RichRenderable)
-            else Pretty(
-                value,
-                overflow=overflow,
-                indent_guides=indent_guides,
-                max_length=max_length,
-                max_string=max_string,
-                max_depth=max_depth,
-                expand_all=expand_all,
-                margin=12,
-            ),
-            crop=crop,
-            new_line_start=True,
-            end="",
-        )
-    # strip trailing newline, not usually part of a text repr
-    # I'm not sure if this should be prevented at a lower level
-    return capture.get().rstrip("\n")
-
-
-def _safe_isinstance(
-    obj: object, class_or_tuple: Union[type, Tuple[type, ...]]

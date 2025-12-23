@@ -1,0 +1,2 @@
+  - Via SDKMAN: sdk install gradle 8.3 (or use Homebrew/apt if available), or
+  - Use Android Studio’s bundled Gradle (<AndroidStudio>/gradle/gradle-8.x/bin/gradle).

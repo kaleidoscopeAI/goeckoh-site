@@ -1,0 +1,7 @@
+- Incremental stability via contraction mappings
+- Extensions to non-Euclidean and weighted norms for sharper stability criteria
+- Applications to implicit recurrent neural networks and learning models
+- Robustness and perturbations analysis
+- Use of contraction for online feedback optimization and networked systems
+- Connections to convex optimization and monotone operators
+- Illustrative examples from neuroscience and machine learning

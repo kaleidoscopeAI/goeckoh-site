@@ -1,0 +1,11 @@
+scheme = get_scheme(
+    "",
+    user=user,
+    home=home,
+    root=root,
+    isolated=isolated,
+    prefix=prefix,
+)
+return [scheme.purelib, scheme.platlib]
+
+

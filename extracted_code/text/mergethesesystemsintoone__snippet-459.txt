@@ -1,0 +1,4 @@
+"kaleidoscope_ai/setup.py": {  "status": "implemented", "description" : "Initial configurations of the code"} ,
+
+  "kaleidoscope_ai/README.md": {   "status":"implemented",  "description" :  " Documentation"}
+

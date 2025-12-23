@@ -1,0 +1,2 @@
+  callback_context: CallbackContext,
+  llm_response: LlmResponse

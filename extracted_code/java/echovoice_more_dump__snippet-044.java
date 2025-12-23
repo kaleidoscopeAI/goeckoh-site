@@ -1,1 +1,1 @@
-private _applyRemoteVector(v: EVector) {
+private loadActiveW() {

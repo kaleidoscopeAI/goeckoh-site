@@ -1,0 +1,8 @@
+197          else:
+198 -            # Default to repo-local run dir so telemetry is captured without extra config.
+199 -            backend_dir = Path(__file__).resolve().parents[2]
+200 -            run_dir = backend_dir / ".run"
+198 +            # Default to user-writable temp dir to avoid permission issues.
+199 +            run_dir = Path(os.environ.get("GOECKOH_RUN_DIR", "/tmp/goeckoh_run"))
+200              run_dir.mkdir(parents=True, exist_ok=True)
+

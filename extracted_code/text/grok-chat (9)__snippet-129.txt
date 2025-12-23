@@ -1,0 +1,2 @@
+ GOECKOH_LATENCY_P95_TARGET=350 (or your target), then re-run python
+ scripts/validate_mirror_metrics.py to see p95 latency vs. target.

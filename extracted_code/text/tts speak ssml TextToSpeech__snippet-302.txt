@@ -1,0 +1,7 @@
+you use versions of Android Studio and the command-line tools that were released at different times.
+package.xml parsing problem. unexpected element (uri:"", local:"abis"). Expected elements are <{}vendor>,<{}codename>,<{}
+base-extension>,<{}abi>,<{}api-level>,<{}extension-level>,<{}tag>
+… +71 lines
+BUILD FAILED in 1m 27s
+2 actionable tasks: 2 executed
+

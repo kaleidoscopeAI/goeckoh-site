@@ -1,3 +1,1 @@
-const phi = integratedInformation(embedText("Artificial Intelligence evolves"));
-const conscious = phi>0.7;
-console.log([ts ] Tick: gen=${++gen} Φ=${phi} conscious=${conscious});
+"run": "bash -lc 'if command -v ts-node >/dev/null 2>&1; then ts-node src/ts/agi.ts; elif [ -f bin_ts/agi.js ]; then node bin_ts/agi.js; else node -e "console.log(\"

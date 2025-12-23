@@ -1,0 +1,8 @@
+f0_hz: np.ndarray       # shape [T]
+rms: np.ndarray         # shape [T]
+time_s: np.ndarray      # shape [T]
+f0_median: float
+rms_mean: float
+duration_s: float
+
+

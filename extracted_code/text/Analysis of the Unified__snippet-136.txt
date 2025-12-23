@@ -1,0 +1,3 @@
+super();
+// Detect platform and set appropriate Ollama binary path
+this.OLLAMA_BINARY = this.detectOllamaBinary();

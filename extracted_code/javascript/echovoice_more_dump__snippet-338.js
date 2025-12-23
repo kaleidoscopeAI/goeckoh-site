@@ -1,1 +1,1 @@
-const recent = logs.slice(-200);
+function simulationStep(driverInput: any) {

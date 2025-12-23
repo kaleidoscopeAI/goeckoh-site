@@ -1,0 +1,10 @@
+"""
+Lazy-load a small, CPU-friendly model.
+"""
+global _WHISPER_MODEL
+if _WHISPER_MODEL is None:
+    # tiny.en keeps CPU usage low; adjust if you need higher accuracy
+    _WHISPER_MODEL = WhisperModel("tiny.en", device="cpu", compute_type="int8")
+return _WHISPER_MODEL
+
+

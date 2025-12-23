@@ -1,3 +1,8 @@
-• The component lacks a defined 'heart' variable and uses 'heartName' and 'heartSample' from state instead; I need to search for
-  actual status-related variables like 'heartStatus' to fix the TypeScript error.
+ 9
+10 -from .crystalline_heart_core import CrystallineHeart, Metrics
+10 +from .crystalline_heart_core import CrystallineHeart, NeurocoherenceLatt
+    ice, Metrics
+11
+12 -__all__ = ["CrystallineHeart", "Metrics"]
+12 +__all__ = ["CrystallineHeart", "NeurocoherenceLattice", "Metrics"]
 

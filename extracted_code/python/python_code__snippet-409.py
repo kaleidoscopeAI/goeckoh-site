@@ -1,9 +1,13 @@
-from .compat import parse_http_list as _parse_list_header
-from .compat import (
-    proxy_bypass,
-    proxy_bypass_environment,
-    quote,
-    str,
-    unquote,
-    urlparse,
-    urlunparse,
+class Stack(List[T]):
+    """A small shim over builtin list."""
+
+    @property
+    def top(self) -> T:
+        """Get top of stack."""
+        return self[-1]
+
+    def push(self, item: T) -> None:
+        """Push an item on to the stack (append in stack nomenclature)."""
+        self.append(item)
+
+

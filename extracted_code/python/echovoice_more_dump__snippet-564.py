@@ -1,1 +1,1 @@
-estimation benefits from double.
+Ei (t) = emotional influence from emotional vector Ei (t)

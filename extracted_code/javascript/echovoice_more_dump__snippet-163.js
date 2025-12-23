@@ -1,3 +1,4 @@
-error[E0631]: type mismatch in function arguments
-   --> src/universal_engine/engine.rs:141:25
-    |
+pub fn generate_synthetic_dataset() -> Result<Vec<Graph>> {
+
+And then adjust the function accordingly.
+

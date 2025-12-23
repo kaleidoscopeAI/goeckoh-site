@@ -1,1 +1,1 @@
-export const DEFAULT_PARAMS = {
+const app = initializeApp(cfg.firebaseConfig);

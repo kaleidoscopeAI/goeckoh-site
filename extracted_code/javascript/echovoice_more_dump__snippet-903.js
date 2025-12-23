@@ -1,1 +1,1 @@
-const specScale = 0.05;
+Additionally, let me know:

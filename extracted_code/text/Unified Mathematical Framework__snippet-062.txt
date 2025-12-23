@@ -1,0 +1,6 @@
+advanced_voice_mimic.py → final VoiceCrystal with prosody transfer & drift
+aba_engine.py → full social stories & mastery
+routine_engine.py → emotion-aware daily prompts
+KivyMD GUI → complete native app (no Flask)
+One-click installers → Windows/macOS/Android/iOS/RPi (v5.0)
+

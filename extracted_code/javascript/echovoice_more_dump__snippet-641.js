@@ -1,2 +1,1 @@
-const interval = setInterval(() => {
-const nodes = nodesProvider ? nodesProvider() : [];
+let replayLogs: any[] | null = null;

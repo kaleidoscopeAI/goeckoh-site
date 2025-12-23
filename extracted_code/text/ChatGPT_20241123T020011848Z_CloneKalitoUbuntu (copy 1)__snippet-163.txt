@@ -1,0 +1,2 @@
+- Acts as a communal library.
+- Nodes contribute unique insights without duplicating existing entries.

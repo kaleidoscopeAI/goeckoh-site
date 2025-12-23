@@ -1,0 +1,4 @@
+globals().update(kw)
+_state_vars.update(dict.fromkeys(kw, vartype))
+
+

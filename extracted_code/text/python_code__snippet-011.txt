@@ -1,4 +1,2 @@
-class NoWayToWaitForSocketError(Exception):
-    pass
-
+# <REDACTED: potential secret detected>
 

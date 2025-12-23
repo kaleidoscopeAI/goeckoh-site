@@ -1,3 +1,2 @@
-import json
-from json import JSONDecodeError
+only one — the one from the certifi package.
 

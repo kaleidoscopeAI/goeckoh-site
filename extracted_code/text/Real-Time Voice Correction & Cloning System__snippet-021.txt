@@ -1,0 +1,2 @@
+asr_session: Session<'static>,
+stream: Option<cpal::Stream>,

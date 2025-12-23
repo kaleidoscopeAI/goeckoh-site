@@ -1,0 +1,5 @@
+if not s.endswith('/'):
+    return s + '/'
+return s
+
+

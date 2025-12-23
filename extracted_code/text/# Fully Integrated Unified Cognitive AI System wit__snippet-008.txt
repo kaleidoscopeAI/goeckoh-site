@@ -1,2 +1,0 @@
-- **Node and Supernode Logic**: Organic nodes track energy, valence, arousal, and awareness, updating via networkx and vectorized physics. Nodes are batched into supernodes using KMeans clustering for high-level cognitive processing.
-- **Transformer Model**: A lightweight PyTorch transformer layer enables node and supernode reflections, implementing AGI-style introspection and “thought” updates using the meta-equation for synthesis.

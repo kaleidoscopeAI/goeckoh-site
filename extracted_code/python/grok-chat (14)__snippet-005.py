@@ -1,1 +1,1 @@
-    def generate_glottal_source(self, duration, f0, jitter_amount, shimmer_amount, breathiness):
+user: Pretrained CREPE weights loading: Using torch implementation (maxrmorrison/torchcrepe). Since env can't pip, I provide code with manual .pt download note (from GitHub raw: full.pt ~100MB, tiny.pt ~10MB). Load with torch.load. If no file, fallback to untrained or YIN.

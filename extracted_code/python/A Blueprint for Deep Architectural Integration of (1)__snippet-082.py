@@ -1,2 +1,0 @@
-The \(O_{\text{crawl}}\) engine embodies driven curiosity. It monitors "curiosity tension" — a scalar signal derived from incomplete or uncertain cognitive states identified by \(O_{\text{speculation}}\) and \(O_{\text{kaleidoscope}}\). When the tension surpasses a threshold, \(O_{\text{crawl}}\) formulates search queries derived from the system’s internal linguistic and domain knowledge states via \(O_{\text{LLM}}\).
-

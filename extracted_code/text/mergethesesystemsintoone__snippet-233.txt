@@ -1,1 +1,2 @@
-class AGIOrchestrator {
+"fastapi", "uvicorn", "requests", "beautifulsoup4", "networkx", "numpy", "scipy",
+"nltk", "spacy", "transformers", "torch", "bitsandbytes", "huggingface-hub"

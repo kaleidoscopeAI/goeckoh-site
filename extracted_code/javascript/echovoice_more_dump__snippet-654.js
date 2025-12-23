@@ -1,1 +1,1 @@
-const ptsStr = pts.map(([x,y])=>`${x},${y}`).join(" ");
+console.log("Trial done", res);

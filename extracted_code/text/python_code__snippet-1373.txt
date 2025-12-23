@@ -1,0 +1,6 @@
+*,
+reason: str,
+replacement: Optional[str],
+gone_in: Optional[str],
+feature_flag: Optional[str] = None,
+issue: Optional[int] = None,

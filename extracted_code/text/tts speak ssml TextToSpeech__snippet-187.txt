@@ -1,0 +1,3 @@
+      silenceDurationSeekBar.max = 30
+
+      vadThresholdSeekBar.progress = (sharedPrefs.getFloat("vad_threshold",

@@ -1,3 +1,31 @@
-I'm using convolution model
-       
-     
+synth = OmniSynth()
+cube = VocalConsciousCube(["Fry", "Modal", "Falsetto", "Whistle", "Timbre", "RVC_Model"])
+detector = VocalPatternDetector()
+normal_freq = np.random.normal(150, 50, 1000)
+detector.establish_baseline(normal_freq)
+
+# Mic input
+mic_audio = real_time_mic_input()
+is_autistic = detector.detect_emergent_pattern(mic_audio)[0]
+profile = synth.extract_params_from_audio(mic_audio)  # Uses CREPE
+
+# Update Cube
+cube.ingest_insight("Modal", "RVC_Model", profile['f0_avg'] / 500)
+
+# Sonify + Convert
+sonified = cube.sonify_graph(synth)
+synth.load_rvc('rvc_models/example.pth')
+synth.rvc_convert(sonified, 'rvc_expressive.wav')
+
+# Compare voices (example: pred vs gt pitch/emb)
+f0_gt = np.random.normal(440, 10, 100)  # Dummy gt
+voiced_gt = f0_gt > 0
+emb_gt = np.random.randn(256)
+synth.compare_voices(np.full(100, profile['f0_avg']), f0_gt, np.ones(100, bool), voiced_gt, np.random.randn(256), emb_gt)
+
+# XTTS insights
+insight_text = "CREPE improves pitch accuracy for expressive cloning."
+synth.xtts_clone_and_speak(insight_text, mic_audio)
+
+pickle.dump({'cube': cube.graph, 'profile': profile}, open('system_state.pkl', 'wb'))
+

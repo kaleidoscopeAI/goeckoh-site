@@ -1,0 +1,4 @@
+LocationValueError,
+MaxRetryError,
+NewConnectionError,
+ProtocolError,

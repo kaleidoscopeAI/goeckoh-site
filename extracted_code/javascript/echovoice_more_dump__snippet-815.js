@@ -1,1 +1,1 @@
-src/simulation/*, src/components/*. I provide TypeScript-style function signatures and NumPy analogues.
+const delta = node.K.map((v) => 1e-3 * (v - meanK));

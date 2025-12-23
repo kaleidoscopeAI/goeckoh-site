@@ -1,0 +1,2 @@
+print(f"[WARN] Symbolic solve failed: {e}. Using numerical method only.")
+emotional_solution = None

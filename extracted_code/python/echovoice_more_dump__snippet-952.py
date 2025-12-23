@@ -1,1 +1,3 @@
-(operationalized as a symmetric matrix derived from normalized similarity and coherence metrics Sij ∈ [0, 1]). The geometric flow receives Teff as a
+  designed to let complex behavior emerge from a set of fundamental rules (the Hamiltonian dynamics). This is a
+  cornerstone of complexity science and a powerful paradigm for creating true autonomy.
+

@@ -1,0 +1,76 @@
+         }
+
+     }
+
+     ~MemoryStore() {
+
+         if (db) sqlite3_close(db);
+
+     }
+
+};
+
+class AGIOrchestrator {
+
+private:
+
+     KnowledgeDNA dna;
+
+     AGIMathematics math;
+
+     MemoryStore memory;
+
+     std::deque<std::string> history;
+
+     double phi = 0.0;
+
+     bool conscious = false;
+
+public:
+
+     explicit AGIOrchestrator(const std::string &dbPath) : memory(dbPath) {}
+
+     void step() {
+
+         std::string text = "Artificial Intelligence evolves";
+
+         auto vec = embed_text(text);
+
+         phi = math.integrated_information(vec);
+
+         if (!conscious && phi > 0.7) {
+
+             conscious = true;
+
+             std::cout << "Consciousness threshold reached: Φ=" << phi << std::endl;
+
+         }
+
+         dna.replicate();
+
+         memory.save_state(dna.generation, phi);
+
+         std::ostringstream oss;
+
+         oss << "Φ=" << phi;
+
+         history.push_front(oss.str());
+
+         if (history.size() > 1000) history.pop_back();
+
+     }
+
+     void run() {
+
+         while (running.load()) {
+
+             try {
+
+                 step();
+
+             } catch (const std::exception &e) {
+
+                 std::cerr << "Step error: " << e.what() << std::endl;
+
+             }
+

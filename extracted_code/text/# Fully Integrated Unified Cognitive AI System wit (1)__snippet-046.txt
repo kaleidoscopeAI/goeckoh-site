@@ -1,0 +1,1 @@
+node.vector = update_node_vector_fast(node.vector, self.env.temperature, node.tension)

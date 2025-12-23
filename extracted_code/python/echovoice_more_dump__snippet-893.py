@@ -1,7 +1,1 @@
-def sensor_grad(kappa, adc_raw):
-    """Simulates the sensor gradient logic (∂I/∂t = ∇ · (κ ADC))"""
-    if not adc_raw:
-        return [0.0]
-    # Simple discrete gradient calculation
-    return np.gradient(np.array(adc_raw)) * kappa
-
+formulating decision variables into a QUBO whose linear coefficients are biased by episodic valence retrieved from the lattice; and

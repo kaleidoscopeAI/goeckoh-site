@@ -1,0 +1,9 @@
+  final_response_content = "Final response not yet received."
+
+  async for event in events:
+      if function_calls := event.get_function_calls():
+          tool_name = function_calls[0].name
+          display(Markdown(f"_Using tool {tool_name}..._"))
+      elif event.actions and event.actions.transfer_to_agent:
+          personality_name = event.actions.transfer_to_agent
+          display(Markdown(f"_Delegating to agent:

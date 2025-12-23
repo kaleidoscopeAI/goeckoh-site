@@ -1,0 +1,3 @@
+reset_metrics","/mirror/select","/mirror/start","/mirror/status","/mirror/stop","/mirror/stream","/mirror/validate","/
+process","/profiles","/routes","/static/<path:filename>","/status"]}
+

@@ -1,0 +1,1 @@
+          // For simplicity, assume we record for max time or use built-in

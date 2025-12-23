@@ -1,1 +1,2 @@
-async def get_status():
+class OrganicNode:
+def __init__(self, node_id):

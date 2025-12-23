@@ -1,1 +1,1 @@
-console.log("Admin rollback approved by", approver, "for", id);
++let currentE: EmotionalVector = { values: new Array(8).fill(0) };

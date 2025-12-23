@@ -1,2 +1,0 @@
-    - The number \$ (R^k)_{ij} \$ denotes the total weight/number of paths of length \$ k \$ from engine \$ i \$ to \$ j \$.
-    - This is crucial in reasoning about information propagation depth and influences in the network.

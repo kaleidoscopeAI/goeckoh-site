@@ -1,1 +1,1 @@
-const sum = data.reduce((acc, d) => acc + Math.abs(d), 0);
+const p = Math.abs(d) / sum;

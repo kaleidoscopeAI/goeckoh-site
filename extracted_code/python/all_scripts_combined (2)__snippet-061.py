@@ -1,12 +1,29 @@
-class SimilarityScorer:
-    settings: AudioSettings
+from gtts import gTTS
+from typing import Dict
 
-    def _load_mfcc(self, path: Path) -> np.ndarray:
-        audio, sr = librosa.load(path, sr=self.settings.sample_rate)
-        return librosa.feature.mfcc(y=audio, sr=sr, n_mfcc=20)
+class SpeechSynthesizer:
+    """Handles the conversion of textual knowledge into speech"""
 
-    def compare(self, reference: Path, attempt: Path) -> float:
-        ref_mfcc = self._load_mfcc(reference)
-        att_mfcc = self._load_mfcc(attempt)
-        distance, _ = fastdtw(ref_mfcc.T, att_mfcc.T)
-        return 1.0 / (1.0 + distance)
+    def __init__(self):
+        self.voice_cache: Dict[str, str] = {}  # Cache for synthesized speech files
+
+    def synthesize(self, text: str, language: str = "en") -> str:
+        """
+        Converts text to speech and saves the audio to a file.
+        Returns the path to the audio file.
+        """
+        if text in self.voice_cache:
+            return self.voice_cache[text]
+
+        try:
+            tts = gTTS(text=text, lang=language)
+            file_path = f"speech_{hash(text)}.mp3"
+            tts.save(file_path)
+            self.voice_cache[text] = file_path
+            return file_path
+        except Exception as e:
+            raise RuntimeError(f"Speech synthesis failed: {e}")
+
+    def clear_cache(self):
+        """Clears the voice cache"""
+        self.voice_cache.clear()

@@ -1,1 +1,1 @@
-./package_android.sh debug
+./package_android.sh release

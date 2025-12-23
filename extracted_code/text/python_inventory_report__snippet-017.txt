@@ -1,0 +1,3 @@
+doc: Low-level audio capture and playback utilities.
+functions: chunked_audio
+classes: AudioIO

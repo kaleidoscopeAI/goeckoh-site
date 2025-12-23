@@ -1,9 +1,11 @@
-def process(self, data_wrapper: DataWrapper) -> Dict:
-    """Processes text data using TF-IDF vectorization."""
-    text = data_wrapper.get_data()
+import networkx as nx
+from typing import Dict, List, Optional, Any, Tuple
+from collections import defaultdict
+import numpy as np
 
-    # Fit and transform the text data using the vectorizer
-    tfidf_matrix = self.vectorizer.fit_transform([text])
+class KnowledgeGraph:
+    def __init__(self):
+        self.graph = nx.DiGraph()  # Use a directed graph
 
-    # Convert to a dense array
-    return {"tfidf_vector": tfidf_matrix.toarray()}
+    def add_node(self, node_id: str, data: Dict = None):
+        """Adds a node to the knowledge graph."""

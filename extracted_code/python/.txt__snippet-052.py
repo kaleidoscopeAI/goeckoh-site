@@ -1,1 +1,1 @@
-def step(self, full_audio: np.ndarray, transcript: str) -> Dict[str, Any]:
+def create_app(echo: EchoCompanion) -> Flask:

@@ -1,1 +1,1 @@
-function stress_Jv(v, y) {
+const v = vCluster[cIndex];

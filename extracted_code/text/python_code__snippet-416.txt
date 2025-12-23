@@ -1,0 +1,5 @@
+"pre": "c",
+"preview": "c",
+"-": "final-",
+"rc": "c",
+"dev": "@",

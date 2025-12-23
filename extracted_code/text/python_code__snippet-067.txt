@@ -1,2 +1,1 @@
-# <REDACTED: potential secret detected>
-
+The package resource API is designed to work with normal filesystem packages,

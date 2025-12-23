@@ -1,2 +1,1 @@
-const mesh = nodeMeshesRef.current[idx];
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+for (let i = 0; i < numSpecies; i++) {

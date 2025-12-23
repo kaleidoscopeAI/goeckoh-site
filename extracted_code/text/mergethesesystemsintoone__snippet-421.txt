@@ -1,0 +1,1 @@
+ probabilities [node_id] = data.get ('strength', 0.0)

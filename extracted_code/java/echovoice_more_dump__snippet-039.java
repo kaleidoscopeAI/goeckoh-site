@@ -1,4 +1,3 @@
-export class ActuationService {
-private firestore: Firestore;
-private emotion: EmotionalVector;
-private weights: WeightTensor;
+export class ProjectionService {
+private constructsNames: string[];
+private M: number;

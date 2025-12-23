@@ -1,1 +1,4 @@
-This module previously handled import compatibility issues
+def default_hooks():
+    return {event: [] for event in HOOKS}
+
+

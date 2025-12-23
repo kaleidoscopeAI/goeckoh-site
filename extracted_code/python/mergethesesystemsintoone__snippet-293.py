@@ -1,2 +1,5 @@
-class StrategyGenerator:
-def init(self):
+    def _simulate_cluster_adjustment(self):
+
+
+
+

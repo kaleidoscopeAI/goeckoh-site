@@ -1,1 +1,4 @@
-3. Set your Firebase config (replace in code or load from env). In ActuationService constructor pass cfg.firebaseConfig or set to null to disable Firestore.
+const t = step / steps;
+for (const k of this.emotions) {
+const a = (from as any)[k];
+const b = (to as any)[k];

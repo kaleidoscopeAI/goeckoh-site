@@ -1,1 +1,1 @@
-const allowed: Modulators = { ...mods };
+const mesh = nodeMeshesRef.current[idx];

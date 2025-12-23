@@ -1,0 +1,15 @@
+       continue
+  if (path.stat().st_size or 0) > 1_000_000:
+       continue
+  try:
+       txt = path.read_text(encoding="utf-8", errors="ignore")
+  except Exception:
+       continue
+  for pat, tag in signals:
+       for m in re.finditer(pat, txt, flags=re.IGNORECASE):
+           snippet = txt[max(0, m.start()-80): m.end()+80].replace("\n"," ")
+           signal_rows.append({"root": row["root"], "relpath": row["relpath"], "signal": tag, "snippet": snippet})
+           hits += 1
+           if hits >= 400:
+               break
+

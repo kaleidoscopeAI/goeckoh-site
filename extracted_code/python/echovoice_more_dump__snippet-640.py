@@ -1,2 +1,1 @@
-class NodeManager:
-def __init__(self):
+def generate_dynamic_dot(self, state):

@@ -1,0 +1,4 @@
+lines: Iterable[bytes],
+name: str = "stdin",
+minimal: bool = False,
+should_rename_legacy: bool = False,

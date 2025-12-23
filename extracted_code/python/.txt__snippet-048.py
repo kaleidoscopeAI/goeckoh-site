@@ -1,2 +1,1 @@
-def __init__(self, config: CompanionConfig) -> None:
-import torch
+def _process_utterance(self, audio: np.ndarray) -> None:

@@ -1,2 +1,1 @@
-but we have developement some complex stuff . are you recalling all the scripts i have shared with you ?i feel like we should be far beyond this step of simple testing on a few nodes that arent actually doing what we have them set out to do . let me think ...... there should be a way to utulize tools at our disposal to greatly enhance this demo both visually and test in the real world. any thiing for ai as far as packages or platforms frameworks etc we can use. what i want to do is try the mirroring systems. are you familiar with those scripts or do i need to share them with you again ?
-
+  - Highlight the system's ability to function autonomously.

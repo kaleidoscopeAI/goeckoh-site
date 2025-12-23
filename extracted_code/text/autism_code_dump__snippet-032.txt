@@ -1,0 +1,8 @@
+vad_min_silence_ms: int = 1200
+vad_speech_pad_ms: int = 400
+vad_min_speech_ms: int = 250
+silence_rms_threshold: float = 0.0125
+samplerate: int = 16000
+blocksize: int = 1024  # ~64 ms at 16kHz
+
+

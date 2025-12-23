@@ -1,1 +1,2 @@
-6. Interactive orbit camera to explore the 3D network from any angle.
+import { ProjectionService } from "./services/projectionService";
+const projection = new ProjectionService({ constructs: [...], persistenceDecay: 0.94, seed: 42 });

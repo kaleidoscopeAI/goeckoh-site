@@ -1,0 +1,4 @@
+Embedded Architecture: The system bundles an Ollama LLM binary directly within the application. This strategy creates a single cohesive intelligence with zero network overhead, sub-millisecond LLM responses, and enhances security by ensuring complete data isolation.
+
+Hardware Control (HID Emulation): To ground the AI in the physical world, the system achieves Hardware Control via Human Interface Device (HID) emulation. The AI simulates user actions (typing, mouse movement) to interact with the operating system and change settings like CPU frequency or display gamma, bypassing the need for low-level drivers.
+

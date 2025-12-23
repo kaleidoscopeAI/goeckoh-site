@@ -1,1 +1,22 @@
-class AGIOrchestrator {
+H, T, F3 = V.shape
+D = E_mem.shape[1]
+rng = np.random.RandomState(1234)
+Wk = rng.normal(0, 1.0 / math.sqrt(D), size=(D, d))
+Wqs = rng.normal(0, 1.0, size=(H, F3, d))
+K = E_mem @ Wk
+K /= (np.linalg.norm(K, axis=1, keepdims=True) + 1e-9)
+shapes = []
+tau = max(1e-3, sigma_temp)
+for h in range(H):
+    Q = V[h] @ Wqs[h]
+    Q /= (np.linalg.norm(Q, axis=1, keepdims=True) + 1e-9)
+    S = (Q @ K.T) / (d * tau)
+    S -= S.max(axis=1, keepdims=True)
+    P = np.exp(S)
+    P /= (P.sum(axis=1, keepdims=True) + 1e-12)
+    for t in range(T):
+        w = P[t]
+        top = np.argsort(-w)[:8]
+        shapes.append({"head": int(h), "t": int(t), "ids": top.astype(int).tolist(), "weights": w[top].astype(float).tolist()})
+return {"shapes": shapes}
+

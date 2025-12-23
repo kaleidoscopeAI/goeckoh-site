@@ -1,0 +1,2 @@
+},
+{"Execution Results" : "Systematic representation of the data transformations , memory operations, patterns/innsights/analysis results , to guide what further research or information needs refinement . "  },

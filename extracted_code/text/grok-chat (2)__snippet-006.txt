@@ -1,0 +1,4 @@
+sample_rate: int = 16000
+chunk_seconds: float = 2.5
+silence_rms_threshold: float = 0.02
+

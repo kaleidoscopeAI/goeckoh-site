@@ -1,2 +1,2 @@
-let len = env.get_array_length(qubits_j).unwrap_or(0);
-let mut buf = vec![0f32; len as usize];
+let dummy_freq = 300_000_000f32; // placeholder - compute properly
+let out = env.new_float_array(1).unwrap();

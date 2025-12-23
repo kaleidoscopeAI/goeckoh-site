@@ -1,1 +1,0 @@
-Compute (R_{t+1}), (\rho_{S,t+1}), and (w_{t+1}) as in §3 using the updated (Z_{t+1}) and current context. Use (w_{t+1}) to:

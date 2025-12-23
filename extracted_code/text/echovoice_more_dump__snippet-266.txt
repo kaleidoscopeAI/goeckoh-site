@@ -1,1 +1,8 @@
-export class EmotionLoop {
+   * `unified_interface_node.py`: To define the Unified Interface Nodes (UINs), their internal state (ψ, r, E),
+     and the local Cognitive Annealing logic.
+   * `kaleidoscope_engine.py`: To serve as the central system intelligence, managing the global Hamiltonian, the
+     networkx graph for "Conceptual Crystals," and orchestrating the annealing and crystallization processes.
+   * `perspective_engine.py`: To handle speculative exploration and hypothesis generation within the "Mirrored
+     Network."
+   * `qsin_stream.py`: To manage real-time data ingestion, adhering to the QSIN Envelope standard.
+   * `kaleidoscope_core_py.py`: To provide the Python-to-C interface using ctypes.

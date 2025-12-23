@@ -1,12 +1,17 @@
-import logging
-import os
-import sys
-import sysconfig
-import typing
+    whl_basename, metadata_directory, config_settings):
+"""Extract the metadata from a wheel.
 
-from pip._internal.exceptions import InvalidSchemeCombination, UserInstallationInvalid
-from pip._internal.models.scheme import SCHEME_KEYS, Scheme
-from pip._internal.utils.virtualenv import running_under_virtualenv
+Fallback for when the build backend does not
+define the 'get_wheel_metadata' hook.
+"""
+from zipfile import ZipFile
+with open(os.path.join(metadata_directory, WHEEL_BUILT_MARKER), 'wb'):
+    pass  # Touch marker file
 
-from .base import change_root, get_major_minor_version, is_osx_framework
+whl_file = os.path.join(metadata_directory, whl_basename)
+with ZipFile(whl_file) as zipf:
+    dist_info = _dist_info_files(zipf)
+    zipf.extractall(path=metadata_directory, members=dist_info)
+return dist_info[0].split('/')[0]
+
 

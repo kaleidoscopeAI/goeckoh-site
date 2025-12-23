@@ -1,1 +1,1 @@
-Imitation from human-provided emotion traces.
+import { Firestore } from "firebase-admin/firestore";

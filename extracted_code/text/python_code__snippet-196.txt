@@ -1,1 +1,1 @@
-# sysconfig, but is explicitly opting out and using distutils instead.
+                   LEGACY_METADATA_FILENAME)

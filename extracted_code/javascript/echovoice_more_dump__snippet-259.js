@@ -1,1 +1,1 @@
-export const DEFAULT_P: Record<string, number[]> = {
+const identityInfluence = sigmoid(projectVec(s, DEFAULT_P.identity));

@@ -1,37 +1,15 @@
-def main():
-    parser = argparse.ArgumentParser(
-        description="Build and package Echo v4.0 for distribution"
-    )
-    parser.add_argument(
-        "--platform",
-        choices=["windows", "macos", "linux", "all"],
-        required=True,
-        help="Target platform(s) to build for"
-    )
-    parser.add_argument(
-        "--clean",
-        action="store_true",
-        help="Clean build directories before building"
-    )
-    
-    args = parser.parse_args()
-    
-    # Save deployment guide
-    guide_path = Path("DEPLOYMENT_GUIDE.md")
-    with open(guide_path, "w") as f:
-        f.write(DEPLOYMENT_GUIDE)
-    print(f"📖 Deployment guide saved to: {guide_path}")
-    
-    # Save installer bootstrap
-    bootstrap_path = Path("installer_bootstrap.py")
-    with open(bootstrap_path, "w") as f:
-        f.write(INSTALLER_BOOTSTRAP)
-    print(f"📄 Installer bootstrap saved to: {bootstrap_path}")
-    
-    # Build for requested platforms
-    platforms = ["windows", "macos", "linux"] if args.platform == "all" else [args.platform]
-    
-    for platform in platforms:
-        builder = EchoBuilder(platform, clean=args.clean)
-        builder.build()
+# deterministic hashing into bytes array using SHAKE-like approach without external libs
+import hashlib
+h = hashlib.blake2b(digest_size=32)
+h.update(s.encode("utf8"))
+base = h.digest()
+out = bytearray()
+i = 0
+while len(out) < length:
+    h2 = hashlib.blake2b(digest_size=32)
+    h2.update(base)
+    h2.update(bytes([i]))
+    out.extend(h2.digest())
+    i += 1
+return bytes(out[:length])
 

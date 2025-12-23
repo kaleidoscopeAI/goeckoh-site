@@ -1,0 +1,5 @@
+"""Calculate interaction strength with another memory pattern."""
+interference = np.abs(np.sum(self.interference_pattern *
+                             np.conj(other.interference_pattern)))
+return float(interference)
+

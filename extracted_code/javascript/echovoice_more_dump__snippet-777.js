@@ -1,1 +1,1 @@
-const grad = this.computeGradientFromTraces(traces);
+const specScale = 0.05;

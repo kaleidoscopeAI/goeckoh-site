@@ -1,0 +1,55 @@
+parser = argparse.ArgumentParser(description="Autism speech companion control CLI")
+sub = parser.add_subparsers(dest="command")
+
+rec = sub.add_parser("record", help="Record a canonical phrase")
+rec.add_argument("--text", required=True, help="Phrase text to associate with the recording")
+rec.add_argument("--seconds", type=float, default=3.0, help="Recording length")
+
+sub.add_parser("list", help="List known phrases")
+sub.add_parser("summary", help="Show metrics CSV path")
+
+run = sub.add_parser("run", help="Start the realtime loop")
+
+dash = sub.add_parser("dashboard", help="Launch therapist dashboard")
+dash.add_argument("--host", default="0.0.0.0")
+dash.add_argument("--port", type=int, default=8765)
+
+sub.add_parser("gui", help="Launch the local Tkinter caregiver/child dashboard")
+
+strat = sub.add_parser("strategies", help="Show calming strategies catalog")
+strat.add_argument("--category", choices=list_categories(), help="Filter by category")
+strat.add_argument(
+    "--event",
+    choices=[
+        "meltdown",
+        "transition",
+        "anxious_speech",
+        "anxious",
+        "hyperactivity",
+        "high_energy",
+        "care_team_sync",
+        "school_meeting",
+        "communication_practice",
+        "caregiver_reset",
+        "interest_planning",
+        "perseveration",
+        "encouragement",
+    ],
+    help="Filter by event trigger",
+)
+
+comfort = sub.add_parser("comfort", help="Play a supportive prompt right now")
+comfort.add_argument("--event", choices=sorted(GUIDANCE_SCRIPTS.keys()), required=True)
+comfort.add_argument("--message", help="Override guidance text with a custom message")
+
+# New commands for Voice Crystal
+record_facet = sub.add_parser("record-voice-facet", help="Record a voice sample for a specific style (facet)")
+record_facet.add_argument("style", choices=["neutral", "calm", "excited"], help="Style label for this facet")
+record_facet.add_argument("--seconds", type=float, default=3.0, help="Duration of the recording in seconds")
+record_facet.add_argument("--name", help="Optional name suffix stored with the sample")
+
+sub.add_parser("show-voice-profile", help="Show the current VoiceProfile facets")
+
+return parser
+
+

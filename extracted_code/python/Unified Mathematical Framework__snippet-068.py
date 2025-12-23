@@ -1,11 +1,9 @@
-class Paths:
-    base: Path = Path.home() / "EchoCrystal"
-    voices_dir: Path = base / "voices"
-    logs_dir: Path = base / "logs"
-    metrics_csv: Path = logs_dir / "aba_progress.csv"
-
-    def __post_init__(self):
-        self.base.mkdir(exist_ok=True)
-        self.voices_dir.mkdir(exist_ok=True)
-        self.logs_dir.mkdir(exist_ok=True)
+    Prosody transfer mandatory (pitch contour, rhythm, energy from original utterance preserved)
+    First-person always for corrective echo (“I want juice” never “You said I want juice”)
+    Dynamic style switching via BehaviorMonitor:
+    ─ high_energy → excited coach voice
+    ─ anxious/meltdown risk → calm inner voice
+    ─ success streak ≥3 → excited reinforcement
+    Slow-drift adaptation: every 10 successes → re-sample best recent attempts → phase out old facets
+    Fallback if no samples yet: use parent-recorded base facets or lightest possible generic child voice until first samples collected
 

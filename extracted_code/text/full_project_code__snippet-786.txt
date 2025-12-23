@@ -1,0 +1,5 @@
+"class_table": GB2312_CLS,
+"class_factor": 7,
+"state_table": GB2312_ST,
+"char_len_table": GB2312_CHAR_LEN_TABLE,
+"name": "GB2312",

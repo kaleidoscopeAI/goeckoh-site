@@ -1,0 +1,9 @@
+NegativeInfinityType,
+Tuple[
+    Union[
+        SubLocalType,
+        Tuple[SubLocalType, str],
+        Tuple[NegativeInfinityType, SubLocalType],
+    ],
+    ...,
+],

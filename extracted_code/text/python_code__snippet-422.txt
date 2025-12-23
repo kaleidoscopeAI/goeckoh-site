@@ -1,0 +1,6 @@
+epoch: int,
+release: Tuple[int, ...],
+pre: Optional[Tuple[str, int]],
+post: Optional[Tuple[str, int]],
+dev: Optional[Tuple[str, int]],
+local: Optional[Tuple[SubLocalType]],

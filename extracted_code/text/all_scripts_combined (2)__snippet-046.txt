@@ -1,12 +1,10 @@
-class AttemptRecord:
-    """Structured representation of one speech attempt."""
+class CaregiverPrompt:
+    """Script submitted by Molly to be spoken gently in his own voice."""
 
     timestamp: Timestamp
-    phrase_text: str
-    raw_text: str
-    corrected_text: str
-    needs_correction: bool
-    audio_file: Path
-    similarity: float = 0.0
+    text: str
+    mode: Literal["inner", "coach"] = "inner"
+    active: bool = True
+    expires_after_uses: int = 1
 
 

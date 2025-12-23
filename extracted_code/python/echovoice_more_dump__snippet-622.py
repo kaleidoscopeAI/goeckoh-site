@@ -1,1 +1,1 @@
-Author: Merged from user conversation
+def Theta_quant(self, Q, p):

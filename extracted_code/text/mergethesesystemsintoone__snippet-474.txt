@@ -1,0 +1,2 @@
+        "core/pattern_recognition.py" ,
+  "utils/config.py",

@@ -1,1 +1,1 @@
-const f0 = sr / betterTau;
+function estimateHNR(x, sr, f0) {

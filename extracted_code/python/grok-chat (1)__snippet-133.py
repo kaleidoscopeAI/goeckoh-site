@@ -1,12 +1,21 @@
-class EnergyLandscape:
-    def __init__(self, bonds, temp=1.0):
-        self.bonds = bonds
-        self.temp = temp
+def __init__(self):
+    self.q = queue.Queue()
+    self.stop = threading.Event()
 
-    def hamiltonian(self):
-        return sum(b.energy() for b in self.bonds)
+def callback(self, indata, *args):
+    self.q.put(indata.copy().flatten())
 
-    def local_energy(self, node):
-        node_bonds = [b for b in self.bonds if b.node1 is node or b.node2 is node]
-        return sum(b.energy() for b in node_bonds) / max(1, len(node_bonds)) if node_bonds else 0
+def start(self):
+    threading.Thread(target=self._run, daemon=True).start()
+
+def _run(self):
+    with sd.InputStream(samplerate=CONFIG.sample_rate, channels=1, dtype='float32', callback=self.callback):
+        while not self.stop.is_set():
+            sd.sleep(100)
+
+def get(self) -> Optional[np.ndarray]:
+    try:
+        return self.q.get(timeout=0.1)
+    except queue.Empty:
+        return None
 

@@ -1,0 +1,6 @@
+  mask = False
+  for pat in patterns:
+      m = df["relpath"].str.contains(pat, case=False, regex=True, na=False) | df["name"].str.contains(pat, case=False, regex=True, na=False)
+      mask = m if mask is False else (mask | m)
+  return df[mask].copy()
+

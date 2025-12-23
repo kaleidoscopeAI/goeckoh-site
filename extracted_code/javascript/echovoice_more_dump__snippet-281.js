@@ -1,4 +1,3 @@
-export function updateHomeostasisAndMaturity(node: NodeState, dtSeconds: number) {
-const s = node.species;
-const h = node.homeostasis;
-const rho = DEFAULT_PARAMS.homeoRho;
+const idx: number[] = [];
+const vals: number[] = [];
+for (let k = 0; k < r.idx.length; k++) {

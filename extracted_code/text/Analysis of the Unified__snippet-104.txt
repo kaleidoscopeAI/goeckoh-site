@@ -1,0 +1,9 @@
+"target": "ES2022",
+"lib": ["DOM", "DOM.Iterable", "ES2022"],
+"module": "ESNext",
+"moduleResolution": "Node",
+"jsx": "react-jsx",
+"strict": true,
+"esModuleInterop": true,
+"skipLibCheck": true,
+"outDir": "dist"

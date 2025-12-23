@@ -1,2 +1,1 @@
-# <REDACTED: potential secret detected>
-
+"""Support for installing and building the "wheel" binary package format.

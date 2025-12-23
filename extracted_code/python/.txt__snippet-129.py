@@ -1,3 +1,1 @@
-import Foundation
-import AVFoundation
-final class EchoClient: ObservableObject {
+import winshell # type: ignore

@@ -1,1 +1,4 @@
-export const DEFAULT_PARAMS = {
+const NODE_COUNT = 30;
+const VECTOR_SCALE = 2.0;
+const CONSTRUCT_SCALE = 0.5;
+const TIMESTEP_MS = 50;

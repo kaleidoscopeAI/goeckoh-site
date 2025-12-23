@@ -1,0 +1,7 @@
+env: Environment,
+asr_session: Session<'static>,
+tts_session: Session<'static>,
+vad: Vad,
+resampler: Arc<Mutex<FftFixedInOut<f32>>>,
+stream: Option<cpal::Stream>,
+fft_planner: FftPlanner<f32>,

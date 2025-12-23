@@ -1,18 +1,17 @@
-import codecs
-import contextlib
-import io
-import os
-import re
-import socket
-import struct
-import sys
-import tempfile
-import warnings
-import zipfile
-from collections import OrderedDict
+    from pip._internal.utils.compat import WINDOWS
+    if not WINDOWS:
+        raise ImportError("pip internals: don't import cryptography on Windows")
+    try:
+        import ssl
+    except ImportError:
+        ssl = None
 
-from pip._vendor.urllib3.util import make_headers, parse_url
+    if not getattr(ssl, "HAS_SNI", False):
+        from pip._vendor.urllib3.contrib import pyopenssl
 
-from . import certs
-from .__version__ import __version__
+        pyopenssl.inject_into_urllib3()
 
+        # Check cryptography version
+        from cryptography import __version__ as cryptography_version
+
+        _check_cryptography(cryptography_version)

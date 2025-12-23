@@ -1,1 +1,2 @@
-The type unpack operator takes the child types from some container type,
+def _make_install_req_from_dist(
+    dist: BaseDistribution, template: InstallRequirement

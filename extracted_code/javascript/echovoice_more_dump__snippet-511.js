@@ -1,2 +1,6 @@
-const positions = points.geometry.attributes.position.array as Float32Array;
-for (let p = 0; p < PARTICLE_COUNT; p++) {
+let lambda = 0;
+for (let iter = 0; iter < maxIter; iter++) {
+const w = new Array(M).fill(0);
+for (let i = 0; i < M; i++) {
+let sum = 0;
+for (let j = 0; j < M; j++) sum += A[i][j] * v[j];

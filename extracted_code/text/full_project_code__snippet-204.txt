@@ -1,0 +1,18 @@
+"""Coerce *s* to six.text_type.
+
+For Python 2:
+  - `unicode` -> `unicode`
+  - `str` -> `unicode`
+
+For Python 3:
+  - `str` -> `str`
+  - `bytes` -> decoded to `str`
+"""
+if isinstance(s, binary_type):
+    return s.decode(encoding, errors)
+elif isinstance(s, text_type):
+    return s
+else:
+    raise TypeError("not expecting type '%s'" % type(s))
+
+

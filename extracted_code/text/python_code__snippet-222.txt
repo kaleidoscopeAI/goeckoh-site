@@ -1,2 +1,4 @@
-# <REDACTED: potential secret detected>
+       'LegacyVersion', 'LegacyMatcher',
+       'SemanticVersion', 'SemanticMatcher',
+       'UnsupportedVersionError', 'get_scheme']
 

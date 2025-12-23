@@ -1,1 +1,2 @@
-5. Cross-Learning and Collaboration: Nodes communicate with connected nodes to share knowledge. This knowledge sharing accelerates learning across the network, much like an ecosystem where each plant can benefit from the collective resources of its surroundings.
+With each new node added, connectivity improves, and clustering remains high while LLL stays relatively low. This small-world network property ensures that each node can quickly access knowledge from any other node, making the network adaptable to new tasks and challenges.
+

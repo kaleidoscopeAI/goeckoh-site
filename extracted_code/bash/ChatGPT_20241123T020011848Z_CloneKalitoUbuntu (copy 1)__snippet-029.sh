@@ -1,21 +1,9 @@
-/project-root
-├── /src
-│   ├── /nodes
-│   │   ├── seed_node.py
-│   │   ├── specialized_node.py
-│   ├── /utilities
-│   │   ├── error_handling.py
-│   │   ├── communication.py
-│   ├── /core
-│   │   ├── learning.py
-│   │   ├── replication.py
-│   │   ├── optimization.py
-├── /docs
-│   ├── seed_based_ai_algorithm.pdf
-│   ├── core_documentation.md
-├── /tests
-│   ├── test_seed_node.py
-│   ├── test_network_growth.py
-│   ├── test_error_handling.py
-└── README.md
+# Run the core demo
+python3 /path/to/project/demos/core_demo.py
+
+# Run an advanced functionality demo
+python3 /path/to/project/demos/functional_ai_demo.py
+
+# Run visualization demo
+python3 /path/to/project/demos/interactive_graph_demo.py
 

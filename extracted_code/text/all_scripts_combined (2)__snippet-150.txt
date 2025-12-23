@@ -1,0 +1,4 @@
+gui = CompanionGUI(config=config or CONFIG)
+gui.run()-e 
+
+

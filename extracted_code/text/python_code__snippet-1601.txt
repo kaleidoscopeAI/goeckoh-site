@@ -1,0 +1,7 @@
+Option,
+"--no-use-pep517",
+dest="use_pep517",
+action="callback",
+callback=_handle_no_use_pep517,
+default=None,
+help=SUPPRESS_HELP,

@@ -1,1 +1,1 @@
-def process(self, data: List[float]):
+def init_plot(self):

@@ -1,1 +1,1 @@
-Flask async issues are resolved (using Quart).
+using a combination of Stochastic Differential Equations (SDEs), dxi​=f(xi​)dt+g(xi​)dWi​, to capture stochastic processes like neural noise, and Partial

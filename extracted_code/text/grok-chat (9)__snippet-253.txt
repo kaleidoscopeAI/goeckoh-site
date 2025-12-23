@@ -1,0 +1,5 @@
+Server: Werkzeug/3.1.4 Python/3.12.3
+… +5 lines
+
+{"error":"Object of type complex is not JSON serializable"}
+

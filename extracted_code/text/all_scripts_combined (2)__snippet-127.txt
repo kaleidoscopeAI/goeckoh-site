@@ -1,0 +1,6 @@
+print(f"Recording {seconds:.1f}s for '{style}' facet...")
+audio = loop.audio_io.record_phrase(seconds)
+path = loop.voice_profile.add_sample_from_wav(audio, style, name=name)
+print(f"Saved facet at {path}")
+
+

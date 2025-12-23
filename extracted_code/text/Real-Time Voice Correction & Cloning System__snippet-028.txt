@@ -1,0 +1,9 @@
+name="SpeechCorrectionAgent",
+model="gemini-2.0-flash-live", # Low-latency live model
+instruction="""You are a speech prosthetic agent. 
+Transform the input text:
+- Change third-person ('he/she') to first-person ('I').
+- Correct stutters or repetition while maintaining intent.
+- Return ONLY valid JSON.""",
+output_schema=SpeechOutput,
+output_key="final_speech"

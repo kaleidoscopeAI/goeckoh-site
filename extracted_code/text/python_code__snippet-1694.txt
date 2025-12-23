@@ -1,0 +1,2 @@
+print("! BioAudio Kernel missing. Physics simulation unavailable.")
+

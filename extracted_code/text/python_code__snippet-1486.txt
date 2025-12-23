@@ -1,0 +1,30 @@
+"""Joins a line ending in '\' with the previous line (except when following
+comments).  The joined line takes on the index of the first line.
+"""
+primary_line_number = None
+new_line: List[str] = []
+for line_number, line in lines_enum:
+    if not line.endswith("\\") or COMMENT_RE.match(line):
+        if COMMENT_RE.match(line):
+            # this ensures comments are always matched later
+            line = " " + line
+        if new_line:
+            new_line.append(line)
+            assert primary_line_number is not None
+            yield primary_line_number, "".join(new_line)
+            new_line = []
+        else:
+            yield line_number, line
+    else:
+        if not new_line:
+            primary_line_number = line_number
+        new_line.append(line.strip("\\"))
+
+# last line contains \
+if new_line:
+    assert primary_line_number is not None
+    yield primary_line_number, "".join(new_line)
+
+# TODO: handle space after '\'.
+
+

@@ -1,19 +1,32 @@
-class Node:
-    def __init__(self, node_id, threshold=10):
-        self.node_id = node_id
-        self.learned_knowledge = []
-        self.threshold = threshold  # Replication threshold
-        self.resources_shared = 0
+from mirrored_network_module import MirroredNetwork
+from resource_sharing_module import ResourceSharing
+from thought_hub_module import ThoughtHub
+from synaptic_overlay_module import SynapticOverlay
 
-    def learn(self, knowledge):
-        """Add knowledge and evaluate for replication."""
-        self.learned_knowledge.append(knowledge)
-        if len(self.learned_knowledge) >= self.threshold:
-            return self.replicate()
+# Initialize modules
+network = MirroredNetwork()
+resource_sharing = ResourceSharing()
+thought_hub = ThoughtHub()
+synaptic_overlay = SynapticOverlay()
 
-    def replicate(self):
-        """Replicate the node with a shared resource base."""
-        new_node = Node(node_id=self.node_id + "_child")
-        new_node.learned_knowledge = self.learned_knowledge.copy()
-        return new_node
+# Populate the network
+for i in range(5):
+    network.add_node(f"Node_{i}")
+    if i > 0:
+        network.add_edge(f"Node_{i-1}", f"Node_{i}")
+
+# Share resources and build thought hub
+resource_sharing.share_resource("Image_001", {"type": "image", "description": "Hotdog"}, "Node_1")
+thought_hub.add_synapse("Node_1", "Hotdog: A food or a dog that is hot.")
+
+# Add synaptic overlay
+synaptic_overlay.add_connection("Node_1", "Node_2", "Shares 'Hotdog' context")
+
+# Visualize network and overlay
+network.visualize()
+synaptic_overlay.visualize_overlay()
+
+# Query examples
+print("Query Thought Hub:", thought_hub.query_synapse("Hotdog"))
+print("Query Resource Pool:", resource_sharing.query_resource("Image_001"))
 

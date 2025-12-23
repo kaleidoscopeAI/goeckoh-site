@@ -1,0 +1,11 @@
+"""Types of systems to upgrade"""
+WEB_APP = auto()
+DESKTOP_APP = auto()
+MOBILE_APP = auto()
+API = auto()
+CLI = auto()
+LIBRARY = auto()
+FRAMEWORK = auto()
+DATABASE = auto()
+UNKNOWN = auto()
+

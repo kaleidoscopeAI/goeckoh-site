@@ -1,3 +1,3 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { EmotionName, EVector } from "../services/actuationService";
-import "./EmotionalDial.css"; // small CSS for layout (I'll provide styles below)
+import { NodeDatum, CognitiveConstruct, ConstructHistoryPoint } from "../types";
+import { ConstructLearner } from "./constructLearner";
+/* (All helper functions from the previous ProjectionService remain: mulberry32, makeDeterministicW,

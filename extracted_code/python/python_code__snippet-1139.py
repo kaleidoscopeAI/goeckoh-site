@@ -1,17 +1,4 @@
-class EmptyProvider(NullProvider):
-    """Provider that returns nothing for all requests"""
+    def audio_rms(_audio):  # type: ignore
+        return 0.0
 
-    module_path = None
-
-    _isdir = _has = lambda self, path: False
-
-    def _get(self, path):
-        return ''
-
-    def _listdir(self, path):
-        return []
-
-    def __init__(self):
-        pass
-
-
+# Local package integrations (prefer these when available)

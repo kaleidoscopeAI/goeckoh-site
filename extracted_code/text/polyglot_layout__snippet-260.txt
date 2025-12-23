@@ -1,0 +1,3 @@
+It auto-connects to ws://<host>:8767/avatar (or wss:// when HTTPS), shows “connected • 18,000 points”, and renders the live avatar.
+
+

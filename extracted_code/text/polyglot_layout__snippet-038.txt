@@ -1,0 +1,78 @@
+         self.unravel.visualize_quantum_network(str(ROOT / "network.png"))
+
+         # RL/GNN
+
+         state = torch.tensor([self.phi, self.dna.generation, len(self.history)], dtype=torch.float32)
+
+         utility = self.gnn(state.unsqueeze(0)).item()
+
+         actions_prob = self.policy(state.unsqueeze(0))
+
+         action = torch.argmax(actions_prob).item()
+
+         reward = 1.0 - max(errors)
+
+         self.replay_buffer.append((state, action, reward))
+
+         if len(self.replay_buffer) > self.config.training_batch_size:
+
+            batch = random.sample(self.replay_buffer, self.config.training_batch_size)
+
+            self.optimizer.zero_grad()
+
+            loss = torch.tensor([r for _, _, r in batch]).mean() # Sim loss; real TD
+
+            loss.backward()
+
+            self.optimizer.step()
+
+       await asyncio.sleep(1)
+
+  async def batch_ingest(self) -> List[Dict]:
+
+    async with aiohttp.ClientSession() as session:
+
+       urls = ["https://en.wikipedia.org/wiki/Artificial_intelligence"] * BATCH_SIZE
+
+       tasks = [self._fetch_url(session, url) for url in urls]
+
+       texts = await asyncio.gather(*tasks)
+
+    insights = []
+
+    for text in texts:
+
+       insight = {"content": text[:500], "id": str(uuid.uuid4()), "img_url":
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/AI_Steering_Wheel.jpg/800px-AI_Steering_Wheel.jpg",
+
+             "num_data": [random.random() for _ in range(10)]}
+
+
+
+
+       fasta_batch = [">seq\nATGC"] * BATCH_SIZE
+
+       seqs = [str(SeqIO.read(BytesIO(f.encode()), "fasta").seq) for f in fasta_batch]
+
+       insight['bio'] = seqs[0]
+
+
+
+
+       smi_batch = ["CCO"] * BATCH_SIZE
+
+       fps = self.pool.map(lambda s: Chem.RDKFingerprint(Chem.MolFromSmiles(s)).ToBitString()[:100], smi_batch)
+
+       insight['chem'] = fps[0]
+
+
+
+
+       ra = np.random.uniform(0,360,BATCH_SIZE)
+
+       dec = np.random.uniform(-90,90,BATCH_SIZE)
+
+       coords = SkyCoord(ra=ra*u.degree, dec=dec*u.degree)
+
+       insight['phys'] = str(coords[0])
+

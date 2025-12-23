@@ -1,1 +1,2 @@
-private initW(): number[][] {
+|                                                      ^^^^^^^^ private field
+|

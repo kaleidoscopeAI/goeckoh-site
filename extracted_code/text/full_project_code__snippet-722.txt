@@ -1,0 +1,2 @@
+return CSI + str(mode) + 'J'
+

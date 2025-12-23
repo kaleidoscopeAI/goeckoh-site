@@ -1,0 +1,4 @@
+Headphone-only mode mandatory (Android forces it, desktop assumes private)
+All data local & portable (data/ folder works off USB stick)
+No internet permission required after install
+

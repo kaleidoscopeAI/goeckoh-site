@@ -1,1 +1,2 @@
-* (K_i), (D_i), (\Psi_i): initialize from encoder outputs on initial corpus (randomly seeded if none).
+Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+141/141please [rovide me with the emotional math from our past conversation

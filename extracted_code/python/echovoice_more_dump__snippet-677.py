@@ -1,2 +1,2 @@
-class MatplotlibVisualizer:
-def __init__(self, system_ref):
+from __future__ import annotations
+

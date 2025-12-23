@@ -1,1 +1,1 @@
-def compute_hamiltonian(self):
+def compute_bonds(K, D, Psi, U, roles):

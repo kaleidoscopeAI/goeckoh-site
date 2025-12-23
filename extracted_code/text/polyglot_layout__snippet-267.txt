@@ -1,0 +1,10 @@
+    Keep an Avatar18k engine in memory, update every tick with:
+
+         Inputs: H_bits, S_field, caption_text.
+         Forces: spring→shape, swirl (tension), noise (inverse coherence), damping (stability).
+
+    Stream positions over /avatar as binary:
+         Format: [uint32_le N] + [N*3 float32], positions in [-1,1].
+    Your viewer (the new avatar_client.html) auto-connects and renders.
+    If you keep your existing UI, just ensure it connects to /avatar.
+

@@ -1,2 +1,1 @@
-const nodeIdx = this.reflectionQueue.shift()!;
-const logs = this.reflectionLogs[nodeIdx] || [];
+const weight = mapping[emotionKey];

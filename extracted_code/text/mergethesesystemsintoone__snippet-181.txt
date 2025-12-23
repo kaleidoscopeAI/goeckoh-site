@@ -1,17 +1,14 @@
-class UpgradeConfig:
-    """Configuration for the upgrade process"""
-    target_language: LanguageType
-    strategy: UpgradeStrategy
-    preserve_functionality: bool = True
-    update_dependencies: bool = True
-    fix_vulnerabilities: bool = True
-    improve_performance: bool = True
-    add_tests: bool = True
-    modernize_architecture: bool = True
-    refactor_code: bool = True
-    target_frameworks: List[str] = field(default_factory.list)
-    excluded_paths: List[str] = field(default_factory.list)
-    keep_original: bool = True
-    max_parallel_processes: int = multiprocessing.cpu_count()
-    timeout_seconds: int = 3600  # 1 hour
+sys_p = "You optimize a spring-mesh cube. Reply STRICT JSON only: {\"k_scale\":float, \"rest_scale\":float}."
+user_p = f"Metrics: {metrics}\nReflection: {reflection}\nReturn only JSON."
+try:
+    r = requests.post(f"{OLLAMA_URL}/api/chat",
+                      json={"model": OLLAMA_MODEL, "messages":[{"role":"system","content":sys_p},{"role":"user","content":user_p}], "stream": False},
+                      timeout=8)
+    r.raise_for_status()
+    content = r.json().get("message", {}).get("content", "").strip()
+    data = json.loads(content)
+    if not all(k in data for k in ("k_scale","rest_scale")): raise ValueError("missing keys")
+    return {"ok": True, "adjust": data, "raw": content}
+except Exception as e:
+    return {"ok": False, "adjust": heuristic_adjust(metrics), "error": str(e)}
 

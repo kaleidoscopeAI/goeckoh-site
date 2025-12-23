@@ -1,0 +1,27 @@
+974
+975 -        # Always log telemetry for dashboards, even when fragment is re
+     jected.
+976 -        self._record_telemetry(ts=ts, dur_s=dur_s, rms=rms, frag_score=
+     None, harvested=False, transcript=transcript, corrected=corrected)
+975 +        harvest_ok = (
+976 +            self._harvest_dir is not None
+977 +            and 0.03 <= rms <= 0.95
+978 +            and 1.0 <= dur_s <= 10.0
+979 +        )
+980
+978 -        if self._harvest_dir is None:
+979 -            return
+980 -        if not (0.03 <= rms <= 0.95 and 1.0 <= dur_s <= 10.0):
+981 +        # Log even if we cannot harvest, then exit early.
+982 +        if not harvest_ok:
+983 +            self._record_telemetry(
+984 +                ts=ts,
+985 +                dur_s=dur_s,
+986 +                rms=rms,
+987 +                frag_score=None,
+988 +                harvested=False,
+989 +                transcript=transcript,
+990 +                corrected=corrected,
+991 +            )
+992              return
+

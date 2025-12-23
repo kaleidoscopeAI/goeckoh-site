@@ -1,0 +1,23 @@
+853              playback_sr = int(out_sr) if out_sr else input_sr
+854 +        elif self._use_rust_vc and RUST_VC_AVAILABLE:
+855 +            # Rust voice synthesizer (LPC/PSOLA-lite). Requires referen
+     ce audio.
+856 +            if not (self._reference_wav and self._reference_wav.exists(
+     )):
+857 +                return
+858 +            try:
+859 +                if self._rust_vc is None:
+860 +                    self._rust_vc = VoiceSynthesizerEngine(sample_rate=
+     int(input_sr), lpc_order=self._lpc_order)
+861 +                ref_audio = self._load_reference_audio(sr=input_sr)
+862 +                audio = self._rust_vc.synthesize(text, voice_sample=ref
+     _audio)
+863 +                playback_sr = input_sr
+864 +            except Exception as e:
+865 +                self._log.warning("Rust voice synth failed, falling bac
+     k: %s", e)
+866 +                self._rust_vc = None
+867 +                return
+868          elif self._tts_mode in ("piper", "piper_vc") and self._sherpa_t
+     ts is not None:
+

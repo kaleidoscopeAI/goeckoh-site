@@ -1,2 +1,3 @@
-const mat = new THREE.PointsMaterial({ size: 0.2, color: colorMap(Math.random()), transparent: true, opacity: 0.7 });
-const points = new THREE.Points(geom, mat);
+function makeDeterministicW(nodeCount: number, constructs: string[], seed = 1337): number[][] {
+const M = constructs.length;
+const rnd = mulberry32(seed);

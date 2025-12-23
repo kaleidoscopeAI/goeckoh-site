@@ -1,0 +1,10 @@
+ComplexArray *arr = (ComplexArray*) malloc(sizeof(ComplexArray));
+if (!arr) return NULL;
+arr->n = n;
+// calloc initializes the memory to zero
+arr->data = (double complex*) calloc(n, sizeof(double complex)); 
+if (!arr->data) {
+    free(arr);
+    return NULL;
+}
+return arr;

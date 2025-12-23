@@ -1,5 +1,9 @@
-✅ Real-time psychoacoustic state extraction (<10ms worklet)
-✅ Deterministic Heart physics (Rust/WASM, no NN opacity)  
-✅ Cross-platform (Chrome/iOS Safari, no native app needed)
-✅ Visual metaphor validates corollary discharge timing
-✅ Production-ready (zero allocations, no GC pauses)
+<meta charset="utf-8" />
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1,viewport-fit=cover"
+/>
+```
+<title>Real-Time Voice Bubble</title>
+```
+<link rel="stylesheet" href="./style.css" />

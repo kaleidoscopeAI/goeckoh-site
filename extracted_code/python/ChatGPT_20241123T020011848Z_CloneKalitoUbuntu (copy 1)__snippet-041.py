@@ -1,28 +1,21 @@
-from core_node import Node
+import requests
+from bs4 import BeautifulSoup
 
-class MirroredNetwork:
-    def __init__(self):
-        self.primary_node = Node()
-        self.mirrored_node = Node()
+class WikiCrawler:
+    def __init__(self, topic):
+        self.topic = topic
+        self.base_url = "https://en.wikipedia.org/wiki/"
+        self.data = {}
 
-    def cross_validate(self):
-        """Cross-validate knowledge between nodes."""
-        common_keys = set(self.primary_node.knowledge.keys()) & set(self.mirrored_node.knowledge.keys())
-        unique_primary = set(self.primary_node.knowledge.keys()) - common_keys
-        unique_mirrored = set(self.mirrored_node.knowledge.keys()) - common_keys
-
-        return {
-            "Common Knowledge": len(common_keys),
-            "Primary Unique": len(unique_primary),
-            "Mirrored Unique": len(unique_mirrored)
-        }
-
-    def simulate(self, iterations=50):
-        """Simulate the learning and mirroring process."""
-        for i in range(iterations):
-            self.primary_node.learn({"Topic": f"Data-{i}"})
-            self.mirrored_node.learn({"Topic": f"Data-{i}"})
-            self.primary_node.share_resources(self.mirrored_node)
-            self.mirrored_node.share_resources(self.primary_node)
-            print(self.cross_validate())
+    def fetch_data(self):
+        """Fetch and parse data from Wikipedia."""
+        try:
+            url = self.base_url + self.topic.replace(" ", "_")
+            response = requests.get(url)
+            soup = BeautifulSoup(response.content, "html.parser")
+            paragraphs = soup.find_all("p")
+            self.data = {f"Paragraph-{i}": p.get_text() for i, p in enumerate(paragraphs)}
+        except Exception as e:
+            print(f"Error fetching data: {e}")
+        return self.data
 

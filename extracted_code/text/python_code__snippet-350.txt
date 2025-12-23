@@ -1,0 +1,2 @@
+# dataclass_transform exists in 3.11 but lacks the frozen_default parameter
+dataclass_transform = typing.dataclass_transform

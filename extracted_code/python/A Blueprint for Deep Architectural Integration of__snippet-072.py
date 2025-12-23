@@ -1,1 +1,1 @@
-1. **Basic Crawler:** Implement a simple, polite crawler that fetches data from a predefined whitelist of high-quality sources (e.g., Wikipedia, ArXiv, reputable news APIs).
+2. **LLM-Powered Query Generation:** Integrate the call to `O_LLM` for generating optimal search queries from abstract concepts.

@@ -1,0 +1,16 @@
+                          recorder.stop()
+                          whisper.start()
+                          logVadMetrics()
+                          break
+                      }
+                  }
+
+                  offset += frameSize
+              }
+
+              // Forward full chunk to Whisper
+              whisper.writeBuffer(samples)
+
+              // Collect for prosody
+              val byteArray = ByteArray(samples.size * 2)
+              ByteBuffer.wrap(byteArray).asShortBuffer().put(shortFrame) //

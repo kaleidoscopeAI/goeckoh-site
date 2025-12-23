@@ -1,0 +1,4 @@
+"""Raised when the most up-to-date version of a package is already
+installed."""
+
+

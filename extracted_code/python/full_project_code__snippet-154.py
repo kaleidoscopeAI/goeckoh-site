@@ -1,11 +1,16 @@
-import base64
-import ctypes
-import itertools
-import os
-import re
-import ssl
-import struct
-import tempfile
+from __future__ import absolute_import
 
-from .bindings import CFConst, CoreFoundation, Security
-
+import platform
+from ctypes import (
+    CDLL,
+    CFUNCTYPE,
+    POINTER,
+    c_bool,
+    c_byte,
+    c_char_p,
+    c_int32,
+    c_long,
+    c_size_t,
+    c_uint32,
+    c_ulong,
+    c_void_p,

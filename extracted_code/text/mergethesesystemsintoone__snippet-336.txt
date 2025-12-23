@@ -1,0 +1,26 @@
+"""Updates running statistics based on the processing history."""
+if not self.processing_history:
+    return
+
+successful_tasks = [p for p in self.processing_history if p["success"]]
+if successful_tasks:
+    avg_processing_time = np.mean([p["processing_time"] for p in successful_tasks])
+    avg_input_size = np.mean([p["input_size"] for p in successful_tasks])
+    avg_output_size = np.mean([p["output_size"] for p in successful_tasks])
+    avg_energy_per_task = self.total_energy_consumed / len(successful_tasks) if successful_tasks else 0.0
+    processing_success_rate = len(successful_tasks) / len(self.processing_history)
+else:
+    avg_processing_time = 0.0
+    avg_input_size = 0.0
+    avg_output_size = 0.0
+    avg_energy_per_task = 0.0
+    processing_success_rate = 0.0
+
+self.running_stats.update({
+    "avg_processing_time": avg_processing_time,
+    "avg_input_size": avg_input_size,
+    "avg_output_size": avg_output_size,
+    "avg_energy_per_task": avg_energy_per_task,
+    "processing_success_rate": processing_success_rate,
+})
+

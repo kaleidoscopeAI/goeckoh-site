@@ -1,3 +1,1 @@
-const newLambda = w.reduce((s, x, i) => s + x * v[i], 0);
-const wnorm = Math.hypot(...w) || 1;
-const vNext = w.map(x => x / wnorm);
+Server analysis: the server endpoints let you compute top nodes and export CSVs easily for offline analysis.

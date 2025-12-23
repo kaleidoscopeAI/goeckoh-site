@@ -1,22 +1,10 @@
-    """Generate metadata using mechanisms described in PEP 517.
+"""Wait strategy that waits a random amount of time between min/max."""
 
-    Returns the generated metadata directory.
-    """
-    metadata_tmpdir = TempDirectory(kind="modern-metadata", globally_managed=True)
+def __init__(self, min: _utils.time_unit_type = 0, max: _utils.time_unit_type = 1) -> None:  # noqa
+    self.wait_random_min = _utils.to_seconds(min)
+    self.wait_random_max = _utils.to_seconds(max)
 
-    metadata_dir = metadata_tmpdir.path
-
-    with build_env:
-        # Note that BuildBackendHookCaller implements a fallback for
-        # prepare_metadata_for_build_wheel, so we don't have to
-        # consider the possibility that this hook doesn't exist.
-        runner = runner_with_spinner_message("Preparing metadata (pyproject.toml)")
-        with backend.subprocess_runner(runner):
-            try:
-                distinfo_dir = backend.prepare_metadata_for_build_wheel(metadata_dir)
-            except InstallationSubprocessError as error:
-                raise MetadataGenerationFailed(package_details=details) from error
-
-    return os.path.join(metadata_dir, distinfo_dir)
+def __call__(self, retry_state: "RetryCallState") -> float:
+    return self.wait_random_min + (random.random() * (self.wait_random_max - self.wait_random_min))
 
 

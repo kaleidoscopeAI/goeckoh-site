@@ -1,0 +1,12 @@
+  names = ["avatar_mask.png","mask.png","silhouette.png","face_mask.png","avatar.png","silhouette.jpg","mask.jpg"]
+  for root in search_roots:
+      for n in names:
+          p = root / n
+          if p.exists() and p.is_file():
+              return p
+      # scan subdirs shallow
+      for p in root.rglob("*"):
+          if p.suffix.lower() in [".png",".jpg",".jpeg"] and any(k in p.name.lower() for k in ["mask","avatar","silhouette"]):
+              return p
+  return None
+

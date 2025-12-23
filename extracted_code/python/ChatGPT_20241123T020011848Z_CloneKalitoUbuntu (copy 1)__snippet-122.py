@@ -1,2 +1,2 @@
-Yes id like help creating the packet starting from beginning. Use as much time as you need and remember cover all bases 
+In essence, for a unique, scalable AI model like yours, potential valuations could realistically span from millions to tens of millions—and possibly more with market demand and successful implementation.
 

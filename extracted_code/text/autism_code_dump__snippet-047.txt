@@ -1,0 +1,9 @@
+s = text.strip()
+if not s:
+    return ""
+s = s[0].upper() + s[1:]
+if not s.endswith((".", "!", "?")):
+    s += "."
+return s
+
+

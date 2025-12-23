@@ -1,0 +1,8 @@
+name: str,
+wheel_zip: ZipFile,
+wheel_path: str,
+scheme: Scheme,
+pycompile: bool = True,
+warn_script_location: bool = True,
+direct_url: Optional[DirectUrl] = None,
+requested: bool = False,

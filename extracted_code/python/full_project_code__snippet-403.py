@@ -1,13 +1,6 @@
-import argparse
-import sys
-from typing import Iterable, List, Optional
+import warnings
 
-from .. import __version__
-from ..universaldetector import UniversalDetector
+from pip._vendor import urllib3
 
+from .exceptions import RequestsDependencyWarning
 
-def description_of(
-    lines: Iterable[bytes],
-    name: str = "stdin",
-    minimal: bool = False,
-    should_rename_legacy: bool = False,

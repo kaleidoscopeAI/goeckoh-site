@@ -1,0 +1,3 @@
+status; EchoService now streams mirror telemetry; main UI shows live GCL/mode/latency badges. (mobile/lib/services/
+api_service.dart, mobile/lib/logic/echo_service.dart, mobile/lib/main.dart)
+

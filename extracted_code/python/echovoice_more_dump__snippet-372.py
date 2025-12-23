@@ -1,1 +1,1 @@
-async def process_user_query(self, query_text, query_type="conversational"):
+def llm_reflection(self, embedded_input, context_embeddings, torque):

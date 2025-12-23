@@ -1,2 +1,10 @@
-# <REDACTED: potential secret detected>
+class CERT_CHAIN_POLICY_STATUS(Structure):
+    _fields_ = (
+        ("cbSize", DWORD),
+        ("dwError", DWORD),
+        ("lChainIndex", LONG),
+        ("lElementIndex", LONG),
+        ("pvExtraPolicyStatus", c_void_p),
+    )
+
 

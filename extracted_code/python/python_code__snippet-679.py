@@ -1,19 +1,6 @@
-    def LiteralString(self, params):
-        """Represents an arbitrary literal string.
-
-        Example::
-
-          from pip._vendor.typing_extensions import LiteralString
-
-          def query(sql: LiteralString) -> ...:
-              ...
-
-          query("SELECT * FROM table")  # ok
-          query(f"SELECT * FROM {input()}")  # not ok
-
-        See PEP 675 for details.
-
-        """
-        raise TypeError(f"{self} is not subscriptable")
-
-
+from pip._internal.metadata import BaseDistribution
+from pip._internal.models.link import Link, links_equivalent
+from pip._internal.models.wheel import Wheel
+from pip._internal.req.constructors import (
+    install_req_from_editable,
+    install_req_from_line,

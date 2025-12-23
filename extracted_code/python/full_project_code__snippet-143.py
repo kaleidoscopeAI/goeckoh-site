@@ -1,7 +1,5 @@
-from ..packages.six.moves.urllib.parse import urljoin
-from ..request import RequestMethods
-from ..response import HTTPResponse
-from ..util.retry import Retry
-from ..util.timeout import Timeout
-from . import _appengine_environ
+To use this module, simply import and inject it::
+
+    import pip._vendor.urllib3.contrib.securetransport as securetransport
+    securetransport.inject_into_urllib3()
 

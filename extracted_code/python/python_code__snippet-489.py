@@ -1,4 +1,28 @@
-from .before_sleep import before_sleep_log  # noqa
-from .before_sleep import before_sleep_nothing  # noqa
+class ColorSystem(IntEnum):
+    """One of the 3 color system supported by terminals."""
 
-# Replace a conditional import with a hard-coded None so that pip does
+    STANDARD = 1
+    EIGHT_BIT = 2
+    TRUECOLOR = 3
+    WINDOWS = 4
+
+    def __repr__(self) -> str:
+        return f"ColorSystem.{self.name}"
+
+    def __str__(self) -> str:
+        return repr(self)
+
+
+class ColorType(IntEnum):
+    """Type of color stored in Color class."""
+
+    DEFAULT = 0
+    STANDARD = 1
+    EIGHT_BIT = 2
+    TRUECOLOR = 3
+    WINDOWS = 4
+
+    def __repr__(self) -> str:
+        return f"ColorType.{self.name}"
+
+

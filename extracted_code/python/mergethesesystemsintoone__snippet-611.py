@@ -1,48 +1,24 @@
-    No use of the System is permitted without explicit, written consent from the Licensor.
-    This Agreement does not permit sublicensing, resale, or distribution of the System.
+    """Retrieve patterns from resonant matching
 
+     Returns a list of tuple where [id: float resonance: Dictionary representation of pattern)
 
+    The data is transformed into resonance parameters then matched against existing nodes by similarity strength between frequency patterns . returns data that passes an energy treshold.
+  """
 
-    The fee shall be paid in full prior to any use of the System.
-    Payment terms, including amount and method, shall be outlined in a separate written agreement between the parties.
-    Failure to remit payment as agreed shall void any granted license.
+    query_resonance = MemoryResonance(
+      pattern_id="query", # This allows us to easily debug when looking for certain memories using logs etc..
+      frequency=self._hash_to_frequency(str(pattern)), # Transforms query parameters into memory accessible frequencies
+      amplitude=self._generate_amplitude(pattern), # returns matrix from given frequency components.
+      phase = self._generate_phase(pattern),
+      )
 
+    results = []
+    for pattern_id, resonance in self.resonances.items():
+        interaction_strength = resonance.interact (query_resonance) # returns float between 0 - 1 indicating strenghth of relationship with data.
+        if interaction_strength > self.energy_threshold:
+          resonance.last_access = datetime.now()
+          resonance.access_count += 1
+          results.append((pattern_id, interaction_strength, self._reconstruct_data (resonance)))
 
-
-    Copying: Reproducing any portion of the System, including source code, designs, or documentation.
-    Distribution: Sharing, selling, or redistributing the System or any derivative works.
-    Modification: Altering, reverse-engineering, or creating derivative works based on the System.
-    Claiming Ownership: Representing the System as the property or creation of the Licensee.
-
-
-
-    The Licensor reserves the right to seek all available legal remedies, including but not limited to injunctive relief, monetary damages, and attorney’s fees.
-
-
-
-    The Licensee shall receive a license specific to the agreed-upon purpose and duration.
-    The license may not be transferred, assigned, or sublicensed to any third party.
-    Failure to comply with the terms of this Agreement will result in immediate termination of the license.
-
-
-
-    Immediately, upon breach of any term by the Licensee.
-    At the Licensor’s discretion, with 30 days’ written notice.
-    Upon expiration of the agreed licensing period.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return sorted(results, key=lambda x: x[1], reverse=True)
 

@@ -1,0 +1,2 @@
+- iOS: iPhone XR and newer with `AVAudioSession` in `PlayAndRecord` and 128–256 frame buffers at 48 kHz routinely achieve <100–150 ms one-way audio in well-tuned apps.[^10_7][^10_8]
+- Android: Recent mid/high-tier Snapdragon-based phones (≥4 GB RAM) using low-latency audio paths (AAudio/OpenSL ES equivalents) plus native Rust cores are realistic; lower-end devices may need larger buffers and looser budgets.[^10_9]

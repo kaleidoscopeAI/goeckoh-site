@@ -1,2 +1,0 @@
-This paper argues that the system's impact extends dramatically beyond this initial use case. By creating a closed loop between a user's neurobiology (modeled by the Heart) and an AGI's power (gated by the Heart's metrics), this architecture represents a new class of technology: a Neuro-Acoustic Exocortex.
-

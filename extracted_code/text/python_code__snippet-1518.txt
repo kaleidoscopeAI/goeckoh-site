@@ -1,0 +1,6 @@
+req: InstallRequirement,
+output_dir: str,
+verify: bool,
+build_options: List[str],
+global_options: List[str],
+editable: bool,

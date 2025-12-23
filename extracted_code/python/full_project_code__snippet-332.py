@@ -1,1 +1,4 @@
-    from unittest.mock import MagicMock, Mock, patch
+from .jisfreq import (
+    JIS_CHAR_TO_FREQ_ORDER,
+    JIS_TABLE_SIZE,
+    JIS_TYPICAL_DISTRIBUTION_RATIO,

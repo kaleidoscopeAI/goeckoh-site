@@ -1,0 +1,16 @@
+"""MSYS2 patches distutils and sysconfig to use a UNIX-like scheme.
+
+However, MSYS2 incorrectly patches sysconfig ``nt`` scheme. The fix is
+likely going to be included in their 3.10 release, so we ignore the warning.
+See msys2/MINGW-packages#9319.
+
+MSYS2 MINGW's patch uses lowercase ``"lib"`` instead of the usual uppercase,
+and is missing the final ``"site-packages"``.
+"""
+paths = sysconfig.get_paths("nt", expand=False)
+return all(
+    "Lib" not in p and "lib" in p and not p.endswith("site-packages")
+    for p in (paths[key] for key in ("platlib", "purelib"))
+)
+
+

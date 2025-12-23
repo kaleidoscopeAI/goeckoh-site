@@ -1,0 +1,4 @@
+"""Return the EntryPoint object for `group`+`name`, or ``None``"""
+return get_distribution(dist).get_entry_info(group, name)
+
+

@@ -1,1 +1,13 @@
-# Hebrew. Disjointed from the model probers, the results of the HebrewProber
+def inspect(
+    obj: Any,
+    *,
+    console: Optional["Console"] = None,
+    title: Optional[str] = None,
+    help: bool = False,
+    methods: bool = False,
+    docs: bool = True,
+    private: bool = False,
+    dunder: bool = False,
+    sort: bool = True,
+    all: bool = False,
+    value: bool = True,

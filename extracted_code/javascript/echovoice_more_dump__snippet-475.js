@@ -1,1 +1,2 @@
-const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 2000);
+const db = admin.firestore();
+const app = express();

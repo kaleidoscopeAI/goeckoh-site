@@ -1,1 +1,1 @@
-def temperature(self) -> float:
+def get_phrase_stats(self) -> Dict[str, Any]:

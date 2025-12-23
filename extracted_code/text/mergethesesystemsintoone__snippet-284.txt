@@ -1,0 +1,3 @@
+  print(f"Error in _analyze_textures: {e}")
+  return []
+

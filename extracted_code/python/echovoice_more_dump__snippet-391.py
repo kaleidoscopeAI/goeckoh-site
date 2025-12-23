@@ -1,1 +1,2 @@
-async def _process_command(self, command):
+class OrganicMetrics:
+def __init__(self):

@@ -1,0 +1,5 @@
+2  distributionPath=wrapper/dists
+3 -distributionUrl=https\://services.gradle.org/distributions/gradle-8.3-bin.zip
+3 +distributionUrl=https\://services.gradle.org/distributions/gradle-8.4-bin.zip
+4  zipStoreBase=GRADLE_USER_HOME
+

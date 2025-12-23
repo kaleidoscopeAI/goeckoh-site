@@ -1,0 +1,115 @@
+md_bg_color: 0.05, 0.05, 0.1, 1
+
+MDBoxLayout:
+    orientation: "vertical"
+    padding: 20
+    spacing: 20
+
+    # HEADER
+    MDLabel:
+        text: "NEURO-ACOUSTIC EXOCORTEX"
+        halign: "center"
+        theme_text_color: "Custom"
+        text_color: 0.8, 0.9, 1, 1
+        font_style: "H5"
+        size_hint_y: None
+        height: 60
+
+    # VISUALIZER (THE HEART)
+    MDAnchorLayout:
+        size_hint_y: 1.5
+
+        MDCard:
+            size_hint: None, None
+            size: "250dp", "250dp"
+            radius: [125,]
+            md_bg_color: 0.1, 0.1, 0.15, 1
+            elevation: 4
+
+            MDIcon:
+                icon: "diamond-stone"
+                halign: "center"
+                theme_text_color: "Custom"
+                text_color: app.heart_color
+                font_size: "150sp"
+                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+    # METRICS DISPLAY
+    MDGridLayout:
+        cols: 3
+        size_hint_y: None
+        height: 60
+        spacing: 10
+
+        MDCard:
+            orientation: "vertical"
+            padding: 10
+            md_bg_color: 0.15, 0.15, 0.2, 1
+            MDLabel:
+                text: "GCL"
+                halign: "center"
+                theme_text_color: "Secondary"
+            MDLabel:
+                text: app.gcl_text
+                halign: "center"
+                theme_text_color: "Custom"
+                text_color: app.heart_color
+
+        MDCard:
+            orientation: "vertical"
+            padding: 10
+            md_bg_color: 0.15, 0.15, 0.2, 1
+            MDLabel:
+                text: "STATE"
+                halign: "center"
+                theme_text_color: "Secondary"
+            MDLabel:
+                text: app.state_text
+                halign: "center"
+                bold: True
+
+        MDCard:
+            orientation: "vertical"
+            padding: 10
+            md_bg_color: 0.15, 0.15, 0.2, 1
+            MDLabel:
+                text: "STRESS"
+                halign: "center"
+                theme_text_color: "Secondary"
+            MDLabel:
+                text: app.stress_text
+                halign: "center"
+
+    # RESPONSE TEXT
+    MDCard:
+        size_hint_y: None
+        height: 100
+        padding: 20
+        md_bg_color: 0.1, 0.1, 0.1, 0.5
+        MDLabel:
+            text: app.last_response
+            halign: "center"
+            theme_text_color: "Primary"
+            font_style: "Subtitle1"
+
+    # CONTROLS
+    MDBoxLayout:
+        spacing: 10
+        size_hint_y: None
+        height: 50
+
+        MDTextField:
+            id: input_field
+            hint_text: "Enter thought..."
+            mode: "fill"
+            text_color_normal: 1, 1, 1, 1
+            fill_color_normal: 0.2, 0.2, 0.2, 1
+
+        MDRaisedButton:
+            text: "PROCESS"
+            on_release: app.submit_input(input_field)
+
+        MDFloatingActionButton:
+            icon: "power-standby"
+            md_bg_color: 1, 0, 0, 1
+            on_release: app.trigger_panic()

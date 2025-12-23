@@ -1,33 +1,35 @@
-class KnowledgeDNA:
-    """Complex DNA structure for knowledge representation"""
-    text_patterns: List[PatternStrand] = field(default_factory=list)
-    visual_patterns: List[VisualStrand] = field(default_factory=list)
-    connection_strength: Dict[Tuple[str, str], float] = field(default_factory=dict)
-    mutation_rate: float = 0.01
-    generation: int = 0
+class SystemInfo:
+    """Information about the system to upgrade"""
+    root_path: str
+    system_type: SystemType
+    primary_language: LanguageType
+    other_languages: List[LanguageType] = field(default_factory=list)
+    files: Dict[str, CodeFile] = field(default_factory=dict)
+    dependencies: Dict[str, DependencyInfo] = field(default_factory=dict)
+    entry_points: List[str] = field(default_factory=list)
+    config_files: List[str] = field(default_factory=list)
+    database_info: Dict[str, Any] = field(default_factory=dict)
+    api_endpoints: List[str] = field(default_factory=list)
+    vulnerabilities: List[str] = field(default_factory=list)
+    dependencies_graph: Optional[nx.DiGraph] = None
+    file_count: int = 0
+    code_size: int = 0  # In bytes
     
-    def replicate(self):
-        """Create new DNA strand with possible mutations"""
-        new_dna = KnowledgeDNA(mutation_rate=self.mutation_rate)
-        new_dna.generation = self.generation + 1
-        
-        # Replicate text patterns with possible mutations
-        for pattern in self.text_patterns:
-            new_pattern = PatternStrand(
-                sequence=pattern.sequence.copy(),
-                strength=pattern.strength,
-                adaptation_rate=pattern.adaptation_rate
-            )
-            if np.random.random() < self.mutation_rate:
-                new_pattern.mutate()
-            new_dna.text_patterns.append(new_pattern)
-            
-        # Replicate visual patterns with adaptation
-        for pattern in self.visual_patterns:
-            new_visual = VisualStrand()
-            for key, features in pattern.feature_patterns.items():
-                noise = np.random.normal(0, self.mutation_rate, features.shape)
-                new_visual.feature_patterns[key] = features + noise
-            new_dna.visual_patterns.append(new_visual)
-        
-        return new_dna
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary"""
+        result = {
+            "root_path": self.root_path,
+            "system_type": self.system_type.name,
+            "primary_language": self.primary_language.name,
+            "other_languages": [lang.name for lang in self.other_languages],
+            "entry_points": self.entry_points,
+            "config_files": self.config_files,
+            "database_info": self.database_info,
+            "api_endpoints": self.api_endpoints,
+            "vulnerabilities": self.vulnerabilities,
+            "file_count": self.file_count,
+            "code_size": self.code_size,
+            "dependencies": {k: {"name": v.name, "version": v.version} for k, v in self.dependencies.items()},
+        }
+        return result
+

@@ -1,7 +1,8 @@
-from __future__ import absolute_import
+    class UnsupportedExtension(Exception):
+        pass
 
-import OpenSSL.crypto
-import OpenSSL.SSL
-from cryptography import x509
-from cryptography.hazmat.backends.openssl import backend as openssl_backend
+
+from io import BytesIO
+from socket import error as SocketError
+from socket import timeout
 

@@ -1,1 +1,1 @@
-Smooth animated transitions, export/import JSON, Reset, and Share button.
+1. Replace the deterministic Wconstruct with an online learner that adapts masks from reflection/regret logs (gradient-based; CPU Adam optimizer).

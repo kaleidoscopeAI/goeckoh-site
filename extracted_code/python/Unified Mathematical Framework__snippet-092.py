@@ -1,3 +1,6 @@
-from dataclasses import dataclass
-from pathlib import Path
+Whisper got fine-tuned on dysarthric speech (2024–2025 papers exploding out of Microsoft, Google, and small labs). Accuracy for cerebral palsy, Parkinson’s, ALS jumped from ~30 % to 80-90 % when you train on the right data instead of pretending everyone sounds like a TED Talk.
+AAC (augmentative communication) users are training custom voices on their own atypical speech patterns so the synthesizer sounds like THEM, not some generic “Stephen Hawking 2.0”.
+Stutterers are building “fluency-shaping” models that don’t try to “fix” the stutter in transcription — they preserve it if you want, or smooth it only when YOU ask. Consent-based correction. (Your “correction_echo_enabled” toggle? That’s ethical gold.)
+Autistic-led projects (like Open VoiceOS forks and NeurodivergentAI collectives on Discord) are adding prosody flags: “keep my monotone”, “keep my echolalia”, “don’t normalize my volume swings”.
+Real-time “broken speech” normalization — exactly what your broken_speech_tool.py does — is being used in crisis hotlines so when someone calls mid-panic-attack, rambling, repeating “I-I-I can’t breathe help help”, the operator instantly sees the cleaned intent without the human ever feeling judged.
 

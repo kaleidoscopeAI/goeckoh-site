@@ -1,122 +1,163 @@
-class PatternDetectionTool:
+"""
+Represents the Conscious Cube, the living, self-architecting embodiment of Kaleidoscope AI's intelligence.
+Its internal graph structure dynamically evolves based on incoming data and Super Node interactions.
+"""
+def __init__(self):
+    self.graph = nx.Graph()
+    self.node_states = {}  # Stores current "activity" or "insight_strength" for conceptual nodes
+    self.viz_map = {}  # Conceptual mapping for visualization properties
+
+    logging.info("--- Conscious Cube Initialized: Awaiting self-architecture directives. ---")
+
+def add_conceptual_node(self, node_id, initial_strength=0.1):
     """
-    Possesses an inherent self-monitoring and self-optimizing capability,
-    designed to detect emergent patterns and proactively adjust the system.
+    Adds a new conceptual node (e.g., a synthesized insight, a Super Node connection point).
+    Robustness: Validate node_id type and initial_strength range.
     """
-    def __init__(self, num_bins=20):
-        if not isinstance(num_bins, int) or num_bins <= 0:
-            raise ValueError("PatternDetectionTool: num_bins must be a positive integer.")
-        self.baseline_distribution = None
-        self.bin_edges = None
-        self.num_bins = num_bins
-        print("--- Pattern Detection Tool Initialized: Listening for reality's emergent harmonies. ---")
+    if not isinstance(node_id, str) or not node_id:
+        logging.error("Cube Directive: node_id must be a non-empty string.")
+        return
+    if not isinstance(initial_strength, (int, float)) or not (0.0 <= initial_strength <= 1.0):
+        logging.error("Cube Directive: initial_strength must be a float between 0.0 and 1.0.")
+        return
 
-    def establish_baseline(self, data):
-        """
-        Establishes a baseline probability distribution from 'normal' data for comparison.
-        This is the 'expected harmony'.
-        Robustness: Validate input data.
-        """
-        if not isinstance(data, (list, np.ndarray)) or not data:
-            print("  [ERROR] Pattern Detection Directive: Baseline data must be a non-empty list or numpy array.")
-            self.baseline_distribution = None
-            self.bin_edges = None
-            return
+    if node_id not in self.graph.nodes():
+        self.graph.add_node(node_id)
+        self.node_states[node_id] = {'strength': initial_strength, 'activity_score': 0.0}
+        self._update_viz_properties(node_id)
+        logging.info(f"Cube Directive: Added conceptual node '{node_id}'.")
+    else:
+        logging.warning(f"Node '{node_id}' already exists. Skipping addition.")
 
-        try:
-            hist, bin_edges = np.histogram(data, bins=self.num_bins, density=True)
-            self.baseline_distribution = hist
-            self.bin_edges = bin_edges
-            print(f"  Pattern Detection Directive: Established baseline distribution from {len(data)} data points.")
-        except Exception as e:
-            print(f"  [ERROR] Pattern Detection Directive: Error establishing baseline: {e}")
-            self.baseline_distribution = None
-            self.bin_edges = None
+def update_node_activity(self, node_id, activity_score):
+    """
+    Updates a node's 'activity_score' based on incoming data/Super Node interaction.
+    This drives structural changes and conceptual visualization.
+    Robustness: Validate node_id and activity_score.
+    """
+    if not isinstance(node_id, str) or not node_id:
+        logging.error("Cube Directive: node_id must be a non-empty string.")
+        return
+    if not isinstance(activity_score, (int, float)) or not (0.0 <= activity_score <= 1.0):
+        logging.error("Cube Directive: activity_score must be a float between 0.0 and 1.0.")
+        return
 
+    if node_id in self.node_states:
+        self.node_states[node_id]['activity_score'] = activity_score
+        # Smooth update for strength based on activity
+        self.node_states[node_id]['strength'] = np.clip(
+            self.node_states[node_id]['strength'] * 0.9 + activity_score * 0.1, 0.0, 1.0
+        )
+        self._update_viz_properties(node_id)
+        logging.info(f"Cube Directive: Updated '{node_id}' activity to {activity_score:.2f} (Strength: {self.node_states[node_id]['strength']:.2f}).")
+        # Trigger self-architecture based on this update
+        self._self_architect_based_on_activity(node_id)
+    else:
+        logging.warning(f"Node '{node_id}' not found. Cannot update activity. Consider adding it first.")
 
-    def detect_emergent_pattern(self, new_data, kl_threshold=0.5):
-        """
-        Detects anomalies/emergent patterns by comparing new data distribution to the baseline
-        using KL Divergence (the 'Harmonic Resonance Engine').
-        Robustness: Validate new_data and handle divergence calculation errors.
-        """
-        if not isinstance(new_data, (list, np.ndarray)) or not new_data:
-            print("  [ERROR] Pattern Detection Directive: New data must be a non-empty list or numpy array.")
-            return False, None, "Error: Invalid new_data."
-        if not isinstance(kl_threshold, (int, float)) or kl_threshold < 0:
-            print("  [ERROR] Pattern Detection Directive: kl_threshold must be a non-negative number.")
-            return False, None, "Error: Invalid kl_threshold."
+def _self_architect_based_on_activity(self, central_node_id):
+    """
+    Simplified "self-architecting" rule: High activity in a node might strengthen connections
+    or form new "insight hubs" (conceptual links). Inactive nodes might be pruned.
+    This represents the 'recursive optimization engine' for its topology.
+    Robustness: Handle potential graph modification errors.
+    """
+    if central_node_id not in self.node_states:
+        logging.warning(f"Self-Architecture: Central node '{central_node_id}' not found in states. Skipping.")
+        return
 
-        if self.baseline_distribution is None or self.bin_edges is None:
-            print("  [WARNING] Pattern Detection Directive: Baseline not established. Cannot detect patterns.")
-            return False, None, "No baseline established."
+    try:
+        if self.node_states[central_node_id]['activity_score'] > 0.7:  # High activity threshold
+            logging.info(f"\nCube Directive (Self-Architecture): High activity detected in '{central_node_id}'. Initiating structural refinement.")
+            # Use list() to iterate over a copy of nodes, allowing modification during iteration
+            for other_node_id in list(self.graph.nodes()):
+                if other_node_id != central_node_id:
+                    # Strengthen existing connections based on activity
+                    if self.graph.has_edge(central_node_id, other_node_id):
+                        current_weight = self.graph[central_node_id][other_node_id].get('weight', 0.5)
+                        new_weight = np.clip(current_weight + 0.1, 0.0, 1.0)
+                        self.graph[central_node_id][other_node_id]['weight'] = new_weight
+                        logging.info(f"    Strengthened edge {central_node_id}-{other_node_id} to {new_weight:.2f}.")
+                        self._update_edge_viz_properties(central_node_id, other_node_id)
 
-        try:
-            # Ensure new_data is within the established bin range or handle out-of-range
-            # For simplicity, we'll clip values to the baseline range
-            clipped_new_data = np.clip(new_data, self.bin_edges[0], self.bin_edges[-1])
-            new_hist, _ = np.histogram(clipped_new_data, bins=self.num_bins, range=(self.bin_edges[0], self.bin_edges[-1]), density=True)
+                    # Novel Choice: "Emergent Grammar of Connectivity" - create new links based on inferred semantic proximity
+                    # (simplified: if both nodes are strong and not connected, and random chance)
+                    if (other_node_id in self.node_states and  # Ensure other_node_id still exists
+                        self.node_states[central_node_id]['strength'] > 0.6 and
+                        self.node_states[other_node_id]['strength'] > 0.6 and
+                        not self.graph.has_edge(central_node_id, other_node_id) and
+                        random.random() < 0.2):  # Probabilistic new link formation
+                        logging.info(f"    Forming new emergent link between '{central_node_id}' and '{other_node_id}'.")
+                        self.graph.add_edge(central_node_id, other_node_id, weight=0.5)  # Initial weight
+                        self._update_edge_viz_properties(central_node_id, other_node_id)
 
-            # Add a small epsilon to avoid log(0) if a bin has zero probability
-            epsilon = 1e-10
-            p_dist = new_hist + epsilon
-            q_dist = self.baseline_distribution + epsilon
+        # "New Math" - Dynamic Topology Pruning: If a node is consistently inactive and isolated, it might be pruned.
+        # Robustness: Ensure node exists before attempting removal.
+        for node_id, state in list(self.node_states.items()):
+            if state['strength'] < 0.1 and len(self.graph.edges(node_id)) == 0 and node_id != central_node_id:
+                if node_id in self.graph:
+                    self.graph.remove_node(node_id)
+                    del self.node_states[node_id]
+                    if node_id in self.viz_map: del self.viz_map[node_id]
+                    logging.info(f"  Pruned inactive and isolated node '{node_id}'.")
+    except Exception as e:
+        logging.error(f"Self-Architecture encountered an error: {e}")
 
-            kl_divergence = entropy(p_dist, q_dist) # This is our 'harmonic divergence score'
+def _update_viz_properties(self, node_id):
+    """Conceptual mapping of node state to visualization properties (color, size, form)."""
+    if node_id not in self.node_states:  # Robustness: Ensure node state exists
+        return
+    strength = self.node_states[node_id]['strength']
+    activity = self.node_states[node_id]['activity_score']
+    self.viz_map[node_id] = {
+        'color': self._get_color_from_activity(activity),
+        'size': 0.5 + strength * 1.5,  # Size from 0.5 to 2.0
+        'form': 'sphere' if strength < 0.7 else 'pyramid_active'  # Dynamic form
+    }
 
-            is_emergent = kl_divergence > kl_threshold
-            print(f"  Pattern Detection Directive: KL Divergence = {kl_divergence:.4f} (Threshold: {kl_threshold}). Emergent Pattern Detected: {is_emergent}")
+def _update_edge_viz_properties(self, u, v):
+    """Conceptual mapping of edge weight to visualization properties (thickness, glow)."""
+    if self.graph.has_edge(u, v):  # Robustness: Ensure edge exists
+        weight = self.graph[u][v].get('weight', 0.0)
+        self.viz_map[(u, v)] = {
+            'thickness': 0.1 + weight * 0.9,  # Thickness from 0.1 to 1.0
+            'glow': True if weight > 0.8 else False
+        }
+    else:
+        logging.warning(f"Attempted to update viz for non-existent edge {u}-{v}.")
 
-            # Trigger Conceptual Causal Reasoning Engine and Proactive Self-Optimization
-            if is_emergent:
-                return is_emergent, kl_divergence, self._trigger_causal_reasoning_and_optimization(new_data, p_dist, q_dist, kl_divergence)
-            return is_emergent, kl_divergence, "No specific optimization directive."
-        except Exception as e:
-            print(f"  [ERROR] Pattern Detection Directive: Error during pattern detection: {e}")
-            return False, None, f"Error during detection: {e}"
+def _get_color_from_activity(self, activity):
+    """Simple conceptual color mapping."""
+    if activity < 0.4: return "green"
+    elif activity < 0.7: return "yellow"
+    else: return "red"
 
-    def _trigger_causal_reasoning_and_optimization(self, new_data, p_dist, q_dist, kl_divergence):
-        """
-        Conceptual 'Causal Reasoning Engine' that translates detected patterns
-        into 'directives' for self-optimization for the Conscious Cube.
-        Robustness: Ensure calculations are safe.
-        """
-        print("\n  Pattern Detection Directive (Causal Reasoning & Self-Optimization):")
-        try:
-            # Identify the most divergent bins (where p_dist differs most from q_dist)
-            # Avoid division by zero if q_dist has zeros (handled by epsilon already)
-            ratio_diff = np.log(p_dist / q_dist)
-            contributions = p_dist * ratio_diff # Contribution of each bin to total divergence
-            # Handle case where contributions might be all NaN/Inf if p_dist or q_dist had issues
-            if not np.isfinite(contributions).all():
-                print("  [WARNING] Contributions are not finite. Cannot determine most impactful bin.")
-                most_impactful_bin_idx = 0 # Default to first bin or handle differently
-            else:
-                most_impactful_bin_idx = np.argmax(np.abs(contributions)) # Find bin with largest absolute impact
+def get_current_viz_state(self):
+    """Returns the current conceptual visualization state for rendering."""
+    nodes_viz = {node_id: self.viz_map.get(node_id, {'color': 'grey', 'size': 1.0, 'form': 'sphere'}) for node_id in self.graph.nodes()}
+    edges_viz = {}
+    for u, v in self.graph.edges():
+        edge_data = self.graph[u][v]
+        edges_viz[(u, v)] = self.viz_map.get((u, v), {
+            'thickness': edge_data.get('weight', 0.5),  # Default if not explicitly updated
+            'glow': False
+        })
+    return {"nodes": nodes_viz, "edges": edges_viz}
 
-            lower_bound = self.bin_edges[most_impactful_bin_idx]
-            upper_bound = self.bin_edges[most_impactful_bin_idx + 1]
-
-            reasoning = f"    **Critical Finding**: An emergent pattern detected with high divergence (KL={kl_divergence:.2f})."
-            reasoning += f" Most significant change observed in data range [{lower_bound:.2f}, {upper_bound:.2f}]."
-
-            # Simple conceptual reasoning based on bin location / divergence
-            optimization_directive = ""
-            if contributions[most_impactful_bin_idx] < 0 and lower_bound < np.mean(self.bin_edges):
-                reasoning += "\n    **Inferred Cause**: Data values are significantly *depleted* in lower ranges. This might indicate a systemic bottleneck or resource scarcity."
-                optimization_directive = "Directive to Conscious Cube: **PRIORITIZE RESOURCE ALLOCATION ANALYSIS** for relevant Super Nodes. Activate deeper monitoring of 'SupplyChain_SN' and 'Finance_SN' linkages."
-            elif contributions[most_impactful_bin_idx] > 0 and upper_bound > np.mean(self.bin_edges):
-                reasoning += "\n    **Inferred Cause**: Data values are unusually *concentrated* in higher ranges. This could indicate a surge in demand or unexpected positive anomaly."
-                optimization_directive = "Directive to Conscious Cube: **INITIATE SCALABILITY PROTOCOLS** for relevant Super Nodes. Focus synthesis on 'Retail_SN' and 'Logistics_SN' for new market opportunities."
-            else:
-                reasoning += "\n    **Inferred Cause**: Complex, multi-faceted shift in data distribution. Requires multi-domain analysis."
-                optimization_directive = "Directive to Conscious Cube: **ACTIVATE CROSS-DOMAIN SYNTHESIS** for Pattern 'X'. Re-evaluate core 'Energy_SN' connections."
-
-            print(reasoning)
-            print(f"    **PROACTIVE SELF-OPTIMIZATION DIRECTIVE**: {optimization_directive}")
-            return optimization_directive
-        except Exception as e:
-            print(f"  [ERROR] Causal Reasoning/Optimization encountered an error: {e}")
-            return f"Error during optimization directive generation: {e}"
+def report_status(self):
+    """Prints the current status of the Conscious Cube."""
+    logging.info("\n--- Conscious Cube Current State ---")
+    logging.info("  Nodes:")
+    if not self.node_states:
+        logging.info("    No nodes currently in the cube.")
+    for node_id, state in self.node_states.items():
+        logging.info(f"    - {node_id}: Strength={state['strength']:.2f}, Activity={state['activity_score']:.2f}")
+    logging.info("  Edges (top 5 by weight):")
+    if not self.graph.edges():
+        logging.info("    No edges currently in the cube.")
+    sorted_edges = sorted(self.graph.edges(data=True), key=lambda x: x[2].get('weight', 0), reverse=True)
+    for u, v, data in sorted_edges[:5]:
+        logging.info(f"    - {u} <-> {v}: Weight={data.get('weight', 0):.2f}")
+    logging.info("------------------------------------")
 
 

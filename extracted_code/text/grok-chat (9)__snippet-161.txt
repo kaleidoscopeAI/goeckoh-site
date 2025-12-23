@@ -1,0 +1,7 @@
+232                  gcl=float(self._last_gcl),
+233 +                heart_valence=float(self._heart_valence),
+234 +                heart_arousal=float(self._heart_arousal),
+235 +                heart_coherence=float(self._heart_coherence),
+236                  output_mode=("inner" if (self._inner_voice_enabled and
+     self._last_gcl < self._gcl_lockout) else "normal"),
+

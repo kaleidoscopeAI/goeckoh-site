@@ -1,0 +1,3 @@
+- When the weighted previous curiosity bit plus inputs surpass threshold $\theta$, set $b_{k+1} = 1$, activating crawling.
+- Otherwise, deactivate ($b_{k+1} = 0$).
+

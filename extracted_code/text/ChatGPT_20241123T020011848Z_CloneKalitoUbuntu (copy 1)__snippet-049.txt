@@ -1,2 +1,4 @@
-It appears some demo files are missing. I'll create replacements for the missing scripts and ensure the `EnhancedAdaptiveNode` class includes the necessary methods like `get_state`.
+   - Process experience and update Ni’s Memory
+   - Adjust Ni's Function based on past successes/failures
+   - Optimize Ni’s internal state based on Memory
 

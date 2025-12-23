@@ -1,14 +1,20 @@
-class ReflectionTransformer(nn.Module):
-    def __init__(self, input_dim=16, num_heads=4, hidden_dim=64):
-        super().__init__()
-        self.self_attn = nn.MultiheadAttention(input_dim, num_heads, batch_first=True)
-        self.fc1 = nn.Linear(input_dim, hidden_dim)
-        self.fc2 = nn.Linear(hidden_dim, input_dim)
+print(f"--- Cycle {t+1} ---")
+print(f"System Energy: {ham.energy(state):.4f}")
 
-    def forward(self, x):
-        attn_output, _ = self.self_attn(x, x, x)
-        x = x + attn_output
-        x = F.relu(self.fc1(x))
-        x = self.fc2(x)
-        return x
+# ... (summarize state and get ai_thought from Ollama) ...
+ai_thought = cognitive_engine.reflect_with_ollama(prompt)
+visualizer.update_from_thought(ai_thought)
+
+# 🧠 NEW: Apply cognitive feedback
+# The total dimension of X_bar is node_count * vec_dim
+total_vec_dim = node_count * vec_dim 
+nudge_vector = thought_to_vector(ai_thought, total_vec_dim)
+
+# Apply the nudge to the Hamiltonian's target state
+ham.X_bar += nudge_vector 
+# Normalize to prevent drift
+ham.X_bar /= (np.linalg.norm(ham.X_bar) + 1e-9) 
+
+print("[Cognitive Engine] Feedback applied. Hamiltonian target state has been nudged.")
+time.sleep(1)
 

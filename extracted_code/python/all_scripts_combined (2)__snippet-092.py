@@ -1,61 +1,54 @@
-class BitRegister:
-    def __init__(self, name: str, size: int = 128):
-        self.name = name
-        self.size = size
-        self.bits = np.zeros(size, dtype=np.uint8)
-        self.noise_rate = 2e-6
-        self.lock = Lock()
+class EchoCrystallineHeart(nn.Module):
+    def __init__(self, n_nodes=1024, dim=128, llm_model="llama3.2:1b"):
+        super().__init__()
+        self.n = n_nodes
+        self.emotions = nn.Parameter(torch.zeros(n_nodes, 5)) # arousal, valence, dominance, coherence, resonance
+        self.t = torch.tensor(0.0)
+        self.T0, self.alpha_t = 1.0, 0.01
+        self.llm = LocalLLM(model=llm_model)
 
-    def write_int(self, value: int):
-        with self.lock:
-            for i in range(self.size):
-                self.bits[i] = (value >> i) & 1
+    def temperature(self):
+        return self.T0 / torch.log1p(self.alpha_t * self.t)
 
-    def read_int(self) -> int:
-        with self.lock:
-            if random.random() < self.noise_rate:
-                idx = random.randrange(self.size)
-                self.bits[idx] ^= 1
-            out = 0
-            for i in range(self.size):
-                out |= int(self.bits[i]) << i
-            return out
+    def coherence(self):
+        return 1.0 / (1.0 + self.emotions.std(0).mean().item())
 
-    def set_bit(self, idx: int, val: int):
-        with self.lock:
-            self.bits[idx % self.size] = 1 if val else 0
+    def step(self, audio_stimulus: torch.Tensor, raw_transcript: str, corrected_transcript: str):
+        self.t += 1.0
+        T = self.temperature()
 
-    def get_bit(self, idx: int) -> int:
-        with self.lock:
-            return int(self.bits[idx % self.size])
+        # Emotional ODEs
+        decay = -0.5 * self.emotions
+        noise = torch.randn_like(self.emotions) * T * 0.1
+        diffusion = 0.3 * (self.emotions.mean(0) - self.emotions)
+        dE = audio_stimulus.mean(0) + decay + diffusion + noise
+        self.emotions.data += 0.03 * dE
+        self.emotions.data.clamp_(-10, 10)
 
-    def as_bitstring(self) -> str:
-        with self.lock:
-            return ''.join(str(int(b)) for b in self.bits[::-1])
+        # --- LLM Integration (The Sentience Port) ---
+        mean_state = self.emotions.mean(0)
+        coh = self.coherence()
+        prompt = f"""You are Echo, an inner voice for an autistic person. My current internal state is:
+        - Arousal (Intensity): {mean_state[0]:.2f}/10
+        - Valence (Mood): {mean_state[1]:.2f}/10
+        - Coherence (Clarity): {coh:.2f}
+        I heard them say (raw): "{raw_transcript}"
+        This likely meant (corrected): "{corrected_transcript}"
+        RULES: MUST speak in first-person ("I", "my"). Short, concrete sentences. If arousal is high, be grounding. If valence is low, be gentle.
+        My immediate, inner-voice thought is:"""
 
-class SimulatedHardware:
-    def __init__(self, adc_channels: int = 16):
-        self.cpu_register = BitRegister("CPU_REG", size=256)
-        self.gpio = BitRegister("GPIO", size=64)
-        self.adc = np.zeros(adc_channels, dtype=float)
-        self.temp_C = 35.0
-        self.freq_GHz = 1.2
+        llm_temp = max(0.1, T * 1.5)
+        llm_top_p = 0.9 + 0.1 * (1 - coh)
+        llm_output = self.llm.generate(prompt, llm_temp, llm_top_p)
 
-    def poll_sensors(self):
-        # realistic sensor noise and drift
-        self.adc += np.random.randn(len(self.adc)) * 0.005
-        self.adc = np.clip(self.adc, -5.0, 5.0)
-        self.temp_C += (self.freq_GHz - 1.0) * 0.02 + np.random.randn() * 0.01
+        # Eq 25: Inject LLM thought back into resonance channel
+        embedding = hash_embedding(llm_output, self.n)
+        self.emotions.data[:, 4] += 0.05 * torch.from_numpy(embedding)
 
-    def set_frequency(self, ghz: float):
-        self.freq_GHz = float(max(0.2, min(ghz, 5.0)))
-
-    def as_status(self):
         return {
-            "freq_GHz": round(self.freq_GHz, 3),
-            "temp_C": round(self.temp_C, 3),
-            "cpu_reg": self.cpu_register.as_bitstring(),
-            "gpio": self.gpio.as_bitstring(),
-            "adc": [round(float(x), 4) for x in self.adc.tolist()],
+            "arousal": mean_state[0].item(),
+            "valence": mean_state[1].item(),
+            "temperature": T.item(),
+            "llm_response": llm_output
         }
 

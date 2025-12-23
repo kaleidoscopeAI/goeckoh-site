@@ -1,0 +1,16 @@
+R = core.R
+Q = core.Q
+I_R = np.abs(R)**2
+I_Q = np.abs(Q)**2
+fig, axs = plt.subplots(1,2, figsize=(8,4))
+im0 = axs[0].imshow(I_R, origin='lower', interpolation='nearest')
+axs[0].set_title("|R|^2")
+plt.colorbar(im0, ax=axs[0], fraction=0.046)
+im1 = axs[1].imshow(I_Q, origin='lower', interpolation='nearest')
+axs[1].set_title("|Q|^2")
+plt.colorbar(im1, ax=axs[1], fraction=0.046)
+plt.tight_layout()
+plt.savefig(f"{save_prefix}_heatmaps.png", dpi=200)
+plt.close()
+print("Wrote", f"{save_prefix}_heatmaps.png")
+

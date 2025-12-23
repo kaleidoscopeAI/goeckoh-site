@@ -1,0 +1,2 @@
+  return {"ok": True, "rows": orch.mem.recent(table, limit)}
+

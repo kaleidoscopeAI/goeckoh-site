@@ -1,2 +1,10 @@
-class ImageProcessingUnit(ProcessingUnit):
-def init(self):
+    def _apply_decay(self) -> None:
+
+
+
+
+
+
+
+            
+

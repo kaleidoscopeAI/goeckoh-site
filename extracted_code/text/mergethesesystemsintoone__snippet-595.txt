@@ -1,0 +1,5 @@
+name="Text Analysis",
+func=analyze_text_task,
+args=["Sample text for analysis"],
+priority=TaskPriority.NORMAL,
+estimated_resources={"cpu_percent": 25.0, "memory_percent": 10.0}

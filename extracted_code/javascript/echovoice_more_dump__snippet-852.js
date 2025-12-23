@@ -1,2 +1,1 @@
-const W_DIR = path.join(__dirname, "persisted_w");
-function performRollback(id: string) {
+const s = await Promise.resolve(); // placeholder to allow await if needed

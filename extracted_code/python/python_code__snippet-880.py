@@ -1,96 +1,52 @@
-class LiveRender:
-    """Creates a renderable that may be updated.
+def _(text):
+    return filter(_nonblank, map(str.strip, text.splitlines()))
 
-    Args:
-        renderable (RenderableType): Any renderable object.
-        style (StyleType, optional): An optional style to apply to the renderable. Defaults to "".
+
+def drop_comment(line):
     """
+    Drop comments.
 
-    def __init__(
-        self,
-        renderable: RenderableType,
-        style: StyleType = "",
-        vertical_overflow: VerticalOverflowMethod = "ellipsis",
-    ) -> None:
-        self.renderable = renderable
-        self.style = style
-        self.vertical_overflow = vertical_overflow
-        self._shape: Optional[Tuple[int, int]] = None
+    >>> drop_comment('foo # bar')
+    'foo'
 
-    def set_renderable(self, renderable: RenderableType) -> None:
-        """Set a new renderable.
+    A hash without a space may be in a URL.
 
-        Args:
-            renderable (RenderableType): Any renderable object, including str.
-        """
-        self.renderable = renderable
+    >>> drop_comment('http://example.com/foo#bar')
+    'http://example.com/foo#bar'
+    """
+    return line.partition(" #")[0]
 
-    def position_cursor(self) -> Control:
-        """Get control codes to move cursor to beginning of live render.
 
-        Returns:
-            Control: A control instance that may be printed.
-        """
-        if self._shape is not None:
-            _, height = self._shape
-            return Control(
-                ControlType.CARRIAGE_RETURN,
-                (ControlType.ERASE_IN_LINE, 2),
-                *(
-                    (
-                        (ControlType.CURSOR_UP, 1),
-                        (ControlType.ERASE_IN_LINE, 2),
-                    )
-                    * (height - 1)
-                )
-            )
-        return Control()
+def join_continuation(lines):
+    r"""
+    Join lines continued by a trailing backslash.
 
-    def restore_cursor(self) -> Control:
-        """Get control codes to clear the render and restore the cursor to its previous position.
+    >>> list(join_continuation(['foo \\', 'bar', 'baz']))
+    ['foobar', 'baz']
+    >>> list(join_continuation(['foo \\', 'bar', 'baz']))
+    ['foobar', 'baz']
+    >>> list(join_continuation(['foo \\', 'bar \\', 'baz']))
+    ['foobarbaz']
 
-        Returns:
-            Control: A Control instance that may be printed.
-        """
-        if self._shape is not None:
-            _, height = self._shape
-            return Control(
-                ControlType.CARRIAGE_RETURN,
-                *((ControlType.CURSOR_UP, 1), (ControlType.ERASE_IN_LINE, 2)) * height
-            )
-        return Control()
+    Not sure why, but...
+    The character preceeding the backslash is also elided.
 
-    def __rich_console__(
-        self, console: Console, options: ConsoleOptions
-    ) -> RenderResult:
+    >>> list(join_continuation(['goo\\', 'dly']))
+    ['godly']
 
-        renderable = self.renderable
-        style = console.get_style(self.style)
-        lines = console.render_lines(renderable, options, style=style, pad=False)
-        shape = Segment.get_shape(lines)
+    A terrible idea, but...
+    If no line is available to continue, suppress the lines.
 
-        _, height = shape
-        if height > options.size.height:
-            if self.vertical_overflow == "crop":
-                lines = lines[: options.size.height]
-                shape = Segment.get_shape(lines)
-            elif self.vertical_overflow == "ellipsis":
-                lines = lines[: (options.size.height - 1)]
-                overflow_text = Text(
-                    "...",
-                    overflow="crop",
-                    justify="center",
-                    end="",
-                    style="live.ellipsis",
-                )
-                lines.append(list(console.render(overflow_text)))
-                shape = Segment.get_shape(lines)
-        self._shape = shape
-
-        new_line = Segment.line()
-        for last, line in loop_last(lines):
-            yield from line
-            if not last:
-                yield new_line
+    >>> list(join_continuation(['foo', 'bar\\', 'baz\\']))
+    ['foo']
+    """
+    lines = iter(lines)
+    for item in lines:
+        while item.endswith("\\"):
+            try:
+                item = item[:-2].strip() + next(lines)
+            except StopIteration:
+                return
+        yield item
 
 

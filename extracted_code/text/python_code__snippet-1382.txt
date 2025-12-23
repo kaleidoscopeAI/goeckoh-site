@@ -1,0 +1,3 @@
+return getattr(response, "from_cache", False)
+
+

@@ -1,0 +1,3 @@
+HAS_TTS = False
+print("⚠️  Coqui TTS not found, install: pip install TTS")
+

@@ -1,1 +1,6 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+|                       ^^               --------- this is an iterator with items of type `(&(usize, usize), &{float})`
+|                       |
+|                       expected `usize`, found `&_`
+|
+= note:   expected type `usize`
+        found reference `&_`

@@ -1,0 +1,19 @@
+name: str
+version: str
+location: str
+editable_project_location: Optional[str]
+requires: List[str]
+required_by: List[str]
+installer: str
+metadata_version: str
+classifiers: List[str]
+summary: str
+homepage: str
+project_urls: List[str]
+author: str
+author_email: str
+license: str
+entry_points: List[str]
+files: Optional[List[str]]
+
+

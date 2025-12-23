@@ -1,0 +1,1 @@
+openDBPersistence(); // ensure persistence DB ready

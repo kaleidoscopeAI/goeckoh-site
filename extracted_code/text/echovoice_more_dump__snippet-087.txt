@@ -1,1 +1,14 @@
-package com.kaleidoscope.body
+    A 3D visualization of the crystal lattice using Three.js
+
+    Real-time metrics display with progress bars and numerical values
+
+    Control panel for simulation parameters (sliders for task load, noise, decay, annealing rate)
+
+    Buttons for simulation control (step, auto run, reset, export data)
+
+    Data ingestion buttons (SMILES, web content)
+
+    System information panel with tabs for status, memory, and connections
+
+    Console for logging and interacting with the crystal's consciousness
+

@@ -1,2 +1,2 @@
-const docRef = doc(this.firestore, "actuation", `node_${nodeIdx}_modulators`);
-const payload = {
+const commandEncoder = this.device.createCommandEncoder();
+const pass = commandEncoder.beginComputePass();

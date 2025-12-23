@@ -1,5 +1,23 @@
-def bond_energy(node1, node2):
-    hamming = sum(b1 != b2 for b1, b2 in zip(node1.bits, node2.bits)) / 128
-    dist = sum((p1 - p2)**2 for p1, p2 in zip(node1.position, node2.position))
-    return 0.5 * hamming + 0.5 * dist
+class FinalMergedSystem:
+    def __init__(self):
+        self.heart = CrystallineHeart()
+        self.metrics = AutismMetrics()
+
+    def run(self):
+        while True:
+            input_text = input("Speak: ").strip()
+            if not input_text:
+                continue
+
+            echoed, stimulus = auditory_motor_core(input_text, self.metrics)
+
+            gcl, energy, disorder = self.heart.step(stimulus, input_text)
+
+            core = DeepReasoningCore()
+            response = core.execute(echoed, gcl)
+
+            print(f"[GCL: {gcl:.2f}] [Energy: {energy:.2f}] [Disorder Entropy: {disorder:.2f}]")
+            print(f"[Metrics: Attempts {self.metrics.attempts}, Success {self.metrics.success_rate():.2f}, Streak {self.metrics.streak}]")
+            print(f"[Response]: {response}")
+            time.sleep(1)
 

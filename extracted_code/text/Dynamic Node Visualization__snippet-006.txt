@@ -1,1 +1,0 @@
-  state is updated using a first-order exponential filter modulated by the ingestion learning rate η 

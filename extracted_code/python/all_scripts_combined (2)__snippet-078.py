@@ -1,16 +1,16 @@
-def _interp_to_num_frames(src: np.ndarray, num_frames: int) -> np.ndarray:
-    if src.size == 0:
-        return np.zeros(num_frames, dtype=np.float32)
-    if src.size == num_frames:
-        return src.astype(np.float32)
-    x_old = np.linspace(0.0, 1.0, num=src.size, dtype=np.float32)
-    x_new = np.linspace(0.0, 1.0, num=num_frames, dtype=np.float32)
-    return np.interp(x_new, x_old, src).astype(np.float32)
+class ProsodyProfile:
+    """Container for F0 and energy envelopes."""
+    f0_hz: np.ndarray
+    energy: np.ndarray
+    times_s: np.ndarray
+    frame_length: int
+    hop_length: int
+    sample_rate: int
 
-
-def apply_prosody_to_tts(
-    tts_wav: np.ndarray,
-    tts_sample_rate: int,
-    prosody: ProsodyProfile,
-    strength_pitch: float = 1.0,
-    strength_energy: float = 1.0,
+def extract_prosody(
+    wav: np.ndarray,
+    sample_rate: int,
+    frame_ms: float = 40.0,
+    hop_ms: float = 20.0,
+    fmin_hz: float = 80.0,
+    fmax_hz: float = 600.0,

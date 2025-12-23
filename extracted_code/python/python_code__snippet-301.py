@@ -1,98 +1,98 @@
-    def is_consecutive(c):
-        c_int = ord(c)
-        is_consecutive.prev, prev = c_int, is_consecutive.prev
-        if c_int - prev > 1:
-            is_consecutive.value = next(is_consecutive.counter)
-        return is_consecutive.value
-
-    is_consecutive.prev = 0  # type: ignore [attr-defined]
-    is_consecutive.counter = itertools.count()  # type: ignore [attr-defined]
-    is_consecutive.value = -1  # type: ignore [attr-defined]
-
-    def escape_re_range_char(c):
-        return "\\" + c if c in r"\^-][" else c
-
-    def no_escape_re_range_char(c):
-        return c
-
-    if not re_escape:
-        escape_re_range_char = no_escape_re_range_char
-
-    ret = []
-    s = "".join(sorted(set(s)))
-    if len(s) > 3:
-        for _, chars in itertools.groupby(s, key=is_consecutive):
-            first = last = next(chars)
-            last = collections.deque(
-                itertools.chain(iter([last]), chars), maxlen=1
-            ).pop()
-            if first == last:
-                ret.append(escape_re_range_char(first))
-            else:
-                sep = "" if ord(last) == ord(first) + 1 else "-"
-                ret.append(
-                    f"{escape_re_range_char(first)}{sep}{escape_re_range_char(last)}"
-                )
-    else:
-        ret = [escape_re_range_char(c) for c in s]
-
-    return "".join(ret)
+class LayoutError(Exception):
+    """Layout related error."""
 
 
-def _flatten(ll: list) -> list:
-    ret = []
-    for i in ll:
-        if isinstance(i, list):
-            ret.extend(_flatten(i))
-        else:
-            ret.append(i)
-    return ret
+class NoSplitter(LayoutError):
+    """Requested splitter does not exist."""
 
 
-def _make_synonym_function(compat_name: str, fn: C) -> C:
-    # In a future version, uncomment the code in the internal _inner() functions
-    # to begin emitting DeprecationWarnings.
+class _Placeholder:
+    """An internal renderable used as a Layout placeholder."""
 
-    # Unwrap staticmethod/classmethod
-    fn = getattr(fn, "__func__", fn)
+    highlighter = ReprHighlighter()
 
-    # (Presence of 'self' arg in signature is used by explain_exception() methods, so we take
-    # some extra steps to add it if present in decorated function.)
-    if "self" == list(inspect.signature(fn).parameters)[0]:
+    def __init__(self, layout: "Layout", style: StyleType = "") -> None:
+        self.layout = layout
+        self.style = style
 
-        @wraps(fn)
-        def _inner(self, *args, **kwargs):
-            # warnings.warn(
-            #     f"Deprecated - use {fn.__name__}", DeprecationWarning, stacklevel=3
-            # )
-            return fn(self, *args, **kwargs)
-
-    else:
-
-        @wraps(fn)
-        def _inner(*args, **kwargs):
-            # warnings.warn(
-            #     f"Deprecated - use {fn.__name__}", DeprecationWarning, stacklevel=3
-            # )
-            return fn(*args, **kwargs)
-
-    _inner.__doc__ = f"""Deprecated - use :class:`{fn.__name__}`"""
-    _inner.__name__ = compat_name
-    _inner.__annotations__ = fn.__annotations__
-    if isinstance(fn, types.FunctionType):
-        _inner.__kwdefaults__ = fn.__kwdefaults__
-    elif isinstance(fn, type) and hasattr(fn, "__init__"):
-        _inner.__kwdefaults__ = fn.__init__.__kwdefaults__
-    else:
-        _inner.__kwdefaults__ = None
-    _inner.__qualname__ = fn.__qualname__
-    return cast(C, _inner)
+    def __rich_console__(
+        self, console: Console, options: ConsoleOptions
+    ) -> RenderResult:
+        width = options.max_width
+        height = options.height or options.size.height
+        layout = self.layout
+        title = (
+            f"{layout.name!r} ({width} x {height})"
+            if layout.name
+            else f"({width} x {height})"
+        )
+        yield Panel(
+            Align.center(Pretty(layout), vertical="middle"),
+            style=self.style,
+            title=self.highlighter(title),
+            border_style="blue",
+            height=height,
+        )
 
 
-def replaced_by_pep8(fn: C) -> Callable[[Callable], C]:
-    """
-    Decorator for pre-PEP8 compatibility synonyms, to link them to the new function.
-    """
-    return lambda other: _make_synonym_function(other.__name__, fn)
+class Splitter(ABC):
+    """Base class for a splitter."""
+
+    name: str = ""
+
+    @abstractmethod
+    def get_tree_icon(self) -> str:
+        """Get the icon (emoji) used in layout.tree"""
+
+    @abstractmethod
+    def divide(
+        self, children: Sequence["Layout"], region: Region
+    ) -> Iterable[Tuple["Layout", Region]]:
+        """Divide a region amongst several child layouts.
+
+        Args:
+            children (Sequence(Layout)): A number of child layouts.
+            region (Region): A rectangular region to divide.
+        """
+
+
+class RowSplitter(Splitter):
+    """Split a layout region in to rows."""
+
+    name = "row"
+
+    def get_tree_icon(self) -> str:
+        return "[layout.tree.row]⬌"
+
+    def divide(
+        self, children: Sequence["Layout"], region: Region
+    ) -> Iterable[Tuple["Layout", Region]]:
+        x, y, width, height = region
+        render_widths = ratio_resolve(width, children)
+        offset = 0
+        _Region = Region
+        for child, child_width in zip(children, render_widths):
+            yield child, _Region(x + offset, y, child_width, height)
+            offset += child_width
+
+
+class ColumnSplitter(Splitter):
+    """Split a layout region in to columns."""
+
+    name = "column"
+
+    def get_tree_icon(self) -> str:
+        return "[layout.tree.column]⬍"
+
+    def divide(
+        self, children: Sequence["Layout"], region: Region
+    ) -> Iterable[Tuple["Layout", Region]]:
+        x, y, width, height = region
+        render_heights = ratio_resolve(height, children)
+        offset = 0
+        _Region = Region
+        for child, child_height in zip(children, render_heights):
+            yield child, _Region(x, y + offset, width, child_height)
+            offset += child_height
 
 

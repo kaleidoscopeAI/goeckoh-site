@@ -1,2 +1,0 @@
-    - Send hardware triggers (TTL pulses) from the audio/playback controller to the EEG amplifier at the exact moment buffers are submitted to the audio device.
-    - Alternatively, record a copy of the actual audio output into an auxiliary EEG/physiology channel so the acoustic waveform is time-locked to the EEG clock.

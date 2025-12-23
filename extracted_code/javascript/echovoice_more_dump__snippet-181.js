@@ -1,5 +1,1 @@
-    pub async fn request_approval(&self, action: Action) -> Result<ApprovalResult, ApprovalError> {
-        let approval_id = self.store_action(action).await?;
-        self.notify_human(approval_id).await?;
-        self.wait_for_response(approval_id).await
-    }
+let result = unsafe { set_user_nice(task_ptr, new_nice.clamp(-20, 19)) };

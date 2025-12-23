@@ -1,0 +1,9 @@
+       Start script; within 2–3 seconds /status shows changing tick, sigma, H_bits, S_field.
+
+       Without touching the UI, /recent?table=captions accumulates captions.
+       Opening the viewer shows 18k points connected and moving; captions visibly change motion pattern within ~1–2 cycles.
+       Stopping Ollama does not break the loop or the avatar.
+
+       Setting ALLOW_ONLINE=0 still runs end-to-end.
+
+

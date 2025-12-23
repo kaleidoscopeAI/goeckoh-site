@@ -1,0 +1,7 @@
+score: int = 0
+level: str = "No data yet"
+message: str = (
+    "No behavioural events logged yet. This card will display early warnings as the system runs."
+)
+
+

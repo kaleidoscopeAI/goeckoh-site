@@ -1,2 +1,1 @@
-const docRef = doc(this.firestore, "actuation", "latestProjection");
-const payload = {
+const bindGroup = this.device.createBindGroup({

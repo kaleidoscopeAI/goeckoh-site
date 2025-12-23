@@ -1,0 +1,5 @@
+# Absolute final logic for execution
+system = GoeckohUniversal("assets/reference_voice.wav")
+
+
+

@@ -1,28 +1,10 @@
-class MemoryStore:
-    def __init__(self, path: str, D: int = 512):
-        self.path = path
-        self.D = D
-        self._init()
-
-    def _init(self):
-        con = sqlite3.connect(self.path)
-        cur = con.cursor()
-        # Existing tables
-        # Add evolutionary
-        cur.execute("""CREATE TABLE IF NOT EXISTS evo_states (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            ts REAL, tick INTEGER, dna TEXT, phi REAL, generation INTEGER
-        )""")
-        con.commit()
-        con.close()
-
-    def add_evo_state(self, tick: int, dna: List[float], phi: float, generation: int):
-        con = sqlite3.connect(self.path)
-        cur = con.cursor()
-        cur.execute("INSERT INTO evo_states(ts, tick, dna, phi, generation) VALUES(?,?,?,?,?)",
-                    (time.time(), tick, json.dumps(dna), phi, generation))
-        con.commit()
-        con.close()
-
-    # ... (other methods same)
+def evo():
+    con = sqlite3.connect(DB_PATH)
+    cur = con.cursor()
+    cur.execute("SELECT * FROM evo_states ORDER BY id DESC LIMIT 1")
+    row = cur.fetchone()
+    con.close()
+    if row:
+        return {"dna": json.loads(row[3]), "phi": row[4], "generation": row[5]}
+    return {"dna": [], "phi": 0.0, "generation": 0}
 

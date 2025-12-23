@@ -1,0 +1,6 @@
+Comment out the lines that access missing fields in ChemicalFeatures and AdaptiveCoolingParams.
+
+Change the field access of Metrics to method calls.
+
+For the total field, if there's no method, we might have to use a different value or leave it as 0.
+

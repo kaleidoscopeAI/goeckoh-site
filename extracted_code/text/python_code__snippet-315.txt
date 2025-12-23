@@ -1,0 +1,3 @@
+overload = typing.overload
+get_overloads = typing.get_overloads
+clear_overloads = typing.clear_overloads

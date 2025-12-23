@@ -1,0 +1,1 @@
+_escapedPunc | _escapedHexChar | _escapedOctChar | CharsNotIn(r"\]", exact=1)

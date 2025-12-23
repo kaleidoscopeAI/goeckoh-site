@@ -1,4 +1,19 @@
-from .timeout import Timeout, current_time
-from .url import Url, get_host, parse_url, split_first
-from .wait import wait_for_read, wait_for_write
+    def fsencode(filename):
+        if isinstance(filename, bytes):
+            return filename
+        elif isinstance(filename, text_type):
+            return filename.encode(_fsencoding, _fserrors)
+        else:
+            raise TypeError("expect bytes or str, not %s" %
+                            type(filename).__name__)
+
+    def fsdecode(filename):
+        if isinstance(filename, text_type):
+            return filename
+        elif isinstance(filename, bytes):
+            return filename.decode(_fsencoding, _fserrors)
+        else:
+            raise TypeError("expect bytes or str, not %s" %
+                            type(filename).__name__)
+
 

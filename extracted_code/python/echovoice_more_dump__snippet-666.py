@@ -1,1 +1,8 @@
-def optimize_p(self, S, R, I, P, S_target, lr=0.01, lambda_reg=0.01, max_opt_iter=20):
+class Position:
+    """Position in source code"""
+    line: int
+    column: int
+    
+    def __str__(self) -> str:
+        return f"{self.line}:{self.column}"
+

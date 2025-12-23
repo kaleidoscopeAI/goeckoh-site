@@ -1,0 +1,2 @@
+ Adapts thresholds using overall field to update, frequency and amplitue range limits in current memory.
+"""

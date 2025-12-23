@@ -1,0 +1,3 @@
+- "Contraction Theory for Dynamical Systems," Bullo (KDP, 2023) - comprehensive mathematical treatment.
+- "Geometric Control of Mechanical Systems," Bullo \& Lewis - foundational for control-oriented contraction methods.
+- Recent tutorial articles covering learning stable dynamical systems ([arXiv 2024](https://arxiv.org/pdf/2404.11707v1)).

@@ -1,0 +1,6 @@
+'run': {'type': 'translate', 'speed': 2.0, 'direction': [1, 0, 0]},  # Fast move right
+'jump': {'type': 'pulse', 'intensity': 1.5, 'freq': 5},  # High freq pulse
+'think': {'type': 'rotate', 'speed': 0.5, 'axis': [0, 0, 1]},  # Slow rotate Z
+'chase': {'type': 'attract', 'target': 'next_shape'},  # Move toward next noun
+'grow': {'type': 'scale', 'factor': 1.2},  # Enlarge
+# Add more: 'eat' -> converge, 'sleep' -> slow fade, etc.

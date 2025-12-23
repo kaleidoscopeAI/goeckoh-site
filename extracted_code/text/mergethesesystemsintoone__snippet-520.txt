@@ -1,0 +1,14 @@
+logging.info("Starting the Kaleidoscope AI System")
+
+# Initialize core components
+energy_manager = EnergyManager(total_energy=5000.0)
+node_manager = NodeLifecycleManager()
+cluster_manager
+
+
+
+
+
+
+
+

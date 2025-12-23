@@ -1,0 +1,1 @@
+setattr(Module_six_moves_urllib_error, attr.name, attr)

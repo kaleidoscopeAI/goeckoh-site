@@ -1,0 +1,10 @@
+result: List[str] = []
+for item in version.split("."):
+    match = _prefix_regex.search(item)
+    if match:
+        result.extend(match.groups())
+    else:
+        result.append(item)
+return result
+
+

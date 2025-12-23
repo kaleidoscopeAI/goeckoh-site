@@ -1,64 +1,75 @@
-class EscCharSetProber(CharSetProber):
-    """
-    This CharSetProber uses a "code scheme" approach for detecting encodings,
-    whereby easily recognizable escape or shift sequences are relied on to
-    identify these encodings.
-    """
+class LogRender:
+    def __init__(
+        self,
+        show_time: bool = True,
+        show_level: bool = False,
+        show_path: bool = True,
+        time_format: Union[str, FormatTimeCallable] = "[%x %X]",
+        omit_repeated_times: bool = True,
+        level_width: Optional[int] = 8,
+    ) -> None:
+        self.show_time = show_time
+        self.show_level = show_level
+        self.show_path = show_path
+        self.time_format = time_format
+        self.omit_repeated_times = omit_repeated_times
+        self.level_width = level_width
+        self._last_time: Optional[Text] = None
 
-    def __init__(self, lang_filter: LanguageFilter = LanguageFilter.NONE) -> None:
-        super().__init__(lang_filter=lang_filter)
-        self.coding_sm = []
-        if self.lang_filter & LanguageFilter.CHINESE_SIMPLIFIED:
-            self.coding_sm.append(CodingStateMachine(HZ_SM_MODEL))
-            self.coding_sm.append(CodingStateMachine(ISO2022CN_SM_MODEL))
-        if self.lang_filter & LanguageFilter.JAPANESE:
-            self.coding_sm.append(CodingStateMachine(ISO2022JP_SM_MODEL))
-        if self.lang_filter & LanguageFilter.KOREAN:
-            self.coding_sm.append(CodingStateMachine(ISO2022KR_SM_MODEL))
-        self.active_sm_count = 0
-        self._detected_charset: Optional[str] = None
-        self._detected_language: Optional[str] = None
-        self._state = ProbingState.DETECTING
-        self.reset()
+    def __call__(
+        self,
+        console: "Console",
+        renderables: Iterable["ConsoleRenderable"],
+        log_time: Optional[datetime] = None,
+        time_format: Optional[Union[str, FormatTimeCallable]] = None,
+        level: TextType = "",
+        path: Optional[str] = None,
+        line_no: Optional[int] = None,
+        link_path: Optional[str] = None,
+    ) -> "Table":
+        from .containers import Renderables
+        from .table import Table
 
-    def reset(self) -> None:
-        super().reset()
-        for coding_sm in self.coding_sm:
-            coding_sm.active = True
-            coding_sm.reset()
-        self.active_sm_count = len(self.coding_sm)
-        self._detected_charset = None
-        self._detected_language = None
+        output = Table.grid(padding=(0, 1))
+        output.expand = True
+        if self.show_time:
+            output.add_column(style="log.time")
+        if self.show_level:
+            output.add_column(style="log.level", width=self.level_width)
+        output.add_column(ratio=1, style="log.message", overflow="fold")
+        if self.show_path and path:
+            output.add_column(style="log.path")
+        row: List["RenderableType"] = []
+        if self.show_time:
+            log_time = log_time or console.get_datetime()
+            time_format = time_format or self.time_format
+            if callable(time_format):
+                log_time_display = time_format(log_time)
+            else:
+                log_time_display = Text(log_time.strftime(time_format))
+            if log_time_display == self._last_time and self.omit_repeated_times:
+                row.append(Text(" " * len(log_time_display)))
+            else:
+                row.append(log_time_display)
+                self._last_time = log_time_display
+        if self.show_level:
+            row.append(level)
 
-    @property
-    def charset_name(self) -> Optional[str]:
-        return self._detected_charset
+        row.append(Renderables(renderables))
+        if self.show_path and path:
+            path_text = Text()
+            path_text.append(
+                path, style=f"link file://{link_path}" if link_path else ""
+            )
+            if line_no:
+                path_text.append(":")
+                path_text.append(
+                    f"{line_no}",
+                    style=f"link file://{link_path}#{line_no}" if link_path else "",
+                )
+            row.append(path_text)
 
-    @property
-    def language(self) -> Optional[str]:
-        return self._detected_language
-
-    def get_confidence(self) -> float:
-        return 0.99 if self._detected_charset else 0.00
-
-    def feed(self, byte_str: Union[bytes, bytearray]) -> ProbingState:
-        for c in byte_str:
-            for coding_sm in self.coding_sm:
-                if not coding_sm.active:
-                    continue
-                coding_state = coding_sm.next_state(c)
-                if coding_state == MachineState.ERROR:
-                    coding_sm.active = False
-                    self.active_sm_count -= 1
-                    if self.active_sm_count <= 0:
-                        self._state = ProbingState.NOT_ME
-                        return self.state
-                elif coding_state == MachineState.ITS_ME:
-                    self._state = ProbingState.FOUND_IT
-                    self._detected_charset = coding_sm.get_coding_state_machine()
-                    self._detected_language = coding_sm.language
-                    return self.state
-
-        return self.state
+        output.add_row(*row)
+        return output
 
 

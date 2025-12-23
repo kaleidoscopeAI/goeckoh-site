@@ -1,27 +1,41 @@
-import pytest
-import math
-from goeckoh.heart.logic_core import CrystallineHeart
+"""A hash was needed for a requirement but is absent."""
 
-def test_gcl_stability():
-    heart = CrystallineHeart()
-    
-    # Test 1: Idle state should be stable
-    metrics = heart.compute_metrics()
-    assert metrics.gcl > 0.9
-    assert metrics.mode_label == "FLOW"
+order = 2
+head = (
+    "Hashes are required in --require-hashes mode, but they are "
+    "missing from some requirements. Here is a list of those "
+    "requirements along with the hashes their downloaded archives "
+    "actually had. Add lines like these to your requirements files to "
+    "prevent tampering. (If you did not enable --require-hashes "
+    "manually, note that it turns on automatically when any package "
+    "has a hash.)"
+)
 
-    # Test 2: Meltdown injection
-    # Massively increase lattice energy
-    heart.nodes = [10.0] * 1024
-    metrics = heart.compute_metrics()
-    
-    assert metrics.gcl < 0.2
-    assert metrics.mode_label == "MELTDOWN"
+def __init__(self, gotten_hash: str) -> None:
+    """
+    :param gotten_hash: The hash of the (possibly malicious) archive we
+        just downloaded
+    """
+    self.gotten_hash = gotten_hash
 
-def test_input_normalization():
-    heart = CrystallineHeart()
-    resp, _ = heart.process_input("You are bad")
-    # Ensure semantic mirror works
-    assert "I" in resp
-    assert "bad" in resp
-    assert "You" not in resp.lower()
+def body(self) -> str:
+    # Dodge circular import.
+    from pip._internal.utils.hashes import FAVORITE_HASH
+
+    package = None
+    if self.req:
+        # In the case of URL-based requirements, display the original URL
+        # seen in the requirements file rather than the package name,
+        # so the output can be directly copied into the requirements file.
+        package = (
+            self.req.original_link
+            if self.req.is_direct
+            # In case someone feeds something downright stupid
+            # to InstallRequirement's constructor.
+            else getattr(self.req, "req", None)
+        )
+    return "    {} --hash={}:{}".format(
+        package or "unknown package", FAVORITE_HASH, self.gotten_hash
+    )
+
+

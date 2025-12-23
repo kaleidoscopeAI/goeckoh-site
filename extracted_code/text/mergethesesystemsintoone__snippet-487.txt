@@ -1,0 +1,168 @@
+  image = image.resize((100, 100))\n
+  img_array = np.array(image)\n
+  gray = cv2.cvtColor (img_array, cv2.COLOR_RGB2GRAY)
+
+  # Edge Detection (Sobel)
+  sobel_x = np.array ([[-1,0,1], [-2,0,2], [-1,0,1] ] )
+  sobel_y = np.array([[-1,-2,-1], [0,0,0], [1,2,1] ] )
+
+  edges_x = self._convolve(gray, sobel_x)
+  edges_y = self._convolve (gray, sobel_y)
+  edges = np.sqrt (edges_x**2 + edges_y**2)
+
+   # Threshold
+  threshold = np.mean (edges) + np.std(edges)
+  binary_edges = (edges > threshold).astype (np.uint8) * 255
+ # Contour (simplified)
+  contours = self._find_contours(binary_edges)
+
+  shapes = []
+  for cnt in contours:
+    approx = self._approximate_polygon(cnt, 0.01 * self._calculate_perimeter(cnt))
+    shape_type = {3: "triangle", 4: "rectangle", 5: "pentagon", 6:"hexagon", 10:"star"}.get(len(approx), "circle")
+    if len(approx) == 4:
+          x, y, w, h = cv2.boundingRect(cnt)
+          aspect_ratio = float (w) /h
+          if 0.95 <= aspect_ratio <= 1.05:
+                shape_type = "square"
+    shapes.append( {"type":shape_type , "vertices": len(approx) , "contour": cnt.tolist()}  )
+
+  texture = self._analyze_textures(gray) # basic extraction 
+
+  return { # Structured data output so systems downstream know what it will recieve for more accurate processing logic for edgecases
+    'type': 'visual_pattern',
+     'edges': edges.tolist(),
+     'shapes': shapes,
+      'texture': texture
+ }
+
+def _convolve(self, image: np.ndarray, kernel: np.ndarray) -> np.ndarray:
+    """Performs a 2D convolution operation."""
+    kernel_size = kernel.shape[0]
+    pad = kernel_size // 2
+    output = np.zeros_like(image, dtype=float)
+    padded_image = np.pad(image, pad, mode='constant')
+
+    for i in range(image.shape[0]):
+        for j in range(image.shape[1]):
+            region = padded_image[i:i+kernel_size, j:j+kernel_size]
+            output[i, j] = np.sum(region * kernel)
+    return output
+
+def _find_contours(self, binary_image: np.ndarray) -> List[List[Tuple[int, int]]]:
+     """ simplified border tracing/contour following to simulate find controus. A real implmention would use multiple iterations with optimizations."""
+     contours = []
+     visited = set()
+
+     def dfs (x, y, contour):
+         if (x, y) in visited or not (0 <= x < binary_image.shape[0] and 0 <= y < binary_image.shape [1]) or binary_image [x,y] ==0:
+            return
+         visited.add((x, y))
+         contour.append ((x, y))
+         for dx in [-1, 0 , 1]:
+           for dy in [-1, 0 , 1]:
+             if dx != 0 or dy != 0:
+              dfs (x + dx, y + dy , contour)
+
+     for i in range (binary_image.shape[0]):
+       for j in range (binary_image.shape [1]):
+             if binary_image[i, j] == 255 and (i, j) not in visited:
+                 contour = []
+                 dfs (i, j, contour)
+                 if len(contour) >= 3:  # Minimum edge length for use, removes noise/bad data.
+                       contours.append (contour)
+
+     return contours
+
+def _calculate_perimeter(self, contour: List[Tuple[int, int]]) -> float:
+    """Calculates the perimeter of a contour."""
+    perimeter = 0
+    for i in range(len(contour)):
+      p1 = np.array (contour [i])
+      p2 = np.array (contour[(i + 1) % len (contour)])
+      perimeter += np.linalg.norm (p1-p2)
+    return perimeter
+
+def _approximate_polygon(self, contour: List[Tuple[int, int]], epsilon: float) -> List[Tuple[int, int]]:
+  """Douglas Peucker Algorithm simplified with only basic math/np operations. This improves speed in edge cases if implemented correclty on recursive calls .  Returns subset based on error threshold
+
+  Parameters
+    contour  (List[Tuple [int, int] ]): set of coordinates  creating a edge list/ data
+   epsion float : represents tolerance error
+    """
+  if len(contour) <= 3: # No more calculations possible with small enough list/ points. base case
+    return contour
+
+      #Find distance point furthest from edge connecting points to allow subdivision for a better shape approximation if larger. 
+  dmax = 0 # keep record for index for max separation
+  index = 0  #  index tracker for position to create subsets in next phase
+  for i in range (1, len(contour)-1):
+    distance = self._perpendicular_distance(contour[i], contour[0], contour[-1])
+    if distance > dmax :
+       index = i  # replace index based upon distance, (max edge length to calculate more smaller approximations). 
+       dmax = distance
+
+      # Check that we didn't fail on base conditions or when using previous states. recursively call function for simplification process or output basic list to end processing branch for more modular code base. if max > our limit for tolerance then recursive approach to resolve the most complex curves as sets of basic polygon shapes ( triangles, or quads. ) 
+  if dmax > epsilon :  
+    res1 = self._approximate_polygon (contour [:index+1], epsilon) # get new contours by first half and check .
+    res2 = self._approximate_polygon(contour[index:] , epsilon )  # use recursive method to sub section until base case criteria is met (epsilon / tolerance or base contur of max list values of < 4 points in sequence of xy values )
+
+    results =  res1[: -1] + results2[:-1] # rebuild as list after resursions. removing duplicate mid point using -1 notation
+  else:
+     results= [contour [0] , contour[-1]] # exit condition from recursive structure . use ends in path rather than multiple mid points. 
+  return results  #Return newly approximated vertex
+
+def _perpendicular_distance (self, point, start, end):
+    """Calculates the perpendicular distance from the line connecting points "start" and 'end' and  return scalar """
+
+    x0, y0 = point
+    x1, y1 = start
+    x2, y2 = end
+
+    if x1 == x2 and y1 == y2: # exception and prevents div zero error.  for simple use cases to ensure consistent state. if not a distance
+        return math.hypot(x0 - x1, y0- y1)
+    else:
+        return abs ((x2 - x1) * (y1 - y0) - (x1- x0) * (y2- y1) ) / math.hypot (x2 - x1 , y2 - y1 ) # calculate from perp points of the given curve if they are not a zero line state
+
+def _analyze_textures(self, image: Image.Image) -> List[Dict]:
+   """Calculate basic mean, std-variance , or schaannons entropy on grayscale areas with spatial 3x3 grid implementation. can expand upon
+     param = gray image data for transformation 
+       return dict value that provides metrics information.
+   """
+   try:
+
+    img_array = np.array (image.convert ('L')) # Make it Grayscale
+
+        # Creates a placeholder value for operations
+    patterns = []
+
+    for i in range(1, img_array.shape[0] -1) : # start for boundary conditons avoid reading out of matrix values
+       for j in range(1, img_array.shape [1] -1 ):
+             neighborhood = img_array [i-1 : i+2, j-1:j+2 ] # Creates smaller matrix around pixel under analysis to gather all data points to then perform operations
+
+              # perform calculation (stats of the data matrix) (using np method and conver to type for dict readability and data transfer integrity across system in type )
+              patterns.append({ 
+                              'type' : "texture" , 
+                          'mean' : np.mean(neighborhood).item(),
+                      "variance": np.var(neighborhood).item() , 
+                          "entropy": self._calculate_entropy (neighborhood).item() , # add more operations to get other structural information if needed by downstream tasks
+
+              })
+
+    # Return if operations successfull. with patterns as list object to track state more easily (memory) in other methods (if the types and object structures have been set or are correct.) 
+    return patterns 
+   except Exception as e: # simple catch block incase of errors
+      print(f"Error in _analyze_textures: {e}")
+      return [] # output [] when error present
+
+
+def _calculate_entropy(self, region: np.ndarray) -> float:
+      """Calculates shannons entopy over a specified dataset. used for texture, a method based on image histogram calculations and probabilistic distribution
+     :return number showing information spread in data
+    """
+      hist, _ = np.histogram(region.flatten(), bins=np.arange(257))  # Calculate the normalized histogram
+      probs = hist / (np.sum (hist)  + 1e-6 ) # prevent 0 based issues ( nan from divide by zero on the sums.) 
+      entropy = -np.sum ([p*np.log2(p) for p in probs if p>0] )  # Shannon equation
+
+      return float(entropy) # converted from numpy object into core python number using float so operations are simplified if other parts to access that information .
+

@@ -1,0 +1,11 @@
+path = config.paths.guidance_csv
+if not path.exists():
+    return []
+rows: List[Dict[str, str]] = []
+with path.open("r", newline="") as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+        rows.append(row)
+return rows
+
+

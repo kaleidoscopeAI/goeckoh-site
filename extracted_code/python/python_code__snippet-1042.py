@@ -1,40 +1,74 @@
-def _configure_context(ctx: ssl.SSLContext) -> typing.Iterator[None]:
-    # First, check whether the default locations from OpenSSL
-    # seem like they will give us a usable set of CA certs.
-    # ssl.get_default_verify_paths already takes care of:
-    # - getting cafile from either the SSL_CERT_FILE env var
-    #   or the path configured when OpenSSL was compiled,
-    #   and verifying that that path exists
-    # - getting capath from either the SSL_CERT_DIR env var
-    #   or the path configured when OpenSSL was compiled,
-    #   and verifying that that path exists
-    # In addition we'll check whether capath appears to contain certs.
-    defaults = ssl.get_default_verify_paths()
-    if defaults.cafile or (defaults.capath and _capath_contains_certs(defaults.capath)):
-        ctx.set_default_verify_paths()
-    else:
-        # cafile from OpenSSL doesn't exist
-        # and capath from OpenSSL doesn't contain certs.
-        # Let's search other common locations instead.
-        for cafile in _CA_FILE_CANDIDATES:
-            if os.path.isfile(cafile):
-                ctx.load_verify_locations(cafile=cafile)
-                break
-
-    yield
+def find_links() -> Option:
+    return Option(
+        "-f",
+        "--find-links",
+        dest="find_links",
+        action="append",
+        default=[],
+        metavar="url",
+        help="If a URL or path to an html file, then parse for links to "
+        "archives such as sdist (.tar.gz) or wheel (.whl) files. "
+        "If a local path or file:// URL that's a directory, "
+        "then look for archives in the directory listing. "
+        "Links to VCS project URLs are not supported.",
+    )
 
 
-def _capath_contains_certs(capath: str) -> bool:
-    """Check whether capath exists and contains certs in the expected format."""
-    if not os.path.isdir(capath):
-        return False
-    for name in os.listdir(capath):
-        if _HASHED_CERT_FILENAME_RE.match(name):
-            return True
-    return False
+def trusted_host() -> Option:
+    return Option(
+        "--trusted-host",
+        dest="trusted_hosts",
+        action="append",
+        metavar="HOSTNAME",
+        default=[],
+        help="Mark this host or host:port pair as trusted, even though it "
+        "does not have valid or any HTTPS.",
+    )
 
 
-def _verify_peercerts_impl(
-    ssl_context: ssl.SSLContext,
-    cert_chain: list[bytes],
-    server_hostname: str | None = None,
+def constraints() -> Option:
+    return Option(
+        "-c",
+        "--constraint",
+        dest="constraints",
+        action="append",
+        default=[],
+        metavar="file",
+        help="Constrain versions using the given constraints file. "
+        "This option can be used multiple times.",
+    )
+
+
+def requirements() -> Option:
+    return Option(
+        "-r",
+        "--requirement",
+        dest="requirements",
+        action="append",
+        default=[],
+        metavar="file",
+        help="Install from the given requirements file. "
+        "This option can be used multiple times.",
+    )
+
+
+def editable() -> Option:
+    return Option(
+        "-e",
+        "--editable",
+        dest="editables",
+        action="append",
+        default=[],
+        metavar="path/url",
+        help=(
+            "Install a project in editable mode (i.e. setuptools "
+            '"develop mode") from a local project path or a VCS url.'
+        ),
+    )
+
+
+def _handle_src(option: Option, opt_str: str, value: str, parser: OptionParser) -> None:
+    value = os.path.abspath(value)
+    setattr(parser.values, option.dest, value)
+
+

@@ -1,0 +1,5 @@
+audio_samples: List[np.ndarray],
+sr: int,
+user_id: str,
+output_dir: str,
+speaker_embedding: np.ndarray,

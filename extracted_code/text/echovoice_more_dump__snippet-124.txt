@@ -1,1 +1,1 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+1. npm install firebase (or firebase-admin + adapt init if using admin SDK).

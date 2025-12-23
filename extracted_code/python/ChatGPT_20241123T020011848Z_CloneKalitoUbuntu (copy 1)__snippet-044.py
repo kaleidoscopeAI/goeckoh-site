@@ -1,25 +1,29 @@
-import matplotlib.pyplot as plt
+from core_node import Node
 
-class DynamicVisualization:
+class NodeReplication:
     def __init__(self):
-        self.fig, self.axs = plt.subplots(3, 1, figsize=(8, 12))
+        self.nodes = [Node()]
 
-    def update(self, epochs, population, maturity, energy):
-        """Update real-time graphs."""
-        self.axs[0].clear()
-        self.axs[0].plot(epochs, population, label="Population")
-        self.axs[0].set_title("Population Growth")
-        self.axs[0].legend()
+    def replicate_node(self, parent_node):
+        """Replicate a node based on maturity threshold."""
+        if parent_node.maturity > 1.0 and parent_node.energy > 0.5:
+            child_node = Node()
+            child_node.generation = parent_node.generation + 1
+            child_node.knowledge = parent_node.knowledge.copy()  # Inherit knowledge
+            child_node.energy = parent_node.energy * 0.5  # Share energy
+            parent_node.energy *= 0.5  # Retain half energy
+            self.nodes.append(child_node)
+            return child_node
+        return None
 
-        self.axs[1].clear()
-        self.axs[1].plot(epochs, maturity, label="Average Maturity", color="orange")
-        self.axs[1].set_title("Maturity Over Time")
-        self.axs[1].legend()
+    def manage_replication(self):
+        """Iterate through nodes and manage replication."""
+        for node in self.nodes:
+            self.replicate_node(node)
 
-        self.axs[2].clear()
-        self.axs[2].plot(epochs, energy, label="Energy Levels", color="green")
-        self.axs[2].set_title("Energy Usage")
-        self.axs[2].legend()
-
-        plt.pause(0.1)
+    def get_status(self):
+        return {
+            "Total Nodes": len(self.nodes),
+            "Generations": len(set(node.generation for node in self.nodes))
+        }
 

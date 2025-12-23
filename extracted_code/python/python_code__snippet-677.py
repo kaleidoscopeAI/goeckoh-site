@@ -1,45 +1,168 @@
-    def TypeGuard(self, parameters):
-        """Special typing form used to annotate the return type of a user-defined
-        type guard function.  ``TypeGuard`` only accepts a single type argument.
-        At runtime, functions marked this way should return a boolean.
+from pip._vendor.packaging.specifiers import SpecifierSet
+from pip._vendor.packaging.utils import NormalizedName, canonicalize_name
 
-        ``TypeGuard`` aims to benefit *type narrowing* -- a technique used by static
-        type checkers to determine a more precise type of an expression within a
-        program's code flow.  Usually type narrowing is done by analyzing
-        conditional code flow and applying the narrowing to a block of code.  The
-        conditional expression here is sometimes referred to as a "type guard".
+from pip._internal.req.constructors import install_req_drop_extras
+from pip._internal.req.req_install import InstallRequirement
 
-        Sometimes it would be convenient to use a user-defined boolean function
-        as a type guard.  Such a function should use ``TypeGuard[...]`` as its
-        return type to alert static type checkers to this intention.
+from .base import Candidate, CandidateLookup, Requirement, format_name
 
-        Using  ``-> TypeGuard`` tells the static type checker that for a given
-        function:
 
-        1. The return value is a boolean.
-        2. If the return value is ``True``, the type of its argument
-        is the type inside ``TypeGuard``.
+class ExplicitRequirement(Requirement):
+    def __init__(self, candidate: Candidate) -> None:
+        self.candidate = candidate
 
-        For example::
+    def __str__(self) -> str:
+        return str(self.candidate)
 
-            def is_str(val: Union[str, float]):
-                # "isinstance" type guard
-                if isinstance(val, str):
-                    # Type of ``val`` is narrowed to ``str``
-                    ...
-                else:
-                    # Else, type of ``val`` is narrowed to ``float``.
-                    ...
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({self.candidate!r})"
 
-        Strict type narrowing is not enforced -- ``TypeB`` need not be a narrower
-        form of ``TypeA`` (it can even be a wider form) and this may lead to
-        type-unsafe results.  The main reason is to allow for things like
-        narrowing ``List[object]`` to ``List[str]`` even though the latter is not
-        a subtype of the former, since ``List`` is invariant.  The responsibility of
-        writing type-safe type guards is left to the user.
+    @property
+    def project_name(self) -> NormalizedName:
+        # No need to canonicalize - the candidate did this
+        return self.candidate.project_name
 
-        ``TypeGuard`` also works with type variables.  For more information, see
-        PEP 647 (User-Defined Type Guards).
-        """
-        item = typing._type_check(parameters, f'{self} accepts only a single type.')
-        return typing._GenericAlias(self, (item,))
+    @property
+    def name(self) -> str:
+        # No need to canonicalize - the candidate did this
+        return self.candidate.name
+
+    def format_for_error(self) -> str:
+        return self.candidate.format_for_error()
+
+    def get_candidate_lookup(self) -> CandidateLookup:
+        return self.candidate, None
+
+    def is_satisfied_by(self, candidate: Candidate) -> bool:
+        return candidate == self.candidate
+
+
+class SpecifierRequirement(Requirement):
+    def __init__(self, ireq: InstallRequirement) -> None:
+        assert ireq.link is None, "This is a link, not a specifier"
+        self._ireq = ireq
+        self._extras = frozenset(canonicalize_name(e) for e in self._ireq.extras)
+
+    def __str__(self) -> str:
+        return str(self._ireq.req)
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({str(self._ireq.req)!r})"
+
+    @property
+    def project_name(self) -> NormalizedName:
+        assert self._ireq.req, "Specifier-backed ireq is always PEP 508"
+        return canonicalize_name(self._ireq.req.name)
+
+    @property
+    def name(self) -> str:
+        return format_name(self.project_name, self._extras)
+
+    def format_for_error(self) -> str:
+        # Convert comma-separated specifiers into "A, B, ..., F and G"
+        # This makes the specifier a bit more "human readable", without
+        # risking a change in meaning. (Hopefully! Not all edge cases have
+        # been checked)
+        parts = [s.strip() for s in str(self).split(",")]
+        if len(parts) == 0:
+            return ""
+        elif len(parts) == 1:
+            return parts[0]
+
+        return ", ".join(parts[:-1]) + " and " + parts[-1]
+
+    def get_candidate_lookup(self) -> CandidateLookup:
+        return None, self._ireq
+
+    def is_satisfied_by(self, candidate: Candidate) -> bool:
+        assert candidate.name == self.name, (
+            f"Internal issue: Candidate is not for this requirement "
+            f"{candidate.name} vs {self.name}"
+        )
+        # We can safely always allow prereleases here since PackageFinder
+        # already implements the prerelease logic, and would have filtered out
+        # prerelease candidates if the user does not expect them.
+        assert self._ireq.req, "Specifier-backed ireq is always PEP 508"
+        spec = self._ireq.req.specifier
+        return spec.contains(candidate.version, prereleases=True)
+
+
+class SpecifierWithoutExtrasRequirement(SpecifierRequirement):
+    """
+    Requirement backed by an install requirement on a base package.
+    Trims extras from its install requirement if there are any.
+    """
+
+    def __init__(self, ireq: InstallRequirement) -> None:
+        assert ireq.link is None, "This is a link, not a specifier"
+        self._ireq = install_req_drop_extras(ireq)
+        self._extras = frozenset(canonicalize_name(e) for e in self._ireq.extras)
+
+
+class RequiresPythonRequirement(Requirement):
+    """A requirement representing Requires-Python metadata."""
+
+    def __init__(self, specifier: SpecifierSet, match: Candidate) -> None:
+        self.specifier = specifier
+        self._candidate = match
+
+    def __str__(self) -> str:
+        return f"Python {self.specifier}"
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({str(self.specifier)!r})"
+
+    @property
+    def project_name(self) -> NormalizedName:
+        return self._candidate.project_name
+
+    @property
+    def name(self) -> str:
+        return self._candidate.name
+
+    def format_for_error(self) -> str:
+        return str(self)
+
+    def get_candidate_lookup(self) -> CandidateLookup:
+        if self.specifier.contains(self._candidate.version, prereleases=True):
+            return self._candidate, None
+        return None, None
+
+    def is_satisfied_by(self, candidate: Candidate) -> bool:
+        assert candidate.name == self._candidate.name, "Not Python candidate"
+        # We can safely always allow prereleases here since PackageFinder
+        # already implements the prerelease logic, and would have filtered out
+        # prerelease candidates if the user does not expect them.
+        return self.specifier.contains(candidate.version, prereleases=True)
+
+
+class UnsatisfiableRequirement(Requirement):
+    """A requirement that cannot be satisfied."""
+
+    def __init__(self, name: NormalizedName) -> None:
+        self._name = name
+
+    def __str__(self) -> str:
+        return f"{self._name} (unavailable)"
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({str(self._name)!r})"
+
+    @property
+    def project_name(self) -> NormalizedName:
+        return self._name
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    def format_for_error(self) -> str:
+        return str(self)
+
+    def get_candidate_lookup(self) -> CandidateLookup:
+        return None, None
+
+    def is_satisfied_by(self, candidate: Candidate) -> bool:
+        return False
+
+

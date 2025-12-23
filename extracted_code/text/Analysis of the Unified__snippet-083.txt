@@ -1,0 +1,8 @@
+"""
+R shape (dS, dA) -> psi = vec(R) shape (n,1) with n=dS*dA
+-> rho = psi psi^†
+"""
+psi = R.reshape(-1,1)
+rho = psi @ psi.conj().T
+return rho
+

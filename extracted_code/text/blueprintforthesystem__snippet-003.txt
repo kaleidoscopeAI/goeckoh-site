@@ -1,0 +1,1 @@
+ to run entirely on-device, ensuring no personal data is ever sent to the cloud.

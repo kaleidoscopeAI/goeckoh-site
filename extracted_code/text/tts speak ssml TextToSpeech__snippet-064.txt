@@ -1,0 +1,4 @@
+              recognizer.acceptWaveForm(shortBuffer, read / 2)
+              val energy = calculateRMS(shortBuffer)
+              if (energy < 0.01) { // Silence threshold
+                  if (silenceStart == 0L) silenceStart =

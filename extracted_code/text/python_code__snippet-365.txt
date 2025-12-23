@@ -1,0 +1,7 @@
+id: str
+version: str
+version_parts: VersionDict
+like: str
+codename: str
+
+

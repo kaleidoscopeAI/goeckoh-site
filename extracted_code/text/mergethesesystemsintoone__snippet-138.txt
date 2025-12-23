@@ -1,1 +1,3 @@
-Fix: Create a class with a queue and consumer registration (e.g., using queue.Queue or asyncio).
+system = UnifiedSystem()
+result = system.run("Sample view", "node1", "Sample data", "Sample input")
+print(result)

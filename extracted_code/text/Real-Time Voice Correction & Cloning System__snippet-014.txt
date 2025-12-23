@@ -1,0 +1,4 @@
+asr_session: Session<'static>,
+tts_session: Session<'static>,
+vad: Vad,
+fft_planner: FftPlanner<f32>,

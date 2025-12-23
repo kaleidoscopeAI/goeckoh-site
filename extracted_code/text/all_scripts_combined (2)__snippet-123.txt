@@ -1,0 +1,7 @@
+print("Starting realtime speech companion. Press Ctrl+C to exit.")
+try:
+    asyncio.run(loop.run())
+except KeyboardInterrupt:
+    print("Stopped.")
+
+

@@ -1,0 +1,5 @@
+'name'
+… +6 lines
+WARNING: Skipping /home/jacob/.local/lib/python3.12/site-packages/hpack-4.1.0.dist-info due to invalid metadata entry 'name'
+WARNING: Skipping /usr/lib/python3.12/dist-packages/pybind11-2.11.1.dist-info due to invalid metadata entry 'name'
+

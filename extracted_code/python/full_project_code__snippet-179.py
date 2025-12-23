@@ -1,69 +1,151 @@
-class DeflateDecoder(object):
-    def __init__(self):
-        self._first_try = True
-        self._data = b""
-        self._obj = zlib.decompressobj()
+class RequestField(object):
+    """
+    A data container for request body parameters.
 
-    def __getattr__(self, name):
-        return getattr(self._obj, name)
+    :param name:
+        The name of this request field. Must be unicode.
+    :param data:
+        The data/value body.
+    :param filename:
+        An optional filename of the request field. Must be unicode.
+    :param headers:
+        An optional dict-like object of headers to initially use for the field.
+    :param header_formatter:
+        An optional callable that is used to encode and format the headers. By
+        default, this is :func:`format_header_param_html5`.
+    """
 
-    def decompress(self, data):
-        if not data:
-            return data
+    def __init__(
+        self,
+        name,
+        data,
+        filename=None,
+        headers=None,
+        header_formatter=format_header_param_html5,
+    ):
+        self._name = name
+        self._filename = filename
+        self.data = data
+        self.headers = {}
+        if headers:
+            self.headers = dict(headers)
+        self.header_formatter = header_formatter
 
-        if not self._first_try:
-            return self._obj.decompress(data)
+    @classmethod
+    def from_tuples(cls, fieldname, value, header_formatter=format_header_param_html5):
+        """
+        A :class:`~urllib3.fields.RequestField` factory from old-style tuple parameters.
 
-        self._data += data
-        try:
-            decompressed = self._obj.decompress(data)
-            if decompressed:
-                self._first_try = False
-                self._data = None
-            return decompressed
-        except zlib.error:
-            self._first_try = False
-            self._obj = zlib.decompressobj(-zlib.MAX_WBITS)
-            try:
-                return self.decompress(self._data)
-            finally:
-                self._data = None
+        Supports constructing :class:`~urllib3.fields.RequestField` from
+        parameter of key/value strings AND key/filetuple. A filetuple is a
+        (filename, data, MIME type) tuple where the MIME type is optional.
+        For example::
 
+            'foo': 'bar',
+            'fakefile': ('foofile.txt', 'contents of foofile'),
+            'realfile': ('barfile.txt', open('realfile').read()),
+            'typedfile': ('bazfile.bin', open('bazfile').read(), 'image/jpeg'),
+            'nonamefile': 'contents of nonamefile field',
 
-class GzipDecoderState(object):
+        Field names and filenames must be unicode.
+        """
+        if isinstance(value, tuple):
+            if len(value) == 3:
+                filename, data, content_type = value
+            else:
+                filename, data = value
+                content_type = guess_content_type(filename)
+        else:
+            filename = None
+            content_type = None
+            data = value
 
-    FIRST_MEMBER = 0
-    OTHER_MEMBERS = 1
-    SWALLOW_DATA = 2
+        request_param = cls(
+            fieldname, data, filename=filename, header_formatter=header_formatter
+        )
+        request_param.make_multipart(content_type=content_type)
 
+        return request_param
 
-class GzipDecoder(object):
-    def __init__(self):
-        self._obj = zlib.decompressobj(16 + zlib.MAX_WBITS)
-        self._state = GzipDecoderState.FIRST_MEMBER
+    def _render_part(self, name, value):
+        """
+        Overridable helper function to format a single header parameter. By
+        default, this calls ``self.header_formatter``.
 
-    def __getattr__(self, name):
-        return getattr(self._obj, name)
+        :param name:
+            The name of the parameter, a string expected to be ASCII only.
+        :param value:
+            The value of the parameter, provided as a unicode string.
+        """
 
-    def decompress(self, data):
-        ret = bytearray()
-        if self._state == GzipDecoderState.SWALLOW_DATA or not data:
-            return bytes(ret)
-        while True:
-            try:
-                ret += self._obj.decompress(data)
-            except zlib.error:
-                previous_state = self._state
-                # Ignore data after the first error
-                self._state = GzipDecoderState.SWALLOW_DATA
-                if previous_state == GzipDecoderState.OTHER_MEMBERS:
-                    # Allow trailing garbage acceptable in other gzip clients
-                    return bytes(ret)
-                raise
-            data = self._obj.unused_data
-            if not data:
-                return bytes(ret)
-            self._state = GzipDecoderState.OTHER_MEMBERS
-            self._obj = zlib.decompressobj(16 + zlib.MAX_WBITS)
+        return self.header_formatter(name, value)
+
+    def _render_parts(self, header_parts):
+        """
+        Helper function to format and quote a single header.
+
+        Useful for single headers that are composed of multiple items. E.g.,
+        'Content-Disposition' fields.
+
+        :param header_parts:
+            A sequence of (k, v) tuples or a :class:`dict` of (k, v) to format
+            as `k1="v1"; k2="v2"; ...`.
+        """
+        parts = []
+        iterable = header_parts
+        if isinstance(header_parts, dict):
+            iterable = header_parts.items()
+
+        for name, value in iterable:
+            if value is not None:
+                parts.append(self._render_part(name, value))
+
+        return u"; ".join(parts)
+
+    def render_headers(self):
+        """
+        Renders the headers for this request field.
+        """
+        lines = []
+
+        sort_keys = ["Content-Disposition", "Content-Type", "Content-Location"]
+        for sort_key in sort_keys:
+            if self.headers.get(sort_key, False):
+                lines.append(u"%s: %s" % (sort_key, self.headers[sort_key]))
+
+        for header_name, header_value in self.headers.items():
+            if header_name not in sort_keys:
+                if header_value:
+                    lines.append(u"%s: %s" % (header_name, header_value))
+
+        lines.append(u"\r\n")
+        return u"\r\n".join(lines)
+
+    def make_multipart(
+        self, content_disposition=None, content_type=None, content_location=None
+    ):
+        """
+        Makes this request field into a multipart request field.
+
+        This method overrides "Content-Disposition", "Content-Type" and
+        "Content-Location" headers to the request parameter.
+
+        :param content_type:
+            The 'Content-Type' of the request body.
+        :param content_location:
+            The 'Content-Location' of the request body.
+
+        """
+        self.headers["Content-Disposition"] = content_disposition or u"form-data"
+        self.headers["Content-Disposition"] += u"; ".join(
+            [
+                u"",
+                self._render_parts(
+                    ((u"name", self._name), (u"filename", self._filename))
+                ),
+            ]
+        )
+        self.headers["Content-Type"] = content_type
+        self.headers["Content-Location"] = content_location
 
 

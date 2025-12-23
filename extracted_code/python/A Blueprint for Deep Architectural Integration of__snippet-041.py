@@ -1,2 +1,2 @@
-At each level, data morphs from raw binary states to complex vector embeddings, to nonlinear transforms, and back into the global integrated system state, producing a rich, robust, and mathematically coherent cognitive substrate.
+- **Path Counting**: The number of directed paths of length \$ k \$ from engine \$ i \$ to engine \$ j \$ is given by the \$ (i,j)^{th} \$ entry of the matrix power \$ R^k \$:
 

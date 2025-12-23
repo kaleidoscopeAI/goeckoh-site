@@ -1,1 +1,2 @@
-export const DEFAULT_EMOTIONS = [
+for (const c of constructs) {
+const sp = spritesRef.current[c.id];

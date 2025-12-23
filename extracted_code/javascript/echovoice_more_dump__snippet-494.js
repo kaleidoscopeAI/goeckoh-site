@@ -1,3 +1,1 @@
-const width = mountRef.current?.clientWidth ?? window.innerWidth;
-const height = mountRef.current?.clientHeight ?? window.innerHeight;
-const scene = new THREE.Scene();
+export default function EmotionalDial({ value, emotions = DEFAULT_EMOTIONS, onChange, onApply }: Props) {

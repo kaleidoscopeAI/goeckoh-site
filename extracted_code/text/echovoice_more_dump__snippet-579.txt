@@ -1,0 +1,4 @@
+position: THREE.Vector3;
+color: THREE.Color;
+intensity?: number;
+connections?: number[];

@@ -1,0 +1,6 @@
+Scale and Performance: Renders 50,000+ nodes without lag using React, Three.js, and a Web Worker.
+
+Decoupling: Renders and physics are decoupled via Shared Buffers. This results in Zero main-thread load, ensuring the core cognitive simulation runs unencumbered.
+
+Deterministic Analysis: The CPU-friendly, decoupled nature allows the user to freeze, replay, and sample the full state for rigorous scientific computation.
+

@@ -1,1 +1,7 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+build: ./server
+ports:
+  - "4000:4000"
+environment:
+  - OLLAMA_URL=http://ollama:11434
+  - OLLAMA_MODEL=llama2
+  - SPEC_WORKER_URL=http://spec_worker:5001

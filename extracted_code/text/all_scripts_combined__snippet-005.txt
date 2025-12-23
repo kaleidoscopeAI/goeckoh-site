@@ -1,8 +1,0 @@
-class AbaProgress:
-    """Tracks progress per skill."""
-    attempts: int = 0
-    successes: int = 0
-    last_attempt_ts: float = 0.0
-    current_level: int = 1  # 1: Basic prompt, 2: Partial, 3: Independent
-
-

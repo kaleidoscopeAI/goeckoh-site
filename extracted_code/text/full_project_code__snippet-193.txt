@@ -1,0 +1,9 @@
+_meth_func = "im_func"
+_meth_self = "im_self"
+
+_func_closure = "func_closure"
+_func_code = "func_code"
+_func_defaults = "func_defaults"
+_func_globals = "func_globals"
+
+

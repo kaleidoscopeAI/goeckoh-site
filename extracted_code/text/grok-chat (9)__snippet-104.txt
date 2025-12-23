@@ -1,0 +1,5 @@
+1311                  "latency_ms": float(self._last_latency_ms),
+1312 +                "playback_latency_ms": float(self._last_playback_laten
+      cy_ms),
+1313                  "harvested": bool(harvested),
+

@@ -1,0 +1,6 @@
+- Configure the stream with a fixed buffer size (e.g., 128 or 256 frames) and sample rate.
+- Pre-allocate:
+    - Input/output ring buffers or SPSC queues,
+    - Lattice/physics state arrays,
+    - DSP filter state (IIR/FIR coefficients, delay lines),
+    - Any temporary work buffers.

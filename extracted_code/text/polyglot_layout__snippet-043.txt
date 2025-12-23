@@ -1,0 +1,17 @@
+  weave.py — the supervisor/runner
+
+  requirements.txt — minimal Python libs for the supervisor (none heavy)
+
+  src/cpp/agi.cpp — C++ worker
+
+  src/php/agi.php — PHP worker
+
+  src/js/agi.js — Node.js worker
+
+  src/ts/agi.ts — TypeScript worker
+
+  src/java/FinalAgiJava.java — Java worker
+
+  src/python/agi_py.py — Python worker
+
+

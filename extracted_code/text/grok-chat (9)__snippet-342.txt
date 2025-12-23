@@ -1,0 +1,14 @@
+ 12            then plays it back in the child’s cloned voice. This is not a chatbot; it is a
+ 13 -          <strong> Crystalline AGI stack</strong> designed for biomimetic modeling of affect and agency.
+ 13 +          <strong> neurocoherence AGI stack</strong> designed for biomimetic modeling of affect and agency.
+ 14          </p>
+    ⋮
+ 40              </div>
+ 41 -            <h3 className="text-xl font-bold text-brand-black mb-3">Crystalline Heart</h3>
+ 41 +            <h3 className="text-xl font-bold text-brand-black mb-3">Neurocoherence Lattice</h3>
+ 42              <p className="text-slate-500 text-sm leading-relaxed">
+    ⋮
+156
+157 -export default System;
+157 +export default System;
+

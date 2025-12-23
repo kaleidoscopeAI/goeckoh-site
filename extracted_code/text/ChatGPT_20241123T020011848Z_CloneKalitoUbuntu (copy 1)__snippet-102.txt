@@ -1,0 +1,2 @@
+- Synchronization intervals for shared states.
+- Independent decision-making and self-reflection.

@@ -1,1 +1,1 @@
-def audio_callback(self, indata, frames, time, status):
+def transcribe(self, audio: np.ndarray) -> str:

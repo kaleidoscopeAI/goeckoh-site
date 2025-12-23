@@ -1,1 +1,1 @@
-const Pcon = sigmoid( eta1 * item.writeFactor + eta2 * item.basePriority - eta3 * H );
+const selfRaw = projectVec(s, DEFAULT_P.self); // scalar proxy

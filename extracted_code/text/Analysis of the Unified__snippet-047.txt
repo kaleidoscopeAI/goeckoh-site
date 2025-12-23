@@ -1,0 +1,3 @@
+# Mock molecular theater
+print("Optimizing drug via FastAPI")
+

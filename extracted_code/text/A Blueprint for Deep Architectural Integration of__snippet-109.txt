@@ -1,0 +1,3 @@
+- Python, Rust, and Julia implementations of contraction-based recurrent networks.
+- Toolkits for semidefinite programming underlying contraction metric learning.
+

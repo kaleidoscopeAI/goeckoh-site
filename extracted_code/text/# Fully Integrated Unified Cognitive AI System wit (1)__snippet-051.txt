@@ -1,0 +1,6 @@
+img = Image.open(image_path)
+img_t = preprocess(img).unsqueeze(0)
+with torch.no_grad():
+    features = model.avgpool(model.layer4(model.layer3(model.layer2(model.layer1(model.relu(model.bn1(model.conv1(img_t))))))))
+    features = features.squeeze()
+return features.cpu().numpy()

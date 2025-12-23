@@ -1,0 +1,7 @@
+  eps = 1e-12
+  mag = S + eps
+  mag_sum = np.sum(mag, axis=0) + eps
+  centroid = np.sum((f[:, None] * mag), axis=0) / mag_sum
+  bw = np.sqrt(np.sum(((f[:, None] - centroid[None, :])**2) * mag, axis=0) / mag_sum)
+  return centroid, bw
+

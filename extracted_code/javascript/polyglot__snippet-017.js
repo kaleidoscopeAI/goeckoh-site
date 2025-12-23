@@ -1,1 +1,1 @@
-function split_text(string $s): array {
+function embed_text(string $text, int $dim = 256): array {

@@ -1,0 +1,5 @@
+others":1,"use AAC device":1},"self_care":{"brush teeth":1,"dress self":1,"take medication":1,"wash hands":1},"social_tom":
+… +25 lines
+{"energy":0.3,"pitch_mean":100.0,"pitch_std":10.0},"excited":{"energy":0.8,"pitch_mean":180.0,"pitch_std":40.0},"neutral":
+{"energy":0.5,"pitch_mean":120.0,"pitch_std":20.0}}}}
+

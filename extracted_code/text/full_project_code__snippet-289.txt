@@ -1,0 +1,8 @@
+"""
+Body should be :class:`http.client.HTTPResponse` like
+(have an fp attribute which returns raw chunks) for read_chunked().
+"""
+
+pass
+
+

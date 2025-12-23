@@ -1,1 +1,1 @@
-def process_numerical_batch(self, data_lists: List[List[float]]) -> List[Dict]:
+def _detect_shapes(self, edges: np.ndarray) -> List:

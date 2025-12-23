@@ -1,0 +1,10 @@
+<ErrorBoundary>
+  <ThemeProvider>
+    <MobileOptimized>
+      <PerformanceMonitor enabled={process.env.NODE_ENV === 'development'} />
+      <EnhancedThreeCanvas {...props} />
+      <EnhancedUIOverlay {...props} />
+      <ThemeToggle />
+    </MobileOptimized>
+  </ThemeProvider>
+</ErrorBoundary>

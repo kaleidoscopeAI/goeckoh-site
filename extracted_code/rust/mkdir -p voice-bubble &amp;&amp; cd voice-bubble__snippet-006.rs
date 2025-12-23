@@ -1,60 +1,40 @@
-use tokio::sync::mpsc;
+use ort::{Session, Value};
 
-struct EchoSystem {
-    audio_pipeline: AudioPipeline,
-    stt: StreamingSTT,
-    tts: VoiceCloningTTS,
-    vad: SileroVAD,
-    prediction_engine: PredictionEngine,
-    
-    // Communication channels
-    audio_tx: mpsc::Sender<AudioFrame>,
-    text_tx: mpsc::Sender<String>,
-    tts_tx: mpsc::Sender<String>,
+struct SileroVAD {
+    session: Session,
+    threshold: f32,
+    sample_rate: u32,
 }
 
-impl EchoSystem {
-    async fn run(mut self) {
-        let (audio_tx, mut audio_rx) = mpsc::channel(100);
-        let (text_tx, mut text_rx) = mpsc::channel(100);
-        let (tts_tx, mut tts_rx) = mpsc::channel(100);
+impl SileroVAD {
+    fn new(model_path: &str) -> Self {
+        let session = Session::builder()
+            .unwrap()
+            .with_model_from_file(model_path)
+            .unwrap();
         
-        self.audio_tx = audio_tx;
-        self.text_tx = text_tx;
-        self.tts_tx = tts_tx;
+        Self {
+            session,
+            threshold: 0.5,
+            sample_rate: 16000,
+        }
+    }
+    
+    fn is_speech(&self, audio: &[f32]) -> bool {
+        // Prepare input tensor: [1, audio_len]
+        let input_shape = vec![1, audio.len() as i64];
+        let input_array = ort::ndarray::Array2::from_shape_vec(
+            (1, audio.len()),
+            audio.to_vec()
+        ).unwrap();
         
-        // Start audio ingestion task
-        tokio::spawn(async move {
-            while let Some(frame) = self.audio_pipeline.input_queue.pop() {
-                if self.vad.is_speech(&frame) {
-                    self.audio_tx.send(frame).await.unwrap();
-                }
-            }
-        });
+        let inputs = vec![Value::from_array(self.session.allocator(), &input_array).unwrap()];
         
-        // STT processing task
-        let stt_task = tokio::spawn(async move {
-            while let Some(frame) = audio_rx.recv().await {
-                if let Some(text) = self.stt.process_chunk(&frame.samples).await {
-                    self.text_tx.send(text).await.unwrap();
-                }
-            }
-        });
+        // Run inference
+        let outputs = self.session.run(inputs).unwrap();
+        let output = outputs[0].try_extract_tensor::<f32>().unwrap();
+        let confidence = output.view()[[0, 0]];
         
-        // Predictive text + TTS task
-        let tts_task = tokio::spawn(async move {
-            while let Some(text) = text_rx.recv().await {
-                // Get prediction
-                let prediction = self.prediction_engine.predict(&text);
-                
-                // Synthesize
-                let audio = self.tts.synthesize_streaming(&prediction).await;
-                
-                // Queue for playback
-                self.audio_pipeline.output_queue.push_slice(&audio);
-            }
-        });
-        
-        tokio::join!(stt_task, tts_task);
+        confidence > self.threshold
     }
 }

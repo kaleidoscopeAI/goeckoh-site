@@ -1,0 +1,18 @@
+temp_dir = TempDirectory(kind="unpack", globally_managed=True)
+# If a download dir is specified, is the file already downloaded there?
+already_downloaded_path = None
+if download_dir:
+    already_downloaded_path = _check_download_dir(link, download_dir, hashes)
+
+if already_downloaded_path:
+    from_path = already_downloaded_path
+    content_type = None
+else:
+    # let's download to a tmp dir
+    from_path, content_type = download(link, temp_dir.path)
+    if hashes:
+        hashes.check_against_path(from_path)
+
+return File(from_path, content_type)
+
+

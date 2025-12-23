@@ -1,1 +1,1 @@
-console.log("ProjectionService: loaded persisted W");
+console.log(`[step ${step}] scaled gains:`, globalGains);

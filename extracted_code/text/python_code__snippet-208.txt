@@ -1,2 +1,7 @@
-# <REDACTED: potential secret detected>
+           'Supported-Platform', 'Summary', 'Description',
+           'Keywords', 'Home-page', 'Author', 'Author-email',
+           'Maintainer', 'Maintainer-email', 'License',
+           'Classifier', 'Download-URL', 'Obsoletes-Dist',
+           'Project-URL', 'Provides-Dist', 'Requires-Dist',
+           'Requires-Python', 'Requires-External')
 

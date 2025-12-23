@@ -1,1 +1,1 @@
-const unsub = svc.subscribe((constructs) => {
+function stress_Jv(v: Vec, y: Vec): void

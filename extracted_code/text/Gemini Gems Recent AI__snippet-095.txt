@@ -1,0 +1,6 @@
+<div>
+  <div ref={mountRef} style={{ height: '600px' }} />
+  <div>
+    <input type="text" placeholder="SMILES 1" value={smiles1} onChange={e => setSmiles1(e.target.value)} />
+    <input type="text" placeholder="SMI
+

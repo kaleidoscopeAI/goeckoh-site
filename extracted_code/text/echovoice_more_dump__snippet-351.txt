@@ -1,1 +1,6 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+if 'sensors' in snapshot:
+    adc = np.array(snapshot['adc_raw'])  # Mock sensor data
+    grad = sensor_grad(1.0, adc)
+    return {"sensor_update": grad.tolist()}
+# ... Previous
+

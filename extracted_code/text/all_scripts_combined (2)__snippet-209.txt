@@ -1,0 +1,11 @@
+# Configuration
+cfg = EchoConfig(
+    child_name="Jackson",
+    voice_sample_path="my_voice.wav",  # Record child's voice sample
+    llm_model="deepseek-r1:8b",  # Or llama3.2:1b for faster responses
+    device="cpu",  # or "cuda" if GPU available
+)
+
+# Create and start Echo
+echo = Echo(cfg)
+echo.start()

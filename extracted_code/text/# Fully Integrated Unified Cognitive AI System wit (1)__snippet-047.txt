@@ -1,0 +1,3 @@
+logging.info(f"TIME: {time.ctime()}, ACTION: {action}, CONFIDENCE: {confidence:.3f}, REASON: {reason}")
+return confidence > 0.85
+

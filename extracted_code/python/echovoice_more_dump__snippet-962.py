@@ -1,1 +1,4 @@
-def _is_allowed_domain(self, url: str):
+n.v = clip(n.v + gaussian() * 0.1 * n.ar, -1, 1); // Valence drift with arousal
+n.ar = clip(n.ar - 0.05 + 0.1 * Math.abs(n.energy), 0, 1); // Arousal from E
+n.st = clip(n.st + 0.05 * (n.k - 0.5), -1, 1); // Stance from confidence
+n.coh = 1 - Math.abs(n.v - n.st); // Coherence as alignment

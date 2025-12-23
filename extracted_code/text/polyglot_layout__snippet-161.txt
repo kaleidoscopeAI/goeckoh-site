@@ -1,0 +1,17 @@
+  if len(edges)==0:
+      return {"H_bits": float(np.mean(1.0-S) if E.shape[0] else 0.0), "S_field":0.0, "L":0.0}
+  w=np.zeros(len(edges));
+  rng=np.random.RandomState(11)
+  for k,(i,j) in enumerate(edges):
+      ei,ej=E[i],E[j]
+      sims=[]
+      for _ in range(4):
+          ein=ei+sigma*rng.normal(0.0,1.0,size=ei.shape); ein/= (np.linalg.norm(ein)+1e-9)
+          ejn=ej+sigma*rng.normal(0.0,1.0,size=ej.shape); ejn/= (np.linalg.norm(ejn)+1e-9)
+          sims.append(float(np.dot(ein,ejn)))
+      w[k]=float(np.mean(sims))
+  tau=1.0-w
+  H_bits=float(np.mean(1.0-S) if E.shape[0] else 0.0)
+  S_field=float(np.mean(tau)); L=float(np.sum(tau*tau))
+  return {"H_bits":H_bits,"S_field":S_field,"L":L}
+

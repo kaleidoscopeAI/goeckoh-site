@@ -1,0 +1,2 @@
+  return [w for w in text.lower().split() if w.strip()]
+

@@ -1,1 +1,1 @@
-export function jacobian(node: Node, e: EmotionalVector): number[][] {
+const jv = (v: Float64Array) => Jv(nodes, adjList, v, blockSizes);

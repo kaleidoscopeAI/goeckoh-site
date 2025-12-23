@@ -1,0 +1,18 @@
+"""Return the WHEEL metadata of an extracted wheel, if possible.
+Otherwise, raise UnsupportedWheel.
+"""
+path = f"{dist_info_dir}/WHEEL"
+# Zip file path separators must be /
+wheel_contents = read_wheel_metadata_file(source, path)
+
+try:
+    wheel_text = wheel_contents.decode()
+except UnicodeDecodeError as e:
+    raise UnsupportedWheel(f"error decoding {path!r}: {e!r}")
+
+# FeedParser (used by Parser) does not raise any exceptions. The returned
+# message may have .defects populated, but for backwards-compatibility we
+# currently ignore them.
+return Parser().parsestr(wheel_text)
+
+

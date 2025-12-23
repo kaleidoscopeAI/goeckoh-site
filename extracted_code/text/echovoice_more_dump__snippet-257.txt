@@ -1,1 +1,2 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+  Calculate Time Step: The new Δt is computed as a fraction of the ratio Δx/λmax​.   
+

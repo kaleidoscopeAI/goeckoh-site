@@ -1,2 +1,4 @@
-    def _in_proc_script_path():
-        return resources.path(__package__, '_in_process.py')
+from typing import TYPE_CHECKING, Any
+
+from ._ssl_constants import _set_ssl_context_verify_mode
+

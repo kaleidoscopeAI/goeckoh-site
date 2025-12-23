@@ -1,0 +1,2 @@
+this.cellSize = cellSize;
+this.grid = new Map();

@@ -1,1 +1,1 @@
-class GrowthState(Enum):
+Fix: Define a class using NetworkX to store nodes, edges, and metadata.

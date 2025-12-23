@@ -1,2 +1,1 @@
-@StateObject private var config = ServerConfig()
-@StateObject private var appState = AppState()
+@StateObject private var metricsModel = ParentMetricsModel()

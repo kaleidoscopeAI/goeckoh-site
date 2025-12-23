@@ -1,0 +1,137 @@
+certs = None
+policies = None
+trust = None
+cf_error = None
+try:
+    if server_hostname is not None:
+        cf_str_hostname = None
+        try:
+            cf_str_hostname = _bytes_to_cf_string(server_hostname.encode("ascii"))
+            ssl_policy = Security.SecPolicyCreateSSL(True, cf_str_hostname)
+        finally:
+            if cf_str_hostname:
+                CoreFoundation.CFRelease(cf_str_hostname)
+    else:
+        ssl_policy = Security.SecPolicyCreateSSL(True, None)
+
+    policies = ssl_policy
+    if ssl_context.verify_flags & ssl.VERIFY_CRL_CHECK_CHAIN:
+        # Add explicit policy requiring positive revocation checks
+        policies = CoreFoundation.CFArrayCreateMutable(
+            CoreFoundation.kCFAllocatorDefault,
+            0,
+            ctypes.byref(CoreFoundation.kCFTypeArrayCallBacks),
+        )
+        CoreFoundation.CFArrayAppendValue(policies, ssl_policy)
+        CoreFoundation.CFRelease(ssl_policy)
+        revocation_policy = Security.SecPolicyCreateRevocation(
+            kSecRevocationUseAnyAvailableMethod
+            | kSecRevocationRequirePositiveResponse
+        )
+        CoreFoundation.CFArrayAppendValue(policies, revocation_policy)
+        CoreFoundation.CFRelease(revocation_policy)
+    elif ssl_context.verify_flags & ssl.VERIFY_CRL_CHECK_LEAF:
+        raise NotImplementedError("VERIFY_CRL_CHECK_LEAF not implemented for macOS")
+
+    certs = None
+    try:
+        certs = _der_certs_to_cf_cert_array(cert_chain)
+
+        # Now that we have certificates loaded and a SecPolicy
+        # we can finally create a SecTrust object!
+        trust = Security.SecTrustRef()
+        Security.SecTrustCreateWithCertificates(
+            certs, policies, ctypes.byref(trust)
+        )
+
+    finally:
+        # The certs are now being held by SecTrust so we can
+        # release our handles for the array.
+        if certs:
+            CoreFoundation.CFRelease(certs)
+
+    # If there are additional trust anchors to load we need to transform
+    # the list of DER-encoded certificates into a CFArray. Otherwise
+    # pass 'None' to signal that we only want system / fetched certificates.
+    ctx_ca_certs_der: list[bytes] | None = ssl_context.get_ca_certs(
+        binary_form=True
+    )
+    if ctx_ca_certs_der:
+        ctx_ca_certs = None
+        try:
+            ctx_ca_certs = _der_certs_to_cf_cert_array(cert_chain)
+            Security.SecTrustSetAnchorCertificates(trust, ctx_ca_certs)
+        finally:
+            if ctx_ca_certs:
+                CoreFoundation.CFRelease(ctx_ca_certs)
+    else:
+        Security.SecTrustSetAnchorCertificates(trust, None)
+
+    cf_error = CoreFoundation.CFErrorRef()
+    sec_trust_eval_result = Security.SecTrustEvaluateWithError(
+        trust, ctypes.byref(cf_error)
+    )
+    # sec_trust_eval_result is a bool (0 or 1)
+    # where 1 means that the certs are trusted.
+    if sec_trust_eval_result == 1:
+        is_trusted = True
+    elif sec_trust_eval_result == 0:
+        is_trusted = False
+    else:
+        raise ssl.SSLError(
+            f"Unknown result from Security.SecTrustEvaluateWithError: {sec_trust_eval_result!r}"
+        )
+
+    cf_error_code = 0
+    if not is_trusted:
+        cf_error_code = CoreFoundation.CFErrorGetCode(cf_error)
+
+        # If the error is a known failure that we're
+        # explicitly okay with from SSLContext configuration
+        # we can set is_trusted accordingly.
+        if ssl_context.verify_mode != ssl.CERT_REQUIRED and (
+            cf_error_code == CFConst.errSecNotTrusted
+            or cf_error_code == CFConst.errSecCertificateExpired
+        ):
+            is_trusted = True
+        elif (
+            not ssl_context.check_hostname
+            and cf_error_code == CFConst.errSecHostNameMismatch
+        ):
+            is_trusted = True
+
+    # If we're still not trusted then we start to
+    # construct and raise the SSLCertVerificationError.
+    if not is_trusted:
+        cf_error_string_ref = None
+        try:
+            cf_error_string_ref = CoreFoundation.CFErrorCopyDescription(cf_error)
+
+            # Can this ever return 'None' if there's a CFError?
+            cf_error_message = (
+                _cf_string_ref_to_str(cf_error_string_ref)
+                or "Certificate verification failed"
+            )
+
+            # TODO: Not sure if we need the SecTrustResultType for anything?
+            # We only care whether or not it's a success or failure for now.
+            sec_trust_result_type = Security.SecTrustResultType()
+            Security.SecTrustGetTrustResult(
+                trust, ctypes.byref(sec_trust_result_type)
+            )
+
+            err = ssl.SSLCertVerificationError(cf_error_message)
+            err.verify_message = cf_error_message
+            err.verify_code = cf_error_code
+            raise err
+        finally:
+            if cf_error_string_ref:
+                CoreFoundation.CFRelease(cf_error_string_ref)
+
+finally:
+    if policies:
+        CoreFoundation.CFRelease(policies)
+    if trust:
+        CoreFoundation.CFRelease(trust)
+
+

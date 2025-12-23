@@ -1,70 +1,85 @@
-def _is_version_marker(s):
-    return isinstance(s, string_types) and s in _VERSION_MARKERS
+class ResolutionError(Exception):
+    """Abstract base for dependency resolution errors"""
+
+    def __repr__(self):
+        return self.__class__.__name__ + repr(self.args)
 
 
-def _is_literal(o):
-    if not isinstance(o, string_types) or not o:
-        return False
-    return o[0] in '\'"'
-
-
-def _get_versions(s):
-    return {LV(m.groups()[0]) for m in _VERSION_PATTERN.finditer(s)}
-
-
-class Evaluator(object):
+class VersionConflict(ResolutionError):
     """
-    This class is used to evaluate marker expressions.
+    An already-installed version conflicts with the requested version.
+
+    Should be initialized with the installed Distribution and the requested
+    Requirement.
     """
 
-    operations = {
-        '==': lambda x, y: x == y,
-        '===': lambda x, y: x == y,
-        '~=': lambda x, y: x == y or x > y,
-        '!=': lambda x, y: x != y,
-        '<': lambda x, y: x < y,
-        '<=': lambda x, y: x == y or x < y,
-        '>': lambda x, y: x > y,
-        '>=': lambda x, y: x == y or x > y,
-        'and': lambda x, y: x and y,
-        'or': lambda x, y: x or y,
-        'in': lambda x, y: x in y,
-        'not in': lambda x, y: x not in y,
-    }
+    _template = "{self.dist} is installed but {self.req} is required"
 
-    def evaluate(self, expr, context):
-        """
-        Evaluate a marker expression returned by the :func:`parse_requirement`
-        function in the specified context.
-        """
-        if isinstance(expr, string_types):
-            if expr[0] in '\'"':
-                result = expr[1:-1]
-            else:
-                if expr not in context:
-                    raise SyntaxError('unknown variable: %s' % expr)
-                result = context[expr]
-        else:
-            assert isinstance(expr, dict)
-            op = expr['op']
-            if op not in self.operations:
-                raise NotImplementedError('op not implemented: %s' % op)
-            elhs = expr['lhs']
-            erhs = expr['rhs']
-            if _is_literal(expr['lhs']) and _is_literal(expr['rhs']):
-                raise SyntaxError('invalid comparison: %s %s %s' %
-                                  (elhs, op, erhs))
+    @property
+    def dist(self):
+        return self.args[0]
 
-            lhs = self.evaluate(elhs, context)
-            rhs = self.evaluate(erhs, context)
-            if ((_is_version_marker(elhs) or _is_version_marker(erhs))
-                    and op in ('<', '<=', '>', '>=', '===', '==', '!=', '~=')):
-                lhs = LV(lhs)
-                rhs = LV(rhs)
-            elif _is_version_marker(elhs) and op in ('in', 'not in'):
-                lhs = LV(lhs)
-                rhs = _get_versions(rhs)
-            result = self.operations[op](lhs, rhs)
-        return result
+    @property
+    def req(self):
+        return self.args[1]
+
+    def report(self):
+        return self._template.format(**locals())
+
+    def with_context(self, required_by):
+        """
+        If required_by is non-empty, return a version of self that is a
+        ContextualVersionConflict.
+        """
+        if not required_by:
+            return self
+        args = self.args + (required_by,)
+        return ContextualVersionConflict(*args)
+
+
+class ContextualVersionConflict(VersionConflict):
+    """
+    A VersionConflict that accepts a third parameter, the set of the
+    requirements that required the installed Distribution.
+    """
+
+    _template = VersionConflict._template + ' by {self.required_by}'
+
+    @property
+    def required_by(self):
+        return self.args[2]
+
+
+class DistributionNotFound(ResolutionError):
+    """A requested distribution was not found"""
+
+    _template = (
+        "The '{self.req}' distribution was not found "
+        "and is required by {self.requirers_str}"
+    )
+
+    @property
+    def req(self):
+        return self.args[0]
+
+    @property
+    def requirers(self):
+        return self.args[1]
+
+    @property
+    def requirers_str(self):
+        if not self.requirers:
+            return 'the application'
+        return ', '.join(self.requirers)
+
+    def report(self):
+        return self._template.format(**locals())
+
+    def __str__(self):
+        return self.report()
+
+
+class UnknownExtra(ResolutionError):
+    """Distribution doesn't have an "extra feature" of the given name"""
 
 

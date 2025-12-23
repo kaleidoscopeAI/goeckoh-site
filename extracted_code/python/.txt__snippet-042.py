@@ -1,1 +1,1 @@
-def enforce_first_person(text: str) -> str:
+def process(self, audio: np.ndarray) -> Dict[str, str]:

@@ -1,0 +1,5 @@
+1_jackson_0.wav: 23.8 ms -> 'one'
+… +9 lines
+Accuracy: 8/10
+Latency: p50=18.0 ms p95=282.5 ms
+

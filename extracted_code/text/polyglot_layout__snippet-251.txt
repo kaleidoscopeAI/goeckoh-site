@@ -1,0 +1,6 @@
+ The avatar uses node dynamics (swirl, z-depth, damping, jitter) mapped to H_bits/S_field and the caption hash, so it “thinks/feels” with the crystal
+ state rather than fixed sprites.
+ If you drop any *mask*.png / *avatar*.png silhouettes into the project folders, the agent will try to adopt them as a target field; otherwise it draws a
+ default circular silhouette.
+ Autonomous ingest currently uses a stable placeholder search routine—wire a real API when you’re ready; everything else already runs hands-free.
+

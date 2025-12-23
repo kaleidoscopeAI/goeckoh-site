@@ -1,16 +1,20 @@
-def add_move(move):
-    """Add an item to six.moves."""
-    setattr(_MovedItems, move.name, move)
+def finder_for_path(path):
+    """
+    Return a resource finder for a path, which should represent a container.
 
-
-def remove_move(name):
-    """Remove item from six.moves."""
-    try:
-        delattr(_MovedItems, name)
-    except AttributeError:
-        try:
-            del moves.__dict__[name]
-        except KeyError:
-            raise AttributeError("no such move, %r" % (name,))
+    :param path: The path.
+    :return: A :class:`ResourceFinder` instance for the path.
+    """
+    result = None
+    # calls any path hooks, gets importer into cache
+    pkgutil.get_importer(path)
+    loader = sys.path_importer_cache.get(path)
+    finder = _finder_registry.get(type(loader))
+    if finder:
+        module = _dummy_module
+        module.__file__ = os.path.join(path, '')
+        module.__loader__ = loader
+        result = finder(module)
+    return result
 
 

@@ -1,5 +1,12 @@
-from .ssl_ import create_urllib3_context, resolve_cert_reqs, resolve_ssl_version
-
-
-def connection_requires_http_tunnel(
-    proxy_url=None, proxy_config=None, destination_scheme=None
+import codecs
+from collections import deque
+import contextlib
+import csv
+from glob import iglob as std_iglob
+import io
+import json
+import logging
+import os
+import py_compile
+import re
+import socket

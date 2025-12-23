@@ -1,1 +1,1 @@
-const reflectionProb = clamp(
+const allowed = { ...mods };

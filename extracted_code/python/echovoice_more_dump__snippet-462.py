@@ -1,6 +1,6 @@
-import { ActuationService } from "./services/actuationService";
-import { initializeApp, getFirestore } from "firebase-admin/firestore";
-const firebaseApp = initializeApp();
-const firestore = getFirestore(firebaseApp);
-const actuationService = new ActuationService(firestore);
-function simulationStep(driverInput: any) {
+import React from "react";
+import EmotionalDial from "./components/EmotionalDial";
+import { useEmotionalActuation } from "./hooks/useEmotionalActuation";
+import { DEFAULT_EMOTIONS } from "./services/actuationService";
+import { EmotionLoop } from "./core/emotionLoop";
+export default function App() {

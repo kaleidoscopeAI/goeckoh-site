@@ -1,4 +1,16 @@
-from pip._vendor.pygments.formatter import Formatter
-from pip._vendor.pygments.util import get_int_opt, surrogatepair
+import re
+import string
+import urllib.parse
+from typing import List, Optional as TOptional, Set
 
-
+from pip._vendor.pyparsing import (  # noqa
+    Combine,
+    Literal as L,
+    Optional,
+    ParseException,
+    Regex,
+    Word,
+    ZeroOrMore,
+    originalTextFor,
+    stringEnd,
+    stringStart,

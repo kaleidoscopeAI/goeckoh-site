@@ -1,2 +1,3 @@
-pub fn generate_synthetic_dataset() -> Vec<Graph> {
-
+    fn default() -> Self {
+        Self::None
+    }

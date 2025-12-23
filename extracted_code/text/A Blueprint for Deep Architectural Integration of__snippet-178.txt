@@ -1,0 +1,5 @@
+- A runnable Python or Rust simulation implementing the discrete-time models,
+- Automated parameter tuning scripts to identify stable operating points,
+- Example Rust framework for asynchronous event-driven cognitive modules with scheduler and safety rollback,
+- Documentation and detailed proof sketches supporting stability claims.
+

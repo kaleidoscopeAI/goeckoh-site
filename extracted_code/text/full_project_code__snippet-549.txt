@@ -1,0 +1,12 @@
+                 replacefunc=lambda x: x):
+last = 0
+for match in regex.finditer(value):
+    start, end = match.start(), match.end()
+    if start != last:
+        yield ttype, value[last:start]
+    yield specialttype, replacefunc(value[start:end])
+    last = end
+if last != len(value):
+    yield ttype, value[last:]
+
+

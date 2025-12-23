@@ -1,1 +1,1 @@
-if let Some(ref path) = self.msr_mapping {
+let mut reg = CPU_REGISTRY.lock().unwrap();

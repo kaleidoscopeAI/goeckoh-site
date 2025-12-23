@@ -1,0 +1,16 @@
+"""Updates word vectors based on positive and negative samples."""
+try:
+    context_vector = self.context_vectors[context_word]
+    target_vector = self.word_vectors[target_word]
+    score = np.dot(target_vector, context_vector)
+    prob = 1 / (1 + np.exp(-score))
+except KeyError:
+    return  # Do not train for unknown word vectors
+
+# Calculate the gradient
+gradient = learning_rate * (label - prob) * context_vector
+
+# Update the word vectors
+self.word_vectors[target_word] += gradient
+context_vector -= learning_rate * (label - prob) * self.word_vectors[target_word]  # Update context vector
+

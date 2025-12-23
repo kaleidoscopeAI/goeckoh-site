@@ -1,3 +1,6 @@
-  directories are excluded from snapshots and undo cleanup. Adjust `ghost_snapshot.ignore_large_untracked_dirs` to change this
-  behavior.
+  │ import sys, subprocess, json, os
+  │ import importlib.util
+  │ … +3 lines
+  └ vosk spec None
+    sherpa_onnx spec None
 

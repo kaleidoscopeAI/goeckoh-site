@@ -1,1 +1,2 @@
-for (let i = 0; i < node.Psi.length; i++) out.Psi[i] += w * (nb.Psi[i] - node.Psi[i]);
++const PORT = Number(process.env.PERSISTENCE_PORT || 4302);
++app.listen(PORT, () => console.log(`Persistence server listening ${PORT}`));

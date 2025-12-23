@@ -1,1 +1,1 @@
-class EmotionalField:
+using Python for the backend, React/Three.js for the visualization frontend, an asynchronous API layer for real-time control, and LLM integration (via

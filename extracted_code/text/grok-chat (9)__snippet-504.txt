@@ -1,0 +1,1 @@
+  console.print(f"[yellow]{final_response_content}[/yellow]")

@@ -1,2 +1,2 @@
-    |                                 ^^^^^^^^ private field
+    |                                                ^^^^^^^^ private field
     |

@@ -1,0 +1,11 @@
+adapter = CacheControlAdapter(
+    DictCache(), cache_etags=True, serializer=None, heuristic=None
+)
+sess = requests.Session()
+sess.mount("http://", adapter)
+sess.mount("https://", adapter)
+
+sess.cache_controller = adapter.controller  # type: ignore[attr-defined]
+return sess
+
+

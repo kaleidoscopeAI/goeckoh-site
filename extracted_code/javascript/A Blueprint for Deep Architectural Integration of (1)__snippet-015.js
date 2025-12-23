@@ -1,1 +1,0 @@
-- $\sigma$ is a Lipschitz continuous activation function with Lipschitz constant 1 (e.g., ReLU, sigmoid scaled accordingly),

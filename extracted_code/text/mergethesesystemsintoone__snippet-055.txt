@@ -1,13 +1,3 @@
-class GrowthState(Enum):
-    DORMANT = auto()
-    GROWING = auto()
-    MATURE = auto()
-    DECLINING = auto()
+# Install Python dependencies (consider using a virtual environment)
 
-class TraitCategory(Enum):
-    COGNITIVE = auto()
-    PHYSICAL = auto()
-    ADAPTIVE = auto()
-    SOCIAL = auto()
-    SPECIALIZED = auto()
 

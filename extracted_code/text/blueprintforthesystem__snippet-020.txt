@@ -1,0 +1,3 @@
+ to generate the necessary assets: a VoiceFingerprint (JSON), a reference .wav file, and a speaker embedding .npy file.
+ These files are then loaded by the TTS (Step 4) and Prosody Transfer (Step 5) modules during the real-time loop.
+

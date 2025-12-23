@@ -1,1 +1,1 @@
-async def initialize_lattice(self):
+Laplacian: computed from adjacency (sparse).

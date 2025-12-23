@@ -1,0 +1,10 @@
+No 3D Visualization: We've removed the Three.js part entirely for now.
+
+Synchronous Similarity Calculation: The similarity calculation is done synchronously in the Flask route. No Celery.
+
+No Database: No database interaction.
+
+Simple Similarity Metric: Uses RDKit fingerprints and Tanimoto similarity – easy to calculate.
+
+Basic React Frontend: A very basic React frontend with input fields and a button.
+

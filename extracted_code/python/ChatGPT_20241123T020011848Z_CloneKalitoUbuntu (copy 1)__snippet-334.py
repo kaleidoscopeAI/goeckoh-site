@@ -1,0 +1,2 @@
+- Node A crawls content from Wikipedia on topic X.
+- Node B gathers annotated images related to topic X from image APIs.

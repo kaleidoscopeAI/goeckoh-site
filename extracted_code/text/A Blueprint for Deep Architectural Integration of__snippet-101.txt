@@ -1,0 +1,5 @@
+x1 = T(x1)
+x2 = T(x2)
+dist = np.linalg.norm(x1 - x2)
+distances.append(dist)
+

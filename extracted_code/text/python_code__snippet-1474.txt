@@ -1,0 +1,3 @@
+cmdoptions.global_options,
+cmdoptions.hash,
+cmdoptions.config_settings,

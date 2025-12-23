@@ -1,0 +1,19 @@
+parts = parse_req_from_editable(editable_req)
+
+return InstallRequirement(
+    parts.requirement,
+    comes_from=comes_from,
+    user_supplied=user_supplied,
+    editable=True,
+    permit_editable_wheels=permit_editable_wheels,
+    link=parts.link,
+    constraint=constraint,
+    use_pep517=use_pep517,
+    isolated=isolated,
+    global_options=global_options,
+    hash_options=hash_options,
+    config_settings=config_settings,
+    extras=parts.extras,
+)
+
+

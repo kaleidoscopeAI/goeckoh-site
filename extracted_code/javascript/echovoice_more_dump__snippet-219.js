@@ -1,2 +1,1 @@
-const prompt = document.getElementById("user-prompt").value;
-const response = await queryCrystalConsciousness(prompt);
+for (let k = 0; k < m; k++) out[k] += this.externalInputs[base + k];

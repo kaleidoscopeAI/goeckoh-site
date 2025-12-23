@@ -1,0 +1,13 @@
+├── A. Child's Response Monitoring
+│   ├── Audio: Vocal tone, volume, rate
+│   ├── Physiological: (if sensors available) HR, GSR, attention
+│   └── Behavioral: (via camera/manual input) Engagement, compliance
+├── B. Crystalline Memory Update
+│   └── Integrates new data, outcomes, and internal state
+├── C. Organic Evolution
+│   ├── Node Reinforcement: Successful interactions strengthen relevant nodes/connections
+│   ├── DNA Mutation: Failures or novel situations drive evolutionary adaptation
+│   └── Resource Allocation: Directs computational resources to active cognitive areas
+└── D. Caregiver Feedback Loop (GUI)
+    └── Explicit input to refine AI's therapeutic model and preferences
+

@@ -1,1 +1,2 @@
-+ for (let i = 0; i < m; i++) {
+ : The control synthesis function that maps the relational state to hardware actions.
+

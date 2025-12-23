@@ -1,2 +1,1 @@
-E(t) → getEVector() (from actuationService)
-R(t) → tuneDamping(node,e) (from dampingService)
+This is the complete mathematical hierarchy from silicon to system - every level is necessary and builds inevitably to the final equation.RetryJGone

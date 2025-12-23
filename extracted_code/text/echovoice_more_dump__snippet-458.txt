@@ -1,1 +1,2 @@
-ollama package or direct API calls would be used in a production environment
+# <REDACTED: potential secret detected>
+

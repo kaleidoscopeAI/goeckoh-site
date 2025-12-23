@@ -1,1 +1,1 @@
-def dispatch_latest_chunk(self, orches: 'AGIOrchestrator'):
+def _process_text_batch_sync(self, texts: List[str]) -> List[Dict]:

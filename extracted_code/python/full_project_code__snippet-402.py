@@ -1,2 +1,7 @@
-If no paths are provided, it takes its input from stdin.
+   >>> import requests
+   >>> r = requests.get('https://www.python.org')
+   >>> r.status_code
+   200
+   >>> b'Python is a programming language' in r.content
+   True
 

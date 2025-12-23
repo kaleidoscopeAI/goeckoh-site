@@ -1,0 +1,42 @@
+"""
+Scrapes a product page and extracts the product name and price.
+
+Args:
+    url: The URL of the product page.
+
+Returns:
+    A dictionary containing the product name and price, or None if an error occurs.
+"""
+try:
+    response = requests.get(url)
+    response.raise_for_status()  # Raise an exception for bad status codes
+
+    soup = BeautifulSoup(response.content, 'html.parser')
+
+    # Adapt the following selectors to the specific website's structure
+    product_name_element = soup.find('h1', {'class': 'product-title'})  
+    price_element = soup.find('span', {'class': 'product-price'})
+
+    if product_name_element and price_element:
+        product_name = product_name_element.text.strip()
+        price = price_element.text.strip()
+        return {'product_name': product_name, 'price': price}
+    else:
+        print("Could not find product name or price on the page.")
+        return None
+
+except requests.exceptions.RequestException as e:
+    print(f"Error during request: {e}")
+    return None
+except Exception as e:
+    print(f"An unexpected error occurred: {e}")
+    return None
+
+product_url = input("Enter the product URL: ") # Example: "https://www.example.com/product-page"
+product_info = get_product_price(product_url)
+
+if product_info:
+    print(f"Product Name: {product_info['product_name']}")
+    print(f"Price: {product_info['price']}")
+
+

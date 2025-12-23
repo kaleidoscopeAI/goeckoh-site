@@ -1,0 +1,6 @@
+async for message in websocket:
+    # Receive viz requests, send snapshots
+    snapshot = json.loads(message)
+    # Process and send node targets
+    await websocket.send(json.dumps({"nodes": snapshot}))
+

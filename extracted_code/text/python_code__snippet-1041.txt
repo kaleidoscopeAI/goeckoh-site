@@ -1,0 +1,9 @@
+if not location.endswith(WHEEL_EXTENSION):
+    return False
+if not os.path.isfile(location):
+    return False
+if not Wheel.wheel_file_re.match(os.path.basename(location)):
+    return False
+return zipfile.is_zipfile(location)
+
+

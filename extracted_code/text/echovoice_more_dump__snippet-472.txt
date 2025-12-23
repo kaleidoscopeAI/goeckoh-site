@@ -1,1 +1,5 @@
-using Python for the backend, React/Three.js for the visualization frontend, an asynchronous API layer for real-time control, and LLM integration (via
+pub pid: i32,
+pub priority_delta: i32,
+pub memory_hint: u8,
+pub io_class: u8,
+pub timestamp: u64,

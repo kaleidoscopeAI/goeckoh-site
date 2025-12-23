@@ -1,0 +1,76 @@
+"""Special matching class for matching whitespace.  Normally,
+whitespace is ignored by pyparsing grammars.  This class is included
+when some whitespace structures are significant.  Define with
+a string containing the whitespace characters to be matched; default
+is ``" \\t\\r\\n"``.  Also takes optional ``min``,
+``max``, and ``exact`` arguments, as defined for the
+:class:`Word` class.
+"""
+
+whiteStrs = {
+    " ": "<SP>",
+    "\t": "<TAB>",
+    "\n": "<LF>",
+    "\r": "<CR>",
+    "\f": "<FF>",
+    "\u00A0": "<NBSP>",
+    "\u1680": "<OGHAM_SPACE_MARK>",
+    "\u180E": "<MONGOLIAN_VOWEL_SEPARATOR>",
+    "\u2000": "<EN_QUAD>",
+    "\u2001": "<EM_QUAD>",
+    "\u2002": "<EN_SPACE>",
+    "\u2003": "<EM_SPACE>",
+    "\u2004": "<THREE-PER-EM_SPACE>",
+    "\u2005": "<FOUR-PER-EM_SPACE>",
+    "\u2006": "<SIX-PER-EM_SPACE>",
+    "\u2007": "<FIGURE_SPACE>",
+    "\u2008": "<PUNCTUATION_SPACE>",
+    "\u2009": "<THIN_SPACE>",
+    "\u200A": "<HAIR_SPACE>",
+    "\u200B": "<ZERO_WIDTH_SPACE>",
+    "\u202F": "<NNBSP>",
+    "\u205F": "<MMSP>",
+    "\u3000": "<IDEOGRAPHIC_SPACE>",
+}
+
+def __init__(self, ws: str = " \t\r\n", min: int = 1, max: int = 0, exact: int = 0):
+    super().__init__()
+    self.matchWhite = ws
+    self.set_whitespace_chars(
+        "".join(c for c in self.whiteStrs if c not in self.matchWhite),
+        copy_defaults=True,
+    )
+    # self.leave_whitespace()
+    self.mayReturnEmpty = True
+    self.errmsg = "Expected " + self.name
+
+    self.minLen = min
+
+    if max > 0:
+        self.maxLen = max
+    else:
+        self.maxLen = _MAX_INT
+
+    if exact > 0:
+        self.maxLen = exact
+        self.minLen = exact
+
+def _generateDefaultName(self) -> str:
+    return "".join(White.whiteStrs[c] for c in self.matchWhite)
+
+def parseImpl(self, instring, loc, doActions=True):
+    if instring[loc] not in self.matchWhite:
+        raise ParseException(instring, loc, self.errmsg, self)
+    start = loc
+    loc += 1
+    maxloc = start + self.maxLen
+    maxloc = min(maxloc, len(instring))
+    while loc < maxloc and instring[loc] in self.matchWhite:
+        loc += 1
+
+    if loc - start < self.minLen:
+        raise ParseException(instring, loc, self.errmsg, self)
+
+    return loc, instring[start:loc]
+
+

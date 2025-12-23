@@ -1,0 +1,5 @@
+OpenJDK Runtime Environment (build 21.0.8+9-Ubuntu-0ubuntu124.04.1)
+… +9 lines
+
+* Get more help at https://help.gradle.org
+

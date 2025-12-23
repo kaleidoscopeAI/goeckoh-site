@@ -1,1 +1,2 @@
-function pushHistory(history: ConstructHistoryPoint[], pt: ConstructHistoryPoint, maxLen = 200) {
+const W = req.body.W;
+const meta = req.body.meta ?? {};

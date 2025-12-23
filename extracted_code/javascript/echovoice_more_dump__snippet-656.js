@@ -1,1 +1,1 @@
-const nodes = useNodeSimulation.getNodes(); // returns NodeDatum[] with Ki
+for (const k of this.targets) {

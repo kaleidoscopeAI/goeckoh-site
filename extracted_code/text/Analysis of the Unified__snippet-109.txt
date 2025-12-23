@@ -1,0 +1,2 @@
+workerRef.current = worker;
+mediatorRef.current = new OllamaMediator(worker);

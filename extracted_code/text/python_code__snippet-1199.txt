@@ -1,0 +1,3 @@
+return mimetypes.guess_type(file_url, strict=False)[0] == "text/html"
+
+

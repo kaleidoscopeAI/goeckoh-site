@@ -1,71 +1,40 @@
-class PipReporter(BaseReporter):
-    def __init__(self) -> None:
-        self.reject_count_by_package: DefaultDict[str, int] = defaultdict(int)
+        raise ValueError("No phonemes from G2P.")
 
-        self._messages_at_reject_count = {
-            1: (
-                "pip is looking at multiple versions of {package_name} to "
-                "determine which version is compatible with other "
-                "requirements. This could take a while."
-            ),
-            8: (
-                "pip is still looking at multiple versions of {package_name} to "
-                "determine which version is compatible with other "
-                "requirements. This could take a while."
-            ),
-            13: (
-                "This is taking longer than usual. You might need to provide "
-                "the dependency resolver with stricter constraints to reduce "
-                "runtime. See https://pip.pypa.io/warnings/backtracking for "
-                "guidance. If you want to abort this run, press Ctrl + C."
-            ),
-        }
+    child_duration = max(len(phonemes) / max(fp.rate, 1e-6), dt)
+    num_frames = max(1, int(child_duration / dt))
+    t = np.linspace(0.0, child_duration, num_frames)
 
-    def rejecting_candidate(self, criterion: Any, candidate: Candidate) -> None:
-        self.reject_count_by_package[candidate.name] += 1
+    base_contour = np.clip(np.sin(np.pi * t / child_duration), 0.0, 1.0)
+    target_f0 = fp.mu_f0 + base_contour * fp.sigma_f0
+    jitter_pert = np.sin(t * 100) * fp.jitter_base
+    target_f0 += jitter_pert * fp.sigma_f0 * 0.1
 
-        count = self.reject_count_by_package[candidate.name]
-        if count not in self._messages_at_reject_count:
-            return
+    energy = np.clip(base_contour, 0.1, 1.0)
+    shimmer_pert = np.cos(t * 50) * fp.shimmer_base
+    energy += shimmer_pert * 0.1
+    energy = np.clip(energy, 0.1, 1.0)
 
-        message = self._messages_at_reject_count[count]
-        logger.info("INFO: %s", message.format(package_name=candidate.name))
+    target_hnr = np.full(num_frames, 1.0 - fp.base_roughness)
+    target_tilt = np.full(num_frames, fp.base_metalness)
 
-        msg = "Will try a different candidate, due to conflict:"
-        for req_info in criterion.information:
-            req, parent = req_info.requirement, req_info.parent
-            # Inspired by Factory.get_installation_error
-            msg += "\n    "
-            if parent:
-                msg += f"{parent.name} {parent.version} depends on "
-            else:
-                msg += "The user requested "
-            msg += req.format_for_error()
-        logger.debug(msg)
+    zcr = np.zeros(num_frames)
+    frames_per_ph = max(1, num_frames // len(phonemes))
+    for i, ph in enumerate(phonemes):
+        start = i * frames_per_ph
+        end = num_frames if i == len(phonemes) - 1 else start + frames_per_ph
+        zcr[start:end] = _phoneme_sharpness(ph, fp.base_sharpness)
 
+    audio = vocoder_backend.synthesize(
+        phonemes, profile.embedding, target_f0, energy, target_hnr, target_tilt, dt
+    )
 
-class PipDebuggingReporter(BaseReporter):
-    """A reporter that does an info log for every event it sees."""
-
-    def starting(self) -> None:
-        logger.info("Reporter.starting()")
-
-    def starting_round(self, index: int) -> None:
-        logger.info("Reporter.starting_round(%r)", index)
-
-    def ending_round(self, index: int, state: Any) -> None:
-        logger.info("Reporter.ending_round(%r, state)", index)
-
-    def ending(self, state: Any) -> None:
-        logger.info("Reporter.ending(%r)", state)
-
-    def adding_requirement(self, requirement: Requirement, parent: Candidate) -> None:
-        logger.info("Reporter.adding_requirement(%r, %r)", requirement, parent)
-
-    def rejecting_candidate(self, criterion: Any, candidate: Candidate) -> None:
-        logger.info("Reporter.rejecting_candidate(%r, %r)", criterion, candidate)
-
-    def pinning(self, candidate: Candidate) -> None:
-        logger.info("Reporter.pinning(%r)", candidate)
+    return audio, {
+        "energy": energy.astype(np.float32),
+        "f0": target_f0.astype(np.float32),
+        "zcr": zcr.astype(np.float32),
+        "hnr": target_hnr.astype(np.float32),
+        "tilt": target_tilt.astype(np.float32),
+        "dt": np.array([dt], dtype=np.float32),
+    }
 
 

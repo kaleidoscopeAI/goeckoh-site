@@ -1,1 +1,1 @@
-export function getEVector(): EmotionalVector {
+const weights = adjList[i].map((nb) => nb.w);

@@ -1,0 +1,8 @@
+"""Checks if a concept matches a rule condition."""
+for key, value in condition.items():
+    if key == 'pattern_type':
+        if not any(pattern.get('type') == value for pattern in concept.get('patterns', [])):
+            return False
+    elif concept.get(key) != value:
+        return False
+return True

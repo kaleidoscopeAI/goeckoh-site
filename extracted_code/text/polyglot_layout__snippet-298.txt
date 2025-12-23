@@ -1,0 +1,2 @@
+  </div>
+  <p class="small" style="margin-top:8px;">Open <span class="code">/status</span> or <span class="code">/recent</span> for data. The system

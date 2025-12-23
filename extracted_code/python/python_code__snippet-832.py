@@ -1,3 +1,6 @@
+import codecs
+import locale
+import re
 import sys
-from typing import TYPE_CHECKING, Iterable, List
+from typing import List, Tuple
 

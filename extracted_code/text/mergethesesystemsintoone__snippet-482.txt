@@ -1,0 +1,22 @@
+            "h5n1_simulation.py" :{  "status": "omitted" ,  "description" :  "example integration method into h5n1 , remove or re define."} , # placehoder only 
+
+          ]},
+
+  "kaleidoscope_ai/visualization/": { "status":" incomplete for basic setup purposes, visualization should be tested via matplotlib first","description": "implements visualiazation for the nodes behaviours as an ongoing real time update component that is part of the AGI framework.",
+
+  "submodules":[
+         "__init__.py":{ "status": "implemented" ,  "description" : "Makes directory into package"},
+    "visualizer.py" :{ "status":" omitted , visual components implememtated directly as requried, but as part of larger codebase for readability. ","description" :"Visualisation is made to ensure modularity, but only minimal implementations provided"} ,
+
+           ]
+} ,
+  "kaleidoscope_ai/utils/": {
+      "description":"Helper and functions that perform very generic logic/process" ,
+   "submodules" :[
+      "__init__.py":{ "status":"implemented" ,"description": "Marks utils submodule"}
+        ,     "validation.py" :{ "status": "implemented","description":"Method of check of output, data , type , values etc."},
+   "config.py":{ "status":"implemented", "description" : "A core method that provides all the configurable items or attributes available"}
+           ,"metrics.py": { "status" :" implemented",  "description":  "Provides a structred container for output analysis for all node behaviours." }
+
+     ]},
+

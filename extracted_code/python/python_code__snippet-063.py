@@ -1,25 +1,6 @@
-    def b(s):
-        return s
+def get_scheme(name):
+    if name not in _SCHEMES:
+        raise ValueError('unknown scheme name: %r' % name)
+    return _SCHEMES[name]
 
-    # Workaround for standalone backslash
 
-    def u(s):
-        return unicode(s.replace(r"\\", r"\\\\"), "unicode_escape")
-
-    unichr = unichr
-    int2byte = chr
-
-    def byte2int(bs):
-        return ord(bs[0])
-
-    def indexbytes(buf, i):
-        return ord(buf[i])
-
-    iterbytes = functools.partial(itertools.imap, ord)
-    import StringIO
-
-    StringIO = BytesIO = StringIO.StringIO
-    _assertCountEqual = "assertItemsEqual"
-    _assertRaisesRegex = "assertRaisesRegexp"
-    _assertRegex = "assertRegexpMatches"
-    _assertNotRegex = "assertNotRegexpMatches"

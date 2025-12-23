@@ -1,11 +1,14 @@
-package com.kaleidoscope.body
-import android.app.Activity
-import android.app.admin.DevicePolicyManager
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.provider.Settings
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+import android.view.View
+import android.widget.Button
+import android.widget.CompoundButton
+import android.widget.Switch
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import java.util.concurrent.TimeUnit
+class MainActivity : AppCompatActivity() {
+private val TAG = "MainActivity"
+private lateinit var hal: DeviceHAL

@@ -1,3 +1,3 @@
-const unsub = service.subscribe((cs) => setConstructs(cs));
-// initial update from provider
-const nodes = nodesProvider ? nodesProvider() : [];
+import fs from "fs";
+import path from "path";
+export class ProjectionService {

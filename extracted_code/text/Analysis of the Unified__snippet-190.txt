@@ -1,0 +1,6 @@
+Suitability Score: Calculated using a Specialization Match Factor (×1.5 if data type, e.g., "evidence", matches gear function, e.g., decision_making) and an Activity Factor for load balancing.
+
+Activity Factor: 1.0+time_since_active/36001.0​ (using a 1-hour scale to promote distribution).
+
+Connections: Gears are set up with a linear connection structure (each connected only to its next and previous gear).
+

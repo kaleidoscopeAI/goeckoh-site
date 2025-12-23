@@ -1,5 +1,4 @@
-const f0 = yinPitch(frame, sr, 80, 400);
-
-// HNR (dB) using autocorrelation peak ratio at pitch lag
-const hnr = estimateHNR(frame, sr, f0);
-
+function yinPitch(x, sr, fMin, fMax) {
+const N = x.length;
+const tauMin = Math.floor(sr / fMax);
+const tauMax = Math.floor(sr / fMin);

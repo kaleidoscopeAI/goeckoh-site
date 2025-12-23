@@ -1,0 +1,18 @@
+HTML structure with all the panels and controls.
+
+CSS styling for a professional dark theme.
+
+JavaScript code for:
+
+    Initializing the Three.js visualization
+
+    Implementing the CognitiveCrystal class with physics simulation
+
+    Handling user interactions (sliders, buttons)
+
+    Updating metrics and charts
+
+    Console logging
+
+    Exporting data
+

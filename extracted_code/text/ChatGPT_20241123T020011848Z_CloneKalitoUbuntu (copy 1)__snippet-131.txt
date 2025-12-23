@@ -1,0 +1,5 @@
+scatters.set_offsets([])
+fitness_line.set_data([], [])
+replication_line.set_data([], [])
+return scatters, fitness_line, replication_line
+

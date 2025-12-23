@@ -1,49 +1,15 @@
-def _default_key_normalizer(key_class, request_context):
-    """
-    Create a pool key out of a request context dictionary.
+from __future__ import unicode_literals
 
-    According to RFC 3986, both the scheme and host are case-insensitive.
-    Therefore, this function normalizes both before constructing the pool
-    key for an HTTPS request. If you wish to change this behaviour, provide
-    alternate callables to ``key_fn_by_scheme``.
+import codecs
+from email import message_from_file
+import json
+import logging
+import re
 
-    :param key_class:
-        The class to use when constructing the key. This should be a namedtuple
-        with the ``scheme`` and ``host`` keys at a minimum.
-    :type  key_class: namedtuple
-    :param request_context:
-        A dictionary-like object that contain the context for a request.
-    :type  request_context: dict
 
-    :return: A namedtuple that can be used as a connection pool key.
-    :rtype:  PoolKey
-    """
-    # Since we mutate the dictionary, make a copy first
-    context = request_context.copy()
-    context["scheme"] = context["scheme"].lower()
-    context["host"] = context["host"].lower()
-
-    # These are both dictionaries and need to be transformed into frozensets
-    for key in ("headers", "_proxy_headers", "_socks_options"):
-        if key in context and context[key] is not None:
-            context[key] = frozenset(context[key].items())
-
-    # The socket_options key may be a list and needs to be transformed into a
-    # tuple.
-    socket_opts = context.get("socket_options")
-    if socket_opts is not None:
-        context["socket_options"] = tuple(socket_opts)
-
-    # Map the kwargs to the names in the namedtuple - this is necessary since
-    # namedtuples can't have fields starting with '_'.
-    for key in list(context.keys()):
-        context["key_" + key] = context.pop(key)
-
-    # Default to ``None`` for keys missing from the context
-    for field in key_class._fields:
-        if field not in context:
-            context[field] = None
-
-    return key_class(**context)
-
+from . import DistlibException, __version__
+from .compat import StringIO, string_types, text_type
+from .markers import interpret
+from .util import extract_by_key, get_extras
+from .version import get_scheme, PEP440_VERSION_RE
 

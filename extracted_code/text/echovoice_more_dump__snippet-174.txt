@@ -1,8 +1,2 @@
-class WavefunctionCollapse(Enum):
-    """Possible collapse states for quantum wave functions"""
-    COHERENT = auto()       # Maintains quantum coherence
-    CLASSICAL = auto()      # Collapsed to classical state
-    ENTANGLED = auto()      # Entangled with other nodes
-    SUPERPOSED = auto()     # In superposition of multiple states
-    TELEPORTED = auto()     # State has been teleported
+This method extends the CellularChaosGenerator class (which manages self.grid) to calculate the required features: Shannon Entropy (exploration measure) and a D-dimensional directional bias vector (using PCA for rigor).
 

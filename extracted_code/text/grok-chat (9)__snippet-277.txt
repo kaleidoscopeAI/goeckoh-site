@@ -1,0 +1,5 @@
+Server: Werkzeug/3.1.4 Python/3.12.3
+… +13 lines
+{"clear":0,"empty":0,"uncertain":0},"reference_seconds":0.0,"reference_source":"none","refractory_until":0.0,"running":false
+,"sample_rate":16000,"tts_mode":"xtts"}
+

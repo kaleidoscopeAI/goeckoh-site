@@ -1,0 +1,7 @@
+  ),
+  max_files_to_process: int = typer.Option(
+      None,
+      "--max-files-to-process",
+      "-m",
+      help="Set the maximum number of files to process. 0 means no limit."
+  )

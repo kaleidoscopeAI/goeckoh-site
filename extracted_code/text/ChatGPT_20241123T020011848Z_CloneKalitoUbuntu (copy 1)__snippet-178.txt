@@ -1,0 +1,3 @@
+- Allocates resources dynamically.
+- Ensures nodes don’t duplicate references.
+

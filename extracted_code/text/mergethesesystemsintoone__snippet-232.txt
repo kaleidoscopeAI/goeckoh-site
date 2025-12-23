@@ -1,2 +1,4 @@
-# <REDACTED: potential secret detected>
+print(f"Deploy: uvicorn {__file__}:app --host {HOST} --port {PORT}")
+uvicorn.run(app, host=HOST, port=PORT)
 
+#!/usr/bin/env python3

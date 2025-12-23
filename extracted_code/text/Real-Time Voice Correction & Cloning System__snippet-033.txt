@@ -1,0 +1,5 @@
+name="ProstheticAgent",
+model="gemini-2.0-flash-live", # Low-latency live inference
+instruction="""Convert third-person to first-person. Maintain tone. 
+Output JSON ONLY.""",
+output_schema=SpeechCorrection

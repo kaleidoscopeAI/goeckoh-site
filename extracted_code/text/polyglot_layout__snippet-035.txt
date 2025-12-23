@@ -1,0 +1,76 @@
+    row = self.cur.fetchone()
+
+    if row:
+
+       data = json.loads(row[0])
+
+       await self._set_cache(f"agi:dna:{gen}", row[0], CACHE_TTL)
+
+       return KnowledgeDNA(
+
+           text_patterns=[PatternStrand(**p) for p in data['text_patterns']],
+
+           visual_patterns=[VisualStrand(**v) for v in data['visual_patterns']],
+
+           mutation_rate=data['mutation_rate'],
+
+           generation=data['generation']
+
+       )
+
+    return KnowledgeDNA()
+
+  async def add_insight_batch(self, insights: List[Dict]):
+
+    data = [(str(uuid.uuid4()), json.dumps(ins)) for ins in insights]
+
+    if self.redis:
+
+       async with self.redis.pipeline() as pipe:
+
+           for id_, js in data:
+
+              await pipe.set(f"agi:insight:{id_}", js, ex=CACHE_TTL)
+
+           await pipe.execute()
+
+    else:
+
+       for id_, js in data:
+
+           self.fallback_cache[f"agi:insight:{id_}"] = js
+
+    self.cur.executemany("INSERT INTO insights VALUES (?, ?)", data)
+
+    self.con.commit()
+
+  async def add_edge_batch(self, edges: List[Tuple[str, str, float]]):
+
+    if self.redis:
+
+       async with self.redis.pipeline() as pipe:
+
+           for s, t, w in edges:
+
+              await pipe.sadd(f"agi:graph:{s}", f"{t}:{w}")
+
+           await pipe.execute()
+
+    else:
+
+       for s, t, w in edges:
+
+           if f"agi:graph:{s}" not in self.fallback_cache:
+
+              self.fallback_cache[f"agi:graph:{s}"] = set()
+
+           self.fallback_cache[f"agi:graph:{s}"].add(f"{t}:{w}")
+
+    self.cur.executemany("INSERT INTO graph VALUES (?, ?, ?)", edges)
+
+    self.con.commit()
+
+# Hypercube
+
+class Hypercube:
+

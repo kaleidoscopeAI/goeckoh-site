@@ -1,1 +1,1 @@
-export const DEFAULT_P: Record<string, number[]> = {
+const unsub = svc.subscribe((v) => setEVec(v));

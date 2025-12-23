@@ -1,1 +1,0 @@
-The cognitive system is architected as a network of modular \emph{Thought Engines}, each implementing specialized cognitive functions. These engines operate on distributed embedding vectors representing knowledge, perceptions, and hypotheses. The global cognitive state \( S_k \) evolves by integrating inputs from these engines through a routing mechanism formalized as:

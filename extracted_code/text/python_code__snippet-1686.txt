@@ -1,0 +1,2 @@
+print("Warning: Rust Kernel 'bio_audio' not compiled. Sound Synthesis Disabled.")
+

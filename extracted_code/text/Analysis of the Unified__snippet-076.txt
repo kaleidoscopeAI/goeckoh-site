@@ -1,0 +1,3 @@
+rec = _JOBS[job_id]
+return rec["core"].diagnostics()
+

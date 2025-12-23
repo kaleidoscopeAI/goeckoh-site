@@ -1,1 +1,2 @@
-const reflection = node.generateReflection();
+const angles = useMemo(() => {
+const n = emotions.length;

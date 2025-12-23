@@ -1,0 +1,3 @@
+doc: This module defines the concrete API boundary between the Echo core
+functions: log_echo_utterance, get_brain_caption, get_brain_metrics, get_avatar_frame
+classes: EchoMeta, BrainMetrics, AvatarFrame

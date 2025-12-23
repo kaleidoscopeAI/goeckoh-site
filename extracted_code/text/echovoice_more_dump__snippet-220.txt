@@ -1,1 +1,3 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+• The "metric" (g) represents the internal state of understanding or the relationships between different dimensions/concepts within the Cube.
+• "Ricci curvature" symbolizes local complexity, inconsistency, uncertainty, or information density. Regions of high positive "curvature" might represent areas of conflicting information or poorly integrated concepts.
+• The Ricci flow equation ( \partial_t g = -2 \text{Ric} ) then represents an adaptive process that drives the system towards a more coherent, simplified, or stable state by "smoothing out" these inconsistencies (reducing positive curvature), analogous to how heat flow homogenizes temperature.30

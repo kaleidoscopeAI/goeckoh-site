@@ -1,0 +1,6 @@
+for node in self.nodes:
+    hypothesis, confidence = self.perspective_engine.generate_and_evaluate_hypothesis(node, step)
+    if hypothesis and confidence > 0.5:
+        # Update node position or knowledge based on hypothesis
+        node.position = hypothesis  # Or a weighted blend
+        node.knowledge = min(1.0, node.knowledge + confidence * 0.1)

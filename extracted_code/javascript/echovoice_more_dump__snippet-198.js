@@ -1,3 +1,3 @@
-133 |             let mut rng = rand::thread_rng();
-    |                     ^^^ help: if this is intentional, prefix it with an underscore: `_rng`
+We'll create a function to update the visualization:
 
+function updateVisualization(viz, crystal) {

@@ -1,4 +1,3 @@
-  terminfo/74 (268 files), 3 more. These directories are excluded from snapshots
-  and undo cleanup. Adjust `ghost_snapshot.ignore_large_untracked_dirs` to
-  change this behavior.
+• Decided to download a 6.6MB mini Librispeech zip with audio and transcripts from a public URL to keep test data small and
+  manageable, storing it under backend/data. I'll fetch and unzip this to avoid large commits.
 

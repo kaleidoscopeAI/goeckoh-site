@@ -1,0 +1,7 @@
+      5,     7,     7,MachineState.ERROR,     4,     3,MachineState.ERROR,MachineState.ERROR,#00-07
+ MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,#08-0f
+ MachineState.ITS_ME,MachineState.ITS_ME,     6,     6,     6,     6,MachineState.ERROR,MachineState.ERROR,#10-17
+      6,     6,     6,     6,     6,MachineState.ITS_ME,     6,     6,#18-1f
+      6,     6,     6,     6,     5,     7,     7,MachineState.ERROR,#20-27
+      5,     8,     6,     6,MachineState.ERROR,     6,     6,     6,#28-2f
+      6,     6,     6,     6,MachineState.ERROR,MachineState.ERROR,MachineState.START,MachineState.START #30-37

@@ -1,0 +1,7 @@
+       "submodules":[
+          "__init__.py": {  "description":"Marks util as submodule"},
+        "validation.py": { "description":  "verifies output at various states ensuring system behaviour"},
+        "config.py": {  "description":"data-class holding initial setu options , as specified by documnetation."},
+         "metrics.py": {"description" : " Tracks key behaviour metrics at node level using history of node properties"},
+          ]
+ }   ,

@@ -1,0 +1,10 @@
+aggregate_knowledge: Builds a simple networkx graph, adding nodes for each contributing node and their individual data items to show the structure of aggregation.
+
+identify_gaps: A simplified method that looks for nodes in the knowledge graph with few connections.
+
+generate_tasks: Creates placeholder tasks based on the identified gaps.
+
+generate_dna: Creates the aggregated DNA of the SuperNode.
+
+identify_key_insights and report_status (basic summary).
+

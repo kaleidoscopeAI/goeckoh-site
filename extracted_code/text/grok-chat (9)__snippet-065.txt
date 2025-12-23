@@ -1,0 +1,3 @@
+correction → XTTS/Piper VC → playback with GCL/latency gating
+(speech_mirror.py).
+

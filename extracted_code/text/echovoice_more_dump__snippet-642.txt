@@ -1,0 +1,10 @@
+# produce a synthetic 'crawl' delta X based on role and step
+seed = int(node.id * 1009 + step * 97)
+rng = np.random.RandomState(seed)
+delta = rng.normal(scale=0.1, size=cfg.dims)
+# small signal depending on role
+role_signal = {'red': -0.2, 'blue': 0.2, 'crawler': 0.5, 'analyzer': 0.1}
+delta += role_signal.get(node.R, 0.0)
+return delta
+
+

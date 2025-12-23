@@ -1,1 +1,0 @@
-- **Self-supervised Online Learning:** System refines its knowledge base, emotional models, and operators unsupervised from streaming multimodal inputs with minimal human tuning.

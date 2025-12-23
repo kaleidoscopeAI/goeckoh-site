@@ -1,0 +1,4 @@
+"""Returns glibc version string, or None if not using glibc."""
+return _glibc_version_string_confstr() or _glibc_version_string_ctypes()
+
+

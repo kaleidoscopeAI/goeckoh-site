@@ -1,6 +1,6 @@
-export default function App3D() {
-const mountRef = useRef<HTMLDivElement>(null);
-const loopRef = useRef<EmotionLoop | null>(null);
-const nodeMeshesRef = useRef<THREE.Mesh[]>([]);
-const vectorArrowsRef = useRef<THREE.ArrowHelper[][]>([]);
-const constructLinesRef = useRef<THREE.Line[][]>([]);
+const onMove = (moveEv: PointerEvent) => {
+const rect = (ev.currentTarget.ownerSVGElement as SVGSVGElement).getBoundingClientRect();
+const x = moveEv.clientX - rect.left;
+const y = moveEv.clientY - rect.top;
+const dx = x - cx, dy = y - cy;
+const angleNow = Math.atan2(dy, dx);

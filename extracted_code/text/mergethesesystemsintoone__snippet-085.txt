@@ -1,1 +1,1 @@
-class DataWrapper:
+A threaded class using psutil to monitor system CPU and memory usage against configurable maximums.

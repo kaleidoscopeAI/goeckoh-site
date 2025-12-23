@@ -1,1 +1,1 @@
-def coherence(self) -> float:
+def start(self) -> None:

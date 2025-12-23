@@ -1,0 +1,6 @@
+  ),
+  output_path: str = typer.Option(
+      None, # Optional
+      "--output-path",
+      "-o",
+      help=("The absolute path to save the llms.txt file. If not specified,

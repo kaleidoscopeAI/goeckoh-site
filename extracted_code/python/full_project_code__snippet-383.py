@@ -1,2 +1,2 @@
-from pip._vendor.chardet.sbcharsetprober import SingleByteCharSetModel
+from typing import TYPE_CHECKING, Tuple
 

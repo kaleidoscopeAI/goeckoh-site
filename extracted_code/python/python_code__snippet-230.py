@@ -1,10 +1,26 @@
-import re
-import sys
-import types
-import fnmatch
-from os.path import basename
+class InfinityType:
+    def __repr__(self) -> str:
+        return "Infinity"
 
-from pip._vendor.pygments.formatters._mapping import FORMATTERS
-from pip._vendor.pygments.plugin import find_plugin_formatters
-from pip._vendor.pygments.util import ClassNotFound
+    def __hash__(self) -> int:
+        return hash(repr(self))
+
+    def __lt__(self, other: object) -> bool:
+        return False
+
+    def __le__(self, other: object) -> bool:
+        return False
+
+    def __eq__(self, other: object) -> bool:
+        return isinstance(other, self.__class__)
+
+    def __gt__(self, other: object) -> bool:
+        return True
+
+    def __ge__(self, other: object) -> bool:
+        return True
+
+    def __neg__(self: object) -> "NegativeInfinityType":
+        return NegativeInfinity
+
 

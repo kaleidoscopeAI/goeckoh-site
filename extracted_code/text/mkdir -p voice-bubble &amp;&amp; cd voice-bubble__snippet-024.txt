@@ -1,3 +1,4 @@
-1. Apply WASM fix → refresh → speak → lattice physics
-2. Add UI → toggle Monitor → **hear valence shaping** 
-3. Screenshot 3 states → clinician PDF done
+input_stream: cpal::Stream,
+output_stream: cpal::Stream,
+input_queue: Arc<SegQueue<AudioFrame>>,
+output_queue: Arc<HeapRb<f32>>,

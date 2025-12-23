@@ -1,1 +1,1 @@
-import SwiftUI
+def bootstrap_xtts(paths: InstallPaths):

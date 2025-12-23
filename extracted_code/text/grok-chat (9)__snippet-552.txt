@@ -1,0 +1,4 @@
+Search noise|vad|gating|spectral|snr|wiener|snr|rms|floor|threshold|latency|
+       playback in speech_mirror.py
+Read speech_mirror.py, gcl_gate.py
+

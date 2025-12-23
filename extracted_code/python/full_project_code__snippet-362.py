@@ -1,2 +1,3 @@
-from within setuptools and from chardet subpackages.
+from .codingstatemachinedict import CodingStateMachineDict
+from .enums import MachineState
 

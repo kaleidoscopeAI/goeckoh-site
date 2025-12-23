@@ -1,2 +1,1 @@
-class RiskAnalyzer:
-def init_(self):
+# system_upgrade_module.py (continued from your original)

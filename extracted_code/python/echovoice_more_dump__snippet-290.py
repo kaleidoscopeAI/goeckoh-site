@@ -1,2 +1,3 @@
-Note: We must be careful with the imports. The Graph and ChemicalFeatures are from cognitive_crystal.
-
+error[E0432]: unresolved import `crate::chemistry::Hybridization`
+ --> src/validation_tests.rs:5:5
+  |

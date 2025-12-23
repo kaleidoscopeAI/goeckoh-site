@@ -1,0 +1,3 @@
+smiles, features = details
+print("Molecule details:", smiles, features)
+

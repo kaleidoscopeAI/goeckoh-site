@@ -1,6 +1,10 @@
-from typing import Callable, Match, Optional
-import re
+import collections
+import logging
+from typing import Generator, List, Optional, Sequence, Tuple
 
-from ._emoji_codes import EMOJI
+from pip._internal.utils.logging import indent_log
 
+from .req_file import parse_requirements
+from .req_install import InstallRequirement
+from .req_set import RequirementSet
 

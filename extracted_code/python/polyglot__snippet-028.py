@@ -1,1 +1,1 @@
-async def process_codebase(self, input_directory: str, target_language: Optional[str] = None) -> Dict[str, Any]:
+def update_buffer_from_environment(self, sound_level: str):

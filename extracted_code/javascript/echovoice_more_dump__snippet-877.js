@@ -1,1 +1,1 @@
-for (let i = 0; i < node.D.length; i++) out.D[i] += w * (nb.D[i] - node.D[i]);
+- **Operators Oᵢ**: Each operator **Oᵢ** was assumed to be a Lipschitz-continuous nonlinear function (e.g., tanh or sigmoid). Tests confirmed

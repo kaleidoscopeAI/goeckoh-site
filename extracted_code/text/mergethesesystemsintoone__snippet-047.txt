@@ -1,1 +1,2 @@
-class Trait:
+# <REDACTED: potential secret detected>
+

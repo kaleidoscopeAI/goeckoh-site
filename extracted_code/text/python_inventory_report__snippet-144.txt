@@ -1,0 +1,2 @@
+doc: text_utils.py
+functions: normalize_simple, text_similarity

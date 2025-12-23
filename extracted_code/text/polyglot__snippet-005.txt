@@ -1,1 +1,1 @@
-class AGIMathematics {
+class AGIOrchestrator {

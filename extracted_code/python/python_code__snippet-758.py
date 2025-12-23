@@ -1,79 +1,100 @@
-import contextlib
-import functools
-import operator
-import os
-import re
-import struct
-import subprocess
-import sys
-from typing import IO, Iterator, NamedTuple, Optional, Tuple
+def get_build_tracker() -> Generator["BuildTracker", None, None]:
+    root = os.environ.get("PIP_BUILD_TRACKER")
+    with contextlib.ExitStack() as ctx:
+        if root is None:
+            root = ctx.enter_context(TempDirectory(kind="build-tracker")).path
+            ctx.enter_context(update_env_context_manager(PIP_BUILD_TRACKER=root))
+            logger.debug("Initialized build tracking at %s", root)
+
+        with BuildTracker(root) as tracker:
+            yield tracker
 
 
-def _read_unpacked(f: IO[bytes], fmt: str) -> Tuple[int, ...]:
-    return struct.unpack(fmt, f.read(struct.calcsize(fmt)))
+class TrackerId(str):
+    """Uniquely identifying string provided to the build tracker."""
 
 
-def _parse_ld_musl_from_elf(f: IO[bytes]) -> Optional[str]:
-    """Detect musl libc location by parsing the Python executable.
+class BuildTracker:
+    """Ensure that an sdist cannot request itself as a setup requirement.
 
-    Based on: https://gist.github.com/lyssdod/f51579ae8d93c8657a5564aefc2ffbca
-    ELF header: https://refspecs.linuxfoundation.org/elf/gabi4+/ch4.eheader.html
-    """
-    f.seek(0)
-    try:
-        ident = _read_unpacked(f, "16B")
-    except struct.error:
-        return None
-    if ident[:4] != tuple(b"\x7fELF"):  # Invalid magic, not ELF.
-        return None
-    f.seek(struct.calcsize("HHI"), 1)  # Skip file type, machine, and version.
+    When an sdist is prepared, it identifies its setup requirements in the
+    context of ``BuildTracker.track()``. If a requirement shows up recursively, this
+    raises an exception.
 
-    try:
-        # e_fmt: Format for program header.
-        # p_fmt: Format for section header.
-        # p_idx: Indexes to find p_type, p_offset, and p_filesz.
-        e_fmt, p_fmt, p_idx = {
-            1: ("IIIIHHH", "IIIIIIII", (0, 1, 4)),  # 32-bit.
-            2: ("QQQIHHH", "IIQQQQQQ", (0, 2, 5)),  # 64-bit.
-        }[ident[4]]
-    except KeyError:
-        return None
-    else:
-        p_get = operator.itemgetter(*p_idx)
+    This stops fork bombs embedded in malicious packages."""
 
-    # Find the interpreter section and return its content.
-    try:
-        _, e_phoff, _, _, _, e_phentsize, e_phnum = _read_unpacked(f, e_fmt)
-    except struct.error:
-        return None
-    for i in range(e_phnum + 1):
-        f.seek(e_phoff + e_phentsize * i)
+    def __init__(self, root: str) -> None:
+        self._root = root
+        self._entries: Dict[TrackerId, InstallRequirement] = {}
+        logger.debug("Created build tracker: %s", self._root)
+
+    def __enter__(self) -> "BuildTracker":
+        logger.debug("Entered build tracker: %s", self._root)
+        return self
+
+    def __exit__(
+        self,
+        exc_type: Optional[Type[BaseException]],
+        exc_val: Optional[BaseException],
+        exc_tb: Optional[TracebackType],
+    ) -> None:
+        self.cleanup()
+
+    def _entry_path(self, key: TrackerId) -> str:
+        hashed = hashlib.sha224(key.encode()).hexdigest()
+        return os.path.join(self._root, hashed)
+
+    def add(self, req: InstallRequirement, key: TrackerId) -> None:
+        """Add an InstallRequirement to build tracking."""
+
+        # Get the file to write information about this requirement.
+        entry_path = self._entry_path(key)
+
+        # Try reading from the file. If it exists and can be read from, a build
+        # is already in progress, so a LookupError is raised.
         try:
-            p_type, p_offset, p_filesz = p_get(_read_unpacked(f, p_fmt))
-        except struct.error:
-            return None
-        if p_type != 3:  # Not PT_INTERP.
-            continue
-        f.seek(p_offset)
-        interpreter = os.fsdecode(f.read(p_filesz)).strip("\0")
-        if "musl" not in interpreter:
-            return None
-        return interpreter
-    return None
+            with open(entry_path) as fp:
+                contents = fp.read()
+        except FileNotFoundError:
+            pass
+        else:
+            message = "{} is already being built: {}".format(req.link, contents)
+            raise LookupError(message)
 
+        # If we're here, req should really not be building already.
+        assert key not in self._entries
 
-class _MuslVersion(NamedTuple):
-    major: int
-    minor: int
+        # Start tracking this requirement.
+        with open(entry_path, "w", encoding="utf-8") as fp:
+            fp.write(str(req))
+        self._entries[key] = req
 
+        logger.debug("Added %s to build tracker %r", req, self._root)
 
-def _parse_musl_version(output: str) -> Optional[_MuslVersion]:
-    lines = [n for n in (n.strip() for n in output.splitlines()) if n]
-    if len(lines) < 2 or lines[0][:4] != "musl":
-        return None
-    m = re.match(r"Version (\d+)\.(\d+)", lines[1])
-    if not m:
-        return None
-    return _MuslVersion(major=int(m.group(1)), minor=int(m.group(2)))
+    def remove(self, req: InstallRequirement, key: TrackerId) -> None:
+        """Remove an InstallRequirement from build tracking."""
+
+        # Delete the created file and the corresponding entry.
+        os.unlink(self._entry_path(key))
+        del self._entries[key]
+
+        logger.debug("Removed %s from build tracker %r", req, self._root)
+
+    def cleanup(self) -> None:
+        for key, req in list(self._entries.items()):
+            self.remove(req, key)
+
+        logger.debug("Removed build tracker: %r", self._root)
+
+    @contextlib.contextmanager
+    def track(self, req: InstallRequirement, key: str) -> Generator[None, None, None]:
+        """Ensure that `key` cannot install itself as a setup requirement.
+
+        :raises LookupError: If `key` was already provided in a parent invocation of
+                             the context introduced by this method."""
+        tracker_id = TrackerId(key)
+        self.add(req, tracker_id)
+        yield
+        self.remove(req, tracker_id)
 
 

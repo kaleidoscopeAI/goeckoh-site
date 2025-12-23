@@ -1,0 +1,9 @@
+"""Run autonomous cognitive cycles"""
+while True:
+    try:
+        await cognitive_system.cognitive_cycle()
+        await asyncio.sleep(2.0)  # 2-second cycles
+    except Exception as e:
+        logging.error(f"Autonomous cycle failed: {e}")
+        await asyncio.sleep(5.0)
+

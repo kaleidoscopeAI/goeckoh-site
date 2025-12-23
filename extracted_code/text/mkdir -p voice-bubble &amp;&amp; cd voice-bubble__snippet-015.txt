@@ -1,2 +1,13 @@
-Worklet: 10ms features → 16ms render → browser audio stack ~80-150ms
-Total: 110-180ms on desktop Chrome, 150-250ms mobile Safari
+"GOECKOH MIRROR DEMO (2min)
+
+1. HEADPHONES ON. Toggle 'Hear lattice DSP' → speak normally
+   → Bubble smooths, audio clear → 'High coherence/valence'
+
+2. Say 'tick-tock' sharply → spikes + edge → 'Arousal state'
+
+3. Whisper → rough/muffled → 'Disrupted lattice'
+
+TECHNICAL: 180ms E2E. Rust lattice core. Sub-250ms corollary discharge.
+DEPLOYMENT: Browser-native. iPhone XR capable.
+
+Next: Voice cloning + predictive text → full STT→TTS loop."

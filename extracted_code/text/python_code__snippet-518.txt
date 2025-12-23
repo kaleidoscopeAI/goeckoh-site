@@ -1,0 +1,11 @@
+"""A prompt that returns a float.
+
+Example:
+    >>> temperature = FloatPrompt.ask("Enter desired temperature")
+
+"""
+
+response_type = float
+validate_error_message = "[prompt.invalid]Please enter a number"
+
+

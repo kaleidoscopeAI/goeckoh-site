@@ -1,9 +1,4 @@
-fn ensure_dataset_exists(path: &str, url: &str) -> Result<(), CrystalError> {
-    let p = Path::new(path);
-    if p.exists() {
-        return Ok(());
-    }
-    if url.is_empty() {
-        return Err(CrystalError::IO(std::io::Error::new(std::io::ErrorKind::NotFound, format!("File {} does not exist and no download URL provided", path)));
-    }
-    // ... download code
+Now, the run_experiment function is complete.
+
+We also note that the run_experiment function uses evaluate_kfold_advanced and evaluate_holdout_advanced which are assumed to be implemented in the optimizer module.
+

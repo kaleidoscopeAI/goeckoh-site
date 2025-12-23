@@ -1,22 +1,35 @@
-class QuantumState:
-    """Enhanced quantum state with Hamiltonian dynamics from documents"""
-    hamiltonian: np.ndarray = field(default_factory=lambda: np.eye(3))
-    wavefunction: np.ndarray = field(default_factory=lambda: np.ones(3)/np.sqrt(3))
-    energy: float = 0.0
-    # From Unified Mathematical Framework
-    correlation_length: float = 5.0  # ξ from criticality equations
-    criticality_index: float = 1.0
-    
-    def evolve(self, dt: float = 0.01):
-        """Quantum evolution using Hamiltonian from documents"""
-        try:
-            from scipy.linalg import expm
-            evolution_matrix = expm(-1j * self.hamiltonian * dt)
-        except ImportError:
-            # Taylor series approximation
-            evolution_matrix = np.eye(self.hamiltonian.shape[0]) - 1j * self.hamiltonian * dt
-        
-        self.wavefunction = evolution_matrix @ self.wavefunction
-        self.wavefunction /= np.linalg.norm(self.wavefunction)
-        self.energy = np.real(self.wavefunction.conj().T @ self.hamiltonian @ self.wavefunction)
+# needed here to prevent circular import:
+from .console import ConsoleRenderable
+
+# always skip rich generated jupyter renderables or None values
+if _safe_isinstance(value, JupyterRenderable) or value is None:
+    return None
+
+console = console or get_console()
+
+with console.capture() as capture:
+    # certain renderables should start on a new line
+    if _safe_isinstance(value, ConsoleRenderable):
+        console.line()
+    console.print(
+        value
+        if _safe_isinstance(value, RichRenderable)
+        else Pretty(
+            value,
+            overflow=overflow,
+            indent_guides=indent_guides,
+            max_length=max_length,
+            max_string=max_string,
+            max_depth=max_depth,
+            expand_all=expand_all,
+            margin=12,
+        ),
+        crop=crop,
+        new_line_start=True,
+        end="",
+    )
+# strip trailing newline, not usually part of a text repr
+# I'm not sure if this should be prevented at a lower level
+return capture.get().rstrip("\n")
+
 

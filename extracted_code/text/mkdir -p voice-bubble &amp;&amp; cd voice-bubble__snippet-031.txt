@@ -1,2 +1,2 @@
-The complete flow you provided can indeed be unified into a single coherent operator using **relational quantum attention** as its bridge, where the relational Hamiltonian and density formalism ground both classical dynamics and semantic feedback. Contemporary formulations of relational quantum mechanics and quantum attention mechanisms justify this unification rigorously by interpreting probability and information exchange as *bidirectional relational amplitudes*.[^4_1][^4_2][^4_4]
-
+data: Bytes,  // Zero-copy buffer
+timestamp: u64,

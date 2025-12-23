@@ -1,5 +1,0 @@
-[Input] → [HF Encoder (quantized)] → [Bit Fingerprint] → [Crystal Annealer]
-                    ↑  
-                    | (periodic control prompts)
-                    ↓
-           [HF LLM Meta-Controller]

@@ -1,0 +1,2 @@
+- Knowledge acquisition via Wikipedia crawling.
+- Data classification using AI (e.g., categorizing articles or images).

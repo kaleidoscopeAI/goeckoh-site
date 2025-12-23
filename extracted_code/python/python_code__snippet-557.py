@@ -1,69 +1,10 @@
-def _pep_440_key(s):
-    s = s.strip()
-    m = PEP440_VERSION_RE.match(s)
-    if not m:
-        raise UnsupportedVersionError('Not a valid version: %s' % s)
-    groups = m.groups()
-    nums = tuple(int(v) for v in groups[1].split('.'))
-    while len(nums) > 1 and nums[-1] == 0:
-        nums = nums[:-1]
+from __future__ import annotations
 
-    if not groups[0]:
-        epoch = 0
-    else:
-        epoch = int(groups[0][:-1])
-    pre = groups[4:6]
-    post = groups[7:9]
-    dev = groups[10:12]
-    local = groups[13]
-    if pre == (None, None):
-        pre = ()
-    else:
-        if pre[1] is None:
-            pre = pre[0], 0
-        else:
-            pre = pre[0], int(pre[1])
-    if post == (None, None):
-        post = ()
-    else:
-        if post[1] is None:
-            post = post[0], 0
-        else:
-            post = post[0], int(post[1])
-    if dev == (None, None):
-        dev = ()
-    else:
-        if dev[1] is None:
-            dev = dev[0], 0
-        else:
-            dev = dev[0], int(dev[1])
-    if local is None:
-        local = ()
-    else:
-        parts = []
-        for part in local.split('.'):
-            # to ensure that numeric compares as > lexicographic, avoid
-            # comparing them directly, but encode a tuple which ensures
-            # correct sorting
-            if part.isdigit():
-                part = (1, int(part))
-            else:
-                part = (0, part)
-            parts.append(part)
-        local = tuple(parts)
-    if not pre:
-        # either before pre-release, or final release and after
-        if not post and dev:
-            # before pre-release
-            pre = ('a', -1)     # to sort before a0
-        else:
-            pre = ('z',)        # to sort after all pre-releases
-    # now look at the state of post and dev.
-    if not post:
-        post = ('_',)   # sort before 'a'
-    if not dev:
-        dev = ('final',)
+import hashlib
+import os
+from textwrap import dedent
+from typing import IO, TYPE_CHECKING
 
-    return epoch, nums, pre, post, dev, local
-
+from pip._vendor.cachecontrol.cache import BaseCache, SeparateBodyBaseCache
+from pip._vendor.cachecontrol.controller import CacheController
 

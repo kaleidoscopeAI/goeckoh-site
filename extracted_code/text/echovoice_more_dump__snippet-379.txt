@@ -1,1 +1,4 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+dataset_path: String,
+samples: usize,
+output_path: Option<String>,
+config: CrystalConfig,

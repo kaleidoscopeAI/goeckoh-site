@@ -1,0 +1,1 @@
+frontend shows fragments, drift, latency, gate blocks.

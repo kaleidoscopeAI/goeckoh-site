@@ -1,0 +1,6 @@
+"os.name": "os_name",
+"sys.platform": "sys_platform",
+"platform.version": "platform_version",
+"platform.machine": "platform_machine",
+"platform.python_implementation": "platform_python_implementation",
+"python_implementation": "platform_python_implementation",

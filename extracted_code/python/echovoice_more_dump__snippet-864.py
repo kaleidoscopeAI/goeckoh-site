@@ -1,15 +1,14 @@
-class ControlMapper:
-    def __init__(self):
-        self.map = {
-            "conserve_energy": [{"op": "no_op", "delay": 0.0}],
-            "ingest_new_data": [{"op": "open_url", "url": "https://example.com", "delay": 0.1}],
-            "defensive_stance_disconnect": [{"op": "network_disable", "delay": 0.01}],
-            "type_text": [{"op": "key_press", "key": c, "delay": 0.05} for c in "test"],
-        }
-
-    def get_sequence(self, intent_name: str, params: Dict = None) -> Tuple[List[Dict], float]:
-        params = params or {}
-        seq = self.map.get(intent_name, [{"op": "no_op"}])
-        cost = params.get("cost", len(seq) * 0.1)
-        return seq, cost
+async def ws_updates():
+    ws = websocket._get_current_object()
+    core.register_ws(ws)
+    try:
+        while True:
+            msg = await ws.receive()
+            # simple echo or control
+            if msg == 'ping':
+                await ws.send(json.dumps({'type': 'pong'}))
+    except asyncio.CancelledError:
+        pass
+    except Exception as e:
+        logging.info(f'WS closed: {e}')
 

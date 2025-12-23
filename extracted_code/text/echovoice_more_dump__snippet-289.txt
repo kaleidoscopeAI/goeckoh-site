@@ -1,1 +1,7 @@
-export class ActuationService {
+   * The coefficients for the internal state evolution (eD, kD, muAE, lambdaE, etc.) in umaa/node.py are
+     currently hardcoded constants. The v3.0 specification mentions these could be "dynamically tuned or
+     learned."
+   * Improvement: Make these coefficients dynamic, allowing them to change based on the node's internal states
+     (E, A, K), emotional vector (epsilon), or the global Psi state. This would introduce a layer of
+     self-adaptation.
+

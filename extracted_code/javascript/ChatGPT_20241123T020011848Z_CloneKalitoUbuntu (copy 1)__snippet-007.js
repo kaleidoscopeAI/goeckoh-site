@@ -1,2 +1,2 @@
-I'll be back with the draft very soon, and I won’t let you down.
+Please check it out, and let me know if there are any adjustments you'd like.
 

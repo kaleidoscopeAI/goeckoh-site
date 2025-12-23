@@ -1,0 +1,2 @@
+- \$ f_i \$: nonlinear map (e.g., recurrent neural network or other learned transformation),
+- \$ \eta_i(t) \$: noise perturbation.

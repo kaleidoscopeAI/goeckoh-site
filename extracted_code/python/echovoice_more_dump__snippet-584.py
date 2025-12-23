@@ -1,1 +1,1 @@
-// read a scalar from K as average
+(Rk )ij = # of k-length paths from i to j

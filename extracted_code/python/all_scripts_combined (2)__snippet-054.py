@@ -1,39 +1,37 @@
-class Planner:
-    def __init__(self, hardware: SimulatedHardware, relational: RelationalMatrix):
-        self.hw = hardware
-        self.rel = relational
-        # concrete actions map to methods to keep safe
-        self.actions = [
-            ("increase_freq", lambda: self.hw.set_frequency(self.hw.freq_GHz + 0.1)),
-            ("decrease_freq", lambda: self.hw.set_frequency(self.hw.freq_GHz - 0.1)),
-            ("toggle_gpio", lambda: self.hw.gpio.set_bit(random.randint(0, self.hw.gpio.size-1), random.randint(0,1))),
-            ("no_op", lambda: None),
-        ]
+class SettingsStore:
+    path: Path
+    defaults: Dict[str, object] = field(default_factory=lambda: {
+        "correction_echo_enabled": True,
+        "support_voice_enabled": False,
+        "support_phrases": [],
+    })
+    data: Dict[str, object] = field(init=False)
 
-    def score_actions(self, thought: ThoughtEngines) -> List[Tuple[float, int]]:
-        scores = []
-        for idx, (name, fn) in enumerate(self.actions):
-            sys_idx = idx % self.rel.n_system
-            app_idx = idx % self.rel.n_apparatus
-            rweight = abs(self.rel.bidirectional_weight(sys_idx, app_idx))
-            cog_signal = float(np.tanh(np.mean(thought.b) + np.mean(thought.kappa)))
-            score = rweight * (1.0 + cog_signal)
-            # small diversity noise
-            score += random.random() * 1e-6
-            scores.append((score, idx))
-        scores.sort(reverse=True, key=lambda x: x[0])
-        return scores
-
-    def select_and_execute(self, thought: ThoughtEngines) -> str:
-        scored = self.score_actions(thought)
-        weights = np.array([s for s, i in scored], dtype=float)
-        if weights.sum() <= 0:
-            idx = scored[0][1]
+    def __post_init__(self) -> None:
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        if self.path.exists():
+            self.data = json.loads(self.path.read_text())
         else:
-            probs = weights / weights.sum()
-            choice = np.random.choice(len(scored), p=probs)
-            idx = scored[choice][1]
-        name, fn = self.actions[idx]
-        fn()
-        return name
+            self.data = {**self.defaults}
+            self.save()
+        for key, value in self.defaults.items():
+            self.data.setdefault(key, value)
 
+    def save(self) -> None:
+        self.path.write_text(json.dumps(self.data, indent=2))
+
+    def update(self, **kwargs: object) -> None:
+        self.data.update({k: v for k, v in kwargs.items() if v is not None})
+        self.save()
+
+    def get_settings(self) -> Dict[str, object]:
+        return dict(self.data)
+
+    def add_support_phrase(self, phrase: str) -> None:
+        phrases = list(self.data.get("support_phrases", []))
+        phrases.append(phrase)
+        self.data["support_phrases"] = phrases
+        self.save()
+
+    def list_support_phrases(self) -> List[str]:
+        return list(self.data.get("support_phrases", []))

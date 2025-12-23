@@ -1,3 +1,2 @@
-function makeNeutral(emotions: EmotionName[]) {
-const n: any = {};
-for (const e of emotions) n[e] = 0;
+const denom = Math.sqrt(this.v[i][j]) + this.eps;
+const step = lrT * (this.m[i][j] / denom);

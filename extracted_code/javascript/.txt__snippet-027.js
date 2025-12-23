@@ -1,2 +1,1 @@
-async function tick() {
-const live = await fetchJSON("/api/latest");
+if let url = config.baseURL {

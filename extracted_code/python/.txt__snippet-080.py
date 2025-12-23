@@ -1,1 +1,1 @@
-import SwiftUI
+def _stream_worker(self) -> None:

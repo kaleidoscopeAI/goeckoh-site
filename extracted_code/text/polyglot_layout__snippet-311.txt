@@ -1,0 +1,5 @@
+ Make sure the server is running and your browser hits the same host:port (no HTTPS/HTTP mismatch).
+
+ Check devtools → Network → /avatar (should show continuous WS frames).
+ Any errors are also emitted on /ws and printed to your terminal.
+

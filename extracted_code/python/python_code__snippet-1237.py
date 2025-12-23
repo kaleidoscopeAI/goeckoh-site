@@ -1,83 +1,102 @@
-    the highest weight: a package without any dependencies should be installed
-    first. This is done again and again in the same way, giving ever less weight
-    to the newly found leaves. The loop stops when no leaves are left: all
-    remaining packages have at least one dependency left in the graph.
-
-    Then we continue with the remaining graph, by taking the length for the
-    longest path to any node from root, ignoring any paths that contain a single
-    node twice (i.e. cycles). This is done through a depth-first search through
-    the graph, while keeping track of the path to the node.
-
-    Cycles in the graph result would result in node being revisited while also
-    being on its own path. In this case, take no action. This helps ensure we
-    don't get stuck in a cycle.
-
-    When assigning weight, the longer path (i.e. larger length) is preferred.
-
-    We are only interested in the weights of packages that are in the
-    requirement_keys.
-    """
-    path: Set[Optional[str]] = set()
-    weights: Dict[Optional[str], int] = {}
-
-    def visit(node: Optional[str]) -> None:
-        if node in path:
-            # We hit a cycle, so we'll break it here.
+class SafetyMonitor:
+    """Safety monitoring and emergency controls"""
+    
+    def __init__(self, config: SystemConfig, logger: ProductionLogger, unified_system: CompleteUnifiedSystem):
+        self.config = config
+        self.logger = logger
+        self.unified_system = unified_system
+        
+        # Safety thresholds
+        self.max_arousal = config.get_float('SAFETY', 'max_arousal', 0.9)
+        self.stress_threshold = config.get_float('SAFETY', 'stress_threshold', 0.8)
+        self.monitor_interval = config.get_int('SAFETY', 'monitor_interval', 5)
+        
+        # Monitoring state
+        self.is_monitoring = False
+        self.monitor_thread = None
+        self.emergency_triggered = False
+        
+        # Emergency actions
+        self.emergency_actions = []
+    
+    def start(self):
+        """Start safety monitoring"""
+        if self.is_monitoring:
             return
+        
+        self.is_monitoring = True
+        self.monitor_thread = threading.Thread(target=self._monitor_loop, daemon=True)
+        self.monitor_thread.start()
+        
+        self.logger.log_event("SAFETY_START", "Safety monitoring started")
+    
+    def stop(self):
+        """Stop safety monitoring"""
+        self.is_monitoring = False
+        if self.monitor_thread:
+            self.monitor_thread.join(timeout=1.0)
+        
+        self.logger.log_event("SAFETY_STOP", "Safety monitoring stopped")
+    
+    def _monitor_loop(self):
+        """Main monitoring loop"""
+        while self.is_monitoring:
+            try:
+                self._check_system_safety()
+                time.sleep(self.monitor_interval)
+            except Exception as e:
+                self.logger.log_event("SAFETY_ERROR", str(e), 'ERROR')
+    
+    def _check_system_safety(self):
+        """Check system safety parameters"""
+        status = self.unified_system.get_complete_system_status()
+        
+        # Check stress levels
+        if status.get('stress', 0) > self.stress_threshold:
+            self._trigger_safety_event("HIGH_STRESS", f"Stress level: {status['stress']:.3f}")
+        
+        # Check emotional state
+        emotional_state = status.get('emotional_state')
+        if emotional_state:
+            if hasattr(emotional_state, 'anxiety') and emotional_state.anxiety > self.max_arousal:
+                self._trigger_safety_event("HIGH_ANXIETY", f"Anxiety level: {emotional_state.anxiety:.3f}")
+        
+        # Check system health
+        if status.get('gcl', 1.0) < 0.3:
+            self._trigger_safety_event("LOW_COHERENCE", f"GCL: {status['gcl']:.3f}")
+    
+    def _trigger_safety_event(self, event_type: str, details: str):
+        """Trigger safety event"""
+        self.logger.log_event("SAFETY_EVENT", f"{event_type}: {details}", 'WARNING')
+        
+        # Add emergency actions if needed
+        if event_type in ["HIGH_STRESS", "HIGH_ANXIETY", "LOW_COHERENCE"]:
+            self._execute_emergency_protocol(event_type)
+    
+    def _execute_emergency_protocol(self, event_type: str):
+        """Execute emergency protocol"""
+        if self.emergency_triggered:
+            return  # Already in emergency mode
+        
+        self.emergency_triggered = True
+        self.logger.log_event("EMERGENCY_PROTOCOL", f"Executing emergency protocol for {event_type}")
+        
+        # Emergency actions based on event type
+        if event_type == "HIGH_STRESS":
+            # Reduce system arousal, activate calming protocols
+            pass
+        elif event_type == "HIGH_ANXIETY":
+            # Activate anxiety reduction protocols
+            pass
+        elif event_type == "LOW_COHERENCE":
+            # System coherence restoration
+            pass
+        
+        # Reset emergency flag after cooldown
+        threading.Timer(30.0, self._reset_emergency).start()
+    
+    def _reset_emergency(self):
+        """Reset emergency state"""
+        self.emergency_triggered = False
+        self.logger.log_event("EMERGENCY_RESET", "Emergency state reset")
 
-        # Time to visit the children!
-        path.add(node)
-        for child in graph.iter_children(node):
-            visit(child)
-        path.remove(node)
-
-        if node not in requirement_keys:
-            return
-
-        last_known_parent_count = weights.get(node, 0)
-        weights[node] = max(last_known_parent_count, len(path))
-
-    # Simplify the graph, pruning leaves that have no dependencies.
-    # This is needed for large graphs (say over 200 packages) because the
-    # `visit` function is exponentially slower then, taking minutes.
-    # See https://github.com/pypa/pip/issues/10557
-    # We will loop until we explicitly break the loop.
-    while True:
-        leaves = set()
-        for key in graph:
-            if key is None:
-                continue
-            for _child in graph.iter_children(key):
-                # This means we have at least one child
-                break
-            else:
-                # No child.
-                leaves.add(key)
-        if not leaves:
-            # We are done simplifying.
-            break
-        # Calculate the weight for the leaves.
-        weight = len(graph) - 1
-        for leaf in leaves:
-            if leaf not in requirement_keys:
-                continue
-            weights[leaf] = weight
-        # Remove the leaves from the graph, making it simpler.
-        for leaf in leaves:
-            graph.remove(leaf)
-
-    # Visit the remaining graph.
-    # `None` is guaranteed to be the root node by resolvelib.
-    visit(None)
-
-    # Sanity check: all requirement keys should be in the weights,
-    # and no other keys should be in the weights.
-    difference = set(weights.keys()).difference(requirement_keys)
-    assert not difference, difference
-
-    return weights
-
-
-def _req_set_item_sorter(
-    item: Tuple[str, InstallRequirement],
-    weights: Dict[Optional[str], int],

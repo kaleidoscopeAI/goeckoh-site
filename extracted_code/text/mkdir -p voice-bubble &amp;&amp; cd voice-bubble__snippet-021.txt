@@ -1,6 +1,3 @@
-"Goeckoh achieves 152-242ms end-to-end latency on commodity hardware:
-• CPAL audio I/O: 32ms (512-frame buffers)
-• Whisper tiny streaming STT: 80-120ms  
-• Piper TTS: 40-90ms
-• Memory: 350MB total (iPhone XR capable)
-• No GC pauses, deterministic physics core"
+lattice = lattice_from_features(
+  feat.energy, feat.f0, feat.zcr, feat.hnr, feat.tilt, feat.dt
+);

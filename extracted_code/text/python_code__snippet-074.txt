@@ -1,2 +1,66 @@
-# <REDACTED: potential secret detected>
+    """Check if a package set is consistent
 
+    If should_ignore is passed, it should be a callable that takes a
+    package name and returns a boolean.
+    """
+
+    warn_legacy_versions_and_specifiers(package_set)
+
+    missing = {}
+    conflicting = {}
+
+    for package_name, package_detail in package_set.items():
+        # Info about dependencies of package_name
+        missing_deps: Set[Missing] = set()
+        conflicting_deps: Set[Conflicting] = set()
+
+        if should_ignore and should_ignore(package_name):
+            continue
+
+        for req in package_detail.dependencies:
+            name = canonicalize_name(req.name)
+
+            # Check if it's missing
+            if name not in package_set:
+                missed = True
+                if req.marker is not None:
+                    missed = req.marker.evaluate({"extra": ""})
+                if missed:
+                    missing_deps.add((name, req))
+                continue
+
+            # Check if there's a conflict
+            version = package_set[name].version
+            if not req.specifier.contains(version, prereleases=True):
+                conflicting_deps.add((name, version, req))
+
+        if missing_deps:
+            missing[package_name] = sorted(missing_deps, key=str)
+        if conflicting_deps:
+            conflicting[package_name] = sorted(conflicting_deps, key=str)
+
+    return missing, conflicting
+
+
+def check_install_conflicts(to_install: List[InstallRequirement]) -> ConflictDetails:
+    """For checking if the dependency graph would be consistent after \
+    installing given requirements
+    """
+    # Start from the current state
+    package_set, _ = create_package_set_from_installed()
+    # Install packages
+    would_be_installed = _simulate_installation_of(to_install, package_set)
+
+    # Only warn about directly-dependent packages; create a whitelist of them
+    whitelist = _create_whitelist(would_be_installed, package_set)
+
+    return (
+        package_set,
+        check_package_set(
+            package_set, should_ignore=lambda name: name not in whitelist
+        ),
+    )
+
+
+def _simulate_installation_of(
+    to_install: List[InstallRequirement], package_set: PackageSet

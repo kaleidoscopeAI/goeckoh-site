@@ -1,0 +1,4 @@
+"""Updates the data associated with an edge."""
+if self.graph.has_edge(node1, node2):
+    self.graph[node1][node2].update(data)
+

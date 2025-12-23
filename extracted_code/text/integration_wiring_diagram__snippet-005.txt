@@ -1,0 +1,4 @@
+*   `main.py`, `organic_ai/`: Core "Organic AI" logic (node growth, DNA mutation).
+*   `adapters/`: Integration with external systems.
+*   `dash/`: Possible internal dashboard (`streamlit`).
+*   `pynput`, `pyautogui`: HID Emulation.

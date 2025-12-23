@@ -1,0 +1,9 @@
+Hamiltonian Equation (H(G)):
+H(G)=−(ij)∑​wij​si​sj​
+
+.
+
+    si​∈{−1,+1} represent crystallized concept alignments (spins).
+
+    wij​ encode the strength or tension of relational knowledge (bonds).
+

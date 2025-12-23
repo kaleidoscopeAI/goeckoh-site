@@ -1,0 +1,3 @@
+Module_six_moves_urllib_response(__name__ + ".moves.urllib.response"),
+"moves.urllib_response",
+"moves.urllib.response",

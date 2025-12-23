@@ -1,1 +1,5 @@
-You want to know which engines contribute most to instability (largest impact on ρ). We provide an efficient sensitivity test using engine ablation via J·v
+// ... Previous
+"adbkit": "^2.11.1",  // From openstf/adbkit
+"node-brightness": "^1.0.0",  // From Jabbath
+"pigpio": "^3.3.1",  // From fivdi/pigpio
+"os-utils": "^0.0.14"  // Safe CPU/MSR approx

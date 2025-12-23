@@ -1,0 +1,16 @@
+"""
+Return the version of the current OS distribution as a tuple
+``(major, minor, build_number)`` with items as follows:
+
+* ``major``:  The result of :func:`distro.major_version`.
+
+* ``minor``:  The result of :func:`distro.minor_version`.
+
+* ``build_number``:  The result of :func:`distro.build_number`.
+
+For a description of the *best* parameter, see the :func:`distro.version`
+method.
+"""
+return _distro.version_parts(best)
+
+

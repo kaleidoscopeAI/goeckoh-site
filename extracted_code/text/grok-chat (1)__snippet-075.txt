@@ -1,0 +1,7 @@
+if not values:
+    return 0
+hist = [math.exp(-v**2) for v in values]  # Approx
+total = sum(hist)
+p = [h / total for h in hist]
+return -sum(pi * math.log(pi + 1e-10) for pi in p)
+

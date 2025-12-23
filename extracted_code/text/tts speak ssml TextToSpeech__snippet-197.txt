@@ -1,0 +1,17 @@
+          gcl > 0.7 -> "Perform baseline analysis for: $task"
+          else -> "Reflect on: $task"
+      }
+      return try {
+          llmInference!!.generateResponse(prompt)
+      } catch (e: Exception) {
+          Log.e("AGI", "Inference error: ${e.message}")
+          "Reasoning failed"
+      }
+  }
+
+  fun executeBasedOnGCL(gcl: Double, input: String) {
+      Log.d("AGI", "GCL: $gcl, Input: $input")
+      // Adaptive VAD
+      if (gcl < 0.5) {
+          // Meltdown: Patient VAD
+          mirror.tuneVAD(0, 2000, 0.3f) // Mode 0 (less aggressive), longer

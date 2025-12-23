@@ -1,3 +1,4 @@
-from pip._vendor.pygments.formatter import Formatter
+import re
+from io import TextIOWrapper
 
 

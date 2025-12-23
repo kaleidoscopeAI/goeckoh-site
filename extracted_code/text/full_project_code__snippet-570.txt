@@ -1,0 +1,3 @@
+return '[' + CS_ESCAPE.sub(lambda m: '\\' + m.group(), ''.join(letters)) + ']'
+
+

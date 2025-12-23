@@ -1,2 +1,2 @@
-const denom = Math.sqrt(this.v[i][j]) + this.eps;
-const step = lrT * (this.m[i][j] / denom);
+const PORT = process.env.EXP_PORT ? Number(process.env.EXP_PORT) : 4301;
+app.listen(PORT, () => console.log(`Experiments server listening ${PORT}`));

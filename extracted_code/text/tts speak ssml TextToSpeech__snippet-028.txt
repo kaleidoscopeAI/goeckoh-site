@@ -1,2 +1,9 @@
-data class Prosody(val pitch: Double, val rate: Double, val arousal: Double, val volume: Double, val pitchVariance: Double)
+companion object {
+    lateinit var instance: ExocortexApplication
+}
 
+override fun onCreate() {
+    super.onCreate()
+    instance = this
+    Vosk.init(this) // Initialize Vosk
+}

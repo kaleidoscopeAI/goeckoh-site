@@ -1,0 +1,2 @@
+ASYNCIO_AVAILABLE = False
+

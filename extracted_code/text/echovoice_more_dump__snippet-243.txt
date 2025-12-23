@@ -1,1 +1,8 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+• Φ Approximation: Given the infeasibility of calculating Φ exactly, the CSA must rely on approximations or proxy measures.
+    ◦ Heuristics: Ricci curvature analysis can provide heuristics to guide the search for the minimum information partition (MIP), potentially reducing the search space [Insight 3.2.1].
+    ◦ TN-Based Estimation: If the system state or Φ-structure is represented using TNs, algorithms for approximate TN contraction or entanglement measures calculated on the TN might serve as proxies for Φ.20
+    ◦ Simplified Measures: Develop alternative metrics inspired by IIT's postulates (integration, exclusion, information) but designed for computational tractability, perhaps focusing on specific aspects of the cause-effect structure.
+• Workspace Dynamics Metrics: Define and track metrics reflecting the functional principles of GWT within the CQICS architecture.
+    ◦ Information Flow/Broadcast: Measure the rate, diversity, and reach of information broadcast through the GW. How many SMs receive and are influenced by the broadcast content?
+    ◦ Attentional Dynamics: Quantify the focus of attention (e.g., entropy over competing SMs) and the stability or flexibility of attentional shifts.
+    ◦ Functional Integration: Develop measures based on information theory (e.g., transfer entropy, Granger causality) or causal analysis applied to the time series of SM activities, quantifying how effectively information broadcast via the GW integrates processing across different modules.

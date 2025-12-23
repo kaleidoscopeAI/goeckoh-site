@@ -1,0 +1,8 @@
+1564                  "playback_latency_ms": float(self._last_playback_laten
+      cy_ms),
+1565 +                "snr_db": float(self._last_snr_db),
+1566 +                "vad_active": bool(self._vad_active),
+1567 +                "vad_threshold": float(self._last_vad_threshold),
+1568 +                "noise_floor": float(self._noise_floor),
+1569                  "harvested": bool(harvested),
+

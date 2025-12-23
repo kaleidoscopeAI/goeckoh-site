@@ -1,0 +1,2 @@
+ VADUtteranceDetector consumes these chunks, using webrtcvad to identify speech segments. It intelligently handles silence,
+ respecting a 1.2-second pause threshold before segmenting an utterance, ensuring fragmented speech is captured as a whole.

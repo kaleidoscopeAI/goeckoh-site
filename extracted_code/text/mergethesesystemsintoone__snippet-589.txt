@@ -1,0 +1,8 @@
+"""Status of a task"""
+PENDING = auto()
+RUNNING = auto()
+COMPLETED = auto()
+FAILED = auto()
+CANCELLED = auto()
+TIMEOUT = auto()
+

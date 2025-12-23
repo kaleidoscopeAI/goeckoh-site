@@ -1,1 +1,1 @@
-Mimicry → Node: updates knowledge/actions from peers
+def create_node(self, node_id: str, dna: GeneticCode, energy: float):

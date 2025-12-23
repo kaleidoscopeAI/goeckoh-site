@@ -1,0 +1,25 @@
+      whisper.loadModel(modelPath, vocabPath, true) // multilingual = true
+
+      // Init Recorder
+      recorder = Recorder(context)
+
+      // Init VAD
+      tuneVAD(vadMode, silenceDurationMs, speechDurationMs)
+  }
+
+  fun tuneVAD(mode: Mode, silenceMs: Int, speechMs: Int) {
+      vadMode = mode
+      silenceDurationMs = silenceMs
+      speechDurationMs = speechMs
+      vad?.close()
+      vad = VadWebRTC.builder()
+          .setSampleRate(SampleRate.SAMPLE_RATE_16K)
+          .setFrameSize(FrameSize.FRAME_SIZE_320)
+          .setMode(vadMode)
+          .setSilenceDurationMs(silenceDurationMs)
+          .setSpeechDurationMs(speechDurationMs)
+          .build()
+  }
+
+  fun listenAndProcess(callback: (String, Prosody) -> Unit) {
+      if (ContextCompat.checkSelfPermission(context,

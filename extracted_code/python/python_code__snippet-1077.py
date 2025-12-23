@@ -1,111 +1,118 @@
-    from http.client import HTTPResponse
+import optparse
+import os
+import sys
+from itertools import chain
+from typing import Any, Iterable, List, Optional
+
+from pip._internal.cli.main_parser import create_main_parser
+from pip._internal.commands import commands_dict, create_command
+from pip._internal.metadata import get_default_environment
 
 
-class CallbackFileWrapper:
-    """
-    Small wrapper around a fp object which will tee everything read into a
-    buffer, and when that file is closed it will execute a callback with the
-    contents of that buffer.
+def autocomplete() -> None:
+    """Entry Point for completion of main and subcommand options."""
+    # Don't complete if user hasn't sourced bash_completion file.
+    if "PIP_AUTO_COMPLETE" not in os.environ:
+        return
+    cwords = os.environ["COMP_WORDS"].split()[1:]
+    cword = int(os.environ["COMP_CWORD"])
+    try:
+        current = cwords[cword - 1]
+    except IndexError:
+        current = ""
 
-    All attributes are proxied to the underlying file object.
+    parser = create_main_parser()
+    subcommands = list(commands_dict)
+    options = []
 
-    This class uses members with a double underscore (__) leading prefix so as
-    not to accidentally shadow an attribute.
+    # subcommand
+    subcommand_name: Optional[str] = None
+    for word in cwords:
+        if word in subcommands:
+            subcommand_name = word
+            break
+    # subcommand options
+    if subcommand_name is not None:
+        # special case: 'help' subcommand has no options
+        if subcommand_name == "help":
+            sys.exit(1)
+        # special case: list locally installed dists for show and uninstall
+        should_list_installed = not current.startswith("-") and subcommand_name in [
+            "show",
+            "uninstall",
+        ]
+        if should_list_installed:
+            env = get_default_environment()
+            lc = current.lower()
+            installed = [
+                dist.canonical_name
+                for dist in env.iter_installed_distributions(local_only=True)
+                if dist.canonical_name.startswith(lc)
+                and dist.canonical_name not in cwords[1:]
+            ]
+            # if there are no dists installed, fall back to option completion
+            if installed:
+                for dist in installed:
+                    print(dist)
+                sys.exit(1)
 
-    The data is stored in a temporary file until it is all available.  As long
-    as the temporary files directory is disk-based (sometimes it's a
-    memory-backed-``tmpfs`` on Linux), data will be unloaded to disk if memory
-    pressure is high.  For small files the disk usually won't be used at all,
-    it'll all be in the filesystem memory cache, so there should be no
-    performance impact.
-    """
+        should_list_installables = (
+            not current.startswith("-") and subcommand_name == "install"
+        )
+        if should_list_installables:
+            for path in auto_complete_paths(current, "path"):
+                print(path)
+            sys.exit(1)
 
-    def __init__(
-        self, fp: HTTPResponse, callback: Callable[[bytes], None] | None
-    ) -> None:
-        self.__buf = NamedTemporaryFile("rb+", delete=True)
-        self.__fp = fp
-        self.__callback = callback
+        subcommand = create_command(subcommand_name)
 
-    def __getattr__(self, name: str) -> Any:
-        # The vaguaries of garbage collection means that self.__fp is
-        # not always set.  By using __getattribute__ and the private
-        # name[0] allows looking up the attribute value and raising an
-        # AttributeError when it doesn't exist. This stop thigns from
-        # infinitely recursing calls to getattr in the case where
-        # self.__fp hasn't been set.
-        #
-        # [0] https://docs.python.org/2/reference/expressions.html#atom-identifiers
-        fp = self.__getattribute__("_CallbackFileWrapper__fp")
-        return getattr(fp, name)
+        for opt in subcommand.parser.option_list_all:
+            if opt.help != optparse.SUPPRESS_HELP:
+                options += [
+                    (opt_str, opt.nargs) for opt_str in opt._long_opts + opt._short_opts
+                ]
 
-    def __is_fp_closed(self) -> bool:
-        try:
-            return self.__fp.fp is None
+        # filter out previously specified options from available options
+        prev_opts = [x.split("=")[0] for x in cwords[1 : cword - 1]]
+        options = [(x, v) for (x, v) in options if x not in prev_opts]
+        # filter options by current input
+        options = [(k, v) for k, v in options if k.startswith(current)]
+        # get completion type given cwords and available subcommand options
+        completion_type = get_path_completion_type(
+            cwords,
+            cword,
+            subcommand.parser.option_list_all,
+        )
+        # get completion files and directories if ``completion_type`` is
+        # ``<file>``, ``<dir>`` or ``<path>``
+        if completion_type:
+            paths = auto_complete_paths(current, completion_type)
+            options = [(path, 0) for path in paths]
+        for option in options:
+            opt_label = option[0]
+            # append '=' to options which require args
+            if option[1] and option[0][:2] == "--":
+                opt_label += "="
+            print(opt_label)
+    else:
+        # show main parser options only when necessary
 
-        except AttributeError:
-            pass
+        opts = [i.option_list for i in parser.option_groups]
+        opts.append(parser.option_list)
+        flattened_opts = chain.from_iterable(opts)
+        if current.startswith("-"):
+            for opt in flattened_opts:
+                if opt.help != optparse.SUPPRESS_HELP:
+                    subcommands += opt._long_opts + opt._short_opts
+        else:
+            # get completion type given cwords and all available options
+            completion_type = get_path_completion_type(cwords, cword, flattened_opts)
+            if completion_type:
+                subcommands = list(auto_complete_paths(current, completion_type))
 
-        try:
-            closed: bool = self.__fp.closed
-            return closed
-
-        except AttributeError:
-            pass
-
-        # We just don't cache it then.
-        # TODO: Add some logging here...
-        return False
-
-    def _close(self) -> None:
-        if self.__callback:
-            if self.__buf.tell() == 0:
-                # Empty file:
-                result = b""
-            else:
-                # Return the data without actually loading it into memory,
-                # relying on Python's buffer API and mmap(). mmap() just gives
-                # a view directly into the filesystem's memory cache, so it
-                # doesn't result in duplicate memory use.
-                self.__buf.seek(0, 0)
-                result = memoryview(
-                    mmap.mmap(self.__buf.fileno(), 0, access=mmap.ACCESS_READ)
-                )
-            self.__callback(result)
-
-        # We assign this to None here, because otherwise we can get into
-        # really tricky problems where the CPython interpreter dead locks
-        # because the callback is holding a reference to something which
-        # has a __del__ method. Setting this to None breaks the cycle
-        # and allows the garbage collector to do it's thing normally.
-        self.__callback = None
-
-        # Closing the temporary file releases memory and frees disk space.
-        # Important when caching big files.
-        self.__buf.close()
-
-    def read(self, amt: int | None = None) -> bytes:
-        data: bytes = self.__fp.read(amt)
-        if data:
-            # We may be dealing with b'', a sign that things are over:
-            # it's passed e.g. after we've already closed self.__buf.
-            self.__buf.write(data)
-        if self.__is_fp_closed():
-            self._close()
-
-        return data
-
-    def _safe_read(self, amt: int) -> bytes:
-        data: bytes = self.__fp._safe_read(amt)  # type: ignore[attr-defined]
-        if amt == 2 and data == b"\r\n":
-            # urllib executes this read to toss the CRLF at the end
-            # of the chunk.
-            return data
-
-        self.__buf.write(data)
-        if self.__is_fp_closed():
-            self._close()
-
-        return data
+        print(" ".join([x for x in subcommands if x.startswith(current)]))
+    sys.exit(1)
 
 
+def get_path_completion_type(
+    cwords: List[str], cword: int, opts: Iterable[Any]

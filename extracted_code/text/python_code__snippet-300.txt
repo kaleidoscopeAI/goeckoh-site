@@ -1,0 +1,27 @@
+rich_path_glob = RICH_GLOB.split(path_glob, 1)
+if len(rich_path_glob) > 1:
+    assert len(rich_path_glob) == 3, rich_path_glob
+    prefix, set, suffix = rich_path_glob
+    for item in set.split(','):
+        for path in _iglob(''.join((prefix, item, suffix))):
+            yield path
+else:
+    if '**' not in path_glob:
+        for item in std_iglob(path_glob):
+            yield item
+    else:
+        prefix, radical = path_glob.split('**', 1)
+        if prefix == '':
+            prefix = '.'
+        if radical == '':
+            radical = '*'
+        else:
+            # we support both
+            radical = radical.lstrip('/')
+            radical = radical.lstrip('\\')
+        for path, dir, files in os.walk(prefix):
+            path = os.path.normpath(path)
+            for fn in _iglob(os.path.join(path, radical)):
+                yield fn
+
+

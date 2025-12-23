@@ -1,17 +1,33 @@
-class EmotionalChemistry:
-    def __init__(self):
-        self.DA = 0.5
-        self.Ser = 0.5
-        self.NE = 0.5
+class BehaviorMonitor:
+    settings: SystemSettings
 
-    def step(self, reward: float, mood_signal: float, arousal: float, dt: float = 0.1):
-        self.DA += (0.9 * reward - 0.12 * self.DA) * dt
-        self.Ser += (0.4 * mood_signal - 0.06 * self.Ser) * dt
-        self.NE += (0.65 * arousal - 0.08 * self.NE) * dt
-        self.DA = float(np.clip(self.DA, 0.0, 1.0))
-        self.Ser = float(np.clip(self.Ser, 0.0, 1.0))
-        self.NE = float(np.clip(self.NE, 0.0, 1.0))
+    def __post_init__(self) -> None:
+        self._phrases: Deque[str] = deque(maxlen=self.settings.behavior.max_phrase_history)
+        self._correction_streak = 0
+        self._last_event: Optional[str] = None
 
-    def vector(self) -> List[float]:
-        return [self.DA, self.Ser, self.NE]
+    def register(self, normalized_text: str, needs_correction: bool, rms: float) -> Optional[str]:
+        event: Optional[str] = None
+
+        if needs_correction:
+            self._correction_streak += 1
+        else:
+            if self._correction_streak >= self.settings.behavior.anxious_threshold:
+                event = "encouragement"
+            self._correction_streak = 0
+
+        self._phrases.append(normalized_text)
+
+        if self._correction_streak >= self.settings.behavior.anxious_threshold:
+            event = "anxious"
+        elif normalized_text and list(self._phrases).count(normalized_text) >= self.settings.behavior.perseveration_threshold:
+            event = event or "perseveration"
+        elif rms >= self.settings.behavior.high_energy_rms:
+            event = event or "high_energy"
+
+        if event == self._last_event and event not in {"perseveration", "encouragement"}:
+            return None
+        if event:
+            self._last_event = event
+        return event
 

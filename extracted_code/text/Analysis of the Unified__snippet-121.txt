@@ -1,0 +1,2 @@
+console.warn('persistence load failed', err);
+return null;

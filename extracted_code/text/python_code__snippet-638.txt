@@ -1,0 +1,1 @@
+newlines_offsets: Sequence[int], position: SyntaxPosition

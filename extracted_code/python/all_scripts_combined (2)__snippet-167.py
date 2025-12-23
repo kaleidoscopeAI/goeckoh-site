@@ -1,19 +1,33 @@
-from __future__ import annotations
+"""
+Text-to-Speech engine using Coqui TTS.
+"""
 
-import csv
-import random
-import time
-from collections import defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime
-from typing import Dict, List, Optional
+def __init__(self, settings: SpeechSettings):
+    self.settings = settings
+    self.device = "cuda" if torch.cuda.is_available() else "cpu"
+    self.model = TTS(self.settings.tts_model_name).to(self.device)
+    self.voice_sample = self.settings.tts_voice_clone_reference
 
-from core.models import BehaviorEvent
-from core.settings import SystemSettings
-from core.logging import GuidanceLogger
-from voice.profile import VoiceProfile
-from loop.decision import Mode
-from aba.strategies import StrategyAdvisor, STRATEGIES, EVENT_TO_CATEGORIES
+def update_voiceprint(self, voice_sample: Path):
+    self.voice_sample = voice_sample
 
+def synthesize(self, text: str) -> np.ndarray:
+    """
+    Synthesizes text and returns the audio as a numpy array.
+    """
+    if not self.voice_sample or not self.voice_sample.exists():
+        return self._fallback_synthesize(text)
 
-# ABA Skill Categories (from 2025 NIH/PMC overviews: self-care, communication, social/ToM)
+    return np.array(
+        self.model.tts(
+            text=text,
+            speaker_wav=str(self.voice_sample),
+            language="en",
+        )
+    )
+
+def _fallback_synthesize(self, text: str) -> np.ndarray:
+    """
+    Fallback to a default voice if no voice sample is available.
+    """
+    return np.array(self.model.tts(text=text, speaker=self.model.speakers[0], language="en"))

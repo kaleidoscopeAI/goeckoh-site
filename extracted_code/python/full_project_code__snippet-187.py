@@ -1,16 +1,16 @@
-from .packages import six
-from .packages.six.moves import queue
-from .request import RequestMethods
-from .response import HTTPResponse
-from .util.connection import is_connection_dropped
-from .util.proxy import connection_requires_http_tunnel
-from .util.queue import LifoQueue
-from .util.request import set_file_position
-from .util.response import assert_header_parsing
-from .util.retry import Retry
-from .util.ssl_match_hostname import CertificateError
-from .util.timeout import Timeout
-from .util.url import Url, _encode_target
-from .util.url import _normalize_host as normalize_host
-from .util.url import get_host, parse_url
+    class RequestModule(sys.modules[__name__].__class__):
+        def __call__(self, *args, **kwargs):
+            """
+            If user tries to call this module directly urllib3 v2.x style raise an error to the user
+            suggesting they may need urllib3 v2
+            """
+            raise TypeError(
+                "'module' object is not callable\n"
+                "urllib3.request() method is not supported in this release, "
+                "upgrade to urllib3 v2 to use it\n"
+                "see https://urllib3.readthedocs.io/en/stable/v2-migration-guide.html"
+            )
+
+    sys.modules[__name__].__class__ = RequestModule
+
 

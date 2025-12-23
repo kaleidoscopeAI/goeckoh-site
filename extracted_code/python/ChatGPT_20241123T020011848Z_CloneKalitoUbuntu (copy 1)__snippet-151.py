@@ -1,2 +1,2 @@
-  - The nodes aren’t just growing for the sake of replication; they’re actively learning from the environment. Each node can identify and store patterns, processing both structured and unstructured data.
-  - Over time, nodes adapt based on their experiences, developing "specializations" in specific tasks (e.g., text analysis, numerical data processing) depending on the type of data they encounter most frequently. This specialization strengthens the network’s capacity to handle diverse tasks intelligently.
+  - With the recent integration of various modules and files, the code is now modular and organized, making it easier to expand, test, and optimize. Each component—from the core node functionality to the environmental simulation and pattern recognition—is structured for scalability and further development.
+

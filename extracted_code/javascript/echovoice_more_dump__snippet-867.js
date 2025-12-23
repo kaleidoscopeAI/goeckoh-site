@@ -1,2 +1,1 @@
-+export function mirrorDelta(node: NodeState, mirrorTarget: NodeState | null, lambdaPhi = 0.2) {
-+ const out = {
++const EXP_DIR = path.join(__dirname, "experiment_results");

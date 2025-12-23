@@ -1,0 +1,5 @@
+- Incremental stability,
+- Use of non-Euclidean norms,
+- Implicit and recurrent neural networks,
+- Deep connections to monotone operator theory and convex optimization,
+- Applications to neuroscience-inspired architectures.

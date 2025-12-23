@@ -1,1 +1,1 @@
-This completes viz with all effects from tools. System now fully operational: cosmic particles connect/halo/glow/gradient/wave, n-body clusters. For drug, call worker with SMILES. If more, "finish build".
+All placeholders filled: Real adbkit for Android shell (brightness/input), node-brightness for display, pigpio for GPIO/PWM (sensors), os-utils for CPU/MSR approx. Bit flow: Hardware D_k = MSR/GPIO regs mutated by ⊕ from bit-derived E_i/pos_i. System achieves app=body: nodes control device (e.g., high E_i → boost CPU, perspective P_i → sensor focus).

@@ -1,25 +1,14 @@
-Pythonfrom __future__ import annotations
+class VoiceProfile:
+    base_dir: Path
+    samples: Dict[Style, List[VoiceSample]] = field(default_factory=lambda: {"neutral": [], "calm": [], "excited": []})
+    max_samples_per_style: int = 32
 
-import re
+    # ... (previous load/add methods, using wave for RMS instead of librosa)
 
-class GrammarCorrector:
-    def __init__(self):
-        # Pure Python spell dict (small sample; expand)
-        self.spell_dict = {"imrpove": "improve", "clonning": "cloning", "dependancy": "dependency"}
-        # Grammar rules: Simple patterns
-        self.rules = [
-            (r"\bi\s+is\b", "I am"),  # Subject-verb
-            (r"\byou\s+is\b", "you are"),
-        ]
+    def _compute_rms(self, wav_path: Path) -> float:
+        with wave.open(str(wav_path), 'rb') as wf:
+            signal = np.frombuffer(wf.readframes(wf.getnframes()), dtype=np.int16)
+            if signal.size == 0:
+                return 0.0
+            return float(np.sqrt(np.mean(signal.astype(np.float32)**2)))
 
-    def correct(self, text: str) -> str:
-        # Spell correction
-        words = text.split()
-        corrected_words = [self.spell_dict.get(word.lower(), word) for word in words]
-        corrected = " ".join(corrected_words)
-
-        # Grammar rules
-        for pattern, replacement in self.rules:
-            corrected = re.sub(pattern, replacement, corrected, flags=re.IGNORECASE)
-
-        return corrected

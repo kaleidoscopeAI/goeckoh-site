@@ -1,0 +1,5 @@
+# Python 2
+class ConnectionError(Exception):
+    pass
+
+

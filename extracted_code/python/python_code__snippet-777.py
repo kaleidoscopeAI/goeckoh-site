@@ -1,29 +1,21 @@
-    import io
-    import os
-    import pty
-    import sys
+import functools
+import logging
+import os
+import pathlib
+import sys
+import sysconfig
+from typing import Any, Dict, Generator, Optional, Tuple
 
-    decoder = AnsiDecoder()
+from pip._internal.models.scheme import SCHEME_KEYS, Scheme
+from pip._internal.utils.compat import WINDOWS
+from pip._internal.utils.deprecation import deprecated
+from pip._internal.utils.virtualenv import running_under_virtualenv
 
-    stdout = io.BytesIO()
-
-    def read(fd: int) -> bytes:
-        data = os.read(fd, 1024)
-        stdout.write(data)
-        return data
-
-    pty.spawn(sys.argv[1:], read)
-
-    from .console import Console
-
-    console = Console(record=True)
-
-    stdout_result = stdout.getvalue().decode("utf-8")
-    print(stdout_result)
-
-    for line in decoder.decode(stdout_result):
-        console.print(line)
-
-    console.save_html("stdout.html")
-
-
+from . import _sysconfig
+from .base import (
+    USER_CACHE_DIR,
+    get_major_minor_version,
+    get_src_prefix,
+    is_osx_framework,
+    site_packages,
+    user_site,

@@ -1,0 +1,3 @@
+console: "Console",
+options: "ConsoleOptions",
+renderables: Sequence["RenderableType"],

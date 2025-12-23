@@ -1,1 +1,1 @@
-const loop = new EmotionLoop({ nodes: NODE_COUNT, timestepMs: TIMESTEP_MS, maxReflections: 200 });
+const numSpecies = Simulation.nodes.length;

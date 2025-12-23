@@ -1,4 +1,2 @@
-const t = v * 2;
-const r = Math.floor(50 + 205 * t);
-const g = Math.floor(50 + 205 * (1 - t));
-const b = 220 - Math.floor(200 * t);
+function computeWij(i,j): number — returns w_ij.
+function computeWijDerivatives(i,j): WeightDeriv — returns structure with functions/arrays that compute ∂w_ij/∂K_i, ∂w_ij/∂K_j, ∂w_ij/∂U_i, etc.

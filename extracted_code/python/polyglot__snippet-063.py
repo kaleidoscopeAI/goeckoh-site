@@ -1,1 +1,1 @@
-def calculate_phi(data: np.ndarray) -> float:
+async def batch_ingest(self) -> List[Dict]:

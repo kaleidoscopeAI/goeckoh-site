@@ -1,2 +1,1 @@
-function activationColor(val: number) {
-const v = 1 / (1 + Math.exp(-val)); // 0..1
+nb.computeDwAlongV(...) is a small function that, based on chosen similarity kernels, computes directional derivative using local components only (K,

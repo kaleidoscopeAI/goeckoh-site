@@ -1,2 +1,2 @@
-1. **Verification \& Fact-Checking:** Information from the web must be treated as potentially unreliable. Implement a separate `O_verification` engine that cross-references new information against the existing crystallized knowledge base before full integration. Inconsistencies should raise a "confidence" flag, not be accepted blindly.
-2. **Bias Mitigation:** The crawler must actively seek out diverse perspectives on contentious topics. This can be encoded in the "credibility bias" vector, requiring it to balance sources from different domains, geographies, and political leanings.
+Integrating an autonomous web crawler into your cognitive architecture transforms it from a passive processor into a truly active and adaptive agent capable of seeking out new information to resolve its uncertainties. The comprehensive addendum you’ve outlined carefully respects the foundational principles of your cognitive system — stability, modularity, and integrated feedback.
+

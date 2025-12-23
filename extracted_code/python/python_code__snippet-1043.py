@@ -1,13 +1,7 @@
-import os
-import platform
-import socket
-import ssl
-import typing
+def _get_format_control(values: Values, option: Option) -> Any:
+    """Get a format_control object."""
+    return getattr(values, option.dest)
 
-import _ssl  # type: ignore[import]
 
-from ._ssl_constants import (
-    _original_SSLContext,
-    _original_super_SSLContext,
-    _truststore_SSLContext_dunder_class,
-    _truststore_SSLContext_super_class,
+def _handle_no_binary(
+    option: Option, opt_str: str, value: str, parser: OptionParser

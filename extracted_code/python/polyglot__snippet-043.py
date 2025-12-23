@@ -1,1 +1,2 @@
-def _dfs_contour(self, edges: np.ndarray, visited: np.ndarray, x: int, y: int) -> List[Tuple[int,int]]:
+class MemoryStore:
+def __init__(self, path: str, redis: Optional[aioredis.Redis]):

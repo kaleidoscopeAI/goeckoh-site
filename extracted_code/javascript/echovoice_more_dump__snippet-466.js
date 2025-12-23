@@ -1,2 +1,2 @@
-const maxC = Math.max(...node.chemicals);
-const colorRatio = node.chemicals.map(c => c / (maxC || 1));
+let seen: any = null;
+Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.

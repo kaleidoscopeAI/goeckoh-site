@@ -1,0 +1,14 @@
+ 7  │  ├─ systems/
+ 8 -│  │  ├─ speech_mirror.py – mic→ASR→grammar correction→TTS→playback, GCL
+     gate
+ 8 +│  │  ├─ speech_mirror.py – mic→ASR→grammar correction→TTS→playback, GCL
+     gate, Rust VC option
+ 9  │  │  ├─ complete_unified_system.py – orchestrates “Neurocoherence Latti
+    ce”, ABA, voice, memory
+   ⋮
+19  │  └─ src/services/api.ts – calls /status, /mirror/*
+20 +├─ Cognitive-NeBula (visualizer add-on)
+21 +│  ├─ agi-thought-visualizer/ – react + three.js 3D visualizer (use /mir
+    ror/stream SSE)
+22  ├─ Audio Kernel (Rust + UniFFI)
+

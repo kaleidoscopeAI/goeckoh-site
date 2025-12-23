@@ -1,0 +1,3 @@
+'.egg': Distribution,
+'.egg-info': EggInfoDistribution,
+'.dist-info': DistInfoDistribution,

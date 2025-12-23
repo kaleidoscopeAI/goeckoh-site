@@ -1,1 +1,1 @@
-const animate = () => {
+const svc = new EmotionalActuationService({ firebaseConfig: undefined });

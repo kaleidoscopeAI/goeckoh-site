@@ -1,0 +1,5 @@
+261              Coherence {heartMirror.coherence !== undefined ? heartMirror.coherence.toFixed(3) : '—'} ·
+262 -            Arousal {heartMirror.arousal !== undefined ? heartMirror.arousal.toFixed(3) : '—'} ·
+262 +            Activation {heartMirror.arousal !== undefined ? heartMirror.arousal.toFixed(3) : '—'} ·
+263              Valence {heartMirror.valence !== undefined ? heartMirror.valence.toFixed(3) : '—'}
+

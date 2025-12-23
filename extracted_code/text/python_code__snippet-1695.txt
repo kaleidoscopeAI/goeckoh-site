@@ -1,0 +1,2 @@
+"active_voice_name": "Default Hybrid",
+"synthesis_mode": "hybrid",

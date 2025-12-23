@@ -1,2 +1,2 @@
-# <REDACTED: potential secret detected>
+Attach to: class Swarm: and use within the main update loop.
 

@@ -1,0 +1,7 @@
+      vadThresholdSeekBar.max = 100
+
+      applyVadButton.setOnClickListener {
+          val modeIndex = vadModeSpinner.selectedItemPosition
+          val silenceMs = silenceDurationSeekBar.progress * 100
+          val threshold = vadThresholdSeekBar.progress / 100f
+          sharedPrefs.edit().putInt("vad_mode",

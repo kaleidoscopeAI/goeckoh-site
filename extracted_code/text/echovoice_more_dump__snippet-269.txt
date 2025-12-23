@@ -1,1 +1,3 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+  Updates implicit state Ki​ (via μdata​ term).
+
+  Updates the explicit G by adding/refining nodes (symbols) and edges (relations) that link to the updated Ki​ 

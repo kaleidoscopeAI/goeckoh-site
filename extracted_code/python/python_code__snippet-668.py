@@ -1,12 +1,3 @@
-    def TypeAlias(self, parameters):
-        """Special marker indicating that an assignment should
-        be recognized as a proper type alias definition by type
-        checkers.
+from pip._internal.utils.filesystem import adjacent_tmp_file, check_path_owner, replace
+from pip._internal.utils.misc import ensure_dir
 
-        For example::
-
-            Predicate: TypeAlias = Callable[..., bool]
-
-        It's invalid when used anywhere except as in the example above.
-        """
-        raise TypeError(f"{self} is not subscriptable")

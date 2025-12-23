@@ -1,0 +1,2 @@
+return StreamWrapper(stream, None).isatty()
+

@@ -1,0 +1,30 @@
+ """ Update frequency harmonics based on relationship or by simple generation methods.
+
+  - uses resonance stenght, and interacts and amplifies based on similar nodes and removes if it does not relate
+    # parameters - field_stat and data.
+    # return nothing is handled inplace on the resonnace obj.
+ """
+  # check the exisiting resonances of all current resonances nodes influence based on similar frequencies with harmonic functions of sine waves to enforce.
+
+  #Harmonic reinforcement based on matching harmonics
+ for other_id, other_resonance in global_stats.get("resonances", {}).items():
+    if other_id != self.pattern_id:
+          for harmonic in other_resonance.harmonics:
+             if self._is_harmonic_related(self.frequency, harmonic):
+               # increase strength if other harmonic exists.
+               if harmonic not in self.harmonics:
+                   self.harmonics.append(harmonic)
+               else:
+                 self.harmonics[self.harmonics.index(harmonic)] = harmonic  # Replace value if it exists
+
+    # Genrate new harmonic with weighted average if strenght increases
+ if len (self.harmonics) < 5 and random.random () < resonance_strength * self.harmonic_influence_factor: # Increase the randomness threshold by amplitude
+
+      new_harmonic = np.mean(self.frequency) * (1.5 + random.random()) # Calculate average freqs of self
+      if new_harmonic not in self.harmonics:
+         self.harmonics.append(new_harmonic) # Appends if unique
+
+ # Clean harmonics with very low frequency matching of 1 or 0. only harmonics that connect get updated. If a hormic doesn't relate over time then remove it
+ self.harmonics = [h for h in self.harmonics if any (self._is_harmonic_related (h, other_resonance.frequency)
+                  for other_id, other_resonance in global_stats.get ("resonances", {}).items()
+                 if other_id != self.pattern_id) ]

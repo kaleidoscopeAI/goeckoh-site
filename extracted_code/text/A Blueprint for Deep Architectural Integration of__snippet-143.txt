@@ -1,0 +1,4 @@
+- Routing matrix $R$ thresholds are evaluated on bit patterns or control bits represented as Boolean conditions.
+- The composed summations $\bigoplus$ correspond to **bitwise XOR** or **OR** reductions depending on signaling semantics, implemented via logic reduction operators (\&, |, ^).
+- Engine outputs $O_i$ presumptively produce bit vectors of size $m$ representing quantized outputs.
+

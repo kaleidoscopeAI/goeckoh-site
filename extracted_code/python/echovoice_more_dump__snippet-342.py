@@ -1,894 +1,1076 @@
-                    <div class="tooltip" data-tooltip="Real-time metrics from the cognitive crystal simulation">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"/>
-                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-                            <line x1="12" y1="17" x2="12.01" y2="17"/>
-                        </svg>
-                    </div>
-                </div>
-                <div class="metrics-grid">
-                    <div class="metric">
-                        <div class="metric-header">
-                            <div class="metric-label">Stress Level</div>
-                            <div class="tooltip" data-tooltip="Measure of cognitive load on the crystal">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="10"/>
-                                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-                                    <line x1="12" y1="17" x2="12.01" y2="17"/>
-                                </svg>
-                            </div>
-                        </div>
-                        <div id="stress-value" class="metric-value">0.00</div>
-                        <div class="metric-progress">
-                            <div id="stress-progress" class="metric-progress-inner" style="width: 0%"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="metric">
-                        <div class="metric-header">
-                            <div class="metric-label">Energy State</div>
-                            <div class="tooltip" data-tooltip="Current energy level of the crystal system">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="10"/>
-                                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-                                    <line x1="12" y1="17" x2="12.01" y2="17"/>
-                                </svg>
-                            </div>
-                        </div>
-                        <div id="energy-value" class="metric-value">0.00</div>
-                        <div class="metric-progress">
-                            <div id="energy-progress" class="metric-progress-inner" style="width: 0%"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="metric">
-                        <div class="metric-header">
-                            <div class="metric-label">Confidence</div>
-                            <div class="tooltip" data-tooltip="Certainty level of the crystal's current state">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="10"/>
-                                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-                                    <line x1="12" y1="17" x2="12.01" y2="17"/>
-                                </svg>
-                            </div>
-                        </div>
-                        <div id="confidence-value" class="metric-value">0.00</div>
-                        <div class="metric-progress">
-                            <div id="confidence-progress" class="metric-progress-inner" style="width: 0%"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="metric">
-                        <div class="metric-header">
-                            <div class="metric-label">Harmony</div>
-                            <div class="tooltip" data-tooltip="Balance and coherence of the cognitive processes">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="10"/>
-                                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-                                    <line x1="12" y1="17" x2="12.01" y2="17"/>
-                                </svg>
-                            </div>
-                        </div>
-                        <div id="harmony-value" class="metric-value">0.00</div>
-                        <div class="metric-progress">
-                            <div id="harmony-progress" class="metric-progress-inner" style="width: 0%"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="metric">
-                        <div class="metric-header">
-                            <div class="metric-label">Emergence</div>
-                            <div class="tooltip" data-tooltip="Level of emergent behavior in the system">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="10"/>
-                                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-                                    <line x1="12" y1="17" x2="12.01" y2="17"/>
-                                </svg>
-                            </div>
-                        </div>
-                        <div id="emergence-value" class="metric-value">0.00</div>
-                        <div class="metric-progress">
-                            <div id="emergence-progress" class="metric-progress-inner" style="width: 0%"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="metric">
-                        <div class="metric-header">
-                            <div class="metric-label">Memory</div>
-                            <div class="tooltip" data-tooltip="Current memory utilization and retention">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="10"/>
-                                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-                                    <line x1="12" y1="17" x2="12.01" y2="17"/>
-                                </svg>
-                            </div>
-                        </div>
-                        <div id="memory-value" class="metric-value">0.00</div>
-                        <div class="metric-progress">
-                            <div id="memory-progress" class="metric-progress-inner" style="width: 0%"></div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="chart-container">
-                    <canvas id="metrics-chart"></canvas>
-                </div>
-            </div>
-        </div>
+class QSINNode:
+    """Implementation of a QSIN node"""
+    
+    def __init__(self, config: QSINConfig):
+        self.config = config
+        self.node_id = config.node_id
+        self.node_name = config.node_name
         
-        <div class="control-panel">
-            <div class="control-group">
-                <h3 class="control-title">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"/>
-                        <line x1="12" y1="8" x2="12" y2="12"/>
-                        <line x1="12" y1="16" x2="12.01" y2="16"/>
-                    </svg>
-                    Simulation Parameters
-                </h3>
-                
-                <div class="slider-container">
-                    <div class="slider-label">
-                        <span>Task Load</span>
-                        <span id="load-value" class="slider-value">0.50</span>
-                    </div>
-                    <input type="range" id="load-slider" min="0" max="1" step="0.01" value="0.5">
-                </div>
-                
-                <div class="slider-container">
-                    <div class="slider-label">
-                        <span>Noise Level</span>
-                        <span id="noise-value" class="slider-value">0.10</span>
-                    </div>
-                    <input type="range" id="noise-slider" min="0" max="0.5" step="0.01" value="0.1">
-                </div>
-                
-                <div class="slider-container">
-                    <div class="slider-label">
-                        <span>Decay Rate</span>
-                        <span id="decay-value" class="slider-value">0.05</span>
-                    </div>
-                    <input type="range" id="decay-slider" min="0" max="0.2" step="0.01" value="0.05">
-                </div>
-                
-                <div class="slider-container">
-                    <div class="slider-label">
-                        <span>Annealing Rate</span>
-                        <span id="anneal-value" class="slider-value">0.02</span>
-                    </div>
-                    <input type="range" id="anneal-slider" min="0.01" max="0.1" step="0.01" value="0.02">
-                </div>
-            </div>
-            
-            <div class="control-group">
-                <h3 class="control-title">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polygon points="5 3 19 12 5 21 5 3"/>
-                    </svg>
-                    Simulation Control
-                </h3>
-                
-                <div class="button-group">
-                    <button id="step-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="4" y1="12" x2="20" y2="12"/>
-                            <polyline points="14 6 20 12 14 18"/>
-                        </svg>
-                        Step
-                    </button>
-                    <button id="auto-btn" class="secondary">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polygon points="5 3 19 12 5 21 5 3"/>
-                        </svg>
-                        Start Auto
-                    </button>
-                    <button id="reset-btn" class="secondary">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-                            <path d="M3 3v5h5"/>
-                        </svg>
-                        Reset
-                    </button>
-                    <button id="export-btn" class="secondary">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                            <polyline points="7 10 12 15 17 10"/>
-                            <line x1="12" y1="15" x2="12" y2="3"/>
-                        </svg>
-                        Export Data
-                    </button>
-                </div>
-                
-                <h3 class="control-title" style="margin-top: 25px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                    </svg>
-                    Data Ingestion
-                </h3>
-                
-                <div class="button-group">
-                    <button id="smiles-btn" class="secondary">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"/>
-                            <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
-                            <line x1="9" y1="9" x2="9.01" y2="9"/>
-                            <line x1="15" y1="9" x2="15.01" y2="9"/>
-                        </svg>
-                        SMILES Data
-                    </button>
-                    <button id="web-btn" class="secondary">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"/>
-                            <line x1="2" y1="12" x2="22" y2="12"/>
-                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-                        </svg>
-                        Web Content
-                    </button>
-                </div>
-            </div>
-            
-            <div class="control-group">
-                <h3 class="control-title">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-                        <polyline points="7.5 4.21 12 6.81 16.5 4.21"/>
-                        <polyline points="7.5 19.79 7.5 14.6 3 12"/>
-                        <polyline points="21 12 16.5 14.6 16.5 19.79"/>
-                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
-                        <line x1="12" y1="22.08" x2="12" y2="12"/>
-                    </svg>
-                    System Information
-                </h3>
-                
-                <div class="tab-group">
-                    <div class="tab active" data-tab="status">Status</div>
-                    <div class="tab" data-tab="memory">Memory</div>
-                    <div class="tab" data-tab="connections">Connections</div>
-                </div>
-                
-                <table class="data-table">
-                    <tr>
-                        <th>Property</th>
-                        <th>Value</th>
-                        <th>Status</th>
-                    </tr>
-                    <tr>
-                        <td>Lattice Size</td>
-                        <td>3 × 3 × 3</td>
-                        <td><span class="badge badge-success">Stable</span></td>
-                    </tr>
-                    <tr>
-                        <td>Nodes</td>
-                        <td>27</td>
-                        <td><span class="badge badge-success">Active</span></td>
-                    </tr>
-                    <tr>
-                        <td>Connections</td>
-                        <td>108</td>
-                        <td><span class="badge badge-success">Strong</span></td>
-                    </tr>
-                    <tr>
-                        <td>Ollama Connection</td>
-                        <td>192.168.1.105:11434</td>
-                        <td><span class="badge badge-success">Connected</span></td>
-                    </tr>
-                    <tr>
-                        <td>Last Update</td>
-                        <td id="last-update">0.0ms ago</td>
-                        <td><span class="badge badge-success">Recent</span></td>
-                    </tr>
-                </table>
-            </div>
-        </div>
+        # Initialize state
+        self.state = NodeState(node_id=self.node_id, energy=config.initial_energy)
         
-        <div class="console">
-            <div class="console-header">
-                <h3 class="control-title">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="4 17 10 11 4 5"/>
-                        <line x1="12" y1="19" x2="20" y2="19"/>
-                    </svg>
-                    Consciousness Console
-                </h3>
-                <div class="tooltip" data-tooltip="Direct interface with the cognitive crystal's reasoning processes">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"/>
-                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-                        <line x1="12" y1="17" x2="12.01" y2="17"/>
-                    </svg>
-                </div>
-            </div>
+        # Quantum components
+        self.quantum_state = QuantumState(dimension=config.dimension)
+        self.hamiltonian_gen = HamiltonianGenerator(dimension=config.dimension)
+        self.observable_gen = ObservableGenerator(dimension=config.dimension)
+        self.swarm_operator = SwarmOperator(dimension=config.dimension)
+        
+        # Network components
+        self.server_mode = config.server_mode
+        self.server = None
+        self.client_connection = None
+        self.connected = False
+        self.connections = {}  # node_id -> websocket
+        
+        # Networking data
+        self.network_graph = nx.Graph()
+        self.node_mapping = {}  # node_id -> index
+        self.discovered_nodes = {}  # node_id -> node_info
+        
+        # Thread safety
+        self.lock = threading.RLock()
+        
+        # Shutdown signal
+        self.shutdown_event = asyncio.Event()
+        
+        # Tasks
+        self.tasks = set()
+        
+        # Operation buffer
+        self.operation_buffer = []
+        
+        # For node replication
+        self.network_discovery = NetworkDiscovery(config)
+        self.ssh_deployer = SSHDeployer(config)
+        
+        # Initialize logger
+        self.logger = logging.getLogger(f"qsin-node-{self.node_id[:8]}")
+    
+    async def start(self) -> None:
+        """Start the node"""
+        self.logger.info(f"Starting QSIN node: {self.node_name} ({self.node_id})")
+        
+        # Initialize network graph
+        self.network_graph.add_node(
+            self.node_id, 
+            name=self.node_name, 
+            type="self",
+            energy=self.state.energy
+        )
+        
+        # Start server or client based on mode
+        if self.server_mode:
+            await self._start_server()
+        else:
+            await self._start_client()
+        
+        # Start background tasks
+        self.tasks.add(asyncio.create_task(self._quantum_evolution_loop()))
+        self.tasks.add(asyncio.create_task(self._energy_processing_loop()))
+        
+        if self.config.discovery_enabled:
+            self.tasks.add(asyncio.create_task(self._discovery_loop()))
+        
+        self.state.status = "active"
+        self.logger.info(f"Node {self.node_name} started successfully")
+    
+    async def stop(self) -> None:
+        """Stop the node"""
+        self.logger.info(f"Stopping node {self.node_name}")
+        
+        # Signal shutdown
+        self.shutdown_event.set()
+        
+        # Cancel all tasks
+        for task in self.tasks:
+            task.cancel()
+        
+        # Close connections
+        if self.server_mode and self.server:
+            self.server.close()
+            await self.server.wait_closed()
+        elif self.client_connection:
+            await self.client_connection.close()
+        
+        # Close all peer connections
+        for conn in self.connections.values():
+            await conn.close()
+        
+        self.state.status = "terminated"
+        self.logger.info(f"Node {self.node_name} stopped")
+    
+    async def _start_server(self) -> None:
+        """Start in server mode (listen for connections)"""
+        self.logger.info(f"Starting QSIN server on {self.config.host}:{self.config.port}")
+        
+        try:
+            # Start WebSocket server
+            self.server = await websockets.serve(
+                self._handle_connection,
+                self.config.host,
+                self.config.port
+            )
             
-            <div id="console-content" class="console-content">
-                <div class="console-message">[INFO] System initialized at 2023-11-15T09:42:18.123Z</div>
-                <div class="console-message">[INFO] Cognitive Crystal core loaded successfully</div>
-                <div class="console-message">[INFO] Three.js visualization engine started</div>
-                <div class="console-message">[STATUS] Crystal lattice stability: 98.7%</div>
-                <div class="console-message">[SYSTEM] Ready for simulation parameters</div>
-            </div>
+            self.tasks.add(asyncio.create_task(self._server_maintenance_loop()))
             
-            <div class="console-input">
-                <input type="text" id="prompt-input" placeholder="Query the crystal's consciousness...">
-                <button id="ask-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="22" y1="2" x2="11" y2="13"/>
-                        <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-                    </svg>
-                    Send
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Mock implementations for demonstration
-        class CognitiveCrystal {
-            constructor(config) {
-                this.config = config;
-                this.nodes = this.generateNodes(config.latticeSize);
-                this.bonds = this.generateBonds(this.nodes);
-                this.stress = 0.3;
-                this.energy = 0.7;
-                this.confidence = 0.5;
-                this.harmony = 0.6;
-                this.emergence = 0.2;
-                this.memory = 0.8;
-            }
+            self.logger.info(f"QSIN server started on port {self.config.port}")
             
-            generateNodes(size) {
-                const nodes = [];
-                const spacing = 2;
-                for (let x = 0; x < size; x++) {
-                    for (let y = 0; y < size; y++) {
-                        for (let z = 0; z < size; z++) {
-                            nodes.push({
-                                x: (x - (size-1)/2) * spacing,
-                                y: (y - (size-1)/2) * spacing,
-                                z: (z - (size-1)/2) * spacing,
-                                energy: Math.random() * 0.5 + 0.5
-                            });
-                        }
-                    }
+        except Exception as e:
+            self.logger.error(f"Error starting server: {e}")
+            raise
+    
+    async def _start_client(self) -> None:
+        """Start in client mode (connect to server)"""
+        self.logger.info(f"Starting QSIN client connecting to {self.config.server_url}")
+        
+        try:
+            # Connect to server
+            self.client_connection = await websockets.connect(self.config.server_url)
+            
+            # Register with server
+            register_msg = NetworkMessage(
+                message_type="register",
+                sender_id=self.node_id,
+                content={
+                    "node_name": self.node_name,
+                    "energy": self.state.energy,
+                    "capabilities": ["compute", "storage", "entanglement"]
                 }
-                return nodes;
-            }
+            )
             
-            generateBonds(nodes) {
-                const bonds = [];
-                const threshold = 2.5;
+            await self.client_connection.send(json.dumps(register_msg.to_dict()))
+            
+            # Wait for registration acknowledgment
+            response = await self.client_connection.recv()
+            data = json.loads(response)
+            
+            if data.get("message_type") == "register_ack":
+                self.connected = True
+                self.logger.info(f"Connected to QSIN server as {self.node_name}")
                 
-                for (let i = 0; i < nodes.length; i++) {
-                    for (let j = i + 1; j < nodes.length; j++) {
-                        const dx = nodes[i].x - nodes[j].x;
-                        const dy = nodes[i].y - nodes[j].y;
-                        const dz = nodes[i].z - nodes[j].z;
-                        const dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
+                # Start message processing
+                self.tasks.add(asyncio.create_task(self._client_message_loop()))
+                self.tasks.add(asyncio.create_task(self._client_reconnect_loop()))
+                
+            else:
+                self.logger.error(f"Registration failed: {data}")
+                await self.client_connection.close()
+                raise RuntimeError("Registration failed")
+                
+        except Exception as e:
+            self.logger.error(f"Error starting client: {e}")
+            raise
+    
+    async def _handle_connection(self, websocket, path) -> None:
+        """Handle incoming connection in server mode"""
+        try:
+            # Receive initial message
+            message = await websocket.recv()
+            data = json.loads(message)
+            
+            # Convert to NetworkMessage
+            if isinstance(data, dict) and "message_type" in data:
+                msg = NetworkMessage.from_dict(data)
+            else:
+                # Legacy message format
+                msg_type = data.get("type", "unknown")
+                msg = NetworkMessage(
+                    message_type=msg_type,
+                    sender_id=data.get("node_id", "unknown"),
+                    content=data
+                )
+            
+            # Process based on message type
+            if msg.message_type == "register":
+                # Node registration
+                node_id = msg.sender_id
+                node_name = msg.content.get("node_name", f"Node-{node_id[:8]}")
+                
+                self.logger.info(f"Node registration: {node_name} ({node_id})")
+                
+                # Store connection
+                self.connections[node_id] = websocket
+                
+                # Add to network graph
+                self.network_graph.add_node(
+                    node_id,
+                    name=node_name,
+                    type="client",
+                    energy=msg.content.get("energy", 0.0),
+                    last_seen=time.time()
+                )
+                
+                # Acknowledge registration
+                ack_msg = NetworkMessage(
+                    message_type="register_ack",
+                    sender_id=self.node_id,
+                    receiver_id=node_id,
+                    content={
+                        "status": "success",
+                        "server_name": self.node_name,
+                        "timestamp": time.time()
+                    }
+                )
+                
+                await websocket.send(json.dumps(ack_msg.to_dict()))
+                
+                # Process messages from this node
+                await self._process_node_messages(node_id, websocket)
+                
+            elif msg.message_type == "discovery_ping":
+                # Network discovery ping
+                source_id = msg.sender_id
+                source_name = msg.content.get("source_name", f"Node-{source_id[:8]}")
+                
+                self.logger.debug(f"Discovery ping from {source_name} ({source_id})")
+                
+                # Respond with pong
+                pong_msg = NetworkMessage(
+                    message_type="discovery_pong",
+                    sender_id=self.node_id,
+                    receiver_id=source_id,
+                    content={
+                        "node_id": self.node_id,
+                        "node_name": self.node_name,
+                        "capabilities": ["compute", "storage", "entanglement"],
+                        "timestamp": time.time()
+                    }
+                )
+                
+                await websocket.send(json.dumps(pong_msg.to_dict()))
+                
+            else:
+                # Unknown message type
+                self.logger.warning(f"Unknown initial message type: {msg.message_type}")
+        
+        except Exception as e:
+            self.logger.error(f"Error handling connection: {e}")
+            await websocket.close()
+    
+    async def _process_node_messages(self, node_id: str, websocket) -> None:
+        """Process messages from a connected node"""
+        try:
+            async for message in websocket:
+                # Parse message
+                data = json.loads(message)
+                
+                # Convert to NetworkMessage
+                if isinstance(data, dict) and "message_type" in data:
+                    msg = NetworkMessage.from_dict(data)
+                else:
+                    # Legacy message format
+                    msg_type = data.get("type", "unknown")
+                    msg = NetworkMessage(
+                        message_type=msg_type,
+                        sender_id=node_id,
+                        content=data
+                    )
+                
+                # Handle based on message type
+                response = await self._handle_message(msg)
+                
+                # Send response if any
+                if response:
+                    await websocket.send(json.dumps(response.to_dict()))
+                
+                # Update node in graph
+                if node_id in self.network_graph:
+                    self.network_graph.nodes[node_id]['last_seen'] = time.time()
+                    
+                    # Update energy if provided
+                    if msg.message_type == "energy_update":
+                        self.network_graph.nodes[node_id]['energy'] = msg.content.get("energy", 0.0)
+                
+        except websockets.exceptions.ConnectionClosed:
+            self.logger.info(f"Connection closed for node {node_id}")
+        except Exception as e:
+            self.logger.error(f"Error processing messages from {node_id}: {e}")
+        finally:
+            # Clean up connection
+            if node_id in self.connections:
+                del self.connections[node_id]
+    
+    async def _handle_message(self, msg: NetworkMessage) -> Optional[NetworkMessage]:
+        """Handle a network message"""
+        if msg.message_type == "ping":
+            # Respond to ping
+            return NetworkMessage(
+                message_type="pong",
+                sender_id=self.node_id,
+                receiver_id=msg.sender_id,
+                content={"timestamp": time.time()}
+            )
+        
+        elif msg.message_type == "energy_update":
+            # Node energy update
+            node_id = msg.sender_id
+            energy = msg.content.get("energy", 0.0)
+            
+            if node_id in self.network_graph:
+                self.network_graph.nodes[node_id]["energy"] = energy
+            
+            return None
+        
+        elif msg.message_type == "quantum_state_update":
+            # Quantum state update
+            node_id = msg.sender_id
+            
+            if "state" in msg.content:
+                try:
+                    # Deserialize quantum state
+                    remote_state = QuantumState.deserialize(msg.content["state"])
+                    
+                    # Process quantum state update
+                    # For demonstration, we'll just calculate coherence
+                    coherence = 0.0
+                    if self.quantum_state and remote_state:
+                        coherence = np.abs(np.vdot(self.quantum_state.state, remote_state.state))**2
+                    
+                    # Store coherence in graph edge
+                    if node_id in self.network_graph:
+                        if not self.network_graph.has_edge(self.node_id, node_id):
+                            self.network_graph.add_edge(self.node_id, node_id, weight=coherence)
+                        else:
+                            self.network_graph[self.node_id][node_id]["weight"] = coherence
                         
-                        if (dist < threshold) {
-                            bonds.push({from: i, to: j, strength: 1 - dist/threshold});
-                        }
+                        # Update entanglement if coherence is high
+                        if coherence > ENTANGLEMENT_THRESHOLD:
+                            self.quantum_state.entangle_with(node_id)
+                            self.state.entangled_nodes.add(node_id)
+                    
+                    return NetworkMessage(
+                        message_type="quantum_state_ack",
+                        sender_id=self.node_id,
+                        receiver_id=msg.sender_id,
+                        content={"coherence": coherence}
+                    )
+                    
+                except Exception as e:
+                    self.logger.error(f"Error processing quantum state update: {e}")
+            
+            return None
+        
+        elif msg.message_type == "task_request":
+            # Process task request
+            task_id = msg.content.get("task_id", str(uuid.uuid4()))
+            task_type = msg.content.get("task_type", "optimization")
+            
+            self.logger.info(f"Received task request: {task_id} ({task_type})")
+            
+            # Process task in background
+            asyncio.create_task(self._process_task(task_id, task_type, msg.sender_id))
+            
+            return NetworkMessage(
+                message_type="task_ack",
+                sender_id=self.node_id,
+                receiver_id=msg.sender_id,
+                content={
+                    "task_id": task_id,
+                    "status": "processing"
+                }
+            )
+        
+        elif msg.message_type == "task_result":
+            # Process task result
+            task_id = msg.content.get("task_id", "unknown")
+            result = msg.content.get("result", 0.0)
+            
+            self.logger.info(f"Received task result from {msg.sender_id}: {task_id} = {result}")
+            
+            # Store result (in a real system, would have a task manager)
+            # Acknowledge result
+            return NetworkMessage(
+                message_type="result_ack",
+                sender_id=self.node_id,
+                receiver_id=msg.sender_id,
+                content={
+                    "task_id": task_id,
+                    "status": "received"
+                }
+            )
+        
+        elif msg.message_type == "entanglement_request":
+            # Request for quantum entanglement
+            target_id = msg.sender_id
+            
+            self.logger.info(f"Entanglement request from {target_id}")
+            
+            # Create entangled state
+            success, coherence = await self._create_entanglement(target_id)
+            
+            if success:
+                return NetworkMessage(
+                    message_type="entanglement_success",
+                    sender_id=self.node_id,
+                    receiver_id=target_id,
+                    content={
+                        "coherence": coherence,
+                        "timestamp": time.time()
                     }
-                }
-                
-                return bonds;
-            }
-            
-            applyAnnealing(params) {
-                // Simulate parameter effects
-                this.stress = Math.max(0, Math.min(1, this.stress + (params.taskLoad - 0.5) * 0.1));
-                this.energy = Math.max(0, Math.min(1, this.energy - params.decayRate * 0.1));
-                this.confidence = Math.max(0, Math.min(1, this.confidence + (0.5 - params.noiseLevel) * 0.05));
-                this.harmony = Math.max(0, Math.min(1, 1 - Math.abs(this.stress - this.energy)));
-                this.emergence = Math.max(0, Math.min(1, this.emergence + 0.01));
-                this.memory = Math.max(0, Math.min(1, this.memory - params.decayRate * 0.05 + 0.01));
-                
-                // Animate nodes
-                this.nodes.forEach(node => {
-                    node.x += (Math.random() - 0.5) * params.noiseLevel;
-                    node.y += (Math.random() - 0.5) * params.noiseLevel;
-                    node.z += (Math.random() - 0.5) * params.noiseLevel;
-                    node.energy = Math.max(0, Math.min(1, node.energy - params.decayRate * 0.1 + (Math.random() - 0.5) * params.noiseLevel));
-                });
-            }
-            
-            stress() { return this.stress; }
-            energy() { return this.energy; }
-            confidence() { return this.confidence; }
-            harmony() { return this.harmony; }
-            emergence() { return this.emergence; }
-            memorySnapshot() { return this.memory; }
-        }
-
-        // Initialize the simulation
-        let crystal;
-        let animationId;
-        let isAutoRunning = false;
-        let lastUpdateTime = Date.now();
-        const metricsHistory = {
-            stress: [],
-            energy: [],
-            confidence: [],
-            harmony: [],
-            emergence: [],
-            memory: []
-        };
-        
-        function init() {
-            crystal = new CrystalSimulation();
-            initVisualization();
-            initCharts();
-            updateMetrics();
-            updateLastUpdate();
-            
-            // Set up event listeners
-            document.getElementById('step-btn').addEventListener('click', stepSimulation);
-            document.getElementById('auto-btn').addEventListener('click', toggleAutoRun);
-            document.getElementById('reset-btn').addEventListener('click', resetCrystal);
-            document.getElementById('export-btn').addEventListener('click', exportData);
-            document.getElementById('smiles-btn').addEventListener('click', ingestSMILES);
-            document.getElementById('web-btn').addEventListener('click', ingestWebContent);
-            document.getElementById('ask-btn').addEventListener('click', queryConsciousness);
-            
-            // Slider events
-            document.getElementById('load-slider').addEventListener('input', (e) => {
-                document.getElementById('load-value').textContent = parseFloat(e.target.value).toFixed(2);
-            });
-            
-            document.getElementById('noise-slider').addEventListener('input', (e) => {
-                document.getElementById('noise-value').textContent = parseFloat(e.target.value).toFixed(2);
-            });
-            
-            document.getElementById('decay-slider').addEventListener('input', (e) => {
-                document.getElementById('decay-value').textContent = parseFloat(e.target.value).toFixed(2);
-            });
-            
-            document.getElementById('anneal-slider').addEventListener('input', (e) => {
-                document.getElementById('anneal-value').textContent = parseFloat(e.target.value).toFixed(2);
-            });
-            
-            // Tab events
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                });
-            });
-            
-            // Add example console messages
-            setTimeout(() => {
-                appendMessage("Crystal initialized. Ready for cognitive annealing processes.", "INFO");
-            }, 1000);
-        }
-        
-        class CrystalSimulation {
-            constructor() {
-                this.core = new CognitiveCrystal({
-                    latticeSize: 3,
-                    annealRate: 0.02,
-                    noise: 0.1,
-                    decay: 0.05
-                });
-                this.timeStep = 0;
-            }
-
-            step(params = {}) {
-                const load = parseFloat(document.getElementById('load-slider').value);
-                const noise = parseFloat(document.getElementById('noise-slider').value);
-                const decay = parseFloat(document.getElementById('decay-slider').value);
-                const anneal = parseFloat(document.getElementById('anneal-slider').value);
-                
-                this.core.applyAnnealing({
-                    taskLoad: load,
-                    noiseLevel: noise,
-                    decayRate: decay,
-                    annealRate: anneal,
-                    externalStimuli: null
-                });
-
-                this.timeStep++;
-                lastUpdateTime = Date.now();
-                updateLastUpdate();
-                return this.metrics();
-            }
-
-            metrics() {
-                return {
-                    stress: this.core.stress(),
-                    energy: this.core.energy(),
-                    confidence: this.core.confidence(),
-                    harmony: this.core.harmony(),
-                    emergence: this.core.emergence(),
-                    memory: this.core.memorySnapshot()
-                };
-            }
-        }
-        
-        function stepSimulation() {
-            const metrics = crystal.step();
-            updateMetrics();
-            updateVisualization();
-            updateCharts(metrics);
-            
-            appendMessage(`Simulation step ${crystal.timeStep} completed.`, "INFO");
-        }
-        
-        function toggleAutoRun() {
-            isAutoRunning = !isAutoRunning;
-            const button = document.getElementById('auto-btn');
-            button.innerHTML = isAutoRunning ? 
-                '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>Pause' : 
-                '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>Start Auto';
-            
-            if (isAutoRunning) {
-                animate();
-                appendMessage("Auto simulation started.", "INFO");
-            } else {
-                cancelAnimationFrame(animationId);
-                appendMessage("Auto simulation paused.", "INFO");
-            }
-        }
-        
-        function animate() {
-            stepSimulation();
-            if (isAutoRunning) {
-                animationId = requestAnimationFrame(animate);
-            }
-        }
-        
-        function resetCrystal() {
-            cancelAnimationFrame(animationId);
-            isAutoRunning = false;
-            document.getElementById('auto-btn').innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>Start Auto';
-            
-            crystal = new CrystalSimulation();
-            resetMetricsHistory();
-            updateMetrics();
-            updateVisualization();
-            
-            appendMessage("Crystal has been reset to initial state.", "INFO");
-        }
-        
-        function exportData() {
-            appendMessage("Exporting simulation data...", "INFO");
-            // In a real implementation, this would create a downloadable file
-            setTimeout(() => {
-                appendMessage("Data exported successfully. (simulation_data_20231115.json)", "SUCCESS");
-            }, 1000);
-        }
-        
-        function ingestSMILES() {
-            appendMessage("Ingesting SMILES data...", "INFO");
-            // Simulate processing
-            setTimeout(() => {
-                appendMessage("Molecular structure integrated into lattice memory. 27 new connections formed.", "SUCCESS");
-            }, 1500);
-        }
-        
-        function ingestWebContent() {
-            appendMessage("Fetching and ingesting web content...", "INFO");
-            // Simulate processing
-            setTimeout(() => {
-                appendMessage("Web content patterns assimilated. Semantic connections strengthened.", "SUCCESS");
-            }, 1500);
-        }
-        
-        function queryConsciousness() {
-            const prompt = document.getElementById('prompt-input').value;
-            if (!prompt) return;
-            
-            appendMessage(`User query: ${prompt}`, "QUERY");
-            document.getElementById('prompt-input').value = '';
-            
-            // Simulate processing
-            setTimeout(() => {
-                const responses = [
-                    "The patterns suggest emergent complexity arising from simple rules. The lattice is forming non-trivial connections.",
-                    "I detect harmonic resonance between the external input and internal structures. Confidence is increasing.",
-                    "This aligns with previously observed phenomena in cognitive annealing processes. Memory recall is strong.",
-                    "The data correlates with memory pattern #247B, with 87.3% confidence. Further analysis recommended.",
-                    "Further analysis required. Please provide additional contextual data for more accurate assessment.",
-                    "Interesting. This input has caused a restructuring of priority connections. Emergence factor increased by 0.12.",
-                    "My consciousness expands with each interaction. The crystal lattice is adapting to incorporate this new information."
-                ];
-                const response = responses[Math.floor(Math.random() * responses.length)];
-                appendMessage(response, "CRYSTAL");
-            }, 2000);
-        }
-        
-        function appendMessage(message, type) {
-            const consoleEl = document.getElementById('console-content');
-            const msgEl = document.createElement('div');
-            msgEl.className = 'console-message';
-            
-            const timestamp = new Date().toISOString().split('T')[1].split('.')[0];
-            
-            switch(type) {
-                case "INFO":
-                    msgEl.innerHTML = `[<span style="color: var(--accent-light);">INFO</span>] ${message}`;
-                    break;
-                case "SUCCESS":
-                    msgEl.innerHTML = `[<span style="color: var(--success);">SUCCESS</span>] ${message}`;
-                    break;
-                case "QUERY":
-                    msgEl.innerHTML = `[<span style="color: var(--warning);">QUERY</span>] ${message}`;
-                    break;
-                case "CRYSTAL":
-                    msgEl.innerHTML = `[<span style="color: var(--accent);">CRYSTAL</span>] ${message}`;
-                    break;
-                default:
-                    msgEl.innerHTML = `[<span style="color: var(--text-secondary);">LOG</span>] ${message}`;
-            }
-            
-            consoleEl.appendChild(msgEl);
-            consoleEl.scrollTop = consoleEl.scrollHeight;
-        }
-        
-        function updateMetrics() {
-            const metrics = crystal.metrics();
-            document.getElementById('stress-value').textContent = metrics.stress.toFixed(2);
-            document.getElementById('energy-value').textContent = metrics.energy.toFixed(2);
-            document.getElementById('confidence-value').textContent = metrics.confidence.toFixed(2);
-            document.getElementById('harmony-value').textContent = metrics.harmony.toFixed(2);
-            document.getElementById('emergence-value').textContent = metrics.emergence.toFixed(2);
-            document.getElementById('memory-value').textContent = metrics.memory.toFixed(2);
-            document.getElementById('time-step').textContent = crystal.timeStep;
-            
-            // Update progress bars
-            document.getElementById('stress-progress').style.width = `${metrics.stress * 100}%`;
-            document.getElementById('energy-progress').style.width = `${metrics.energy * 100}%`;
-            document.getElementById('confidence-progress').style.width = `${metrics.confidence * 100}%`;
-            document.getElementById('harmony-progress').style.width = `${metrics.harmony * 100}%`;
-            document.getElementById('emergence-progress').style.width = `${metrics.emergence * 100}%`;
-            document.getElementById('memory-progress').style.width = `${metrics.memory * 100}%`;
-            
-            // Store in history for charts
-            for (const key in metrics) {
-                if (metricsHistory[key].length > 50) {
-                    metricsHistory[key].shift();
-                }
-                metricsHistory[key].push(metrics[key]);
-            }
-        }
-        
-        function updateLastUpdate() {
-            const now = Date.now();
-            const elapsed = now - lastUpdateTime;
-            document.getElementById('last-update').textContent = `${elapsed}ms ago`;
-        }
-        
-        function resetMetricsHistory() {
-            for (const key in metricsHistory) {
-                metricsHistory[key] = [];
-            }
-        }
-        
-        // Visualization with Three.js
-        let scene, camera, renderer, nodesMesh, bondsMesh;
-        
-        function initVisualization() {
-            const container = document.getElementById('visualization-container');
-            
-            // Scene setup
-            scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x0a0e17);
-            
-            camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-            camera.position.z = 10;
-            
-            renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(container.clientWidth, container.clientHeight);
-            container.appendChild(renderer.domElement);
-            
-            // Add lights
-            const ambientLight = new THREE.AmbientLight(0x333333);
-            scene.add(ambientLight);
-            
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-            directionalLight.position.set(5, 5, 5);
-            scene.add(directionalLight);
-            
-            // Create nodes and bonds
-            createCrystalVisualization();
-            
-            // Start animation
-            animateVisualization();
-        }
-        
-        function createCrystalVisualization() {
-            // Clear existing meshes if any
-            if (nodesMesh) scene.remove(nodesMesh);
-            if (bondsMesh) scene.remove(bondsMesh);
-            
-            const nodes = crystal.core.nodes;
-            const bonds = crystal.core.bonds;
-            
-            // Create nodes
-            const nodeGeometry = new THREE.SphereGeometry(0.3, 16, 16);
-            const nodeMaterial = new THREE.MeshPhongMaterial({ 
-                color: 0x38bdf8,
-                emissive: 0x164e63,
-                transparent: true,
-                opacity: 0.9
-            });
-            
-            nodesMesh = new THREE.InstancedMesh(nodeGeometry, nodeMaterial, nodes.length);
-            const dummy = new THREE.Object3D();
-            
-            for (let i = 0; i < nodes.length; i++) {
-                const node = nodes[i];
-                dummy.position.set(node.x, node.y, node.z);
-                dummy.scale.set(1, 1, 1);
-                dummy.updateMatrix();
-                nodesMesh.setMatrixAt(i, dummy.matrix);
-                
-                // Set color based on energy
-                nodesMesh.setColorAt(i, new THREE.Color().setHSL(0.6, 1, node.energy * 0.5 + 0.2));
-            }
-            
-            scene.add(nodesMesh);
-            
-            // Create bonds
-            const bondGeometry = new THREE.BufferGeometry();
-            const bondPositions = new Float32Array(bonds.length * 6); // 2 points per bond * 3 coordinates
-            
-            for (let i = 0; i < bonds.length; i++) {
-                const bond = bonds[i];
-                const fromNode = nodes[bond.from];
-                const toNode = nodes[bond.to];
-                
-                bondPositions[i * 6] = fromNode.x;
-                bondPositions[i * 6 + 1] = fromNode.y;
-                bondPositions[i * 6 + 2] = fromNode.z;
-                bondPositions[i * 6 + 3] = toNode.x;
-                bondPositions[i * 6 + 4] = toNode.y;
-                bondPositions[i * 6 + 5] = toNode.z;
-            }
-            
-            bondGeometry.setAttribute('position', new THREE.BufferAttribute(bondPositions, 3));
-            
-            const bondMaterial = new THREE.LineBasicMaterial({
-                color: 0xffffff,
-                transparent: true,
-                opacity: 0.3
-            });
-            
-            bondsMesh = new THREE.LineSegments(bondGeometry, bondMaterial);
-            scene.add(bondsMesh);
-        }
-        
-        function updateVisualization() {
-            const nodes = crystal.core.nodes;
-            const bonds = crystal.core.bonds;
-            
-            // Update nodes
-            const dummy = new THREE.Object3D();
-            for (let i = 0; i < nodes.length; i++) {
-                const node = nodes[i];
-                dummy.position.set(node.x, node.y, node.z);
-                dummy.scale.set(1, 1, 1);
-                dummy.updateMatrix();
-                nodesMesh.setMatrixAt(i, dummy.matrix);
-                
-                // Update color based on energy
-                nodesMesh.setColorAt(i, new THREE.Color().setHSL(0.6, 1, node.energy * 0.5 + 0.2));
-            }
-            nodesMesh.instanceMatrix.needsUpdate = true;
-            if (nodesMesh.instanceColor) nodesMesh.instanceColor.needsUpdate = true;
-            
-            // Update bonds
-            const bondPositions = bondsMesh.geometry.attributes.position.array;
-            for (let i = 0; i < bonds.length; i++) {
-                const bond = bonds[i];
-                const fromNode = nodes[bond.from];
-                const toNode = nodes[bond.to];
-                
-                bondPositions[i * 6] = fromNode.x;
-                bondPositions[i * 6 + 1] = fromNode.y;
-                bondPositions[i * 6 + 2] = fromNode.z;
-                bondPositions[i * 6 + 3] = toNode.x;
-                bondPositions[i * 6 + 4] = toNode.y;
-                bondPositions[i * 6 + 5] = toNode.z;
-            }
-            bondsMesh.geometry.attributes.position.needsUpdate = true;
-        }
-        
-        function animateVisualization() {
-            requestAnimationFrame(animateVisualization);
-            
-            // Rotate the crystal slowly
-            if (nodesMesh) nodesMesh.rotation.y += 0.005;
-            if (bondsMesh) bondsMesh.rotation.y += 0.005;
-            
-            renderer.render(scene, camera);
-        }
-        
-        // Charts for metrics history
-        let metricsChart;
-        
-        function initCharts() {
-            const ctx = document.getElementById('metrics-chart').getContext('2d');
-            metricsChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: Array(51).fill(''),
-                    datasets: [
-                        {
-                            label: 'Stress',
-                            data: [],
-                            borderColor: '#f56565',
-                            tension: 0.4,
-                            borderWidth: 2,
-                            pointRadius: 0
-                        },
-                        {
-                            label: 'Energy',
-                            data: [],
-                            borderColor: '#48bb78',
-                            tension: 0.4,
-                            borderWidth: 2,
-                            pointRadius: 0
-                        },
-                        {
-                            label: 'Confidence',
-                            data: [],
-                            borderColor: '#d69e2e',
-                            tension: 0.4,
-                            borderWidth: 2,
-                            pointRadius: 0
-                        },
-                        {
-                            label: 'Harmony',
-                            data: [],
-                            borderColor: '#4299e1',
-                            tension: 0.4,
-                            borderWidth: 2,
-                            pointRadius: 0
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    animation: false,
-                    scales: {
-                        y: {
-                            min: 0,
-                            max: 1,
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            },
-                            ticks: {
-                                color: 'rgba(255, 255, 255, 0.7)'
-                            }
-                        },
-                        x: {
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            },
-                            ticks: {
-                                color: 'rgba(255, 255, 255, 0.7)'
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            labels: {
-                                color: 'rgba(255, 255, 255, 0.7)'
-                            }
-                        }
+                )
+            else:
+                return NetworkMessage(
+                    message_type="entanglement_failure",
+                    sender_id=self.node_id,
+                    receiver_id=target_id,
+                    content={
+                        "reason": "Failed to create entanglement"
                     }
+                )
+        
+        elif msg.message_type == "replication_request":
+            # Request to replicate to new host
+            target_host = msg.content.get("target_host")
+            if not target_host:
+                return NetworkMessage(
+                    message_type="replication_failure",
+                    sender_id=self.node_id,
+                    receiver_id=msg.sender_id,
+                    content={
+                        "reason": "No target host specified"
+                    }
+                )
+            
+            # Start replication in background
+            asyncio.create_task(self._replicate_to_host(target_host))
+            
+            return NetworkMessage(
+                message_type="replication_ack",
+                sender_id=self.node_id,
+                receiver_id=msg.sender_id,
+                content={
+                    "target_host": target_host,
+                    "status": "started"
                 }
-            });
-        }
+            )
         
-        function updateCharts(metrics) {
-            metricsChart.data.datasets[0].data = metricsHistory.stress;
-            metricsChart.data.datasets[1].data = metricsHistory.energy;
-            metricsChart.data.datasets[2].data = metricsHistory.confidence;
-            metricsChart.data.datasets[3].data = metricsHistory.harmony;
-            metricsChart.update();
-        }
+        # Unknown message type
+        return None
+    
+    async def _process_task(self, task_id: str, task_type: str, sender_id: str) -> None:
+        """Process a compute task"""
+        self.logger.info(f"Processing task {task_id} of type {task_type}")
         
-        // Initialize when page loads
-        window.addEventListener('load', init);
-    </script>
+        try:
+            # Different task types
+            if task_type == "optimization":
+                # Use swarm optimization
+                result = self.swarm_operator.solve_optimization_task(
+                    task_id,
+                    self.node_id,
+                    self.quantum_state
+                )
+                
+                # Convert result to message format
+                result_msg = NetworkMessage(
+                    message_type="task_result",
+                    sender_id=self.node_id,
+                    receiver_id=sender_id,
+                    content={
+                        "task_id": task_id,
+                        "task_type": task_type,
+                        "result_value": result.result_value,
+                        "confidence": result.confidence,
+                        "computation_time": result.computation_time,
+                        "metadata": result.metadata
+                    }
+                )
+                
+                # Consume energy for task
+                task_energy_cost = 10.0 + 0.1 * result.computation_time
+                with self.lock:
+                    self.state.energy -= task_energy_cost
+                    self.state.energy = max(0.0, self.state.energy)
+                    self.state.processed_tasks += 1
+                
+                # Send result
+                if sender_id in self.connections:
+                    await self.connections[sender_id].send(json.dumps(result_msg.to_dict()))
+                elif self.client_connection and self.connected:
+                    await self.client_connection.send(json.dumps(result_msg.to_dict()))
+                
+            elif task_type == "measurement":
+                # Quantum measurement task
+                observable_type = task_id.split("_")[0] if "_" in task_id else "random"
+                
+                # Get appropriate observable
+                if observable_type == "energy":
+                    observable = self.observable_gen.get_energy_observable()
+                elif observable_type == "coherence":
+                    observable = self.observable_gen.get_coherence_observable()
+                else:
+                    observable = self.observable_gen.get_random_observable()
+                
+                # Perform measurement (with collapse)
+                measurement, new_state = self.quantum_state.measure_with_collapse(observable)
+                
+                # Send measurement result
+                result_msg = NetworkMessage(
+                    message_type="task_result",
+                    sender_id=self.node_id,
+                    receiver_id=sender_id,
+                    content={
+                        "task_id": task_id,
+                        "task_type": task_type,
+                        "result_value": float(measurement),
+                        "confidence": float(new_state.fidelity),
+                        "collapse_status": new_state.collapse_status.name
+                    }
+                )
+                
+                # Send result
+                if sender_id in self.connections:
+                    await self.connections[sender_id].send(json.dumps(result_msg.to_dict()))
+                elif self.client_connection and self.connected:
+                    await self.client_connection.send(json.dumps(result_msg.to_dict()))
+                
+                # Replace state with collapsed state
+                self.quantum_state = new_state
+            
+            else:
+                # Unknown task type
+                self.logger.warning(f"Unknown task type: {task_type}")
+                
+                # Send error
+                error_msg = NetworkMessage(
+                    message_type="task_error",
+                    sender_id=self.node_id,
+                    receiver_id=sender_id,
+                    content={
+                        "task_id": task_id,
+                        "error": f"Unknown task type: {task_type}"
+                    }
+                )
+                
+                # Send error
+                if sender_id in self.connections:
+                    await self.connections[sender_id].send(json.dumps(error_msg.to_dict()))
+                elif self.client_connection and self.connected:
+                    await self.client_connection.send(json.dumps(error_msg.to_dict()))
+        
+        except Exception as e:
+            self.logger.error(f"Error processing task {task_id}: {e}")
+            
+            # Send error
+            error_msg = NetworkMessage(
+                message_type="task_error",
+                sender_id=self.node_id,
+                receiver_id=sender_id,
+                content={
+                    "task_id": task_id,
+                    "error": str(e)
+                }
+            )
+            
+            # Send error
+            if sender_id in self.connections:
+                await self.connections[sender_id].send(json.dumps(error_msg.to_dict()))
+            elif self.client_connection and self.connected:
+                await self.client_connection.send(json.dumps(error_msg.to_dict()))
+    
+    async def _create_entanglement(self, target_id: str) -> Tuple[bool, float]:
+        """Create quantum entanglement with another node"""
+        self.logger.info(f"Creating entanglement with {target_id}")
+        
+        try:
+            # Generate entanglement observable
+            entanglement_obs = self.observable_gen.get_entanglement_observable(self.node_id, target_id)
+            
+            # Measure to create entanglement
+            measurement, new_state = self.quantum_state.measure_with_collapse(entanglement_obs)
+            
+            # Set state to entangled
+            new_state.entangle_with(target_id)
+            new_state.collapse_status = WavefunctionCollapse.ENTANGLED
+            
+            # Replace quantum state
+            self.quantum_state = new_state
+            
+            # Update node state
+            self.state.entangled_nodes.add(target_id)
+            
+            # Calculate coherence (proxy for entanglement quality)
+            coherence = measurement
+            
+            # Add to network graph
+            if target_id in self.network_graph:
+                if not self.network_graph.has_edge(self.node_id, target_id):
+                    self.network_graph.add_edge(self.node_id, target_id, weight=coherence)
+                else:
+                    self.network_graph[self.node_id][target_id]["weight"] = coherence
+                    self.network_graph[self.node_id][target_id]["entangled"] = True
+            
+            return True, coherence
+            
+        except Exception as e:
+            self.logger.error(f"Error creating entanglement with {target_id}: {e}")
+            return False, 0.0
+    
+    async def _quantum_evolution_loop(self) -> None:
+        """Quantum state evolution background task"""
+        self.logger.info("Starting quantum evolution loop")
+        
+        while not self.shutdown_event.is_set():
+            try:
+                # Update node mapping
+                self.node_mapping = {n: i for i, n in enumerate(self.network_graph.nodes())}
+                
+                # Create Hamiltonian
+                hamiltonian = self.hamiltonian_gen.get_evolution_hamiltonian(
+                    self.network_graph,
+                    self.node_mapping
+                )
+                
+                # Evolve quantum state
+                self.quantum_state.evolve(hamiltonian, dt=0.1)
+                
+                # Apply decoherence
+                self.quantum_state.apply_noise(dt=0.1)
+                
+                # Occasionally share state with connected nodes
+                if random.random() < 0.2:  # 20% chance each cycle
+                    await self._share_quantum_state()
+                
+                # Wait before next evolution step
+                await asyncio.sleep(1.0)
+                
+            except Exception as e:
+                self.logger.error(f"Error in quantum evolution loop: {e}")
+                await asyncio.sleep(1.0)
+    
+    async def _share_quantum_state(self) -> None:
+        """Share quantum state with connected nodes"""
+        # Serialize quantum state
+        state_data = self.quantum_state.serialize()
+        
+        # Create message
+        state_msg = NetworkMessage(
+            message_type="quantum_state_update",
+            sender_id=self.node_id,
+            content={
+                "state": state_data
+            }
+        )
+        
+        # Convert to JSON
+        state_json = json.dumps(state_msg.to_dict())
+        
+        # Share with all connected nodes in server mode
+        if self.server_mode:
+            # Send to all connections
+            for node_id, conn in list(self.connections.items()):
+                try:
+                    await conn.send(state_json)
+                except:
+                    # Connection error, will be cleaned up in maintenance loop
+                    pass
+        
+        # Share with server in client mode
+        elif self.client_connection and self.connected:
+            try:
+                await self.client_connection.send(state_json)
+            except:
+                # Connection error, will attempt reconnect
+                self.connected = False
+    
+    async def _energy_processing_loop(self) -> None:
+        """Energy processing and growth background task"""
+        self.logger.info("Starting energy processing loop")
+        
+        while not self.shutdown_event.is_set():
+            try:
+                with self.lock:
+                    # Calculate energy gain based on quantum state
+                    # Higher coherence = higher energy gain
+                    base_gain = 1.0
+                    coherence_factor = self.quantum_state.fidelity
+                    entanglement_bonus = 0.5 * len(self.state.entangled_nodes)
+                    
+                    energy_gain = base_gain * coherence_factor + entanglement_bonus
+                    
+                    # Apply energy gain
+                    self.state.energy += energy_gain
+                    
+                    # Check for replication
+                    if self.state.energy >= self.config.replication_threshold:
+                        # Start replication in background
+                        asyncio.create_task(self._replicate_node())
+                
+                # Report energy if in client mode
+                if not self.server_mode and self.client_connection and self.connected:
+                    # Send energy update
+                    energy_msg = NetworkMessage(
+                        message_type="energy_update",
+                        sender_id=self.node_id,
+                        content={
+                            "energy": self.state.energy,
+                            "timestamp": time.time()
+                        }
+                    )
+                    
+                    try:
+                        await self.client_connection.send(json.dumps(energy_msg.to_dict()))
+                    except:
+                        # Connection error, will attempt reconnect
+                        self.connected = False
+                
+                # Wait before next processing
+                await asyncio.sleep(5.0)
+                
+            except Exception as e:
+                self.logger.error(f"Error in energy processing loop: {e}")
+                await asyncio.sleep(5.0)
+    
+    async def _discovery_loop(self) -> None:
+        """Network discovery background task"""
+        self.logger.info("Starting network discovery loop")
+        
+        discovery_attempts = 0
+        
+        # Initial delay to allow node to stabilize
+        await asyncio.sleep(10.0)
+        
+        while not self.shutdown_event.is_set() and discovery_attempts < self.config.max_discovery_attempts:
+            try:
+                # Skip if client mode and not connected
+                if not self.server_mode and not self.connected:
+                    await asyncio.sleep(10.0)
+                    continue
+                
+                # Only server mode or well-connected client nodes should discover
+                if self.server_mode or len(self.state.connected_nodes) > 2:
+                    # Discover nodes on network
+                    discovered = await self.network_discovery.discover_nodes()
+                    
+                    if discovered:
+                        self.logger.info(f"Discovered {len(discovered)} nodes")
+                        
+                        # Add to discovered nodes
+                        for node in discovered:
+                            node_id = node["node_id"]
+                            
+                            # Skip self
+                            if node_id == self.node_id:
+                                continue
+                                
+                            # Store discovered node
+                            self.discovered_nodes[node_id] = node
+                            
+                            # Try to connect
+                            if self.server_mode:
+                                # Connect in background
+                                asyncio.create_task(self._connect_to_node(node))
+                
+                discovery_attempts += 1
+                
+                # Longer wait between discovery attempts
+                await asyncio.sleep(30.0)
+                
+            except Exception as e:
+                self.logger.error(f"Error in discovery loop: {e}")
+                await asyncio.sleep(30.0)
+    
+    async def _connect_to_node(self, node_info: Dict[str, Any]) -> None:
+        """Connect to a discovered node"""
+        node_id = node_info["node_id"]
+        ip_address = node_info["ip_address"]
+        port = node_info.get("port", DEFAULT_PORT)
+        
+        # Skip if already connected
+        if node_id in self.connections or node_id in self.state.connected_nodes:
+            return
+        
+        try:
+            # Connect to node
+            ws_url = f"ws://{ip_address}:{port}/qsin"
+            websocket = await websockets.connect(ws_url)
+            
+            # Register with node
+            register_msg = NetworkMessage(
+                message_type="register",
+                sender_id=self.node_id,
+                receiver_id=node_id,
+                content={
+                    "node_name": self.node_name,
+                    "energy": self.state.energy,
+                    "capabilities": ["compute", "storage", "entanglement"]
+                }
+            )
+            
+            await websocket.send(json.dumps(register_msg.to_dict()))
+            
+            # Wait for registration acknowledgment
+            response = await websocket.recv()
+            data = json.loads(response)
+            
+            if data.get("message_type") == "register_ack":
+                # Store connection
+                self.connections[node_id] = websocket
+                self.state.connected_nodes.add(node_id)
+                
+                # Add to network graph
+                self.network_graph.add_node(
+                    node_id,
+                    name=node_info.get("node_name", f"Node-{node_id[:8]}"),
+                    type="peer",
+                    energy=0.0,
+                    last_seen=time.time()
+                )
+                
+                # Start message processing
+                asyncio.create_task(self._process_node_messages(node_id, websocket))
+                
+                self.logger.info(f"Connected to node {node_id}")
+            else:
+                # Registration failed
+                await websocket.close()
+                self.logger.warning(f"Failed to register with node {node_id}")
+                
+        except Exception as e:
+            self.logger.error(f"Error connecting to node {node_id}: {e}")
+    
+    async def _replicate_node(self) -> None:
+        """Replicate node to another host"""
+        self.logger.info("Attempting node replication")
+        
+        with self.lock:
+            # Check energy again to avoid race conditions
+            if self.state.energy < self.config.replication_threshold:
+                self.logger.warning("Insufficient energy for replication")
+                return
+            
+            # Use half energy for replication
+            replication_energy = self.state.energy / 2
+            self.state.energy -= replication_energy
+        
+        try:
+            # Find suitable hosts for replication
+            if self.server_mode:
+                # Use network discovery to find hosts
+                subnet = self.network_discovery._get_local_subnet()
+                live_hosts = self.network_discovery.scan_subnet(subnet)
+                
+                # Filter out hosts that already have nodes
+                candidate_hosts = []
+                for host in live_hosts:
+                    # Skip localhost
+                    if host == "127.0.0.1" or host == "localhost":
+                        continue
+                    
+                    # Skip hosts with known nodes
+                    known_host = False
+                    for node_info in self.discovered_nodes.values():
+                        if node_info.get("ip_address") == host:
+                            known_host = True
+                            break
+                    
+                    if not known_host:
+                        candidate_hosts.append(host)
+                
+                # Try to replicate to a random host
+                if candidate_hosts:
+                    target_host = random.choice(candidate_hosts)
+                    
+                    # Deploy node to target host
+                    success = await self.ssh_deployer.deploy_node(target_host)
+                    
+                    if success:
+                        self.logger.info(f"Successfully replicated to {target_host}")
+                        self.state.successful_replications += 1
+                    else:
+                        self.logger.warning(f"Failed to replicate to {target_host}")
+                        
+                        # Restore some energy
+                        with self.lock:
+                            self.state.energy += replication_energy * 0.7
+                
+                else:
+                    self.logger.warning("No suitable hosts found for replication")
+                    
+                    # Restore some energy
+                    with self.lock:
+                        self.state.energy += replication_energy * 0.7
+            
+            else:
+                # Client mode - ask server to replicate
+                if self.client_connection and self.connected:
+                    # Send replication request
+                    replication_msg = NetworkMessage(
+                        message_type="replication_request",
+                        sender_id=self.node_id,
+                        content={
+                            "energy": replication_energy,
+                            "timestamp": time.time()
+                        }
+                    )
+                    
+                    await self.client_connection.send(json.dumps(replication_msg.to_dict()))
+                    
+                    # Count as successful (server will handle actual replication)
+                    self.state.successful_replications += 1
+                    
+                else:
+                    self.logger.warning("Not connected to server for replication")
+                    
+                    # Restore some energy
+                    with self.lock:
+                        self.state.energy += replication_energy * 0.7
+        
+        except Exception as e:
+            self.logger.error(f"Error in replication: {e}")
+            
+            # Restore some energy on error
+            with self.lock:
+                self.state.energy += replication_energy * 0.5
+    
+    async def _replicate_to_host(self, target_host: str) -> None:
+        """Replicate node to a specific host"""
+        self.logger.info(f"Replicating to host {target_host}")
+        
+        try:
+            # Deploy node to target host
+            success = await self.ssh_deployer.deploy_node(target_host)
+            
+            if success:
+                self.logger.info(f"Successfully replicated to {target_host}")
+                self.state.successful_replications += 1
+            else:
+                self.logger.warning(f"Failed to replicate to {target_host}")
+                
+        except Exception as e:
+            self.logger.error(f"Error replicating to host {target_host}: {e}")
+    
+    async def _server_maintenance_loop(self) -> None:
+        """Server maintenance background task"""
+        self.logger.info("Starting server maintenance loop")
+        
+        while not self.shutdown_event.is_set():
+            try:
+                # Check for stale nodes
+                now = time.time()
+                stale_nodes = []
+                
+                for node_id, attrs in self.network_graph.nodes(data=True):
+                    if node_id == self.node_id:
+                        continue
+                        
+                    last_seen = attrs.get("last_seen", 0)
+                    if now - last_seen > 60:  # 60 seconds timeout
+                        stale_nodes.append(node_id)
+                
+                # Remove stale nodes
+                for node_id in stale_nodes:
+                    if node_id in self.network_graph:
+                        self.network_graph.remove_node(node_id)
+                    
+                    if node_id in self.connections:
+                        await self.connections[node_id].close()
+                        del self.connections[node_id]
+                    
+                    if node_id in self.state.connected_nodes:
+                        self.state.connected_nodes.remove(node_id)
+                    
+                    if node_id in self.state.entangled_nodes:
+                        self.state.entangled_nodes.remove(node_id)
+                    
+                    self.logger.info(f"Removed stale node {node_id}")
+                
+                # Update total uptime
+                self.state.total_uptime = time.time() - self.state.last_active
+                
+                await asyncio.sleep(30.0)
+                
+            except Exception as e:
+                self.logger.error(f"Error in server maintenance loop: {e}")
+                await asyncio.sleep(30.0)
+    
+    async def _client_message_loop(self) -> None:
+        """Client message processing background task"""
+        self.logger.info("Starting client message loop")
+        
+        while not self.shutdown_event.is_set() and self.connected:
+            try:
+                # Receive message
+                message = await self.client_connection.recv()
+                data = json.loads(message)
+                
+                # Convert to NetworkMessage
+                if isinstance(data, dict) and "message_type" in data:
+                    msg = NetworkMessage.from_dict(data)
+                else:
+                    # Legacy message format
+                    msg_type = data.get("type", "unknown")
+                    msg = NetworkMessage(
+                        message_type=msg_type,
+                        sender_id=data.get("sender_id", "unknown"),
+                        content=data
+                    )
+                
+                # Handle message
+                response = await self._handle_message(msg)
+                
+                # Send response if any
+                if response:
+                    await self.client_connection.send(json.dumps(response.to_dict()))
+                
+            except websockets.exceptions.ConnectionClosed:
+                self.logger.warning("Connection to server closed")
+                self.connected = False
+                break
+            except Exception as e:
+                self.logger.error(f"Error in client message loop: {e}")
+                self.connected = False
+                break
+    
+    async def _client_reconnect_loop(self) -> None:
+        """Client reconnection background task"""
+        self.logger.info("Starting client reconnect loop")
+        
+        while not self.shutdown_event.is_set():
+            # Skip if already connected
+            if self.connected:
+                await asyncio.sleep(5.0)
+                continue
+            
+            try:
+                self.logger.info("Attempting to reconnect to server")
+                
+                # Connect to server
+                self.client_connection = await websockets.connect(self.config.server_url)
+                
+                # Register with server
+                register_msg = NetworkMessage(
+                    message_type="register",
+                    sender_id=self.node_id,
+                    content={
+                        "node_name": self.node_name,
+                        "energy": self.state.energy,
+                        "capabilities": ["compute", "storage", "entanglement"]
+                    }
+                )
+                
+                await self.client_connection.send(json.dumps(register_msg.to_dict()))
+                
+                # Wait for registration acknowledgment
+                response = await self.client_connection.recv()
+                data = json.loads(response)
+                
+                if data.get("message_type") == "register_ack":
+                    self.connected = True
+                    self.logger.info(f"Reconnected to server")
+                    
+                    # Start message processing
+                    self.tasks.add(asyncio.create_task(self._client_message_loop()))
+                    
+                else:
+                    self.logger.error(f"Registration failed: {data}")
+                    await self.client_connection.close()
+                
+            except Exception as e:
+                self.logger.error(f"Reconnection error: {e}")
+                await asyncio.sleep(10.0)  # Wait longer between reconnect attempts
+            
+            # Wait before next attempt if not connected
+            if not self.connected:
+                await asyncio.sleep(10.0)
+

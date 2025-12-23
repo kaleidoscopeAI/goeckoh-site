@@ -1,0 +1,5 @@
+> Task :app:preDebugBuild UP-TO-DATE
+… +32 lines
+
+BUILD FAILED in 3s
+

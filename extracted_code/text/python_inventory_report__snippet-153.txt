@@ -1,0 +1,1 @@
+functions: _auto_timbre_path, update_auto_timbre_from_audio, get_auto_timbre_wav

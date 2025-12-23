@@ -1,0 +1,14 @@
+Module Resolution Error:
+
+    The crystal_core module is not found in optimizer. Import it directly instead.
+
+Struct Field Access Errors:
+
+    ChemicalFeatures no longer has fields like atomic_number, formal_charge, etc. Remove these field accesses.
+
+    AdaptiveCoolingParams fields have changed. Update to use available fields.
+
+Private Field Access:
+
+    Use getter methods (accuracy(), precision(), etc.) instead of direct field access for Metrics.
+

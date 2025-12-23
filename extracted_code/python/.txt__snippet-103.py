@@ -1,1 +1,1 @@
-def transcribe(self, audio: np.ndarray) -> str:
+- Installs Python deps from backend/requirements.txt

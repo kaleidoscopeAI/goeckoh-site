@@ -1,4 +1,4 @@
-for (let i = 0; i < this.graph.n; i++) {
-const node = this.nodeStates[i];
-const base = i * this.cfg.speciesCount;
-for (let k = 0; k < this.cfg.speciesCount; k++) node.species[k] = this.S[base + k];
+const [i, j] = connections[fIdx];
+const srcNode = loop.nodeStates[i];
+const dstNode = loop.nodeStates[j];
+const intensity = Math.min(1, (Math.max(...srcNode.chemicals) + Math.max(...dstNode.chemicals)) / 2);

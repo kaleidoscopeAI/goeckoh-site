@@ -1,1 +1,2 @@
-const numSpecies = Simulation.nodes.length;
+const b = constructs[j];
+const pts = [

@@ -1,0 +1,12 @@
+n = max(a_packed.size, b_packed.size)
+if a_packed.size != n:
+    a = np.pad(a_packed, (0, n - a_packed.size), constant_values=0)
+else:
+    a = a_packed
+if b_packed.size != n:
+    b = np.pad(b_packed, (0, n - b_packed.size), constant_values=0)
+else:
+    b = b_packed
+xor = np.bitwise_xor(a, b)
+return popcount_u64(xor)
+

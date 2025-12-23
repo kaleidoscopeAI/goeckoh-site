@@ -1,0 +1,5 @@
+tts_wav_path: Path,
+target: ProsodyFeatures,
+pitch_limit_semitones: float = 5.0,
+tempo_limit_ratio: float = 0.5,  # max +/- 50% change
+loudness_limit_ratio: float = 2.0,

@@ -1,10 +1,5 @@
-import wikipediaapi
-
-def crawl_wikipedia(node, topic):
-    wiki = wikipediaapi.Wikipedia('en')
-    page = wiki.page(topic)
-    if page.exists():
-        node.resources[f"{topic}_summary"] = page.summary
-    else:
-        node.logs.append(f"Wikipedia page for {topic} does not exist.")
+def create_new_node(existing_nodes, dna_base):
+    node_id_counter = len(existing_nodes)
+    new_node = Node(node_id_counter, f"{dna_base}_child{node_id_counter}", resources={})
+    existing_nodes.append(new_node)
 

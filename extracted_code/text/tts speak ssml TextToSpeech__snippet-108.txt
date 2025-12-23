@@ -1,0 +1,3 @@
+      val effectiveStim = stimulus * volume * (1 + variance / 50.0)
+      for (i in 0 until nNodes) {
+          externalInput[i] = effectiveStim * exp(-i.toDouble() / (nNodes /

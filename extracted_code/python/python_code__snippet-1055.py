@@ -1,13 +1,12 @@
-class Module_six_moves_urllib(types.ModuleType):
+import os
+import subprocess
+import sys
+from typing import List, Optional, Tuple
 
-    """Create a six.moves.urllib namespace that resembles the Python 3 namespace"""
-    __path__ = []  # mark as package
-    parse = _importer._get_module("moves.urllib_parse")
-    error = _importer._get_module("moves.urllib_error")
-    request = _importer._get_module("moves.urllib_request")
-    response = _importer._get_module("moves.urllib_response")
-    robotparser = _importer._get_module("moves.urllib_robotparser")
-
-    def __dir__(self):
-        return ['parse', 'error', 'request', 'response', 'robotparser']
+from pip._internal.build_env import get_runnable_pip
+from pip._internal.cli import cmdoptions
+from pip._internal.cli.parser import ConfigOptionParser, UpdatingDefaultsHelpFormatter
+from pip._internal.commands import commands_dict, get_similar_commands
+from pip._internal.exceptions import CommandError
+from pip._internal.utils.misc import get_pip_version, get_prog
 

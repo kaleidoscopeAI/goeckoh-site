@@ -1,2 +1,4 @@
-This should allow Python to locate and import `adaptive_ai_node`. If the file still isn’t found, check the file extension to ensure it is `.py` and confirm there are no typos in the import statement. Let me know how this goes!
-
+    from knowledge_pool import EnhancedSharedKnowledgePool
+  File "/home/studio/Desktop/node-demo/knowledge_pool.py", line 3, in <module>
+    from knowledge_pool import EnhancedSharedKnowledgePool
+ImportError: cannot import name 'EnhancedSharedKnowledgePool' from partially initialized module 'knowledge_pool' (most likely due to a circular import) (/home/studio/Desktop/node-demo/knowledge_pool.py)

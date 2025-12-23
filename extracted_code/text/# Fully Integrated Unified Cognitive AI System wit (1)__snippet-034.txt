@@ -1,0 +1,2 @@
+- `requirements.txt` for backend Python dependencies.
+- `package.json` and `yarn.lock`/`package-lock.json` for frontend dependencies.

@@ -1,0 +1,5 @@
+55          vadMetricsText = findViewById(R.id.vad_metrics_text)
+56 +        silenceValueText = findViewById(R.id.silence_value)
+57 +        thresholdValueText = findViewById(R.id.threshold_value)
+58
+

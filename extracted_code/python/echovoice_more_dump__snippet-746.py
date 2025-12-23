@@ -1,3 +1,2 @@
-async def startup():
-    await cognitive_system.cognitive_cycle()  # Initial cycle
+ ): A data buffer holding ingested information from the web crawler or other nodes.
 

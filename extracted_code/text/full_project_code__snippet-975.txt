@@ -1,0 +1,1 @@
+FutureGenericT = futures.Future[t.Any]

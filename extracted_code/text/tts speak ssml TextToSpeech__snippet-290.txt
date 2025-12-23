@@ -1,0 +1,5 @@
+  Length      Date    Time    Name
+… +10 lines
+---------                     -------
+    69838                     9 files
+

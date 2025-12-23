@@ -1,0 +1,2 @@
+  return {"ok": True, "rows": brain.mem.recent(table, limit)}
+

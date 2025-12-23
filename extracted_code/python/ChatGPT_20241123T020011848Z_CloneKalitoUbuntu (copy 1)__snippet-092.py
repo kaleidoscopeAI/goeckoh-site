@@ -1,13 +1,15 @@
-class KnowledgeIndex:
+from collections import defaultdict
+
+class MessagingBus:
     def __init__(self):
-        self.index = {}
+        self.topics = defaultdict(list)
 
-    def add_entry(self, topic, reference):
-        if topic not in self.index:
-            self.index[topic] = []
-        if reference not in self.index[topic]:
-            self.index[topic].append(reference)
+    def publish(self, topic, data):
+        self.topics[topic].append(data)
 
-    def get_references(self, topic):
-        return self.index.get(topic, [])
+    def consume(self):
+        for topic, messages in self.topics.items():
+            if messages:
+                return topic, messages.pop(0)
+        return None, None
 

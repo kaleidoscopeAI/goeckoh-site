@@ -1,0 +1,5 @@
+  for key, value in condition.items():
+       if rule_result.get(key) != value:
+          return False
+  return True
+

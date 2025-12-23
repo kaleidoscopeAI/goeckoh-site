@@ -1,1 +1,2 @@
-const ch = input[0];
+const frame = new Float32Array(this.win);
+const tail = this.win - this.writeIdx;

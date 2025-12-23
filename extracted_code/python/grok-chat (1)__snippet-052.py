@@ -1,36 +1,47 @@
-class PragmaticAnalysis:
-    type: PragmaticType
-    confidence: float
-    adjusted_text: str  # Rephrased for clarity if needed
-    social_intent: str  # e.g., "request help", "express frustration"
+Pythonfrom __future__ import annotations
 
-class PragmaticEngine:
-    def __init__(self):
-        # Patterns for pragmatics (expand with ML later)
-        self.idiom_patterns = [r"kick the bucket", r"piece of cake", r"break a leg"]
-        self.sarcasm_markers = ["yeah right", "oh sure", "as if"]
-        self.social_cues = {
-            "help": ["can you", "please", "need"],
-            "frustration": ["ugh", "why", "can't"],
-        }
+import numpy as np
+import sounddevice as sd
+import queue
+import wave  # Built-in for audio
+from typing import Optional, Tuple
+import struct  # Built-in for unpacking
 
-    def analyze(self, text: str, semantic_embed: np.ndarray) -> PragmaticAnalysis:
-        text_lower = text.lower()
+class SpeechRecognizer:
+    def __init__(self, vad_threshold: float = 0.45, min_silence_ms: int = 1200):
+        self.q = queue.Queue()
+        self.stop = False
+        self.vad_threshold = vad_threshold
+        self.min_silence_ms = min_silence_ms
+        self.sample_rate = 16000
+        # No deps: Simple word list for "transcription" sim (improve with custom dict)
+        self.word_dict = ["hello", "help", "happy", "voice", "echo"]  # Expand manually
 
-        # Detect idioms
-        for pattern in self.idiom_patterns:
-            if re.search(pattern, text_lower):
-                return PragmaticAnalysis("idiom", 0.9, text, "figurative expression")
+    def callback(self, indata: np.ndarray, *args):
+        self.q.put(indata.flatten())
 
-        # Detect sarcasm (simple heuristic)
-        if any(marker in text_lower for marker in self.sarcasm_markers):
-            return PragmaticAnalysis("sarcasm", 0.8, text, "opposite intent")
+    def start(self):
+        import threading  # Built-in
+        threading.Thread(target=self._listen, daemon=True).start()
 
-        # Social cues
-        for intent, cues in self.social_cues.items():
-            if any(cue in text_lower for cue in cues):
-                return PragmaticAnalysis("social_cue", 0.85, text, intent)
+    def _listen(self):
+        with sd.InputStream(samplerate=self.sample_rate, channels=1, dtype='float32', callback=self.callback):
+            while not self.stop:
+                sd.sleep(100)
 
-        # Default literal
-        return PragmaticAnalysis("literal", 1.0, text, "direct statement")
+    def transcribe_chunk(self) -> Optional[Tuple[str, np.ndarray]]:
+        try:
+            audio = self.q.get(timeout=0.1)
+        except queue.Empty:
+            return None
 
+        # Zero-dep VAD: RMS threshold
+        rms = np.sqrt(np.mean(audio**2))
+        if rms < self.vad_threshold:
+            return None
+
+        # Zero-dep "transcription": Simulate by matching audio length/peaks to words (placeholder; real needs model)
+        # For improvement: Save to wave, analyze peaks
+        text = random.choice(self.word_dict) if rms > 0.6 else ""  # Sim; replace with better heuristic
+
+        return text, audio if text else None

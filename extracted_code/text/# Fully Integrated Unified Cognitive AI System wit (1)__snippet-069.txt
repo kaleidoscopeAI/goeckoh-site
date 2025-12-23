@@ -1,0 +1,7 @@
+e8 = E8Lattice()
+pe = PerspectiveEngine(e8, None)
+input_vec = Vector([0.1, 0.2, 0.3])
+hypothesis = pe.generate_hypothesis(input_vec)
+assert isinstance(hypothesis, Vector)
+assert len(hypothesis.components) == 3
+

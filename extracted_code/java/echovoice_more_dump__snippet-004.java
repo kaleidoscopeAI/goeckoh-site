@@ -1,1 +1,1 @@
-private fun startThoughtLoop() {
+private fun oscillatorState(): ConsciousState {

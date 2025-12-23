@@ -1,0 +1,2 @@
+return -x + np.dot(W, np.tanh(x))
+

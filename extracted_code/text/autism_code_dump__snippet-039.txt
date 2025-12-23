@@ -1,0 +1,8 @@
+words = re.findall(r"[a-z']+", text.lower())
+if not words:
+    return 0.0
+neg = sum(1 for w in words if w in NEGATIVE_WORDS)
+pos = sum(1 for w in words if w in POSITIVE_WORDS)
+return (pos - neg) / max(1, len(words))
+
+

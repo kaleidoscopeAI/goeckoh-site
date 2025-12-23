@@ -1,0 +1,4 @@
+return {
+  running: this.isRunning,
+  queueLength: this.requestQueue.length
+};

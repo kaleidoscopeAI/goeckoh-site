@@ -1,0 +1,2 @@
+shared_pool.add_pattern(pattern=pattern.content, confidence=0.8)
+

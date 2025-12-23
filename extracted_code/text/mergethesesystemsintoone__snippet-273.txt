@@ -1,0 +1,3 @@
+"""Processes the data and returns a processed representation."""
+raise NotImplementedError
+

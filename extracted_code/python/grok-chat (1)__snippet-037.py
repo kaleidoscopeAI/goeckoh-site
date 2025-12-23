@@ -1,25 +1,43 @@
-class GuidanceEngine:
-    logger: GuidanceLogger
-    parent_phrases: Dict[EventType, List[str]] = field(default_factory=lambda: {
-        "meltdown_risk": ["Everything is okay. Close my eyes and breathe."],
-        "anxious": ["I am safe. Let's take a deep breath."],
-        "success": ["Great job! I did it."]
-    })
+Pythonfrom __future__ import annotations
 
-    def add_parent_phrase(self, event_type: EventType, phrase: str) -> None:
-        if event_type not in self.parent_phrases:
-            self.parent_phrases[event_type] = []
-        self.parent_phrases[event_type].append(phrase)
+import numpy as np
+import sounddevice as sd
+import queue
+from faster_whisper import WhisperModel
+from typing import Optional, Tuple
 
-    def get_guidance(self, event_type: EventType) -> Optional[str]:
-        phrases = self.parent_phrases.get(event_type, [])
-        if phrases:
-            return np.random.choice(phrases)
-        return None
+class SpeechRecognizer:
+    def __init__(self, model_size: str = "small.en", vad_threshold: float = 0.45, min_silence_ms: int = 1200):
+        self.model = WhisperModel(model_size, device="cpu", compute_type="int8")
+        self.q = queue.Queue()
+        self.stop = False
+        self.vad_threshold = vad_threshold
+        self.min_silence_ms = min_silence_ms
+        self.sample_rate = 16000
 
-    def trigger(self, event_type: EventType) -> None:
-        message = self.get_guidance(event_type)
-        if message:
-            self.logger.log(event_type, "Guidance Triggered", message)
-            # Integrate with voice: speak(message, style="calm", mode="coach")
-            print(f"Guiding: {message}")
+    def callback(self, indata: np.ndarray, *args):
+        self.q.put(indata.flatten())
+
+    def start(self):
+        threading.Thread(target=self._listen, daemon=True).start()
+
+    def _listen(self):
+        with sd.InputStream(samplerate=self.sample_rate, channels=1, dtype='float32', callback=self.callback):
+            while not self.stop:
+                sd.sleep(100)
+
+    def transcribe_chunk(self) -> Optional[Tuple[str, np.ndarray]]:
+        try:
+            audio = self.q.get(timeout=0.1)
+        except queue.Empty:
+            return None
+
+        # Simple VAD
+        rms = np.sqrt(np.mean(audio**2))
+        if rms < self.vad_threshold:
+            return None
+
+        segments, _ = self.model.transcribe(audio, vad_filter=True, vad_parameters={"threshold": self.vad_threshold, "min_silence_duration_ms": self.min_silence_ms})
+        text = " ".join(s.text for s in segments).strip()
+        return text, audio if text else None
+

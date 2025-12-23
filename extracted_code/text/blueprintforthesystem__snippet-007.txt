@@ -1,0 +1,4 @@
+   * Input: Live microphone audio stream.
+   * Output: A single audio buffer (np.ndarray) containing one complete utterance. This buffer is passed to two subsequent
+     steps in parallel: STT and Prosody Extraction.
+

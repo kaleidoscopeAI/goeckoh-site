@@ -1,1 +1,8 @@
-    import imp
+    def _get(self, path):
+        if hasattr(self.loader, 'get_data'):
+            return self.loader.get_data(path)
+        raise NotImplementedError(
+            "Can't perform this operation for loaders without 'get_data()'"
+        )
+
+

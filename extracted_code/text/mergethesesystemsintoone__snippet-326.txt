@@ -1,0 +1,6 @@
+"""Implements a diversification strategy."""
+# Example: Decrease node's specialization to encourage broader exploration
+specialization_trait = "specialization"
+if specialization_trait in node.traits.traits:
+    node.traits.traits[specialization_trait].value = max(0.0, node.traits.traits[specialization_trait].value - 0.1)
+

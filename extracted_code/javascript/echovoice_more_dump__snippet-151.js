@@ -1,6 +1,4 @@
-We'll adjust the load_or_process_dataset function to only attempt download for parquet.
+Let's now output the completed code for the load_or_process_dataset function and the run_experiment function (if any changes are needed).
 
-Now, note that the ensure_dataset_exists function is called in the InspectDataset command. We want to keep that behavior.
-
-We'll create a helper function that downloads only if the URL is not empty.
+But note: the run_experiment function in the given code already calls load_or_process_dataset and then proceeds. We don't change the run_experiment function itself, only the helper.
 

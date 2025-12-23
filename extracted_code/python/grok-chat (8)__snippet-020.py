@@ -1,98 +1,155 @@
-    # Add a conceptual insight that links finance and healthcare (e.g., from a separate SN or pre-existing data)
-    insight_synthesizer.ingest_super_node_insights(
-        "EconomicHealth_SN",
-        "Economic downturns correlate with increased mental health service demand.",
-        ['economy', 'mental health', 'healthcare', 'correlation']
-    )
-    conscious_cube.add_conceptual_node("EconomicHealth_SN_Proxy", initial_strength=0.6)
-    conscious_cube.update_node_activity("EconomicHealth_SN_Proxy", 0.7) # Simulate high activity for this link
+"""
+Represents an autonomous, learning AI agent designed to mimic and master a specific real-world domain.
+"""
+def __init__(self, node_id, domain_description):
+    if not isinstance(node_id, str) or not node_id:
+        raise ValueError("SuperNode: node_id must be a non-empty string.")
+    if not isinstance(domain_description, str) or not domain_description:
+        raise ValueError("SuperNode: domain_description must be a non-empty string.")
 
-    print("\n--- PHASE 3: Synthesis Tool Articulates Breakthroughs ---")
-    # Synthesis Tool identifies clusters and articulates breakthroughs
-    insight_synthesizer.identify_semantic_clusters()
-    breakthrough_insights = insight_synthesizer.articulate_breakthroughs()
-    if breakthrough_insights:
-        for b_insight in breakthrough_insights:
-            print(b_insight)
-            # Conceptual: A breakthrough insight might strengthen a new connection in the Cube
-            # Or even trigger the creation of a new conceptual node representing the breakthrough
-            if "integrated risk models" in b_insight:
-                conscious_cube.add_conceptual_node("IntegratedRiskModel_Insight", initial_strength=0.9)
-                conscious_cube.graph.add_edge("IntegratedRiskModel_Insight", "Finance_SN_Proxy", weight=0.8)
-                conscious_cube.graph.add_edge("IntegratedRiskModel_Insight", "SupplyChain_SN_Proxy", weight=0.7)
-                conscious_cube._update_viz_properties("IntegratedRiskModel_Insight")
-                conscious_cube._update_edge_viz_properties("IntegratedRiskModel_Insight", "Finance_SN_Proxy")
-                conscious_cube._update_edge_viz_properties("IntegratedRiskModel_Insight", "SupplyChain_SN_Proxy")
-            elif "healthcare delivery paradigms" in b_insight:
-                conscious_cube.add_conceptual_node("NewHealthcareParadigm_Insight", initial_strength=0.9)
-                conscious_cube.graph.add_edge("NewHealthcareParadigm_Insight", "Healthcare_SN_Proxy", weight=0.8)
-                conscious_cube.graph.add_edge("NewHealthcareParadigm_Insight", "SupplyChain_SN_Proxy", weight=0.7)
-                conscious_cube._update_viz_properties("NewHealthcareParadigm_Insight")
-                conscious_cube._update_edge_viz_properties("NewHealthcareParadigm_Insight", "Healthcare_SN_Proxy")
-                conscious_cube._update_edge_viz_properties("NewHealthcareParadigm_Insight", "SupplyChain_SN_Proxy")
+    self.node_id = node_id
+    self.domain_description = domain_description
+    self.historical_data = {}  # Stores time series data for different aspects of the domain
+    self.generative_models = {}  # Models to 'mimic' or generate domain behavior
+    logging.info(f"--- Super Node '{self.node_id}' Initialized: Forging reality's mimicry for {domain_description}. ---")
 
+def ingest_historical_data(self, data_series_name, data_points):
+    """
+    Ingest initial historical data for mimicry and causal analysis.
+    Robustness: Validate input types and data points.
+    """
+    if not isinstance(data_series_name, str) or not data_series_name:
+        logging.error(f"Super Node '{self.node_id}': data_series_name must be a non-empty string.")
+        return
+    if not isinstance(data_points, (list, np.ndarray)) or not data_points:
+        logging.error(f"Super Node '{self.node_id}': data_points must be a non-empty list or numpy array.")
+        return
+    try:
+        self.historical_data[data_series_name] = pd.Series(data_points, name=data_series_name)
+        logging.info(f"Super Node '{self.node_id}': Ingested historical data for '{data_series_name}'.")
+    except Exception as e:
+        logging.error(f"Super Node '{self.node_id}': Failed to ingest data for '{data_series_name}': {e}")
 
-    print("\n--- PHASE 4: Pattern Detection Monitors and Triggers Optimization ---")
-    # Establish a baseline for system health (e.g., overall system activity score)
-    baseline_system_activity = np.random.normal(loc=0.5, scale=0.1, size=500) # Simulate normal system activity
-    pattern_detector.establish_baseline(baseline_system_activity)
+def train_generative_models(self, series_names, lags=5):
+    """
+    Trains simple AutoRegressive models to 'generatively mimic' domain behavior.
+    This is a highly simplified generative simulation.
+    Robustness: Validate series_names and handle training errors.
+    """
+    if not isinstance(series_names, list) or not series_names:
+        logging.error(f"Super Node '{self.node_id}': series_names must be a non-empty list of strings.")
+        return
+    if not isinstance(lags, int) or lags <= 0:
+        logging.error(f"Super Node '{self.node_id}': lags must be a positive integer.")
+        return
 
-    # Simulate a period of "normal" system activity
-    current_system_activity_normal = np.random.normal(loc=0.55, scale=0.08, size=50)
-    is_emergent, kl_val, optimization_directive_normal = pattern_detector.detect_emergent_pattern(current_system_activity_normal, kl_threshold=0.1)
-    if is_emergent:
-        print(f"  System-wide Optimization Triggered: {optimization_directive_normal}")
+    logging.info(f"Super Node '{self.node_id}': Training generative models for {', '.join(series_names)}...")
+    for name in series_names:
+        if name not in self.historical_data or self.historical_data[name].empty:
+            logging.warning(f"    No historical data for '{name}'. Skipping model training.")
+            self.generative_models[name] = None
+            continue
+        if len(self.historical_data[name]) <= lags:
+            logging.warning(f"    Not enough historical data for '{name}' to train generative model (min {lags+1} points needed). Skipping.")
+            self.generative_models[name] = None
+            continue
+        try:
+            self.generative_models[name] = AutoReg(self.historical_data[name], lags=lags, seasonal=False).fit()
+            logging.info(f"    Model for '{name}' trained successfully.")
+        except Exception as e:
+            logging.error(f"Super Node '{self.node_id}': Error training model for '{name}': {e}")
+            self.generative_models[name] = None
 
-    # Simulate an "emergent pattern" - e.g., a sudden increase in overall system activity/stress
-    print("\n--- SIMULATING EMERGENT SYSTEM STRESS ---")
-    emergent_system_activity = np.random.normal(loc=0.8, scale=0.15, size=50) # Higher, more volatile activity
-    is_emergent, kl_val, optimization_directive_emergent = pattern_detector.detect_emergent_pattern(emergent_system_activity, kl_threshold=0.1)
-    if is_emergent:
-        print(f"  System-wide Optimization Triggered: {optimization_directive_emergent}")
-        # Conceptual: This directive from Pattern Detection would directly influence the Cube's self-architecture
-        # For example, if directive is to "PRIORITIZE RESOURCE ALLOCATION ANALYSIS", the Cube might
-        # strengthen connections to resource-related Super Nodes or spawn a "ResourceMonitor_Insight" node.
-        if "PRIORITIZE RESOURCE ALLOCATION ANALYSIS" in optimization_directive_emergent:
-            conscious_cube.update_node_activity("Finance_SN_Proxy", 1.0) # Highlight finance due to resource concern
-            conscious_cube.update_node_activity("SupplyChain_SN_Proxy", 1.0) # Highlight supply chain
-            conscious_cube.add_conceptual_node("ResourceMonitor_Insight", initial_strength=0.8)
-            conscious_cube.graph.add_edge("ResourceMonitor_Insight", "Finance_SN_Proxy", weight=0.9)
-            conscious_cube.graph.add_edge("ResourceMonitor_Insight", "SupplyChain_SN_Proxy", weight=0.9)
-            conscious_cube._update_viz_properties("ResourceMonitor_Insight")
-            conscious_cube._update_edge_viz_properties("ResourceMonitor_Insight", "Finance_SN_Proxy")
-            conscious_cube._update_edge_viz_properties("ResourceMonitor_Insight", "SupplyChain_SN_Proxy")
-            print("  Conscious Cube responded to optimization directive by highlighting relevant nodes and creating 'ResourceMonitor_Insight'.")
+def perform_generative_simulation(self, series_name, steps=1):
+    """
+    Simulates future 'behavior' using the generative models.
+    This represents a basic 'multi-fidelity, generative simulation'.
+    Robustness: Validate series_name, steps, and handle prediction errors.
+    """
+    if not isinstance(series_name, str) or not series_name:
+        logging.error(f"Super Node '{self.node_id}': series_name must be a non-empty string.")
+        return
+    if not isinstance(steps, int) or steps <= 0:
+        logging.error(f"Super Node '{self.node_id}': steps must be a positive integer.")
+        return
 
+    if series_name in self.generative_models and self.generative_models[series_name]:
+        logging.info(f"Super Node '{self.node_id}': Performing generative simulation for '{series_name}' for {steps} steps...")
+        try:
+            forecast = self.generative_models[series_name].predict(
+                start=len(self.historical_data[series_name]),
+                end=len(self.historical_data[series_name]) + steps - 1
+            )
+            logging.info(f"    Simulated '{series_name}': {np.round(forecast.values, 2)}")
+            return forecast.values
+        except Exception as e:
+            logging.error(f"Super Node '{self.node_id}': Error during simulation for '{series_name}': {e}")
+            return None
+    else:
+        logging.warning(f"Super Node '{self.node_id}': Generative model for '{series_name}' not trained or found.")
+        return None
 
-    print("\n--- FINAL SYSTEM STATUS REPORT ---")
-    conscious_cube.report_status()
+def infer_causal_links(self, series_x, series_y, max_lags=3):
+    """
+    Attempts to infer causal links between two time series using Granger Causality.
+    This represents a basic form of 'causal inference network'.
+    Robustness: Validate inputs, data availability, and handle statistical test errors.
+    """
+    if not isinstance(series_x, str) or not series_x or not isinstance(series_y, str) or not series_y:
+        logging.error(f"Super Node '{self.node_id}': series_x and series_y must be non-empty strings.")
+        return None, None
+    if not isinstance(max_lags, int) or max_lags <= 0:
+        logging.error(f"Super Node '{self.node_id}': max_lags must be a positive integer.")
+        return None, None
 
-    # Visualize the Conscious Cube using voxels
-    conscious_cube.visualize_voxels()
+    if (series_x not in self.historical_data or self.historical_data[series_x].empty or
+        series_y not in self.historical_data or self.historical_data[series_y].empty):
+        logging.warning(f"Super Node '{self.node_id}': Missing historical data for '{series_x}' or '{series_y}'.")
+        return None, None
+    if len(self.historical_data[series_x]) <= max_lags or len(self.historical_data[series_y]) <= max_lags:
+        logging.warning(f"Super Node '{self.node_id}': Not enough data for causal inference (min {max_lags+1} points needed).")
+        return None, None
+    if len(self.historical_data[series_x]) != len(self.historical_data[series_y]):
+        logging.warning(f"Super Node '{self.node_id}': Time series '{series_x}' and '{series_y}' have different lengths. Truncating to match.")
+        min_len = min(len(self.historical_data[series_x]), len(self.historical_data[series_y]))
+        self.historical_data[series_x] = self.historical_data[series_x][:min_len]
+        self.historical_data[series_y] = self.historical_data[series_y][:min_len]
 
-    # --- Conceptual Visualization of Pattern Detection (using Matplotlib) ---
-    plt.figure(figsize=(12, 5))
+    data = pd.DataFrame({series_x: self.historical_data[series_x], series_y: self.historical_data[series_y]})
+    logging.info(f"Super Node '{self.node_id}': Inferring causal links: '{series_x}' vs '{series_y}' (max_lags={max_lags})...")
+    try:
+        # Does X Granger-cause Y?
+        test_result = grangercausalitytests(data[[series_y, series_x]], maxlag=max_lags, verbose=False)
+        p_value = test_result[max_lags][0]['ssr_ftest'][1]
+        causal_direction = f"'{series_x}' Granger-causes '{series_y}'" if p_value < 0.05 else f"'{series_x}' does NOT Granger-cause '{series_y}'"
+        logging.info(f"    Result: {causal_direction} (p-value: {p_value:.4f})")
+        return causal_direction, p_value
+    except Exception as e:
+        logging.error(f"Super Node '{self.node_id}': Error during Granger Causality for {series_x} vs {series_y}: {e}")
+        return None, None
 
-    plt.subplot(1, 2, 1)
-    plt.hist(baseline_system_activity, bins=pattern_detector.bin_edges, density=True, alpha=0.7, color='blue', label='Baseline Activity')
-    plt.hist(current_system_activity_normal, bins=pattern_detector.bin_edges, density=True, alpha=0.7, color='green', label='Normal Current Activity')
-    plt.title('System Activity: Normal State vs. Baseline')
-    plt.xlabel('Activity Score')
-    plt.ylabel('Density')
-    plt.legend()
+def provide_proactive_insight(self):
+    """
+    Conceptual function to generate a proactive insight and an activity score
+    for the Conscious Cube based on its domain's state.
+    Robustness: Handle cases where models are not trained.
+    """
+    logging.info(f"Super Node '{self.node_id}': Generating proactive insight for Conscious Cube...")
+    if 'inventory' in self.generative_models and self.generative_models['inventory']:
+        predicted_inventory = self.perform_generative_simulation('inventory', steps=1)
+        if predicted_inventory is not None:
+            if predicted_inventory[0] < 95:  # Hypothetical critical threshold
+                insight_text = f"Predicted critical low inventory ({predicted_inventory[0]:.2f}) for {self.domain_description}. Potential supply chain disruption imminent."
+                keywords = ['inventory', 'supply chain', 'risk', 'disruption']
+                activity_score = 0.9  # High activity for critical insight
+            else:
+                insight_text = f"Inventory levels for {self.domain_description} are stable and within expected range ({predicted_inventory[0]:.2f})."
+                keywords = ['inventory', 'stable']
+                activity_score = 0.4  # Normal activity
+            logging.info(f"    Insight: {insight_text[:70]}...")
+            return insight_text, keywords, activity_score
+        else:
+            logging.warning(f"Super Node '{self.node_id}': Could not perform inventory simulation for insight. Defaulting.")
+    return "No specific insight generated due to missing model or data.", [], 0.1  # Default low activity
 
-    plt.subplot(1, 2, 2)
-    plt.hist(baseline_system_activity, bins=pattern_detector.bin_edges, density=True, alpha=0.5, color='blue', label='Baseline Activity')
-    plt.hist(emergent_system_activity, bins=pattern_detector.bin_edges, density=True, alpha=0.7, color='red', label='Emergent (Stressed) Activity')
-    plt.title('System Activity: Emergent Stress vs. Baseline')
-    plt.xlabel('Activity Score')
-    plt.ylabel('Density')
-    plt.legend()
-
-    plt.tight_layout()
-    plt.show()
-
-    print("\n=====================================================")
-    print("=== KALEIDOSCOPE AI SYSTEM SIMULATION COMPLETE! ===")
-    print("=====================================================")
 

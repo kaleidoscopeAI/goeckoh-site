@@ -1,0 +1,16 @@
+   Polyglot Embedding: Unicode 1–4-gram signed hashing (language-agnostic) turns any language into a common vector space.
+
+   Crystallization Loop: Periodic annealing (σ decays) estimates each memory facet’s stability; energetics (H_bits, S_field, L) summarize
+   uncertainty/tension.
+   Sonification → Attention: Energetics modulate a synthesizer; STFT features go through multi-head projections that “attend” over memory,
+   producing captions that reflect what the brain is currently focusing on — no LLMs.
+
+   Concurrent Domain Solvers:
+
+        Math: symbolic evaluation/solve via SymPy.
+        Logic/Plan: rule-based planner builds steps.
+
+        Compose: retrieval-augmented synthesizer (pure Python) merges top-K memories and a heuristic explanation.
+
+   Selection: Scores each solver and returns the best result in the same language as your input label (no translation models or APIs).
+

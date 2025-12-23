@@ -1,2 +1,2 @@
-private loadActiveW() {
-const activePath = path.resolve(__dirname, "../../server/persisted_w/w_active.json");
+console.log(`[step ${step}] spectral radius ≈ ${rho.toFixed(6)}`);
+Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.

@@ -1,1 +1,2 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+   * Integrate the spatial partitioning system to optimize neighbor finding for repulsive forces.
+   * Make the internal state coefficients (eD, kD, etc.) dynamic, influenced by the node's epsilon vector.

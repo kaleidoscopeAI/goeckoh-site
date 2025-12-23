@@ -1,0 +1,1 @@
+"data_wrappers":" data management system designed to contain multiple data types (audio text images numeric etc and transforms them so system can proccess. ensures all nodes act with similar context.",

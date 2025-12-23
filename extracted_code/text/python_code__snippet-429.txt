@@ -1,0 +1,8 @@
+value = sysconfig.get_config_var(name)
+if value is None and warn:
+    logger.debug(
+        "Config variable '%s' is unset, Python ABI tag may be incorrect", name
+    )
+return value
+
+

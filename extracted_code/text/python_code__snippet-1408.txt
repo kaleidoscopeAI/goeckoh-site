@@ -1,0 +1,19 @@
+data = []
+for dist in packages:
+    info = {
+        "name": dist.raw_name,
+        "version": str(dist.version),
+    }
+    if options.verbose >= 1:
+        info["location"] = dist.location or ""
+        info["installer"] = dist.installer
+    if options.outdated:
+        info["latest_version"] = str(dist.latest_version)
+        info["latest_filetype"] = dist.latest_filetype
+    editable_project_location = dist.editable_project_location
+    if editable_project_location:
+        info["editable_project_location"] = editable_project_location
+    data.append(info)
+return json.dumps(data)
+
+

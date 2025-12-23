@@ -1,1 +1,2 @@
-class HyperCubeConfig:
+|                                          ^^^^ variant or associated item not found in `CrystalError`
+|

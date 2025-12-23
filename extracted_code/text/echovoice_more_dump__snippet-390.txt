@@ -1,1 +1,12 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+dataset_path: String,
+dataset_url: String,
+test_ratio: f64,
+k_folds: usize,
+seed: Option<u64>,
+output_path: Option<String>,
+multi_objective: bool,
+adaptive_cooling: bool,
+chemical_validation: bool,
+evolution_generations: usize,
+population_size: usize,
+config: CrystalConfig,

@@ -1,0 +1,2 @@
+pred: Callable[[T], bool],
+iterable: Iterable[T],

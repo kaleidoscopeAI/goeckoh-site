@@ -1,36 +1,56 @@
-    42      private val languageDetector = LanguageDetectorBuilder.fromLanguages
-        (Language.ENGLISH, Language.SPANISH, Language.FRENCH).build()
-    43 -    private val whisper = Whisper(context)
-    44 -    private val recorder = Recorder(context)
-    45 -    private val sileroVad: SileroVad = SileroVad.load(context)
-    43      private val sharedPrefs: SharedPreferences = context.getSharedPrefer
-        ences("vad_prefs", Context.MODE_PRIVATE)
-       ⋮
-    45
-    49 -    private var partialText = ""
-    50 -    private var silenceStart: Long = 0
-    51 -    private var isSpeechDetected = false
-    46 +    private val models = mutableMapOf<String, Model>()
-    47 +    private var vad = VadWebRTC.builder()
-    48 +        .setSampleRate(SampleRate.SAMPLE_RATE_16K)
-    49 +        .setFrameSize(FrameSize.FRAME_SIZE_320)
-    50 +        .setMode(Mode.NORMAL)
-    51 +        .setSilenceDurationMs(1200)
-    52 +        .setSpeechDurationMs(100)
-    53 +        .build()
-    54 +
-    55 +    private var vadModeIndex = 2
-    56 +    private var silenceDurationMs: Int = 1200
-    57      private var vadThreshold: Float = 0.5f
-    53 -    private var silenceDurationMs: Int = 1200
-    54 -    private var vadMode: Int = 2
-    55 -    private var nsWrapper: NsWrapper? = null
-    56 -    private var useNoiseSuppression = true
-    58 +    private var noiseSuppressor: NoiseSuppressor? = null
-    59 +
-    60      private var totalFrames = 0
-       ⋮
-    62      private var vadLatencySum = 0L
-    60 -    private var lastMetricsUpdate = 0L
-    63
+private val E: DoubleArray = DoubleArray(nNodes) { Random.nextDouble(-0.5, 0.5) }
+private val W: RealMatrix = Array2DRowRealMatrix(nNodes, nNodes).apply {
+    for (i in 0 until nNodes) {
+        for (j in 0 until nNodes) {
+            setEntry(i, j, if (Random.nextDouble() < 0.1) Random.nextDouble(-0.2, 0.2) else 0.0)
+        }
+    }
+}
+private val decayRate = 0.05
+private val diffusionRate = 0.1
+private val noiseLevel = 0.01
+var gcl: Double = 0.5 // Public for UI
 
+private inner class HeartODE(private val externalInput: DoubleArray) : FirstOrderDifferentialEquations {
+    override fun getDimension(): Int = nNodes
+    override fun computeDerivatives(t: Double, y: DoubleArray, yDot: DoubleArray) {
+        val diffusion = W.multiply(Array2DRowRealMatrix(y)).scalarMultiply(diffusionRate)
+        for (i in 0 until nNodes) {
+            yDot[i] = -decayRate * y[i] + diffusion.getEntry(i, 0) + externalInput[i] + Random.nextDouble(-noiseLevel, noiseLevel)
+        }
+    }
+}
+
+private val integrator = DormandPrince853Integrator(1e-8, 100.0, 1e-10, 1e-10)
+private val externalInput = DoubleArray(nNodes) { 0.0 }
+
+fun updateAndGetGCL(stimulus: Double, volume: Double): Double {
+    // Apply stimulus modulated by volume
+    val effectiveStim = stimulus * (1 + volume)
+    for (i in 0 until nNodes) {
+        externalInput[i] = effectiveStim * exp(-i.toDouble() / (nNodes / 10.0)) * sin(i.toDouble() / 10.0)
+    }
+
+    val yOut = DoubleArray(nNodes)
+    integrator.integrate(HeartODE(externalInput), 0.0, E, 1.0, yOut)
+    yOut.copyInto(E)
+
+    // GCL: Coherence as correlation + low variance
+    val mean = E.average()
+    val variance = E.map { (it - mean).pow(2) }.average()
+    val coherence = calculateGlobalCoherence(E)
+    gcl = (1.0 / (1.0 + variance) + coherence) / 2.0
+    return gcl
+}
+
+private fun calculateGlobalCoherence(states: DoubleArray): Double {
+    // Simple average pairwise correlation approximation
+    var sumCorr = 0.0
+    val count = 100 // Sample pairs to avoid O(n^2)
+    for (k in 0 until count) {
+        val i = Random.nextInt(nNodes)
+        val j = Random.nextInt(nNodes)
+        if (i != j) sumCorr += (states[i] * states[j]).coerceIn(-1.0, 1.0)
+    }
+    return (sumCorr / count + 1.0) / 2.0 // Normalized 0-1
+}

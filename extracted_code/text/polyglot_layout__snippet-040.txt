@@ -1,0 +1,8 @@
+  build C++ and Java,
+
+  launch 6 workers concurrently,
+  parse Φ values,
+
+  write to ring/consensus.db,
+  show a live text dashboard.
+

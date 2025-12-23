@@ -1,1 +1,2 @@
-async def shutdown():
+import argparse
+main()

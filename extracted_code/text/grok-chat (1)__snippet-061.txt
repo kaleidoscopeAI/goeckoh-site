@@ -1,0 +1,3 @@
+# Simulate user speech input
+return input("Speak (type phrase): ").strip()
+

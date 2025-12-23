@@ -1,0 +1,10 @@
+"""Checks if a theorem is applicable based on premises."""
+for premise in premises:
+    if premise['type'] == 'concept':
+        if not self._concept_matches(concept, premise['condition']):
+            return False
+    elif premise['type'] == 'rule':
+        if not any(self._rule_result_matches(result, premise['condition']) for result in rule_results):
+            return False
+return True
+

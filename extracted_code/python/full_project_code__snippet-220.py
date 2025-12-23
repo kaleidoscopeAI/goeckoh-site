@@ -1,5 +1,9 @@
-import codecs
+import os
+import sys
 
-from pip._vendor.pygments.util import get_bool_opt
-from pip._vendor.pygments.styles import get_style_by_name
+from pip._vendor.pygments.formatter import Formatter
+from pip._vendor.pygments.util import get_bool_opt, get_int_opt, get_list_opt, \
+    get_choice_opt
+
+import subprocess
 

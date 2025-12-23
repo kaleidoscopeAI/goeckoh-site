@@ -1,0 +1,2 @@
+this.worker = worker;
+this.worker.onmessage = this.handleWorkerMessage.bind(this);

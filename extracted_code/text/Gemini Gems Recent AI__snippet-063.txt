@@ -1,0 +1,21 @@
+"CC(=O)Oc1ccccc1C(=O)O",  # Aspirin
+"c1ccccc1",  # Benzene
+"C1CC2=C3C(=CC=C2)C(=CN3C1)[C@@H](C4=CC=CC=C4)O", #Ondansetron
+"C1=CC=CC=C1C(=O)O", #Benzoic Acid
+"C1=CN=CC=C1", #Pyridine
+"C1=CC=NC=C1", # Pyrimidine
+"C1=CC=CC=C1C=O", #Benzaldehyde
+"C1=CC=C2C=CC=CC2=C1", #Naphthalene
+"C1=CC=C2C=CC=CC2=C1C=O", # 2-Naphthaldehyde
+"C1=CC=C(C=C1)C(=O)O", # 4-Hydroxybenzoic acid
+"C1=CC=C(C=C1)C(=O)NC2=CC=CC=C2", # Benzamide
+"C1=CC=C(C=C1)C(=O)C2=CC=CC=C2", # Benzophenone
+"C1=CC=C(C=C1)C(=O)C2=CC=CC=C2C(=O)O", # 4-Benzoylbenzoic acid
+"C1=CC=C(C=C1)C(=O)C2=CC=CC=C2C(=O)NC3=CC=CC=C3", # 4-Benzoylbenzamide
+"C1=CC=C(C=C1)C(=O)C2=CC=CC=C2C(=O)OC3=CC=CC=C3", # 4-Benzoylbenzoic acid phenyl ester
+"C1=CC=C(C=C1)C(=O)C2=CC=CC=C2C(=O)NC3=CC=CC=C3C(=O)O", # 4-Benzoylbenzamide-4-carboxylic acid
+"C1=CC=C(C=C1)C(=O)C2=CC=CC=C2C(=O)NC3=CC=CC=C3C(=O)NC4=CC=CC=C4", # 4-Benzoylbenzamide-4-carboxamide
+"C1=CC=C(C=C1)C(=O)C2=CC=CC=C2C(=O)NC3=CC=CC=C3C(=O)NC4=CC=CC=C4C(=O)O", # 4-Benzoylbenzamide-4-carboxamide-4-carboxylic acid
+"C1=CC=C(C=C1)C(=O)C2=CC=CC=C2C(=O)NC3=CC=CC=C3C(=O)NC4=CC=CC=C4C(=O)NC5=CC=CC=C5", # 4-Benzoylbenzamide-4-carboxamide-4-carboxamide
+"C1=CC=C(C=C1)C(=O)C2=CC=CC=C2C(=O)NC3=CC=CC=C3C(=O)NC4=CC=CC=C4C(=O)NC5=CC=CC=C5C(=O)O" # 4-Benzoylbenzamide-4-carboxamide-4-carboxamide-4-carboxylic acid
+

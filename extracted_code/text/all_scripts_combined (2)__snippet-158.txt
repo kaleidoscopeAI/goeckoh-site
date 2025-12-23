@@ -1,0 +1,3 @@
+HAS_LT = False
+print("⚠️ language-tool-python not found. `pip install language-tool-python`. Grammar correction disabled.")
+

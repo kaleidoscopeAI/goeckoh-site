@@ -1,8 +1,12 @@
-    class UnsupportedExtension(Exception):
-        pass
+    def TypeAlias(self, parameters):
+        """Special marker indicating that an assignment should
+        be recognized as a proper type alias definition by type
+        checkers.
 
+        For example::
 
-from io import BytesIO
-from socket import error as SocketError
-from socket import timeout
+            Predicate: TypeAlias = Callable[..., bool]
 
+        It's invalid when used anywhere except as in the example above.
+        """
+        raise TypeError(f"{self} is not subscriptable")

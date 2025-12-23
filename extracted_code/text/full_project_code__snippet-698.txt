@@ -1,0 +1,4 @@
+Literal("[")
++ Opt("^").set_results_name("negate")
++ Group(OneOrMore(_charRange | _singleChar)).set_results_name("body")
++ Literal("]")

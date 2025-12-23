@@ -1,0 +1,3 @@
+return sorted({s.category for s in STRATEGIES})
+
+

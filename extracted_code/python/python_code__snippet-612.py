@@ -1,60 +1,61 @@
-    import importlib.machinery
-    import importlib.util
+def _parents(path):
+    """
+    yield all parents of path including path
+    """
+    last = None
+    while path != last:
+        yield path
+        last = path
+        path, _ = os.path.split(path)
 
 
-def _get_suffixes():
-    if imp:
-        return [s[0] for s in imp.get_suffixes()]
-    else:
-        return importlib.machinery.EXTENSION_SUFFIXES
+class EggProvider(NullProvider):
+    """Provider based on a virtual filesystem"""
+
+    def __init__(self, module):
+        super().__init__(module)
+        self._setup_prefix()
+
+    def _setup_prefix(self):
+        # Assume that metadata may be nested inside a "basket"
+        # of multiple eggs and use module_path instead of .archive.
+        eggs = filter(_is_egg_path, _parents(self.module_path))
+        egg = next(eggs, None)
+        egg and self._set_egg(egg)
+
+    def _set_egg(self, path):
+        self.egg_name = os.path.basename(path)
+        self.egg_info = os.path.join(path, 'EGG-INFO')
+        self.egg_root = path
 
 
-def _load_dynamic(name, path):
-    # https://docs.python.org/3/library/importlib.html#importing-a-source-file-directly
-    if imp:
-        return imp.load_dynamic(name, path)
-    else:
-        spec = importlib.util.spec_from_file_location(name, path)
-        module = importlib.util.module_from_spec(spec)
-        sys.modules[name] = module
-        spec.loader.exec_module(module)
-        return module
+class DefaultProvider(EggProvider):
+    """Provides access to package resources in the filesystem"""
 
+    def _has(self, path):
+        return os.path.exists(path)
 
-class Mounter(object):
+    def _isdir(self, path):
+        return os.path.isdir(path)
 
-    def __init__(self):
-        self.impure_wheels = {}
-        self.libs = {}
+    def _listdir(self, path):
+        return os.listdir(path)
 
-    def add(self, pathname, extensions):
-        self.impure_wheels[pathname] = extensions
-        self.libs.update(extensions)
+    def get_resource_stream(self, manager, resource_name):
+        return open(self._fn(self.module_path, resource_name), 'rb')
 
-    def remove(self, pathname):
-        extensions = self.impure_wheels.pop(pathname)
-        for k, v in extensions:
-            if k in self.libs:
-                del self.libs[k]
+    def _get(self, path):
+        with open(path, 'rb') as stream:
+            return stream.read()
 
-    def find_module(self, fullname, path=None):
-        if fullname in self.libs:
-            result = self
-        else:
-            result = None
-        return result
-
-    def load_module(self, fullname):
-        if fullname in sys.modules:
-            result = sys.modules[fullname]
-        else:
-            if fullname not in self.libs:
-                raise ImportError('unable to find extension for %s' % fullname)
-            result = _load_dynamic(fullname, self.libs[fullname])
-            result.__loader__ = self
-            parts = fullname.rsplit('.', 1)
-            if len(parts) > 1:
-                result.__package__ = parts[0]
-        return result
+    @classmethod
+    def _register(cls):
+        loader_names = (
+            'SourceFileLoader',
+            'SourcelessFileLoader',
+        )
+        for name in loader_names:
+            loader_cls = getattr(importlib_machinery, name, type(None))
+            register_loader_type(loader_cls, cls)
 
 

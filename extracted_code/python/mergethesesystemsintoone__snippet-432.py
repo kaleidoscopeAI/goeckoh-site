@@ -1,33 +1,87 @@
-class SimulationConfig:
-    """Configuration for the simulation parameters."""
-    initial_resources: float = 1000.0
-    resource_regeneration_rate: float = 5.0
-    max_node_energy: float = 50.0
-    reproduction_energy_threshold: float = 30.0
-    energy_gain_min: float = 2.0
-    energy_gain_max: float = 6.0
-    knowledge_transfer_min: float = 1.0
-    knowledge_transfer_max: float = 5.0
-    mutation_probability: float = 0.2
-    trait_plasticity: float = 0.6
-    initial_nodes: int = 3
-    simulation_steps: int = 20
-    data_processing_types: List[str] = field(default_factory=lambda: ["text", "image", "numerical"])
-    text_data_path: Optional[str] = "data/text_data.txt" # You need to provide these paths
-    image_data_path: Optional[str] = "data/image_data.jpg" # You need to provide these paths
-    cube_size: int = 10
-
-    def load_config(self, config_path: str):
-        """Loads configuration from a JSON file."""
+class ComponentManager:
+    """Manages system components lifecycle"""
+    
+    def __init__(self, config_path: str):
+        """Initialize with configuration"""
         with open(config_path, 'r') as f:
-            config_data = json.load(f)
-
-        for key, value in config_data.items():
-            if hasattr(self, key):
-                setattr(self, key, value)
-
-    def save_config(self, config_path: str):
-        """Saves the current configuration to a JSON file."""
-        with open(config_path, 'w') as f:
-            json.dump(self.__dict__, f, indent=4)
+            self.config = json.load(f)
+        
+        self.processes = {}
+        self.activated_env = False
+    
+    def _activate_env(self):
+        """Activate the virtual environment for subprocess calls"""
+        if self.activated_env:
+            return
+            
+        # Get the activate script path
+        if sys.platform == 'win32':
+            activate_script = Path.cwd() / "venv" / "Scripts" / "activate.bat"
+            self.activate_cmd = f'"{activate_script}"'
+        else:
+            activate_script = Path.cwd() / "venv" / "bin" / "activate"
+            self.activate_cmd = f'source "{activate_script}"'
+        
+        self.activated_env = True
+    
+    def start_component(self, name: str, script_path: str, args: List[str] = None):
+        """Start a system component as a subprocess"""
+        self._activate_env()
+        
+        if name in self.processes and self.processes[name].poll() is None:
+            logger.info(f"Component {name} is already running")
+            return
+        
+        args = args or []
+        cmd = f'{self.activate_cmd} && python "{script_path}" {" ".join(args)}'
+        
+        logger.info(f"Starting component: {name}")
+        if sys.platform == 'win32':
+            process = subprocess.Popen(cmd, shell=True)
+        else:
+            process = subprocess.Popen(cmd, shell=True, executable="/bin/bash")
+        
+        self.processes[name] = process
+        logger.info(f"Started {name} (PID: {process.pid})")
+    
+    def stop_component(self, name: str):
+        """Stop a running component"""
+        if name not in self.processes:
+            logger.warning(f"Component {name} is not running")
+            return
+        
+        process = self.processes[name]
+        if process.poll() is None:
+            logger.info(f"Stopping component: {name}")
+            process.terminate()
+            try:
+                process.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                logger.warning(f"Component {name} did not terminate gracefully, killing it")
+                process.kill()
+        
+        del self.processes[name]
+    
+    def start_api_server(self):
+        """Start the FastAPI server"""
+        self._activate_env()
+        
+        host = self.config.get("host", "0.0.0.0")
+        port = self.config.get("port", 8000)
+        
+        cmd = f'{self.activate_cmd} && python -m uvicorn src.main:app --host={host} --port={port} --reload'
+        
+        logger.info(f"Starting API server on {host}:{port}")
+        if sys.platform == 'win32':
+            process = subprocess.Popen(cmd, shell=True)
+        else:
+            process = subprocess.Popen(cmd, shell=True, executable="/bin/bash")
+        
+        self.processes["api_server"] = process
+        logger.info(f"Started API server (PID: {process.pid})")
+    
+    def stop_all(self):
+        """Stop all running components"""
+        for name in list(self.processes.keys()):
+            self.stop_component(name)
 

@@ -1,69 +1,39 @@
-class DeflateDecoder(object):
-    def __init__(self):
-        self._first_try = True
-        self._data = b""
-        self._obj = zlib.decompressobj()
+    class _RequiredForm(_ExtensionsSpecialForm, _root=True):
+        def __getitem__(self, parameters):
+            item = typing._type_check(parameters,
+                                      f'{self._name} accepts only a single type.')
+            return typing._GenericAlias(self, (item,))
 
-    def __getattr__(self, name):
-        return getattr(self._obj, name)
+    Required = _RequiredForm(
+        'Required',
+        doc="""A special typing construct to mark a key of a total=False TypedDict
+        as required. For example:
 
-    def decompress(self, data):
-        if not data:
-            return data
+            class Movie(TypedDict, total=False):
+                title: Required[str]
+                year: int
 
-        if not self._first_try:
-            return self._obj.decompress(data)
+            m = Movie(
+                title='The Matrix',  # typechecker error if key is omitted
+                year=1999,
+            )
 
-        self._data += data
-        try:
-            decompressed = self._obj.decompress(data)
-            if decompressed:
-                self._first_try = False
-                self._data = None
-            return decompressed
-        except zlib.error:
-            self._first_try = False
-            self._obj = zlib.decompressobj(-zlib.MAX_WBITS)
-            try:
-                return self.decompress(self._data)
-            finally:
-                self._data = None
+        There is no runtime checking that a required key is actually provided
+        when instantiating a related TypedDict.
+        """)
+    NotRequired = _RequiredForm(
+        'NotRequired',
+        doc="""A special typing construct to mark a key of a TypedDict as
+        potentially missing. For example:
 
+            class Movie(TypedDict):
+                title: str
+                year: NotRequired[int]
 
-class GzipDecoderState(object):
-
-    FIRST_MEMBER = 0
-    OTHER_MEMBERS = 1
-    SWALLOW_DATA = 2
-
-
-class GzipDecoder(object):
-    def __init__(self):
-        self._obj = zlib.decompressobj(16 + zlib.MAX_WBITS)
-        self._state = GzipDecoderState.FIRST_MEMBER
-
-    def __getattr__(self, name):
-        return getattr(self._obj, name)
-
-    def decompress(self, data):
-        ret = bytearray()
-        if self._state == GzipDecoderState.SWALLOW_DATA or not data:
-            return bytes(ret)
-        while True:
-            try:
-                ret += self._obj.decompress(data)
-            except zlib.error:
-                previous_state = self._state
-                # Ignore data after the first error
-                self._state = GzipDecoderState.SWALLOW_DATA
-                if previous_state == GzipDecoderState.OTHER_MEMBERS:
-                    # Allow trailing garbage acceptable in other gzip clients
-                    return bytes(ret)
-                raise
-            data = self._obj.unused_data
-            if not data:
-                return bytes(ret)
-            self._state = GzipDecoderState.OTHER_MEMBERS
-            self._obj = zlib.decompressobj(16 + zlib.MAX_WBITS)
+            m = Movie(
+                title='The Matrix',  # typechecker error if key is omitted
+                year=1999,
+            )
+        """)
 
 

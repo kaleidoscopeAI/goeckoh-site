@@ -1,7 +1,0 @@
-# From long-format pilot data
-library(lme4)
-m <- lmer(N1 ~ Condition + (1|Subject), data=pilot)
-VarCorr(m)  # sigma_subject^2, sigma_residual^2
-
-# Effect size f
-f_pilot <- sqrt( (Var_between * df_effect) / Var_total )

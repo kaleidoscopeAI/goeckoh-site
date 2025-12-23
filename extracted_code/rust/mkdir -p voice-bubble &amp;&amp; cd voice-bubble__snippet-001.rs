@@ -1,39 +1,20 @@
-#![feature(generic_const_exprs)]
-use verus::*;
-use coq_of_rust::*;
-use rus_synth::*;
-use contraction_nn::*;
-use dyn_robust::*;
-
-struct StateVector<const N: usize> {
-    values: [f64; N],
-}
-
-impl<const N: usize> StateVector<N> {
-    pub fn contractive_update(&mut self, weights: [[f64; N]; N]) {
-        for i in 0..N {
-            let mut sum = 0.0;
-            for j in 0..N {
-                sum += weights[i][j] * (self.values[j].tanh());
-            }
-            self.values[i] = 0.95 * self.values[i] + 0.05 * sum;
-        }
-    }
-}
-
-verus_verify! {
-    pub const fn stable_contraction<const N: usize>(s: StateVector<N>, w: [[f64; N]; N])
-        requires
-            symmetric(w),
-            trace_lt_1(w),
-        ensures
-            contractive(s, w),
-    { }
-}
-
-fn main() {
-    let mut system = StateVector::<8> { values: [0.0; 8] };
-    let weights = synthesize_contractive_matrix(8);
-    for _ in 0..1000 { system.contractive_update(weights); }
-    assert!(system.values.iter().all(|v| v.abs() < 1.0));
-}
+// Cargo.toml dependencies
+[dependencies]
+# Audio I/O
+cpal = "0.15"  # Cross-platform audio I/O
+ringbuf = "0.3"  # Lock-free ring buffer
+# ASR (STT)
+whisper-rs = "0.7"  # Whisper.cpp bindings
+ort = "2.0"  # ONNX Runtime for faster STT/VAD
+# TTS & Voice Cloning
+piper-rs = { git = "https://github.com/rhasspy/piper-rs" }  # Piper TTS
+# or use: tts-rs = "0.1" for system TTS
+# Concurrency
+tokio = { version = "1.35", features = ["full"] }
+crossbeam = "0.8"
+# DSP
+rustfft = "6.1"
+realfft = "3.3"
+# Communication
+serde = { version = "1.0", features = ["derive"] }
+bincode = "1.3"

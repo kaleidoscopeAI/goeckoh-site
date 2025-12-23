@@ -1,0 +1,9 @@
+if src.size == 0:
+    return np.zeros(num_frames, dtype=np.float32)
+if src.size == num_frames:
+    return src.astype(np.float32)
+x_old = np.linspace(0.0, 1.0, num=src.size)
+x_new = np.linspace(0.0, 1.0, num=num_frames)
+return np.interp(x_new, x_old, src).astype(np.float32)
+
+

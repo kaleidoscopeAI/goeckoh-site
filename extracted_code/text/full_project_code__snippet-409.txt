@@ -1,0 +1,20 @@
+opts = {}
+if not o_strs:
+    return opts
+for o_str in o_strs:
+    if not o_str.strip():
+        continue
+    o_args = o_str.split(',')
+    for o_arg in o_args:
+        o_arg = o_arg.strip()
+        try:
+            o_key, o_val = o_arg.split('=', 1)
+            o_key = o_key.strip()
+            o_val = o_val.strip()
+        except ValueError:
+            opts[o_arg] = True
+        else:
+            opts[o_key] = o_val
+return opts
+
+

@@ -1,0 +1,50 @@
+"""
+Compute ZCR, spectral tilt, and crude HNR per frame using FFT.
+No external deps beyond numpy/scipy.
+"""
+T, L = frames.shape
+
+# ZCR
+zcr = _zero_crossing_rate(frames)
+zcr = np.clip(zcr / (np.max(zcr) + 1e-6), 0.0, 1.0)
+
+# FFT
+fft = np.fft.rfft(frames, axis=1)  # [T, F]
+freqs = np.fft.rfftfreq(L, d=1.0 / sr)  # [F]
+power = np.abs(fft) ** 2 + 1e-12
+
+freqs_nz = freqs[1:]
+log_freqs = np.log10(np.maximum(freqs_nz, 1.0))  # [F-1]
+log_power = np.log10(power[:, 1:])  # [T, F-1]
+
+spectral_tilt = np.zeros(T, dtype=np.float32)
+hnr = np.zeros(T, dtype=np.float32)
+
+for t in range(T):
+    p = log_power[t]
+    if not np.any(np.isfinite(p)):
+        spectral_tilt[t] = 0.5
+        hnr[t] = 0.5
+        continue
+
+    coeffs = np.polyfit(log_freqs, p, 1)
+    slope = float(coeffs[0])
+    slope_clipped = np.clip(slope, -4.0, 0.0)
+    spectral_tilt[t] = 1.0 - (abs(slope_clipped) / 4.0)
+
+    spec = power[t]
+    total_e = float(np.sum(spec))
+    if total_e <= 0:
+        hnr[t] = 0.5
+    else:
+        peak_e = float(np.max(spec))
+        noise_e = max(total_e - peak_e, 1e-12)
+        hnr[t] = peak_e / (peak_e + noise_e)
+
+return {
+    "zcr": zcr.astype(np.float32),
+    "spectral_tilt": spectral_tilt.astype(np.float32),
+    "hnr": hnr.astype(np.float32),
+}
+
+

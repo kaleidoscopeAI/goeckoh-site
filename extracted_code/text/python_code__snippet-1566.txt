@@ -1,0 +1,8 @@
+Option,
+"--timeout",
+"--default-timeout",
+metavar="sec",
+dest="timeout",
+type="float",
+default=15,
+help="Set the socket timeout (default %default seconds).",

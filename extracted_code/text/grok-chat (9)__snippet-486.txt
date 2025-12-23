@@ -1,0 +1,1 @@
+  return {"status": "success", "llms_txt_path": llms_txt_path}

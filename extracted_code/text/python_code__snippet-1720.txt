@@ -1,0 +1,4 @@
+COQUI_AVAILABLE = False
+TTS = None  # type: ignore
+
+

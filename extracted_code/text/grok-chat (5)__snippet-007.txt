@@ -1,0 +1,2 @@
+echo = Echo(voice_sample="my_voice.wav")  # Initialize with your voice sample
+echo.start()  # Start listening and responding

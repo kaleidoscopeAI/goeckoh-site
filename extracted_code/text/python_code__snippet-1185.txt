@@ -1,0 +1,10 @@
+new = _sysconfig.get_bin_prefix()
+if _USE_SYSCONFIG:
+    return new
+
+old = _distutils.get_bin_prefix()
+if _warn_if_mismatch(pathlib.Path(old), pathlib.Path(new), key="bin_prefix"):
+    _log_context()
+return old
+
+

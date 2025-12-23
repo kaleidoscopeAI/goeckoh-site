@@ -1,0 +1,6 @@
+"""
+User-throwable exception thrown when inconsistent parse content
+is found; stops all parsing immediately
+"""
+
+

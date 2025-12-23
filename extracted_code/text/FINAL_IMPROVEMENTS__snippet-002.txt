@@ -1,0 +1,2 @@
+{ id: '1', title: 'Welcome', content: 'Welcome to Bubble!' },
+{ id: '2', title: 'Voice Panel', content: 'Use the voice panel for feedback' }

@@ -1,2 +1,1 @@
-# <REDACTED: potential secret detected>
-
+    help="Don't install package dependencies.",

@@ -1,1 +1,0 @@
-I'll break it down file by file, speaking it out in my narrative style so you can 'hear' the logic as you read. Drop these into a package called 'autism_companion' or something similar. Set up a venv, install deps like numpy, librosa, TTS, faster_whisper, and you're off to the races. If it needs tweaking for your setup, just say the word—I'm here to mimic and refine on the fly.

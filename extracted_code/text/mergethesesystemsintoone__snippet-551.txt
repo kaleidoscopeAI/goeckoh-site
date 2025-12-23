@@ -1,0 +1,9 @@
+"numpy",
+"networkx",
+"scipy",
+"matplotlib",
+"aiohttp",
+"asyncio",
+"tqdm",
+"psutil",
+"colorama"

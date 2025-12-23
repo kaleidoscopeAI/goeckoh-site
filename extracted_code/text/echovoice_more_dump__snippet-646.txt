@@ -1,0 +1,5 @@
+# simple speculative vector: small nonlinear transform of K + D
+z = np.tanh(node.K + node.D - node.U * 0.01)
+return z * cfg.gamma
+
+

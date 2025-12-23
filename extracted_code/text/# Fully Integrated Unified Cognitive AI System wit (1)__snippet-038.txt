@@ -1,0 +1,5 @@
+- Direct memory queries,
+- Fine-grained device control commands,
+- Cognitive state snapshots,
+- Logging and audit access.
+

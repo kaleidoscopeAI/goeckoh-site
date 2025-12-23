@@ -1,4 +1,6 @@
-  terminfo/74 (268 files), 3 more. These directories are excluded from snapshots
-  and undo cleanup. Adjust `ghost_snapshot.ignore_large_untracked_dirs` to
-  change this behavior.
+    587      def setup_flask_app(self):
+        ⋮
+    613          self.app.route('/mirror/stream', methods=['GET'])(self.mirror_stream_events)
+    614 +        self.app.route('/asr', methods=['POST'])(self.asr_recognize)
+    615          self.app.before_request(self._enforce_security)
 

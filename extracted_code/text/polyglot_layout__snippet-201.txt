@@ -1,0 +1,9 @@
+ Extraction status
+
+ Top-level items in each zip
+ File types by root
+
+ Key config files (README, requirements, Gradle, etc.)
+
+ Signal hits (subset with path + snippet)
+

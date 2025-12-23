@@ -1,0 +1,2 @@
+      // Use TarsosDSP for pitch detection
+      val dispatcher = AudioDispatcherFactory.fromByteArray(audioBytes,

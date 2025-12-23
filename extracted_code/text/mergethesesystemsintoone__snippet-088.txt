@@ -1,13 +1,2 @@
-class GrowthState(Enum):
-    DORMANT = auto()
-    GROWING = auto()
-    MATURE = auto()
-    DECLINING = auto()
-
-class TraitCategory(Enum):
-    COGNITIVE = auto()
-    PHYSICAL = auto()
-    ADAPTIVE = auto()
-    SOCIAL = auto()
-    SPECIALIZED = auto()
+Data Processing:Text Processing: TextNode analyzes, summarizes, extracts entities, and generates responses using a GPT processor, with concurrency for scalability.
 

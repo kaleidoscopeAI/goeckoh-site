@@ -1,1 +1,1 @@
-# Assumes deps installed: pip install -r requirements.txt (from REQ list).
+def lazy_import(module_name):

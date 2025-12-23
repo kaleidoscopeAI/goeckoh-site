@@ -1,1 +1,4 @@
-const histPt: ConstructHistoryPoint = { t, x: c.coord.x, y: c.coord.y, activation: c.activation };
+const [applyRange, setApplyRange] = useState("5,10");
+const [seedRange, setSeedRange] = useState("42,1337");
+const [status, setStatus] = useState<string>("Idle");
+async function runSweep() {

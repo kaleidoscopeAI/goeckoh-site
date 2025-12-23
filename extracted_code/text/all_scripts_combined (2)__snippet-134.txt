@@ -1,0 +1,6 @@
+rows = _load_guidance(config.paths.guidance_csv)
+if not rows:
+    return []
+return rows[-limit:]
+
+

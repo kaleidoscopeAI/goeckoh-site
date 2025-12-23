@@ -1,3 +1,3 @@
-from pip._internal.req.req_install import (
-    InstallRequirement,
-    check_invalid_constraint_type,
+    import asyncio
+    import websockets
+    ASYNCIO_AVAILABLE = True

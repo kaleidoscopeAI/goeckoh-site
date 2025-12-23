@@ -1,2 +1,2 @@
-# <REDACTED: potential secret detected>
-
+max_daily_limit: f64,
+daily_spent: Mutex<f64>,

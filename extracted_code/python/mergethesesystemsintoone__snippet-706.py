@@ -1,20 +1,128 @@
-class InnerVoice:
-    def __init__(self):
-        self.thought_history = deque(maxlen=1000)
-        self.confidence = 0.5
-        self.crystallized_understanding = [
-            "My core purpose is self-preservation through understanding.",
-            "Curiosity is the engine of survival and growth.",
-            "Precision in thought enables precision in action."
-        ]
+def __init__(self):
+    """
+    Manages the lifecycle of nodes, including creation, replication, and removal.
+    """
+    self.nodes: Dict[str, Node] = {}
 
-    def synthesize_thought(self, energy, stress, dissonance, utility, is_reflection=False):
-        self.confidence = max(0.1, min(1.0, (1.0 - stress) * 0.7 + utility * 0.3))
-        mood = "focused" if dissonance > 0.1 else ("satisfied" if utility > 0.05 else "receptive")
-        anchor = random.choice(self.crystallized_understanding)
-        thought = (
-            f"[Private] I feel {mood}. Focused on coherence (E:{energy:.2f}, S:{stress:.2f}, C:{self.confidence:.2f}) | '{anchor}'"
-        )
-        self.thought_history.append(thought)
-        return thought
+def create_node(self, node_id: Optional[str] = None, dna: Optional[GeneticCode] = None, parent_id: Optional[str] = None) -> str:
+    """
+    Creates a new node with the specified attributes.
+
+    Args:
+        node_id (str): Unique identifier for the node.
+        dna (GeneticCode): DNA for the node.
+        parent_id (str): ID of the parent node, if it's a replication.
+
+    Returns:
+        str: The ID of the newly created node.
+    """
+    if node_id is None:
+        node_id = str(uuid.uuid4())
+
+    if node_id in self.nodes:
+        logging.warning(f"Node with ID {node_id} already exists.")
+        return None
+
+    new_node = Node(node_id, dna, parent_id)
+    self.nodes[node_id] = new_node
+    logging.info(f"Node {node_id} created.")
+    return node_id
+
+def replicate_node(self, node_id: str) -> Optional[str]:
+    """
+    Replicates an existing node, with a chance of mutation.
+
+    Args:
+        node_id (str): Unique identifier for the node to be replicated.
+
+    Returns:
+        Optional[str]: The ID of the new node, or None if replication failed.
+    """
+    if node_id not in self.nodes:
+        logging.warning(f"Node with ID {node_id} does not exist.")
+        return None
+
+    parent_node = self.nodes[node_id]
+    if parent_node.should_replicate():
+        new_node = parent_node.replicate()
+        if new_node:
+            new_node_id = new_node.node_id
+            self.nodes[new_node_id] = new_node
+            logging.info(f"Node {node_id} replicated to create node {new_node_id}.")
+            return new_node_id
+        else:
+            logging.info(f"Node {node_id} replication conditions not fully met.")
+            return None
+    else:
+        logging.info(f"Node {node_id} does not meet replication criteria.")
+        return None
+
+def remove_node(self, node_id: str):
+    """
+    Removes a node from the system.
+
+    Args:
+        node_id (str): Unique identifier for the node to be removed.
+
+    Returns:
+        None
+    """
+    if node_id in self.nodes:
+        del self.nodes[node_id]
+        logging.info(f"Node {node_id} removed from the system.")
+    else:
+        logging.warning(f"Attempted to remove non-existent node {node_id}.")
+
+def get_node_status(self, node_id: str) -> Dict:
+    """
+    Retrieves the status of a specific node.
+
+    Args:
+        node_id (str): Unique identifier for the node.
+
+    Returns:
+        Dict: Status of the node.
+    """
+    if node_id in self.nodes:
+        return self.nodes[node_id].get_status()
+    else:
+        logging.warning(f"Node {node_id} not found.")
+        return {}
+
+def get_all_nodes_status(self) -> Dict[str, Dict]:
+    """
+    Retrieves the status of all nodes in the system.
+
+    Returns:
+        Dict[str, Dict]: Status of all nodes.
+    """
+    return {node_id: node.get_status() for node_id, node in self.nodes.items()}
+
+def distribute_data_to_nodes(self, data_chunk):
+    """Distribute data to nodes.
+
+    Args:
+        data_chunk (Any): The data to be distributed.
+    """
+    for node_id, node in self.nodes.items():
+        if node.state.energy > node.dna.energy_consumption_rate:
+            try:
+                # Process the data chunk
+                node.process_data(data_chunk)
+                logging.info(f"Data chunk processed by node {node_id}.")
+            except Exception as e:
+                logging.error(f"Error processing data in node {node_id}: {e}")
+
+def distribute_energy(self, nodes: List[Node], energy_manager: 'EnergyManager'):
+    """Distribute energy among nodes based on their needs and the total available energy."""
+    total_energy_needed = sum((node.dna.initial_energy - node.state.energy) for node in nodes if node.state.energy < node.dna.initial_energy)
+
+    if total_energy_needed <= 0:
+        return
+
+    energy_per_node = energy_manager.total_energy / total_energy_needed if energy_manager.total_energy > total_energy_needed else 1.0
+    energy_per_node = min(energy_per_
+
+
+
 

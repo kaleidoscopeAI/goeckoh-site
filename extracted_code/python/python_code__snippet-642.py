@@ -1,6 +1,4 @@
-from __future__ import absolute_import
+from typing import List, Optional
 
-import glob
-import os.path
-import sys
+from pip._internal.utils import _log
 

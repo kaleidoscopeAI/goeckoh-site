@@ -1,2 +1,2 @@
-    = note: expected function signature `fn(std::result::Result<_, walkdir::Error>) -> _`
-               found function signature `fn(std::result::Result<_, universal_engine::error::Error>) -> _`
+But note: the function load_mutag_dataset returns Result<Vec<Graph>>, so we can use ? inside.
+

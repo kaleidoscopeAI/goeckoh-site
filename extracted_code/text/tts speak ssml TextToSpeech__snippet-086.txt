@@ -1,0 +1,1 @@
+          task.contains("income", ignoreCase = true) && gcl > 0.9 ->

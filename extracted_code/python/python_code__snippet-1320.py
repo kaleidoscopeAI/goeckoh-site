@@ -1,12 +1,16 @@
-import importlib.util
-import os
-from collections import namedtuple
-from typing import Any, List, Optional
+"""Return a `TOMLDecodeError` where error message is suffixed with
+coordinates in source."""
 
-from pip._vendor import tomli
-from pip._vendor.packaging.requirements import InvalidRequirement, Requirement
+def coord_repr(src: str, pos: Pos) -> str:
+    if pos >= len(src):
+        return "end of document"
+    line = src.count("\n", 0, pos) + 1
+    if line == 1:
+        column = pos + 1
+    else:
+        column = pos - src.rindex("\n", 0, pos)
+    return f"line {line}, column {column}"
 
-from pip._internal.exceptions import (
-    InstallationError,
-    InvalidPyProjectBuildRequires,
-    MissingPyProjectBuildRequires,
+return TOMLDecodeError(f"{msg} (at {coord_repr(src, pos)})")
+
+

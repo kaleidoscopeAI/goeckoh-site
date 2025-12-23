@@ -1,0 +1,5 @@
+11  │  ├─ voice/ – prosody, mimic/RTVC adapters
+12 -│  ├─ heart/ – Crystalline Heart stubs/engines
+12 +│  ├─ heart/ – Neurocoherence Lattice stubs/engines
+13  │  ├─ psychoacoustic_engine/, behavior/, persistence/, text_processing/
+

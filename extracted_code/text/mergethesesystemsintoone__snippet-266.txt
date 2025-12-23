@@ -1,0 +1,3 @@
+"""Saves the current configuration to a JSON file."""
+with open(config_path, 'w') as f:
+    json.dump(self.__dict__, f, indent=4)

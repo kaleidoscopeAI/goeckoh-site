@@ -1,126 +1,71 @@
 import numpy as np
 import plotly.graph_objects as go
-from rdkit import Chem, DataStructs
-from rdkit.Chem import AllChem, Descriptors, Lipinski
-from sklearn.preprocessing import MinMaxScaler
-import networkx as nx
-from scipy.sparse.linalg import eigsh  # For spectral analysis
-from sklearn.decomposition import PCA
+#... (Other imports from previous code)
+from scipy.linalg import expm  # For matrix exponentiation (quantum-like evolution)
 
 class MolecularCube:
-    def __init__(self, smiles_list, target_protein_pdbqt=None):  # Add target protein
-        self.graph = nx.Graph()
-        self.node_positions =
-        self.energy_levels =
-        self.smiles_list = smiles_list #Store for later use
-        self.target_protein_pdbqt = target_protein_pdbqt  # Store target PDBQT file
-        self._initialize_from_smiles(smiles_list)
+    #... (Existing code from previous stage)
 
-    def _initialize_from_smiles(self, smiles_list):
-        for i, smiles in enumerate(smiles_list):
-            mol = Chem.MolFromSmiles(smiles)
-            if mol is None:
-                print(f"Invalid SMILES: {smiles}")
+    def quantum_inspired_similarity(self, smiles1, smiles2):
+        """Calculates a quantum-inspired similarity between two molecules."""
+        mol1 = Chem.MolFromSmiles(smiles1)
+        mol2 = Chem.MolFromSmiles(smiles2)
+
+        if mol1 is None or mol2 is None:
+            return 0  # Handle invalid SMILES
+
+        # Simplified "quantum state" representation (replace with more sophisticated methods)
+        # For now, use the scaled features as a proxy for the quantum state
+        features1 = self._get_scaled_features(mol1) #Helper function to get scaled features
+        features2 = self._get_scaled_features(mol2)
+
+        if features1 is None or features2 is None: #Handle cases where molecule is not in cube
+            return 0
+
+        state1 = features1 / np.linalg.norm(features1)  # Normalize
+        state2 = features2 / np.linalg.norm(features2)
+
+        # "Quantum-like evolution" (simplified - replace with more advanced methods)
+        # This is a placeholder - explore more meaningful transformations
+        H = np.random.rand(3, 3)  # Random Hamiltonian (replace with a meaningful one) - Could be based on molecular properties
+        time = 1  # Time parameter
+        evolved_state1 = expm(-1j * H * time) @ state1  # Matrix multiplication
+        evolved_state2 = expm(-1j * H * time) @ state2
+
+        # Similarity measure (e.g., overlap of states)
+        similarity = np.abs(np.dot(evolved_state1.conj(), evolved_state2))  # Dot product of complex conjugates
+
+        return similarity
+
+    def _get_scaled_features(self, mol):
+        """Helper function to retrieve scaled features for a molecule from the graph"""
+        for node in self.graph.nodes:
+            if self.graph.nodes[node]['mol'] == mol: #Compare molecule objects
+                features = self.graph.nodes[node]['features']
+                #Scale the features using the same scaler used during initialization
+                feature_matrix = np.array([self.graph.nodes[n]['features'] for n in self.graph.nodes])
+                scaler = StandardScaler() #Or MinMaxScaler - must be the same as in initialization
+                scaler.fit(feature_matrix) #Fit on the entire set of features
+                scaled_features = scaler.transform(np.array([features])) #Scale the individual molecule's features
+                return scaled_features
+        return None
+
+
+
+    def find_similar_molecules_quantum(self, smiles, threshold=0.7):
+        """Find similar molecules using quantum-inspired similarity."""
+        similar_molecules =
+        for other_smiles in self.smiles_list: #Iterate through the original list of SMILES
+            if smiles == other_smiles:
                 continue
 
-            # Calculate diverse molecular properties
-            mol_weight = Descriptors.MolWt(mol)
-            num_rotatable_bonds = Lipinski.NumRotatableBonds(mol)
-            logp = Descriptors.MolLogP(mol)
-            tpsa = Descriptors.TPSA(mol)
-            hbd = Lipinski.NumHDonors(mol)
-            hba = Lipinski.NumHAcceptors(mol)
-
-            #Calculate ECFP4 fingerprints for similarity search
-            ecfp4 = AllChem.GetRDKitFP(mol)
-
-            # Placeholder for docking (replace with real docking)
-            if self.target_protein_pdbqt:
-                binding_affinity = -np.random.rand() * 10  # Placeholder with a range
-            else:
-                binding_affinity = -np.random.rand() * 5  # Placeholder, different range
-
-            features = np.array([mol_weight, num_rotatable_bonds, logp, tpsa, hbd, hba, binding_affinity])
-
-            self.graph.add_node(i, mol=mol, features=features, ecfp4=ecfp4, smiles=smiles) #Store molecule object
-
-
-        #Dimensionality reduction using PCA for 3D visualization
-        feature_matrix = np.array([self.graph.nodes[i]['features'] for i in self.graph.nodes])
-        pca = PCA(n_components=3)
-        self.node_positions = pca.fit_transform(feature_matrix)
-
-        #Energy calculation based on distance to center in reduced dimensions
-        center_point = np.mean(self.node_positions, axis=0) #Center based on data
-        self.energy_levels = np.linalg.norm(self.node_positions - center_point, axis=1)
-
-    def visualize_cube(self):
-        fig = go.Figure(data=[go.Scatter3d(
-            x=self.node_positions[:, 0],
-            y=self.node_positions[:, 1],
-            z=self.node_positions[:, 2],
-            mode='markers',
-            marker=dict(
-                size=8,
-                color=self.energy_levels,
-                colorscale='Viridis',
-                opacity=0.8
-            ),
-            text=[f"{self.graph.nodes[i]['smiles']}<br>Energy: {e:.2f}" for i, e in enumerate(self.energy_levels)],
-            hoverinfo='text',
-            customdata=list(self.graph.nodes.data()) #Store all node data for interactivity
-        )])
-
-        fig.update_layout(
-            title="3D Molecular Cube (Plotly)",
-            scene=dict(
-                xaxis_title="PC1",  # Principal Components
-                yaxis_title="PC2",
-                zaxis_title="PC3",
-            ),
-            margin=dict(l=0, r=0, b=0, t=50)
-        )
-
-        #Add click event handler (Example - modify as needed)
-        fig.show()
-
-
-    def quantum_state_evolution(self):
-        adjacency = nx.adjacency_matrix(self.graph).toarray()
-        #... (Quantum state evolution code - as before, but ensure it uses the graph)
-        #... (Update node properties in the graph with the evolved states)
-
-    def node_adaptation(self):
-        for node in self.graph.nodes:
-            energy = self.graph.nodes[node]['energy']
-            if energy > np.percentile(self.energy_levels, 75): #High energy is now relative
-                #... (Adaptation/mutation logic - modify features in the graph)
-                #... (Recalculate node positions after adaptation)
-
-
-    def find_similar_molecules(self, smiles, threshold=0.7):
-        """Find molecules similar to the given SMILES in the cube."""
-        ref_mol = Chem.MolFromSmiles(smiles)
-        if ref_mol is None:
-            return
-
-        ref_ecfp4 = AllChem.GetRDKitFP(ref_mol)
-        similar_molecules =
-
-        for node in self.graph.nodes:
-            ecfp4 = self.graph.nodes[node]['ecfp4']
-            similarity = DataStructs.TanimotoSimilarity(ref_ecfp4, ecfp4)
+            similarity = self.quantum_inspired_similarity(smiles, other_smiles)
             if similarity >= threshold:
-                similar_molecules.append((self.graph.nodes[node]['smiles'], similarity))
+                similar_molecules.append((other_smiles, similarity))
 
         return similar_molecules
 
-    def get_molecule_details(self, index):
-        """Get details of a molecule by its index in the graph."""
-        if index in self.graph:
-            node_data = self.graph.nodes[index]
-            return node_data['smiles'], node_data['features']  # Return SMILES and features
-        return None
 
+    #... (Rest of the MolecularCube class)
 
 

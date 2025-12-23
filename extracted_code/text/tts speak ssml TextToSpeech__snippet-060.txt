@@ -1,0 +1,1 @@
+      audioRecord = AudioRecord(MediaRecorder.AudioSource.MIC, sampleRate,

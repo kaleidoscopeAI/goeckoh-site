@@ -1,0 +1,9 @@
+  - speech_mirror.py: optional Rust voice synth (GOECKOH_USE_RUST_VC=1 if
+    libgoeckoh_core.so is built) and separate playback latency tracking;
+    validation now reports p50/p95 latency, playback p95, target compliance,
+    gate blocks. Telemetry records playback latency and target.
+  - real_unified_system.py: new endpoints /mirror/validate and /mirror/
+    reset_metrics.
+  - scripts/validate_mirror_metrics.py: quick CLI to read backend/.run/
+    mirror_metrics.jsonl, print p50/p95/max for latency/playback, GCL mean/
+    min, drift p95; shows histograms if matplotlib is present.

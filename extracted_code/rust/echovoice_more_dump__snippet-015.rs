@@ -1,1 +1,1 @@
-pub extern "system" fn Java_com_kaleidoscope_body_DeviceHAL_nativeApplyQubitsToCpu(
+pub extern "system" fn Java_com_kaleidoscope_body_DeviceHAL_nativeEthicsCheck(

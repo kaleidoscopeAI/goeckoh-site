@@ -1,113 +1,54 @@
-class VoiceProfile:
-    audio: AudioSettings
-    base_dir: Path
-    max_samples_per_style: int = 32
-    samples: Dict[Style, List[VoiceSample]] = field(default_factory=lambda: {
-        "neutral": [],
-        "calm": [],
-        "excited": [],
-    })
+class SystemSettings:
+    child_id: str = "child_001"
+    child_name: str = "Jackson"
+    device: str = "cpu"
+    audio: AudioSettings = field(default_factory=AudioSettings)
+    speech: SpeechSettings = field(default_factory=SpeechSettings)
+    llm: LLMSettings = field(default_factory=LLMSettings)
+    behavior: BehaviorSettings = field(default_factory=BehaviorSettings)
+    paths: PathRegistry = field(default_factory=PathRegistry)
+    heart: HeartSettings = field(default_factory=HeartSettings)
 
-    def __post_init__(self) -> None:
-        self.base_dir.mkdir(parents=True, exist_ok=True)
-        self.load_existing()
+    @property
+    def voice_sample(self) -> Path:
+        return self.paths.voices_dir / "child_voice.wav"
 
-    # ------------------- helpers -------------------
-    def _style_dir(self, style: Style) -> Path:
-        return self.base_dir / style
 
-    def _compute_rms(self, wav: np.ndarray) -> float:
-        if wav.size == 0:
-            return 0.0
-        return float(np.sqrt(np.mean(np.square(wav))))
+def load_settings(config_path: Optional[Path] = None) -> SystemSettings:
+    """
+    Load settings from disk if available, otherwise fall back to defaults.
+    """
 
-    def _register_sample(self, path: Path, style: Style, wav: np.ndarray, quality_score: float) -> None:
-        duration = len(wav) / float(self.audio.sample_rate)
-        rms = self._compute_rms(wav)
-        sample = VoiceSample(
-            path=path,
-            duration_s=duration,
-            rms=rms,
-            style=style,
-            quality_score=quality_score,
-            added_ts=path.stat().st_mtime,
-        )
-        self.samples.setdefault(style, []).append(sample)
-        self._prune(style)
+    if config_path is None:
+        config_path = DEFAULT_ROOT / "config.json"
 
-    def load_existing(self) -> None:
-        for style in ("neutral", "calm", "excited"):
-            dir_path = self._style_dir(style)
-            if not dir_path.exists():
-                continue
-            for wav_path in sorted(dir_path.glob("*.wav")):
-                try:
-                    data, sr = sf.read(wav_path, dtype="float32")
-                except Exception:
-                    continue
-                if data.ndim > 1:
-                    data = np.mean(data, axis=1)
-                if sr != self.audio.sample_rate:
-                    data = librosa.resample(data, orig_sr=sr, target_sr=self.audio.sample_rate)
-                duration = len(data) / float(self.audio.sample_rate)
-                rms = self._compute_rms(np.asarray(data, dtype=np.float32))
-                sample = VoiceSample(
-                    path=wav_path,
-                    duration_s=duration,
-                    rms=rms,
-                    style=style,  # type: ignore[arg-type]
-                    quality_score=1.0,
-                    added_ts=wav_path.stat().st_mtime,
-                )
-                self.samples.setdefault(style, []).append(sample)
+    settings = SystemSettings()
+    if config_path.exists():
+        data = json.loads(config_path.read_text(encoding="utf-8"))
+        _apply_json(settings, data)
 
-    def _prune(self, style: Style) -> None:
-        if len(self.samples[style]) <= self.max_samples_per_style:
-            return
-        self.samples[style].sort(key=lambda s: (s.quality_score, s.added_ts), reverse=True)
-        self.samples[style] = self.samples[style][: self.max_samples_per_style]
+    settings.paths.ensure_logs()
+    return settings
 
-    def add_sample_from_wav(
-        self,
-        wav: np.ndarray,
-        style: Style,
-        name: Optional[str] = None,
-        quality_score: float = 1.0,
-    ) -> Path:
-        if wav.ndim > 1:
-            wav = np.mean(wav, axis=1)
-        wav = np.asarray(wav, dtype=np.float32)
-        style_dir = self._style_dir(style)
-        style_dir.mkdir(parents=True, exist_ok=True)
-        suffix = name or uuid.uuid4().hex[:8]
-        path = style_dir / f"{style}_{suffix}.wav"
-        sf.write(path, wav, self.audio.sample_rate)
-        self._register_sample(path, style, wav, quality_score)
-        return path
 
-    def pick_reference(self, style: Style = "neutral") -> Optional[VoiceSample]:
-        candidates = self.samples.get(style) or []
-        if candidates:
-            return max(candidates, key=lambda s: s.quality_score)
-        if style != "neutral" and self.samples["neutral"]:
-            return max(self.samples["neutral"], key=lambda s: s.quality_score)
-        for lst in self.samples.values():
-            if lst:
-                return max(lst, key=lambda s: s.quality_score)
-        return None
+def _apply_json(settings: SystemSettings, data: dict) -> None:
+    for key, value in data.items():
+        if key == "audio" and isinstance(value, dict):
+            _update_dataclass(settings.audio, value)
+        elif key == "speech" and isinstance(value, dict):
+            _update_dataclass(settings.speech, value)
+        elif key == "llm" and isinstance(value, dict):
+            _update_dataclass(settings.llm, value)
+        elif key == "behavior" and isinstance(value, dict):
+            _update_dataclass(settings.behavior, value)
+        elif key == "heart" and isinstance(value, dict):
+            _update_dataclass(settings.heart, value)
+        elif hasattr(settings, key):
+            setattr(settings, key, value)
 
-    def maybe_adapt_from_attempt(
-        self,
-        attempt_wav: np.ndarray,
-        style: Style,
-        quality_score: float,
-        min_quality_bootstrap: float = 0.8,
-        min_quality_refine: float = 0.9,
-    ) -> Optional[Path]:
-        has_profile = any(self.samples.values())
-        threshold = min_quality_bootstrap if not has_profile else min_quality_refine
-        if quality_score < threshold:
-            return None
-        return self.add_sample_from_wav(attempt_wav, style, quality_score=quality_score)
 
+def _update_dataclass(obj, values: dict) -> None:
+    for key, value in values.items():
+        if hasattr(obj, key):
+            setattr(obj, key, value)
 

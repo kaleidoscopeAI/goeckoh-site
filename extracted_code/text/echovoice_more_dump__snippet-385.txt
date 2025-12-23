@@ -1,1 +1,7 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+molecular_weight: cp.molecular_weight,
+formula: cp.formula,
+smiles: cp.smiles,
+atom_types: cp.atom_types,
+bond_types: cp.bond_types,
+ring_count: cp.ring_count,
+is_aromatic: cp.is_aromatic,

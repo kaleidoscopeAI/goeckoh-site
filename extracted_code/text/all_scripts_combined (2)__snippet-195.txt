@@ -1,0 +1,68 @@
+"""Apply child's prosody onto synthesized waveform (overlap-add)."""
+if tts_wav.ndim > 1:
+    tts_wav = np.mean(tts_wav, axis=1)
+tts_wav = np.asarray(tts_wav, dtype=np.float32)
+
+frame_length = max(
+    int(tts_sample_rate * (prosody.frame_length / prosody.sample_rate)), 256
+)
+hop_length = max(
+    int(tts_sample_rate * (prosody.hop_length / prosody.sample_rate)), 128
+)
+
+num_frames = 1 + max(0, (len(tts_wav) - frame_length) // hop_length)
+if num_frames <= 0:
+    return tts_wav
+
+f0_child = _interp_to_num_frames(prosody.f0_hz, num_frames)
+energy_child = _interp_to_num_frames(prosody.energy, num_frames)
+
+# Baseline F0 of TTS
+f0_tts, _, _ = librosa.pyin(
+    tts_wav,
+    fmin=80.0,
+    fmax=600.0,
+    sr=tts_sample_rate,
+    frame_length=frame_length,
+    hop_length=hop_length,
+)
+if np.any(np.isfinite(f0_tts)):
+    base_f0 = np.nanmedian(f0_tts)
+else:
+    base_f0 = np.median(f0_child)
+
+out = np.zeros(len(tts_wav) + frame_length, dtype=np.float32)
+window = np.hanning(frame_length).astype(np.float32)
+
+for i in range(num_frames):
+    start = i * hop_length
+    end = start + frame_length
+    if start >= len(tts_wav):
+        break
+
+    frame = tts_wav[start:end]
+    if len(frame) < frame_length:
+        frame = np.pad(frame, (0, frame_length - len(frame)), mode="constant")
+
+    target_f0 = float(f0_child[i])
+    pitch_ratio = (target_f0 / base_f0) if base_f0 > 1 else 1.0
+    pitch_ratio = (pitch_ratio - 1.0) * strength_pitch + 1.0
+    n_steps = 12.0 * np.log2(max(pitch_ratio, 1e-3))
+
+    shifted = librosa.effects.pitch_shift(
+        y=frame, sr=tts_sample_rate, n_steps=n_steps
+    )
+
+    # Energy match
+    frame_rms = np.sqrt(np.mean(shifted**2) + 1e-6)
+    target_rms = float(energy_child[i])
+    ratio = (target_rms / frame_rms)
+    ratio = (ratio - 1.0) * strength_energy + 1.0
+    shifted *= ratio
+
+    out[start:end] += shifted * window
+
+max_val = np.max(np.abs(out)) + 1e-6
+return (out / max_val).astype(np.float32)
+
+

@@ -1,1 +1,4 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+pub id: String,
+pub mutag_entry: MutagEntry,
+pub metadata: GraphMetadata,
+pub processing_stats: ProcessingStats,

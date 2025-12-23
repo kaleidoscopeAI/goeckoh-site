@@ -1,1 +1,5 @@
-requests.utils imports from here, so be careful with imports.
+import abc
+import typing
+
+from pip._vendor.tenacity import _utils
+

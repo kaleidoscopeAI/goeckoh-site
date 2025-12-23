@@ -1,0 +1,4 @@
+        result["decompiled_files"].append(decompiled_path)
+
+    return result
+

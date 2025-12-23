@@ -1,0 +1,2 @@
+// Use Box-Muller or an external crate in real implementation
+0.0 // For pseudocode no noise

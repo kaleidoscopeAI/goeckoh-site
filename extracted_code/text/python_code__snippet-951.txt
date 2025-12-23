@@ -1,0 +1,3 @@
+return {'PowerPC': 'ppc', 'Power_Macintosh': 'ppc'}.get(machine, machine)
+
+

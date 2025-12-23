@@ -1,0 +1,1 @@
+ selected_strategies.append(self.strategies ["diversify"])

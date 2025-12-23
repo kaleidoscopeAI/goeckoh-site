@@ -1,6 +1,6 @@
-import express from "express";
-import cors from "cors";
-import bodyParser from "body-parser";
-import admin from "firebase-admin";
-import serviceAccount from "./firebaseServiceAccount.json";
-import { DEFAULT_EMOTIONS, EVector } from "../src/services/actuationService";
+import fs from "fs";
+import path from "path";
+import yargs from "yargs";
+import { ProjectionService } from "../src/services/projectionService";
+import { ConstructLearner } from "../src/services/constructLearner";
+const argv = yargs(process.argv.slice(2))

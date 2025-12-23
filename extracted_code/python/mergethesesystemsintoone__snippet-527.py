@@ -1,34 +1,11 @@
-from collections import deque
-from typing import Any
+feature_patterns: Dict[str, np.ndarray] = field(default_factory=dict)
+mutation_rate: float = 0.1
 
-class MemoryBank:
-    """
-    Represents a memory bank for a node, storing data with a limited capacity.
-    """
-    def __init__(self, capacity: int = 100):
-        self.capacity = capacity
-        self.memory = deque(maxlen=capacity)
+def evolve(self, new_features: np.ndarray):
+    key = list(self.feature_patterns.keys())[0] if self.feature_patterns else "default"
+    if key not in self.feature_patterns:
+        self.feature_patterns[key] = new_features
+    else:
+        noise = np.random.normal(0, self.mutation_rate, new_features.shape)
+        self.feature_patterns[key] = 0.8 * self.feature_patterns[key] + 0.2 * new_features + noise
 
-    def add_data(self, data: Any):
-        """
-        Adds data to the memory bank.
-        """
-        self.memory.append(data)
-
-    def retrieve_data(self, num_items: int) -> list:
-        """
-        Retrieves a specified number of items from the memory, prioritizing recent data.
-        """
-        return list(self.memory)[-num_items:]
-
-    def get_size(self):
-        """
-        Returns the current size of the memory bank.
-        """
-        return len(self.memory)
-
-    def clear(self):
-        """
-        Clears all data from the memory bank.
-        """
-        self.memory.clear()

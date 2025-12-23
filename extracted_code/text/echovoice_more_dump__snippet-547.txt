@@ -1,0 +1,2 @@
+_swarm_lib = ctypes.CDLL('./swarm_evolution.so')
+_has_swarm_lib = True

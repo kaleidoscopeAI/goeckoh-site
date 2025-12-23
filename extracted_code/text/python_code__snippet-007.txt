@@ -1,5 +1,2 @@
-class Module_six_moves_urllib_request(_LazyModule):
-
-    """Lazy loading of moved objects in six.moves.urllib_request"""
-
+# <REDACTED: potential secret detected>
 

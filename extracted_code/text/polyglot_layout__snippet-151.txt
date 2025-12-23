@@ -1,0 +1,10 @@
+  await ws.accept()
+  q = brain.bus.subscribe()
+  try:
+       await ws.send_text(json.dumps({"type":"hello","data":{"tick":brain.state.tick,"sigma":brain.state.sigma}}))
+       while True:
+           msg = await q.get()
+           await ws.send_text(json.dumps(msg))
+  except WebSocketDisconnect:
+       pass
+

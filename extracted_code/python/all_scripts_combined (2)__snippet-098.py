@@ -1,84 +1,76 @@
-class AGISystem:
-    def __init__(self, n_nodes: int = 32, n_apparatus: int = 24):
-        self.hw = SimulatedHardware(adc_channels=24)
-        self.rel = RelationalMatrix(n_nodes, n_apparatus)
-        self.thought = ThoughtEngines(n_nodes)
-        self.emotion = EmotionalChemistry()
-        self.memory = MemorySystem(embedding_dim=128, capacity=10000)
-        self.planner = Planner(self.hw, self.rel)
-        self.t = 0.0
-        self.dt = 0.1
-        self.history = []
-        self.lock = Lock()
-        # seed semantic memory
-        self.memory.store_semantic("agent_identity", "A private, self-contained cognitive assistant for execution and opportunity synthesis.")
-        self.memory.store_episode("system initialized")
+class EchoCompanion:
+    """
+    Orchestrates the SpeechLoop and provides an API for external interfaces
+    like the Flask dashboard or mobile clients.
+    """
 
-    def step(self, user_input: Optional[str] = None) -> Dict[str, Any]:
-        with self.lock:
-            self.hw.poll_sensors()
-            n = self.thought.n
-            sensor_vec = np.concatenate([self.hw.adc, np.array([self.hw.temp_C, self.hw.freq_GHz])])
-            inputs = np.zeros(n)
-            ssum = float(np.sum(sensor_vec))
-            for i in range(n):
-                inputs[i] = float(np.tanh(ssum * 0.0005 + random.random() * 0.01))
-            if user_input:
-                self.memory.store_episode(user_input)
-                emb = self.memory.embed(user_input)
-                bias = float(np.tanh(np.mean(emb))) * 0.5
-                inputs += bias
-            self.thought.step(self.rel, inputs, dt=self.dt)
-            reward = float(np.clip(np.mean(inputs), -1, 1))
-            mood = float(np.tanh(np.mean(self.thought.b)))
-            arousal = float(np.abs(np.std(self.thought.h)))
-            self.emotion.step(reward, mood, arousal, dt=self.dt)
-            most_active_node = int(np.argmax(np.abs(self.thought.kappa)))
-            apparatus_idx = int(abs(int((np.sum(self.hw.adc) * 100) % self.rel.n_apparatus)))
-            self.rel.update_hebbian(most_active_node, apparatus_idx, lr=1e-3)
-            action_name = self.planner.select_and_execute(self.thought)
-            self.rel.normalize_rows()
-            conn_metrics = self.relational_consciousness_metrics()
-            log_item = {
-                "t": self.t,
-                "action": action_name,
-                "hw": self.hw.as_status(),
-                "emotion": {"DA": self.emotion.DA, "Ser": self.emotion.Ser, "NE": self.emotion.NE},
-                "thought_summary": {
-                    "b_mean": float(np.mean(self.thought.b)),
-                    "h_mean": float(np.mean(self.thought.h)),
-                    "kappa_mean": float(np.mean(self.thought.kappa)),
-                    "mu_mean": float(np.mean(self.thought.mu)),
-                },
-                "consciousness": conn_metrics
+    settings: SystemSettings = field(default_factory=load_settings)
+    speech_loop: SpeechLoop = field(init=False)
+    _loop_task: asyncio.Task | None = None
+    _metrics_cache: Dict[str, Any] = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        self.speech_loop = SpeechLoop(settings=self.settings)
+        # Start the speech loop in a separate thread/task for continuous operation
+        # For simplicity, we'll start it here directly, but in a real app
+        # you'd manage this with a proper asyncio event loop.
+        # self.start_loop() # This will be called externally by the main entry point
+
+    async def start_loop(self) -> None:
+        """Starts the main speech processing loop."""
+        if not self._loop_task or self._loop_task.done():
+            self._loop_task = asyncio.create_task(self.speech_loop.run())
+            print("[EchoCompanion] Speech loop started.")
+
+    async def stop_loop(self) -> None:
+        """Stops the main speech processing loop."""
+        if self._loop_task:
+            self._loop_task.cancel()
+            await asyncio.gather(self._loop_task, return_exceptions=True)
+            self._loop_task = None
+            print("[EchoCompanion] Speech loop stopped.")
+
+    def get_latest_metrics(self) -> Dict[str, Any]:
+        """Returns the latest metrics for the dashboard."""
+        # This is a simplified cache for demonstration.
+        # In a real system, SpeechLoop would push updates or expose a stream.
+        latest_attempt = self.speech_loop.metrics_logger.tail(limit=1)
+        if latest_attempt:
+            record = latest_attempt[0]
+            # Fetch heart state from the speech loop
+            heart_state = self.speech_loop.heart.step(np.array([])) # dummy audio for state
+            self._metrics_cache = {
+                "timestamp_iso": record.timestamp.isoformat(),
+                "raw_text": record.raw_text,
+                "corrected_text": record.corrected_text,
+                "arousal": heart_state.get("arousal_raw", 0.0),
+                "valence": heart_state.get("emotions", np.array([0,0]))[0,1] if "emotions" in heart_state else 0.0, # Placeholder
+                "temperature": heart_state.get("T", 0.0),
+                "coherence": heart_state.get("coherence", 0.0),
             }
-            self.history.append(log_item)
-            self.t += self.dt
-            return log_item
+        return self._metrics_cache
 
-    def relational_consciousness_metrics(self) -> Dict[str, float]:
-        diag = np.array([abs(self.rel.R[i, i % self.rel.n_apparatus]) for i in range(min(self.rel.n_system, self.rel.n_apparatus))])
-        coherence = float(np.mean(diag))
-        awareness = float(np.clip(self.emotion.DA * (1.0 + np.tanh(np.mean(self.thought.b))), 0.0, 1.0))
-        activities = np.concatenate([self.thought.b, self.thought.h, self.thought.kappa, self.thought.mu])
-        integrated_info = float(np.var(activities))
-        return {"coherence": coherence, "awareness": awareness, "phi_proxy": integrated_info}
+    def get_phrase_stats(self) -> Dict[str, Any]:
+        """Returns statistics about phrase correction for the dashboard."""
+        # This will be more complex, involving parsing the metrics CSV
+        # For now, return dummy data or process what's available
+        stats: Dict[str, Dict[str, Any]] = {}
+        for record in self.speech_loop.metrics_logger.tail(limit=100):
+            phrase = record.phrase_text or "<empty>"
+            if phrase not in stats:
+                stats[phrase] = {"attempts": 0, "corrections": 0, "correction_rate": 0.0}
+            stats[phrase]["attempts"] += 1
+            if record.needs_correction:
+                stats[phrase]["corrections"] += 1
+            stats[phrase]["correction_rate"] = stats[phrase]["corrections"] / stats[phrase]["attempts"]
+        return stats
 
-    def respond(self, user_input: str) -> str:
-        log = self.step(user_input)
-        candidates = self.memory.retrieve(user_input, top_k=3)
-        reply_parts = []
-        if candidates:
-            reply_parts.append("I recall: " + "; ".join([c for _, _, c in candidates[:2]]))
-        if log["consciousness"]["awareness"] > 0.6:
-            reply_parts.append("I am engaged and reflecting on that.")
-        elif log["consciousness"]["phi_proxy"] > 0.08:
-            reply_parts.append("This seems important; I'll think further.")
-        else:
-            reply_parts.append("Noted and stored.")
-        da = log["emotion"]["DA"]
-        mood = "positive" if da > 0.55 else "neutral" if da > 0.45 else "cautious"
-        reply_parts.append(f"My mood is {mood}. Action taken: {log['action']}.")
-        return " ".join(reply_parts)-e 
-
+    async def process_utterance_for_mobile(self, audio_np: np.ndarray) -> Dict[str, Any]:
+        """
+        Processes an audio utterance received from a mobile client.
+        This bypasses the microphone stream and directly feeds into _handle_utterance.
+        """
+        print("[EchoCompanion] Processing mobile utterance...")
+        await self.speech_loop._handle_utterance(audio_np)
+        return {"status": "processed", "latest_metrics": self.get_latest_metrics()}
 

@@ -1,1 +1,1 @@
-class Trait:
+class DataWrapper:

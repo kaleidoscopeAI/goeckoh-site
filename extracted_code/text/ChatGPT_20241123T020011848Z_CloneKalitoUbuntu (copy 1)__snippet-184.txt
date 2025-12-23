@@ -1,0 +1,2 @@
+return shared_hub.get(node_id, "No data available.")
+

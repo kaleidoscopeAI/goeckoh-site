@@ -1,0 +1,7 @@
+PipOption,
+"--path",
+dest="path",
+type="path",
+action="append",
+help="Restrict to the specified installation path for listing "
+"packages (can be used multiple times).",

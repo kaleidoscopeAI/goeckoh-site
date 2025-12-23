@@ -1,0 +1,2 @@
+keeps GCL history (with timestamps) so the 1024‑node lattice exposes time-
+series data instead of a single scalar.

@@ -1,0 +1,7 @@
+ AvatarSynth controls exactly 18,000 nodes (60×60×5 grid) by default.
+
+ If you place spec/avatar_spec.zip (inside onbrain_auto/spec/) with either nodes.npy (N×3) or nodes.csv (x,y,z), it will load your node layout and
+ normalize to the render cube.
+ Energetics (H_bits, S_field, L) drive node motion (swirl/expansion/jitter), color, and depth, then render to PNG frames and periodic GIFs. No APIs, all
+ local.
+

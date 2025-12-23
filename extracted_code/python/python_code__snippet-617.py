@@ -1,6 +1,4 @@
-import subprocess
-import sys
-import tarfile
-import tempfile
-import textwrap
+def find_nothing(importer, path_item, only=False):
+    return ()
+
 

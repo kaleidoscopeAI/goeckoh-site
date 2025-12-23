@@ -1,0 +1,8 @@
+2542
+2543 +        heart_name = "Neurocoherence Lattice"
+2544          # Heart lattice snapshot (downsampled) for UI/telemetry
+     ⋮
+2559              'life_intensity': life_intensity,
+2560 +            'heart_name': heart_name,
+2561              'emotional_state': emotional_state,
+

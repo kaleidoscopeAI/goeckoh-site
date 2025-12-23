@@ -1,0 +1,9 @@
+gear_id: str
+specialization: str
+weight: float = 1.0
+active: bool = True
+connected_gears: Set[str] = field(default_factory=set)
+processing_queue: asyncio.Queue = field(default_factory=asyncio.Queue)
+operations_count: int = 0
+last_active: datetime = field(default_factory=datetime.now)
+

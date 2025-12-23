@@ -1,0 +1,1 @@
+x64: 'https://github.com/jmorganca/ollama/releases/download/v0.1.0/ollama-windows-amd64.exe'

@@ -1,0 +1,5 @@
+"""Returns the probabilities of nodes in the network."""
+probabilities = {}
+for node_id, data in self.nodes.items():
+    probabilities[node_id] = data.get('strength', 0.0)
+return probabilities

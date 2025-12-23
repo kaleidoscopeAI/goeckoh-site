@@ -1,2 +1,2 @@
-fn variance(arr: &[f32;3]) -> f32 {
-let mean = (arr[0] + arr[1] + arr[2]) / 3.0;
+let p = control_rho[i].max(1e-7);
+let q = device_rho[i].max(1e-7);

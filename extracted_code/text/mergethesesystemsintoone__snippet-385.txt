@@ -1,0 +1,6 @@
+  """Transforms data into a amplitude using a simlar hashing strategy as in hash to freqs"""
+  combined = str (sorted(data.items()))
+  hash_value = int (hashlib.md5 (combined.encode()).hexdigest(), 16)
+  rng = np.random.RandomState(hash_value)
+  return np.abs(rng.normal(0, 1, self.dimensions))
+

@@ -1,0 +1,20 @@
+print(f"{Colors.CYAN}=== NEURO-ACOUSTIC EXOCORTEX LAUNCHER ==={Colors.ENDC}")
+
+# 1. Environment Check
+if not check_rust_toolchain():
+    print_status("Cannot build kernel. Continuing with mocks is possible but not recommended.", "WARN")
+    time.sleep(2)
+else:
+    # 2. Build Rust Kernel
+    if not os.path.exists("bio_audio.so") and not os.path.exists("bio_audio.pyd"):
+        success = build_rust_extension()
+        if not success:
+            print_status("Using Python-only mode.", "WARN")
+
+# 3. Launch GUI
+print_status("Initializing Crystalline Heart...", "INFO")
+try:
+    subprocess.run([sys.executable, "gui_main.py"])
+except KeyboardInterrupt:
+    print_status("Shutdown complete.", "OK")
+

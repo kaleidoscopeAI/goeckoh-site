@@ -1,1 +1,3 @@
-class NodeMetrics:
+• Data Ingestion: Data is ingested and preprocessed by nodes using their ProcessingUnit.
+• Pattern Recognition: Patterns and features are extracted by nodes using EnhancedPatternRecognition.
+

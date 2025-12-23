@@ -1,0 +1,13 @@
+_fields_ = (
+    ("cbSize", DWORD),
+    ("RequestedUsage", CERT_USAGE_MATCH),
+    ("RequestedIssuancePolicy", CERT_USAGE_MATCH),
+    ("dwUrlRetrievalTimeout", DWORD),
+    ("fCheckRevocationFreshnessTime", BOOL),
+    ("dwRevocationFreshnessTime", DWORD),
+    ("pftCacheResync", LPFILETIME),
+    ("pStrongSignPara", c_void_p),
+    ("dwStrongSignFlags", DWORD),
+)
+
+

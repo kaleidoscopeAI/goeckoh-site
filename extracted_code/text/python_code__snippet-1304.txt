@@ -1,0 +1,6 @@
+# If it's a symlink, return 0.
+if os.path.islink(path):
+    return 0
+return os.path.getsize(path)
+
+

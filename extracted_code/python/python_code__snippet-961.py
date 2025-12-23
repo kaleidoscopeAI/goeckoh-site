@@ -1,267 +1,155 @@
-class Align(JupyterMixin):
-    """Align a renderable by adding spaces if necessary.
+def _looks_like_path(name: str) -> bool:
+    """Checks whether the string "looks like" a path on the filesystem.
 
-    Args:
-        renderable (RenderableType): A console renderable.
-        align (AlignMethod): One of "left", "center", or "right""
-        style (StyleType, optional): An optional style to apply to the background.
-        vertical (Optional[VerticalAlginMethod], optional): Optional vertical align, one of "top", "middle", or "bottom". Defaults to None.
-        pad (bool, optional): Pad the right with spaces. Defaults to True.
-        width (int, optional): Restrict contents to given width, or None to use default width. Defaults to None.
-        height (int, optional): Set height of align renderable, or None to fit to contents. Defaults to None.
+    This does not check whether the target actually exists, only judge from the
+    appearance.
 
-    Raises:
-        ValueError: if ``align`` is not one of the expected values.
+    Returns true if any of the following conditions is true:
+    * a path separator is found (either os.path.sep or os.path.altsep);
+    * a dot is found (which represents the current directory).
     """
+    if os.path.sep in name:
+        return True
+    if os.path.altsep is not None and os.path.altsep in name:
+        return True
+    if name.startswith("."):
+        return True
+    return False
 
-    def __init__(
-        self,
-        renderable: "RenderableType",
-        align: AlignMethod = "left",
-        style: Optional[StyleType] = None,
-        *,
-        vertical: Optional[VerticalAlignMethod] = None,
-        pad: bool = True,
-        width: Optional[int] = None,
-        height: Optional[int] = None,
-    ) -> None:
-        if align not in ("left", "center", "right"):
-            raise ValueError(
-                f'invalid value for align, expected "left", "center", or "right" (not {align!r})'
-            )
-        if vertical is not None and vertical not in ("top", "middle", "bottom"):
-            raise ValueError(
-                f'invalid value for vertical, expected "top", "middle", or "bottom" (not {vertical!r})'
-            )
-        self.renderable = renderable
-        self.align = align
-        self.style = style
-        self.vertical = vertical
-        self.pad = pad
-        self.width = width
-        self.height = height
 
-    def __repr__(self) -> str:
-        return f"Align({self.renderable!r}, {self.align!r})"
+def _get_url_from_path(path: str, name: str) -> Optional[str]:
+    """
+    First, it checks whether a provided path is an installable directory. If it
+    is, returns the path.
 
-    @classmethod
-    def left(
-        cls,
-        renderable: "RenderableType",
-        style: Optional[StyleType] = None,
-        *,
-        vertical: Optional[VerticalAlignMethod] = None,
-        pad: bool = True,
-        width: Optional[int] = None,
-        height: Optional[int] = None,
-    ) -> "Align":
-        """Align a renderable to the left."""
-        return cls(
-            renderable,
-            "left",
-            style=style,
-            vertical=vertical,
-            pad=pad,
-            width=width,
-            height=height,
+    If false, check if the path is an archive file (such as a .whl).
+    The function checks if the path is a file. If false, if the path has
+    an @, it will treat it as a PEP 440 URL requirement and return the path.
+    """
+    if _looks_like_path(name) and os.path.isdir(path):
+        if is_installable_dir(path):
+            return path_to_url(path)
+        # TODO: The is_installable_dir test here might not be necessary
+        #       now that it is done in load_pyproject_toml too.
+        raise InstallationError(
+            f"Directory {name!r} is not installable. Neither 'setup.py' "
+            "nor 'pyproject.toml' found."
         )
+    if not is_archive_file(path):
+        return None
+    if os.path.isfile(path):
+        return path_to_url(path)
+    urlreq_parts = name.split("@", 1)
+    if len(urlreq_parts) >= 2 and not _looks_like_path(urlreq_parts[0]):
+        # If the path contains '@' and the part before it does not look
+        # like a path, try to treat it as a PEP 440 URL req instead.
+        return None
+    logger.warning(
+        "Requirement %r looks like a filename, but the file does not exist",
+        name,
+    )
+    return path_to_url(path)
 
-    @classmethod
-    def center(
-        cls,
-        renderable: "RenderableType",
-        style: Optional[StyleType] = None,
-        *,
-        vertical: Optional[VerticalAlignMethod] = None,
-        pad: bool = True,
-        width: Optional[int] = None,
-        height: Optional[int] = None,
-    ) -> "Align":
-        """Align a renderable to the center."""
-        return cls(
-            renderable,
-            "center",
-            style=style,
-            vertical=vertical,
-            pad=pad,
-            width=width,
-            height=height,
-        )
 
-    @classmethod
-    def right(
-        cls,
-        renderable: "RenderableType",
-        style: Optional[StyleType] = None,
-        *,
-        vertical: Optional[VerticalAlignMethod] = None,
-        pad: bool = True,
-        width: Optional[int] = None,
-        height: Optional[int] = None,
-    ) -> "Align":
-        """Align a renderable to the right."""
-        return cls(
-            renderable,
-            "right",
-            style=style,
-            vertical=vertical,
-            pad=pad,
-            width=width,
-            height=height,
-        )
-
-    def __rich_console__(
-        self, console: "Console", options: "ConsoleOptions"
-    ) -> "RenderResult":
-        align = self.align
-        width = console.measure(self.renderable, options=options).maximum
-        rendered = console.render(
-            Constrain(
-                self.renderable, width if self.width is None else min(width, self.width)
-            ),
-            options.update(height=None),
-        )
-        lines = list(Segment.split_lines(rendered))
-        width, height = Segment.get_shape(lines)
-        lines = Segment.set_shape(lines, width, height)
-        new_line = Segment.line()
-        excess_space = options.max_width - width
-        style = console.get_style(self.style) if self.style is not None else None
-
-        def generate_segments() -> Iterable[Segment]:
-            if excess_space <= 0:
-                # Exact fit
-                for line in lines:
-                    yield from line
-                    yield new_line
-
-            elif align == "left":
-                # Pad on the right
-                pad = Segment(" " * excess_space, style) if self.pad else None
-                for line in lines:
-                    yield from line
-                    if pad:
-                        yield pad
-                    yield new_line
-
-            elif align == "center":
-                # Pad left and right
-                left = excess_space // 2
-                pad = Segment(" " * left, style)
-                pad_right = (
-                    Segment(" " * (excess_space - left), style) if self.pad else None
-                )
-                for line in lines:
-                    if left:
-                        yield pad
-                    yield from line
-                    if pad_right:
-                        yield pad_right
-                    yield new_line
-
-            elif align == "right":
-                # Padding on left
-                pad = Segment(" " * excess_space, style)
-                for line in lines:
-                    yield pad
-                    yield from line
-                    yield new_line
-
-        blank_line = (
-            Segment(f"{' ' * (self.width or options.max_width)}\n", style)
-            if self.pad
-            else Segment("\n")
-        )
-
-        def blank_lines(count: int) -> Iterable[Segment]:
-            if count > 0:
-                for _ in range(count):
-                    yield blank_line
-
-        vertical_height = self.height or options.height
-        iter_segments: Iterable[Segment]
-        if self.vertical and vertical_height is not None:
-            if self.vertical == "top":
-                bottom_space = vertical_height - height
-                iter_segments = chain(generate_segments(), blank_lines(bottom_space))
-            elif self.vertical == "middle":
-                top_space = (vertical_height - height) // 2
-                bottom_space = vertical_height - top_space - height
-                iter_segments = chain(
-                    blank_lines(top_space),
-                    generate_segments(),
-                    blank_lines(bottom_space),
-                )
-            else:  #  self.vertical == "bottom":
-                top_space = vertical_height - height
-                iter_segments = chain(blank_lines(top_space), generate_segments())
+def parse_req_from_line(name: str, line_source: Optional[str]) -> RequirementParts:
+    if is_url(name):
+        marker_sep = "; "
+    else:
+        marker_sep = ";"
+    if marker_sep in name:
+        name, markers_as_string = name.split(marker_sep, 1)
+        markers_as_string = markers_as_string.strip()
+        if not markers_as_string:
+            markers = None
         else:
-            iter_segments = generate_segments()
-        if self.style:
-            style = console.get_style(self.style)
-            iter_segments = Segment.apply_style(iter_segments, style)
-        yield from iter_segments
+            markers = Marker(markers_as_string)
+    else:
+        markers = None
+    name = name.strip()
+    req_as_string = None
+    path = os.path.normpath(os.path.abspath(name))
+    link = None
+    extras_as_string = None
 
-    def __rich_measure__(
-        self, console: "Console", options: "ConsoleOptions"
-    ) -> Measurement:
-        measurement = Measurement.get(console, options, self.renderable)
-        return measurement
+    if is_url(name):
+        link = Link(name)
+    else:
+        p, extras_as_string = _strip_extras(path)
+        url = _get_url_from_path(p, name)
+        if url is not None:
+            link = Link(url)
+
+    # it's a local file, dir, or url
+    if link:
+        # Handle relative file URLs
+        if link.scheme == "file" and re.search(r"\.\./", link.url):
+            link = Link(path_to_url(os.path.normpath(os.path.abspath(link.path))))
+        # wheel file
+        if link.is_wheel:
+            wheel = Wheel(link.filename)  # can raise InvalidWheelFilename
+            req_as_string = f"{wheel.name}=={wheel.version}"
+        else:
+            # set the req to the egg fragment.  when it's not there, this
+            # will become an 'unnamed' requirement
+            req_as_string = link.egg_fragment
+
+    # a requirement specifier
+    else:
+        req_as_string = name
+
+    extras = convert_extras(extras_as_string)
+
+    def with_source(text: str) -> str:
+        if not line_source:
+            return text
+        return f"{text} (from {line_source})"
+
+    def _parse_req_string(req_as_string: str) -> Requirement:
+        try:
+            req = get_requirement(req_as_string)
+        except InvalidRequirement:
+            if os.path.sep in req_as_string:
+                add_msg = "It looks like a path."
+                add_msg += deduce_helpful_msg(req_as_string)
+            elif "=" in req_as_string and not any(
+                op in req_as_string for op in operators
+            ):
+                add_msg = "= is not a valid operator. Did you mean == ?"
+            else:
+                add_msg = ""
+            msg = with_source(f"Invalid requirement: {req_as_string!r}")
+            if add_msg:
+                msg += f"\nHint: {add_msg}"
+            raise InstallationError(msg)
+        else:
+            # Deprecate extras after specifiers: "name>=1.0[extras]"
+            # This currently works by accident because _strip_extras() parses
+            # any extras in the end of the string and those are saved in
+            # RequirementParts
+            for spec in req.specifier:
+                spec_str = str(spec)
+                if spec_str.endswith("]"):
+                    msg = f"Extras after version '{spec_str}'."
+                    raise InstallationError(msg)
+        return req
+
+    if req_as_string is not None:
+        req: Optional[Requirement] = _parse_req_string(req_as_string)
+    else:
+        req = None
+
+    return RequirementParts(req, link, markers, extras)
 
 
-class VerticalCenter(JupyterMixin):
-    """Vertically aligns a renderable.
-
-    Warn:
-        This class is deprecated and may be removed in a future version. Use Align class with
-        `vertical="middle"`.
-
-    Args:
-        renderable (RenderableType): A renderable object.
-    """
-
-    def __init__(
-        self,
-        renderable: "RenderableType",
-        style: Optional[StyleType] = None,
-    ) -> None:
-        self.renderable = renderable
-        self.style = style
-
-    def __repr__(self) -> str:
-        return f"VerticalCenter({self.renderable!r})"
-
-    def __rich_console__(
-        self, console: "Console", options: "ConsoleOptions"
-    ) -> "RenderResult":
-        style = console.get_style(self.style) if self.style is not None else None
-        lines = console.render_lines(
-            self.renderable, options.update(height=None), pad=False
-        )
-        width, _height = Segment.get_shape(lines)
-        new_line = Segment.line()
-        height = options.height or options.size.height
-        top_space = (height - len(lines)) // 2
-        bottom_space = height - top_space - len(lines)
-        blank_line = Segment(f"{' ' * width}", style)
-
-        def blank_lines(count: int) -> Iterable[Segment]:
-            for _ in range(count):
-                yield blank_line
-                yield new_line
-
-        if top_space > 0:
-            yield from blank_lines(top_space)
-        for line in lines:
-            yield from line
-            yield new_line
-        if bottom_space > 0:
-            yield from blank_lines(bottom_space)
-
-    def __rich_measure__(
-        self, console: "Console", options: "ConsoleOptions"
-    ) -> Measurement:
-        measurement = Measurement.get(console, options, self.renderable)
-        return measurement
-
-
+def install_req_from_line(
+    name: str,
+    comes_from: Optional[Union[str, InstallRequirement]] = None,
+    *,
+    use_pep517: Optional[bool] = None,
+    isolated: bool = False,
+    global_options: Optional[List[str]] = None,
+    hash_options: Optional[Dict[str, List[str]]] = None,
+    constraint: bool = False,
+    line_source: Optional[str] = None,
+    user_supplied: bool = False,
+    config_settings: Optional[Dict[str, Union[str, List[str]]]] = None,

@@ -1,3 +1,1 @@
-// 4. Compute gradient from recent reflections
-const recent = this.reflectionLogs[nodeIdx].slice(-50); // last 50 reflections
-const grad = computeMetaGrad(node, recent);
+that translates raw quantum mechanics into meaningful, high-level cognition—moving from K (Knowledge/Coherence) to RP (Conceptual Space).

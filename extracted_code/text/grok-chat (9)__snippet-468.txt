@@ -1,0 +1,5 @@
+  if llm_response.content and llm_response.content.parts:
+      # Assuming the response is text in the first part
+      if llm_response.content.parts[0].text:
+          original_text = llm_response.content.parts[0].text
+          logger.debug(f"--- Callback: Original LLM response text (first

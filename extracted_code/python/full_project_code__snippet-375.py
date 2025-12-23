@@ -1,1 +1,7 @@
-# This code was modified from latin1prober.py by Rob Speer <rob@lumino.so>.
+    from typing import TypedDict
+
+    class ResultDict(TypedDict):
+        encoding: Optional[str]
+        confidence: float
+        language: Optional[str]
+

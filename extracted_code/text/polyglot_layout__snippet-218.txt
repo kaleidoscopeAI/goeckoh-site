@@ -1,0 +1,1 @@
+       It subscribes implicitly through the DB (no extra API keys, no UI dependency).

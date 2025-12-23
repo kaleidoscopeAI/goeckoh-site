@@ -1,24 +1,19 @@
-     2  import math
-     3 +import time
-     4  from dataclasses import dataclass
+    19  } from '../src/services/api';
        ⋮
-    21          self.logger = SessionLog()
-    22 +        self.gcl_history: list[float] = []
-    23 +        self.gcl_ts: list[float] = []
-    24
+    28    const [selecting, setSelecting] = useState(false);
+    29 +  const [heart, setHeart] = useState<any>(null);
+    30
        ⋮
-    66          self.coherence_history.append(coherence)
-    67 +        self.gcl_history.append(gcl)
-    68 +        self.gcl_ts.append(time.time())
-    69
-    70          # Keep history bounded
-    66 -        max_history = 100
-    71 +        max_history = 300
-    72          if len(self.arousal_history) > max_history:
+    35          setSystemStatus(status);
+    36 +        const heartSnap = await getHeartSnapshot();
+    37 +        setHeart(heartSnap);
+    38        } catch (err) {
        ⋮
-    75              self.coherence_history = self.coherence_history[-max_history
-        :]
-    76 +            self.gcl_history = self.gcl_history[-max_history:]
-    77 +            self.gcl_ts = self.gcl_ts[-max_history:]
-    78
+    74
+    75 +  const heartSample = heart?.heartSample || [];
+    76 +  const heartMode = heart?.mode;
+    77 +  const heartStress = heart?.stress;
+    78 +  const heartEmo = heart?.emotional || {};
+    79 +
+    80    // Fallback data for chart if not provided by backend
 

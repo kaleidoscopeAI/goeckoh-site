@@ -1,0 +1,25 @@
+              val correctedText = correctToFirstPerson(rawText)
+              speakCorrectedText(correctedText, prosody)
+              callback(correctedText, prosody)
+          }
+      })
+
+      recorder.setListener(object : IRecorderListener {
+          override fun onUpdateReceived(message: String) {
+              Log.d("Recorder", message)
+          }
+
+          override fun onDataReceived(samples: FloatArray) {
+              // Forward to Whisper for real-time processing
+              whisper.writeBuffer(samples)
+
+              // Collect for prosody (convert float to byte)
+              val byteBuffer = ByteBuffer.allocate(samples.size * 4)
+              val floatBuffer = byteBuffer.asFloatBuffer()
+              floatBuffer.put(samples)
+              audioBuffer.write(byteBuffer.array())
+
+              // VAD: Calculate energy
+              var sum = 0.0
+              samples.forEach { sum += it * it }
+              lastEnergy = if (samples.isNotEmpty()) sqrt(sum /

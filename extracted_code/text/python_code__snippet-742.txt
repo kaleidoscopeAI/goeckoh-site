@@ -1,0 +1,10 @@
+"""CoreFoundation constants"""
+
+kCFStringEncodingUTF8 = CFStringEncoding(0x08000100)
+
+errSecIncompleteCertRevocationCheck = -67635
+errSecHostNameMismatch = -67602
+errSecCertificateExpired = -67818
+errSecNotTrusted = -67843
+
+

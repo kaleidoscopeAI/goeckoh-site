@@ -1,10 +1,10 @@
-from __future__ import annotations
-from pathlib import Path
-from typing import Literal
-import numpy as np
-import soundfile as sf
-import librosa
-from TTS.api import TTS
-import sounddevice as sd
-import time
+Must be child’s exact voice (not close, not generic)
+Prosody transfer mandatory (pitch contour, rhythm, energy from original utterance preserved)
+First-person always for corrective echo (“I want juice” never “You said I want juice”)
+Dynamic style switching via BehaviorMonitor:
+─ high_energy → excited coach voice
+─ anxious/meltdown risk → calm inner voice
+─ success streak ≥3 → excited reinforcement
+Slow-drift adaptation: every 10 successes → re-sample best recent attempts → phase out old facets
+Fallback if no samples yet: use parent-recorded base facets or lightest possible generic child voice until first samples collected
 

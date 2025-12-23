@@ -1,0 +1,1 @@
+pyparsing_unicode = unicode  # type: ignore[misc]

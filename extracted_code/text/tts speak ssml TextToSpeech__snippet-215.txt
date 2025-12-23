@@ -1,0 +1,12 @@
+              for (i in samples.indices) {
+                  shortBuffer.put((samples[i] * Short.MAX_VALUE).toShort())
+              }
+
+              // RNNoise suppression
+              val inShort = ShortArray(samples.size)
+              shortBuffer.rewind()
+              shortBuffer.get(inShort)
+              val outShort = ShortArray(samples.size)
+              nsWrapper?.nativeProcess(inShort, null, outShort, null)
+
+              // Convert back to float for Whisper if needed, but assume

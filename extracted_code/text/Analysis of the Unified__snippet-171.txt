@@ -1,0 +1,4 @@
+Kaleidoscope AI Engine: Central component managing nodes, driving the Master State Vector evolution, and processing validated, structured insights.
+
+Perspective Engine: Complements the Kaleidoscope Engine by focusing on generating speculative insights and counterfactual hypotheses for each node.
+

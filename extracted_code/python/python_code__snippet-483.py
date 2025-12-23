@@ -1,15 +1,17 @@
-from .retry import retry_base  # noqa
-from .retry import retry_all  # noqa
-from .retry import retry_always  # noqa
-from .retry import retry_any  # noqa
-from .retry import retry_if_exception  # noqa
-from .retry import retry_if_exception_type  # noqa
-from .retry import retry_if_exception_cause_type  # noqa
-from .retry import retry_if_not_exception_type  # noqa
-from .retry import retry_if_not_result  # noqa
-from .retry import retry_if_result  # noqa
-from .retry import retry_never  # noqa
-from .retry import retry_unless_exception_type  # noqa
-from .retry import retry_if_exception_message  # noqa
-from .retry import retry_if_not_exception_message  # noqa
+    import sys
+
+    from pip._vendor.rich.columns import Columns
+    from pip._vendor.rich.console import Console
+
+    console = Console(record=True)
+
+    columns = Columns(
+        (f":{name}: {name}" for name in sorted(EMOJI.keys()) if "\u200D" not in name),
+        column_first=True,
+    )
+
+    console.print(columns)
+    if len(sys.argv) > 1:
+        console.save_html(sys.argv[1])
+
 

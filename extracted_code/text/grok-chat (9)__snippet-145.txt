@@ -1,0 +1,4 @@
+JSON {ts, transcript, corrected, gcl, phenotype_counts} every 0.5s (only
+when the mirror is available). The cognitive-nebula visualizer can subscribe
+to http://localhost:8080/mirror/stream and render whatever the user says
+(e.g., “dog chasing car”) into 3D nodes.

@@ -1,0 +1,9 @@
+_fields_ = (
+    ("dwCertEncodingType", DWORD),
+    ("pbCertEncoded", c_void_p),
+    ("cbCertEncoded", DWORD),
+    ("pCertInfo", c_void_p),
+    ("hCertStore", HCERTSTORE),
+)
+
+

@@ -1,0 +1,2 @@
+print("🔇 Audio device not available - Silent mode active")
+

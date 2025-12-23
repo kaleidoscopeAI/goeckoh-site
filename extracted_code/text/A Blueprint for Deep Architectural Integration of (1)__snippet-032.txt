@@ -1,2 +1,0 @@
-4. `.process_batch()`: Cleans HTML, extracts main text (using algo like Readability), and summarizes long articles into concise contextual embeddings using the integrated LLM.
-

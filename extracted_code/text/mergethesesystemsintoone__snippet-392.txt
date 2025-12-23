@@ -1,0 +1,6 @@
+  results = []
+  for rule in self.rules:
+    if self._rule_matches(concept, rule["condition"]):
+        results.append ({'rule_id': rule ['id'], "result": rule['action'] (concept)})
+  return results
+

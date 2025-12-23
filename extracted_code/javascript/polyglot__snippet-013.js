@@ -1,3 +1,3 @@
-class KnowledgeDNA {
-public int $generation = 0;
-public function replicate(): void { $this->generation++; }
+class MemoryStore {
+private ?\SQLite3 $db = null;
+public function __construct(string $path) {

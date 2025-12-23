@@ -1,0 +1,10 @@
+Option,
+"--hash",
+# Hash values eventually end up in InstallRequirement.hashes due to
+# __dict__ copying in process_line().
+dest="hashes",
+action="callback",
+callback=_handle_merge_hash,
+type="string",
+help="Verify that the package's archive matches this "
+"hash before installing. Example: --hash=sha256:abcdef...",

@@ -1,3 +1,0 @@
-- **Integrated Visualization:** Generates live Plotly/Mpl dashboard JSON (network graph, radar, timelines, heatmap) using actual system states.
-
-

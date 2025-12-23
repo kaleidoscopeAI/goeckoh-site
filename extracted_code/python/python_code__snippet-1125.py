@@ -1,3 +1,2 @@
-    from os import mkdir, rename, unlink
-
-    WRITE_SUPPORT = True
+    import sounddevice as sd
+    AUDIO_AVAILABLE = True

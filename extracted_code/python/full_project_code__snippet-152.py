@@ -1,4 +1,11 @@
-    def makefile(self, mode, bufsize=-1):
-        self._makefile_refs += 1
-        return _fileobject(self, mode, bufsize, close=True)
+import base64
+import ctypes
+import itertools
+import os
+import re
+import ssl
+import struct
+import tempfile
+
+from .bindings import CFConst, CoreFoundation, Security
 

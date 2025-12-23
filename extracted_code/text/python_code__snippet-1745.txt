@@ -1,0 +1,47 @@
+"""
+Compiles the bio_audio Rust crate into a shared library accessible by Python.
+"""
+print_status("Building Physics Kernel (bio_audio)...", "INFO")
+
+os_type = platform.system()
+target_dir = os.path.join(os.getcwd(), "bio_audio", "target", "release")
+root_dir = os.getcwd()
+
+# 1. Run Cargo Build
+try:
+    os.chdir("bio_audio")
+    cmd = ["cargo", "build", "--release"]
+    subprocess.run(cmd, check=True)
+    os.chdir(root_dir)
+except subprocess.CalledProcessError:
+    print_status("Compilation Failed.", "ERR")
+    return False
+
+# 2. Locate and Move Artifact
+# Windows: .dll -> .pyd
+# Linux/Mac: .so / .dylib -> .so
+
+src_name = ""
+dest_name = ""
+
+if os_type == "Windows":
+    src_name = "bio_audio.dll"
+    dest_name = "bio_audio.pyd"
+elif os_type == "Darwin": # Mac
+    src_name = "libbio_audio.dylib"
+    dest_name = "bio_audio.so"
+else: # Linux
+    src_name = "libbio_audio.so"
+    dest_name = "bio_audio.so"
+
+src_path = os.path.join(target_dir, src_name)
+dest_path = os.path.join(root_dir, dest_name)
+
+if os.path.exists(src_path):
+    shutil.copy2(src_path, dest_path)
+    print_status(f"Kernel linked: {dest_name}", "OK")
+    return True
+else:
+    print_status(f"Artifact not found at {src_path}", "ERR")
+    return False
+

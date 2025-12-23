@@ -1,2 +1,2 @@
-class EnergyFlow:
+class KnowledgeGraph:
 def __init__(self):

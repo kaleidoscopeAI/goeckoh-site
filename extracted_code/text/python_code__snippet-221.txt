@@ -1,80 +1,19 @@
-                    "Ignoring --global-option when building %s using PEP 517", req.name
-                )
-            if build_options:
-                logger.warning(
-                    "Ignoring --build-option when building %s using PEP 517", req.name
-                )
-            if editable:
-                wheel_path = build_wheel_editable(
-                    name=req.name,
-                    backend=req.pep517_backend,
-                    metadata_directory=req.metadata_directory,
-                    tempd=temp_dir.path,
-                )
-            else:
-                wheel_path = build_wheel_pep517(
-                    name=req.name,
-                    backend=req.pep517_backend,
-                    metadata_directory=req.metadata_directory,
-                    tempd=temp_dir.path,
-                )
-        else:
-            wheel_path = build_wheel_legacy(
-                name=req.name,
-                setup_py_path=req.setup_py_path,
-                source_dir=req.unpacked_source_directory,
-                global_options=global_options,
-                build_options=build_options,
-                tempd=temp_dir.path,
-            )
+"""
+Return a resource finder for a path, which should represent a container.
 
-        if wheel_path is not None:
-            wheel_name = os.path.basename(wheel_path)
-            dest_path = os.path.join(output_dir, wheel_name)
-            try:
-                wheel_hash, length = hash_file(wheel_path)
-                shutil.move(wheel_path, dest_path)
-                logger.info(
-                    "Created wheel for %s: filename=%s size=%d sha256=%s",
-                    req.name,
-                    wheel_name,
-                    length,
-                    wheel_hash.hexdigest(),
-                )
-                logger.info("Stored in directory: %s", output_dir)
-                return dest_path
-            except Exception as e:
-                logger.warning(
-                    "Building wheel for %s failed: %s",
-                    req.name,
-                    e,
-                )
-        # Ignore return, we can't do anything else useful.
-        if not req.use_pep517:
-            _clean_one_legacy(req, global_options)
-        return None
+:param path: The path.
+:return: A :class:`ResourceFinder` instance for the path.
+"""
+result = None
+# calls any path hooks, gets importer into cache
+pkgutil.get_importer(path)
+loader = sys.path_importer_cache.get(path)
+finder = _finder_registry.get(type(loader))
+if finder:
+    module = _dummy_module
+    module.__file__ = os.path.join(path, '')
+    module.__loader__ = loader
+    result = finder(module)
+return result
 
 
-def _clean_one_legacy(req: InstallRequirement, global_options: List[str]) -> bool:
-    clean_args = make_setuptools_clean_args(
-        req.setup_py_path,
-        global_options=global_options,
-    )
-
-    logger.info("Running setup.py clean for %s", req.name)
-    try:
-        call_subprocess(
-            clean_args, command_desc="python setup.py clean", cwd=req.source_dir
-        )
-        return True
-    except Exception:
-        logger.error("Failed cleaning build dir for %s", req.name)
-        return False
-
-
-def build(
-    requirements: Iterable[InstallRequirement],
-    wheel_cache: WheelCache,
-    verify: bool,
-    build_options: List[str],
-    global_options: List[str],

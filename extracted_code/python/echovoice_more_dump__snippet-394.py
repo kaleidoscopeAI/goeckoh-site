@@ -1,1 +1,1 @@
-def _setup_routes(self):
+def get_values(self):

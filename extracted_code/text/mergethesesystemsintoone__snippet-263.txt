@@ -1,0 +1,3 @@
+self._validate()
+self._initialize_metadata()
+

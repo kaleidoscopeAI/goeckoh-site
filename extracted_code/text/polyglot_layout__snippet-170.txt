@@ -1,0 +1,5 @@
+             msg = await q.get()
+             await ws.send_text(json.dumps(msg))
+     except WebSocketDisconnect:
+         pass
+

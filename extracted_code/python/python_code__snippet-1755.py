@@ -1,21 +1,36 @@
-class VoiceFingerprint:
-    """
-    Static Bubble Constraints Θ_u for one child.
+def __init__(self, mapping, accessor, appends=None):
+    self._mapping = mapping
+    self._accessor = accessor
+    self._appends = appends or {}
 
-    All values are deterministic statistics from enrollment.
-    """
+def __repr__(self):
+    return "IteratorMapping({!r}, {!r}, {!r})".format(
+        self._mapping,
+        self._accessor,
+        self._appends,
+    )
 
-    mu_f0: float = 180.0
-    sigma_f0: float = 25.0
-    base_roughness: float = 0.2
-    base_metalness: float = 0.5
-    base_sharpness: float = 0.4
-    rate: float = 3.8
-    jitter_base: float = 0.08
-    shimmer_base: float = 0.12
-    base_radius: float = 1.0
+def __bool__(self):
+    return bool(self._mapping or self._appends)
 
-    def to_dict(self) -> Dict[str, Any]:
-        return asdict(self)
+__nonzero__ = __bool__  # XXX: Python 2.
+
+def __contains__(self, key):
+    return key in self._mapping or key in self._appends
+
+def __getitem__(self, k):
+    try:
+        v = self._mapping[k]
+    except KeyError:
+        return iter(self._appends[k])
+    return itertools.chain(self._accessor(v), self._appends.get(k, ()))
+
+def __iter__(self):
+    more = (k for k in self._appends if k not in self._mapping)
+    return itertools.chain(self._mapping, more)
+
+def __len__(self):
+    more = sum(1 for k in self._appends if k not in self._mapping)
+    return len(self._mapping) + more
 
 

@@ -1,0 +1,4 @@
+*   `heart.py`: Full 1024-node ODE Crystalline Heart simulation for continuous affective state modeling.
+*   `text_normalizer.py`: Grammar correction and rigorous first-person pronoun rewriting.
+*   `speech_io.py`: Audio input stream management using `sounddevice` and Silero VAD.
+*   `speech_loop.py`: The central orchestrator, integrating VAD, ASR (`faster-whisper`), TTS (`TTS` for voice cloning), Heart, Brain, Avatar, Trigger Engine, Voice Timbre, and updating the `SystemState`.

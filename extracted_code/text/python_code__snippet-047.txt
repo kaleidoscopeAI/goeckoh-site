@@ -1,2 +1,8 @@
-# <REDACTED: potential secret detected>
+class Frame:
+    filename: str
+    lineno: int
+    name: str
+    line: str = ""
+    locals: Optional[Dict[str, pretty.Node]] = None
+
 

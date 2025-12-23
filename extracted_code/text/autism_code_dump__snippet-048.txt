@@ -1,0 +1,12 @@
+ta = a.split()
+tb = b.split()
+if not ta or not tb:
+    return 0.0
+vocab = {t: i for i, t in enumerate(sorted(set(ta + tb)))}
+va = np.array([vocab[t] for t in ta], dtype=float)
+vb = np.array([vocab[t] for t in tb], dtype=float)
+dist, _ = fastdtw(va, vb)
+max_len = max(len(ta), len(tb))
+return float(math.exp(-dist / max_len))
+
+

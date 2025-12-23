@@ -1,0 +1,2 @@
+  """
+  logger.debug("Entering tool: discover_files with repo_path: %s",

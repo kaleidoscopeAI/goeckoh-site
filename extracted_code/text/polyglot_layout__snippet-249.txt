@@ -1,0 +1,8 @@
+ Continuous loop: ingest → anneal (σ schedule) → energetics (H_bits, S_field, L) → sonify (WAV) → STFT+attention → captions → feed avatar.
+
+ 18,000-node avatar (60×60×5) reacts in real time to H_bits/S_field and the caption hash; frames are written into seed_crystal_agi/shapes/.
+ Minimal FastAPI app:
+        /status – system snapshot (tick, sigma, tension/energy) + avatar frames dir
+
+        /recent?table=states|energetics|captions|reflections|suggestions|docs – quick inspection
+

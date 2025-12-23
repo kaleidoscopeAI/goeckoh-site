@@ -1,0 +1,12 @@
+"""Return an instantiated filter.
+
+Options are passed to the filter initializer if wanted.
+Raise a ClassNotFound if not found.
+"""
+cls = find_filter_class(filtername)
+if cls:
+    return cls(**options)
+else:
+    raise ClassNotFound('filter %r not found' % filtername)
+
+

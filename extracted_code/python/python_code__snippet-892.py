@@ -1,9 +1,32 @@
-    import platform
-
-    features = get_windows_console_features()
-    from pip._vendor.rich import print
-
-    print(f'platform="{platform.system()}"')
-    print(repr(features))
+            # from the server. If we decompress inside of
+            # urllib3 then we cannot verify the checksum
+            # because the checksum will be of the compressed
+            # file. This breakage will only occur if the
+            # server adds a Content-Encoding header, which
+            # depends on how the server was configured:
+            # - Some servers will notice that the file isn't a
+            #   compressible file and will leave the file alone
+            #   and with an empty Content-Encoding
+            # - Some servers will notice that the file is
+            #   already compressed and will leave the file
+            #   alone and will add a Content-Encoding: gzip
+            #   header
+            # - Some servers won't notice anything at all and
+            #   will take a file that's already been compressed
+            #   and compress it again and set the
+            #   Content-Encoding: gzip header
+            #
+            # By setting this not to decode automatically we
+            # hope to eliminate problems with the second case.
+            decode_content=False,
+        ):
+            yield chunk
+    except AttributeError:
+        # Standard file-like object.
+        while True:
+            chunk = response.raw.read(chunk_size)
+            if not chunk:
+                break
+            yield chunk
 
 

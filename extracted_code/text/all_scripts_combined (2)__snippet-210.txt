@@ -1,0 +1,2 @@
+_HAS_OLLAMA = False
+

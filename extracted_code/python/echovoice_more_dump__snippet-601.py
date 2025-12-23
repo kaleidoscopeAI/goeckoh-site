@@ -1,1 +1,1 @@
-* **Mimicry** – learning from peers and sources
+def act(self):

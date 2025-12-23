@@ -1,178 +1,78 @@
-import numpy as np
-from typing import Dict, List, Any
-from collections import defaultdict
-import time
-import random
+def __init__(self):
+    self.word2vec = None  # Lazy init
 
-class KaleidoscopeEngine:
-    """
-    Processes data through a series of transformations, simulating the
-    kaleidoscope's intricate refractions and reflections, to generate
-    refined insights.
-    """
+def process_text(self, text: str) -> Dict:
+    doc = nlp(text)
+    entities = [(ent.text, ent.label_) for ent in doc.ents]
+    topics = self._identify_topics([[t.text for t in doc]])
+    return {"entities": entities, "topics": topics}
 
-    def __init__(self, num_gears: int = 5):
-        self.num_gears = num_gears
-        self.gears = [Gear() for _ in range(num_gears)]
-        self.gear_connections = self._initialize_gear_connections()
-        self.insight_history = []
+def process_image(self, img_url: str) -> Dict:
+    response = requests.get(img_url)
+    img = Image.open(BytesIO(response.content)).convert('L')
+    array = np.array(img)
+    sobel_x = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])
+    edges = self._convolve(array, sobel_x)
+    shapes = self._detect_shapes(edges)
+    return {"shapes": shapes}
 
-    def _initialize_gear_connections(self) -> Dict[int, List[int]]:
-        """
-        Establishes connections between gears.
+def process_numerical(self, data: List[float]) -> Dict:
+    fft = np.fft.fft(data)
+    peaks = np.argwhere(np.abs(fft) > np.mean(np.abs(fft)) + np.std(np.abs(fft)))
+    return {"peaks": peaks.tolist()}
 
-        Returns:
-            dict: A dictionary representing connections between gears.
-        """
-        connections = defaultdict(list)
-        for i in range(self.num_gears):
-            num_connections = random.randint(1, 3)  # Each gear connects to 1-3 others
-            connected_gears = random.sample(
-                [g for g in range(self.num_gears) if g != i],
-                num_connections
-            )
-            connections[i].extend(connected_gears)
-        return connections
+def _convolve(self, img: np.ndarray, kernel: np.ndarray) -> np.ndarray:
+    output = np.zeros_like(img, dtype=float)
+    pad = kernel.shape[0] // 2
+    padded = np.pad(img, pad)
+    for i in range(img.shape[0]):
+        for j in range(img.shape[1]):
+            output[i, j] = np.sum(padded[i:i+kernel.shape[0], j:j+kernel.shape[1]] * kernel)
+    return output
 
-    def process_data(self, data_chunk: Any) -> Dict[str, Any]:
-        """
-        Processes a data chunk through the series of interconnected gears.
+def _detect_shapes(self, edges: np.ndarray) -> List:
+    # Real contour finding (simple DFS)
+    visited = np.zeros_like(edges, dtype=bool)
+    shapes = []
+    for i in range(edges.shape[0]):
+        for j in range(edges.shape[1]):
+            if edges[i,j] > 0 and not visited[i,j]:
+                contour = self._dfs_contour(edges, visited, i, j)
+                if len(contour) > 5:  # Min size
+                    shapes.append({"vertices": len(contour)})
+    return shapes
 
-        Args:
-            data_chunk: The data chunk to be processed.
+def _dfs_contour(self, edges: np.ndarray, visited: np.ndarray, x: int, y: int) -> List[Tuple[int,int]]:
+    stack = [(x, y)]
+    contour = []
+    while stack:
+        cx, cy = stack.pop()
+        if visited[cx, cy]: continue
+        visited[cx, cy] = True
+        contour.append((cx, cy))
+        for dx, dy in [(-1,-1), (-1,0), (-1,1), (0,-1), (0,1), (1,-1), (1,0), (1,1)]:
+            nx, ny = cx + dx, cy + dy
+            if 0 <= nx < edges.shape[0] and 0 <= ny < edges.shape[1] and edges[nx,ny] > 0 and not visited[nx,ny]:
+                stack.append((nx, ny))
+    return contour
 
-        Returns:
-            dict: The processed data with added insights.
-        """
-        current_gear_index = 0  # Start from the first gear
-        processed_data = data_chunk
-        history = []
-
-        for _ in range(self.num_gears):
-            gear = self.gears[current_gear_index]
-            processed_data = gear.process(processed_data)
-            history.append({
-                'gear_index': current_gear_index,
-                'data': processed_data
-            })
-
-            # Move to the next connected gear
-            connected_gears = self.gear_connections.get(current_gear_index, [])
-            if connected_gears:
-                current_gear_index = random.choice(connected_gears)
-            else:
-                break  # No further connections
-
-        insights = self._generate_insights(processed_data)
-        self.insight_history.append(insights)
-
-        return {
-            "processed_data": processed_data,
-            "insights": insights,
-            "processing_history": history
-        }
-
-    def _generate_insights(self, data: Any) -> Dict[str, Any]:
-        """
-        Generates insights based on the data processed by the gears.
-
-        Args:
-            data: The processed data.
-
-        Returns:
-            dict: Generated insights.
-        """
-        # Basic insight generation based on the length of the data
-        insight = {
-            'timestamp': time.time(),
-            'data_length': len(data) if isinstance(data, (list, str)) else 0,
-            'data_type': str(type(data)),
-            'pattern_detected': 'complex' if len(data) > 10 else 'simple'
-        }
-        return insight
-
-    def get_gear_states(self) -> List[Dict[str, Any]]:
-        """
-        Returns the current state of all gears in the engine.
-
-        Returns:
-            list: A list of dictionaries, each representing a gear's state.
-        """
-        return [gear.get_state() for gear in self.gears]
-
-class Gear:
-    """
-    Represents a single gear in the Kaleidoscope Engine, capable of
-    transforming data in unique ways.
-    """
-    def __init__(self):
-        self.rotation = 0
-        self.transformation_matrix = self._initialize_transformation_matrix()
-
-    def _initialize_transformation_matrix(self) -> np.ndarray:
-        """
-        Initializes a transformation matrix with random values.
-
-        Returns:
-            np.ndarray: A 2x2 transformation matrix.
-        """
-        return np.random.rand(2, 2)
-
-    def process(self, data: Any) -> Any:
-        """
-        Transforms the input data based on the gear's current state.
-
-        Args:
-            data: The input data to be transformed.
-
-        Returns:
-            The transformed data.
-        """
-        self.rotate()
-
-        if isinstance(data, list):
-            transformed_data = [self._transform_value(item) for item in data]
-        elif isinstance(data, dict):
-            transformed_data = {k: self._transform_value(v) for k, v in data.items()}
-        else:
-            transformed_data = self._transform_value(data)
-
-        return transformed_data
-
-    def _transform_value(self, value: Any) -> Any:
-        """
-        Applies a transformation to a single data value.
-
-        Args:
-            value: The value to be transformed.
-
-        Returns:
-            The transformed value.
-        """
-        if isinstance(value, (int, float)):
-            # Apply a simple transformation for numerical values
-            return value * np.random.uniform(0.8, 1.2)
-        elif isinstance(value, str):
-            # Reverse the string as a basic transformation for text
-            return value[::-1]
-        else:
-            return value  # Return unchanged if not a supported type
-
-    def rotate(self):
-        """
-        Rotates the gear, changing its transformation behavior.
-        """
-        self.rotation = (self.rotation + np.random.randint(1, 46)) % 360
-
-    def get_state(self) -> Dict[str, Any]:
-        """
-        Returns the current state of the gear.
-
-        Returns:
-            dict: A dictionary containing the gear's rotation and transformation matrix.
-        """
-        return {
-            'rotation': self.rotation,
-            'transformation_matrix': self.transformation_matrix.tolist()
-        }
+def _identify_topics(self, sentences: List[List[str]], num_topics: int = 3) -> List[List[str]]:
+    co_occ = defaultdict(lambda: defaultdict(int))
+    for sent in sentences:
+        for i in range(len(sent)):
+            for j in range(i+1, len(sent)):
+                w1, w2 = sorted([sent[i], sent[j]])
+                co_occ[w1][w2] += 1
+    words = list(set(w for sent in sentences for w in sent))
+    matrix = np.zeros((len(words), len(words)))
+    w2idx = {w: i for i, w in enumerate(words)}
+    for w1 in co_occ:
+        for w2 in co_occ[w1]:
+            matrix[w2idx[w1], w2idx[w2]] = co_occ[w1][w2]
+    U, S, Vt = np.linalg.svd(matrix, full_matrices=False)
+    topics = [[] for _ in range(num_topics)]
+    for i in range(len(words)):
+        topic_idx = np.argmax(np.abs(U[i, :num_topics]))
+        topics[topic_idx].append(words[i])
+    return topics
 

@@ -1,2 +1,1 @@
-for (const r of rows.slice(0, 15)) {
-const tr = document.createElement("tr");
+guard let baseURL = config.baseURL else {

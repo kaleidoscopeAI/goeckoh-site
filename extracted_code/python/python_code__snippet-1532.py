@@ -1,42 +1,38 @@
-class MetadataFile:
-    """Information about a core metadata file associated with a distribution."""
+"""A renderable that fills the terminal screen and crops excess.
 
-    hashes: Optional[Dict[str, str]]
+Args:
+    renderable (RenderableType): Child renderable.
+    style (StyleType, optional): Optional background style. Defaults to None.
+"""
 
-    def __post_init__(self) -> None:
-        if self.hashes is not None:
-            assert all(name in _SUPPORTED_HASHES for name in self.hashes)
+renderable: "RenderableType"
 
+def __init__(
+    self,
+    *renderables: "RenderableType",
+    style: Optional[StyleType] = None,
+    application_mode: bool = False,
+) -> None:
+    from pip._vendor.rich.console import Group
 
-def supported_hashes(hashes: Optional[Dict[str, str]]) -> Optional[Dict[str, str]]:
-    # Remove any unsupported hash types from the mapping. If this leaves no
-    # supported hashes, return None
-    if hashes is None:
-        return None
-    hashes = {n: v for n, v in hashes.items() if n in _SUPPORTED_HASHES}
-    if not hashes:
-        return None
-    return hashes
+    self.renderable = Group(*renderables)
+    self.style = style
+    self.application_mode = application_mode
 
-
-def _clean_url_path_part(part: str) -> str:
-    """
-    Clean a "part" of a URL path (i.e. after splitting on "@" characters).
-    """
-    # We unquote prior to quoting to make sure nothing is double quoted.
-    return urllib.parse.quote(urllib.parse.unquote(part))
-
-
-def _clean_file_url_path(part: str) -> str:
-    """
-    Clean the first part of a URL path that corresponds to a local
-    filesystem path (i.e. the first part after splitting on "@" characters).
-    """
-    # We unquote prior to quoting to make sure nothing is double quoted.
-    # Also, on Windows the path part might contain a drive letter which
-    # should not be quoted. On Linux where drive letters do not
-    # exist, the colon should be quoted. We rely on urllib.request
-    # to do the right thing here.
-    return urllib.request.pathname2url(urllib.request.url2pathname(part))
+def __rich_console__(
+    self, console: "Console", options: "ConsoleOptions"
+) -> "RenderResult":
+    width, height = options.size
+    style = console.get_style(self.style) if self.style else None
+    render_options = options.update(width=width, height=height)
+    lines = console.render_lines(
+        self.renderable or "", render_options, style=style, pad=True
+    )
+    lines = Segment.set_shape(lines, width, height, style=style)
+    new_line = Segment("\n\r") if self.application_mode else Segment.line()
+    for last, line in loop_last(lines):
+        yield from line
+        if not last:
+            yield new_line
 
 

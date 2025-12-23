@@ -1,1 +1,2 @@
-const PRESETS: Record<string, Partial<EVector>> = {
+for (let n = 1; n <= K; n++) {
+const j = dists[n]?.idx;

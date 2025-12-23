@@ -1,0 +1,1 @@
+classes: VoiceSample, VoiceProfile, VoiceCrystalConfig, VoiceCrystal

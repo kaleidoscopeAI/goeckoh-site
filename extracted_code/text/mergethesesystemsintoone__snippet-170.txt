@@ -1,8 +1,9 @@
-class DecompStrategy(Enum):
-    RADARE2 = "radare2"
-    GHIDRA = "ghidra"
-    RETDEC = "retdec"
-    IDA = "ida"
-    BINARY_NINJA = "binary_ninja"
-    CUSTOM = "custom"
+N = E.shape[0]
+if len(edges) == 0:
+    return {"H_bits": float(np.mean(1.0 - S) if N else 0.0), "S_field": 0.0, "L": 0.0}
+w, tau = weights_tension(E, edges, sigma=sigma)
+H_bits = float(np.mean(1.0 - S) if N else 0.0)
+S_field = float(np.mean(tau))
+L = float(np.sum(tau * tau))
+return {"H_bits": H_bits, "S_field": S_field, "L": L}
 

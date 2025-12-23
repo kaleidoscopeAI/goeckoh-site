@@ -1,12 +1,7 @@
-    class NullHandler(logging.Handler):
+    from typing import Literal
 
-        def handle(self, record):
-            pass
+    from pip._vendor.requests import PreparedRequest
+    from pip._vendor.urllib3 import HTTPResponse
 
-        def emit(self, record):
-            pass
-
-        def createLock(self):
-            self.lock = None
-
+    from pip._vendor.cachecontrol.cache import BaseCache
 

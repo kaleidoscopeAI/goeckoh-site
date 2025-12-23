@@ -1,0 +1,8 @@
+"""Virtual emotional states for enhanced decision-making"""
+NEUTRAL = "neutral"
+ALERT = "alert"        # Low resources or threats
+CURIOUS = "curious"    # New patterns or high confidence
+FOCUSED = "focused"    # Complex learning tasks
+SOCIAL = "social"      # Teaching or collaboration
+CONSERVATIVE = "conservative"  # Resource preservation
+

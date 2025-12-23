@@ -1,1 +1,2 @@
-+ for (let n = 0; n < neighbors.length; n++) {
++ const pending = { id, user, ts: Date.now() };
++ const file = path.join(W_DIR, `rollback_pending_${id}.json`);

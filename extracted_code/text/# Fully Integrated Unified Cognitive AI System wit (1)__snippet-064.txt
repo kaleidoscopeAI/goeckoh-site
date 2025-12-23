@@ -1,0 +1,1 @@
+- Use efficient spatial partitioning (your Grid module) more aggressively to limit node proximity searches.

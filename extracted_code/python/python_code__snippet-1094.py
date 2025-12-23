@@ -1,17 +1,4 @@
-    from pip._vendor import requests
-
-    from pip._vendor.cachecontrol.cache import BaseCache
-    from pip._vendor.cachecontrol.controller import CacheController
-    from pip._vendor.cachecontrol.heuristics import BaseHeuristic
-    from pip._vendor.cachecontrol.serialize import Serializer
-
-
-def CacheControl(
-    sess: requests.Session,
-    cache: BaseCache | None = None,
-    cache_etags: bool = True,
-    serializer: Serializer | None = None,
-    heuristic: BaseHeuristic | None = None,
-    controller_class: type[CacheController] | None = None,
-    adapter_class: type[CacheControlAdapter] | None = None,
-    cacheable_methods: Collection[str] | None = None,
+    from cosyvoice import CosyVoice
+    # Assuming load_optimus_ths_lib is available globally or within cosyvoice
+    # from some_custom_lib import load_optimus_ths_lib 
+    COSVOICE_AVAILABLE = True

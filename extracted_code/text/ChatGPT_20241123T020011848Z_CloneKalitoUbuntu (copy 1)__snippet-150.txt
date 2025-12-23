@@ -1,0 +1,3 @@
+dna_network = MirroredDNA()
+dna_network.visualize()
+

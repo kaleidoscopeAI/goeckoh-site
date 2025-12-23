@@ -1,0 +1,2 @@
+doc: Command-line entry point for the Echo speech companion + AGI stack.
+functions: build_parser, cmd_record, cmd_list, cmd_summary, cmd_run, cmd_simulate, cmd_dashboard, cmd_gui, cmd_strategies, cmd_comfort, cmd_record_voice_facet, cmd_show_voice_profile, main

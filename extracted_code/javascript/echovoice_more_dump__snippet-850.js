@@ -1,1 +1,1 @@
-export function setEVector(e: EmotionalVector) {
+const nbs = adjList[i].map((nb) => nodes[nb.j]);

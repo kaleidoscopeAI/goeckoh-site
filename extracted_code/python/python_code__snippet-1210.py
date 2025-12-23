@@ -1,2 +1,6 @@
-def make_install_req_from_editable(
-    link: Link, template: InstallRequirement
+from dataclasses import asdict, dataclass
+from typing import Any, Dict
+
+import numpy as np
+
+

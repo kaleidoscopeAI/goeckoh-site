@@ -1,0 +1,3 @@
+- Incorporate epistemic and aleatoric uncertainty decomposition.
+- Model curiosity not as monotone reduction of uncertainty but as a dynamic oscillation with homeostatic setpoints that prevent runaway excitation.
+

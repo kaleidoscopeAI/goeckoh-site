@@ -1,4 +1,1 @@
-const NODE_COUNT = 30;
-const VECTOR_SCALE = 2.0;
-const CONSTRUCT_SCALE = 0.5;
-const TIMESTEP_MS = 50;
+const color = val >= 0 ? `rgb(${Math.round(30 + 225*val)}, ${Math.round(200*val)}, ${Math.round(255 - 55*val)})` :

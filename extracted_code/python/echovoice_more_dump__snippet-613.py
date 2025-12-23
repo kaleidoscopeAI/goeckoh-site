@@ -1,2 +1,1 @@
-# Global function G
-def G(S, O_list, R, I):
+def _connect_super_nodes(self, sid):

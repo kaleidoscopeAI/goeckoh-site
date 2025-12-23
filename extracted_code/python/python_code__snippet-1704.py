@@ -1,24 +1,43 @@
-class QuantumState:
-    """Robust quantum state with pure NumPy implementation"""
-    hamiltonian: np.ndarray = field(default_factory=lambda: np.eye(3))
-    wavefunction: np.ndarray = field(default_factory=lambda: np.ones(3)/np.sqrt(3))
-    energy: float = 0.0
-    correlation_length: float = 5.0
-    criticality_index: float = 1.0
-    
-    def evolve_pure_numpy(self, dt: float = 0.01):
-        """Pure NumPy quantum evolution without scipy dependency"""
-        # Taylor series expansion of matrix exponential
-        # exp(-iHdt) ≈ I - iHdt - (Hdt)²/2 + i(Hdt)³/6
-        Hdt = -1j * self.hamiltonian * dt
-        
-        # First few terms of Taylor series - ensure complex dtype
-        evolution_matrix = np.eye(self.hamiltonian.shape[0], dtype=complex)
-        evolution_matrix += Hdt  # First order
-        evolution_matrix += Hdt @ Hdt / 2  # Second order
-        evolution_matrix += Hdt @ Hdt @ Hdt / 6  # Third order
-        
-        self.wavefunction = evolution_matrix @ self.wavefunction
-        self.wavefunction /= np.linalg.norm(self.wavefunction)
-        self.energy = np.real(self.wavefunction.conj().T @ self.hamiltonian @ self.wavefunction)
+hChainEngine = None
+hRootCertStore = CertOpenStore(CERT_STORE_PROV_MEMORY, 0, None, 0, None)
+try:
+    # Add custom CA certs to an in-memory cert store
+    for cert_bytes in custom_ca_certs:
+        CertAddEncodedCertificateToStore(
+            hRootCertStore,
+            X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
+            cert_bytes,
+            len(cert_bytes),
+            CERT_STORE_ADD_USE_EXISTING,
+            None,
+        )
+
+    # Create a custom cert chain engine which exclusively trusts
+    # certs from our hRootCertStore
+    cert_chain_engine_config = CERT_CHAIN_ENGINE_CONFIG()
+    cert_chain_engine_config.cbSize = sizeof(cert_chain_engine_config)
+    cert_chain_engine_config.hExclusiveRoot = hRootCertStore
+    pConfig = pointer(cert_chain_engine_config)
+    phChainEngine = pointer(HCERTCHAINENGINE())
+    CertCreateCertificateChainEngine(
+        pConfig,
+        phChainEngine,
+    )
+    hChainEngine = phChainEngine.contents
+
+    # Get and verify a cert chain using the custom chain engine
+    _get_and_verify_cert_chain(
+        ssl_context,
+        hChainEngine,
+        hIntermediateCertStore,
+        pPeerCertContext,
+        pChainPara,
+        server_hostname,
+        chain_flags,
+    )
+finally:
+    if hChainEngine:
+        CertFreeCertificateChainEngine(hChainEngine)
+    CertCloseStore(hRootCertStore, 0)
+
 

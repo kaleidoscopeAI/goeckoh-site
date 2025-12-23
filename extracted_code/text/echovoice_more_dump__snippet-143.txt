@@ -1,2 +1,1 @@
-# <REDACTED: potential secret detected>
-
+Tune by grid / Bayesian optimization using evaluation metrics in Section X.

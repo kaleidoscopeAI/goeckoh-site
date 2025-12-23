@@ -1,1 +1,1 @@
-val hal = KaleidoscopeApp.appContext?.let { DeviceHAL(it) }
+let resource_equity = calculate_entropy(&s.resource_distribution);

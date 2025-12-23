@@ -1,0 +1,23 @@
+  if not zip_path.exists():
+       return False, f"Missing: {zip_path}", 0
+  try:
+       with zipfile.ZipFile(zip_path, 'r') as z:
+           # prevent zip-slip
+           count = 0
+           for m in z.infolist():
+               # normalize target
+               target = dest_dir / m.filename
+               # resolve and ensure within dest_dir
+               if not str(target.resolve()).startswith(str(dest_dir.resolve())):
+                   continue # skip suspicious paths
+               if m.is_dir():
+                   target.mkdir(parents=True, exist_ok=True)
+               else:
+                   target.parent.mkdir(parents=True, exist_ok=True)
+                   with z.open(m) as src, open(target, 'wb') as dst:
+                       dst.write(src.read())
+               count += 1
+       return True, "ok", count
+  except Exception as e:
+       return False, repr(e), 0
+

@@ -1,2 +1,2 @@
-# <REDACTED: potential secret detected>
+Attach to: class Swarm: (assuming self.agents is a list of EvolutionaryAgent objects).
 

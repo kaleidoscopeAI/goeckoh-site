@@ -1,0 +1,1 @@
+still returning Neurocoherence metadata. Enable with GOECKOH_FAST_MODE=1. (backend/goeckoh/apps/real_unified_system.py)

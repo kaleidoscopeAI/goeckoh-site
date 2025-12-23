@@ -1,0 +1,15 @@
+T, L = frames.shape
+zcr = np.zeros(T, dtype=np.float32)
+for i in range(T):
+    frame = frames[i]
+    signs = np.sign(frame)
+    zero_idx = np.where(signs == 0)[0]
+    for idx in zero_idx:
+        if idx == 0:
+            signs[idx] = 1.0
+        else:
+            signs[idx] = signs[idx - 1]
+    zcr[i] = np.sum(np.abs(np.diff(signs))) / (2.0 * (L - 1))
+return zcr
+
+

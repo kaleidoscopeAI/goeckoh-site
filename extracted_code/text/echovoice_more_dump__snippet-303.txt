@@ -1,1 +1,4 @@
-export class ConstructLearner {
+Equation: s^{(r)} = s + ε^{(r)}; L^{(r)} = α E + β div + γ comp; ω_r = softmax(-β L); s' = Σ ω_r s^{(r)}.
+Transformation: Suggestions → rollouts → folded deltas.
+Coding: Sandboxed worker; return if accepted.
+

@@ -1,6 +1,30 @@
-def user_state_dir(
-    appname: str | None = None,
-    appauthor: str | None | Literal[False] = None,
-    version: str | None = None,
-    roaming: bool = False,  # noqa: FBT001, FBT002
-    ensure_exists: bool = False,  # noqa: FBT001, FBT002
+def main():
+    if len(sys.argv) < 3:
+        sys.exit("Needs args: hook_name, control_dir")
+    hook_name = sys.argv[1]
+    control_dir = sys.argv[2]
+    if hook_name not in HOOK_NAMES:
+        sys.exit("Unknown hook: %s" % hook_name)
+    hook = globals()[hook_name]
+
+    hook_input = read_json(pjoin(control_dir, 'input.json'))
+
+    json_out = {'unsupported': False, 'return_val': None}
+    try:
+        json_out['return_val'] = hook(**hook_input['kwargs'])
+    except BackendUnavailable as e:
+        json_out['no_backend'] = True
+        json_out['traceback'] = e.traceback
+    except BackendInvalid as e:
+        json_out['backend_invalid'] = True
+        json_out['backend_error'] = e.message
+    except GotUnsupportedOperation as e:
+        json_out['unsupported'] = True
+        json_out['traceback'] = e.traceback
+    except HookMissing as e:
+        json_out['hook_missing'] = True
+        json_out['missing_hook_name'] = e.hook_name or hook_name
+
+    write_json(json_out, pjoin(control_dir, 'output.json'), indent=2)
+
+

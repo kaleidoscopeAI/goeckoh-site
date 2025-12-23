@@ -1,1 +1,1 @@
-1. For cutting-edge research or practical system design, review and integrate Neural Contraction Metrics (Tsukamoto et al., 2021) and resources from Bullo’s lectures on contractions and neural nets.
+    - Illustrative examples from neuroscience and machine learning

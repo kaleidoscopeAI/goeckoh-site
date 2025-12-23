@@ -1,1 +1,1 @@
-let url = baseURL.appendingPathComponent("api/utterance")
+if let url = Bundle.main.url(forResource: "game", withExtension: "html") {

@@ -1,0 +1,3 @@
+- $S_k$ is the continuous cognitive state embedding vector,
+- $b_k$ is the one-bit curiosity activation flag.
+

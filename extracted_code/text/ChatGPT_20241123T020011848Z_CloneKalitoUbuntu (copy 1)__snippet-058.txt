@@ -1,2 +1,8 @@
-  - Incorporate object detection and labeling using pretrained models (e.g., TensorFlow, PyTorch).
-  - Annotate images based on nouns crawled.
+print(f"--- Cycle {cycle + 1} ---")
+environment.simulate()
+print(f"Total nodes: {len(environment.nodes)}")
+print(f"Total environment resources: {environment.resources}")
+# Visualize after each cycle
+visualize_network(environment.nodes)
+time.sleep(1)  # Pause for a second between cycles
+

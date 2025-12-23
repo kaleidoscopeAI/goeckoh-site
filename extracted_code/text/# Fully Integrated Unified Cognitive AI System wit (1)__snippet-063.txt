@@ -1,0 +1,1 @@
+- Instead of frequent small calls to ctypes C functions, batch data into arrays and call once per frame.

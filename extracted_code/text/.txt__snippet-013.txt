@@ -1,1 +1,1 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+Find the VoiceClone class and add this method inside it (keep speak as-is):

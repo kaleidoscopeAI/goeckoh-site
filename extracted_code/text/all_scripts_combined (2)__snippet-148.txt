@@ -1,0 +1,20 @@
+if not guidance_rows:
+    return BehaviorSummary()
+recent = guidance_rows[-window:]
+counts: Dict[str, int] = {}
+for row in recent:
+    event = (row.get("event") or "").strip()
+    if not event:
+        continue
+    counts[event] = counts.get(event, 0) + 1
+return BehaviorSummary(
+    total=sum(counts.values()),
+    anxious=counts.get("anxious", 0),
+    perseveration=counts.get("perseveration", 0),
+    high_energy=counts.get("high_energy", 0),
+    meltdown=counts.get("meltdown", 0),
+    caregiver_reset=counts.get("caregiver_reset", 0),
+    encouragement=counts.get("encouragement", 0),
+)
+
+

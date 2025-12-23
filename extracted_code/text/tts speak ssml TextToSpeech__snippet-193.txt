@@ -1,0 +1,7 @@
+      silenceDurationMs = sharedPrefs.getInt("silence_ms", 1200)
+      vadThreshold = sharedPrefs.getFloat("vad_threshold", 0.5f)
+      // Silero has no mode, but threshold tunes sensitivity
+  }
+
+  fun listenAndProcess(callback: (String, Prosody) -> Unit) {
+      if (ContextCompat.checkSelfPermission(context,

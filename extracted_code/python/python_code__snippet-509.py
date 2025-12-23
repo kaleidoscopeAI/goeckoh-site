@@ -1,13 +1,9 @@
-    import logging
-
-    from pip._vendor.tenacity import RetryCallState
-
-
-def after_nothing(retry_state: "RetryCallState") -> None:
-    """After call strategy that does nothing."""
-
-
-def after_log(
-    logger: "logging.Logger",
-    log_level: int,
-    sec_format: str = "%0.3f",
+def pprint(
+    _object: Any,
+    *,
+    console: Optional["Console"] = None,
+    indent_guides: bool = True,
+    max_length: Optional[int] = None,
+    max_string: Optional[int] = None,
+    max_depth: Optional[int] = None,
+    expand_all: bool = False,

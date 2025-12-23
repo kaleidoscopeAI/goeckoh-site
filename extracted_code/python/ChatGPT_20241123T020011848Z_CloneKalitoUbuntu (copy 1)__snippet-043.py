@@ -1,21 +1,49 @@
-import requests
-from bs4 import BeautifulSoup
+from core_node import Node
+from mirrored_network import MirroredNetwork
+from resource_manager import ResourceManager
+from data_crawler import WikiCrawler
+from dynamic_visualization import DynamicVisualization
+import time
 
-class WikiCrawler:
-    def __init__(self, topic):
-        self.topic = topic
-        self.base_url = "https://en.wikipedia.org/wiki/"
-        self.data = {}
+def main():
+    # Initialize components
+    nodes = [Node()]
+    mirrored_network = MirroredNetwork()
+    resource_manager = ResourceManager()
+    visualization = DynamicVisualization()
 
-    def fetch_data(self):
-        """Fetch and parse data from Wikipedia."""
-        try:
-            url = self.base_url + self.topic.replace(" ", "_")
-            response = requests.get(url)
-            soup = BeautifulSoup(response.content, "html.parser")
-            paragraphs = soup.find_all("p")
-            self.data = {f"Paragraph-{i}": p.get_text() for i, p in enumerate(paragraphs)}
-        except Exception as e:
-            print(f"Error fetching data: {e}")
-        return self.data
+    # Initialize crawler for testing
+    crawler = WikiCrawler("Artificial Intelligence")
+    data = crawler.fetch_data()
+
+    # Simulation parameters
+    epochs = 100
+    population = []
+    avg_maturity = []
+    avg_energy = []
+
+    # Run simulation
+    for epoch in range(epochs):
+        # Node learning and sharing
+        for node in nodes:
+            node.learn(data)
+            node.adapt()
+
+        if epoch % 10 == 0:
+            mirrored_network.simulate(10)
+
+        # Resource management
+        resource_manager.allocate(nodes)
+
+        # Metrics tracking
+        population.append(len(nodes))
+        avg_maturity.append(sum(node.maturity for node in nodes) / len(nodes))
+        avg_energy.append(sum(node.energy for node in nodes) / len(nodes))
+
+        # Visualization
+        visualization.update(list(range(epoch + 1)), population, avg_maturity, avg_energy)
+        time.sleep(0.1)
+
+if __name__ == "__main__":
+    main()
 

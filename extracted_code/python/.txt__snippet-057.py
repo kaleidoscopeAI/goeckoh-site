@@ -1,2 +1,1 @@
-class VoiceClone:
-def __init__(self, config: CompanionConfig) -> None:
+def run_flask():

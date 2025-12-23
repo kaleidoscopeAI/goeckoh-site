@@ -1,5 +1,5 @@
-Add detailed docstrings to every class method, explaining the mathematical formula or heuristic principle being applied (e.g., the PSO equation in EvolutionaryAgent.update).
+Relational Dynamics (Schrödinger Emergence): The evolution of the relational matrix is governed by the total Hamiltonian, from which the Schrödinger equation emerges as a special case for isolated systems.
 
-In the SwarmGraphOptimizer.find_optimal_paths method, the penalty logic is slightly obscured. Explicitly state the formula for path fitness in the code comments: Fitness=−Cost+β×Diversity Bonus. This ensures the objective function is meticulously accurate and transparent.
 
-These steps will elevate the CSO from a successful implementation to a perfect, elegant, and effective system that stands as a true complement to the QNP.
+
+

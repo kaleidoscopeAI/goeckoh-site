@@ -1,0 +1,4 @@
+"""Updates the interference pattern based on current state."""
+self.interference_pattern = np.outer(self.frequency, self.amplitude) * \
+                            np.exp(1j * self.phase.reshape(-1, 1))
+

@@ -1,0 +1,5 @@
+("request", ("please", "help", "need", "want", "can", "could", "assist", "support")),
+("question", ("what", "why", "how", "when", "where", "who", "?", "do", "is", "are")),
+("complaint", ("angry", "upset", "bad", "issue", "problem", "broke", "broken")),
+("gratitude", ("thanks", "thank", "appreciate", "grateful")),
+("greeting", ("hello", "hi", "hey", "morning", "afternoon")),

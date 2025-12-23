@@ -1,0 +1,22 @@
+"""Detect currently-running musl runtime version.
+
+This is done by checking the specified executable's dynamic linking
+information, and invoking the loader to parse its output for a version
+string. If the loader is musl, the output would be something like::
+
+    musl libc (x86_64)
+    Version 1.2.2
+    Dynamic Program Loader
+"""
+with contextlib.ExitStack() as stack:
+    try:
+        f = stack.enter_context(open(executable, "rb"))
+    except OSError:
+        return None
+    ld = _parse_ld_musl_from_elf(f)
+if not ld:
+    return None
+proc = subprocess.run([ld], stderr=subprocess.PIPE, universal_newlines=True)
+return _parse_musl_version(proc.stderr)
+
+

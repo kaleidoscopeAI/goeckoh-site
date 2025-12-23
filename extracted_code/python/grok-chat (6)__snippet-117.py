@@ -1,1 +1,0 @@
-...System integrated—HID emulates input for therapy sim (mouse/type for "interact"). DA allocates "resources" via sim scores. Visual from Three.js sim as text render (node positions/colors). Merged with exocortex: Mirror triggers HID "feedback", heart uses DA for node alloc, core reasons with visual "snapshot". Pure Python—built-ins, eternal.

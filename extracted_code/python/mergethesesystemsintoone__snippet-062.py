@@ -1,5 +1,5 @@
-def ingest(url: str):
-    title, text = fetch_url(url)
-    doc_id = orch.mem.add_doc_with_embed(url, title, text)
-    return {"ok": True, "doc_id": doc_id}
+import os, sys, subprocess, venv, json, time, asyncio, math, sqlite3, base64, traceback
+from dataclasses import dataclass
+from typing import Dict, Any, List, Tuple
+from pathlib import Path
 

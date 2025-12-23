@@ -1,0 +1,2 @@
+echo = UltimateEcho()
+echo.start()

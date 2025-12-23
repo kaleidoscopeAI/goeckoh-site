@@ -1,1 +1,1 @@
-def _plot_data_flow(self, cognitive_machine):
+async def continuous_crawling(self, focus_topics=None):

@@ -1,1 +1,2 @@
-for (let k = 0; k < blockSizes.D; k++) y2[i][offset + k] += w * (v2[j][offset + k] - v2[i][offset + k]);
+// const scene = new THREE.Scene();
+// const particles = new THREE.Points(...); // Create 18000 particles

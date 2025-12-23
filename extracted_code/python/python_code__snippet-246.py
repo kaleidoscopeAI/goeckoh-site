@@ -1,113 +1,44 @@
-class EachItem(railroad.Group):
-    """
-    Custom railroad item to compose a:
-    - Group containing a
-      - OneOrMore containing a
-        - Choice of the elements in the Each
-    with the group label indicating that all must be matched
-    """
+def _mac_arch(arch: str, is_32bit: bool = _32_BIT_INTERPRETER) -> str:
+    if not is_32bit:
+        return arch
 
-    all_label = "[ALL]"
+    if arch.startswith("ppc"):
+        return "ppc"
 
-    def __init__(self, *items):
-        choice_item = railroad.Choice(len(items) - 1, *items)
-        one_or_more_item = railroad.OneOrMore(item=choice_item)
-        super().__init__(one_or_more_item, label=self.all_label)
+    return "i386"
 
 
-class AnnotatedItem(railroad.Group):
-    """
-    Simple subclass of Group that creates an annotation label
-    """
+def _mac_binary_formats(version: MacVersion, cpu_arch: str) -> List[str]:
+    formats = [cpu_arch]
+    if cpu_arch == "x86_64":
+        if version < (10, 4):
+            return []
+        formats.extend(["intel", "fat64", "fat32"])
 
-    def __init__(self, label: str, item):
-        super().__init__(item=item, label="[{}]".format(label) if label else label)
+    elif cpu_arch == "i386":
+        if version < (10, 4):
+            return []
+        formats.extend(["intel", "fat32", "fat"])
 
+    elif cpu_arch == "ppc64":
+        # TODO: Need to care about 32-bit PPC for ppc64 through 10.2?
+        if version > (10, 5) or version < (10, 4):
+            return []
+        formats.append("fat64")
 
-class EditablePartial(Generic[T]):
-    """
-    Acts like a functools.partial, but can be edited. In other words, it represents a type that hasn't yet been
-    constructed.
-    """
+    elif cpu_arch == "ppc":
+        if version > (10, 6):
+            return []
+        formats.extend(["fat32", "fat"])
 
-    # We need this here because the railroad constructors actually transform the data, so can't be called until the
-    # entire tree is assembled
+    if cpu_arch in {"arm64", "x86_64"}:
+        formats.append("universal2")
 
-    def __init__(self, func: Callable[..., T], args: list, kwargs: dict):
-        self.func = func
-        self.args = args
-        self.kwargs = kwargs
+    if cpu_arch in {"x86_64", "i386", "ppc64", "ppc", "intel"}:
+        formats.append("universal")
 
-    @classmethod
-    def from_call(cls, func: Callable[..., T], *args, **kwargs) -> "EditablePartial[T]":
-        """
-        If you call this function in the same way that you would call the constructor, it will store the arguments
-        as you expect. For example EditablePartial.from_call(Fraction, 1, 3)() == Fraction(1, 3)
-        """
-        return EditablePartial(func=func, args=list(args), kwargs=kwargs)
-
-    @property
-    def name(self):
-        return self.kwargs["name"]
-
-    def __call__(self) -> T:
-        """
-        Evaluate the partial and return the result
-        """
-        args = self.args.copy()
-        kwargs = self.kwargs.copy()
-
-        # This is a helpful hack to allow you to specify varargs parameters (e.g. *args) as keyword args (e.g.
-        # args=['list', 'of', 'things'])
-        arg_spec = inspect.getfullargspec(self.func)
-        if arg_spec.varargs in self.kwargs:
-            args += kwargs.pop(arg_spec.varargs)
-
-        return self.func(*args, **kwargs)
+    return formats
 
 
-def railroad_to_html(diagrams: List[NamedDiagram], embed=False, **kwargs) -> str:
-    """
-    Given a list of NamedDiagram, produce a single HTML string that visualises those diagrams
-    :params kwargs: kwargs to be passed in to the template
-    """
-    data = []
-    for diagram in diagrams:
-        if diagram.diagram is None:
-            continue
-        io = StringIO()
-        try:
-            css = kwargs.get('css')
-            diagram.diagram.writeStandalone(io.write, css=css)
-        except AttributeError:
-            diagram.diagram.writeSvg(io.write)
-        title = diagram.name
-        if diagram.index == 0:
-            title += " (root)"
-        data.append({"title": title, "text": "", "svg": io.getvalue()})
-
-    return template.render(diagrams=data, embed=embed, **kwargs)
-
-
-def resolve_partial(partial: "EditablePartial[T]") -> T:
-    """
-    Recursively resolves a collection of Partials into whatever type they are
-    """
-    if isinstance(partial, EditablePartial):
-        partial.args = resolve_partial(partial.args)
-        partial.kwargs = resolve_partial(partial.kwargs)
-        return partial()
-    elif isinstance(partial, list):
-        return [resolve_partial(x) for x in partial]
-    elif isinstance(partial, dict):
-        return {key: resolve_partial(x) for key, x in partial.items()}
-    else:
-        return partial
-
-
-def to_railroad(
-    element: pyparsing.ParserElement,
-    diagram_kwargs: typing.Optional[dict] = None,
-    vertical: int = 3,
-    show_results_names: bool = False,
-    show_groups: bool = False,
+def mac_platforms(
+    version: Optional[MacVersion] = None, arch: Optional[str] = None

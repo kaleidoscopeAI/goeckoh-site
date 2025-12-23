@@ -1,1 +1,2 @@
-- \( L = D - A \): Laplacian (D degree matrix, A adjacency from tensions).
+package com.kaleidoscope.body
+import kotlin.math.ln

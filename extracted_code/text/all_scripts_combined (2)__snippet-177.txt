@@ -1,0 +1,4 @@
+python build_and_package.py --platform windows
+python build_and_package.py --platform macos
+python build_and_package.py --platform linux
+python build_and_package.py --platform all

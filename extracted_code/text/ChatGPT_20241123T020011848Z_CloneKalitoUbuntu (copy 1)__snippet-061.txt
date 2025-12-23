@@ -1,2 +1,7 @@
-so we are using the 'hotdog' as building data?
+print(f"--- Cycle {cycle + 1} ---")
+environment.simulate()
+print(f"Total nodes: {len(environment.nodes)}")
+print(f"Total environment resources: {environment.resources}")
+visualize_network(environment.nodes)
+time.sleep(1)
 

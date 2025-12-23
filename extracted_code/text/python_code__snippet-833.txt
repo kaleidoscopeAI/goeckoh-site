@@ -1,0 +1,5 @@
+if unicodedata.category(label[0])[0] == 'M':
+    raise IDNAError('Label begins with an illegal combining character')
+return True
+
+

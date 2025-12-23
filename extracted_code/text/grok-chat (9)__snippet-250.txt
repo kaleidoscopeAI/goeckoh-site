@@ -1,0 +1,2 @@
+zsh:1: permission denied: ../.run/backend.log
+

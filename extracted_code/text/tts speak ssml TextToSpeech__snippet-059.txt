@@ -1,0 +1,10 @@
+                  gatedAGI.executeBasedOnGCL(gcl, correctedText)
+              }
+          }
+      }
+  }
+
+  override fun onDestroy() {
+      tts.shutdown()
+      super.onDestroy()
+  }

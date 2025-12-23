@@ -1,2 +1,11 @@
-    - Nodes with depleted energy can go into a low-energy state, allowing them to retain learned knowledge while awaiting "recharge" from resource-sharing nodes.
-    - Use an
+Requirement already satisfied: kiwisolver>=1.3.1 in /home/ai/.local/lib/python3.10/site-packages (from matplotlib) (1.4.7)
+Requirement already satisfied: pillow>=8 in /usr/lib/python3/dist-packages (from matplotlib) (9.0.1)
+Requirement already satisfied: pyparsing>=2.3.1 in /usr/lib/python3/dist-packages (from matplotlib) (2.4.7)
+Requirement already satisfied: cycler>=0.10 in /home/ai/.local/lib/python3.10/site-packages (from matplotlib) (0.12.1)
+Requirement already satisfied: packaging>=20.0 in /home/ai/.local/lib/python3.10/site-packages (from matplotlib) (24.2)
+Requirement already satisfied: python-dateutil>=2.7 in /usr/lib/python3/dist-packages (from matplotlib) (2.8.1)
+Requirement already satisfied: contourpy>=1.0.1 in /home/ai/.local/lib/python3.10/site-packages (from matplotlib) (1.3.1)
+Requirement already satisfied: fonttools>=4.22.0 in /home/ai/.local/lib/python3.10/site-packages (from matplotlib) (4.55.0)
+Requirement already satisfied: scipy>=1.6.0 in /home/ai/.local/lib/python3.10/site-packages (from scikit-learn) (1.14.1)
+Requirement already satisfied: joblib>=1.2.0 in /home/ai/.local/lib/python3.10/site-packages (from scikit-learn) (1.4.2)
+Requirement already satisfied: threadpoolctl>=3.1.0 in /home/ai/.local/lib/python3.10/site-packages (from scikit-learn) (3.5.0)

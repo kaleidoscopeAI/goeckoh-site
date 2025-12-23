@@ -1,0 +1,3 @@
+tempdir_kinds.BUILD_ENV,
+tempdir_kinds.EPHEM_WHEEL_CACHE,
+tempdir_kinds.REQ_BUILD,

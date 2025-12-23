@@ -1,1 +1,7 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+return {
+  nodes: Array.from(this.nodes.values()).map(n => ({
+    id: n.id, pos: n.pos, vel: n.vel, E: n.energy, K: n.K, A: n.A, sem_head: n.sem.slice(0, 4), repProb: n.repProb
+  })),
+  edges: this.edges.map(e => [e.a, e.b, {k: e.k, L: e.L}]),
+  stats: { totalEnergy: Array.from(this.nodes.values()).reduce((sum, n) => sum + n.energy, 0) }
+};

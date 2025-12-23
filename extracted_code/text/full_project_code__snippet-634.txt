@@ -1,0 +1,6 @@
+"""(DEPRECATED - use :class:`DelimitedList` class)"""
+return DelimitedList(
+    expr, delim, combine, min, max, allow_trailing_delim=allow_trailing_delim
+)
+
+

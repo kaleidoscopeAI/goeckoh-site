@@ -1,2 +1,1 @@
-- **Kullback-Leibler Divergence** quantifies the deviation of a learned distribution \$ P \$ from a reference \$ Q \$:
-
+    - and \$ Performance_{ij} \$ is a scalar signal quantifying the usefulness of routing from engine \$ i \$ to \$ j \$.

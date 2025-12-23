@@ -1,1 +1,1 @@
-async def initialize_system(self):
+- **Memory Queries**: Search and retrieval from crystalline memory

@@ -1,1 +1,0 @@
-- Gradients and performance metrics are passed externally (computed from losses or rewards).

@@ -1,0 +1,8 @@
+  
+      ,    "Logical Processors":"the core implementation now includes a set of modules and placeholder rules that simulate decision, value or risk assessment or even generate strategies.",
+        "Adaptable Learning": " The design facilitates self learning and adaptability, providing core aspects to test and fine tune. has built in mechanisms that will evolve over time to further provide meaningful change, based on input datasets.",
+          "Iterative Approach": "All modules were built out with emphasis on clear feedback loops, allowing the model to enhance over cycles, simulating learning and optimization.",
+
+        "Testability": "Each module contains metrics of performance allowing detailed debug logs to observe component behaviours "
+
+]

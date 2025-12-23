@@ -1,1 +1,1 @@
-HIL.class implements the permitted control primitives using:
+2. If using the native crate, install the NDK and build the native library. The crate uses `jni` and compiles to a CDYLIB.

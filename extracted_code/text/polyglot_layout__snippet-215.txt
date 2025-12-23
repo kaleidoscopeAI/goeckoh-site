@@ -1,0 +1,2 @@
+ Avatar agent (Python) → seed_crystal_avatar_agent.py
+

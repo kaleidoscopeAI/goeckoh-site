@@ -1,0 +1,3 @@
+                  val shortFrame = ShortArray(frameSize)
+                  for (i in 0 until frameSize) {
+                      shortFrame[i] = (frame[i] *

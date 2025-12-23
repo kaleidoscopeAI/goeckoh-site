@@ -1,0 +1,12 @@
+"""A lightweight snapshot of the AGI state for display purposes."""
+
+freq_GHz: float = 0.0
+temp_C: float = 0.0
+DA: float = 0.0
+Ser: float = 0.0
+NE: float = 0.0
+coherence: float = 0.0
+awareness: float = 0.0
+phi_proxy: float = 0.0
+
+

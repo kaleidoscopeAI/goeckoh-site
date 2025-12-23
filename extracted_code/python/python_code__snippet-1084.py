@@ -1,3 +1,8 @@
-from pip._vendor.cachecontrol.caches.file_cache import FileCache, SeparateBodyFileCache
-from pip._vendor.cachecontrol.caches.redis_cache import RedisCache
-
+from pip._internal.exceptions import (
+    BadCommand,
+    CommandError,
+    DiagnosticPipError,
+    InstallationError,
+    NetworkConnectionError,
+    PreviousBuildDirError,
+    UninstallationError,

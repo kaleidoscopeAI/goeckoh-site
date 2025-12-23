@@ -1,0 +1,7 @@
+168          self._last_gcl: float = 0.8
+169 +        self._heart_valence: float = 0.0
+170 +        self._heart_arousal: float = 0.0
+171 +        self._heart_coherence: float = 0.8
+172          self._gcl_lockout: float = float(os.environ.get("GOECKOH_GCL_LO
+     CKOUT", "0.5"))
+

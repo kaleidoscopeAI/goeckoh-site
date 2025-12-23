@@ -1,1 +1,3 @@
-Ingestion is governed by the **selection function** \(\text{Sel}_i\), which dynamically extracts relevant inputs from the global state \( S_k \), prior
+Determined by entropy thresholds from routing R.
+#### 4. **Clusters: Ingestion of Aggregated Patterns from Supernodes**
+Clusters (in the Cube) ingest outputs from supernodes or node groups, determined by graph Laplacian minimization and stress propagation to

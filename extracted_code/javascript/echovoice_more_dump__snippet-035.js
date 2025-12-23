@@ -1,5 +1,2 @@
-let qs: Vec<Qubit> = buf.into_iter().map(|a| Qubit{amp: a}).collect();
-let reg_opt = CPU_REGISTRY.lock().unwrap().get(&(core_id as usize)).cloned();
-if let Some(mut core) = reg_opt {
-let qreg = QuantumRegister { qubits: qs.clone(), hw_map: core.msr_mapping.clone() };
-let _ = core.apply_quantum_state(&qreg);
+pub fn compute_state_commitment(state: &[f32]) -> Vec<u8> {
+let mut hasher = Sha256::new();

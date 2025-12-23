@@ -1,1 +1,0 @@
-    - and \$ Performance_{ij} \$ is a scalar signal quantifying the usefulness of routing from engine \$ i \$ to \$ j \$.

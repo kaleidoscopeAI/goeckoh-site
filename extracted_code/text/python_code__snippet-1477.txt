@@ -1,0 +1,5 @@
+filename: str,
+session: PipSession,
+finder: Optional["PackageFinder"] = None,
+options: Optional[optparse.Values] = None,
+constraint: bool = False,

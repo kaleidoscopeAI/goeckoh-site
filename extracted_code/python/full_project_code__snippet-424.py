@@ -1,12 +1,8 @@
-from .api import delete, get, head, options, patch, post, put, request
-from .exceptions import (
-    ConnectionError,
-    ConnectTimeout,
-    FileModeWarning,
-    HTTPError,
-    JSONDecodeError,
-    ReadTimeout,
-    RequestException,
-    Timeout,
-    TooManyRedirects,
-    URLRequired,
+    >>> import requests
+    >>> requests.codes['temporary_redirect']
+    307
+    >>> requests.codes.teapot
+    418
+    >>> requests.codes['\o/']
+    200
+

@@ -1,26 +1,8 @@
-    # function does on Python versions after 3.2. It sets the ``__wrapped__``
-    # attribute on ``wrapper`` object and it doesn't raise an error if any of
-    # the attributes mentioned in ``assigned`` and ``updated`` are missing on
-    # ``wrapped`` object.
-    def _update_wrapper(wrapper, wrapped,
-                        assigned=functools.WRAPPER_ASSIGNMENTS,
-                        updated=functools.WRAPPER_UPDATES):
-        for attr in assigned:
-            try:
-                value = getattr(wrapped, attr)
-            except AttributeError:
-                continue
-            else:
-                setattr(wrapper, attr, value)
-        for attr in updated:
-            getattr(wrapper, attr).update(getattr(wrapped, attr, {}))
-        wrapper.__wrapped__ = wrapped
-        return wrapper
-    _update_wrapper.__doc__ = functools.update_wrapper.__doc__
-
-    def wraps(wrapped, assigned=functools.WRAPPER_ASSIGNMENTS,
-              updated=functools.WRAPPER_UPDATES):
-        return functools.partial(_update_wrapper, wrapped=wrapped,
-                                 assigned=assigned, updated=updated)
-    wraps.__doc__ = functools.wraps.__doc__
-
+from pip._internal.req.req_file import parse_requirements
+from pip._internal.req.req_install import InstallRequirement
+from pip._internal.resolution.base import BaseResolver
+from pip._internal.self_outdated_check import pip_self_version_check
+from pip._internal.utils.temp_dir import (
+    TempDirectory,
+    TempDirectoryTypeRegistry,
+    tempdir_kinds,

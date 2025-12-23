@@ -1,1 +1,1 @@
-const h = clamp(newFeat.hnr ?? feat.hnr, -20, 40);
+const canWorklet = !!audioCtx.audioWorklet;

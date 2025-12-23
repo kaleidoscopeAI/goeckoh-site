@@ -1,2 +1,15 @@
-  - Enhance the shared knowledge pool with graph-based learning (e.g., using NetworkX) for structured relationships between patterns.
+new_nodes = []
+for x, y in nodes:
+    # Create two new nodes for each existing node, with slight random offsets
+    new_x1, new_y1 = x + random.uniform(-offset_range, offset_range), y + random.uniform(-offset_range, offset_range)
+    new_x2, new_y2 = x + random.uniform(-offset_range, offset_range), y + random.uniform(-offset_range, offset_range)
+
+    # Append new nodes to the list
+    new_nodes.extend([(new_x1, new_y1), (new_x2, new_y2)])
+
+    # Plot the original node
+    plt.plot(x, y, 'o', color="blue", markersize=10 - _)
+
+# Update the list of nodes
+nodes.extend(new_nodes)
 

@@ -1,0 +1,4 @@
+  - Validation card now shows p95 latency vs target (default target =
+    GOECKOH_LATENCY_P95_TARGET or mirror latency budget) and sample count.
+  - Telemetry CSV export remains; UI stays light and professional.
+

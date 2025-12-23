@@ -1,1 +1,1 @@
-async def batch_ingest(self) -> List[Dict]:
+async def startup():

@@ -1,0 +1,4 @@
+current_umask,
+is_within_directory,
+set_extracted_file_to_default_mode_plus_executable,
+zip_item_is_executable,

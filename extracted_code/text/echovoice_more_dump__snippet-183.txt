@@ -1,1 +1,6 @@
-class InteractiveQuerySystem:
+Thought Engine Dynamics: The differential equations governing thought (e.g., Perspective, Speculation) are driven by the bidirectional weights, meaning the AI "thinks" using relational certainty, not just raw data.
+
+
+
+
+

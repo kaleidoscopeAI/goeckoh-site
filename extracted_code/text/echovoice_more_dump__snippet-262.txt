@@ -1,1 +1,1 @@
-1. npm install firebase (or firebase-admin + adapt init if using admin SDK).
+      Metrics such as price, volume, and changePercent are stored within the observable metrics component of the 

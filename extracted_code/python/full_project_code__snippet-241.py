@@ -1,122 +1,113 @@
-def looks_like_xml(text):
-    """Check if a doctype exists or if we have some tags."""
-    if xml_decl_re.match(text):
-        return True
-    key = hash(text)
-    try:
-        return _looks_like_xml_cache[key]
-    except KeyError:
-        m = doctype_lookup_re.search(text)
-        if m is not None:
-            return True
-        rv = tag_re.search(text[:1000]) is not None
-        _looks_like_xml_cache[key] = rv
-        return rv
-
-
-def surrogatepair(c):
-    """Given a unicode character code with length greater than 16 bits,
-    return the two 16 bit surrogate pair.
+class EachItem(railroad.Group):
     """
-    # From example D28 of:
-    # http://www.unicode.org/book/ch03.pdf
-    return (0xd7c0 + (c >> 10), (0xdc00 + (c & 0x3ff)))
-
-
-def format_lines(var_name, seq, raw=False, indent_level=0):
-    """Formats a sequence of strings for output."""
-    lines = []
-    base_indent = ' ' * indent_level * 4
-    inner_indent = ' ' * (indent_level + 1) * 4
-    lines.append(base_indent + var_name + ' = (')
-    if raw:
-        # These should be preformatted reprs of, say, tuples.
-        for i in seq:
-            lines.append(inner_indent + i + ',')
-    else:
-        for i in seq:
-            # Force use of single quotes
-            r = repr(i + '"')
-            lines.append(inner_indent + r[:-2] + r[-1] + ',')
-    lines.append(base_indent + ')')
-    return '\n'.join(lines)
-
-
-def duplicates_removed(it, already_seen=()):
+    Custom railroad item to compose a:
+    - Group containing a
+      - OneOrMore containing a
+        - Choice of the elements in the Each
+    with the group label indicating that all must be matched
     """
-    Returns a list with duplicates removed from the iterable `it`.
 
-    Order is preserved.
+    all_label = "[ALL]"
+
+    def __init__(self, *items):
+        choice_item = railroad.Choice(len(items) - 1, *items)
+        one_or_more_item = railroad.OneOrMore(item=choice_item)
+        super().__init__(one_or_more_item, label=self.all_label)
+
+
+class AnnotatedItem(railroad.Group):
     """
-    lst = []
-    seen = set()
-    for i in it:
-        if i in seen or i in already_seen:
+    Simple subclass of Group that creates an annotation label
+    """
+
+    def __init__(self, label: str, item):
+        super().__init__(item=item, label="[{}]".format(label) if label else label)
+
+
+class EditablePartial(Generic[T]):
+    """
+    Acts like a functools.partial, but can be edited. In other words, it represents a type that hasn't yet been
+    constructed.
+    """
+
+    # We need this here because the railroad constructors actually transform the data, so can't be called until the
+    # entire tree is assembled
+
+    def __init__(self, func: Callable[..., T], args: list, kwargs: dict):
+        self.func = func
+        self.args = args
+        self.kwargs = kwargs
+
+    @classmethod
+    def from_call(cls, func: Callable[..., T], *args, **kwargs) -> "EditablePartial[T]":
+        """
+        If you call this function in the same way that you would call the constructor, it will store the arguments
+        as you expect. For example EditablePartial.from_call(Fraction, 1, 3)() == Fraction(1, 3)
+        """
+        return EditablePartial(func=func, args=list(args), kwargs=kwargs)
+
+    @property
+    def name(self):
+        return self.kwargs["name"]
+
+    def __call__(self) -> T:
+        """
+        Evaluate the partial and return the result
+        """
+        args = self.args.copy()
+        kwargs = self.kwargs.copy()
+
+        # This is a helpful hack to allow you to specify varargs parameters (e.g. *args) as keyword args (e.g.
+        # args=['list', 'of', 'things'])
+        arg_spec = inspect.getfullargspec(self.func)
+        if arg_spec.varargs in self.kwargs:
+            args += kwargs.pop(arg_spec.varargs)
+
+        return self.func(*args, **kwargs)
+
+
+def railroad_to_html(diagrams: List[NamedDiagram], embed=False, **kwargs) -> str:
+    """
+    Given a list of NamedDiagram, produce a single HTML string that visualises those diagrams
+    :params kwargs: kwargs to be passed in to the template
+    """
+    data = []
+    for diagram in diagrams:
+        if diagram.diagram is None:
             continue
-        lst.append(i)
-        seen.add(i)
-    return lst
-
-
-class Future:
-    """Generic class to defer some work.
-
-    Handled specially in RegexLexerMeta, to support regex string construction at
-    first use.
-    """
-    def get(self):
-        raise NotImplementedError
-
-
-def guess_decode(text):
-    """Decode *text* with guessed encoding.
-
-    First try UTF-8; this should fail for non-UTF-8 encodings.
-    Then try the preferred locale encoding.
-    Fall back to latin-1, which always works.
-    """
-    try:
-        text = text.decode('utf-8')
-        return text, 'utf-8'
-    except UnicodeDecodeError:
+        io = StringIO()
         try:
-            import locale
-            prefencoding = locale.getpreferredencoding()
-            text = text.decode()
-            return text, prefencoding
-        except (UnicodeDecodeError, LookupError):
-            text = text.decode('latin1')
-            return text, 'latin1'
+            css = kwargs.get('css')
+            diagram.diagram.writeStandalone(io.write, css=css)
+        except AttributeError:
+            diagram.diagram.writeSvg(io.write)
+        title = diagram.name
+        if diagram.index == 0:
+            title += " (root)"
+        data.append({"title": title, "text": "", "svg": io.getvalue()})
+
+    return template.render(diagrams=data, embed=embed, **kwargs)
 
 
-def guess_decode_from_terminal(text, term):
-    """Decode *text* coming from terminal *term*.
-
-    First try the terminal encoding, if given.
-    Then try UTF-8.  Then try the preferred locale encoding.
-    Fall back to latin-1, which always works.
+def resolve_partial(partial: "EditablePartial[T]") -> T:
     """
-    if getattr(term, 'encoding', None):
-        try:
-            text = text.decode(term.encoding)
-        except UnicodeDecodeError:
-            pass
-        else:
-            return text, term.encoding
-    return guess_decode(text)
+    Recursively resolves a collection of Partials into whatever type they are
+    """
+    if isinstance(partial, EditablePartial):
+        partial.args = resolve_partial(partial.args)
+        partial.kwargs = resolve_partial(partial.kwargs)
+        return partial()
+    elif isinstance(partial, list):
+        return [resolve_partial(x) for x in partial]
+    elif isinstance(partial, dict):
+        return {key: resolve_partial(x) for key, x in partial.items()}
+    else:
+        return partial
 
 
-def terminal_encoding(term):
-    """Return our best guess of encoding for the given *term*."""
-    if getattr(term, 'encoding', None):
-        return term.encoding
-    import locale
-    return locale.getpreferredencoding()
-
-
-class UnclosingTextIOWrapper(TextIOWrapper):
-    # Don't close underlying buffer on destruction.
-    def close(self):
-        self.flush()
-
-
+def to_railroad(
+    element: pyparsing.ParserElement,
+    diagram_kwargs: typing.Optional[dict] = None,
+    vertical: int = 3,
+    show_results_names: bool = False,
+    show_groups: bool = False,

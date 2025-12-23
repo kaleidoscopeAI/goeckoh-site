@@ -1,17 +1,15 @@
-    from pip._vendor.tenacity import RetryCallState
-
-
-class retry_base(abc.ABC):
-    """Abstract base class for retry strategies."""
-
-    @abc.abstractmethod
-    def __call__(self, retry_state: "RetryCallState") -> bool:
-        pass
-
-    def __and__(self, other: "retry_base") -> "retry_all":
-        return retry_all(self, other)
-
-    def __or__(self, other: "retry_base") -> "retry_any":
-        return retry_any(self, other)
-
-
+import contextlib
+import ctypes
+import platform
+import ssl
+import typing
+from ctypes import (
+    CDLL,
+    POINTER,
+    c_bool,
+    c_char_p,
+    c_int32,
+    c_long,
+    c_uint32,
+    c_ulong,
+    c_void_p,

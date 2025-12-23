@@ -1,1 +1,0 @@
-Traditional AI voice assistants (Siri, ChatGPT) operate on a "Turn-Taking" cadence with latencies ranging from 1000ms to 3000ms. This delay fundamentally categorizes the AI as "Other," preventing any therapeutic integration into the user's cognitive loop. To bridge this gap, an AI system must operate simultaneously with the user, functioning as a real-time neuro-acoustic mirror.

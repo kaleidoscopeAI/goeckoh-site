@@ -1,0 +1,4 @@
+- Confirm per-trial audio latency by recording a loopback (mic + speaker) channel into EEG/aux inputs so neural data and physical timing share the same clock.
+- Use within-subject statistics (e.g., paired t-tests or mixed models) to quantify N1 attenuation for real-time vs delayed feedback.
+
+

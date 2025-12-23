@@ -1,0 +1,19 @@
+"""
+Exception thrown when a parse expression doesn't match the input string
+
+Example::
+
+    try:
+        Word(nums).set_name("integer").parse_string("ABC")
+    except ParseException as pe:
+        print(pe)
+        print("column: {}".format(pe.column))
+
+prints::
+
+   Expected integer (at char 0), (line:1, col:1)
+    column: 1
+
+"""
+
+

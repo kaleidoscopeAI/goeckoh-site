@@ -1,2 +1,2 @@
-class ProcessingUnit:
-def init(self, data_type: str):
+class CognitiveEngine:
+def init(self):

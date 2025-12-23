@@ -1,0 +1,7 @@
+30 ms chunk (480 samples @ 16kHz)
+→ Average: 0.021 ms | Max: 0.949 ms | ~1410× real-time
+256 ms chunk (typical Silero window)
+→ Average: 0.026 ms | Max: 0.195 ms | ~9875× real-time
+512 ms chunk (max recommended)
+→ Average: 0.031 ms | Max: 0.203 ms | ~16,278× real-time
+

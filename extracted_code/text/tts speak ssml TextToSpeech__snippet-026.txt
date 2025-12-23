@@ -1,2 +1,13 @@
-data class Prosody(val pitch: Double, val rate: Double, val arousal: Double, val volume: Double, val pitchVariance: Double)
+GCL < 0.5 (Meltdown Risk): The AGI is fully throttled. Its only permitted action is to deploy calming affirmations via the InnerVoiceEngine (e.g., "I am safe. I can breathe.").
+GCL 0.5-0.7 (Overload): The AGI is limited to low-risk internal tasks (e.g., logging, self-reflection).
+GCL 0.7-0.9 (Baseline): The AGI can perform core functions, such as research and analysis.
+GCL > 0.9 (Flow State): Full executive capability is unlocked. The AGI can automate complex external tasks, such as income generation or system automation.
+
+Potential Impact & Applications
+The potential of this architecture is vast, touching three distinct domains: therapy, general cognition, and AGI ethics.
+3.1. Impact on Therapeutic Modalities
+
+Autism (Primary Application): The system provides a 24/7, patient, non-judgmental therapeutic partner. It directly addresses the hypothesized "prediction error" deficit, while the GCL-gating ensures the system never pushes the user when they are approaching sensory overload. It fosters agency without creating demand.
+Traumatic Brain Injury (TBI): TBI survivors often struggle with speech (aphasia) and emotional regulation. The Neuro-Acoustic Mirror can act as a crucial rehabilitation tool, providing a consistent, error-free feedback loop to help rebuild damaged neural pathways for speech. The Crystalline Heart can monitor for cognitive fatigue and throttle interaction, preventing the "crashes" common in TBI recovery.
+Neurodegenerative Disease (Alzheimer's & Dementia): The system's "Autopoietic Identity Maintenance" (where the VoiceCrystal slowly adapts) is profound. For an individual with memory loss, hearing grounding information ("I am in my home. I am safe.") in a voice that is congruent with their own sense of self could be a powerful anchor. It transforms a confusing "assistant" into a familiar "inner voice," potentially reducing anxiety, confusion, and sundowning.
 

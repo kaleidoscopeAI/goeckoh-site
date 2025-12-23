@@ -1,1 +1,1 @@
-public function signal_handler(int $signum): void {
+public function step(): void {

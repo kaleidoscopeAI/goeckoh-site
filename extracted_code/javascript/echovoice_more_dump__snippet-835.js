@@ -1,3 +1,1 @@
-let sum = 0;
-for (let d=0; d<d_K; d++) {
-const a_d = (Kj[d] * (invNormKi*invNormKj)) - (coef * Ki[d]);
++ const blockSizes = { K: nodes[0].K.length, D: nodes[0].D.length, Psi: nodes[0].Psi.length, U: nodes[0].U.length, M: nodes[0].M.length, L:

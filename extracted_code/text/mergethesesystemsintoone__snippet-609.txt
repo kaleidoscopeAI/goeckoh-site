@@ -1,0 +1,15 @@
+"""Supported programming languages"""
+PYTHON = auto()
+JAVASCRIPT = auto()
+TYPESCRIPT = auto()
+JAVA = auto()
+CSHARP = auto()
+CPP = auto()
+RUBY = auto()
+PHP = auto()
+GO = auto()
+RUST = auto()
+SWIFT = auto()
+KOTLIN = auto()
+UNKNOWN = auto()
+

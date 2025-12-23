@@ -1,0 +1,3 @@
+output_buffer: &mut [f32], 
+consumer: &mut Consumer<f32, Arc<HeapRb<f32>>>,
+channels: usize

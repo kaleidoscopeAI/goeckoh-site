@@ -1,0 +1,7 @@
+      // Volume: Average RMS
+      val shortArray = ShortArray(audioBytes.size / 2)
+      java.nio.ByteBuffer.wrap(audioBytes).asShortBuffer().get(shortArray)
+      val volume = calculateRMS(shortArray)
+
+      // Arousal: Combine pitch and volume with heuristic
+      val arousal = (avgPitch / 150.0 + volume * 10.0) / 2.0 // Normalized

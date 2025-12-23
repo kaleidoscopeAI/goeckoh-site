@@ -1,0 +1,6 @@
+   No APIs: The script never calls the network. You can even run it fully offline after dependencies are installed.
+
+   Teach first for richer answers: POST /teach or use the UI’s Teach box.
+
+   Multilingual: Write in English, Spanish, French, Arabic, Chinese, etc. It embeds all text into one space and replies labeled in your language.
+

@@ -1,1 +1,1 @@
-./package_macos.sh
+./package_android.sh

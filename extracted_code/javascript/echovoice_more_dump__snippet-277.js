@@ -1,1 +1,1 @@
-const ratio = (h[i]) / (0.0001 + Math.abs(s[i]) + 1e-6);
+const improvementScalar = clamp(1 - (emoRegretCorrelation / (1 + totalRegret)), 0, 1);

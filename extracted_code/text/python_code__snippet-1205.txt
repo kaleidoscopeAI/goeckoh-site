@@ -1,0 +1,9 @@
+candidate = enum.auto()
+different_project = enum.auto()
+yanked = enum.auto()
+format_unsupported = enum.auto()
+format_invalid = enum.auto()
+platform_mismatch = enum.auto()
+requires_python_mismatch = enum.auto()
+
+

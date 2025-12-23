@@ -1,32 +1,31 @@
-fn load_or_process_dataset(path: &str, url: &str) -> Result<Vec<Graph>, CrystalError> {
-    ensure_dataset_exists(path, url)?;
-    let p = Path::new(path);
-    let ext = p.extension().and_then(|os| os.to_str()).unwrap_or("");
+fn run_experiment(config: RunConfig) -> Result<(), CrystalError> {
+    let start_time = Instant::now();
+    
+    println!("=== COGNITIVE CRYSTAL v2.0 ===");
+    println!("Advanced Physics-Inspired Graph Classification");
+    println!();
 
-    if ext == "parquet" {
-        load_mutag_dataset(path)
+    let seed = config.seed.unwrap_or_else(generate_seed);
+    info!("Using seed: {}", seed);
+
+    info!("Loading/Processing dataset from {}", config.dataset_path);
+    let graphs = load_or_process_dataset(&config.dataset_path, &config.dataset_url)?;
+    info!("Loaded {} graphs", graphs.len());
+
+    // ... [evolution and annealing setup]
+
+    let summary = if config.k_folds >= 2 {
+        evaluate_kfold_advanced(
+            graphs,
+            // ... parameters
+        )?
     } else {
-        let engine = UniversalMutagEngine::new();
-        let runtime = tokio::runtime::Runtime::new().unwrap();
-        let processed = runtime.block_on(engine.process(p)).map_err(|e| CrystalError::Parameter(format!("Processing error: {:?}", e)))?;
-        processed.into_iter().map(|pg| {
-            Graph {
-                x: pg.mutag_entry.x,
-                edge_index: pg.mutag_entry.edge_index,
-                edge_attr: pg.mutag_entry.edge_attr,
-                y: pg.mutag_entry.y,
-                // Assume ChemicalFeatures maps from ChemicalProperties
-                chemical_features: pg.metadata.chemical_properties.map(|cp| ChemicalFeatures {
-                    molecular_weight: cp.molecular_weight,
-                    formula: cp.formula,
-                    // Map other fields accordingly
-                    // Assuming similar struct
-                    smiles: cp.smiles,
-                    atom_types: cp.atom_types,
-                    bond_types: cp.bond_types,
-                    ring_count: cp.ring_count,
-                    is_aromatic: cp.is_aromatic,
-                }),
-            }
-        }).collect()
-    }
+        evaluate_holdout_advanced(
+            graphs,
+            // ... parameters
+        )?
+    };
+
+    // ... print and export results
+
+    Ok(())

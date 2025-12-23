@@ -1,0 +1,8 @@
+We have a CrystalSimulation class that uses a Cognitive Crystal core.
+
+We need to handle the visualization of the crystal's nodes and bonds.
+
+We have functions to ingest data (SMILES and Web) and query the crystal's consciousness via Ollama.
+
+We need to set up the Three.js visualization and update it based on the crystal's state.
+

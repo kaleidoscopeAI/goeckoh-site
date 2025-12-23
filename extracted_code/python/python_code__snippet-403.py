@@ -1,13 +1,11 @@
-import argparse
-import sys
-from typing import Iterable, List, Optional
-
-from .. import __version__
-from ..universaldetector import UniversalDetector
-
-
-def description_of(
-    lines: Iterable[bytes],
-    name: str = "stdin",
-    minimal: bool = False,
-    should_rename_legacy: bool = False,
+from dataclasses import dataclass, field, replace
+from typing import (
+    TYPE_CHECKING,
+    Dict,
+    Iterable,
+    List,
+    NamedTuple,
+    Optional,
+    Sequence,
+    Tuple,
+    Union,

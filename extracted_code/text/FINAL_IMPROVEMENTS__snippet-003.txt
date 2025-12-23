@@ -1,0 +1,13 @@
+<ErrorBoundary>
+  <ThemeProvider>
+    <MobileOptimized>
+      <MultiViewLayout defaultMode="split">
+        <ViewModeSelector />
+        <TutorialSystem steps={tutorialSteps} />
+        <YourMainContent />
+        <UserPreferences {...prefsProps} />
+        <ExportImport {...exportProps} />
+      </MultiViewLayout>
+    </MobileOptimized>
+  </ThemeProvider>
+</ErrorBoundary>

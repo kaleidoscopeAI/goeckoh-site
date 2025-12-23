@@ -1,1 +1,1 @@
-    - Where \$ L_i \$ is task-specific loss function derived from expected output and ground truth or reward signals
+- Gradients and performance metrics are passed externally (computed from losses or rewards).

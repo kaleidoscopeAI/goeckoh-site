@@ -1,0 +1,6 @@
+✔ Review speech mirror pipeline and identify safe insertion points for VAD +
+  denoise + SNR metrics
+✔ Implement denoise/VAD/SNR features behind configurable defaults; add
+  robustness fixes in speech_mirror
+✔ Update tests or API/telemetry as needed and sanity-check for regressions
+

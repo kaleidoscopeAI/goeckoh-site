@@ -1,0 +1,11 @@
+"""Base class for all processing nodes in the Kaleidoscope AI system, provides foundation methods for different kinds of processsing operations
+
+  Provides core implementation for process execution . dynamic properties as attributes and other mechanisms required to self govern all other modules
+    Provides state to knowlged graph as to support evolution and insight discovery,
+
+  Attributes:
+
+       name : string unique
+    trait_manager:
+     state: Dictionary like that is created on instance creation based upon different data, and configurations at runtime. (contains all core behaviours. used to set node action and state properties.)
+  knowledge graph (Nx.digraph) : Data/ Information network graph created by patterns or data it ingests to infer conclusions via rules engines

@@ -1,1 +1,1 @@
-async def _memory_query(self, query_text):
+async def initialize_system(self):

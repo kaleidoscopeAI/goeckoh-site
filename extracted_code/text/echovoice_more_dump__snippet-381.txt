@@ -1,1 +1,6 @@
-✅ That’s the complete mathematical package for Perspective and Speculation, including:
+If the path has extension "parquet", then call ensure_dataset_exists with the URL.
+
+Then, if the file exists (now after possibly downloading), load it as parquet.
+
+Otherwise, use the engine.
+

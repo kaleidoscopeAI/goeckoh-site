@@ -1,1 +1,4 @@
-vectorized operations (e.g., using NumPy), and adherence to low entanglement constraints (χ) when applying quantum tensor network
+decision_engine: DecisionEngine,
+metrics_history: Vec<ProcessMetrics>,  // Bounded for L2 network simulation
+total_decisions: u64,
+last_update: u64,

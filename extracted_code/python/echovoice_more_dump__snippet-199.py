@@ -1,1 +1,3 @@
-server/src/engine.ts (completed with real logic from PDF, filling replication, full semantic, etc.)
+    H as in spec; forces F_ij from ∇H.
+    Transformation: bits/positions → evolved states.
+

@@ -1,0 +1,2 @@
+- Fetches related images for both possible meanings.
+- Attempts to categorize them using known characteristics (e.g., "bun," "tail," "mustard").

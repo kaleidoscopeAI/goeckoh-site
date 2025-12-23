@@ -1,1 +1,4 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+match e {
+    ProcessingError::InvalidFormat(s) => CrystalError::Parameter(format!("Invalid format: {}", s)),
+    // ... etc.
+}

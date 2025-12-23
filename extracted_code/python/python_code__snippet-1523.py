@@ -1,6 +1,4 @@
-class DirectUrlValidationError(Exception):
-    pass
+def encode(self, input, final=False):
+    return codecs.charmap_encode(input, self.errors, encoding_table)[0]
 
 
-def _get(
-    d: Dict[str, Any], expected_type: Type[T], key: str, default: Optional[T] = None

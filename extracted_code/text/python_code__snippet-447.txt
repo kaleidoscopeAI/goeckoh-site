@@ -1,0 +1,7 @@
+"""
+Returns the name of the running interpreter.
+"""
+name = sys.implementation.name
+return INTERPRETER_SHORT_NAMES.get(name) or name
+
+

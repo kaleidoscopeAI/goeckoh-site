@@ -1,2 +1,1 @@
-class KnowledgeGraph:
-def __init__(self):
+def find_interventions(self):

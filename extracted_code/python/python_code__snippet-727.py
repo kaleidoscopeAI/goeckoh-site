@@ -1,6 +1,18 @@
-import re
-from typing import FrozenSet, NewType, Tuple, Union, cast
+import mimetypes
+import os
+import shutil
+from pathlib import Path
+from typing import Dict, Iterable, List, Optional
 
-from .tags import Tag, parse_tag
-from .version import InvalidVersion, Version
+from pip._vendor.packaging.utils import canonicalize_name
 
+from pip._internal.distributions import make_distribution_for_install_requirement
+from pip._internal.distributions.installed import InstalledDistribution
+from pip._internal.exceptions import (
+    DirectoryUrlHashUnsupported,
+    HashMismatch,
+    HashUnpinned,
+    InstallationError,
+    MetadataInconsistent,
+    NetworkConnectionError,
+    VcsHashUnsupported,

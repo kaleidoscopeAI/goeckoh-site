@@ -1,0 +1,4 @@
+loop = SpeechLoop(CONFIG)
+loop.run()
+
+

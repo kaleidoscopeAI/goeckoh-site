@@ -1,0 +1,2 @@
+"""Updates the TF-IDF vectorizer with new text data."""
+self.vectorizer.fit(new_texts)

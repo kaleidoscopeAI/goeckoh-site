@@ -1,0 +1,1 @@
+      val speechRate = if (totalFrames > 0) speechFrames.toFloat() /

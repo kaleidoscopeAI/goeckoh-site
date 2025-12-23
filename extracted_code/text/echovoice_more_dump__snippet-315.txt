@@ -1,1 +1,2 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+Diffusion as in PDF; mutation ξ ~ N(0, σ^2).
+

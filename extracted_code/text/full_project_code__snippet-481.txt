@@ -1,0 +1,5 @@
+if isinstance(style, str):
+    return get_style_by_name(style)
+return style
+
+

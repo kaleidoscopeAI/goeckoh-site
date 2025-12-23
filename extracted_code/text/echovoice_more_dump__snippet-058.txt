@@ -1,1 +1,2 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+> lets implement code in place of using dependency to make this a more self reliant system
+

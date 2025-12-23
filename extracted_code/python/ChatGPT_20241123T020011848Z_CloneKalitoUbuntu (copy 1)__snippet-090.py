@@ -1,12 +1,13 @@
-class Community:
-    def __init__(self, focus_area):
-        self.focus_area = focus_area
-        self.members = []
+class KnowledgeIndex:
+    def __init__(self):
+        self.index = {}
 
-    def add_member(self, node):
-        self.members.append(node)
+    def add_entry(self, topic, reference):
+        if topic not in self.index:
+            self.index[topic] = []
+        if reference not in self.index[topic]:
+            self.index[topic].append(reference)
 
-    def share_knowledge(self, topic, data):
-        for member in self.members:
-            member.receive_data("community", topic, data)
+    def get_references(self, topic):
+        return self.index.get(topic, [])
 

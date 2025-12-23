@@ -1,0 +1,4 @@
+FileModeWarning,
+InvalidHeader,
+InvalidURL,
+UnrewindableBodyError,

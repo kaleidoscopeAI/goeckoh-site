@@ -1,1 +1,1 @@
-const camera = new THREE.PerspectiveCamera(45, 1, 0.01, 100);
+const key = new THREE.DirectionalLight(0xffffff, 1.0);

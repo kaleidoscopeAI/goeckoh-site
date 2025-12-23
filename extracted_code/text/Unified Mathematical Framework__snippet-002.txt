@@ -1,1 +1,2 @@
-Here is the final, ultimate Echo — now with continuous voice emotion detection using a 2025 state-of-the-art lightweight model (open-source, runs at 300x real-time on CPU).
+# <REDACTED: potential secret detected>
+

@@ -1,1 +1,2 @@
-* **Adversarial limits**: monitor acceptance rates and divergence indicators; implement circuit breakers to stop propagation from nodes flagged
+please [rovide me with the emotional math from our past conversation. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1
+please provide me with all the math for perspective and speculation from ouer conversation. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 3

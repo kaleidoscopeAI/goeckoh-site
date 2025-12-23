@@ -1,0 +1,41 @@
+cp_value = ord(label[pos])
+
+if cp_value == 0x00b7:
+    if 0 < pos < len(label)-1:
+        if ord(label[pos - 1]) == 0x006c and ord(label[pos + 1]) == 0x006c:
+            return True
+    return False
+
+elif cp_value == 0x0375:
+    if pos < len(label)-1 and len(label) > 1:
+        return _is_script(label[pos + 1], 'Greek')
+    return False
+
+elif cp_value == 0x05f3 or cp_value == 0x05f4:
+    if pos > 0:
+        return _is_script(label[pos - 1], 'Hebrew')
+    return False
+
+elif cp_value == 0x30fb:
+    for cp in label:
+        if cp == '\u30fb':
+            continue
+        if _is_script(cp, 'Hiragana') or _is_script(cp, 'Katakana') or _is_script(cp, 'Han'):
+            return True
+    return False
+
+elif 0x660 <= cp_value <= 0x669:
+    for cp in label:
+        if 0x6f0 <= ord(cp) <= 0x06f9:
+            return False
+    return True
+
+elif 0x6f0 <= cp_value <= 0x6f9:
+    for cp in label:
+        if 0x660 <= ord(cp) <= 0x0669:
+            return False
+    return True
+
+return False
+
+

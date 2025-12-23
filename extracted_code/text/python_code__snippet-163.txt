@@ -1,10 +1,5 @@
-class CERT_CONTEXT(Structure):
-    _fields_ = (
-        ("dwCertEncodingType", DWORD),
-        ("pbCertEncoded", c_void_p),
-        ("cbCertEncoded", DWORD),
-        ("pCertInfo", c_void_p),
-        ("hCertStore", HCERTSTORE),
-    )
-
-
+x[0-9A-Fa-f](?:_?[0-9A-Fa-f])*   # hex
+|
+b[01](?:_?[01])*                 # bin
+|
+o[0-7](?:_?[0-7])*               # oct

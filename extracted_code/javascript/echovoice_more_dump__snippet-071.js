@@ -1,2 +1,1 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
-49/80There exists a Lyapunov function V(t) such that:
+3.5 Selection function Seli fully specified

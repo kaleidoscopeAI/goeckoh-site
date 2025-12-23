@@ -1,0 +1,2 @@
+ python scripts/validate_mirror_metrics.py and python scripts/
+ measure_loop_latency.py to get real p95 + hardware round-trip latency.

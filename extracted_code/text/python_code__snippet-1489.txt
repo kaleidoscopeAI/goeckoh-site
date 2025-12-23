@@ -1,0 +1,24 @@
+"""Gets the content of a file; it may be a filename, file: URL, or
+http: URL.  Returns (location, content).  Content is unicode.
+Respects # -*- coding: declarations on the retrieved files.
+
+:param url:         File path or url.
+:param session:     PipSession instance.
+"""
+scheme = get_url_scheme(url)
+
+# Pip has special support for file:// URLs (LocalFSAdapter).
+if scheme in ["http", "https", "file"]:
+    resp = session.get(url)
+    raise_for_status(resp)
+    return resp.url, resp.text
+
+# Assume this is a bare path.
+try:
+    with open(url, "rb") as f:
+        content = auto_decode(f.read())
+except OSError as exc:
+    raise InstallationError(f"Could not open requirements file: {exc}")
+return url, content
+
+

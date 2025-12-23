@@ -1,3 +1,3 @@
-  - Create a shared hub (middle "base pair") where "thought" resides. This would aggregate and integrate data from both strands.
-  - Example: Crawled data (left strand) is matched with processed context, images, and descriptors (right strand).
-
+    - One node contextualizes "hotdog" from textual Wikipedia crawls.
+    - Another node analyzes images from search engines to classify attributes (e.g., "round bun, meat cylinder" or "ears, fur, tail").
+    - Together, they build a shared but unique library of hotdog-related data.

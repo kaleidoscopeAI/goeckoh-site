@@ -1,1 +1,1 @@
-class TraitCategory(Enum):
+Fix: Create a class with a queue and consumer registration (e.g., using queue.Queue or asyncio).

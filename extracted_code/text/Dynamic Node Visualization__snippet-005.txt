@@ -1,2 +1,0 @@
-This class handles all data logging for rigorous statistical analysis.
-

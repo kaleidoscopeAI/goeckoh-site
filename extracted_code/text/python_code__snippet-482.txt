@@ -1,0 +1,8 @@
+try:
+    function(*args, **kwargs)
+except exception:
+    return
+else:  # pragma: no cover
+    raise AssertionError('Did not raise %s.' % exception)
+
+

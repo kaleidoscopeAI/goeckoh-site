@@ -1,11 +1,13 @@
-async def processIngestedData(self, dataStream: List[str], topic: str):
-    for chunk in dataStream:
-        sentences = re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', chunk)  # Split sentences
-        for sent in sentences:
-            context = analyze_text(sent)
-            context['topics'].unshift(topic)
-            partialTargets = self.generateDynamicTargets(context)[:self.nodeCount // 10]
-            # Blend...
-            self.emit('partialUpdate', {'targets': partialTargets, 'verbs': context['verbs']})  # Send verbs for motion
-            await asyncio.sleep(0.1)  # Frame delay for story
+def decoherence(node: Node) -> float:
+    # quadratic on misalignment magnitude
+    if node.Phi is None:
+        return 0.0
+    return np.linalg.norm(node.Phi) ** 2
+
+
+def speculation_operator(node: Node, cfg: Config) -> np.ndarray:
+    # simple speculative vector: small nonlinear transform of K + D
+    z = np.tanh(node.K + node.D - node.U * 0.01)
+    return z * cfg.gamma
+
 

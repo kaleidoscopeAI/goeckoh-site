@@ -1,1 +1,2 @@
-High TS = speculation diverges far from perspective
+class EpisodicMemory:
+def __init__(self, capacity=200):

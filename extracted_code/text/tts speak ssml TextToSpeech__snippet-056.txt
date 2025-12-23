@@ -1,0 +1,3 @@
+          initSystem()
+      } else {
+          Toast.makeText(this, "Audio permission denied",

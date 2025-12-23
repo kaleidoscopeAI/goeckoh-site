@@ -1,14 +1,5 @@
-class CodeFile:
-    """Information about a code file"""
-    path: str
-    language: LanguageType
-    content: str
-    ast: Optional[Any] = None
-    imports: List[str] = field(default_factory=list)
-    exports: List[str] = field(default_factory=list)
-    dependencies: List[DependencyInfo] = field(default_factory=list)
-    vulnerabilities: List[str] = field(default_factory.list)
-    outdated_patterns: List[str] = field(default_factory.list)
-    complexity_score: float = 0.0
-    is_test: bool = False
+t = m.get("tension", 0.0)
+if t < 0.015:  return {"k_scale": 1.08, "rest_scale": 0.98}
+if t > 0.050:  return {"k_scale": 0.95, "rest_scale": 1.03}
+return {"k_scale": 1.00, "rest_scale": 1.00}
 

@@ -1,1 +1,1 @@
-def __init__(self, organic_ai):
+def _discover_ollama_models(self):

@@ -1,2 +1,1 @@
-package com.kaleidoscope.body
-data class ConsciousState(val awareness: Float, val valence: Float, val coherence: Float)
+// 5) Map to device control using a representative node

@@ -1,6 +1,3 @@
-async def query_reflect():
-    data = await request.get_json()
-    text = data.get('text', '')
-    reflection = core.llm.reflect(text)
-    return jsonify({'reflection': reflection})
-
+• Model-Free RL: Algorithms like Q-learning and SARSA learn optimal policies directly from state-action-reward experiences without requiring an explicit model of the environment's dynamics (how states transition and rewards are generated).5 This is advantageous when the data dynamics are complex, unknown, or difficult to model accurately.
+• Deep Reinforcement Learning (DRL): Utilizes deep neural networks to approximate the value function (expected future reward) or the policy function (mapping states to actions).5 DRL is essential for handling the potentially very large or continuous state spaces associated with the Cube X System.
+• Policy Gradient and Actor-Critic Methods: These methods directly optimize the parameters of the policy function. Actor-critic methods combine policy learning (actor) with value function learning (critic) for more stable and efficient training.5

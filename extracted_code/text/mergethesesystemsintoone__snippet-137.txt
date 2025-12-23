@@ -1,1 +1,1 @@
-Fix: Define a class using NetworkX to store nodes, edges, and metadata.
+store.insertStmt = await db.prepare('INSERT OR REPLACE INTO dna (gen, phi) VALUES (?, ?)');

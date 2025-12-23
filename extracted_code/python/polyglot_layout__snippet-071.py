@@ -1,0 +1,8 @@
+  import wave
+  x = np.asarray(list(samples), dtype=np.float32)
+  if x.size == 0: x = np.zeros(1, dtype=np.float32)
+  x = np.clip(x, -1.0, 1.0)
+  y = (x * 32767.0).astype(np.int16)
+  with wave.open(str(path), 'wb') as wf:
+      wf.setnchannels(1); wf.setsampwidth(2); wf.setframerate(sr); wf.writeframes(y.tobytes())
+

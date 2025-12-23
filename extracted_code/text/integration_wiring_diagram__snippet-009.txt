@@ -1,0 +1,7 @@
+*   **Data In:** Text, Emotional Context, Crystalline Memory state.
+*   **Function:**
+    *   `Perspective Engine`: Analyzes child's perspective.
+    *   `Kaleidoscope Engine`: Generates novel cognitive pathways.
+*   **LLM Integration:** `backend/engines/llm_reasoning.py` (hypothetical) uses Ollama for self-reflection, strategic planning, and context-aware response generation.
+*   **Data Out:** Therapeutic recommendations, response text, environmental adjustment commands.
+

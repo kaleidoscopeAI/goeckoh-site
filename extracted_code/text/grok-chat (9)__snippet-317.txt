@@ -1,0 +1,5 @@
+🦀 Rust bio-acoustic engine available
+… +32 lines
+ * Running on http://127.0.0.1:8080
+2025-12-19 10:26:49,467 - werkzeug - INFO - Press CTRL+C to quit
+

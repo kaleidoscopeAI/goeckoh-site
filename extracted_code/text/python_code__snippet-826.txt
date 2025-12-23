@@ -1,0 +1,4 @@
+""" Exception when the codepoint is not valid in the context it is used """
+pass
+
+

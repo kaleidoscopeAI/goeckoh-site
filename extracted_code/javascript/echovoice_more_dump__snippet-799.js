@@ -1,1 +1,1 @@
-const pendingFile = path.join(W_DIR, `rollback_pending_${id}.json`);
+const coords: [number, number][] = new Array(J).fill([0, 0]).map(() => [0, 0]);

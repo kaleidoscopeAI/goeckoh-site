@@ -1,0 +1,30 @@
+# preserve for the nested code path
+line_comes_from = "{} {} (line {})".format(
+    "-c" if line.constraint else "-r",
+    line.filename,
+    line.lineno,
+)
+
+assert line.is_requirement
+
+# get the options that apply to requirements
+if line.is_editable:
+    supported_dest = SUPPORTED_OPTIONS_EDITABLE_REQ_DEST
+else:
+    supported_dest = SUPPORTED_OPTIONS_REQ_DEST
+req_options = {}
+for dest in supported_dest:
+    if dest in line.opts.__dict__ and line.opts.__dict__[dest]:
+        req_options[dest] = line.opts.__dict__[dest]
+
+line_source = f"line {line.lineno} of {line.filename}"
+return ParsedRequirement(
+    requirement=line.requirement,
+    is_editable=line.is_editable,
+    comes_from=line_comes_from,
+    constraint=line.constraint,
+    options=req_options,
+    line_source=line_source,
+)
+
+

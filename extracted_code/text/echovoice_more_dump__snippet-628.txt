@@ -1,0 +1,3 @@
+print(f"ERROR LOADING C LIBRARY: {e}")
+C_CORE = None
+

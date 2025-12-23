@@ -1,0 +1,14 @@
+if module_name in sys.modules:
+    mod = sys.modules[module_name]
+else:
+    mod = __import__(module_name)
+if dotted_path is None:
+    result = mod
+else:
+    parts = dotted_path.split('.')
+    result = getattr(mod, parts.pop(0))
+    for p in parts:
+        result = getattr(result, p)
+return result
+
+

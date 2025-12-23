@@ -1,11 +1,8 @@
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Query
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, Response
-import uvicorn
-import requests
-import numpy as np
-import networkx as nx
-from bs4 import BeautifulSoup
-from scipy.io import wavfile
-from scipy.signal import get_window, stft
+def energetics(E: np.ndarray, S: np.ndarray, edges: np.ndarray, sigma: float) -> dict:
+    # Original calculation
+    en = {}  # Implement as before
+    # Add Φ
+    phis = np.array([calculate_phi(E[i]) for i in range(E.shape[0])])
+    en["avg_phi"] = float(np.mean(phis))
+    return en
 

@@ -1,0 +1,8 @@
+              if (result.pitch > 0) {
+                  pitchSum += result.pitch.toDouble()
+                  pitchCount++
+              }
+          }
+      }))
+      dispatcher.run()
+      val avgPitch = if (pitchCount > 0) pitchSum / pitchCount else

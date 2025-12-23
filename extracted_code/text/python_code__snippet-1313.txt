@@ -1,0 +1,4 @@
+# Only use up to the first two numbers.
+return "".join(map(str, version_info[:2]))
+
+

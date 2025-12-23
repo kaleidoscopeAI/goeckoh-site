@@ -1,0 +1,5 @@
+INITIALIZING = "initializing"
+LEARNING = "learning"
+ACTIVE = "active"
+ERROR = "error"
+

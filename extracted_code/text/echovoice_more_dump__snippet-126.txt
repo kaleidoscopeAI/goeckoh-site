@@ -1,1 +1,1 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+3. MetaOptimizer.step() updates DEFAULT_P in-place using Adam-style rules.

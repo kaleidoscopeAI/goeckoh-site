@@ -1,0 +1,4 @@
+  // Implements: iħ ∂ψ/∂t = Hψ with relational constraints
+  for(int i=0; i<dim; i++) {
+      psi[i] = cexp(I * H[i]) * psi[i];
+  }

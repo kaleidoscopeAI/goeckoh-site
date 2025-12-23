@@ -1,0 +1,4 @@
+      },
+
+  { "System Adaptability and evolution ":"Adaptive nature by changing thresholds to dynamically adjust traits by changing mutation rate and probabilities based on the internal state , performance feedback."  },
+

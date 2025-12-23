@@ -1,0 +1,12 @@
+"""
+Validates the format and content of the processing output.
+"""
+if not isinstance(output, dict):
+    return False
+
+# Add more specific checks based on your expected output format
+if "processed_data" not in output or "metadata" not in output:
+    return False
+
+return True
+

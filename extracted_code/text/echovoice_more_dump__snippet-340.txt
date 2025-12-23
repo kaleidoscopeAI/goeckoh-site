@@ -1,1 +1,4 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+"crypto": "^1.0.1",
+"node-fetch": "^2.7.0",
+"ws": "^8.18.0",
+"mathjs": "^13.1.1"  # For matrix/det

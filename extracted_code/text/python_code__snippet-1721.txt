@@ -1,0 +1,20 @@
+Strategy(
+    category="mindfulness",
+    title="Breathe + Ground",
+    description="Guide a short breathing or grounding game to lower anxiety spikes.",
+),
+Strategy(
+    category="sensory",
+    title="Sensory Break",
+    description="Offer headphones, a fidget, or a brief quiet break if energy is high.",
+),
+Strategy(
+    category="encouragement",
+    title="Positive Reinforcement",
+    description="Acknowledge effort and invite a brief pause if corrections stack up.",
+),
+Strategy(
+    category="focus",
+    title="Refocus Prompt",
+    description="Gently redirect with a clear, short prompt if perseveration is detected.",
+),

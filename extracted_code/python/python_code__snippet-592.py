@@ -1,140 +1,107 @@
-    from collections import MutableMapping
+class Codec(codecs.Codec):
 
-    try:
-        from reprlib import recursive_repr as _recursive_repr
-    except ImportError:
+    def encode(self, data: str, errors: str = 'strict') -> Tuple[bytes, int]:
+        if errors != 'strict':
+            raise IDNAError('Unsupported error handling \"{}\"'.format(errors))
 
-        def _recursive_repr(fillvalue='...'):
-            '''
-            Decorator to make a repr function return fillvalue for a recursive
-            call
-            '''
+        if not data:
+            return b"", 0
 
-            def decorating_function(user_function):
-                repr_running = set()
+        return encode(data), len(data)
 
-                def wrapper(self):
-                    key = id(self), get_ident()
-                    if key in repr_running:
-                        return fillvalue
-                    repr_running.add(key)
-                    try:
-                        result = user_function(self)
-                    finally:
-                        repr_running.discard(key)
-                    return result
+    def decode(self, data: bytes, errors: str = 'strict') -> Tuple[str, int]:
+        if errors != 'strict':
+            raise IDNAError('Unsupported error handling \"{}\"'.format(errors))
 
-                # Can't use functools.wraps() here because of bootstrap issues
-                wrapper.__module__ = getattr(user_function, '__module__')
-                wrapper.__doc__ = getattr(user_function, '__doc__')
-                wrapper.__name__ = getattr(user_function, '__name__')
-                wrapper.__annotations__ = getattr(user_function,
-                                                  '__annotations__', {})
-                return wrapper
+        if not data:
+            return '', 0
 
-            return decorating_function
+        return decode(data), len(data)
 
-    class ChainMap(MutableMapping):
-        '''
-        A ChainMap groups multiple dicts (or other mappings) together
-        to create a single, updateable view.
+class IncrementalEncoder(codecs.BufferedIncrementalEncoder):
+    def _buffer_encode(self, data: str, errors: str, final: bool) -> Tuple[str, int]:  # type: ignore
+        if errors != 'strict':
+            raise IDNAError('Unsupported error handling \"{}\"'.format(errors))
 
-        The underlying mappings are stored in a list.  That list is public and can
-        accessed or updated using the *maps* attribute.  There is no other state.
+        if not data:
+            return "", 0
 
-        Lookups search the underlying mappings successively until a key is found.
-        In contrast, writes, updates, and deletions only operate on the first
-        mapping.
-        '''
+        labels = _unicode_dots_re.split(data)
+        trailing_dot = ''
+        if labels:
+            if not labels[-1]:
+                trailing_dot = '.'
+                del labels[-1]
+            elif not final:
+                # Keep potentially unfinished label until the next call
+                del labels[-1]
+                if labels:
+                    trailing_dot = '.'
 
-        def __init__(self, *maps):
-            '''Initialize a ChainMap by setting *maps* to the given mappings.
-            If no mappings are provided, a single empty dictionary is used.
+        result = []
+        size = 0
+        for label in labels:
+            result.append(alabel(label))
+            if size:
+                size += 1
+            size += len(label)
 
-            '''
-            self.maps = list(maps) or [{}]  # always at least one map
+        # Join with U+002E
+        result_str = '.'.join(result) + trailing_dot  # type: ignore
+        size += len(trailing_dot)
+        return result_str, size
 
-        def __missing__(self, key):
-            raise KeyError(key)
+class IncrementalDecoder(codecs.BufferedIncrementalDecoder):
+    def _buffer_decode(self, data: str, errors: str, final: bool) -> Tuple[str, int]:  # type: ignore
+        if errors != 'strict':
+            raise IDNAError('Unsupported error handling \"{}\"'.format(errors))
 
-        def __getitem__(self, key):
-            for mapping in self.maps:
-                try:
-                    return mapping[
-                        key]  # can't use 'key in mapping' with defaultdict
-                except KeyError:
-                    pass
-            return self.__missing__(
-                key)  # support subclasses that define __missing__
+        if not data:
+            return ('', 0)
 
-        def get(self, key, default=None):
-            return self[key] if key in self else default
+        labels = _unicode_dots_re.split(data)
+        trailing_dot = ''
+        if labels:
+            if not labels[-1]:
+                trailing_dot = '.'
+                del labels[-1]
+            elif not final:
+                # Keep potentially unfinished label until the next call
+                del labels[-1]
+                if labels:
+                    trailing_dot = '.'
 
-        def __len__(self):
-            return len(set().union(
-                *self.maps))  # reuses stored hash values if possible
+        result = []
+        size = 0
+        for label in labels:
+            result.append(ulabel(label))
+            if size:
+                size += 1
+            size += len(label)
 
-        def __iter__(self):
-            return iter(set().union(*self.maps))
+        result_str = '.'.join(result) + trailing_dot
+        size += len(trailing_dot)
+        return (result_str, size)
 
-        def __contains__(self, key):
-            return any(key in m for m in self.maps)
 
-        def __bool__(self):
-            return any(self.maps)
+class StreamWriter(Codec, codecs.StreamWriter):
+    pass
 
-        @_recursive_repr()
-        def __repr__(self):
-            return '{0.__class__.__name__}({1})'.format(
-                self, ', '.join(map(repr, self.maps)))
 
-        @classmethod
-        def fromkeys(cls, iterable, *args):
-            'Create a ChainMap with a single dict created from the iterable.'
-            return cls(dict.fromkeys(iterable, *args))
+class StreamReader(Codec, codecs.StreamReader):
+    pass
 
-        def copy(self):
-            'New ChainMap or subclass with a new copy of maps[0] and refs to maps[1:]'
-            return self.__class__(self.maps[0].copy(), *self.maps[1:])
 
-        __copy__ = copy
-
-        def new_child(self):  # like Django's Context.push()
-            'New ChainMap with a new dict followed by all previous maps.'
-            return self.__class__({}, *self.maps)
-
-        @property
-        def parents(self):  # like Django's Context.pop()
-            'New ChainMap from maps[1:].'
-            return self.__class__(*self.maps[1:])
-
-        def __setitem__(self, key, value):
-            self.maps[0][key] = value
-
-        def __delitem__(self, key):
-            try:
-                del self.maps[0][key]
-            except KeyError:
-                raise KeyError(
-                    'Key not found in the first mapping: {!r}'.format(key))
-
-        def popitem(self):
-            'Remove and return an item pair from maps[0]. Raise KeyError is maps[0] is empty.'
-            try:
-                return self.maps[0].popitem()
-            except KeyError:
-                raise KeyError('No keys found in the first mapping.')
-
-        def pop(self, key, *args):
-            'Remove *key* from maps[0] and return its value. Raise KeyError if *key* not in maps[0].'
-            try:
-                return self.maps[0].pop(key, *args)
-            except KeyError:
-                raise KeyError(
-                    'Key not found in the first mapping: {!r}'.format(key))
-
-        def clear(self):
-            'Clear maps[0], leaving maps[1:] intact.'
-            self.maps[0].clear()
+def getregentry() -> codecs.CodecInfo:
+    # Compatibility as a search_function for codecs.register()
+    return codecs.CodecInfo(
+        name='idna',
+        encode=Codec().encode,  # type: ignore
+        decode=Codec().decode,  # type: ignore
+        incrementalencoder=IncrementalEncoder,
+        incrementaldecoder=IncrementalDecoder,
+        streamwriter=StreamWriter,
+        streamreader=StreamReader,
+    )
 
 

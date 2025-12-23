@@ -1,2 +1,1 @@
-def project_batch(self, points: Tuple[np.ndarray]) -> List[np.ndarray]:
-from sklearn.decomposition import PCA
+def redistribute(self, threshold: float = 50.0):

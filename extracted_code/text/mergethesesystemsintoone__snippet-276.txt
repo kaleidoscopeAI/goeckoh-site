@@ -1,0 +1,3 @@
+  p1 = np.array(contour[i])
+  p2 = np.array(contour[(i + 1) % len(contour)])
+  perimeter += np.linalg.norm(p1 - p2)

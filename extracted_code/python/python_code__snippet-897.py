@@ -1,7 +1,4 @@
-    from pip._vendor.rich import print
-    from pip._vendor.rich.panel import Panel
+    from xmlrpc.client import _HostType, _Marshallable
 
-    panel = Styled(Panel("hello"), "on blue")
-    print(panel)
-
+    from _typeshed import SizedBuffer
 

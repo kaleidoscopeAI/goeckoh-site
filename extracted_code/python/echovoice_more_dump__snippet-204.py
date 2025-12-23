@@ -1,2 +1,5 @@
-I've integrated the two specifications: (1) the node definition, evolution, metrics, and 3D visualization blueprint from "🔹 Node in 3D.pdf" (geometry, semantics as embeddings/probabilities, energy as tension/stability, knowledge confidence, perspective bias, awareness/attention, with detailed viz like spheres, halos, pulses, auras, etc.), and (2) the full mathematical framework from "grokconvo.txt" (Hamiltonian, master evolution, Lindblad, thought engine ODEs, emotional flows, discretization, IIT, crystallization, etc.).
+    Teff_ij from ψ, ∂g_ij/∂t = -2 R_ij + κ Teff_ij (bits: tension feedback to edges).
+    Torque τ = novelty * arousal (bits: dist * intensity, gate).
+    V-A-S: valence ±1, arousal 0-1, stance ±1, coherence (bits: vector c update).
+    Complexity O(N) per step (bits: local ops ensure).
 

@@ -1,1 +1,1 @@
-const buf = this.learnerLogsBuffer.splice(0, this.learnerLogsBuffer.length);
+const pendingFile = path.join(W_DIR, `rollback_pending_${id}.json`);

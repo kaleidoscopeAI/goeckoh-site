@@ -1,1 +1,0 @@
-- d_paired: from paired t-test.

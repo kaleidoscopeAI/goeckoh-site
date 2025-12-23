@@ -1,1 +1,0 @@
-cd echo_companion

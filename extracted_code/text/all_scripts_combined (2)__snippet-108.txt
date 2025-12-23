@@ -1,0 +1,8 @@
+f0_hz: np.ndarray
+energy: np.ndarray
+times_s: np.ndarray
+frame_length: int
+hop_length: int
+sample_rate: int
+
+

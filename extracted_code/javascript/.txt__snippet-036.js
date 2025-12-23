@@ -1,2 +1,1 @@
-private func configureAudioSession() {
-let session = AVAudioSession.sharedInstance()
+function pickPhrase(p) {

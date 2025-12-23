@@ -1,161 +1,149 @@
-class UpgradeResult:
-    """Results of the upgrade process"""
-    success: bool
-    output_path: str
-    strategy_used: UpgradeStrategy
-    upgraded_files: List[str] = field.default_factory.list)
-    errors: List[str] = field.default_factory.list)
-    backup_path: Optional[str] = None
-    time_taken_seconds: float = 0.0
-    size_difference: int = 0  # Difference in bytes
-    applied_transformations: List[str] = field.default_factory.list)
-    license_path: Optional[str] = None
+def __init__(self):
+    self.data = None
+    self.logger = logging.getLogger(__name__)
 
-class LanguageDetector:
-    """Detects programming languages from file content and extensions"""
-    
-    def __init__(self):
-        """Initialize language detector"""
-        self.extension_map = {
-            ".py": LanguageType.PYTHON,
-            ".js": LanguageType.JAVASCRIPT,
-            ".jsx": LanguageType.JAVASCRIPT,
-            ".ts": LanguageType.TYPESCRIPT,
-            ".tsx": LanguageType.TYPESCRIPT,
-            ".java": LanguageType.JAVA,
-            ".cs": LanguageType.CSHARP,
-            ".cpp": LanguageType.CPP,
-            ".cc": LanguageType.CPP,
-            ".cxx": LanguageType.CPP,
-            ".c": LanguageType.CPP,
-            ".h": LanguageType.CPP,
-            ".hpp": LanguageType.CPP,
-            ".rb": LanguageType.RUBY,
-            ".php": LanguageType.PHP,
-            ".go": LanguageType.GO,
-            ".rs": LanguageType.RUST,
-            ".swift": LanguageType.SWIFT,
-            ".kt": LanguageType.KOTLIN
-        }
-        
-        self.shebang_patterns = {
-            r"^\s*#!.*python": LanguageType.PYTHON,
-            r"^\s*#!.*node": LanguageType.JAVASCRIPT,
-            r"^\s*#!.*ruby": LanguageType.RUBY,
-            r"^\s*#!.*php": LanguageType.PHP
-        }
-        
-        self.content_patterns = {
-            r"import\s+[a-zA-Z0-9_]+|from\s+[a-zA-Z0-9_\.]+\s+import": LanguageType.PYTHON,
-            r"require\s*\(\s*['\"][a-zA-Z0-9_\-\.\/]+['\"]\s*\)|import\s+[a-zA-Z0-9_]+\s+from": LanguageType.JAVASCRIPT,
-            r"import\s+{\s*[a-zA-Z0-9_,\s]+\s*}\s+from|interface\s+[a-zA-Z0-9_]+": LanguageType.TYPESCRIPT,
-            r"public\s+class|import\s+java\.": LanguageType.JAVA,
-            r"namespace\s+[a-zA-Z0-9_\.]+|using\s+[a-zA-Z0-9_\.]+;": LanguageType.CSHARP,
-            r"#include\s*<[a-zA-Z0-9_\.]+>|#include\s*\"[a-zA-Z0-9_\.]+\"": LanguageType.CPP,
-            r"require\s+['\"][a-zA-Z0-9_\-\.\/]+['\"]\s*|def\s+[a-zA-Z0-9_]+\s*\(": LanguageType.RUBY,
-            r"<\?php|namespace\s+[a-zA-Z0-9_\\]+;": LanguageType.PHP,
-            r"package\s+[a-zA-Z0-9_]+|func\s+[a-zA-Z0-9_]+\s*\(": LanguageType.GO,
-            r"use\s+[a-zA-Z0-9_:]+|fn\s+[a-zA-Z0-9_]+\s*\(": LanguageType.RUST,
-            r"import\s+[a-zA-Z0-9_\.]+|class\s+[a-zA-Z0-9_]+\s*:": LanguageType.SWIFT,
-            r"package\s+[a-zA-Z0-9_\.]+|fun\s+[a-zA-Z0-9_]+\s*\(": LanguageType.KOTLIN
-        }
-    
-    def detect_language(self, file_path: str, content: Optional[str] = None) -> LanguageType:
-        """
-        Detect the programming language of a file
-        
-        Args:
-            file_path: Path to the file
-            content: Optional file content
-            
-        Returns:
-            Detected language type
-        """
-        # Try by extension first
-        ext = os.path.splitext(file_path)[1].lower()
-        if ext in self.extension_map:
-            return self.extension_map[ext]
-        
-        # If no content provided, try to read it
-        if content is None:
-            try:
-                with open(file_path, 'r', errors='ignore') as f:
-                    content = f.read()
-            except Exception as e:
-                logger.warning(f"Could not read {file_path}: {str(e)}")
-                return LanguageType.UNKNOWN
-        
-        # Try by shebang
-        for pattern, lang in self.shebang_patterns.items():
-            if re.search(pattern, content, re.MULTILINE):
-                return lang
-        
-        # Try by content patterns
-        for pattern, lang in self.content_patterns.items():
-            if re.search(pattern, content, re.MULTILINE):
-                return lang
-        
-        return LanguageType.UNKNOWN
+def ingest_data(self, data_source: Union[str, Dict]) -> bool:
+    """
+    Ingests data from various sources, including URLs, files (CSV, Excel, JSON), or raw text.
+    Handles different data formats and checks for successful data ingestion.
+    """
+    try:
+        if isinstance(data_source, str):
+            if data_source.startswith("http"):  # Handle URLs
+                self.data = self._fetch_from_url(data_source)
+            elif os.path.isfile(data_source):  # Handle files
+                self.data = self._read_from_file(data_source)
+            else:
+                self.data = data_source  # Assume raw text input
+        elif isinstance(data_source, dict):  # Handle dictionaries
+            self.data = pd.DataFrame(data_source)
+        else:
+            raise ValueError("Unsupported data source type.")
 
-class SystemAnalyzer:
-    """Analyzes a system to gather information needed for upgrading"""
-    
-    def __init__(self):
-        """Initialize system analyzer"""
-        self.language_detector = LanguageDetector()
-        self.excluded_dirs = {
-            ".git", ".svn", ".hg", "node_modules", "__pycache__", 
-            "venv", "env", ".env", ".venv", "dist", "build"
-        }
-        self.excluded_files = {
-            ".DS_Store", "Thumbs.db", ".gitignore", ".dockerignore"
-        }
-    
-    def analyze_system(self, path: str) -> SystemInfo:
-        """
-        Analyze a system to gather information
-        
-        Args:
-            path: Path to the system root directory
-            
-        Returns:
-            System information
-        """
-        logger.info(f"Analyzing system at {path}")
-        
-        # Initialize system info
-        system_info = SystemInfo(
-            root_path=path,
-            system_type=SystemType.UNKNOWN,
-            primary_language=LanguageType.UNKNOWN
+        if self.data is None:
+            raise ValueError("Data ingestion failed: No data loaded.")
+
+        logging.info(f"Data successfully ingested from {data_source}.")
+        return True
+
+    except Exception as e:
+        logging.error(f"Error ingesting data: {e}")
+        self.data = None
+        return False
+
+def _fetch_from_url(self, url: str) -> pd.DataFrame:
+    """Fetches data from a URL."""
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        if url.endswith(".csv"):
+            return pd.read_csv(io.StringIO(response.text))
+        elif url.endswith(".xlsx") or url.endswith(".xls"):
+            return pd.read_excel(io.BytesIO(response.content))
+        elif url.endswith(".json"):
+            return pd.DataFrame(json.loads(response.text))
+        else:
+            raise ValueError("Unsupported file format for URL.")
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Error fetching data from URL {url}: {e}")
+        raise
+
+def _read_from_file(self, file_path: str) -> Union[pd.DataFrame, str]:
+    """Reads data from a local file."""
+    try:
+        if file_path.endswith(".csv"):
+            return pd.read_csv(file_path)
+        elif file_path.endswith(".xlsx") or file_path.endswith(".xls"):
+            return pd.read_excel(file_path)
+        elif file_path.endswith(".json"):
+            with open(file_path, "r") as f:
+                return pd.DataFrame(json.load(f))
+        else:
+            with open(file_path, "r") as f:
+                return f.read()  # Read as raw text
+    except FileNotFoundError:
+        logging.error(f"File not found: {file_path}")
+        raise
+    except Exception as e:
+        logging.error(f"Error reading from file {file_path}: {e}")
+        raise
+
+def preprocess(self):
+    """
+    Preprocesses the data.
+    """
+    if self.data is None:
+        logging.warning("No data to preprocess.")
+        return
+
+    # Example preprocessing steps (modify as needed)
+    try:
+        if isinstance(self.data, pd.DataFrame):
+            # Drop rows with missing values
+            self.data.dropna(inplace=True)
+
+            # Convert all string columns to lowercase
+            for col in self.data.columns:
+                if self.data[col].dtype == 'object':
+                    self.data[col] = self.data[col].str.lower()
+
+        elif isinstance(self.data, str):
+            # Basic text preprocessing: lowercase and remove extra spaces
+            self.data = ' '.join(self.data.lower().split())
+
+        logging.info("Data preprocessing completed.")
+    except Exception as e:
+        logging.error(f"Error during preprocessing: {e}")
+        raise
+
+def get_data_for_quantum_engine(self):
+    """
+    Prepares data for the Quantum Engine or a classical ML model.
+    """
+    if self.data is None or not isinstance(self.data, pd.DataFrame):
+        logging.error("Data not available or not in DataFrame format for Quantum Engine.")
+        raise ValueError("Data not available or not in DataFrame format for Quantum Engine.")
+
+    try:
+        # Example: Extract features and labels
+        X = self.data.drop('target_column', axis=1).values  # Replace 'target_column' with your target column
+        y = self.data['target_column'].values
+        return {"features": X, "labels": y}
+    except Exception as e:
+        logging.error(f"Error preparing data for Quantum Engine: {e}")
+        raise
+
+def split_data(self, test_size=0.2, random_state=42):
+    """
+    Splits data into training and testing sets.
+    """
+    if not isinstance(self.data, pd.DataFrame):
+        logging.error("Data is not in a suitable format for splitting.")
+        raise ValueError("Data is not in a suitable format for splitting.")
+
+    try:
+        X = self.data.drop('target_column', axis=1).values  # Replace 'target_column' with your target column
+        y = self.data['target_column'].values
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y, test_size=test_size, random_state=random_state
         )
-        
-        # Check if path exists
-        if not os.path.exists(path):
-            raise ValueError(f"Path {path} does not exist")
-        
-        # Count languages for later determining primary language
-        language_counts = {}
-        
-        # Walk through the directory tree
-        total_size = 0
-        file_count = 0
-        
-        for root, dirs, files in os.walk(path, topdown=True):
-            # Skip excluded directories
-            dirs[:] = [d for d in dirs if d not in self.excluded_dirs]
-            
-            # Process each file
-            for file in files:
-                if file in self.excluded_files:
-                    continue
-                
-                file_path = os.path.join(root, file)
-                relative_path = os.path.relpath(file_path, path)
-                
+        logging.info(f"Data split into training and testing sets (test_size={test_size}).")
+        return X_train, X_test, y_train, y_test
+    except Exception as e:
+        logging.error(f"Error splitting data: {e}")
+        raise
+
+def distribute_data_to_nodes(self, nodes: List[Node], data: Any):
+    """
+    Distributes data among nodes based on their specialization or other criteria.
+
+    Args:
+        nodes: List of Node instances.
+        data: Data to be distributed
 
 
 
 
-It seems like the code you provided was cut off mid-implementation. The last complete class appears to be PythonModernizer, and the code ends abruptly in the middle of the _convert_to_fstrings method. Additionally, the script appears to be a partial implementation of the "Kaleidoscope AI - System Upgrade Module," with several key components (like the main upgrade logic) missing.
+
+
 

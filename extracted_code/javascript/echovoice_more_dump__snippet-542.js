@@ -1,2 +1,2 @@
-const setE = async (patch: Partial<EVector>, meta?: Record<string, any>) => {
-const svc = svcRef.current!;
+const sx = PAD + ((x - bounds.minX) / (bounds.maxX - bounds.minX)) * innerW;
+const sy = PAD + (1 - (y - bounds.minY) / (bounds.maxY - bounds.minY)) * innerH;

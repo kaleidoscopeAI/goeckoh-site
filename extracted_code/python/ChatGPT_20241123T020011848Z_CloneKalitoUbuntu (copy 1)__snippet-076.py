@@ -1,14 +1,11 @@
-import networkx as nx
-import matplotlib.pyplot as plt
+from core import Node
 
-class MirroredNetwork:
-    def __init__(self):
-        self.graph = nx.Graph()
-
-    def add_node(self, node_id):
-        self.graph.add_node(node_id)
-
-    def visualize(self):
-        nx.draw(self.graph, with_labels=True, node_color="lightblue")
-        plt.show()
+def create_new_node(existing_nodes, dna_base, threshold):
+    node_id_counter = len(existing_nodes)
+    for node in existing_nodes:
+        new_node = node.replicate(threshold, node_id_counter)
+        if new_node:
+            existing_nodes.append(new_node)
+            return new_node
+    return None
 

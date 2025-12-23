@@ -1,0 +1,2 @@
+line: ParsedLine,
+options: Optional[optparse.Values] = None,

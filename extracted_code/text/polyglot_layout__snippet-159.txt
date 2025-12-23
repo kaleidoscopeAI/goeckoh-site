@@ -1,0 +1,7 @@
+  print(">> Upgrading pip and installing deps")
+  subprocess.check_call([str(pip), "install", "--upgrade", "pip"])
+  subprocess.check_call([str(pip), "install"] + REQ)
+  env = os.environ.copy(); env["OBA_BOOTED"] = "1"
+  print(">> Relaunching inside venv")
+  os.execvpe(str(py), [str(py), __file__], env)
+

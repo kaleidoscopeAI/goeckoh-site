@@ -1,0 +1,6 @@
+TYPES = Option.TYPES + ("path", "package_name")
+TYPE_CHECKER = Option.TYPE_CHECKER.copy()
+TYPE_CHECKER["package_name"] = _package_name_option_check
+TYPE_CHECKER["path"] = _path_option_check
+
+

@@ -1,10 +1,18 @@
-    from pip._vendor.typing_extensions import Literal  # pragma: no cover
+def yield_lines(iterable):
+    r"""
+    Yield valid lines of a string or iterable.
 
+    >>> list(yield_lines(''))
+    []
+    >>> list(yield_lines(['foo', 'bar']))
+    ['foo', 'bar']
+    >>> list(yield_lines('foo\nbar'))
+    ['foo', 'bar']
+    >>> list(yield_lines('\nfoo\n#bar\nbaz #comment'))
+    ['foo', 'baz #comment']
+    >>> list(yield_lines(['foo\nbar', 'baz', 'bing\n\n\n']))
+    ['foo', 'bar', 'baz', 'bing']
+    """
+    return itertools.chain.from_iterable(map(yield_lines, iterable))
 
-from ._loop import loop_last
-from .console import Console, ConsoleOptions, RenderableType, RenderResult
-from .control import Control
-from .segment import ControlType, Segment
-from .style import StyleType
-from .text import Text
 

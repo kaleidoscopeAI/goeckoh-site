@@ -1,0 +1,2 @@
+doc: Kaleidoscope AI Web Interface
+functions: allowed_file, worker_loop, worker_ingest, worker_mimic, index, upload_file, mimic_software, get_status, get_task_details

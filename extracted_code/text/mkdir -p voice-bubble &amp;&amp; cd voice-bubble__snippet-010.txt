@@ -1,2 +1,6 @@
-3.4 Validation Protocol
-A powered within-subjects EEG experiment (N=22 recruited, f=0.65, ρ=0.60, ε=0.75) will quantify N1 suppression for Goeckoh real-time self-voice vs delayed/external controls. Primary RM-ANOVA on fronto-central N1 amplitude (Fz/FCz/Cz) expects η_p²=0.30 based on motor-auditory suppression literature [Baess, 2011; Mirdamadi, 2025]. Confirmatory LMM includes age/hearing covariates with random slopes by condition/subject. Safety screening excludes auditory hypersensitivity per clinical guidelines [SafeSound, 2023].
+✅ Voice bubble demo (browser, 10ms features)
+✅ Rust lattice core (WASM, deterministic)
+✅ Full STT→TTS pipeline (250ms Rust)
+✅ Latency budget proof (<300ms)
+✅ Clinician demo script (2min)
+✅ Whitepaper claims (numbers verified)

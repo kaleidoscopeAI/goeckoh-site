@@ -1,8 +1,2 @@
-def speculate(snapshot: dict):
-    if 'sensors' in snapshot:
-        adc = np.array(snapshot['adc_raw'])  # Mock sensor data
-        grad = sensor_grad(1.0, adc)
-        return {"sensor_update": grad.tolist()}
-    # ... Previous
+    A Visualizer class takes this thought and, using the exact logic from your React component, calculates the 3D coordinates for a particle cloud, describing the emergent "thought-form."
 
-frontend/src/App.tsx (Viz hardware state: overlay CPU/brightness from WS snapshot)

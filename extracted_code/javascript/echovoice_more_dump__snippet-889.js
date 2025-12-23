@@ -1,1 +1,2 @@
-+ const v2 = view2D(v_flat, m, block);
+ : Role vector, defining the node's function (e.g., Red/adversarial, Blue/cooperative).
+

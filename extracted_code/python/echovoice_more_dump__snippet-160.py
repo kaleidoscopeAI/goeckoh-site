@@ -1,4 +1,4 @@
 package com.kaleidoscope.body
+import kotlin.math.ln
 import kotlin.math.sqrt
-import kotlin.random.Random
-data class QuantumState(val amplitudes: FloatArray) {
+Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.

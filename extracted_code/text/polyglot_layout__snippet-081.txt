@@ -1,0 +1,6 @@
+  if var_sigma < theta_crystal and sigma <= sigma_min:
+      return Phase.CRYSTAL
+  if var_sigma < theta_gel:
+      return Phase.GEL
+  return Phase.RAW
+

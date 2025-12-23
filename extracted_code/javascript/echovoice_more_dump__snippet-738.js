@@ -1,1 +1,1 @@
-const filePath = path.join(W_DIR, `${id}.json`);
++export function stressDelta(node: NodeState, neighbors: NodeState[], weights: number[], eta = 0.1) {

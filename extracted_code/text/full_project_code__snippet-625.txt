@@ -1,0 +1,1 @@
+ParserElement, str, Tuple[Union[ParserElement, str], Union[ParserElement, str]]

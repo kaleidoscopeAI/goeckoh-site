@@ -1,0 +1,30 @@
+  f.write("# Zip Review Summary\n\n")
+  f.write("## Extraction Status\n\n")
+  f.write(status_df.to_markdown(index=False))
+  f.write("\n\n## Top-level Items\n\n")
+  try:
+       f.write(top_df.to_markdown(index=False))
+  except Exception:
+       f.write(top_df.to_csv(index=False))
+  f.write("\n\n## File Types (by root)\n\n")
+  try:
+       f.write(type_counts.to_markdown(index=False))
+  except Exception:
+       f.write(type_counts.to_csv(index=False))
+  f.write("\n\n## Key Config Files\n\n")
+  try:
+       f.write(key_files.to_markdown(index=False))
+  except Exception:
+       f.write(key_files.to_csv(index=False))
+  f.write("\n\n## Signal Hits (first ~400)\n\n")
+  try:
+       f.write(signals_df.head(100).to_markdown(index=False))
+  except Exception:
+       f.write(signals_df.head(100).to_csv(index=False))
+  f.write("\n\n## README Snippets (first 120 lines each)\n\n")
+  for _, rr in readme_df.iterrows():
+       f.write(f"### {rr['root']}/{rr['relpath']}\n\n")
+       f.write("```\n")
+       f.write(rr["snippet"])
+       f.write("\n```\n\n")
+

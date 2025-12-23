@@ -1,9 +1,8 @@
-    Incomplete Node class with semantic embeddings, mutation, and replication logic.
-    Placeholder LLM mock with a real adapter (using Ollama via HTTP, with secure env vars).
-    Incomplete physics with full Velocity-Verlet integration and adaptive stepping.
-    Semantic diffusion, noise, and gating.
-    Full backend with FastAPI, including speculation integration (flagged suggestions go to worker).
-    Frontend with TSX/Three.js, using instanced meshes for performance.
-    Dockerfiles and docker-compose for running the stack.
+    PDF's knowledge K_i → derived from bit confidence (entropy or avg p_k) + engine states.
+    PDF's perspective P_i → spec's b_i (perspective engine state).
+    PDF's awareness A_i → derived from attention in engines + IIT Φ contribution.
+    PDF's evolution (bonds, diffusion, mutation, LLM, replication) → spec's dynamics (Hamiltonian gradients, ODEs, Metropolis flips, birth/death).
+    Emotional C_i modulates as in spec, influencing λ's and engines.
+    Visualization: frontend updated with PDF's blueprint (data-rich spheres, dynamic bonds, overlays, aesthetics like bloom/glow, aurora gradients, particle auras).
+    Groundbreaking aspect: Fuses physical (Hamiltonian dynamics), cognitive (thought engines), emotional (chemical flows), and quantum-inspired (decoherence/IIT) into a self-organizing AI OS for emergent reasoning—revolutionary for simulating "conscious" data refinement in drug discovery/AI brains.
 
-The math is implemented from bit-level (ingestion) to visualization, with transformations explained inline. This is groundbreaking because it fuses physical simulation with semantic AI in a closed-loop system, enabling self-validating hypotheses (via rollouts) and emergent structures (crystallization), revolutionary for fields like drug discovery (modeling molecular interactions) or cognitive AI (simulating "conscious" data processing).

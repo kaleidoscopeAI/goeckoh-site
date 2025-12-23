@@ -1,1 +1,1 @@
-import AVFoundation
+def bootstrap_ollama():

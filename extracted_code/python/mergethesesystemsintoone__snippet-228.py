@@ -1,2 +1,2 @@
-class KnowledgeGraph:
-def init(self):
+Text Structure, Patterns and semantics (all built from open sources modules.)
+

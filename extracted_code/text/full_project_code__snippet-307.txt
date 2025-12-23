@@ -1,0 +1,3 @@
+ConnectionCls = SOCKSHTTPSConnection
+
+

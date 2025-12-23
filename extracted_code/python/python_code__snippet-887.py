@@ -1,8 +1,18 @@
-    from .__main__ import make_test_card
-    from .console import Console
+def install_warning_logger() -> None:
+    # Enable our Deprecation Warnings
+    warnings.simplefilter("default", PipDeprecationWarning, append=True)
 
-    console = Console()
-    with console.pager(styles=True):
-        console.print(make_test_card())
+    global _original_showwarning
+
+    if _original_showwarning is None:
+        _original_showwarning = warnings.showwarning
+        warnings.showwarning = _showwarning
 
 
+def deprecated(
+    *,
+    reason: str,
+    replacement: Optional[str],
+    gone_in: Optional[str],
+    feature_flag: Optional[str] = None,
+    issue: Optional[int] = None,

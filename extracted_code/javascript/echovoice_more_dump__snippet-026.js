@@ -1,2 +1,1 @@
-fn apply_quantum_state(&mut self, reg: &QuantumRegister<Self>) {
-let freq_val = reg.qubits.iter()
+implementation using safe wrappers (no direct /sys writes unless owner_mode is enabled). Also exposes JNI functions to let Kotlin call apply_register_to_cpu.

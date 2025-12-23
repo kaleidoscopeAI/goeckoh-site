@@ -1,0 +1,6 @@
+return DirectUrl(
+    url=path_to_url(source_dir),
+    info=DirInfo(editable=True),
+)
+
+

@@ -1,2 +1,2 @@
-package com.kaleidoscope.body
-data class SystemState(
+# <REDACTED: potential secret detected>
+

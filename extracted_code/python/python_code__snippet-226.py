@@ -1,2 +1,3 @@
-    from PIL import Image, ImageDraw, ImageFont
-    pil_available = True
+from .utils import canonicalize_version
+from .version import LegacyVersion, Version, parse
+

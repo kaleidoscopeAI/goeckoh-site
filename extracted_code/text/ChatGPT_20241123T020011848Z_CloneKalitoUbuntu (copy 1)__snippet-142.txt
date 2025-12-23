@@ -1,0 +1,6 @@
+"""Create a network of connected nodes."""
+nodes = [Node(i, np.random.rand()) for i in range(num_nodes)]
+for i in range(num_nodes - 1):
+    nodes[i].connect(nodes[i + 1])
+return nodes
+

@@ -1,0 +1,4 @@
+theme = Theme()
+print(theme.config)
+
+

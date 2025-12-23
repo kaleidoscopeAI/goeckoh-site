@@ -1,0 +1,12 @@
+"""Return the persistent or temporary cache directory where the built
+wheel need to be stored.
+"""
+cache_available = bool(wheel_cache.cache_dir)
+assert req.link
+if cache_available and _should_cache(req):
+    cache_dir = wheel_cache.get_path_for_link(req.link)
+else:
+    cache_dir = wheel_cache.get_ephem_path_for_link(req.link)
+return cache_dir
+
+

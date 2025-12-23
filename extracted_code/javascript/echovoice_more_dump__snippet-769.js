@@ -1,1 +1,1 @@
-console.log("Trial done", res);
+const w = nb[n].w;

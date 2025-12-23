@@ -1,0 +1,5 @@
+ "A virtual env should be used for each install and run, ensure all requirments are intalled via the provided requirements.txt" ,
+ "Then start main.py for basic terminal interaction.",
+
+     ]
+}

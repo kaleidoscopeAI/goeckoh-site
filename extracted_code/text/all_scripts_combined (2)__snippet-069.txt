@@ -1,0 +1,8 @@
+"""All audio constants in one place."""
+
+sample_rate: int = 16_000
+chunk_seconds: float = 2.5
+silence_rms_threshold: float = 0.0125
+channels: int = 1
+
+

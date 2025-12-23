@@ -1,0 +1,12 @@
+level = 1
+g = globals()
+try:
+    # find the first stack frame that is *not* code in
+    # the pkg_resources module, to use for the warning
+    while sys._getframe(level).f_globals is g:
+        level += 1
+except ValueError:
+    pass
+warnings.warn(stacklevel=level + 1, *args, **kw)
+
+

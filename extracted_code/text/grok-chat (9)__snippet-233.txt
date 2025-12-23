@@ -1,0 +1,5 @@
+GOECKOH_USE_RUST_VC=1 GOECKOH_MIRROR_METRICS_LOG=backend/.run/
+… +2 lines
+./.venv/bin/python -m goeckoh.apps.real_unified_system --api --config
+real_system_config.ini
+

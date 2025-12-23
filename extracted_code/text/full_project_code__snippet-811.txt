@@ -1,0 +1,6 @@
+"class_table": ISO2022CN_CLS,
+"class_factor": 9,
+"state_table": ISO2022CN_ST,
+"char_len_table": ISO2022CN_CHAR_LEN_TABLE,
+"name": "ISO-2022-CN",
+"language": "Chinese",

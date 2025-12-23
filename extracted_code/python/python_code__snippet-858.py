@@ -1,6 +1,19 @@
-import io
-from typing import IO, TYPE_CHECKING, Any, List
+import contextlib
+import errno
+import logging
+import logging.handlers
+import os
+import sys
+import threading
+from dataclasses import dataclass
+from io import TextIOWrapper
+from logging import Filter
+from typing import Any, ClassVar, Generator, List, Optional, TextIO, Type
 
-from .ansi import AnsiDecoder
-from .text import Text
-
+from pip._vendor.rich.console import (
+    Console,
+    ConsoleOptions,
+    ConsoleRenderable,
+    RenderableType,
+    RenderResult,
+    RichCast,

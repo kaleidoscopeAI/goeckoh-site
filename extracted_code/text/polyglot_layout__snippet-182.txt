@@ -1,0 +1,18 @@
+  if len(signal_results) >= hits_limit:
+       break
+  root = E_A if row["root"] == E_A.name else E_B
+  p = root / row["relpath"]
+  try:
+       if not p.is_file() or not is_textual(p) or (p.stat().st_size or 0) > 1_000_000:
+           continue
+       txt = p.read_text(encoding="utf-8", errors="ignore")
+  except Exception:
+       continue
+  for pattern, tag in signals:
+       for m in re.finditer(pattern, txt, flags=re.IGNORECASE):
+           start = max(0, m.start()-80)
+           end = min(len(txt), m.end()+80)
+           snippet = txt[start:end].replace("\n"," ")
+           signal_results.append({
+               "root": row["root"],
+

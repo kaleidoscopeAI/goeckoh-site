@@ -1,19 +1,18 @@
-    import threading
+    from pip._vendor.rich import print
 
-    from pip._vendor.tenacity import RetryCallState
+    print()
 
+    def test(foo: float, bar: float) -> None:
+        list_of_things = [1, 2, 3, None, 4, True, False, "Hello World"]
+        dict_of_things = {
+            "version": "1.1",
+            "method": "confirmFruitPurchase",
+            "params": [["apple", "orange", "mangoes", "pomelo"], 1.123],
+            "id": "194521489",
+        }
+        print(render_scope(locals(), title="[i]locals", sort_keys=False))
 
-class stop_base(abc.ABC):
-    """Abstract base class for stop strategies."""
-
-    @abc.abstractmethod
-    def __call__(self, retry_state: "RetryCallState") -> bool:
-        pass
-
-    def __and__(self, other: "stop_base") -> "stop_all":
-        return stop_all(self, other)
-
-    def __or__(self, other: "stop_base") -> "stop_any":
-        return stop_any(self, other)
+    test(20.3423, 3.1427)
+    print()
 
 

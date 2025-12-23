@@ -1,0 +1,3 @@
+doc: Caregiver-facing reporting utilities.
+functions: summarize
+classes: SummaryRow

@@ -1,5 +1,2 @@
-import React, { useState } from "react";
-import axios from "axios";
-function SweepPanel() {
-const [lrRange, setLrRange] = useState("5e-4,1e-3");
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+3. **Learning** — Reinforcement updates, LLM fine-tuning, and data ingestion equations provide parameter updates from experience.
+4. **Autonomy** — The autonomous goal operator (\mathcal{G}(\cdot)) and mirror/reflection engines let the system form, evaluate, and revise

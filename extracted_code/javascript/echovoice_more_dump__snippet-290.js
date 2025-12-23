@@ -1,2 +1,1 @@
-const mods = computeModulators(nodeState).
-const allowedMods = applyRegulatoryFilter(nodeState, mods, valueLayerOk = true).
+const PERIOD_MS = 1000 * 60 * 10;

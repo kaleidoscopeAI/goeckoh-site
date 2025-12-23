@@ -1,1 +1,1 @@
-const w = weights[n];
++ const targetFile = path.join(W_DIR, `${id}.json`);

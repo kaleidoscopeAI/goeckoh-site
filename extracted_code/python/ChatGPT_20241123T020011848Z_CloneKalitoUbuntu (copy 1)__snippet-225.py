@@ -1,2 +1,4 @@
-  command 'python3' from deb python3
-  command 'python' from deb python-is-python3
+  - Nodes with relevant knowledge can retrieve images from other nodes if the local node lacks them.
+
+
+

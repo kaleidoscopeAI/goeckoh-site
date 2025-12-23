@@ -1,0 +1,27 @@
+global positions, velocities
+step = 0
+while True:
+    t0 = time.time()
+    # simple physics: attraction to origin modulated by "emotional field"
+    dist = np.linalg.norm(positions, axis=1) + 1e-6
+    forces = -positions / dist[:,None] * (1.0 / (dist[:,None] + 1.0))[:,None] * 0.02
+    velocities += forces
+    velocities *= 0.98
+    positions += velocities * 0.016
+    # boundary
+    r = np.linalg.norm(positions, axis=1)
+    mask = r > 400
+    positions[mask] *= 0.95
+    velocities[mask] *= 0.95
+    # snapshot for replay
+    snapshots.append(positions.copy())
+    # broadcast to clients (pack as bytes to reduce JSON overhead)
+    try:
+        socketio.emit('positions', {'positions': positions.tobytes()}, broadcast=True, namespace='/kaleido')
+    except Exception as e:
+        print('emit error', e)
+    step += 1
+    dt = time.time() - t0
+    sleep_time = max(0.0, 0.016 - dt)
+    time.sleep(sleep_time)
+

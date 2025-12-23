@@ -1,0 +1,1 @@
+reduce WER/latency; needs paired audio+text and GPU.

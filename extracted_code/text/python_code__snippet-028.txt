@@ -1,1 +1,9 @@
-module, or at any other time before your application begins using ``urllib3``,
+    Returns `True` if the given object's class (or the object itself, if it's a class) has one of the
+    fully qualified names in its MRO.
+    """
+    for type_name in get_object_types_mro_as_strings(obj):
+        if type_name in fully_qualified_types_names:
+            return True
+    return False
+
+

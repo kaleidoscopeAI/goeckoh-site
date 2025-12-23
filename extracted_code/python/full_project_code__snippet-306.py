@@ -1,164 +1,193 @@
-    from ctypes import byref, Structure, c_char, POINTER
+    def get_osfhandle(_):
+        raise OSError("This isn't windows!")
 
-    COORD = wintypes._COORD
 
-    class CONSOLE_SCREEN_BUFFER_INFO(Structure):
-        """struct in wincon.h."""
-        _fields_ = [
-            ("dwSize", COORD),
-            ("dwCursorPosition", COORD),
-            ("wAttributes", wintypes.WORD),
-            ("srWindow", wintypes.SMALL_RECT),
-            ("dwMaximumWindowSize", COORD),
-        ]
-        def __str__(self):
-            return '(%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d)' % (
-                self.dwSize.Y, self.dwSize.X
-                , self.dwCursorPosition.Y, self.dwCursorPosition.X
-                , self.wAttributes
-                , self.srWindow.Top, self.srWindow.Left, self.srWindow.Bottom, self.srWindow.Right
-                , self.dwMaximumWindowSize.Y, self.dwMaximumWindowSize.X
-            )
+from . import win32
 
-    _GetStdHandle = windll.kernel32.GetStdHandle
-    _GetStdHandle.argtypes = [
-        wintypes.DWORD,
-    ]
-    _GetStdHandle.restype = wintypes.HANDLE
+# from wincon.h
+class WinColor(object):
+    BLACK   = 0
+    BLUE    = 1
+    GREEN   = 2
+    CYAN    = 3
+    RED     = 4
+    MAGENTA = 5
+    YELLOW  = 6
+    GREY    = 7
 
-    _GetConsoleScreenBufferInfo = windll.kernel32.GetConsoleScreenBufferInfo
-    _GetConsoleScreenBufferInfo.argtypes = [
-        wintypes.HANDLE,
-        POINTER(CONSOLE_SCREEN_BUFFER_INFO),
-    ]
-    _GetConsoleScreenBufferInfo.restype = wintypes.BOOL
+# from wincon.h
+class WinStyle(object):
+    NORMAL              = 0x00 # dim text, dim background
+    BRIGHT              = 0x08 # bright text, dim background
+    BRIGHT_BACKGROUND   = 0x80 # dim text, bright background
 
-    _SetConsoleTextAttribute = windll.kernel32.SetConsoleTextAttribute
-    _SetConsoleTextAttribute.argtypes = [
-        wintypes.HANDLE,
-        wintypes.WORD,
-    ]
-    _SetConsoleTextAttribute.restype = wintypes.BOOL
+class WinTerm(object):
 
-    _SetConsoleCursorPosition = windll.kernel32.SetConsoleCursorPosition
-    _SetConsoleCursorPosition.argtypes = [
-        wintypes.HANDLE,
-        COORD,
-    ]
-    _SetConsoleCursorPosition.restype = wintypes.BOOL
+    def __init__(self):
+        self._default = win32.GetConsoleScreenBufferInfo(win32.STDOUT).wAttributes
+        self.set_attrs(self._default)
+        self._default_fore = self._fore
+        self._default_back = self._back
+        self._default_style = self._style
+        # In order to emulate LIGHT_EX in windows, we borrow the BRIGHT style.
+        # So that LIGHT_EX colors and BRIGHT style do not clobber each other,
+        # we track them separately, since LIGHT_EX is overwritten by Fore/Back
+        # and BRIGHT is overwritten by Style codes.
+        self._light = 0
 
-    _FillConsoleOutputCharacterA = windll.kernel32.FillConsoleOutputCharacterA
-    _FillConsoleOutputCharacterA.argtypes = [
-        wintypes.HANDLE,
-        c_char,
-        wintypes.DWORD,
-        COORD,
-        POINTER(wintypes.DWORD),
-    ]
-    _FillConsoleOutputCharacterA.restype = wintypes.BOOL
+    def get_attrs(self):
+        return self._fore + self._back * 16 + (self._style | self._light)
 
-    _FillConsoleOutputAttribute = windll.kernel32.FillConsoleOutputAttribute
-    _FillConsoleOutputAttribute.argtypes = [
-        wintypes.HANDLE,
-        wintypes.WORD,
-        wintypes.DWORD,
-        COORD,
-        POINTER(wintypes.DWORD),
-    ]
-    _FillConsoleOutputAttribute.restype = wintypes.BOOL
+    def set_attrs(self, value):
+        self._fore = value & 7
+        self._back = (value >> 4) & 7
+        self._style = value & (WinStyle.BRIGHT | WinStyle.BRIGHT_BACKGROUND)
 
-    _SetConsoleTitleW = windll.kernel32.SetConsoleTitleW
-    _SetConsoleTitleW.argtypes = [
-        wintypes.LPCWSTR
-    ]
-    _SetConsoleTitleW.restype = wintypes.BOOL
+    def reset_all(self, on_stderr=None):
+        self.set_attrs(self._default)
+        self.set_console(attrs=self._default)
+        self._light = 0
 
-    _GetConsoleMode = windll.kernel32.GetConsoleMode
-    _GetConsoleMode.argtypes = [
-        wintypes.HANDLE,
-        POINTER(wintypes.DWORD)
-    ]
-    _GetConsoleMode.restype = wintypes.BOOL
+    def fore(self, fore=None, light=False, on_stderr=False):
+        if fore is None:
+            fore = self._default_fore
+        self._fore = fore
+        # Emulate LIGHT_EX with BRIGHT Style
+        if light:
+            self._light |= WinStyle.BRIGHT
+        else:
+            self._light &= ~WinStyle.BRIGHT
+        self.set_console(on_stderr=on_stderr)
 
-    _SetConsoleMode = windll.kernel32.SetConsoleMode
-    _SetConsoleMode.argtypes = [
-        wintypes.HANDLE,
-        wintypes.DWORD
-    ]
-    _SetConsoleMode.restype = wintypes.BOOL
+    def back(self, back=None, light=False, on_stderr=False):
+        if back is None:
+            back = self._default_back
+        self._back = back
+        # Emulate LIGHT_EX with BRIGHT_BACKGROUND Style
+        if light:
+            self._light |= WinStyle.BRIGHT_BACKGROUND
+        else:
+            self._light &= ~WinStyle.BRIGHT_BACKGROUND
+        self.set_console(on_stderr=on_stderr)
 
-    def _winapi_test(handle):
-        csbi = CONSOLE_SCREEN_BUFFER_INFO()
-        success = _GetConsoleScreenBufferInfo(
-            handle, byref(csbi))
-        return bool(success)
+    def style(self, style=None, on_stderr=False):
+        if style is None:
+            style = self._default_style
+        self._style = style
+        self.set_console(on_stderr=on_stderr)
 
-    def winapi_test():
-        return any(_winapi_test(h) for h in
-                   (_GetStdHandle(STDOUT), _GetStdHandle(STDERR)))
+    def set_console(self, attrs=None, on_stderr=False):
+        if attrs is None:
+            attrs = self.get_attrs()
+        handle = win32.STDOUT
+        if on_stderr:
+            handle = win32.STDERR
+        win32.SetConsoleTextAttribute(handle, attrs)
 
-    def GetConsoleScreenBufferInfo(stream_id=STDOUT):
-        handle = _GetStdHandle(stream_id)
-        csbi = CONSOLE_SCREEN_BUFFER_INFO()
-        success = _GetConsoleScreenBufferInfo(
-            handle, byref(csbi))
-        return csbi
+    def get_position(self, handle):
+        position = win32.GetConsoleScreenBufferInfo(handle).dwCursorPosition
+        # Because Windows coordinates are 0-based,
+        # and win32.SetConsoleCursorPosition expects 1-based.
+        position.X += 1
+        position.Y += 1
+        return position
 
-    def SetConsoleTextAttribute(stream_id, attrs):
-        handle = _GetStdHandle(stream_id)
-        return _SetConsoleTextAttribute(handle, attrs)
-
-    def SetConsoleCursorPosition(stream_id, position, adjust=True):
-        position = COORD(*position)
-        # If the position is out of range, do nothing.
-        if position.Y <= 0 or position.X <= 0:
+    def set_cursor_position(self, position=None, on_stderr=False):
+        if position is None:
+            # I'm not currently tracking the position, so there is no default.
+            # position = self.get_position()
             return
-        # Adjust for Windows' SetConsoleCursorPosition:
-        #    1. being 0-based, while ANSI is 1-based.
-        #    2. expecting (x,y), while ANSI uses (y,x).
-        adjusted_position = COORD(position.Y - 1, position.X - 1)
-        if adjust:
-            # Adjust for viewport's scroll position
-            sr = GetConsoleScreenBufferInfo(STDOUT).srWindow
-            adjusted_position.Y += sr.Top
-            adjusted_position.X += sr.Left
-        # Resume normal processing
-        handle = _GetStdHandle(stream_id)
-        return _SetConsoleCursorPosition(handle, adjusted_position)
+        handle = win32.STDOUT
+        if on_stderr:
+            handle = win32.STDERR
+        win32.SetConsoleCursorPosition(handle, position)
 
-    def FillConsoleOutputCharacter(stream_id, char, length, start):
-        handle = _GetStdHandle(stream_id)
-        char = c_char(char.encode())
-        length = wintypes.DWORD(length)
-        num_written = wintypes.DWORD(0)
-        # Note that this is hard-coded for ANSI (vs wide) bytes.
-        success = _FillConsoleOutputCharacterA(
-            handle, char, length, start, byref(num_written))
-        return num_written.value
+    def cursor_adjust(self, x, y, on_stderr=False):
+        handle = win32.STDOUT
+        if on_stderr:
+            handle = win32.STDERR
+        position = self.get_position(handle)
+        adjusted_position = (position.Y + y, position.X + x)
+        win32.SetConsoleCursorPosition(handle, adjusted_position, adjust=False)
 
-    def FillConsoleOutputAttribute(stream_id, attr, length, start):
-        ''' FillConsoleOutputAttribute( hConsole, csbi.wAttributes, dwConSize, coordScreen, &cCharsWritten )'''
-        handle = _GetStdHandle(stream_id)
-        attribute = wintypes.WORD(attr)
-        length = wintypes.DWORD(length)
-        num_written = wintypes.DWORD(0)
-        # Note that this is hard-coded for ANSI (vs wide) bytes.
-        return _FillConsoleOutputAttribute(
-            handle, attribute, length, start, byref(num_written))
+    def erase_screen(self, mode=0, on_stderr=False):
+        # 0 should clear from the cursor to the end of the screen.
+        # 1 should clear from the cursor to the beginning of the screen.
+        # 2 should clear the entire screen, and move cursor to (1,1)
+        handle = win32.STDOUT
+        if on_stderr:
+            handle = win32.STDERR
+        csbi = win32.GetConsoleScreenBufferInfo(handle)
+        # get the number of character cells in the current buffer
+        cells_in_screen = csbi.dwSize.X * csbi.dwSize.Y
+        # get number of character cells before current cursor position
+        cells_before_cursor = csbi.dwSize.X * csbi.dwCursorPosition.Y + csbi.dwCursorPosition.X
+        if mode == 0:
+            from_coord = csbi.dwCursorPosition
+            cells_to_erase = cells_in_screen - cells_before_cursor
+        elif mode == 1:
+            from_coord = win32.COORD(0, 0)
+            cells_to_erase = cells_before_cursor
+        elif mode == 2:
+            from_coord = win32.COORD(0, 0)
+            cells_to_erase = cells_in_screen
+        else:
+            # invalid mode
+            return
+        # fill the entire screen with blanks
+        win32.FillConsoleOutputCharacter(handle, ' ', cells_to_erase, from_coord)
+        # now set the buffer's attributes accordingly
+        win32.FillConsoleOutputAttribute(handle, self.get_attrs(), cells_to_erase, from_coord)
+        if mode == 2:
+            # put the cursor where needed
+            win32.SetConsoleCursorPosition(handle, (1, 1))
 
-    def SetConsoleTitle(title):
-        return _SetConsoleTitleW(title)
+    def erase_line(self, mode=0, on_stderr=False):
+        # 0 should clear from the cursor to the end of the line.
+        # 1 should clear from the cursor to the beginning of the line.
+        # 2 should clear the entire line.
+        handle = win32.STDOUT
+        if on_stderr:
+            handle = win32.STDERR
+        csbi = win32.GetConsoleScreenBufferInfo(handle)
+        if mode == 0:
+            from_coord = csbi.dwCursorPosition
+            cells_to_erase = csbi.dwSize.X - csbi.dwCursorPosition.X
+        elif mode == 1:
+            from_coord = win32.COORD(0, csbi.dwCursorPosition.Y)
+            cells_to_erase = csbi.dwCursorPosition.X
+        elif mode == 2:
+            from_coord = win32.COORD(0, csbi.dwCursorPosition.Y)
+            cells_to_erase = csbi.dwSize.X
+        else:
+            # invalid mode
+            return
+        # fill the entire screen with blanks
+        win32.FillConsoleOutputCharacter(handle, ' ', cells_to_erase, from_coord)
+        # now set the buffer's attributes accordingly
+        win32.FillConsoleOutputAttribute(handle, self.get_attrs(), cells_to_erase, from_coord)
 
-    def GetConsoleMode(handle):
-        mode = wintypes.DWORD()
-        success = _GetConsoleMode(handle, byref(mode))
-        if not success:
-            raise ctypes.WinError()
-        return mode.value
+    def set_title(self, title):
+        win32.SetConsoleTitle(title)
 
-    def SetConsoleMode(handle, mode):
-        success = _SetConsoleMode(handle, mode)
-        if not success:
-            raise ctypes.WinError()
+
+def enable_vt_processing(fd):
+    if win32.windll is None or not win32.winapi_test():
+        return False
+
+    try:
+        handle = get_osfhandle(fd)
+        mode = win32.GetConsoleMode(handle)
+        win32.SetConsoleMode(
+            handle,
+            mode | win32.ENABLE_VIRTUAL_TERMINAL_PROCESSING,
+        )
+
+        mode = win32.GetConsoleMode(handle)
+        if mode & win32.ENABLE_VIRTUAL_TERMINAL_PROCESSING:
+            return True
+    # Can get TypeError in testsuite where 'fd' is a Mock()
+    except (OSError, TypeError):
+        return False
 
 

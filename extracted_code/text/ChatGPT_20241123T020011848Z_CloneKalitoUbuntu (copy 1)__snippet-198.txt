@@ -1,0 +1,5 @@
+"""Create the first seed node."""
+dna = np.random.rand(5)  # Initialize DNA with random values
+seed_node = Node(node_id=1, dna=dna)
+return seed_node
+

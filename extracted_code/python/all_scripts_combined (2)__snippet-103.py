@@ -1,50 +1,79 @@
-def cmd_record_voice_facet(loop: SpeechLoop, style: Style, seconds: float, name: str | None) -> None:
-    print(f"Recording {seconds:.1f}s for '{style}' facet...")
-    audio = loop.audio_io.record_phrase(seconds)
-    path = loop.voice_profile.add_sample_from_wav(audio, style, name=name)
-    print(f"Saved facet at {path}")
+def _timestamp(ts: datetime) -> str:
+    if ts.tzinfo is None:
+        ts = ts.replace(tzinfo=timezone.utc)
+    return ts.astimezone(timezone.utc).strftime(ISO_FORMAT)
 
 
-def cmd_show_voice_profile(loop: SpeechLoop) -> None:
-    print("Current Voice Profile Facets:")
-    total = 0
-    for style in ("neutral", "calm", "excited"):
-        samples = loop.voice_profile.samples.get(style, [])
-        print(f"- {style}: {len(samples)} sample(s)")
-        for sample in samples:
-            print(f"    • {sample.path.name} (score={sample.quality_score:.2f})")
-        total += len(samples)
-    if total == 0:
-        print("  No facets recorded yet.")
+class MetricsLogger:
+    """Append-only CSV writer for attempt records."""
+
+    header = ("timestamp", "phrase_text", "raw_text", "corrected_text", "needs_correction", "similarity", "audio_file")
+
+    def __init__(self, csv_path: Path):
+        self.csv_path = csv_path
+        if not csv_path.exists():
+            csv_path.parent.mkdir(parents=True, exist_ok=True)
+            with csv_path.open("w", newline="", encoding="utf-8") as f:
+                writer = csv.writer(f)
+                writer.writerow(self.header)
+
+    def append(self, record: AttemptRecord) -> None:
+        with self.csv_path.open("a", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f)
+            writer.writerow(
+                (
+                    _timestamp(record.timestamp),
+                    record.phrase_text,
+                    record.raw_text,
+                    record.corrected_text,
+                    "1" if record.needs_correction else "0",
+                    f"{record.similarity:.4f}",
+                    str(record.audio_file),
+                )
+            )
 
 
-def main(config: CompanionConfig = CONFIG) -> None:
-    parser = build_parser()
-    args = parser.parse_args()
-    if not args.command:
-        parser.print_help()
-        return
+class GuidanceLogger:
+    """Structured log for behavior / guidance events."""
 
-    loop = SpeechLoop(config)
-    if args.command == "record":
-        cmd_record(loop, args)
-    elif args.command == "list":
-        cmd_list(config)
-    elif args.command == "summary":
-        cmd_summary(config)
-    elif args.command == "run":
-        cmd_run(loop)
-    elif args.command == "dashboard":
-        cmd_dashboard(config, args.host, args.port)
-    elif args.command == "gui":
-        cmd_gui(config)
-    elif args.command == "strategies":
-        cmd_strategies(args.category, args.event)
-    elif args.command == "comfort":
-        cmd_comfort(loop, args.event, args.message)
-    elif args.command == "record-voice-facet":
-        cmd_record_voice_facet(loop, args.style, args.seconds, args.name)
-    elif args.command == "show-voice-profile":
-        cmd_show_voice_profile(loop)
+    header = ("timestamp", "level", "category", "title", "message", "metadata_json")
 
+    def __init__(self, csv_path: Path):
+        self.csv_path = csv_path
+        if not csv_path.exists():
+            csv_path.parent.mkdir(parents=True, exist_ok=True)
+            with csv_path.open("w", newline="", encoding="utf-8") as f:
+                writer = csv.writer(f)
+                writer.writerow(self.header)
+
+    def append(self, event: BehaviorEvent) -> None:
+        payload = (
+            _timestamp(event.timestamp),
+            event.level,
+            event.category,
+            event.title,
+            event.message,
+            json.dumps(event.metadata, ensure_ascii=False),
+        )
+        with self.csv_path.open("a", newline="", encoding="utf-8") as f:
+            csv.writer(f).writerow(payload)
+
+    def tail(self, limit: int = 50) -> list[BehaviorEvent]:
+        if not self.csv_path.exists():
+            return []
+        rows: list[BehaviorEvent] = []
+        with self.csv_path.open("r", newline="", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                rows.append(
+                    BehaviorEvent(
+                        timestamp=datetime.fromisoformat(row["timestamp"].replace("Z", "+00:00")),
+                        level=row["level"],
+                        category=row["category"],  # type: ignore[arg-type]
+                        title=row["title"],
+                        message=row["message"],
+                        metadata=json.loads(row.get("metadata_json") or "{}"),
+                    )
+                )
+        return rows[-limit:]
 

@@ -1,8 +1,15 @@
 from __future__ import annotations
-import torch
-import numpy as np
+from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Optional
-from .config import SpeechModelSettings
+import numpy as np
+import soundfile as sf
+import librosa
+import random
+from typing import Dict, List, Literal, Optional
+import uuid
 
-# Attempt to import the TTS library
+from .config import AudioSettings
+from .voice import VoiceMimic
+from .emotion import extract_prosody, ProsodyProfile
+from .gears import AgentDecision, Information, AudioData
+

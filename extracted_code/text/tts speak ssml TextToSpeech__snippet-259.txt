@@ -1,0 +1,7 @@
+20
+21 -tasks.register("clean", Delete) {
+22 -    delete(rootProject.buildDir)
+21 +task clean(type: Delete) {
+22 +    delete rootProject.buildDir
+23  }
+

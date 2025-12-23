@@ -1,2 +1,1 @@
-const raw = fs.readFileSync(activePath, "utf8");
-const data = JSON.parse(raw);
+const scale = computeGlobalScale(rho, 0.95);

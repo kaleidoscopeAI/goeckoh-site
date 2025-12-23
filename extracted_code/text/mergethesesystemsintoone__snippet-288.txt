@@ -1,0 +1,5 @@
+"""Initializes word vectors randomly."""
+for word in self.vocabulary:
+    self.word_vectors[word] = np.random.uniform(-0.5, 0.5, self.vector_size)
+    self.context_vectors[word] = np.random.uniform(-0.5, 0.5, self.vector_size)
+

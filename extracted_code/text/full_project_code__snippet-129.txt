@@ -1,0 +1,17 @@
+"""
+:param appname: See `appname <platformdirs.api.PlatformDirsABC.appname>`.
+:param appauthor: See `appauthor <platformdirs.api.PlatformDirsABC.appauthor>`.
+:param version: See `version <platformdirs.api.PlatformDirsABC.version>`.
+:param opinion: See `opinion <platformdirs.api.PlatformDirsABC.opinion>`.
+:param ensure_exists: See `ensure_exists <platformdirs.api.PlatformDirsABC.ensure_exists>`.
+:returns: runtime directory tied to the user
+"""
+return PlatformDirs(
+    appname=appname,
+    appauthor=appauthor,
+    version=version,
+    opinion=opinion,
+    ensure_exists=ensure_exists,
+).user_runtime_dir
+
+

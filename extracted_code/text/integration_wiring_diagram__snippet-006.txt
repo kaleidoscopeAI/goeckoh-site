@@ -1,0 +1,5 @@
+     |                                                         |
+     | Sensory Input (Audio)                                   | HID Emulation (Physical World)
+     | Speech Output                                           | Frontend Visualisation
+     | ABA Interventions                                       | AGI Internal State
+     v                                                         v

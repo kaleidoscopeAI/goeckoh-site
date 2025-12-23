@@ -1,0 +1,2 @@
+   state = compute_bubble_state(vertices, profile, attempt, t)
+   render_bubble(state)  # Send to GPU

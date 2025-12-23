@@ -1,5 +1,8 @@
-perspective_manager = PerspectiveManager()visualizer = SystemVisualizer(orchestrator.nodes, orchestrator.global_memory) # Assuming nodes and memory are set# Create nodes from seedstext_seed = seed_manager.generate_seed("text", initial_data={"content": "Test text"})visual_seed = seed_manager.generate_seed("visual", initial_data={"resolution": (1920, 1080)})text_node_id = orchestrator.create_node("text", {"content": "Test text"})visual_node_id = orchestrator.create_node("visual", {"resolution": (1920, 1080)})# Process datatext_result = orchestrator.nodes[text_node_id].process("Analyze this")visual_result = orchestrator.nodes[visual_node_id].process({"data": b"image", "resolution": (1920, 1080)})# Analyze patternscombined_data = {"cycle": 1, "node_outputs": {text_node_id: text_result, visual_node_id: visual_result}}patterns = pattern_recognizer.recognize_patterns(combined_data)print("Patterns:", patterns)# Apply perspectivestransformed = perspective_manager.process_perspectives(combined_data)print("Transformed Data:", transformed)# Visualizevisualizer.generate_node_visualization()
+     """ Updates the internal state variables dynamically with insights from process chains or environmental info based on task performance ."""
+     self.internal_state.update ({ "insights_received" : insights} )
 
+     # Example: updates the curiosity metric in real time . all metrics that drive node state/ selection of actions
+     self.internal_state["curiosity"] += self.prediction_error * 0.1 # Placeholder use all internal info to generate a score that is most meaningful
 
-
+     self.internal_state["curiosity"] = max (0.0, min(1.0, self.internal_state["curiosity"])) # maintain between bounds
 

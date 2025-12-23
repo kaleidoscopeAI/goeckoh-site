@@ -1,0 +1,5 @@
+ If Ollama isn’t running, the loop falls back to heuristic adjustments automatically.
+ x_search() is a stub; swap in your scraper or API connector to ingest real links.
+
+ Audio/WAVs write to seed_crystal_agi/audio/; shapes & captions to seed_crystal_agi/shapes/.
+

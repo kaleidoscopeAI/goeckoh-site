@@ -1,0 +1,5 @@
+"""Proposes a new state for a given node."""
+new_state = current_state.copy()
+new_state[node_id] = random.random()
+return new_state
+

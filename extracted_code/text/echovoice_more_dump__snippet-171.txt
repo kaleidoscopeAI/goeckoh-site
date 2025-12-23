@@ -1,10 +1,1 @@
-        Implementing the CognitiveCrystal class with physics simulation
-
-        Handling user interactions (sliders, buttons)
-
-        Updating metrics and charts
-
-        Console logging
-
-        Exporting data
-
+- GradientFlow using analytic gradients

@@ -1,0 +1,2 @@
+"ol": "oracle",  # Oracle Linux
+"opensuse-leap": "opensuse",  # Newer versions of OpenSuSE report as opensuse-leap

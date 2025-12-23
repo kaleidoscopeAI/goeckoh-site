@@ -1,1 +1,1 @@
-def _text_worker(self, doc) -> Dict:
+def process_numerical_batch(self, data_lists: List[List[float]]) -> List[Dict]:

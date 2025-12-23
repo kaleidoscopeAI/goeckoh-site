@@ -1,0 +1,9 @@
+Parent-editable via GUI (dashboard has "Edit Routines" button that calls add/update/delete)
+Weather & special notes set daily in dashboard
+Emotion-aware style selection
+Medication tracking
+Persisted across restarts
+Fully offline
+Uses child's own voice with prosody transfer
+Matches the original PDF vision exactly
+

@@ -1,1 +1,5 @@
-2. Incorporate multi-node interaction: let gradients propagate between connected nodes via graph adjacency for social/empathy simulation.
+private _localSmooth(from: EVector, to: EVector) {
+const duration = Math.max(10, this.smoothingMs);
+const steps = Math.max(1, Math.floor(duration / 50));
+let step = 0;
+const timer = setInterval(() => {

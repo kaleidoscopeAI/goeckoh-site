@@ -1,0 +1,9 @@
+print_status("Checking Rust installation...")
+try:
+    subprocess.run(["cargo", "--version"], check=True, stdout=subprocess.PIPE)
+    print_status("Rust compiler found.", "OK")
+    return True
+except (subprocess.CalledProcessError, FileNotFoundError):
+    print_status("Rust not found. Install via https://rustup.rs/", "ERR")
+    return False
+

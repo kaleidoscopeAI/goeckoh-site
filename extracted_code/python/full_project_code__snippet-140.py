@@ -1,10 +1,13 @@
 from __future__ import absolute_import
 
+import io
+import logging
 import warnings
-from logging import getLogger
 
-from ntlm import ntlm
-
-from .. import HTTPSConnectionPool
-from ..packages.six.moves.http_client import HTTPSConnection
-
+from ..exceptions import (
+    HTTPError,
+    HTTPWarning,
+    MaxRetryError,
+    ProtocolError,
+    SSLError,
+    TimeoutError,

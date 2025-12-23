@@ -1,0 +1,7 @@
+ConnectTimeoutError,
+InvalidHeader,
+MaxRetryError,
+ProtocolError,
+ProxyError,
+ReadTimeoutError,
+ResponseError,

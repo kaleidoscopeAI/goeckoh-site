@@ -1,0 +1,14 @@
+"""Ask the message interactively, with the given possible responses"""
+while 1:
+    _check_no_input(message)
+    response = input(message)
+    response = response.strip().lower()
+    if response not in options:
+        print(
+            "Your response ({!r}) was not one of the expected responses: "
+            "{}".format(response, ", ".join(options))
+        )
+    else:
+        return response
+
+

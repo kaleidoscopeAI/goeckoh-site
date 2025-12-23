@@ -1,2 +1,5 @@
-Defines custom logger class for the `logger.verbose(...)` method.
+           'Supported-Platform', 'Summary', 'Description',
+           'Keywords', 'Home-page', 'Author', 'Author-email',
+           'License', 'Classifier', 'Download-URL', 'Obsoletes',
+           'Provides', 'Requires')
 

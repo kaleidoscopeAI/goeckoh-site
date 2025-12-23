@@ -1,0 +1,3 @@
+check_compatibility(
+    urllib3.__version__, chardet_version, charset_normalizer_version
+)

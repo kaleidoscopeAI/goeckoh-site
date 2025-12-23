@@ -1,0 +1,9 @@
+<div className="app">
+  <div className="sidebar">
+    <AIDashboard systemState={systemState} particleData={null} />
+    <ControlPanel nodeCount={systemState.nodeCount} />
+  </div>
+  <div className="main-viz">
+    <ParticleCanvas nodeCount={systemState.nodeCount} onSystemUpdate={handleSystemUpdate} onWorkerReady={onWorkerReady} />
+  </div>
+</div>

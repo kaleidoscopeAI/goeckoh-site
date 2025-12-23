@@ -1,2 +1,5 @@
-similar past experiences from the memory crystal.1The QIO averages the valences associated with retrieved memories.1 A predominantly positive
-average valence from the context history introduces a positive bias, scaling the resultant decision vector (e.g., by 1.1) to reinforce the action.1
+5. LLM: Start with Ollama running Mistral 7B Instruct v0.2 Q4_K_M or Llama 3.2 3B Instruct Q4_K_M. Use synchronous API calls initially, providing UI feedback during processing. Test empirically on the target CPU.
+6. Visualization: Employ Three.js served via Python/WebSockets. Use a global panel for the primary thought log. Implement node-attached thoughts sparingly using Sprites + CanvasTexture optimized with a texture atlas. Use InstancedMesh for rendering nodes/bonds if their count exceeds a few hundred.
+7. Architecture: Adhere strictly to the modular design centered around the unified CubeState. Utilize an in-process event/callback system for internal module communication if needed for decoupling beyond direct function calls from app.py.
+8. Configuration: Implement config.yaml (or similar) early and make it comprehensive to facilitate easy tuning and experimentation with LLMs, simulation parameters, and feedback logic.
+9. Feedback Loop: Begin with simple, interpretable rules in the Transformation Engine and incrementally add complexity, guided by observation and the LLM's generated insights.

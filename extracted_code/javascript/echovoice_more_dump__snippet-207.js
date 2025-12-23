@@ -1,12 +1,2 @@
-async function init() {
-    crystal = new CrystalSimulation();
+We have a function queryCrystalConsciousness that sends a prompt to Ollama and returns the response.
 
-    // Test Ollama connection
-    const res = await queryOllama({
-        model: OLLAMA_MODEL,
-        messages: [{ role: "system", content: "test" }]
-    });
-    appendMessage("Crystal", res.includes("Error") ? res : "Cognitive Crystal connected.", false);
-
-    const viz = initCrystalVisualization(document.getElementById("visualization-container"));
-    // Hook charts, metrics, control panel to crystal.step()

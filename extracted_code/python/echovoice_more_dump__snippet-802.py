@@ -1,29 +1,36 @@
-class NoemaEngine:
-    def __init__(self, num_nodes):
-        self.nodes = [Node(i) for i in range(num_nodes)]
-        # ... (create bonds between nodes) ...
-        self.temperature = 1000.0
-        self.time_step = 0.01
-        
-    def run(self, steps):
-        for t in range(steps):
-            # Update the temperature according to the annealing schedule
-            self.temperature = 1000.0 / np.log(1 + t + 1)
-            
-            # Update all nodes
-            for node in self.nodes:
-                neighbors = self._get_neighbors(node)
-                node.update_state(self.time_step, neighbors, self.temperature)
-                
-            # Update the visualization
-            self._update_visualization()
-            
-    def _get_neighbors(self, node):
-        # Return the neighbors of a node
-        pass
-    
-    def _update_visualization(self):
-        # This would interface with a graphics library like PyOpenGL or Matplotlib
-        # to draw the nodes and bonds in real-time.
-        # Node color could be based on emotion, size on energy, etc.
-        pass
+class UnifiedInterfaceNode:
+    id: str
+    valence: float = 0.0
+    arousal: float = 0.0
+    stance: float = 0.0
+    coherence: float = 1.0
+    energy: float = 1.0
+    knowledge: float = 0.0
+    hamiltonian_e: float = 0.0
+    perspective_v: np.ndarray = field(default_factory=lambda: np.zeros(64))
+    governance_flags: Dict[str, Any] = field(default_factory=lambda: {"L0":True, "L1":True})
+    history: List[Dict[str,Any]] = field(default_factory=list)
+    last_update: float = field(default_factory=time.time)
+
+    def snapshot(self):
+        return {
+            "id": self.id,
+            "valence": self.valence,
+            "arousal": self.arousal,
+            "energy": self.energy,
+            "hamiltonian_e": self.hamiltonian_e,
+            "time": time.time()
+        }
+
+    def apply_feedback(self, delta_valence=0.0, delta_arousal=0.0, delta_energy=0.0):
+        self.valence = float(np.clip(self.valence + delta_valence, -1.0, 1.0))
+        self.arousal = float(np.clip(self.arousal + delta_arousal, 0.0, 1.0))
+        self.energy = float(np.clip(self.energy + delta_energy, 0.0, 1.0))
+        self.last_update = time.time()
+        self.history.append(self.snapshot())
+
+    def update_perspective(self, vec: np.ndarray, alpha=0.2):
+        if self.perspective_v.shape != vec.shape:
+            self.perspective_v = np.zeros_like(vec)
+        self.perspective_v = (1-alpha)*self.perspective_v + alpha*vec
+

@@ -1,0 +1,9 @@
+"""Script submitted by Molly to be spoken gently in his own voice."""
+
+timestamp: Timestamp
+text: str
+mode: Literal["inner", "coach"] = "inner"
+active: bool = True
+expires_after_uses: int = 1
+
+

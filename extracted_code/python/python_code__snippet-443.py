@@ -1,4 +1,9 @@
-import re
+class RichCast(Protocol):
+    """An object that may be 'cast' to a console renderable."""
 
-from .compat import builtin_str
+    def __rich__(
+        self,
+    ) -> Union["ConsoleRenderable", "RichCast", str]:  # pragma: no cover
+        ...
+
 

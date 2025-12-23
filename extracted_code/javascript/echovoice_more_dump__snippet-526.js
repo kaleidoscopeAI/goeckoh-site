@@ -1,2 +1,2 @@
-const merged = { ...this.localE, ...newE } as EVector;
-const sanitized = this._sanitizeAndClampVector(merged);
+let maxAbs = 0;
+for (const p of coords) {

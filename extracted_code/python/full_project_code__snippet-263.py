@@ -1,5 +1,2 @@
-def infix_notation(
-    base_expr: ParserElement,
-    op_list: List[InfixNotationOperatorSpec],
-    lpar: Union[str, ParserElement] = Suppress("("),
-    rpar: Union[str, ParserElement] = Suppress(")"),
+def matchPreviousLiteral(): ...
+

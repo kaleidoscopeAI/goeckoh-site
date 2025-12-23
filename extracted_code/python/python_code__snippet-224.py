@@ -1,24 +1,22 @@
-def escape_html(text, table=_escape_html_table):
-    """Escape &, <, > as well as single and double quotes for HTML."""
-    return text.translate(table)
-
-
-def webify(color):
-    if color.startswith('calc') or color.startswith('var'):
-        return color
+def parse_sdist_filename(filename: str) -> Tuple[NormalizedName, Version]:
+    if filename.endswith(".tar.gz"):
+        file_stem = filename[: -len(".tar.gz")]
+    elif filename.endswith(".zip"):
+        file_stem = filename[: -len(".zip")]
     else:
-        return '#' + color
+        raise InvalidSdistFilename(
+            f"Invalid sdist filename (extension must be '.tar.gz' or '.zip'):"
+            f" {filename}"
+        )
 
+    # We are requiring a PEP 440 version, which cannot contain dashes,
+    # so we split on the last dash.
+    name_part, sep, version_part = file_stem.rpartition("-")
+    if not sep:
+        raise InvalidSdistFilename(f"Invalid sdist filename: {filename}")
 
-def _get_ttype_class(ttype):
-    fname = STANDARD_TYPES.get(ttype)
-    if fname:
-        return fname
-    aname = ''
-    while fname is None:
-        aname = '-' + ttype[-1] + aname
-        ttype = ttype.parent
-        fname = STANDARD_TYPES.get(ttype)
-    return fname + aname
+    name = canonicalize_name(name_part)
+    version = Version(version_part)
+    return (name, version)
 
 

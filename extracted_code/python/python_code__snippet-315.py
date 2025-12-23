@@ -1,1 +1,2 @@
-    from unittest.mock import patch, Mock
+def SetConsoleCursorPosition(
+    std_handle: wintypes.HANDLE, coords: WindowsCoordinates

@@ -1,0 +1,6 @@
+success: bool
+data: Any = None
+error: Optional[str] = None
+duration: float = 0.0
+resource_usage: Dict[str, float] = field(default_factory=dict)
+

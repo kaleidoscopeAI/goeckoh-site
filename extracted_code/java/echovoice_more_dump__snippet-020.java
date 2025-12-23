@@ -1,1 +1,2 @@
-private fun gatherInputs(): List<FloatArray> {
+    |                                 ^^^^^^^^ private field
+    |

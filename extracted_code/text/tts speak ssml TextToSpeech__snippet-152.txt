@@ -1,0 +1,6 @@
+      if (json.isEmpty()) return "" to 0.0
+      val obj = JSONObject(json)
+      val text = obj.optString("text", "")
+      val conf = if (obj.has("result")) {
+          val resultArray = obj.getJSONArray("result")
+          (0 until resultArray.length()).map

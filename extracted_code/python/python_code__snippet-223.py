@@ -1,1 +1,51 @@
-    import ctags
+def canonicalize_name(name: str) -> NormalizedName:
+    # This is taken from PEP 503.
+    value = _canonicalize_regex.sub("-", name).lower()
+    return cast(NormalizedName, value)
+
+
+def canonicalize_version(version: Union[Version, str]) -> str:
+    """
+    This is very similar to Version.__str__, but has one subtle difference
+    with the way it handles the release segment.
+    """
+    if isinstance(version, str):
+        try:
+            parsed = Version(version)
+        except InvalidVersion:
+            # Legacy versions cannot be normalized
+            return version
+    else:
+        parsed = version
+
+    parts = []
+
+    # Epoch
+    if parsed.epoch != 0:
+        parts.append(f"{parsed.epoch}!")
+
+    # Release segment
+    # NB: This strips trailing '.0's to normalize
+    parts.append(re.sub(r"(\.0)+$", "", ".".join(str(x) for x in parsed.release)))
+
+    # Pre-release
+    if parsed.pre is not None:
+        parts.append("".join(str(x) for x in parsed.pre))
+
+    # Post-release
+    if parsed.post is not None:
+        parts.append(f".post{parsed.post}")
+
+    # Development release
+    if parsed.dev is not None:
+        parts.append(f".dev{parsed.dev}")
+
+    # Local version segment
+    if parsed.local is not None:
+        parts.append(f"+{parsed.local}")
+
+    return "".join(parts)
+
+
+def parse_wheel_filename(
+    filename: str,

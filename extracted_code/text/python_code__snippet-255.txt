@@ -1,0 +1,5 @@
+if not isinstance(o, string_types) or not o:
+    return False
+return o[0] in '\'"'
+
+

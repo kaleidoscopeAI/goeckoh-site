@@ -1,0 +1,4 @@
+- Real-world crawling requires careful error handling. Malicious content and rate limits necessitate robust sandboxing. The system should incorporate input validation, anomaly detection, and fallback policies.
+- LLM vulnerability to adversarial inputs can be addressed by ensemble validation with external fact-checking or consensus models.
+- Semaphores must be extended to full resource schedulers with dynamic quotas and priority-based crawling rate limiting.
+

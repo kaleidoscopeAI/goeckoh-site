@@ -1,1 +1,1 @@
-class KnowledgeDNA:
+You've defined clear structures for tasks using dataclasses and enums. This includes priority levels, status tracking, dependencies between tasks, results (success, data, error, duration), retry parameters, and estimated resource requirements. Task persistence (to_dict) is included.

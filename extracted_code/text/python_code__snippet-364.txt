@@ -1,0 +1,5 @@
+major: str
+minor: str
+build_number: str
+
+

@@ -1,2 +1,1 @@
-private func save() {
-let defaults = UserDefaults.standard
+if let body = message.body as? String {

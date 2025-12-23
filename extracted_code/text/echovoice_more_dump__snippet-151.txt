@@ -1,1 +1,1 @@
-This implementation maintains the same functionality while using more Rust-idiomatic libraries for image processing.
+If we allow continual fine-tuning using node-local objectives:

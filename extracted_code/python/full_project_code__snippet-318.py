@@ -1,14 +1,6 @@
-from contextlib import contextmanager
-from io import StringIO
 import sys
-import os
+from unittest import TestCase, main
 
-
-class StreamTTY(StringIO):
-    def isatty(self):
-        return True
-
-class StreamNonTTY(StringIO):
-    def isatty(self):
-        return False
+from ..ansi import Back, Fore, Style
+from ..ansitowin32 import AnsiToWin32
 

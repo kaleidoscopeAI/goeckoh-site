@@ -1,16 +1,40 @@
-from kivymd.app import MDApp
-from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.label import MDLabel
-from kivymd.uix.button import MDFlatButton
-from kivymd.uix.dialog import MDDialog
+def __init__(self):
+    self.config = Config()
+    self.crystal = VoiceCrystal(self.config)
+    self.lattice = EmotionalLattice()
+    self.processor = SpeechProcessor()
+    self.queue = queue.Queue()
 
-class MainApp(MDApp):
-    def build(self):
-        self.theme_cls.theme_style = "Dark"
-        self.theme_cls.primary_palette = "DeepPurple"
-        layout = MDBoxLayout(orientation="vertical", padding=40, spacing=20)
-        layout.add_widget(MDLabel(text=f"[color=#ffffff]Jackson’s Companion\nAlways Listening[/color]", halign="center", font_style="H3", markup=True))
-        layout.add_widget(MDLabel(text="Status: Active", halign="center"))
-        layout.add_widget(MDFlatButton(text="Close", on_release=lambda x: self.stop()))
-        return layout
+def callback(self, indata, frames, time, status):
+    if status:
+        print(status)
+    self.queue.put(indata.copy())
+
+def run(self):
+    print("Echo v4.0 Crystalline Heart – awake. Waiting for Jackson's voice...")
+    with sd.InputStream(samplerate=self.config.sample_rate, channels=1, dtype='float32', callback=self.callback):
+        while True:
+            audio = self.queue.get()
+            if np.abs(audio).mean() < 0.008:
+                continue
+
+            with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as f:
+                sf.write(f.name, audio.flatten(), self.config.sample_rate)
+                raw = self.processor.transcribe(f.name)
+                os.unlink(f.name)
+
+            if raw.strip():
+                corrected = self.processor.correct(raw)
+                self.lattice.update_from_audio(audio)
+                style = self.lattice.get_style()
+                wav = self.crystal.synthesize(corrected, style)
+                sd.play(wav, samplerate=self.config.sample_rate)
+                sd.wait()
+
+def add_sample_from_mic(self, seconds=5, style="neutral"):
+    print(f"Recording {style} sample for {seconds}s...")
+    rec = sd.rec(int(seconds * self.config.sample_rate), samplerate=self.config.sample_rate, channels=1)
+    sd.wait()
+    self.crystal.add_sample(rec.flatten(), style)
+    print("Sample saved to crystal.")
 

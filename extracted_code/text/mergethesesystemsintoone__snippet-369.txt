@@ -1,0 +1,9 @@
+  if other_id != self.pattern_id:
+      for harmonic in other_resonance.harmonics:
+          if self._is_harmonic_related(self.frequency, harmonic):
+              # Increase strength of related harmonics
+              if harmonic not in self.harmonics:
+                  self.harmonics.append(harmonic)
+              else:
+                self.harmonics[self.harmonics.index(harmonic)] = harmonic
+

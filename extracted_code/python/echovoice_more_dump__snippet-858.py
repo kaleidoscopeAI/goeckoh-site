@@ -1,84 +1,82 @@
-class UnifiedMemory:
-    def __init__(self, db_path="ica_memory.db", dim=384, model_name="all-MiniLM-L6-v2"):
-        self.dim = dim
-        self.conn = sqlite3.connect(db_path, check_same_thread=False)
-        self._ensure_tables()
-        self.model = SentenceTransformer(model_name)
-        self.index = faiss.IndexFlatIP(dim)
-        self.ids = []
-        self.memory_metadata = []
-        self.memory_embeddings = []
+class Document:
+    url: str
+    text: str
+    embedding: Optional[np.ndarray] = None
+    links: List[str] = field(default_factory=list)
+    timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat() + 'Z')
+    score: float = 0.0
 
-    def _ensure_tables(self):
-        cur = self.conn.cursor()
-        cur.execute("""
-        CREATE TABLE IF NOT EXISTS memories (
-            id TEXT PRIMARY KEY,
-            vec BLOB,
-            valence REAL,
-            arousal REAL,
-            meta TEXT
-        );
-        CREATE TABLE IF NOT EXISTS meta (
-            id TEXT PRIMARY KEY,
-            valence REAL,
-            arousal REAL,
-            meta TEXT
-        );
-        """)
-        self.conn.commit()
+class LocalCrawler:
+    def __init__(self, ai_core, corpus_dir='./corpus', embedder: Optional[LocalEmbedder]=None):
+        self.ai = ai_core
+        self.corpus_dir = corpus_dir
+        self.queue = deque()
+        self.visited = set()
+        self.embedder = embedder or LocalEmbedder(n_components=64)
+        self.running = False
+        ensure_corpus(self.corpus_dir)
+        self._load_corpus()
 
-    def _vec_to_blob(self, vec):
-        return vec.astype(np.float32).tobytes()
+    def _load_corpus(self):
+        files = [os.path.join(self.corpus_dir, f) for f in os.listdir(self.corpus_dir) if f.endswith('.txt')]
+        texts = []
+        for f in files:
+            with open(f, 'r', encoding='utf-8') as fh:
+                texts.append(fh.read())
+        if texts:
+            self.embedder.fit(texts)
+        # seed queue with file paths as 'urls'
+        for f in files:
+            self.queue.append('file://' + os.path.abspath(f))
+        logging.info(f'LocalCrawler loaded {len(files)} documents')
 
-    def _blob_to_vec(self, blob):
-        return np.frombuffer(blob, dtype=np.float32)
+    def _read_doc(self, url: str) -> Optional[Document]:
+        if not url.startswith('file://'):
+            return None
+        path = url[len('file://'):]
+        if not os.path.exists(path):
+            return None
+        with open(path, 'r', encoding='utf-8') as fh:
+            text = fh.read()
+        return Document(url=url, text=text)
 
-    def _to_vec(self, text):
-        emb = self.model.encode([text], show_progress_bar=False)
-        v = np.array(emb, dtype=np.float32)
-        faiss.normalize_L2(v)
-        return v[0]
-
-    def store(self, id: str, text_or_vec: Any, valence: float, arousal: float, meta: dict):
-        if isinstance(text_or_vec, str):
-            vec = self._to_vec(text_or_vec)
-        else:
-            vec = np.array(text_or_vec, dtype=np.float32)
-            faiss.normalize_L2(vec.reshape(1, -1))
-        self.index.add(vec.reshape(1, -1))
-        self.ids.append(id)
-        self.memory_metadata.append({'valence': valence, 'arousal': arousal, 'meta': meta})
-        self.memory_embeddings.append(vec)
-        vec_blob = self._vec_to_blob(vec)
-        cur = self.conn.cursor()
-        cur.execute("REPLACE INTO memories (id,vec,valence,arousal,meta) VALUES (?,?,?,?,?)",
-                    (id, vec_blob, float(valence), float(arousal), json.dumps(meta)))
-        cur.execute("REPLACE INTO meta (id,valence,arousal,meta) VALUES (?,?,?,?)",
-                    (id, float(valence), float(arousal), json.dumps(meta)))
-        self.conn.commit()
-
-    def query(self, query_text_or_vec: Any, valence: float, arousal: float, alpha=0.7, beta=0.3, top_k=5):
-        if isinstance(query_text_or_vec, str):
-            qv = self._to_vec(query_text_or_vec).reshape(1, -1)
-        else:
-            qv = np.array(query_text_or_vec, dtype=np.float32).reshape(1, -1)
-            faiss.normalize_L2(qv)
-        D, I = self.index.search(qv, top_k)
-        results = []
-        cur = self.conn.cursor()
-        for score, idx in zip(D[0], I[0]):
-            if idx < 0 or idx >= len(self.ids):
+    async def crawl_once(self, max_docs=5):
+        processed = 0
+        while self.queue and processed < max_docs:
+            url = self.queue.popleft()
+            if url in self.visited:
                 continue
-            id = self.ids[idx]
-            cur.execute("SELECT valence, arousal, meta FROM meta WHERE id=?", (id,))
-            row = cur.fetchone()
-            if row:
-                sval, sar, meta = row
-                emo_dist = abs(valence - float(sval)) + abs(arousal - float(sar))
-                sem_dist = 1.0 - float(score)
-                final_score = alpha * sem_dist + beta * emo_dist
-                results.append((final_score, id, json.loads(meta)))
-        results.sort(key=lambda x: x[0])
-        return results[:top_k]
+            doc = self._read_doc(url)
+            if not doc:
+                continue
+            emb = self.embedder.embed(doc.text)
+            doc.embedding = emb
+            doc.score = float(np.random.rand())
+            self.visited.add(url)
+            # integrate into AI
+            self.ai.memory.add(emb, {'url': doc.url, 'ts': doc.timestamp})
+            # notify AI core
+            await self.ai.on_new_document(doc)
+            processed += 1
+        return processed
+
+    async def start(self, interval=5.0):
+        self.running = True
+        logging.info('LocalCrawler started')
+        while self.running:
+            try:
+                n = await self.crawl_once(max_docs=3)
+                if n == 0:
+                    await asyncio.sleep(interval)
+                else:
+                    await asyncio.sleep(0.5)
+            except asyncio.CancelledError:
+                break
+            except Exception as e:
+                logging.error(f'Crawler error: {e}')
+                await asyncio.sleep(2.0)
+
+    def stop(self):
+        self.running = False
+        logging.info('LocalCrawler stopped')
 

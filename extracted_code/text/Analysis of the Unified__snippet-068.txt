@@ -1,0 +1,5 @@
+"""Standard Born rule marginalization: p_i ∝ Σ_j |R_ij|^2"""
+I = np.abs(R) ** 2
+p = np.sum(I, axis=1)
+return normalize_vector(p)
+

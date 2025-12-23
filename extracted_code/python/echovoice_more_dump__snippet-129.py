@@ -1,14 +1,10 @@
 package com.kaleidoscope.body
-import android.app.job.JobInfo
-import android.app.job.JobScheduler
-import android.content.ComponentName
 import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkRequest
-import android.os.Build
-import android.provider.Settings
-import android.util.Log
-import androidx.work.*
-import java.util.concurrent.TimeUnit
-class DeviceHAL(private val ctx: Context) {
-private val TAG = "DeviceHAL"
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.util.AttributeSet
+import android.view.View
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.random.Random
+class LivingCubeView @JvmOverloads constructor(

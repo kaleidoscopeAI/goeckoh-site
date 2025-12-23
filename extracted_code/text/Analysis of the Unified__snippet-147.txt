@@ -1,0 +1,5 @@
+particleIdx: number, 
+positions: Float32Array, 
+velocities: Float32Array, 
+emotionalContext: any,
+dynamicParams: any

@@ -1,0 +1,10 @@
+"""A hash was provided for a version-control-system-based requirement, but
+we don't have a method for hashing those."""
+
+order = 1
+head = (
+    "Can't verify hashes for these file:// requirements because they "
+    "point to directories:"
+)
+
+

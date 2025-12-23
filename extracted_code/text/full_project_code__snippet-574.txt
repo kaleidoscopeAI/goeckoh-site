@@ -1,0 +1,9 @@
+{% if not head %}
+    <style>
+        .railroad-heading {
+            font-family: monospace;
+        }
+    </style>
+{% else %}
+    {{ head | safe }}
+{% endif %}

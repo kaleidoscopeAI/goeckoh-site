@@ -1,0 +1,5 @@
+      val samples = generatedAudio.samples
+      val ttsSampleRate = generatedAudio.sampleRate
+
+      // Post-process
+      val dispatcher = AudioDispatcherFactory.fromFloatArray(samples,

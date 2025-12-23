@@ -1,0 +1,9 @@
+Option,
+"--debug",
+dest="debug_mode",
+action="store_true",
+default=False,
+help=(
+    "Let unhandled exceptions propagate outside the main subroutine, "
+    "instead of logging them to stderr."
+),

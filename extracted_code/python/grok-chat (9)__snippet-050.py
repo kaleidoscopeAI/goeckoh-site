@@ -1,4 +1,3 @@
-  terminfo/74 (268 files), 3 more. These directories are excluded from snapshots
-  and undo cleanup. Adjust `ghost_snapshot.ignore_large_untracked_dirs` to
-  change this behavior.
+• The log write failure likely stems from attempting to write to a root-owned .run directory at the project root from the
+  backend directory, indicating a permission conflict to resolve.
 

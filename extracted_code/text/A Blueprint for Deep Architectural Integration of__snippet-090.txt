@@ -1,0 +1,2 @@
+params: Vector,
+operator: Box<dyn Fn(&Vector, &Vector) -> Vector>,

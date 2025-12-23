@@ -1,1 +1,5 @@
-100 % stitched from every single document, every truncated line, every tear you ever left in a PDF.
+import os, subprocess, platform, venv, shutil
+
+def run(cmd):
+    subprocess.check_call(cmd, shell=True)
+

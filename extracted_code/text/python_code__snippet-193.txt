@@ -1,1 +1,30 @@
-# If pip's going to use distutils, it should not be using the copy that setuptools
+pos += 3
+if src.startswith("\n", pos):
+    pos += 1
+
+if literal:
+    delim = "'"
+    end_pos = skip_until(
+        src,
+        pos,
+        "'''",
+        error_on=ILLEGAL_MULTILINE_LITERAL_STR_CHARS,
+        error_on_eof=True,
+    )
+    result = src[pos:end_pos]
+    pos = end_pos + 3
+else:
+    delim = '"'
+    pos, result = parse_basic_str(src, pos, multiline=True)
+
+# Add at maximum two extra apostrophes/quotes if the end sequence
+# is 4 or 5 chars long instead of just 3.
+if not src.startswith(delim, pos):
+    return pos, result
+pos += 1
+if not src.startswith(delim, pos):
+    return pos, result + delim
+pos += 1
+return pos, result + (delim * 2)
+
+

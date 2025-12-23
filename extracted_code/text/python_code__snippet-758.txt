@@ -1,0 +1,11 @@
+_fields_ = (
+    ("cbSize", DWORD),
+    ("pCertContext", PCERT_CONTEXT),
+    ("TrustStatus", CERT_TRUST_STATUS),
+    ("pRevocationInfo", c_void_p),
+    ("pIssuanceUsage", PCERT_ENHKEY_USAGE),
+    ("pApplicationUsage", PCERT_ENHKEY_USAGE),
+    ("pwszExtendedErrorInfo", LPCWSTR),
+)
+
+

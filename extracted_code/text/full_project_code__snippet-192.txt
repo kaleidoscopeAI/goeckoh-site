@@ -1,0 +1,7 @@
+_meth_func = "__func__"
+_meth_self = "__self__"
+
+_func_closure = "__closure__"
+_func_code = "__code__"
+_func_defaults = "__defaults__"
+_func_globals = "__globals__"

@@ -1,0 +1,3 @@
+hits: List["TransformedHit"],
+name_column_width: Optional[int] = None,
+terminal_width: Optional[int] = None,

@@ -1,1 +1,1 @@
-async def crawl(self, start_urls):
+import { DEFAULT_P, DEFAULT_PARAMS, SPECIES } from "../config/emotionDefaults";

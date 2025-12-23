@@ -1,8 +1,6 @@
-class VoiceSample:
-    path: Path
-    duration_s: float
-    rms: float
-    style: Style
-    quality_score: float
-    added_ts: float
+Ctrl+J
+
+Voice
+
+Imagine
 

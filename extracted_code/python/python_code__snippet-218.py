@@ -1,11 +1,15 @@
-import re
-import sys
-import types
-import fnmatch
-from os.path import basename
+class ExtraData(UnpackValueError):
+    """ExtraData is raised when there is trailing data.
 
-from pip._vendor.pygments.lexers._mapping import LEXERS
-from pip._vendor.pygments.modeline import get_filetype_from_buffer
-from pip._vendor.pygments.plugin import find_plugin_lexers
-from pip._vendor.pygments.util import ClassNotFound, guess_decode
+    This exception is raised while only one-shot (not streaming)
+    unpack.
+    """
+
+    def __init__(self, unpacked, extra):
+        self.unpacked = unpacked
+        self.extra = extra
+
+    def __str__(self):
+        return "unpack(b) received extra data."
+
 

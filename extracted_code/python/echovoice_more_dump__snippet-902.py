@@ -1,4 +1,1 @@
-def get_status():
-    """Returns the current stable state of the system."""
-    return SYSTEM_STATE
-
+async def fetch(self, url: str, allow_unlisted=False) -> Optional[str]:

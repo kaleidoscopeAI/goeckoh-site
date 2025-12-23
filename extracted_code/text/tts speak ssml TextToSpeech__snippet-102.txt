@@ -1,0 +1,3 @@
+      val durationSec = audioBytes.size / (sampleRate * 2).toDouble()
+      val wordCount = text.split("\\s+".toRegex()).size.toDouble()
+      val rate = if (durationSec > 0) (wordCount / durationSec) / 1.5 else

@@ -1,1 +1,1 @@
-const inj = new Array(12).fill(0);
+const previous = copyVector(this.localE);

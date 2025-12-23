@@ -1,1 +1,3 @@
-from faster_whisper import WhisperModel
+import Foundation
+import Combine
+final class ServerConfig: ObservableObject {

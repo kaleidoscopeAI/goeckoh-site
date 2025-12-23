@@ -1,0 +1,2 @@
+  name="document_summariser_agent",
+  description="A sequential agent that first reads file contents and then

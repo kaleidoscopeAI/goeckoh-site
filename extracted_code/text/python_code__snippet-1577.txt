@@ -1,0 +1,4 @@
+"""Get a format_control object."""
+return getattr(values, option.dest)
+
+

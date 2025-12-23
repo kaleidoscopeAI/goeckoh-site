@@ -1,0 +1,5 @@
+"class_table": EUCJP_CLS,
+"class_factor": 6,
+"state_table": EUCJP_ST,
+"char_len_table": EUCJP_CHAR_LEN_TABLE,
+"name": "EUC-JP",

@@ -1,0 +1,6 @@
+59      gcl: float
+60 +    heart_valence: float
+61 +    heart_arousal: float
+62 +    heart_coherence: float
+63      output_mode: str
+

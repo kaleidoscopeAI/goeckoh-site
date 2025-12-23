@@ -1,2 +1,6 @@
-import { NodeState, computeModulators } from "./emotionIntegrators";
-import { DEFAULT_P, DEFAULT_PARAMS } from "../config/emotionDefaults";
+import { useState, useEffect } from "react";
+import { actuationService, EVector } from "../services/actuationService";
+import axios from "axios";
+export function useEmotionalActuation() {
+const [e, setEState] = useState<EVector>({ ...actuationService.e });
+const setE = (patch: Partial<EVector>) => {

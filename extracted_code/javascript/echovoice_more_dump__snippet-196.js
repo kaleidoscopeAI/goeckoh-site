@@ -1,5 +1,12 @@
-633 |             if let Some(atomic_num) = features.atomic_number {
-    |                                                ^^^^^^^^^^^^^ unknown field
-    |
-    = note: available fields are: `element_symbol`, `electronegativity`, `valence_electrons`, `atomic_radius`, `is_metal` ... and 2 others
+async function init() {
+    crystal = new CrystalSimulation();
 
+    // Test Ollama connection
+    const res = await queryOllama({
+        model: OLLAMA_MODEL,
+        messages: [{ role: "system", content: "test" }]
+    });
+    appendMessage("Crystal", res.includes("Error") ? res : "Cognitive Crystal connected.", false);
+
+    const viz = initCrystalVisualization(document.getElementById("visualization-container"));
+    // Hook charts, metrics, control panel to crystal.step()

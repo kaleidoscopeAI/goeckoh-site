@@ -1,2 +1,2 @@
-def _set_ssl_context_verify_mode(
-    ssl_context: ssl.SSLContext, verify_mode: ssl.VerifyMode
+def _handle_no_use_pep517(
+    option: Option, opt: str, value: str, parser: OptionParser

@@ -1,0 +1,6 @@
+dist_version = dist.version
+if isinstance(dist_version, Version):
+    return f"{dist.raw_name}=={dist_version}"
+return f"{dist.raw_name}==={dist_version}"
+
+

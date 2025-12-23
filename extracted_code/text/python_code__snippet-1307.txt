@@ -1,0 +1,3 @@
+return format_size(directory_size(path))
+
+

@@ -1,0 +1,1 @@
+      return Prosody(avgPitch, rate.coerceIn(0.5, 2.0),

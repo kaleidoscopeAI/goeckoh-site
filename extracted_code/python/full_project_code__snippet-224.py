@@ -1,24 +1,42 @@
-def escape_html(text, table=_escape_html_table):
-    """Escape &, <, > as well as single and double quotes for HTML."""
-    return text.translate(table)
+class GifImageFormatter(ImageFormatter):
+    """
+    Create a GIF image from source code. This uses the Python Imaging Library to
+    generate a pixmap from the source code.
+
+    .. versionadded:: 1.0
+    """
+
+    name = 'img_gif'
+    aliases = ['gif']
+    filenames = ['*.gif']
+    default_image_format = 'gif'
 
 
-def webify(color):
-    if color.startswith('calc') or color.startswith('var'):
-        return color
-    else:
-        return '#' + color
+class JpgImageFormatter(ImageFormatter):
+    """
+    Create a JPEG image from source code. This uses the Python Imaging Library to
+    generate a pixmap from the source code.
+
+    .. versionadded:: 1.0
+    """
+
+    name = 'img_jpg'
+    aliases = ['jpg', 'jpeg']
+    filenames = ['*.jpg']
+    default_image_format = 'jpeg'
 
 
-def _get_ttype_class(ttype):
-    fname = STANDARD_TYPES.get(ttype)
-    if fname:
-        return fname
-    aname = ''
-    while fname is None:
-        aname = '-' + ttype[-1] + aname
-        ttype = ttype.parent
-        fname = STANDARD_TYPES.get(ttype)
-    return fname + aname
+class BmpImageFormatter(ImageFormatter):
+    """
+    Create a bitmap image from source code. This uses the Python Imaging Library to
+    generate a pixmap from the source code.
+
+    .. versionadded:: 1.0
+    """
+
+    name = 'img_bmp'
+    aliases = ['bmp', 'bitmap']
+    filenames = ['*.bmp']
+    default_image_format = 'bmp'
 
 

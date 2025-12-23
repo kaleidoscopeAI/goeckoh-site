@@ -1,1 +1,1 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+n.symbols = ['concept' + Math.floor(n.energy)]; // Auto-extract placeholder

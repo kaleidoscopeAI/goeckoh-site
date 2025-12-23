@@ -1,2 +1,1 @@
-private let hostKey = "EchoServerHost"
-private let portKey = "EchoServerPort"
+function updateMetrics(arousal, valence, temp, coh) {

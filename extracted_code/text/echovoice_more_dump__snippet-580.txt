@@ -1,0 +1,5 @@
+topics: string[];
+sentiment: 'positive' | 'negative' | 'neutral';
+complexity: number;
+entities: string[];
+concepts: string[];

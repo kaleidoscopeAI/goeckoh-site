@@ -1,0 +1,6 @@
+  ),
+  log_level: str = typer.Option(
+      None,
+      "--log-level",
+      "-l",
+      help="Set the log level for the application. This will override any

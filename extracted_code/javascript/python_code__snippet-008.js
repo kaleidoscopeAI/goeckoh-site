@@ -1,21 +1,53 @@
-    # the rest of this function so that we don't get extraneous () on the
-    # outside.
-    if (
-        isinstance(marker, list)
-        and len(marker) == 1
-        and isinstance(marker[0], (list, tuple))
-    ):
-        return _format_marker(marker[0])
+    console.log(
+        "JSONRPC [i]request[/i]",
+        5,
+        1.3,
+        True,
+        False,
+        None,
+        {
+            "jsonrpc": "2.0",
+            "method": "subtract",
+            "params": {"minuend": 42, "subtrahend": 23},
+            "id": 3,
+        },
+    )
 
-    if isinstance(marker, list):
-        inner = (_format_marker(m, first=False) for m in marker)
-        if first:
-            return " ".join(inner)
-        else:
-            return "(" + " ".join(inner) + ")"
-    elif isinstance(marker, tuple):
-        return " ".join([m.serialize() for m in marker])
-    else:
-        return marker
+    console.log("Hello, World!", "{'a': 1}", repr(console))
+
+    console.print(
+        {
+            "name": None,
+            "empty": [],
+            "quiz": {
+                "sport": {
+                    "answered": True,
+                    "q1": {
+                        "question": "Which one is correct team name in NBA?",
+                        "options": [
+                            "New York Bulls",
+                            "Los Angeles Kings",
+                            "Golden State Warriors",
+                            "Huston Rocket",
+                        ],
+                        "answer": "Huston Rocket",
+                    },
+                },
+                "maths": {
+                    "answered": False,
+                    "q1": {
+                        "question": "5 + 7 = ?",
+                        "options": [10, 11, 12, 13],
+                        "answer": 12,
+                    },
+                    "q2": {
+                        "question": "12 - 8 = ?",
+                        "options": [1, 2, 3, 4],
+                        "answer": 4,
+                    },
+                },
+            },
+        }
+    )
 
 

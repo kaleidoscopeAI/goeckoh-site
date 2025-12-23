@@ -1,0 +1,22 @@
+global orig_stdout, orig_stderr
+orig_stdout = None
+orig_stderr = None
+
+global wrapped_stdout, wrapped_stderr
+wrapped_stdout = None
+wrapped_stderr = None
+
+global atexit_done
+atexit_done = False
+
+global fixed_windows_console
+fixed_windows_console = False
+
+try:
+    # no-op if it wasn't registered
+    atexit.unregister(reset_all)
+except AttributeError:
+    # python 2: no atexit.unregister. Oh well, we did our best.
+    pass
+
+

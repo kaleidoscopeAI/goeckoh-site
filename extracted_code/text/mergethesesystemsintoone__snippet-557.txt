@@ -1,0 +1,52 @@
+parser = argparse.ArgumentParser(description="UnravelAI Task Manager")
+parser.add_argument("--input", "-i", help="Input directory containing code files")
+parser.add_argument("--output", "-o", help="Output directory for analysis results")
+parser.add_argument("--target", "-t", help="Target language for reconstruction")
+parser.add_argument("--max-concurrent", "-m", type=int, default=4)
+parser.add_argument("--skip-venv", action="store_true")
+parser.add_argument("--verbose", "-v", action="store_true")
+parser.add_argument("--no-monitor", action="store_true")
+parser.add_argument("--secure", action="store_true")
+parser.add_argument("--optimize", action="store_true")
+args = parser.parse_args()
+
+if args.verbose:
+    logging.getLogger().setLevel(logging.DEBUG)
+
+print(f"\n{Fore.CYAN}╔══════════════════════════════════════════════════════════╗{Style.RESET_ALL}")
+print(f"{Fore.CYAN}║{Style.RESET_ALL}           {Fore.LIGHTMAGENTA_EX}UnravelAI Quantum Code Analysis System{Style.RESET_ALL}          {Fore.CYAN}║{Style.RESET_ALL}")
+print(f"{Fore.CYAN}╚══════════════════════════════════════════════════════════╝{Style.RESET_ALL}")
+
+config = TaskManagerConfig(
+    work_dir=args.output or "unravel_ai_workdir",
+    max_concurrent_tasks=args.max_concurrent,
+    log_level="DEBUG" if args.verbose else "INFO",
+)
+manager = UnravelAITaskManager(config)
+monitor = None if args.no_monitor else SystemMonitor(manager)
+
+try:
+    if monitor:
+        await monitor.start()
+    if args.input:
+        extra_tasks = []
+        if args.secure:
+            extra_tasks.append("security_analysis")
+        if args.optimize:
+            extra_tasks.append("code_optimization")
+        task_ids = manager.create_unravel_tasks(args.input, args.target, extra_tasks)
+        print(f"{Fore.GREEN}Created {len(task_ids)} tasks{Style.RESET_ALL}")
+        success = await manager.run()
+        if success:
+            session_id = task_ids[0].split('_')[-1]
+            manager.visualize_analysis_results(session_id)
+            print(f"\n{Fore.GREEN}Analysis results at: {manager.analysis_dir / session_id}{Style.RESET_ALL}")
+        else:
+            print(f"\n{Fore.RED}Some tasks failed. Check logs.{Style.RESET_ALL}")
+    else:
+        print(f"{Fore.YELLOW}Use --input to specify a codebase.{Style.RESET_ALL}")
+finally:
+    if monitor:
+        await monitor.stop()
+    print(f"{Fore.CYAN}UnravelAI Task Manager finished.{Style.RESET_ALL}")
+

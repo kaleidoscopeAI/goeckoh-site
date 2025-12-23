@@ -1,2 +1,1 @@
-const commandEncoder = this.device.createCommandEncoder();
-const pass = commandEncoder.beginComputePass();
+const modulators = computeModulators(node);

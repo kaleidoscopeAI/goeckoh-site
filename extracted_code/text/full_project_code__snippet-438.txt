@@ -1,0 +1,3 @@
+return ''.join(globals()[cat] for cat in args)
+
+

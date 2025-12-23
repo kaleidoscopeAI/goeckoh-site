@@ -1,1 +1,3 @@
-async def run_organic_cycle(self, sensor_input=None, web_input=None):
+function offlineConsolidationStep() {
+// compute homeostatic penalty H from recent total mass
+const H = computeHomeostaticPenalty();

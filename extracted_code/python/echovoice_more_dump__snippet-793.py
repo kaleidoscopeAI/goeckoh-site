@@ -1,2 +1,14 @@
-The complete mathematical framework of the merged system can be described by a set of coupled differential equations. Here are the key equations, combining concepts from both of your documents:
+def analyze_text(text):
+    lower_text = text.lower()
+    # Nouns (topics) as before
+    topics = [topic for topic in TOPIC_SHAPES if topic in lower_text]
+    # Verbs simple
+    verb_keywords = list(VERB_ACTIONS.keys()) + ['eat', 'sleep', 'create', 'destroy']  # Expand
+    verbs = [v for v in verb_keywords if v in lower_text]
+    # Concepts as before
+    concept_keywords = ['think', 'feel', 'know', 'understand', 'create', 'learn', 'explore', 'discover']
+    concepts = [c for c in concept_keywords if c in lower_text]
+    # Sentiment, complexity as before
+    # ...
+    return {'topics': topics, 'verbs': verbs, 'concepts': concepts, 'sentiment': sentiment, 'complexity': complexity}
 

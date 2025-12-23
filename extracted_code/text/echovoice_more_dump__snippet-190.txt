@@ -1,1 +1,5 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+class Snapshot(BaseModel):
+    node_data: list
+    system_metrics: dict
+    adc_raw: list = [] # Mock Analog-to-Digital Converter raw sensor data
+

@@ -1,0 +1,2 @@
+insights = self_reflection.reflect(action_log, node.get_state())
+                                               ^^^^^^^^^^^^^^

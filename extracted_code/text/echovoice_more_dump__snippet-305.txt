@@ -1,1 +1,4 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+Equation: r_i = r_0 (0.8 + 1.2 A_i); color = HSL((1 - E/3)*0.35, 0.9, 0.5).
+Transformation: States → GPU buffers.
+Coding: InstancedMesh with shaders.
+

@@ -1,51 +1,9 @@
-def canonicalize_name(name: str) -> NormalizedName:
-    # This is taken from PEP 503.
-    value = _canonicalize_regex.sub("-", name).lower()
-    return cast(NormalizedName, value)
-
-
-def canonicalize_version(version: Union[Version, str]) -> str:
-    """
-    This is very similar to Version.__str__, but has one subtle difference
-    with the way it handles the release segment.
-    """
-    if isinstance(version, str):
-        try:
-            parsed = Version(version)
-        except InvalidVersion:
-            # Legacy versions cannot be normalized
-            return version
-    else:
-        parsed = version
-
-    parts = []
-
-    # Epoch
-    if parsed.epoch != 0:
-        parts.append(f"{parsed.epoch}!")
-
-    # Release segment
-    # NB: This strips trailing '.0's to normalize
-    parts.append(re.sub(r"(\.0)+$", "", ".".join(str(x) for x in parsed.release)))
-
-    # Pre-release
-    if parsed.pre is not None:
-        parts.append("".join(str(x) for x in parsed.pre))
-
-    # Post-release
-    if parsed.post is not None:
-        parts.append(f".post{parsed.post}")
-
-    # Development release
-    if parsed.dev is not None:
-        parts.append(f".dev{parsed.dev}")
-
-    # Local version segment
-    if parsed.local is not None:
-        parts.append(f"+{parsed.local}")
-
-    return "".join(parts)
-
-
-def parse_wheel_filename(
-    filename: str,
+from pip._internal.index.package_finder import PackageFinder
+from pip._internal.metadata import BaseDistribution, get_metadata_distribution
+from pip._internal.models.direct_url import ArchiveInfo
+from pip._internal.models.link import Link
+from pip._internal.models.wheel import Wheel
+from pip._internal.network.download import BatchDownloader, Downloader
+from pip._internal.network.lazy_wheel import (
+    HTTPRangeRequestUnsupported,
+    dist_from_wheel_url,

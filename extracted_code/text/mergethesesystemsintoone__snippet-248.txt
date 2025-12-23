@@ -1,1 +1,3 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+global redis
+redis = await aioredis.create_redis_pool(REDIS_URL)
+

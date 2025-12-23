@@ -1,8 +1,5 @@
-    from pip._vendor.pyparsing import Word, alphas
-
-    # define grammar of a greeting
-    greet = Word(alphas) + "," + Word(alphas) + "!"
-
-    hello = "Hello, World!"
-    print(hello, "->", greet.parse_string(hello))
-
+def counted_array(
+    expr: ParserElement,
+    int_expr: typing.Optional[ParserElement] = None,
+    *,
+    intExpr: typing.Optional[ParserElement] = None,

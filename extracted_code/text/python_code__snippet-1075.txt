@@ -1,0 +1,5 @@
+ExplicitRequirement,
+RequiresPythonRequirement,
+SpecifierRequirement,
+SpecifierWithoutExtrasRequirement,
+UnsatisfiableRequirement,

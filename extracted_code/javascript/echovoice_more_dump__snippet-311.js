@@ -1,1 +1,4 @@
-const emoMag = t.emotions ? t.emotions.reduce((a:number,b:number)=>a+Math.abs(b),0) : 0;
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const projRef = doc(db, "actuation", "latestProjection");
+const unsubProj = onSnapshot(projRef, (snap) => {

@@ -1,0 +1,1 @@
+DrawEvent("draw_event", self.canvas, renderer)._process()

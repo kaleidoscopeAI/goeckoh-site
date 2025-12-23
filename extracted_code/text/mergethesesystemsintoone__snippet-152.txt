@@ -1,2 +1,9 @@
-Create CapabilityNode as a base class with energy and capability management.
+if len(edges)==0:
+    return {"H_bits": float(np.mean(1.0-S) if E.shape[0] else 0.0), "S_field":0.0, "L":0.0}
+w=np.zeros(len(edges)); 
+for k,(i,j) in enumerate(edges): w[k]=expected_cos_noise(E[i],E[j],sigma)
+tau=1.0-w
+H_bits=float(np.mean(1.0-S) if E.shape[0] else 0.0)
+S_field=float(np.mean(tau)); L=float(np.sum(tau*tau))
+return {"H_bits":H_bits,"S_field":S_field,"L":L}
 

@@ -1,4 +1,1 @@
-const fs = require('fs');
-const sqlite3 = require('sqlite3');
-const { open } = require('sqlite');
-class AGIMathematics {
+const sum = data.reduce((acc, d) => acc + Math.abs(d), 0);

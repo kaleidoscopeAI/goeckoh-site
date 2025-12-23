@@ -1,86 +1,60 @@
-def choose_boundary():
-    """
-    Our embarrassingly-simple replacement for mimetools.choose_boundary.
-    """
-    boundary = binascii.hexlify(os.urandom(16))
-    if not six.PY2:
-        boundary = boundary.decode("ascii")
-    return boundary
+    class NewType:
+        """NewType creates simple unique types with almost zero
+        runtime overhead. NewType(name, tp) is considered a subtype of tp
+        by static type checkers. At runtime, NewType(name, tp) returns
+        a dummy callable that simply returns its argument. Usage::
+            UserId = NewType('UserId', int)
+            def name_by_id(user_id: UserId) -> str:
+                ...
+            UserId('user')          # Fails type check
+            name_by_id(42)          # Fails type check
+            name_by_id(UserId(42))  # OK
+            num = UserId(5) + 1     # type: int
+        """
 
+        def __call__(self, obj):
+            return obj
 
-def iter_field_objects(fields):
-    """
-    Iterate over fields.
+        def __init__(self, name, tp):
+            self.__qualname__ = name
+            if '.' in name:
+                name = name.rpartition('.')[-1]
+            self.__name__ = name
+            self.__supertype__ = tp
+            def_mod = _caller()
+            if def_mod != 'typing_extensions':
+                self.__module__ = def_mod
 
-    Supports list of (k, v) tuples and dicts, and lists of
-    :class:`~urllib3.fields.RequestField`.
+        def __mro_entries__(self, bases):
+            # We defined __mro_entries__ to get a better error message
+            # if a user attempts to subclass a NewType instance. bpo-46170
+            supercls_name = self.__name__
 
-    """
-    if isinstance(fields, dict):
-        i = six.iteritems(fields)
-    else:
-        i = iter(fields)
+            class Dummy:
+                def __init_subclass__(cls):
+                    subcls_name = cls.__name__
+                    raise TypeError(
+                        f"Cannot subclass an instance of NewType. "
+                        f"Perhaps you were looking for: "
+                        f"`{subcls_name} = NewType({subcls_name!r}, {supercls_name})`"
+                    )
 
-    for field in i:
-        if isinstance(field, RequestField):
-            yield field
-        else:
-            yield RequestField.from_tuples(*field)
+            return (Dummy,)
 
+        def __repr__(self):
+            return f'{self.__module__}.{self.__qualname__}'
 
-def iter_fields(fields):
-    """
-    .. deprecated:: 1.6
+        def __reduce__(self):
+            return self.__qualname__
 
-    Iterate over fields.
+        if sys.version_info >= (3, 10):
+            # PEP 604 methods
+            # It doesn't make sense to have these methods on Python <3.10
 
-    The addition of :class:`~urllib3.fields.RequestField` makes this function
-    obsolete. Instead, use :func:`iter_field_objects`, which returns
-    :class:`~urllib3.fields.RequestField` objects.
+            def __or__(self, other):
+                return typing.Union[self, other]
 
-    Supports list of (k, v) tuples and dicts.
-    """
-    if isinstance(fields, dict):
-        return ((k, v) for k, v in six.iteritems(fields))
-
-    return ((k, v) for k, v in fields)
-
-
-def encode_multipart_formdata(fields, boundary=None):
-    """
-    Encode a dictionary of ``fields`` using the multipart/form-data MIME format.
-
-    :param fields:
-        Dictionary of fields or list of (key, :class:`~urllib3.fields.RequestField`).
-
-    :param boundary:
-        If not specified, then a random boundary will be generated using
-        :func:`urllib3.filepost.choose_boundary`.
-    """
-    body = BytesIO()
-    if boundary is None:
-        boundary = choose_boundary()
-
-    for field in iter_field_objects(fields):
-        body.write(b("--%s\r\n" % (boundary)))
-
-        writer(body).write(field.render_headers())
-        data = field.data
-
-        if isinstance(data, int):
-            data = str(data)  # Backwards compatibility
-
-        if isinstance(data, six.text_type):
-            writer(body).write(data)
-        else:
-            body.write(data)
-
-        body.write(b"\r\n")
-
-    body.write(b("--%s--\r\n" % (boundary)))
-
-    content_type = str("multipart/form-data; boundary=%s" % boundary)
-
-    return body.getvalue(), content_type
+            def __ror__(self, other):
+                return typing.Union[other, self]
 
 

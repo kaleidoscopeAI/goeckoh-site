@@ -1,44 +1,8 @@
-def build_and_run_system(steps: int, node_count: int = 16, bit_dim: int = 64, vec_dim: int = 3):
-    """Initializes and runs the full AGI simulation."""
-    print("--- BUILDING UNIFIED COGNITIVE CRYSTAL AGI ---")
-    
-    # 1. Create Initial State
-    rng = np.random.default_rng(42)
-    E = {i: rng.integers(0, 2, size=(bit_dim,), dtype=np.uint8) for i in range(node_count)}
-    x = {i: rng.standard_normal(vec_dim,) for i in range(node_count)}
-    state = HybridState(E=E, x=x)
-    
-    # 2. Define Hamiltonian
-    Sigma_inv = np.eye(vec_dim * node_count)
-    X_bar = np.zeros((vec_dim * node_count,), dtype=float)
-    edges = [(i, (i + 1) % node_count) for i in range(node_count)] # Simple ring topology
-    ham = SemanticHamiltonian(nodes=list(range(node_count)), edges=edges, Sigma_inv=Sigma_inv, X_bar=X_bar,
-                              lambda_bit=1.0, lambda_pos=0.1)
-                              
-    # 3. Initialize Engines
-    grad_flow = GradientFlow(ham, lr=0.05)
-    metropolis = MetropolisEngine(ham, hajek_schedule(c=1.0))
-    cognitive_engine = CognitiveEngine()
-    visualizer = Visualizer()
-    
-    print("--- SYSTEM INITIALIZED. STARTING COGNITIVE LOOP. ---\n")
-    
-    # 4. Run Cognitive Loop
-    for t in range(steps):
-        # Run one step of low-level optimization
-        grad_flow.step(state, dt=0.01)
-        metropolis.step(state)
-        
-        if (t + 1) % 50 == 0:
-            print(f"--- Cycle {t+1} ---")
-            print(f"System Energy: {ham.energy(state):.4f}")
-            
-            # Trigger reflection and visualization
-            prompt = cognitive_engine.summarize_state(state, ham)
-            ai_thought = cognitive_engine.reflect_with_ollama(prompt)
-            visualizer.update_from_thought(ai_thought)
-            time.sleep(1) # Pause to make output readable
-    
-    print("\n--- SIMULATION COMPLETE ---")
+    We note that the run_experiment function is called from the Run command.
 
+    The run_experiment function should load the dataset (possibly by downloading if not present), then run either k-fold or holdout validation.
+
+    We see that there are two functions for evaluation: evaluate_kfold_advanced and evaluate_holdout_advanced. We assume these are implemented elsewhere (in the optimizer module).
+
+    We need to handle the case when the dataset is not in parquet format by using the UniversalMutagEngine to process it.
 

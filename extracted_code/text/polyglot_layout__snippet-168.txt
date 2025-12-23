@@ -1,0 +1,3 @@
+  latest = sorted(OUT_AVATAR.glob("frame_*.png"))[-1] if any(OUT_AVATAR.glob("frame_*.png")) else None
+  return {"ok":True, "tick":brain.state.tick, "sigma":brain.state.sigma, "latest_frame": (str(latest) if latest else None)}
+

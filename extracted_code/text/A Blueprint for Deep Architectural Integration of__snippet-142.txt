@@ -1,0 +1,6 @@
+- Arithmetic additions, multiplications, and nonlinear activations in $G$ and $O_i$ can be represented as logic gate networks:
+    - **Adder circuits** use XOR, AND gates.
+    - **Multipliers** can be decomposed into AND, shift, and addition operations.
+    - **Nonlinear functions** (e.g., activation thresholds) can be implemented as comparators and multiplexers.
+- Projection operators $P_i$ become bit masks and extraction operations on $\tilde{X}_k = \tilde{S}_k \oplus b_k$.
+

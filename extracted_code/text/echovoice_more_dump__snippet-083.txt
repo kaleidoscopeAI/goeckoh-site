@@ -1,1 +1,4 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+    A group for the nodes (using InstancedMesh for performance if there are many nodes).
+
+    A LineSegments or a set of Cylinder geometries for the bonds.
+

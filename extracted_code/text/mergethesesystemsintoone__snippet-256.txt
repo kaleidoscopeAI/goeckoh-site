@@ -1,1 +1,6 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+probs = np.abs(data) / (np.sum(np.abs(data)) + 1e-12)
+entropy = -np.sum(probs * np.log(probs + 1e-12))
+parts = 2
+part_ent = sum(-np.sum(p * np.log(p + 1e-12)) / parts for p in np.array_split(probs, parts))
+return max(0, entropy - part_ent)
+

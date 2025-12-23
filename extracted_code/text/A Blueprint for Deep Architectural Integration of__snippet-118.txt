@@ -1,0 +1,5 @@
+\item \textbf{Speculation Engine} (\(O_{\text{speculation}}\)): Generates hypotheses about the environment and internal state.
+\item \textbf{Kaleidoscope Engine} (\(O_{\text{kaleidoscope}}\)): Creates multiple semantic perspectives to enhance hypothesis diversity.
+\item \textbf{Verification Engine} (\(O_{\text{verification}}\)): Checks consistency and correctness of knowledge.
+\item \textbf{Large Language Model Engine} (\(O_{\text{LLM}}\)): Performs general reasoning, query generation, and summarization.
+\item \textbf{WebCrawler Thought Engine} (\(O_{\text{crawl}}\)): Autonomous, curiosity-driven web crawler that actively seeks external information to resolve uncertainties identified by the other engines.

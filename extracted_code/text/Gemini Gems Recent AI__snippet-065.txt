@@ -1,0 +1,10 @@
+Interactive Visualization: Plotly is an excellent choice for this application. The interactivity is essential for understanding the relationships within the cube.
+
+SMILES Integration: Reading SMILES strings directly makes the system much more practical. This is the standard way to represent molecules in cheminformatics.
+
+Clearer Feature Mapping: While the features are still simplified, using molecular weight and rotatable bonds is a good starting point. It's much better than random numbers.
+
+Tooltips: Providing tooltips with SMILES strings and energy levels is a great way to make the data more accessible.
+
+Error Handling: Including a check for invalid SMILES strings is important for robustness.
+

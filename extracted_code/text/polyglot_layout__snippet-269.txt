@@ -1,0 +1,7 @@
+ Start avatar streamer regardless of UI.
+ If WS client disconnects, continue producing frames (buffer last; stream on connect).
+ If online ingest fails, back off to local corpus.
+
+ Persist everything (states, energetics, captions, reflections) as we already do.
+
+

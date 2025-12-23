@@ -1,0 +1,9 @@
+Option,
+"--isolated",
+dest="isolated_mode",
+action="store_true",
+default=False,
+help=(
+    "Run pip in an isolated mode, ignoring environment variables and user "
+    "configuration."
+),

@@ -1,2 +1,1 @@
-help: consider removing `&` from the pattern
-    |
+Extract Text from PDFs to TXT

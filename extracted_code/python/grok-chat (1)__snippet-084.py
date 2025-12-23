@@ -1,8 +1,7 @@
-def simulate_audio_input():
-    return input("Speak (type phrase): ").strip()
-
-def correct_to_first_person(text):
-    # Pure string: Replace "you" with "I", etc.
-    text = text.replace(" you ", " I ").replace(" your ", " my ")
-    return text[0].upper() + text[1:]
+def auditory_motor_core(input_text):
+    corrected = correct_to_first_person(input_text)
+    print(f"[Cloned Voice Echo]: {corrected}")
+    arousal = len(input_text) / 20.0  # Sim energy
+    latency = random.uniform(0, 0.5)  # Sim clarity error
+    return corrected, arousal, latency
 

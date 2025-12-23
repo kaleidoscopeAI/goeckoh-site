@@ -1,0 +1,4 @@
+for state in EmotionalState:
+    allocation = resource_manager.allocate_resources(energy_available, mode, state)
+    print(f"Mode: {mode}, State: {state.name}, Allocated Energy: {allocation}")
+

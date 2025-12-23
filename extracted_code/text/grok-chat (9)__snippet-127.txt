@@ -1,0 +1,2 @@
+tracked separately, but true hardware round-trip latency still needs
+measurement with a loopback test.

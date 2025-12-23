@@ -1,23 +1,17 @@
-    """Install a package in editable mode. Most arguments are pass-through
-    to setuptools.
-    """
-    logger.info("Running setup.py develop for %s", name)
-
-    args = make_setuptools_develop_args(
-        setup_py_path,
-        global_options=global_options,
-        no_user_config=isolated,
-        prefix=prefix,
-        home=home,
-        use_user_site=use_user_site,
-    )
-
-    with indent_log():
-        with build_env:
-            call_subprocess(
-                args,
-                command_desc="python setup.py develop",
-                cwd=unpacked_source_directory,
-            )
+pos, key_part = parse_key_part(src, pos)
+key: Key = (key_part,)
+pos = skip_chars(src, pos, TOML_WS)
+while True:
+    try:
+        char: str | None = src[pos]
+    except IndexError:
+        char = None
+    if char != ".":
+        return pos, key
+    pos += 1
+    pos = skip_chars(src, pos, TOML_WS)
+    pos, key_part = parse_key_part(src, pos)
+    key += (key_part,)
+    pos = skip_chars(src, pos, TOML_WS)
 
 

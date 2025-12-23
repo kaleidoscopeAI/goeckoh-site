@@ -1,0 +1,5 @@
+norm = np.linalg.norm(M)
+if norm <= 0:
+    return M
+return M / norm
+

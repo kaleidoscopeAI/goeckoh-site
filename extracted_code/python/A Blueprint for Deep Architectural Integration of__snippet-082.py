@@ -1,2 +1,9 @@
-The \(O_{\text{crawl}}\) engine embodies driven curiosity. It monitors "curiosity tension" — a scalar signal derived from incomplete or uncertain cognitive states identified by \(O_{\text{speculation}}\) and \(O_{\text{kaleidoscope}}\). When the tension surpasses a threshold, \(O_{\text{crawl}}\) formulates search queries derived from the system’s internal linguistic and domain knowledge states via \(O_{\text{LLM}}\).
+    // R[i][j] = true if routing from engine j to i is enabled
+    pub routing_matrix: Vec<Vec<bool>>,
 
+    // Parameters as fixed constants for bit thresholds
+    pub decay_rho: f32,
+    pub lambda: f32,
+    pub sigma: f32,
+    pub beta: f32,
+    pub threshold_theta: f32,

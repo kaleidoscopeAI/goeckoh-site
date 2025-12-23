@@ -1,0 +1,3 @@
+"""The URL scheme (e.g. http or https) is missing."""
+
+

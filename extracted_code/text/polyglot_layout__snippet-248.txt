@@ -1,0 +1,13 @@
+ Download the script
+
+ Run:
+
+   bash
+
+
+   python seed_crystal_agi_autonomous.py
+
+
+ The script will create .venv, install deps (including SciPy & Pillow), relaunch itself, start the AGI loop, and spawn the 18k-node avatar agent in the
+ background.
+

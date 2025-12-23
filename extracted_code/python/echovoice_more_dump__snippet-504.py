@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
+import Constructs3D from "../components/Constructs3D";
+import ActuationHeatmap from "../components/ActuationHeatmap";
 import { useEmotionalActuation } from "../hooks/useEmotionalActuation";
-import EmotionalDial from "./EmotionalDial";
-export default function ActuationTestHarness() {
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+import { ProjectionService } from "../services/projectionService";
+import Chart from "chart.js/auto";
+import axios from "axios";

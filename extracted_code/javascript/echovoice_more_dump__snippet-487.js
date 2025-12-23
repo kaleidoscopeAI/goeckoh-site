@@ -1,1 +1,1 @@
-const keys = Object.keys(node.constructs);
+for (const k of Object.keys(patch)) {

@@ -1,0 +1,14 @@
+"""Returns true if all the paths have the same leading path name
+(i.e., everything is in one subdirectory in an archive)"""
+common_prefix = None
+for path in paths:
+    prefix, rest = split_leading_dir(path)
+    if not prefix:
+        return False
+    elif common_prefix is None:
+        common_prefix = prefix
+    elif prefix != common_prefix:
+        return False
+return True
+
+

@@ -1,1 +1,1 @@
-# SyncWorker using WorkManager
+data class QuantumState(val amplitudes: FloatArray) {

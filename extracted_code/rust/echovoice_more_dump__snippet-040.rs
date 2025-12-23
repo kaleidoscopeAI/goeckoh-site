@@ -1,8 +1,2 @@
-    fn new() -> Self {
-        Self {
-            decision_engine: DecisionEngine::new(),
-            metrics_history: Vec::with_capacity(1000),
-            total_decisions: 0,
-            last_update: 0,
-        }
-    }
+pub extern "C" fn omnimind_cleanup() {
+    pr_info!("Cognitive Crystal AI OS system cleanup\n");

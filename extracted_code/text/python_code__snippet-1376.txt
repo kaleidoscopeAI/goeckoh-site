@@ -1,0 +1,2 @@
+"egg_link_path_from_sys_path",
+"egg_link_path_from_location",

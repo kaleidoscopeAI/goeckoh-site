@@ -1,0 +1,2 @@
+- Appropriate if you have a simple two‑condition contrast (e.g., real‑time vs delayed) and treat each participant’s mean N1 amplitude per condition as the unit.
+- Power tools for paired t are simple and conservative; they ignore trial‑level structure but are standard practice.[^13_9][^13_10]

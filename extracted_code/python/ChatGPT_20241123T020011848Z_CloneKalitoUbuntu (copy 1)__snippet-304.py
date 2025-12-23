@@ -1,0 +1,3 @@
+- Instead of death, introduce
+- Nodes with depleted energy can go into a low-energy state, allowing them to retain learned knowledge while awaiting "recharge" from resource-sharing nodes.
+- Use an

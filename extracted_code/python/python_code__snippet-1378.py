@@ -1,83 +1,88 @@
-def version_info_to_nodot(version_info: Tuple[int, ...]) -> str:
-    # Only use up to the first two numbers.
-    return "".join(map(str, version_info[:2]))
+"""
+This class allows you to chain and/or merge a list of locators.
+"""
+def __init__(self, *locators, **kwargs):
+    """
+    Initialise an instance.
 
+    :param locators: The list of locators to search.
+    :param kwargs: Passed to the superclass constructor,
+                   except for:
+                   * merge - if False (the default), the first successful
+                     search from any of the locators is returned. If True,
+                     the results from all locators are merged (this can be
+                     slow).
+    """
+    self.merge = kwargs.pop('merge', False)
+    self.locators = locators
+    super(AggregatingLocator, self).__init__(**kwargs)
 
-def _mac_platforms(arch: str) -> List[str]:
-    match = _osx_arch_pat.match(arch)
-    if match:
-        name, major, minor, actual_arch = match.groups()
-        mac_version = (int(major), int(minor))
-        arches = [
-            # Since we have always only checked that the platform starts
-            # with "macosx", for backwards-compatibility we extract the
-            # actual prefix provided by the user in case they provided
-            # something like "macosxcustom_". It may be good to remove
-            # this as undocumented or deprecate it in the future.
-            "{}_{}".format(name, arch[len("macosx_") :])
-            for arch in mac_platforms(mac_version, actual_arch)
-        ]
-    else:
-        # arch pattern didn't match (?!)
-        arches = [arch]
-    return arches
+def clear_cache(self):
+    super(AggregatingLocator, self).clear_cache()
+    for locator in self.locators:
+        locator.clear_cache()
 
+def _set_scheme(self, value):
+    self._scheme = value
+    for locator in self.locators:
+        locator.scheme = value
 
-def _custom_manylinux_platforms(arch: str) -> List[str]:
-    arches = [arch]
-    arch_prefix, arch_sep, arch_suffix = arch.partition("_")
-    if arch_prefix == "manylinux2014":
-        # manylinux1/manylinux2010 wheels run on most manylinux2014 systems
-        # with the exception of wheels depending on ncurses. PEP 599 states
-        # manylinux1/manylinux2010 wheels should be considered
-        # manylinux2014 wheels:
-        # https://www.python.org/dev/peps/pep-0599/#backwards-compatibility-with-manylinux2010-wheels
-        if arch_suffix in {"i686", "x86_64"}:
-            arches.append("manylinux2010" + arch_sep + arch_suffix)
-            arches.append("manylinux1" + arch_sep + arch_suffix)
-    elif arch_prefix == "manylinux2010":
-        # manylinux1 wheels run on most manylinux2010 systems with the
-        # exception of wheels depending on ncurses. PEP 571 states
-        # manylinux1 wheels should be considered manylinux2010 wheels:
-        # https://www.python.org/dev/peps/pep-0571/#backwards-compatibility-with-manylinux1-wheels
-        arches.append("manylinux1" + arch_sep + arch_suffix)
-    return arches
+scheme = property(Locator.scheme.fget, _set_scheme)
 
+def _get_project(self, name):
+    result = {}
+    for locator in self.locators:
+        d = locator.get_project(name)
+        if d:
+            if self.merge:
+                files = result.get('urls', {})
+                digests = result.get('digests', {})
+                # next line could overwrite result['urls'], result['digests']
+                result.update(d)
+                df = result.get('urls')
+                if files and df:
+                    for k, v in files.items():
+                        if k in df:
+                            df[k] |= v
+                        else:
+                            df[k] = v
+                dd = result.get('digests')
+                if digests and dd:
+                    dd.update(digests)
+            else:
+                # See issue #18. If any dists are found and we're looking
+                # for specific constraints, we only return something if
+                # a match is found. For example, if a DirectoryLocator
+                # returns just foo (1.0) while we're looking for
+                # foo (>= 2.0), we'll pretend there was nothing there so
+                # that subsequent locators can be queried. Otherwise we
+                # would just return foo (1.0) which would then lead to a
+                # failure to find foo (>= 2.0), because other locators
+                # weren't searched. Note that this only matters when
+                # merge=False.
+                if self.matcher is None:
+                    found = True
+                else:
+                    found = False
+                    for k in d:
+                        if self.matcher.match(k):
+                            found = True
+                            break
+                if found:
+                    result = d
+                    break
+    return result
 
-def _get_custom_platforms(arch: str) -> List[str]:
-    arch_prefix, arch_sep, arch_suffix = arch.partition("_")
-    if arch.startswith("macosx"):
-        arches = _mac_platforms(arch)
-    elif arch_prefix in ["manylinux2014", "manylinux2010"]:
-        arches = _custom_manylinux_platforms(arch)
-    else:
-        arches = [arch]
-    return arches
-
-
-def _expand_allowed_platforms(platforms: Optional[List[str]]) -> Optional[List[str]]:
-    if not platforms:
-        return None
-
-    seen = set()
-    result = []
-
-    for p in platforms:
-        if p in seen:
-            continue
-        additions = [c for c in _get_custom_platforms(p) if c not in seen]
-        seen.update(additions)
-        result.extend(additions)
-
+def get_distribution_names(self):
+    """
+    Return all the distribution names known to this locator.
+    """
+    result = set()
+    for locator in self.locators:
+        try:
+            result |= locator.get_distribution_names()
+        except NotImplementedError:
+            pass
     return result
 
 
-def _get_python_version(version: str) -> PythonVersion:
-    if len(version) > 1:
-        return int(version[0]), int(version[1:])
-    else:
-        return (int(version[0]),)
-
-
-def _get_custom_interpreter(
-    implementation: Optional[str] = None, version: Optional[str] = None

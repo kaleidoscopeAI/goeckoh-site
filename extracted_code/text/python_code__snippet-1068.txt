@@ -1,0 +1,6 @@
+if not extras:
+    return project
+extras_expr = ",".join(sorted(extras))
+return f"{project}[{extras_expr}]"
+
+

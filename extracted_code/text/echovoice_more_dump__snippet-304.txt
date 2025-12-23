@@ -1,1 +1,4 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+Equation: s_super = normalize(Σ K_i s_i); pos_super = Σ A_i pos_i / Σ A_i.
+Transformation: Clusters → supernodes → cube lattice (grid mapping: index = floor(2^{pos+1} * (res-1))).
+Coding: Merge low-E clusters; store in vector DB; feed to transformers for AI ingestion.
+

@@ -1,1 +1,2 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+  both the internal state (E, A, K) and physical position (r, v) evolution in umaa/node.py. This will provide a
+  more stable and precise evolution of the system's dynamics.

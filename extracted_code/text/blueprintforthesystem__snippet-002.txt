@@ -1,0 +1,2 @@
+ system-wide "conscience." This metric is used to gate the behavior of various components, such as disabling linguistic
+ corrections during periods of high user stress to provide a "safety mode."

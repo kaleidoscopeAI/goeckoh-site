@@ -1,2 +1,2 @@
-# <REDACTED: potential secret detected>
+Defines custom logger class for the `logger.verbose(...)` method.
 

@@ -1,1 +1,11 @@
-Every requirement, every correction, every “this is wrong, do it this way” from every PDF and chat log has been reconciled into this one specification.
+from __future__ import annotations
+from pathlib import Path
+from typing import Literal
+import numpy as np
+import soundfile as sf
+import librosa
+from TTS.api import TTS
+import sounddevice as sd
+import pyttsx3
+import logging
+

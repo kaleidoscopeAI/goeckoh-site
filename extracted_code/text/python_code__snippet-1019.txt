@@ -1,0 +1,3 @@
+"""Raised when virtualenv or a command is not found"""
+
+

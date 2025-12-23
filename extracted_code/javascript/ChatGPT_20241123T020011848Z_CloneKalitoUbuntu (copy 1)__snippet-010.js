@@ -1,2 +1,2 @@
-Yes, exactly. In this setup, the "resources" can represent any form of data or input that nodes need to function and grow—like nutrients in a natural ecosystem. Here’s how you might think of the resources in a more concrete way:
+Great question! For this system to function as an AI model—not just a self-replicating or growing model—it needs to incorporate intelligence at multiple levels, allowing nodes to not only grow but also to make decisions, recognize patterns, and interact meaningfully. Here’s how this can work:
 

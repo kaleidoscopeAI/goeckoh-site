@@ -1,1 +1,1 @@
-const dir = new THREE.Vector3(
+function validateActuation(data) {

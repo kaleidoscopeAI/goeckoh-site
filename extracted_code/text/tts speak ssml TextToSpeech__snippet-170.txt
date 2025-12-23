@@ -1,0 +1,5 @@
+      whisper.setListener(object : IWhisperListener {
+          override fun onUpdateReceived(message: String) {
+              partialText = message.trim()
+              Log.d("Whisper", "Partial: $partialText")
+              // Could callback partial if needed, but for echo, wait for

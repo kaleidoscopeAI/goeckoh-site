@@ -1,0 +1,6 @@
+"""Geometric mean of intensities (soft product)"""
+I = np.abs(R) ** 2
+prod = np.prod(I, axis=1)
+gm = prod ** (1.0 / float(I.shape[1]))
+return normalize_vector(gm)
+

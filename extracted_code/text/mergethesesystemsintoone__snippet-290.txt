@@ -1,0 +1,9 @@
+"""Samples negative words for a given context word."""
+not_negative_words = set(context_word)
+negative_samples = []
+while len(negative_samples) < self.negative_samples:
+    sample = random.choice(list(self.vocabulary - not_negative_words))
+    if sample != context_word:
+        negative_samples.append(sample)
+return negative_samples
+

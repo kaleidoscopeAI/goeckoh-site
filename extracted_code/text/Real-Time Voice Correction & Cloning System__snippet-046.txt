@@ -1,0 +1,3 @@
+corrected_text: str = Field(description="First-person, grammatically corrected speech.")
+emotional_tone: str = Field(description="Detected emotion: 'neutral', 'happy', 'urgent'.")
+

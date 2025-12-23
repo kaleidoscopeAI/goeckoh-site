@@ -1,0 +1,9 @@
+position = 0
+word_match = re_word.match(text, position)
+while word_match is not None:
+    start, end = word_match.span()
+    word = word_match.group(0)
+    yield start, end, word
+    word_match = re_word.match(text, end)
+
+

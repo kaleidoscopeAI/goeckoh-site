@@ -1,1 +1,1 @@
-The crawler leverages signals from speculative and kaleidoscopic processing (`O_speculation`, `O_kaleidoscope`), closing the loop by reducing curiosity tension, which mathematically can be integrated into the Lyapunov stability proof as a controlled feedback perturbation.
+Designing the crawler in phases — from simple whitelist-based crawlers to full autonomy with reinforcement learning — allows gradual verification of stability and empirical validation of effectiveness, reducing risk and ensuring stable deployment.

@@ -1,0 +1,5 @@
+FAILURE: Build failed with an exception.
+… +11 lines
+
+BUILD FAILED in 26s
+

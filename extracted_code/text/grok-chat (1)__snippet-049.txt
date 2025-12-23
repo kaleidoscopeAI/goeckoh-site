@@ -1,0 +1,5 @@
+lattice = CrystallineLattice()
+for _ in range(10):
+    stim = np.random.rand(lattice.n_nodes, 5) * 0.2
+    metrics = lattice.step(stim)
+    print(metrics)

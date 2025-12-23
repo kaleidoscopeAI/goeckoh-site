@@ -1,0 +1,7 @@
+"""Operating modes gated by GCL"""
+CRISIS = "red"           # GCL < 0.5
+ELEVATED = "yellow"      # 0.5 <= GCL < 0.7
+NORMAL = "green"         # 0.7 <= GCL < 0.9
+FLOW = "blue"            # GCL >= 0.9
+
+

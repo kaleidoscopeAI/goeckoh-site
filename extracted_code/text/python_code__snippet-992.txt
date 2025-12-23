@@ -1,0 +1,10 @@
+r"""
+(?P<name>[^-]+) (
+    -(?P<ver>[^-]+) (
+        -py(?P<pyver>[^-]+) (
+            -(?P<plat>.+)
+        )?
+    )?
+)?
+""",
+re.VERBOSE | re.IGNORECASE,

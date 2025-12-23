@@ -1,0 +1,1 @@
+obj: object, fully_qualified_types_names: Collection[str]

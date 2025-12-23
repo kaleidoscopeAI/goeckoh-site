@@ -1,11 +1,15 @@
-    from pip._vendor.rich import print
-    from pip._vendor.rich.table import Table
+def _looks_like_slackware_scheme() -> bool:
+    """Slackware patches sysconfig but fails to patch distutils and site.
 
-    grid = Table("Markup", "Result", padding=(0, 1))
-
-    for markup in MARKUP:
-        grid.add_row(Text(markup), markup)
-
-    print(grid)
+    Slackware changes sysconfig's user scheme to use ``"lib64"`` for the lib
+    path, but does not do the same to the site module.
+    """
+    if user_site is None:  # User-site not available.
+        return False
+    try:
+        paths = sysconfig.get_paths(scheme="posix_user", expand=False)
+    except KeyError:  # User-site not available.
+        return False
+    return "/lib64/" in paths["purelib"] and "/lib64/" not in user_site
 
 

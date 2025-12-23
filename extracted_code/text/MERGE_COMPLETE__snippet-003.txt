@@ -1,0 +1,6 @@
+                            │
+                            ├── GOECKOH/
+                            ├── src/
+                            ├── docs/
+                            ├── assets/ (app assets)
+                            └── ... (all goeckoh files)

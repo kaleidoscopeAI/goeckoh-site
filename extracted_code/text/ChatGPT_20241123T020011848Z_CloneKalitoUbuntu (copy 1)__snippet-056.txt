@@ -1,6 +1,18 @@
-  2. Matches it to known words using a vision-language model.
-  3. Associates sound clips (e.g., barking for a dog).
-  4. Links to abstract concepts (e.g., loyalty, companionship).
+# Node learns and adapts
+experience = {'impact': cycle * 0.5}
+root_node.process_experience(experience)
 
+# Node replicates and forms connections with child
+child_node = root_node.replicate()
+root_node.connections.add(child_node.node_id)
 
+# Environment provides resources
+resources_received = environment.provide_resources(root_node)
+
+# Output state for observation
+print(f"Cycle {cycle + 1}: Node {root_node.node_id} traits: {root_node.dna.traits}")
+print(f"Resources received: {resources_received}, Environment resources remaining: {environment.resources}")
+
+# Adjust environment based on success
+environment.adjust_environment("success" if resources_received > 0 else "low")
 

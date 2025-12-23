@@ -1,0 +1,11 @@
+model = PerspectiveEngine(E8Lattice(), None)
+vec1 = Vector([0, 0, 0])
+vec2 = Vector([1, 1, 1])
+class DummyEmo:
+    valence = 0.5
+    arousal = 0.7
+    coherence = 0.8
+emo = DummyEmo()
+confidence = model.evaluate_hypothesis(vec1, vec2, 0.1, 0.9, emo)
+assert 0.0 <= confidence <= 1.0
+

@@ -1,22 +1,19 @@
-class ResourceSharing:
-    def __init__(self):
-        self.resource_pool = {}
+class Node:
+    def __init__(self, node_id, threshold=10):
+        self.node_id = node_id
+        self.learned_knowledge = []
+        self.threshold = threshold  # Replication threshold
+        self.resources_shared = 0
 
-    def share_resource(self, resource_id, resource_content, originating_node_id):
-        """Share a resource across nodes."""
-        if resource_id not in self.resource_pool:
-            self.resource_pool[resource_id] = {
-                "content": resource_content,
-                "origin": originating_node_id,
-                "usage_count": 0
-            }
+    def learn(self, knowledge):
+        """Add knowledge and evaluate for replication."""
+        self.learned_knowledge.append(knowledge)
+        if len(self.learned_knowledge) >= self.threshold:
+            return self.replicate()
 
-    def query_resource(self, resource_id):
-        """Query a specific resource."""
-        return self.resource_pool.get(resource_id)
-
-    def mark_resource_usage(self, resource_id):
-        """Increment usage count for tracking."""
-        if resource_id in self.resource_pool:
-            self.resource_pool[resource_id]["usage_count"] += 1
+    def replicate(self):
+        """Replicate the node with a shared resource base."""
+        new_node = Node(node_id=self.node_id + "_child")
+        new_node.learned_knowledge = self.learned_knowledge.copy()
+        return new_node
 

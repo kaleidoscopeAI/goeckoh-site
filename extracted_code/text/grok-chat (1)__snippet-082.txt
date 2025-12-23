@@ -1,0 +1,14 @@
+ds_int = (therapy_entropy(states) - therapy_entropy(past)) / dt if past else 0
+ds_env = random.gauss(0, 0.1)
+term1 = lambda1 * (ds_int - ds_env)
+
+mi = sum(p * f for p, f in zip(past or [0], future or [0])) / max(len(past), 1)
+h_x = therapy_entropy(states)
+term2 = lambda2 * (mi / (h_x + 1e-10))
+
+dn = n_copies / dt
+term3 = lambda3 * (dn / (len(states) + 1e-10))
+
+l = term1 + term2 + term3
+return (math.tanh(l) + 1) / 2
+

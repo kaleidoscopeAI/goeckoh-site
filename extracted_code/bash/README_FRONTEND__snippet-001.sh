@@ -1,2 +1,1 @@
-cd cognitive-nebula
-npm install
+npm run dev

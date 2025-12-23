@@ -1,1 +1,3 @@
-  state is updated using a first-order exponential filter modulated by the ingestion learning rate η 
+Polars CsvReader:
+Update the polars usage to the correct API:
+

@@ -1,0 +1,5 @@
+  - TarsosDSP
+  - Sherpa-onnx Android
+  - Lingua (we pinned to 1.1.0)
+    The build log shows DNS errors resolving Maven/JitPack. Once network/DNS is available, rerun ./gradlew assembleDebug.
+    Repos are configured (google, mavenCentral, jitpack, k2-fsa).

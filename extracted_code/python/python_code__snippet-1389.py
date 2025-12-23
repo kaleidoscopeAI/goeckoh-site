@@ -1,10 +1,46 @@
-from pip._vendor.rich.highlighter import NullHighlighter
-from pip._vendor.rich.logging import RichHandler
-from pip._vendor.rich.segment import Segment
-from pip._vendor.rich.style import Style
+if sys.version_info[0] >= 3:
+    # needs to be a text stream
+    stream = codecs.getreader('utf-8')(stream)
+# Try to load as JSON, falling back on legacy format
+data = stream.read()
+stream = StringIO(data)
+try:
+    jdata = json.load(stream)
+    result = jdata['extensions']['python.exports']['exports']
+    for group, entries in result.items():
+        for k, v in entries.items():
+            s = '%s = %s' % (k, v)
+            entry = get_export_entry(s)
+            assert entry is not None
+            entries[k] = entry
+    return result
+except Exception:
+    stream.seek(0, 0)
 
-from pip._internal.utils._log import VERBOSE, getLogger
-from pip._internal.utils.compat import WINDOWS
-from pip._internal.utils.deprecation import DEPRECATION_MSG_PREFIX
-from pip._internal.utils.misc import ensure_dir
+def read_stream(cp, stream):
+    if hasattr(cp, 'read_file'):
+        cp.read_file(stream)
+    else:
+        cp.readfp(stream)
+
+cp = configparser.ConfigParser()
+try:
+    read_stream(cp, stream)
+except configparser.MissingSectionHeaderError:
+    stream.close()
+    data = textwrap.dedent(data)
+    stream = StringIO(data)
+    read_stream(cp, stream)
+
+result = {}
+for key in cp.sections():
+    result[key] = entries = {}
+    for name, value in cp.items(key):
+        s = '%s = %s' % (name, value)
+        entry = get_export_entry(s)
+        assert entry is not None
+        # entry.dist = self
+        entries[name] = entry
+return result
+
 

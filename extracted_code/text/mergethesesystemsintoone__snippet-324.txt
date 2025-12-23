@@ -1,0 +1,7 @@
+"""Implements an exploration strategy."""
+# Example: Increase node's affinity for unknown data types
+for data_type in ["text", "image", "numerical"]:
+    affinity_trait = f"affinity_{data_type}"
+    if affinity_trait in node.traits.traits:
+        node.traits.traits[affinity_trait].value = min(1.0, node.traits.traits[affinity_trait].value + 0.1)
+

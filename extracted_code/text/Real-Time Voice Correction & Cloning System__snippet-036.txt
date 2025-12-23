@@ -1,0 +1,5 @@
+stream: Option<cpal::Stream>,
+input_producer: Arc<Mutex<Producer<f32>>>,
+output_consumer: Arc<Mutex<Consumer<f32>>>,
+asr_session: Session,
+fft_planner: Arc<Mutex<FftPlanner<f32>>>,

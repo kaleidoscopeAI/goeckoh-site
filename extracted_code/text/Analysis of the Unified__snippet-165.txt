@@ -1,0 +1,6 @@
+Red: Attack/offensive roles.
+
+Blue: Defense/security roles.
+
+Crawler: Data ingestion and observation roles. Implementation notes suggest running Red/Blue simulations in sandboxes and enforcing legal/ethical constraints for safety.
+

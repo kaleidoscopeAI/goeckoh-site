@@ -1,0 +1,8 @@
+PipOption,
+"--log",
+"--log-file",
+"--local-log",
+dest="log",
+metavar="path",
+type="path",
+help="Path to a verbose appending log.",

@@ -1,0 +1,3 @@
+doc: Evidence-based calming strategy catalog inspired by ABA best practices.
+functions: list_categories, by_category, suggest_for_event
+classes: Strategy, StrategyAdvisor

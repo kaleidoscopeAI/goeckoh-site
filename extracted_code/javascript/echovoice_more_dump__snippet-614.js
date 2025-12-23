@@ -1,4 +1,3 @@
-function computeCovarianceMatrix(V: number[][]): number[][] {
-const M = V.length;
-const N = V[0]?.length ?? 0;
-const Cov = Array.from({ length: M }, () => new Array(M).fill(0));
+const N = 5;
+const nodes: any[] = [];
+for (let i=0;i<N;i++) nodes.push({ id: `n${i}`, Ki: Math.random() * 2 - 1 });

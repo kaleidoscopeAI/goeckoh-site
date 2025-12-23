@@ -1,1 +1,5 @@
-3. (Optional) Set `VITE_SD_URL` if your AUTOMATIC1111 host differs from `http://localhost:7860`.
+# from the parent directory of this repo
+python -m echovoice --help
+python -m echovoice run        # realtime loop (requires audio deps)
+python -m echovoice simulate   # synthetic loop (no microphone)
+python -m echovoice seed       # seed + websocket server

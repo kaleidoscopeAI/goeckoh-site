@@ -1,11 +1,14 @@
-from .wait import wait_chain  # noqa
-from .wait import wait_combine  # noqa
-from .wait import wait_exponential  # noqa
-from .wait import wait_fixed  # noqa
-from .wait import wait_incrementing  # noqa
-from .wait import wait_none  # noqa
-from .wait import wait_random  # noqa
-from .wait import wait_random_exponential  # noqa
-from .wait import wait_random_exponential as wait_full_jitter  # noqa
-from .wait import wait_exponential_jitter  # noqa
+""":return: documents folder for the Android OS"""
+# Get directories with pyjnius
+try:
+    from jnius import autoclass
+
+    context = autoclass("android.content.Context")
+    environment = autoclass("android.os.Environment")
+    documents_dir: str = context.getExternalFilesDir(environment.DIRECTORY_DOCUMENTS).getAbsolutePath()
+except Exception:  # noqa: BLE001
+    documents_dir = "/storage/emulated/0/Documents"
+
+return documents_dir
+
 

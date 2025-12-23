@@ -1,0 +1,7 @@
+PipOption,
+"--exclude",
+dest="excludes",
+action="append",
+metavar="package",
+type="package_name",
+help="Exclude specified package from the output",

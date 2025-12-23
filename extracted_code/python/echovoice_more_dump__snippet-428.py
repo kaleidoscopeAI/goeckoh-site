@@ -1,1 +1,1 @@
-2. Quart replaces Flask to support async def routes safely.
+src/services/emotionIntegrators.ts — modulators, regulatory gating, homeostasis, reflection scaffold (from previous response, slightly adjusted).

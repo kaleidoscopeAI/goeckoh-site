@@ -1,1 +1,1 @@
-2. Flask async issues resolved using Quart (async-native).
+vectorized operations (e.g., using NumPy), and adherence to low entanglement constraints (χ) when applying quantum tensor network

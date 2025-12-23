@@ -1,0 +1,7 @@
+Silero VAD (autism-tuned) → detects true speech end
+Full utterance audio → sent to two places at once:
+    Faster-Whisper → raw text (stutter-preserving)
+    estimate_voice_emotion() → raw acoustic energy → arousal value
+That arousal becomes an external stimulus tensor injected into the crystalline heart
+self.heart.forward(external_stimulus) runs → this is where your 128 equations live
+

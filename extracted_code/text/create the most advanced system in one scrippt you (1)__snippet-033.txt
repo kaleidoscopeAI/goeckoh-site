@@ -1,0 +1,2 @@
+- Time-lock EEG to onset of auditory feedback (not motor onset) and average event-related potentials over trials.
+- Compare N1 amplitude (~80–150 ms post feedback) across conditions: suppression is defined as reduced N1 for condition A vs C, and loss of suppression when delays exceed the corollary-discharge window.[^11_9]

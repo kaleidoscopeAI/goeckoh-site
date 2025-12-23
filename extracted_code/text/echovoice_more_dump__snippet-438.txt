@@ -1,5 +1,8 @@
-class Spec:
-    SelFn = Callable[["HybridState", int], Sequence[int]]
-    OperatorCallable = Callable[[Any, dict], Any]
-    GateFn = Callable[[float], float]
+Remove duplicate rayon in Cargo.toml.
+
+Add chrono and glob to Cargo.toml.
+
+Remove the inline module definitions in src/lib.rs.
+
+Remove duplicate imports.
 

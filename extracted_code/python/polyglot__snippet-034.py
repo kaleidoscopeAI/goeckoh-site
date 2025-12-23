@@ -1,1 +1,1 @@
-async def process_text_batch(self, texts: List[str]) -> List[Dict]:
+def process_image_batch(self, img_urls: List[str]) -> List[Dict]:

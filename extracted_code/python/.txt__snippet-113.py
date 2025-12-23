@@ -1,1 +1,1 @@
-def _stream_worker(self) -> None:
+def copy_docker_sources(paths: InstallPaths):

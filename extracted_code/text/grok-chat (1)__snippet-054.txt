@@ -1,0 +1,4 @@
+learning_rate: float = 0.1
+adaptation_rate: float = 0.1
+energy_efficiency: float = 1.0
+

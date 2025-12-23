@@ -1,1 +1,1 @@
-// 4. Control mapping using aggregated global state
+class SystemVisualizer:

@@ -1,0 +1,12 @@
+"""
+Return the minor version of the current OS distribution, as a string,
+if provided.
+Otherwise, the empty string is returned. The minor version is the second
+part of the dot-separated version string.
+
+For a description of the *best* parameter, see the :func:`distro.version`
+method.
+"""
+return _distro.minor_version(best)
+
+

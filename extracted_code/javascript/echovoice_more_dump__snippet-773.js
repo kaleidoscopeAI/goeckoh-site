@@ -1,2 +1,1 @@
-const maxDelta = Math.max(1e-9, ...constructDelta.map(Math.abs));
-for (let j = 0; j < M; j++) constructDelta[j] /= maxDelta;
+for (let k = 0; k < blockSizes.Psi; k++) y2[i][offset + k] += w * (v2[j][offset + k] - v2[i][offset + k]);

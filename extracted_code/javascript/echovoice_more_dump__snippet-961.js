@@ -1,1 +1,3 @@
-+ const blockSizes = { K: nodes[0].K.length, D: nodes[0].D.length, Psi: nodes[0].Psi.length, U: nodes[0].U.length, M: nodes[0].M.length, L:
+const na = this.nodes.get(edge.a)!, nb = this.nodes.get(edge.b)!;
+const rij = na.neighbors.length + nb.neighbors.length - 2; // Discrete curvature
+edge.w += -2 * rij * this.dt; // Smooth g ~ w

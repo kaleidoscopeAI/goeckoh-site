@@ -1,9 +1,0 @@
-class TextToSpeechInput:
-    """Inputs for Text To Speech inference"""
-
-    inputs: str
-    """The input text data"""
-    parameters: Optional[TextToSpeechParameters] = None
-    """Additional inference parameters for Text To Speech"""
-
-

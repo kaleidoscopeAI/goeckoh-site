@@ -1,1 +1,1 @@
-Design reward mechanisms from curiosity tension reduction and successful knowledge integration, bridging theoretical RL guarantees with system contraction.
+Incorporating a curiosity-driven autonomous web crawler operating as an internal Thought Engine is a novel and powerful design. It elevates the system from passive inference to **active meta-learning and self-directed evolution**, a frontier AI capability still under active research.

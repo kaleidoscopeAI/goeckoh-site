@@ -1,0 +1,1 @@
+      val durationSec = audioBytes.size / (sampleRate * 2).toDouble() //

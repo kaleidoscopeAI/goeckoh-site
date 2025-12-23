@@ -1,0 +1,7 @@
+"""
+Returns True if a given CFTypeRef is an identity.
+"""
+expected = Security.SecIdentityGetTypeID()
+return CoreFoundation.CFGetTypeID(item) == expected
+
+

@@ -1,0 +1,8 @@
+    self.vad_model = load_silero_vad()
+    self.vad_iterator = VADIterator(
+        self.vad_model,
+        threshold=0.45,                 # gentle on quiet/monotone speech
+        sampling_rate=16000,
+        min_silence_duration_ms=1200,   # respects long processing pauses
+        speech_pad_ms=400               # captures slow on-ramps and trailing thoughts
+    )

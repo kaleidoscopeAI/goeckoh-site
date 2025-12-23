@@ -1,0 +1,2 @@
+  print(f"[ready] Open: http://{HOST}:{PORT}/")
+  uvicorn.run(app, host=HOST, port=PORT, log_level="info")

@@ -1,24 +1,21 @@
-    """Generate metadata using mechanisms described in PEP 660.
+"""Wait an incremental amount of time after each attempt.
 
-    Returns the generated metadata directory.
-    """
-    metadata_tmpdir = TempDirectory(kind="modern-metadata", globally_managed=True)
+Starting at a starting value and incrementing by a value for each attempt
+(and restricting the upper limit to some maximum value).
+"""
 
-    metadata_dir = metadata_tmpdir.path
+def __init__(
+    self,
+    start: _utils.time_unit_type = 0,
+    increment: _utils.time_unit_type = 100,
+    max: _utils.time_unit_type = _utils.MAX_WAIT,  # noqa
+) -> None:
+    self.start = _utils.to_seconds(start)
+    self.increment = _utils.to_seconds(increment)
+    self.max = _utils.to_seconds(max)
 
-    with build_env:
-        # Note that BuildBackendHookCaller implements a fallback for
-        # prepare_metadata_for_build_wheel/editable, so we don't have to
-        # consider the possibility that this hook doesn't exist.
-        runner = runner_with_spinner_message(
-            "Preparing editable metadata (pyproject.toml)"
-        )
-        with backend.subprocess_runner(runner):
-            try:
-                distinfo_dir = backend.prepare_metadata_for_build_editable(metadata_dir)
-            except InstallationSubprocessError as error:
-                raise MetadataGenerationFailed(package_details=details) from error
-
-    return os.path.join(metadata_dir, distinfo_dir)
+def __call__(self, retry_state: "RetryCallState") -> float:
+    result = self.start + (self.increment * (retry_state.attempt_number - 1))
+    return max(0, min(result, self.max))
 
 

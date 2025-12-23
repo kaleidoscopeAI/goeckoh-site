@@ -1,0 +1,4 @@
+is_running: bool,
+// The Physics Engine (Shared between UI and Audio)
+lattice: Arc<Mutex<CrystallineLattice>>, 
+audio_stream: Option<AudioStreamManager>,

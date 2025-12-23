@@ -1,4 +1,7 @@
-def get_similar_molecules(smiles):
-    similar = cube.find_similar_molecules(smiles)
-    return jsonify(similar)  # Return data as JSON
+def get_similarity_result(task_id):
+    task = celery.AsyncResult(task_id)
+    if task.ready():
+        return jsonify({'result': task.result})
+    else:
+        return jsonify({'status': task.status}) #Return status to frontend
 

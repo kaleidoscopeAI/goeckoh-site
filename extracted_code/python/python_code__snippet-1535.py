@@ -1,53 +1,24 @@
-from typing import Optional
+def __init__(self, lines: Iterable[List[Segment]], new_lines: bool = False) -> None:
+    """A simple renderable containing a number of lines of segments. May be used as an intermediate
+    in rendering process.
 
-from pip._internal.models.format_control import FormatControl
-
-
-class SelectionPreferences:
+    Args:
+        lines (Iterable[List[Segment]]): Lists of segments forming lines.
+        new_lines (bool, optional): Insert new lines after each line. Defaults to False.
     """
-    Encapsulates the candidate selection preferences for downloading
-    and installing files.
-    """
+    self.lines = list(lines)
+    self.new_lines = new_lines
 
-    __slots__ = [
-        "allow_yanked",
-        "allow_all_prereleases",
-        "format_control",
-        "prefer_binary",
-        "ignore_requires_python",
-    ]
-
-    # Don't include an allow_yanked default value to make sure each call
-    # site considers whether yanked releases are allowed. This also causes
-    # that decision to be made explicit in the calling code, which helps
-    # people when reading the code.
-    def __init__(
-        self,
-        allow_yanked: bool,
-        allow_all_prereleases: bool = False,
-        format_control: Optional[FormatControl] = None,
-        prefer_binary: bool = False,
-        ignore_requires_python: Optional[bool] = None,
-    ) -> None:
-        """Create a SelectionPreferences object.
-
-        :param allow_yanked: Whether files marked as yanked (in the sense
-            of PEP 592) are permitted to be candidates for install.
-        :param format_control: A FormatControl object or None. Used to control
-            the selection of source packages / binary packages when consulting
-            the index and links.
-        :param prefer_binary: Whether to prefer an old, but valid, binary
-            dist over a new source dist.
-        :param ignore_requires_python: Whether to ignore incompatible
-            "Requires-Python" values in links. Defaults to False.
-        """
-        if ignore_requires_python is None:
-            ignore_requires_python = False
-
-        self.allow_yanked = allow_yanked
-        self.allow_all_prereleases = allow_all_prereleases
-        self.format_control = format_control
-        self.prefer_binary = prefer_binary
-        self.ignore_requires_python = ignore_requires_python
+def __rich_console__(
+    self, console: "Console", options: "ConsoleOptions"
+) -> "RenderResult":
+    if self.new_lines:
+        new_line = Segment.line()
+        for line in self.lines:
+            yield from line
+            yield new_line
+    else:
+        for line in self.lines:
+            yield from line
 
 

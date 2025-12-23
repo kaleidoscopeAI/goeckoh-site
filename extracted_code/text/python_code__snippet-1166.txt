@@ -1,0 +1,6 @@
+"installed_base",
+"base",
+"installed_platbase",
+"platbase",
+"prefix",
+"exec_prefix",

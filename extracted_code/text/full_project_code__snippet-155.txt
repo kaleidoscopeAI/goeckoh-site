@@ -1,0 +1,2 @@
+"http": functools.partial(_default_key_normalizer, PoolKey),
+"https": functools.partial(_default_key_normalizer, PoolKey),

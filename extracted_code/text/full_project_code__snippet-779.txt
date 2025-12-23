@@ -1,0 +1,5 @@
+MachineState.ERROR ,MachineState.START ,MachineState.START ,MachineState.START ,MachineState.START ,MachineState.ERROR ,MachineState.ERROR ,3                  ,3                  ,4                  ,  # MachineState.START
+MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,  # MachineState.ITS_ME
+MachineState.ERROR ,MachineState.ERROR ,MachineState.ERROR ,MachineState.ERROR ,MachineState.ERROR ,MachineState.ERROR ,MachineState.ERROR ,MachineState.ERROR ,MachineState.ERROR ,MachineState.ERROR ,  # MachineState.ERROR
+MachineState.ERROR ,MachineState.START ,MachineState.START ,MachineState.ERROR ,MachineState.ERROR ,MachineState.START ,MachineState.START ,MachineState.START ,MachineState.START ,MachineState.START ,  # 3
+MachineState.ERROR ,MachineState.START ,MachineState.ERROR ,MachineState.START ,MachineState.ERROR ,MachineState.START ,MachineState.ERROR ,MachineState.START ,MachineState.ERROR ,MachineState.START ,  # 4

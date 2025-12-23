@@ -1,0 +1,4 @@
+ChunkedEncodingError,
+ContentDecodingError,
+InvalidSchema,
+TooManyRedirects,

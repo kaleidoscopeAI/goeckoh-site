@@ -1,0 +1,8 @@
+"""Convert an ISO format string to a date.
+
+Handles the format 2020-01-22T14:24:01Z (trailing Z)
+which is not supported by older versions of fromisoformat.
+"""
+return datetime.datetime.fromisoformat(isodate.replace("Z", "+00:00"))
+
+

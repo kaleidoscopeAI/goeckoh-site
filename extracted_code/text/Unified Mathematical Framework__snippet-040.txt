@@ -1,0 +1,4 @@
+echo = Echo()
+# Optional: echo.add_sample_from_mic(8, "calm")
+echo.run()
+

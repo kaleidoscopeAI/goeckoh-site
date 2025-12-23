@@ -1,7 +1,14 @@
-class Strategy:
-    category: str
-    title: str
-    description: str
-    cues: List[str] = field(default_factory=list)
+settings = load_settings()
+return CompanionConfig(
+    child_id=settings.child_id,
+    child_name=settings.child_name,
+    device=settings.device,
+    audio=settings.audio,
+    speech=settings.speech,
+    llm=settings.llm,
+    behavior=settings.behavior,
+    paths=settings.paths,
+    heart=settings.heart,
+)
 
 

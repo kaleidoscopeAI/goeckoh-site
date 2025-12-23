@@ -1,0 +1,5 @@
+- Rust implementations leverage llama.cpp API for Hugging Face model inference.
+- Curiosity bit update efficiently implemented as threshold function.
+- Routing matrix $R$ and engine calls orchestrate synchronous and asynchronous operations.
+- Performance metrics to derive $\mathrm{Perf}_k$ may include entropy reduction, error minimization, or external evaluator feedback.
+

@@ -1,13 +1,7 @@
-class DependencyInfo:
-    """Information about a dependency"""
-    name: str
-    version: str
-    current_version: Optional[str] = None
-    latest_version: Optional[str] = None
-    is_vulnerable: bool = False
-    vulnerability_details: Optional[str] = None
-    is_outdated: bool = False
-    upgrade_path: Optional[str] = None
-    is_deprecated: bool = False
-    alternatives: List[str] = field(default_factory.list)
-
+<h2>Console</h2>
+<div id="log" class="code" style="height:45vh; overflow:auto"></div>
+<div style="margin-top:10px; display:flex; gap:8px;">
+  <button class="btn" id="speak">Speak last caption</button>
+  <button class="btn" id="seed">Add local seed</button>
+</div>
+<p class="small" style="margin-top:8px;">Open <span class="code">/status</span> or <span class="code">/recent</span> for data. The system 

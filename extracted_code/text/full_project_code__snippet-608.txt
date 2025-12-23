@@ -1,0 +1,7 @@
+strs: Union[typing.Iterable[str], str],
+caseless: bool = False,
+use_regex: bool = True,
+as_keyword: bool = False,
+*,
+useRegex: bool = True,
+asKeyword: bool = False,

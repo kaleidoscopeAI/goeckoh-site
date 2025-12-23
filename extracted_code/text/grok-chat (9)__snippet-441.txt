@@ -1,0 +1,1 @@
+  excluded_dirs = {'.git', '.github', 'overrides', '.venv', 'node_modules',

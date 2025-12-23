@@ -1,2 +1,5 @@
-Adjust configuration settings using sliders etc to make user changes possible and immediate.
+class LLMMessage:
+    """Message for LLM conversation"""
+    role: str  # "system", "user", "assistant"
+    content: str
 

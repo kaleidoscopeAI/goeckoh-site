@@ -1,0 +1,2 @@
+_EXCLUDED_ATTRS.add("__class_getitem__")
+

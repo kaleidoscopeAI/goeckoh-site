@@ -1,0 +1,6 @@
+Resources: The environment tracks resources and provides them to nodes, recording usage in a history queue.
+
+Replication/Removal: Nodes replicate if they meet an internal criteria (energy surplus) and are removed if their energy depletes to zero.
+
+SuperNode Creation: Nodes with high knowledge crystallize. When sufficient Nodes merge, they form a SuperNode that builds a simple networkx graph to identify knowledge gaps and generate placeholder tasks.
+

@@ -1,1 +1,1 @@
-def add_node_batch(self, nodes: List[Tuple[str, float]]):
+def add_insight_batch(self, insights: List[Dict]):

@@ -1,1 +1,1 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+Voice clone using XTTS (or clean fallback if XTTS isn’t installed)

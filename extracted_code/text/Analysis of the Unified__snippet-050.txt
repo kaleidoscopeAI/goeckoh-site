@@ -1,0 +1,16 @@
+# Initialize the complete AGI system
+agi_system = UnifiedAGISystem(num_nodes=8)
+
+# Run the integrated simulation
+agi_system.run_complete_simulation(iterations=15)
+
+# Demonstrate pharmaceutical application
+print("\n=== PharmAI-Genesis Drug Discovery Application ===")
+print("Optimizing molecular structures using quantum-emotional inference...")
+
+# Simulate drug discovery workflow
+for node in agi_system.nodes[:3]:  # Use first 3 nodes for discovery
+    drug_hypothesis = agi_system.transformer.generate_drug_hypothesis(
+        node.state_vector(), node.emotional_state, max_length=8
+    )
+    print(f"Discovery Node {node.id}: {drug_hypothesis}")

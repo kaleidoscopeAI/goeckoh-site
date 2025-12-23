@@ -1,1 +1,1 @@
-def sleep_dynamics(self, t, y, params):
+def update(frame):

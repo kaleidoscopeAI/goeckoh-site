@@ -1,1 +1,3 @@
-A threaded class using psutil to monitor system CPU and memory usage against configurable maximums.
+edges = np.linspace(0, F, H+1, dtype=int)
+return [(int(edges[i]), int(edges[i+1])) for i in range(H)]
+

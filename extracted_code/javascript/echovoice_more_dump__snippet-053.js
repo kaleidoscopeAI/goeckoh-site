@@ -1,2 +1,2 @@
-fn compute_commitment_vec(vals: &[f32]) -> Vec<u8> {
-let mut hasher = Sha256::new();
+let commit = compute_commitment_vec(&buf);
+let out = env.new_byte_array(commit.len() as i32).unwrap();

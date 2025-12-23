@@ -1,2 +1,1 @@
-class MemoryStore:
-def __init__(self):
+def check_stability(self, S, P, R, I, Q):

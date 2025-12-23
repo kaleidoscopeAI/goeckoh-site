@@ -1,0 +1,3 @@
+ gcl is then passed to the Correction module in Step 3 to gate its behavior. This allows the system to react emotionally
+ without adding latency to the core pipeline.
+

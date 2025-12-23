@@ -1,0 +1,8 @@
+  text = payload.get("text","").strip()
+  if not text: return JSONResponse({"ok":False,"error":"empty"}, status_code=400)
+  try: lang = detect(text)
+  except Exception: lang = "en"
+  fid = brain.mem.teach(text, lang)
+  brain.mem.log(brain.state.tick, "teach", {"id":fid,"lang":lang})
+  return {"ok":True, "id": fid, "lang": lang}
+

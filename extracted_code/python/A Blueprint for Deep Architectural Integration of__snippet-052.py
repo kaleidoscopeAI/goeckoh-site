@@ -1,1 +1,1 @@
-- Gradients and performance metrics are passed externally (computed from losses or rewards).
+- **Avoid Dead-code Elimination**: Use `black_box` from Criterion.rs to prevent compiler optimizations from removing code.

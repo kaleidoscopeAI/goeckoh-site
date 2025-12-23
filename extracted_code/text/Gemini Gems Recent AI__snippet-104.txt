@@ -1,0 +1,5 @@
+<div>
+  {/*... Input fields and buttons... */}
+  <div ref={mountRef} style={{ height: '600px' }} /> {/* 3D visualization */}
+  {/*... Similarity results... */}
+</div>

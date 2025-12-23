@@ -1,0 +1,2 @@
+- Core updates extend to physical devices.
+- Peripherals (CPU, display, actuators) represented by additional state/control vectors, governed by equations e.g.,

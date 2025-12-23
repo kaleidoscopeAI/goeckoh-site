@@ -1,0 +1,6 @@
+- $P_i^b$ are bitwise projection operators selecting bit-fields,
+- $O_i$ are Thought Engines implemented as bitwise operators/logics,
+- $G$ is bitwise integration (adder trees, multiplexers),
+- $\eta_k$ simulates noise via random bit flips,
+- $R$ is routing matrix encoded in bits.
+

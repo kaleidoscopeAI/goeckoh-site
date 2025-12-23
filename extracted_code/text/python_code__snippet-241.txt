@@ -1,6 +1,2 @@
-class Strategy:
-    category: str
-    title: str
-    description: str
-
+# <REDACTED: potential secret detected>
 

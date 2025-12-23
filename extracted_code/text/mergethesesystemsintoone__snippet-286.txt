@@ -1,0 +1,6 @@
+"""Trains the word embedding model on a list of sentences."""
+self.corpus = sentences
+self._build_vocabulary()
+self._initialize_vectors()
+self._train_model()
+

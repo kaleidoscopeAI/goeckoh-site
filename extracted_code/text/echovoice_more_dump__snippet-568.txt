@@ -1,0 +1,7 @@
+state, ham, gf, me = build_minimal_system(node_count=6, bit_dim=64)
+print('Initial energy:', ham.energy(state))
+for t in range(5):
+    gf.step(0.01)
+    me.step()
+    print(f'step {t}: energy={ham.energy(state):.6f}')
+

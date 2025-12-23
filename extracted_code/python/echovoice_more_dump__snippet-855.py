@@ -1,36 +1,31 @@
-class UnifiedInterfaceNode:
-    id: str
-    valence: float = 0.0
-    arousal: float = 0.0
-    stance: float = 0.0
-    coherence: float = 1.0
-    energy: float = 1.0
-    knowledge: float = 0.0
-    hamiltonian_e: float = 0.0
-    perspective_v: np.ndarray = field(default_factory=lambda: np.zeros(64))
-    governance_flags: Dict[str, Any] = field(default_factory=lambda: {"L0":True, "L1":True})
-    history: List[Dict[str,Any]] = field(default_factory=list)
-    last_update: float = field(default_factory=time.time)
+class LocalEmbedder:
+    def __init__(self, n_components=64):
+        self.vectorizer = TfidfVectorizer(max_features=1024)
+        self.pca = PCA(n_components=n_components)
+        self.fitted = False
 
-    def snapshot(self):
-        return {
-            "id": self.id,
-            "valence": self.valence,
-            "arousal": self.arousal,
-            "energy": self.energy,
-            "hamiltonian_e": self.hamiltonian_e,
-            "time": time.time()
-        }
+    def fit(self, texts: List[str]):
+        X = self.vectorizer.fit_transform(texts).toarray()
+        if X.shape[1] < self.pca.n_components:
+            # pad columns
+            pad = np.zeros((X.shape[0], self.pca.n_components - X.shape[1]))
+            X = np.concatenate([X, pad], axis=1)
+        self.pca.fit(X)
+        self.fitted = True
+        logging.info('LocalEmbedder fitted on corpus')
 
-    def apply_feedback(self, delta_valence=0.0, delta_arousal=0.0, delta_energy=0.0):
-        self.valence = float(np.clip(self.valence + delta_valence, -1.0, 1.0))
-        self.arousal = float(np.clip(self.arousal + delta_arousal, 0.0, 1.0))
-        self.energy = float(np.clip(self.energy + delta_energy, 0.0, 1.0))
-        self.last_update = time.time()
-        self.history.append(self.snapshot())
-
-    def update_perspective(self, vec: np.ndarray, alpha=0.2):
-        if self.perspective_v.shape != vec.shape:
-            self.perspective_v = np.zeros_like(vec)
-        self.perspective_v = (1-alpha)*self.perspective_v + alpha*vec
+    def embed(self, text: str) -> np.ndarray:
+        if not self.fitted:
+            # fall back to hashing-based embedding
+            h = np.frombuffer(hashlib_sha256(text.encode()).digest()[:64], dtype=np.uint8).astype(np.float32)
+            return (h - h.mean()) / (h.std() + 1e-9)
+        X = self.vectorizer.transform([text]).toarray()
+        if X.shape[1] < self.pca.n_components:
+            pad = np.zeros((1, self.pca.n_components - X.shape[1]))
+            X = np.concatenate([X, pad], axis=1)
+        emb = self.pca.transform(X)[0]
+        # normalize
+        emb = emb.astype(np.float32)
+        norm = np.linalg.norm(emb) + 1e-9
+        return emb / norm
 

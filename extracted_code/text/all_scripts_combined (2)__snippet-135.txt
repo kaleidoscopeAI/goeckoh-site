@@ -1,0 +1,60 @@
+"""Return (phrase_rows, timeline_labels, timeline_rates)."""
+phrase_stats: Dict[str, Dict[str, Any]] = defaultdict(lambda: {"phrase": "Unknown", "attempts": 0, "corrections": 0})
+daily: Dict[str, Dict[str, int]] = defaultdict(lambda: {"attempts": 0, "corrections": 0})
+
+for row in rows:
+    pid = row.get("phrase_id") or "Unknown"
+    phrase_text = row.get("phrase_text") or pid
+    needs_correction = (row.get("needs_correction") == "1")
+
+    pstats = phrase_stats[pid]
+    pstats["phrase"] = phrase_text
+    pstats["attempts"] += 1
+    if needs_correction:
+        pstats["corrections"] += 1
+
+    ts = row.get("timestamp_iso") or ""
+    if ts:
+        try:
+            dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
+            date_key = dt.date().isoformat()
+        except Exception:
+            date_key = ts.split("T", 1)[0]
+        dstats = daily[date_key]
+        dstats["attempts"] += 1
+        if needs_correction:
+            dstats["corrections"] += 1
+
+phrase_rows: List[Dict[str, Any]] = []
+total_attempts = 0
+total_corrections = 0
+
+for stats in phrase_stats.values():
+    attempts = stats["attempts"]
+    corrections = stats["corrections"]
+    rate = (corrections / attempts) if attempts else 0.0
+    phrase_rows.append(
+        {
+            "phrase": stats["phrase"],
+            "attempts": attempts,
+            "corrections": corrections,
+            "rate": rate,
+        }
+    )
+    total_attempts += attempts
+    total_corrections += corrections
+
+phrase_rows.sort(key=lambda r: r["attempts"], reverse=True)
+
+timeline_labels: List[str] = []
+timeline_rates: List[float] = []
+for date_key in sorted(daily.keys()):
+    attempts = daily[date_key]["attempts"]
+    corrections = daily[date_key]["corrections"]
+    rate = (corrections / attempts) if attempts else 0.0
+    timeline_labels.append(date_key)
+    timeline_rates.append(rate * 100.0)
+
+return phrase_rows, timeline_labels, timeline_rates
+
+

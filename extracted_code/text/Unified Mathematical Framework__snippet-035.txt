@@ -1,0 +1,7 @@
+Microphone → raw audio (16 kHz)
+Whisper (local model) → raw transcription (speech_processing.py)
+broken_speech_tool.py → expands abbreviations, fixes “u” → “you”, “pls” → “please”, collapses “heyyy” → “heyy”, etc.
+LanguageTool → grammar/spelling correction
+Final clean text is fed into the main SpeechLoop (not shown, but referenced heavily)
+The SpeechLoop decides what to say back (support voice, correction echo, etc.) and uses gTTS (Google TTS) to speak the response aloud.
+

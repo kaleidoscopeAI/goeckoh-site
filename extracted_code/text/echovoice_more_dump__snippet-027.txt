@@ -1,1 +1,2 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+package com.kaleidoscope.body
+data class ConsciousState(val awareness: Float, val valence: Float, val coherence: Float)

@@ -1,21 +1,15 @@
-def _find_egg_info(directory: str) -> str:
-    """Find an .egg-info subdirectory in `directory`."""
-    filenames = [f for f in os.listdir(directory) if f.endswith(".egg-info")]
+"""Retries if the result verifies a predicate."""
 
-    if not filenames:
-        raise InstallationError(f"No .egg-info directory found in {directory}")
+def __init__(self, predicate: typing.Callable[[typing.Any], bool]) -> None:
+    self.predicate = predicate
 
-    if len(filenames) > 1:
-        raise InstallationError(
-            "More than one .egg-info directory found in {}".format(directory)
-        )
+def __call__(self, retry_state: "RetryCallState") -> bool:
+    if retry_state.outcome is None:
+        raise RuntimeError("__call__() called before outcome was set")
 
-    return os.path.join(directory, filenames[0])
+    if not retry_state.outcome.failed:
+        return self.predicate(retry_state.outcome.result())
+    else:
+        return False
 
 
-def generate_metadata(
-    build_env: BuildEnvironment,
-    setup_py_path: str,
-    source_dir: str,
-    isolated: bool,
-    details: str,

@@ -1,0 +1,4 @@
+print(f"Error importing required modules: {e}")
+print("Please run this script directly to set up the virtual environment.")
+sys.exit(1)
+

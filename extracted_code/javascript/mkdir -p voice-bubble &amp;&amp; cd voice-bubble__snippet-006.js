@@ -1,1 +1,1 @@
-const renderer = new THREE.WebGLRenderer({ canvas: UI.canvas, antialias: true, alpha: true });
+const camera = new THREE.PerspectiveCamera(45, 1, 0.01, 100);

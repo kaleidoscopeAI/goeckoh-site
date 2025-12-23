@@ -1,2 +1,22 @@
-def conditionAsParseAction(): ...
+    from pip._vendor.rich.console import Group
+    from pip._vendor.rich.markdown import Markdown
+    from pip._vendor.rich.panel import Panel
+    from pip._vendor.rich.syntax import Syntax
+    from pip._vendor.rich.table import Table
 
+    table = Table(row_styles=["", "dim"])
+
+    table.add_column("Released", style="cyan", no_wrap=True)
+    table.add_column("Title", style="magenta")
+    table.add_column("Box Office", justify="right", style="green")
+
+    table.add_row("Dec 20, 2019", "Star Wars: The Rise of Skywalker", "$952,110,690")
+    table.add_row("May 25, 2018", "Solo: A Star Wars Story", "$393,151,347")
+    table.add_row("Dec 15, 2017", "Star Wars Ep. V111: The Last Jedi", "$1,332,539,889")
+    table.add_row("Dec 16, 2016", "Rogue One: A Star Wars Story", "$1,332,439,889")
+
+    code = """\
+class Segment(NamedTuple):
+    text: str = ""
+    style: Optional[Style] = None
+    is_control: bool = False

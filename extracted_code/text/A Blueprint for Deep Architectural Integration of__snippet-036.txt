@@ -1,0 +1,3 @@
+- IEEE 754 floating point definitions
+- Bitwise addition and multiplication rules
+- Machine epsilon and error bounds

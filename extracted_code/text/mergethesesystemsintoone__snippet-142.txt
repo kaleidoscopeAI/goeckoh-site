@@ -1,2 +1,8 @@
-Okay, I've analyzed the unravel_ai_task_manager.py script you provided. This script defines a complete, sophisticated application focused on managing and executing complex tasks, particularly involving code analysis using the LLMProcessor.
+x = np.asarray(list(samples), dtype=np.float32)
+if x.size == 0: x = np.zeros(1, dtype=np.float32)
+x = np.clip(x, -1.0, 1.0)
+y = (x * 32767.0).astype(np.int16)
+with wave.open(str(path), 'wb') as wf:
+    wf.setnchannels(1); wf.setsampwidth(2); wf.setframerate(sr)
+    wf.writeframes(y.tobytes())
 

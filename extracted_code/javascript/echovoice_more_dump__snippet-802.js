@@ -1,1 +1,1 @@
-const payload = JSON.parse(fs.readFileSync(pendingFile, "utf8"));
+for (let i = 0; i < Math.min(nodes.length, this.W.length); i++) {

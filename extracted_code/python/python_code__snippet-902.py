@@ -1,141 +1,117 @@
-        yield from progress.track(
-            sequence, total=total, description=description, update_period=update_period
-        )
+def sanitize_content_filename(filename: str) -> str:
+    """
+    Sanitize the "filename" value from a Content-Disposition header.
+    """
+    return os.path.basename(filename)
 
 
-class _Reader(RawIOBase, BinaryIO):
-    """A reader that tracks progress while it's being read from."""
+def parse_content_disposition(content_disposition: str, default_filename: str) -> str:
+    """
+    Parse the "filename" value from a Content-Disposition header, and
+    return the default filename if the result is empty.
+    """
+    m = email.message.Message()
+    m["content-type"] = content_disposition
+    filename = m.get_param("filename")
+    if filename:
+        # We need to sanitize the filename to prevent directory traversal
+        # in case the filename contains ".." path parts.
+        filename = sanitize_content_filename(str(filename))
+    return filename or default_filename
 
+
+def _get_http_response_filename(resp: Response, link: Link) -> str:
+    """Get an ideal filename from the given HTTP response, falling back to
+    the link filename if not provided.
+    """
+    filename = link.filename  # fallback
+    # Have a look at the Content-Disposition header for a better guess
+    content_disposition = resp.headers.get("content-disposition")
+    if content_disposition:
+        filename = parse_content_disposition(content_disposition, filename)
+    ext: Optional[str] = splitext(filename)[1]
+    if not ext:
+        ext = mimetypes.guess_extension(resp.headers.get("content-type", ""))
+        if ext:
+            filename += ext
+    if not ext and link.url != resp.url:
+        ext = os.path.splitext(resp.url)[1]
+        if ext:
+            filename += ext
+    return filename
+
+
+def _http_get_download(session: PipSession, link: Link) -> Response:
+    target_url = link.url.split("#", 1)[0]
+    resp = session.get(target_url, headers=HEADERS, stream=True)
+    raise_for_status(resp)
+    return resp
+
+
+class Downloader:
     def __init__(
         self,
-        handle: BinaryIO,
-        progress: "Progress",
-        task: TaskID,
-        close_handle: bool = True,
+        session: PipSession,
+        progress_bar: str,
     ) -> None:
-        self.handle = handle
-        self.progress = progress
-        self.task = task
-        self.close_handle = close_handle
-        self._closed = False
+        self._session = session
+        self._progress_bar = progress_bar
 
-    def __enter__(self) -> "_Reader":
-        self.handle.__enter__()
-        return self
+    def __call__(self, link: Link, location: str) -> Tuple[str, str]:
+        """Download the file given by link into location."""
+        try:
+            resp = _http_get_download(self._session, link)
+        except NetworkConnectionError as e:
+            assert e.response is not None
+            logger.critical(
+                "HTTP error %s while getting %s", e.response.status_code, link
+            )
+            raise
 
-    def __exit__(
+        filename = _get_http_response_filename(resp, link)
+        filepath = os.path.join(location, filename)
+
+        chunks = _prepare_download(resp, link, self._progress_bar)
+        with open(filepath, "wb") as content_file:
+            for chunk in chunks:
+                content_file.write(chunk)
+        content_type = resp.headers.get("Content-Type", "")
+        return filepath, content_type
+
+
+class BatchDownloader:
+    def __init__(
         self,
-        exc_type: Optional[Type[BaseException]],
-        exc_val: Optional[BaseException],
-        exc_tb: Optional[TracebackType],
+        session: PipSession,
+        progress_bar: str,
     ) -> None:
-        self.close()
+        self._session = session
+        self._progress_bar = progress_bar
 
-    def __iter__(self) -> BinaryIO:
-        return self
+    def __call__(
+        self, links: Iterable[Link], location: str
+    ) -> Iterable[Tuple[Link, Tuple[str, str]]]:
+        """Download the files given by links into location."""
+        for link in links:
+            try:
+                resp = _http_get_download(self._session, link)
+            except NetworkConnectionError as e:
+                assert e.response is not None
+                logger.critical(
+                    "HTTP error %s while getting %s",
+                    e.response.status_code,
+                    link,
+                )
+                raise
 
-    def __next__(self) -> bytes:
-        line = next(self.handle)
-        self.progress.advance(self.task, advance=len(line))
-        return line
+            filename = _get_http_response_filename(resp, link)
+            filepath = os.path.join(location, filename)
 
-    @property
-    def closed(self) -> bool:
-        return self._closed
-
-    def fileno(self) -> int:
-        return self.handle.fileno()
-
-    def isatty(self) -> bool:
-        return self.handle.isatty()
-
-    @property
-    def mode(self) -> str:
-        return self.handle.mode
-
-    @property
-    def name(self) -> str:
-        return self.handle.name
-
-    def readable(self) -> bool:
-        return self.handle.readable()
-
-    def seekable(self) -> bool:
-        return self.handle.seekable()
-
-    def writable(self) -> bool:
-        return False
-
-    def read(self, size: int = -1) -> bytes:
-        block = self.handle.read(size)
-        self.progress.advance(self.task, advance=len(block))
-        return block
-
-    def readinto(self, b: Union[bytearray, memoryview, mmap]):  # type: ignore[no-untyped-def, override]
-        n = self.handle.readinto(b)  # type: ignore[attr-defined]
-        self.progress.advance(self.task, advance=n)
-        return n
-
-    def readline(self, size: int = -1) -> bytes:  # type: ignore[override]
-        line = self.handle.readline(size)
-        self.progress.advance(self.task, advance=len(line))
-        return line
-
-    def readlines(self, hint: int = -1) -> List[bytes]:
-        lines = self.handle.readlines(hint)
-        self.progress.advance(self.task, advance=sum(map(len, lines)))
-        return lines
-
-    def close(self) -> None:
-        if self.close_handle:
-            self.handle.close()
-        self._closed = True
-
-    def seek(self, offset: int, whence: int = 0) -> int:
-        pos = self.handle.seek(offset, whence)
-        self.progress.update(self.task, completed=pos)
-        return pos
-
-    def tell(self) -> int:
-        return self.handle.tell()
-
-    def write(self, s: Any) -> int:
-        raise UnsupportedOperation("write")
+            chunks = _prepare_download(resp, link, self._progress_bar)
+            with open(filepath, "wb") as content_file:
+                for chunk in chunks:
+                    content_file.write(chunk)
+            content_type = resp.headers.get("Content-Type", "")
+            yield link, (filepath, content_type)
 
 
-class _ReadContext(ContextManager[_I], Generic[_I]):
-    """A utility class to handle a context for both a reader and a progress."""
-
-    def __init__(self, progress: "Progress", reader: _I) -> None:
-        self.progress = progress
-        self.reader: _I = reader
-
-    def __enter__(self) -> _I:
-        self.progress.start()
-        return self.reader.__enter__()
-
-    def __exit__(
-        self,
-        exc_type: Optional[Type[BaseException]],
-        exc_val: Optional[BaseException],
-        exc_tb: Optional[TracebackType],
-    ) -> None:
-        self.progress.stop()
-        self.reader.__exit__(exc_type, exc_val, exc_tb)
-
-
-def wrap_file(
-    file: BinaryIO,
-    total: int,
-    *,
-    description: str = "Reading...",
-    auto_refresh: bool = True,
-    console: Optional[Console] = None,
-    transient: bool = False,
-    get_time: Optional[Callable[[], float]] = None,
-    refresh_per_second: float = 10,
-    style: StyleType = "bar.back",
-    complete_style: StyleType = "bar.complete",
-    finished_style: StyleType = "bar.finished",
-    pulse_style: StyleType = "bar.pulse",
-    disable: bool = False,

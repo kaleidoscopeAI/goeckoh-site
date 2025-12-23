@@ -1,0 +1,26 @@
+"""
+Find the the Python project's root by searching up the filesystem from
+`location`. Return the path to project root relative to `repo_root`.
+Return None if the project root is `repo_root`, or cannot be found.
+"""
+# find project root.
+orig_location = location
+while not is_installable_dir(location):
+    last_location = location
+    location = os.path.dirname(location)
+    if location == last_location:
+        # We've traversed up to the root of the filesystem without
+        # finding a Python project.
+        logger.warning(
+            "Could not find a Python project for directory %s (tried all "
+            "parent directories)",
+            orig_location,
+        )
+        return None
+
+if os.path.samefile(repo_root, location):
+    return None
+
+return os.path.relpath(location, repo_root)
+
+

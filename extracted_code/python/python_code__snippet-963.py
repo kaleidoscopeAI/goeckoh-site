@@ -1,19 +1,20 @@
-from typing import Optional
+            "Packages installed from PyPI cannot depend on packages "
+            "which are not also hosted on PyPI.\n"
+            f"{comes_from.name} depends on {req} "
+        )
+
+    return InstallRequirement(
+        req,
+        comes_from,
+        isolated=isolated,
+        use_pep517=use_pep517,
+        user_supplied=user_supplied,
+    )
 
 
-def pick_bool(*values: Optional[bool]) -> bool:
-    """Pick the first non-none bool or return the last value.
-
-    Args:
-        *values (bool): Any number of boolean or None values.
-
-    Returns:
-        bool: First non-none boolean.
-    """
-    assert values, "1 or more values required"
-    for value in values:
-        if value is not None:
-            return value
-    return bool(value)
-
-
+def install_req_from_parsed_requirement(
+    parsed_req: ParsedRequirement,
+    isolated: bool = False,
+    use_pep517: Optional[bool] = None,
+    user_supplied: bool = False,
+    config_settings: Optional[Dict[str, Union[str, List[str]]]] = None,

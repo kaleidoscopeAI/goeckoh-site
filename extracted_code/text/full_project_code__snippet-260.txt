@@ -1,0 +1,4 @@
+class BrokenPipeError(Exception):
+    pass
+
+

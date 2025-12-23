@@ -1,0 +1,2 @@
+title="Unified Nexus Intelligence Core",
+description="Geometric, Quantum-Integrated AI Core with Adaptive Cyber-Physical Control.",

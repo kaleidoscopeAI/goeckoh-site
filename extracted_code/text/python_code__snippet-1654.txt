@@ -1,0 +1,5 @@
+VoiceMimic = None  # type: ignore
+SpeechSettings = None  # type: ignore
+VOICE_MIMIC_AVAILABLE = False
+
+

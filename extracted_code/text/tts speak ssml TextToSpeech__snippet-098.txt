@@ -1,0 +1,2 @@
+      if (!corrected.matches(Regex("I .*", RegexOption.IGNORE_CASE))) {
+          corrected = "I " + corrected.replaceFirstChar { if

@@ -1,0 +1,12 @@
+# Compatibility as a search_function for codecs.register()
+return codecs.CodecInfo(
+    name='idna',
+    encode=Codec().encode,  # type: ignore
+    decode=Codec().decode,  # type: ignore
+    incrementalencoder=IncrementalEncoder,
+    incrementaldecoder=IncrementalDecoder,
+    streamwriter=StreamWriter,
+    streamreader=StreamReader,
+)
+
+

@@ -1,0 +1,5 @@
+if not 0 <= self.value <= 1:
+    raise ValueError(f"Trait value must be between 0 and 1, got {self.value}")
+if not 0 <= self.plasticity <= 1:
+    raise ValueError(f"Plasticity must be between 0 and 1, got {self.plasticity}")
+

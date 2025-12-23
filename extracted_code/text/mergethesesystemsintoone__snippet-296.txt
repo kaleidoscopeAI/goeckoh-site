@@ -1,0 +1,13 @@
+"""Finds nodes related to a given node, optionally filtered by relationship type."""
+related_nodes = []
+if node_id in self.graph:
+    for neighbor in self.graph.neighbors(node_id):
+        if relationship_type:
+            # Check if the relationship type matches
+            edge_data = self.graph.get_edge_data(node_id, neighbor)
+            if edge_data.get('type') == relationship_type:
+                related_nodes.append(neighbor)
+        else:
+            related_nodes.append(neighbor)
+return related_nodes
+

@@ -1,0 +1,7 @@
+# simple demo: random R
+R = (np.random.randn(4,4) + 1j*np.random.randn(4,4)) * 0.5
+core = RelationalCore(R)
+engine = AdaptiveHybridEngine(core)
+runner = EngineRunner(engine, dt=0.01, cycle_seconds=0.5, llm_period=6)
+runner.run(max_iters=60)
+

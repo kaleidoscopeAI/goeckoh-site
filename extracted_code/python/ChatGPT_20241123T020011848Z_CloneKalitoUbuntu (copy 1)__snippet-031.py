@@ -1,31 +1,19 @@
-# core_demo.py
-from knowledge_pool import KnowledgePoolManager
-from reflection_analysis import SelfReflection
+# knowledge_pool_demo.py
+from knowledge_pool import EnhancedSharedKnowledgePool
 
-class CoreDemo:
-    def __init__(self):
-        self.knowledge_manager = KnowledgePoolManager()
-        self.self_reflector = SelfReflection()
+# Initialize the knowledge pool
+pool = EnhancedSharedKnowledgePool()
 
-    def run_demo(self):
-        # Sample pattern data to add to the pool
-        sample_pattern = {
-            "pattern_id": "001",
-            "data": {"type": "text", "content": "AI pattern recognition"}
-        }
-        confidence = 0.75
-        
-        # Add pattern to knowledge pool
-        self.knowledge_manager.add_to_pool(sample_pattern, confidence)
-        
-        # Perform self-reflection
-        recent_actions = [{"action": "learn", "success": True}]
-        reflection_output = self.self_reflector.reflect(recent_actions)
-        
-        # Display reflection insights
-        print("Reflection Insights:", reflection_output)
+# Sample pattern data for testing
+pattern_data = {
+    'pattern': 'Sample Pattern',
+    'context': 'Example Context'
+}
 
-if __name__ == "__main__":
-    demo = CoreDemo()
-    demo.run_demo()
+# Add patterns with confidence levels
+pool.add_pattern(pattern_data, confidence=0.85)
+pool.add_pattern({'pattern': 'Another Pattern'}, confidence=0.7)
+
+# Output the patterns to verify they were added
+print("Patterns in pool:", pool.patterns)
 

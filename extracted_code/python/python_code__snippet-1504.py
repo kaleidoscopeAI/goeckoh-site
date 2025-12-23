@@ -1,9 +1,13 @@
-def install_given_reqs(
-    requirements: List[InstallRequirement],
-    global_options: Sequence[str],
-    root: Optional[str],
-    home: Optional[str],
-    prefix: Optional[str],
-    warn_script_location: bool,
-    use_user_site: bool,
-    pycompile: bool,
+def __init__(self, value: Any) -> None:
+    self.value = value
+
+def __str__(self) -> str:
+    return str(self.value)
+
+def __repr__(self) -> str:
+    return f"<{self.__class__.__name__}('{self}')>"
+
+def serialize(self) -> str:
+    raise NotImplementedError
+
+

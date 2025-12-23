@@ -1,0 +1,2 @@
+      override fun getDimension(): Int = nNodes
+      override fun computeDerivatives(t: Double, y: DoubleArray, yDot:

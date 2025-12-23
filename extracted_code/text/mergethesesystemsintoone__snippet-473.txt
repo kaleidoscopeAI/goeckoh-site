@@ -1,0 +1,5 @@
+"Code Implemented": {
+    "Description": "These include all key classes to support core mechanisms:",
+    "components":[
+    "memory/MemoryResonance.py",
+"memory/MemoryField.py" ,

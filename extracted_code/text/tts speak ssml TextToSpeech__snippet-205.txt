@@ -1,0 +1,4 @@
+              val frameSize = 512
+              var offset = 0
+              while (offset + frameSize <= samples.size) {
+                  val frame = samples.copyOfRange(offset, offset +

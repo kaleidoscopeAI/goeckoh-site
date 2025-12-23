@@ -1,6 +1,1 @@
-from fastapi import FastAPI
-import numpy as np
-from scipy.integrate import solve_ivp
-from rdkit import Chem  # Real chem
-from rdkit.Chem import AllChem  # Force fields
-
+frontend/src/App.tsx (Full integration: n-body force from tools/blog (acc += -G/r^2 * u), aurora multi-sin lerp from Claude/YouTube, halo ADD blend from deconbatch/OpenProcessing)

@@ -1,0 +1,2 @@
+shared_hub[node_id] = data
+

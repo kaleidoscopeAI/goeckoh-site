@@ -1,36 +1,18 @@
-    def Required(self, parameters):
-        """A special typing construct to mark a key of a total=False TypedDict
-        as required. For example:
+# Avoid conflicting with the PyPI package "Python".
+REQUIRES_PYTHON_IDENTIFIER = cast(NormalizedName, "<Python from Requires-Python>")
 
-            class Movie(TypedDict, total=False):
-                title: Required[str]
-                year: int
 
-            m = Movie(
-                title='The Matrix',  # typechecker error if key is omitted
-                year=1999,
-            )
+def as_base_candidate(candidate: Candidate) -> Optional[BaseCandidate]:
+    """The runtime version of BaseCandidate."""
+    base_candidate_classes = (
+        AlreadyInstalledCandidate,
+        EditableCandidate,
+        LinkCandidate,
+    )
+    if isinstance(candidate, base_candidate_classes):
+        return candidate
+    return None
 
-        There is no runtime checking that a required key is actually provided
-        when instantiating a related TypedDict.
-        """
-        item = typing._type_check(parameters, f'{self._name} accepts only a single type.')
-        return typing._GenericAlias(self, (item,))
 
-    @_ExtensionsSpecialForm
-    def NotRequired(self, parameters):
-        """A special typing construct to mark a key of a TypedDict as
-        potentially missing. For example:
-
-            class Movie(TypedDict):
-                title: str
-                year: NotRequired[int]
-
-            m = Movie(
-                title='The Matrix',  # typechecker error if key is omitted
-                year=1999,
-            )
-        """
-        item = typing._type_check(parameters, f'{self._name} accepts only a single type.')
-        return typing._GenericAlias(self, (item,))
-
+def make_install_req_from_link(
+    link: Link, template: InstallRequirement

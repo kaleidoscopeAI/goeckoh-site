@@ -1,67 +1,105 @@
-    from pip._vendor.rich.table import Table
+class SearchCommand(Command, SessionCommandMixin):
+    """Search for PyPI packages whose name or summary contains <query>."""
 
+    usage = """
+      %prog [options] <query>"""
+    ignore_require_venv = True
 
-class Palette:
-    """A palette of available colors."""
-
-    def __init__(self, colors: Sequence[Tuple[int, int, int]]):
-        self._colors = colors
-
-    def __getitem__(self, number: int) -> ColorTriplet:
-        return ColorTriplet(*self._colors[number])
-
-    def __rich__(self) -> "Table":
-        from pip._vendor.rich.color import Color
-        from pip._vendor.rich.style import Style
-        from pip._vendor.rich.text import Text
-        from pip._vendor.rich.table import Table
-
-        table = Table(
-            "index",
-            "RGB",
-            "Color",
-            title="Palette",
-            caption=f"{len(self._colors)} colors",
-            highlight=True,
-            caption_justify="right",
+    def add_options(self) -> None:
+        self.cmd_opts.add_option(
+            "-i",
+            "--index",
+            dest="index",
+            metavar="URL",
+            default=PyPI.pypi_url,
+            help="Base URL of Python Package Index (default %default)",
         )
-        for index, color in enumerate(self._colors):
-            table.add_row(
-                str(index),
-                repr(color),
-                Text(" " * 16, style=Style(bgcolor=Color.from_rgb(*color))),
+
+        self.parser.insert_option_group(0, self.cmd_opts)
+
+    def run(self, options: Values, args: List[str]) -> int:
+        if not args:
+            raise CommandError("Missing required argument (search query).")
+        query = args
+        pypi_hits = self.search(query, options)
+        hits = transform_hits(pypi_hits)
+
+        terminal_width = None
+        if sys.stdout.isatty():
+            terminal_width = shutil.get_terminal_size()[0]
+
+        print_results(hits, terminal_width=terminal_width)
+        if pypi_hits:
+            return SUCCESS
+        return NO_MATCHES_FOUND
+
+    def search(self, query: List[str], options: Values) -> List[Dict[str, str]]:
+        index_url = options.index
+
+        session = self.get_default_session(options)
+
+        transport = PipXmlrpcTransport(index_url, session)
+        pypi = xmlrpc.client.ServerProxy(index_url, transport)
+        try:
+            hits = pypi.search({"name": query, "summary": query}, "or")
+        except xmlrpc.client.Fault as fault:
+            message = "XMLRPC request failed [code: {code}]\n{string}".format(
+                code=fault.faultCode,
+                string=fault.faultString,
             )
-        return table
-
-    # This is somewhat inefficient and needs caching
-    @lru_cache(maxsize=1024)
-    def match(self, color: Tuple[int, int, int]) -> int:
-        """Find a color from a palette that most closely matches a given color.
-
-        Args:
-            color (Tuple[int, int, int]): RGB components in range 0 > 255.
-
-        Returns:
-            int: Index of closes matching color.
-        """
-        red1, green1, blue1 = color
-        _sqrt = sqrt
-        get_color = self._colors.__getitem__
-
-        def get_color_distance(index: int) -> float:
-            """Get the distance to a color."""
-            red2, green2, blue2 = get_color(index)
-            red_mean = (red1 + red2) // 2
-            red = red1 - red2
-            green = green1 - green2
-            blue = blue1 - blue2
-            return _sqrt(
-                (((512 + red_mean) * red * red) >> 8)
-                + 4 * green * green
-                + (((767 - red_mean) * blue * blue) >> 8)
-            )
-
-        min_index = min(range(len(self._colors)), key=get_color_distance)
-        return min_index
+            raise CommandError(message)
+        assert isinstance(hits, list)
+        return hits
 
 
+def transform_hits(hits: List[Dict[str, str]]) -> List["TransformedHit"]:
+    """
+    The list from pypi is really a list of versions. We want a list of
+    packages with the list of versions stored inline. This converts the
+    list from pypi into one we can use.
+    """
+    packages: Dict[str, "TransformedHit"] = OrderedDict()
+    for hit in hits:
+        name = hit["name"]
+        summary = hit["summary"]
+        version = hit["version"]
+
+        if name not in packages.keys():
+            packages[name] = {
+                "name": name,
+                "summary": summary,
+                "versions": [version],
+            }
+        else:
+            packages[name]["versions"].append(version)
+
+            # if this is the highest version, replace summary and score
+            if version == highest_version(packages[name]["versions"]):
+                packages[name]["summary"] = summary
+
+    return list(packages.values())
+
+
+def print_dist_installation_info(name: str, latest: str) -> None:
+    env = get_default_environment()
+    dist = env.get_distribution(name)
+    if dist is not None:
+        with indent_log():
+            if dist.version == latest:
+                write_output("INSTALLED: %s (latest)", dist.version)
+            else:
+                write_output("INSTALLED: %s", dist.version)
+                if parse_version(latest).pre:
+                    write_output(
+                        "LATEST:    %s (pre-release; install"
+                        " with `pip install --pre`)",
+                        latest,
+                    )
+                else:
+                    write_output("LATEST:    %s", latest)
+
+
+def print_results(
+    hits: List["TransformedHit"],
+    name_column_width: Optional[int] = None,
+    terminal_width: Optional[int] = None,

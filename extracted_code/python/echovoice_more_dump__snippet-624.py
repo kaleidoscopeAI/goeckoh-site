@@ -1,2 +1,1 @@
-from fastapi import FastAPI
-import uvicorn
+def sleep_dynamics(self, t, y, params):

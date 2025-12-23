@@ -1,1 +1,1 @@
-implementation using safe wrappers (no direct /sys writes unless owner_mode is enabled). Also exposes JNI functions to let Kotlin call apply_register_to_cpu.
+let freq_hz = 300_000_000u64 + (val % 1_700_000_000u64); // 300MHz..2.0GHz

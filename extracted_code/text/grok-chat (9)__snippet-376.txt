@@ -1,0 +1,6 @@
+291              </div>
+292 +            <div className="text-xs text-slate-500 mt-1">
+293 +              Top lattice peaks: {Array.isArray((heart as any)?.heart_topk) ? (heart as any).heart_topk.length : 0}
+294 +            </div>
+295            </div>
+

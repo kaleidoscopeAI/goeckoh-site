@@ -1,2 +1,2 @@
-- Prove that the system remains stable with bounded deviation from $S^*$, typically:
+- Simulate trajectories from diverse initial conditions and under noise to observe exponential convergence and bounded steady-state error.
 

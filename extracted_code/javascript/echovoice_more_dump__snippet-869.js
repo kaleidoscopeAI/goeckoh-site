@@ -1,1 +1,1 @@
-+export function specDelta(node: NodeState, gammaSpec = 0.05) {
++ const file = path.join(EXP_DIR, `${id}.json`);

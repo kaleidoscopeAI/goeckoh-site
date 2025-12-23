@@ -1,2 +1,1 @@
-class SpeechProcessor:
-def __init__(self, cfg: CompanionConfig) -> None:
+- The phone is a thin remote client; no cloud calls from iOS.

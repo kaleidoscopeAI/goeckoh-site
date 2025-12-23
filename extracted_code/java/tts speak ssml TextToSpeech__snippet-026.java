@@ -1,35 +1,3 @@
-class ExocortexService : Service() {
-    private lateinit var neuroAcousticMirror: NeuroAcousticMirror
-    private lateinit var crystallineHeart: CrystallineHeart
-    private lateinit var gatedAGI: GatedAGI
-    private val executor = Executors.newSingleThreadExecutor()
+    103 +    private fun resolveModelDir(base: File): File? {
+    104 +        if (!base.exists()) return null
 
-    override fun onCreate() {
-        super.onCreate()
-        neuroAcousticMirror = NeuroAcousticMirror(this)
-        crystallineHeart = CrystallineHeart(1024)
-        gatedAGI = GatedAGI(this, crystallineHeart)
-    }
-
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        executor.execute {
-            while (true) {
-                try {
-                    neuroAcousticMirror.listenAndProcess { correctedText, prosody ->
-                        val gcl = crystallineHeart.updateAndGetGCL(prosody.arousal, prosody.volume, prosody.pitchVariance)
-                        gatedAGI.executeBasedOnGCL(gcl, correctedText)
-                    }
-                } catch (e: Exception) {
-                    Log.e("Service", "Error: ${e.message}")
-                }
-            }
-        }
-        return START_STICKY
-    }
-
-    override fun onBind(intent: Intent?): IBinder? = null
-
-    override fun onDestroy() {
-        executor.shutdownNow()
-        super.onDestroy()
-    }

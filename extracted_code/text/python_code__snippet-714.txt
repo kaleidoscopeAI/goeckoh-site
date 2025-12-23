@@ -1,0 +1,1 @@
+total: int, ratios: List[int], maximums: List[int], values: List[int]

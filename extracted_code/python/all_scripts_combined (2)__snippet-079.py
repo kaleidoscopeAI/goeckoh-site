@@ -1,50 +1,50 @@
-from __future__ import annotations
+    Extracts F0 and RMS energy envelopes from a waveform.
+    """
+    if wav.ndim > 1:
+        wav = np.mean(wav, axis=1)
+    wav = np.asarray(wav, dtype=np.float32)
+    
+    frame_length = max(int(sample_rate * frame_ms / 1000.0), 256)
+    hop_length = max(int(sample_rate * hop_ms / 1000.0), 128)
 
-import asyncio
-import threading
-from pathlib import Path
-from typing import Any
+    # 1. Pitch (F0) extraction using the YIN algorithm
+    # YIN is robust and commonly used for speech processing.
+    f0, voiced_flag, voiced_probs = librosa.pyin(
+        y=wav,
+        fmin=fmin_hz,
+        fmax=fmax_hz,
+        sr=sample_rate,
+        frame_length=frame_length,
+        hop_length=hop_length
+    )
+    # Fill NaNs in unvoiced frames with a reasonable value (e.g., median of voiced frames)
+    if np.any(voiced_flag):
+        median_f0 = np.nanmedian(f0[voiced_flag])
+        f0 = np.nan_to_num(f0, nan=median_f0)
+    else:
+        f0.fill(150) # Fallback to a generic pitch if no voice is detected
 
-from flask import Flask, jsonify, request
-
-from speech_system.config import CONFIG
-from speech_system.dashboard import create_app
-from speech_system.settings_store import SettingsStore
-from speech_system.speech_loop import SpeechLoop
-
-
-def _start_speech_loop(loop: SpeechLoop) -> None:
-    asyncio.run(loop.run())
-
-
-def create_backend_app(settings_store: SettingsStore) -> Flask:
-    app = create_app(CONFIG, settings_store=settings_store)
-
-    @app.post("/api/backend/shutdown")
-    def shutdown() -> Any:
-        request.environ.get("werkzeug.server.shutdown", lambda: None)()
-        return jsonify({"status": "ok"})
-
-    return app
-
-
-def sync_settings_from_store(store: SettingsStore) -> None:
-    CONFIG.behavior.correction_echo_enabled = bool(store.data.get("correction_echo_enabled", True))
-    CONFIG.behavior.support_voice_enabled = bool(store.data.get("support_voice_enabled", False))
-
-
-def main() -> None:
-    config_dir = CONFIG.paths.base_dir
-    settings_path = config_dir / "settings.json"
-    settings_store = SettingsStore(settings_path)
-    sync_settings_from_store(settings_store)
-
-    loop = SpeechLoop(CONFIG)
-    thread = threading.Thread(target=_start_speech_loop, args=(loop,), daemon=True)
-    thread.start()
-
-    app = create_backend_app(settings_store)
-    print(f"App backend running at http://0.0.0.0:8765")
-    app.run(host="0.0.0.0", port=8765, debug=False, use_reloader=False)
+    # 2. Energy (RMS) extraction
+    rms = librosa.feature.rms(
+        y=wav, frame_length=frame_length, hop_length=hop_length, center=True
+    )[0]
+    
+    # 3. Time alignment
+    times = librosa.frames_to_time(
+        np.arange(len(f0)), sr=sample_rate, hop_length=hop_length
+    )
+    
+    # Ensure all outputs are clean float32 arrays
+    f0 = f0.astype(np.float32)
+    rms = np.maximum(rms, 1e-5).astype(np.float32) # Prevent log errors
+    
+    return ProsodyProfile(
+        f0_hz=f0,
+        energy=rms,
+        times_s=times.astype(np.float32),
+        frame_length=frame_length,
+        hop_length=hop_length,
+        sample_rate=sample_rate
+    )-e 
 
 

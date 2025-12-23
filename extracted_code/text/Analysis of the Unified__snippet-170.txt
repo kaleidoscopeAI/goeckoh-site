@@ -1,0 +1,4 @@
+Projection: A node's state is projected onto an 8-dimensional E8 lattice.
+
+Emergent Force: This creates a "Kaleidoscope force" (C∧) that directly influences the node's position and, crucially, its emotional state (valence and arousal). This is the mechanism by which mathematical structure drives affective experience.
+

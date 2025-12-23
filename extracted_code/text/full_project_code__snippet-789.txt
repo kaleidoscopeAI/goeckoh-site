@@ -1,0 +1,5 @@
+"class_table": SJIS_CLS,
+"class_factor": 6,
+"state_table": SJIS_ST,
+"char_len_table": SJIS_CHAR_LEN_TABLE,
+"name": "Shift_JIS",

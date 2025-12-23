@@ -1,0 +1,18 @@
+L("implementation_version")
+| L("platform_python_implementation")
+| L("implementation_name")
+| L("python_full_version")
+| L("platform_release")
+| L("platform_version")
+| L("platform_machine")
+| L("platform_system")
+| L("python_version")
+| L("sys_platform")
+| L("os_name")
+| L("os.name")  # PEP-345
+| L("sys.platform")  # PEP-345
+| L("platform.version")  # PEP-345
+| L("platform.machine")  # PEP-345
+| L("platform.python_implementation")  # PEP-345
+| L("python_implementation")  # undocumented setuptools legacy
+| L("extra")  # PEP-508

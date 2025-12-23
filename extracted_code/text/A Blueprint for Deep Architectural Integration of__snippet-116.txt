@@ -1,0 +1,5 @@
+client: Client,
+to_visit: VecDeque<Url>,
+visited: HashSet<String>,
+max_depth: usize,
+base_domain: String,

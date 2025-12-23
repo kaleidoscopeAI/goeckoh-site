@@ -1,1 +1,3 @@
-def generate_dynamic_dot(self, state):
+import numpy as np
+from scipy.special import expit
+

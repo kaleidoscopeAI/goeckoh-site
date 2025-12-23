@@ -1,4 +1,1 @@
-    import importlib.machinery as importlib_machinery
-
-    # access attribute to force import under delayed import mechanisms.
-    importlib_machinery.__name__
+    from goeckoh.systems.complete_unified_system import CompleteUnifiedSystem

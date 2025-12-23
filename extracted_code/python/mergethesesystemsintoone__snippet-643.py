@@ -1,4 +1,5 @@
-thoughts EditIunderstand.txt:The Node class referenced in create_node() is undefined.Fix: Define a base Node class with attributes like node_id, node_type, and process_data() method.
+def _process_text_data (self, text_wrapper): # method designed to pass through core TextProccess logic, but leaves it open to be overridden at runtime, making nodes specialized without changes at module code level, making system very modular. 
+  text = text_wrapper.get_data ()
 
-Auto-generation logic assumes threading is imported but it’s not.Fix: Add import threading and ensure thread safety.
-
+ # update with any processed information via selected module.
+  tfidf_data =  self.processing_units ["text"].process(text_wrapper)

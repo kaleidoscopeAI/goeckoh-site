@@ -1,2 +1,1 @@
-class NeuralHardwareMapper:
-def __init__(self, consciousness_model):
+import os, textwrap, zipfile, shutil

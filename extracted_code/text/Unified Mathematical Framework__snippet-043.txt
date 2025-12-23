@@ -1,0 +1,3 @@
+audio: AudioSettings = AudioSettings()
+paths: Paths = Paths()
+

@@ -1,0 +1,3 @@
+\item \textbf{NeXosim}: A highly optimized discrete-event simulator with transparent concurrency support designed for complex cyber-physical systems \cite{asynchronics_nexosim_2025}.
+\item \textbf{krABMaga}: A Rust-based agent-based modeling simulator supporting modular components and concurrency \cite{krabmaga}.
+\item Custom asynchronous modules leveraging \texttt{async-std} or \texttt{Tokio} runtimes for dedicated engine processing.

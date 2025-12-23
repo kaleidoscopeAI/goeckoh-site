@@ -1,0 +1,2 @@
+corrected_text: str = Field(description="The grammatically corrected first-person speech.")
+

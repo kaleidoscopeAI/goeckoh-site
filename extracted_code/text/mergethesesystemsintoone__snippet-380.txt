@@ -1,0 +1,5 @@
+"""Evolves all resonances in the field."""
+global_stats = self.get_global_statistics()
+for resonance in self.resonances.values():
+    resonance.evolve(delta_time, self.field_state, global_stats)
+

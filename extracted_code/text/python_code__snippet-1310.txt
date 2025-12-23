@@ -1,0 +1,6 @@
+if sys.platform == "darwin":
+    return _macos_user_config_dir(appname, roaming)
+
+return _appdirs.user_config_dir(appname, appauthor=False, roaming=roaming)
+
+

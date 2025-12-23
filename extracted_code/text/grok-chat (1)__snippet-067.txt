@@ -1,0 +1,4 @@
+text = re.sub(r"\byou\b", "I", text, flags=re.IGNORECASE)
+text = re.sub(r"\byour\b", "my", text, flags=re.IGNORECASE)
+return text.capitalize()
+

@@ -1,2 +1,1 @@
-const [k, v] = p.split(":");
-const vals = v.split(",").map(x => Number(x));
++export function unravelUpdate(node: NodeState, lambdaU = 0.01) {

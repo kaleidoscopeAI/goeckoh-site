@@ -1,0 +1,2 @@
+Neurocoherence snapshot without heavy physics; this keeps p95 ~3 ms for the digit batch script. (Full stack still available
+when FAST_MODE unset.) (backend/goeckoh/apps/real_unified_system.py)

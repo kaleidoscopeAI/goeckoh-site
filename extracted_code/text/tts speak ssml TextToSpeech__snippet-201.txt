@@ -1,0 +1,7 @@
+          noiseSuppressor?.enabled = true
+      } else {
+          Log.w("Mirror", "Noise suppression not available")
+      }
+
+      // Load prefs
+      sharedPrefs = context.getSharedPreferences("vad_prefs",

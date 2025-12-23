@@ -1,0 +1,8 @@
+      whisper.loadModel(modelPath, vocabPath, true) // multilingual = true
+
+      // Init Recorder
+      recorder = Recorder(context)
+  }
+
+  fun listenAndProcess(callback: (String, Prosody) -> Unit) {
+      if (ContextCompat.checkSelfPermission(context,

@@ -1,0 +1,3 @@
+      } else if (gcl > 0.9) {
+          // Flow: Aggressive VAD
+          mirror.tuneVAD(2, 800, 0.7f) // Mode 2, shorter silence, higher

@@ -1,1 +1,2 @@
-console.log('AGI Orchestrator stopped gracefully.');
+const memory = await MemoryStore.create('agi_js.db');
+const agi = new AGIOrchestrator(memory);

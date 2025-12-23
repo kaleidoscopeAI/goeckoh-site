@@ -1,2 +1,3 @@
-# <REDACTED: potential secret detected>
+            'Obsoletes-Dist', 'Requires-External', 'Maintainer',
+            'Maintainer-email', 'Project-URL')
 

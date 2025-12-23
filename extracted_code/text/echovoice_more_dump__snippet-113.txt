@@ -1,1 +1,1 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+Real-time streaming: push projections Ei (t) to users for UI; compress using PCA/UMAP for bandwidth.

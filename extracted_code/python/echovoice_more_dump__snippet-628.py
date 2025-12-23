@@ -1,1 +1,1 @@
-def deterministic_embedding(values: List[float], dim: int = 128):
+def optimize_p(self, S, R, I, P, S_target, lr=0.01, lambda_reg=0.01, max_opt_iter=20):

@@ -1,7 +1,45 @@
-from pip._internal.metadata.base import FilesystemWheel
-from pip._internal.models.direct_url import DirectUrl
-from pip._internal.models.link import Link
-from pip._internal.operations.build.metadata import generate_metadata
-from pip._internal.operations.build.metadata_editable import generate_editable_metadata
-from pip._internal.operations.build.metadata_legacy import (
-    generate_metadata as generate_metadata_legacy,
+_key: Union[CmpKey, LegacyCmpKey]
+
+def __hash__(self) -> int:
+    return hash(self._key)
+
+# Please keep the duplicated `isinstance` check
+# in the six comparisons hereunder
+# unless you find a way to avoid adding overhead function calls.
+def __lt__(self, other: "_BaseVersion") -> bool:
+    if not isinstance(other, _BaseVersion):
+        return NotImplemented
+
+    return self._key < other._key
+
+def __le__(self, other: "_BaseVersion") -> bool:
+    if not isinstance(other, _BaseVersion):
+        return NotImplemented
+
+    return self._key <= other._key
+
+def __eq__(self, other: object) -> bool:
+    if not isinstance(other, _BaseVersion):
+        return NotImplemented
+
+    return self._key == other._key
+
+def __ge__(self, other: "_BaseVersion") -> bool:
+    if not isinstance(other, _BaseVersion):
+        return NotImplemented
+
+    return self._key >= other._key
+
+def __gt__(self, other: "_BaseVersion") -> bool:
+    if not isinstance(other, _BaseVersion):
+        return NotImplemented
+
+    return self._key > other._key
+
+def __ne__(self, other: object) -> bool:
+    if not isinstance(other, _BaseVersion):
+        return NotImplemented
+
+    return self._key != other._key
+
+

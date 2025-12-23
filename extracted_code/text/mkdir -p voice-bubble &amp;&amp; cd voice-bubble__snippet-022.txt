@@ -1,6 +1,1 @@
-✅ Voice bubble demo (browser, 10ms features)
-✅ Rust lattice core (WASM, deterministic)
-✅ Full STT→TTS pipeline (250ms Rust)
-✅ Latency budget proof (<300ms)
-✅ Clinician demo script (2min)
-✅ Whitepaper claims (numbers verified)
+console.warn("Lattice compute:", e);

@@ -1,48 +1,15 @@
-class InvalidMarker(ValueError):
-    """
-    An invalid marker was found, users should refer to PEP 508.
-    """
-
-
-class UndefinedComparison(ValueError):
-    """
-    An invalid operation was attempted on a value that doesn't support it.
-    """
-
-
-class UndefinedEnvironmentName(ValueError):
-    """
-    A name was attempted to be used that does not exist inside of the
-    environment.
-    """
-
-
-class Node:
-    def __init__(self, value: Any) -> None:
-        self.value = value
-
-    def __str__(self) -> str:
-        return str(self.value)
-
-    def __repr__(self) -> str:
-        return f"<{self.__class__.__name__}('{self}')>"
-
-    def serialize(self) -> str:
-        raise NotImplementedError
-
-
-class Variable(Node):
-    def serialize(self) -> str:
-        return str(self)
-
-
-class Value(Node):
-    def serialize(self) -> str:
-        return f'"{self}"'
-
-
-class Op(Node):
-    def serialize(self) -> str:
-        return str(self)
+# See: https://en.wikipedia.org/wiki/English_numerals#Ordinal_numbers
+if pos_num == 0:
+    return "th"
+elif pos_num == 1:
+    return "st"
+elif pos_num == 2:
+    return "nd"
+elif pos_num == 3:
+    return "rd"
+elif 4 <= pos_num <= 20:
+    return "th"
+else:
+    return find_ordinal(pos_num % 10)
 
 

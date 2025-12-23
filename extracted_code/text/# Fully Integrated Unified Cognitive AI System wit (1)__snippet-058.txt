@@ -1,0 +1,5 @@
+et = EmotionalTransformer()
+emotionally_modulated = [0.1] * 10
+crystalline_knowledge = [0.05] * 10
+integrated = et.integrate_knowledge(emotionally_modulated, crystalline_knowledge)
+assert integrated == [0.15] * 10

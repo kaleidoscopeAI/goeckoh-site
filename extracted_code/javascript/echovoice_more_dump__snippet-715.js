@@ -1,2 +1,1 @@
-const N = nodes.length;
-const M = W[0].length;
+function cosDerivativeDot(Ki, Kj, Vi, Vj) {

@@ -1,0 +1,12 @@
+Option,
+"--use-feature",
+dest="features_enabled",
+metavar="feature",
+action="append",
+default=[],
+choices=[
+    "fast-deps",
+    "truststore",
+]
++ ALWAYS_ENABLED_FEATURES,
+help="Enable new functionality, that may be backward incompatible.",

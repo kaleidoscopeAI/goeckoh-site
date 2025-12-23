@@ -1,90 +1,15 @@
-from __future__ import annotations
+def __init__(self):
+    super().__init__("text")
+    self.vectorizer = TfidfVectorizer()  # Initialize TF-IDF vectorizer
 
-import numpy as np
+def process(self, data_wrapper: DataWrapper) -> Dict:
+  """Processes text data using TF-IDF vectorization."""
+  text = data_wrapper.get_data()
 
-from typing import Dict, List, Optional, Tuple, Any, Set
+  # Fit and transform the text data using the vectorizer
+  tfidf_matrix = self.vectorizer.fit_transform([text])
 
-from dataclasses import dataclass, field
+  # Convert to a dense array
+  return {"tfidf_vector": tfidf_matrix.toarray()}
 
-import logging
-
-import uuid
-
-from datetime import datetime
-
-from threading import Lock
-
-from concurrent.futures import ThreadPoolExecutor
-
-
-
-from ..dna.structure import DNASequence
-
-from ..dna.traits import TraitManager
-
-from ...utils.validation import validate_data_chunk
-
-from ...utils.metrics import NodeMetrics
-
-
-
-
-
-
-
-class NodeState:
-
-
-
-
-
-
-
-
-
-
-
-
-    def __post_init__(self):
-
-
-
-
-    def update_state_hash(self):
-
-
-
-
-
-
-
-
-
-
-
-
-class BaseNode:
-
-
-
-
-
-
-
-
-    def __init__(
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
 

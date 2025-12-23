@@ -1,0 +1,15 @@
+"""Records metrics for a processing event."""
+timestamp = datetime.now()
+self.processing_history.append({
+    "timestamp": timestamp,
+    "input_size": input_size,
+    "output_size": output_size,
+    "energy_used": energy_used,
+    "processing_time": processing_time,
+    "success": success
+})
+self.total_processed_data += output_size
+self.total_energy_consumed += energy_used
+
+self._update_running_stats()
+

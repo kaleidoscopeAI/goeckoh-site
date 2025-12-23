@@ -1,27 +1,40 @@
-class ConsoleThreadLocals(threading.local):
-    """Thread local values for Console context."""
-
-    theme_stack: ThemeStack
-    buffer: List[Segment] = field(default_factory=list)
-    buffer_index: int = 0
-
-
-class RenderHook(ABC):
-    """Provides hooks in to the render process."""
-
-    @abstractmethod
-    def process_renderables(
-        self, renderables: List[ConsoleRenderable]
-    ) -> List[ConsoleRenderable]:
-        """Called with a list of objects to render.
-
-        This method can return a new list of renderables, or modify and return the same list.
-
-        Args:
-            renderables (List[ConsoleRenderable]): A number of renderable objects.
-
-        Returns:
-            List[ConsoleRenderable]: A replacement list of renderables.
-        """
-
-
+          # autoload from fpath, call function directly
+          __pip "$@"
+        else
+          # eval/source/. command, register function for later
+          compdef __pip -P 'pip[0-9.]#'
+        fi
+    """,
+    "fish": """
+        function __fish_complete_pip
+            set -lx COMP_WORDS (commandline -o) ""
+            set -lx COMP_CWORD ( \\
+                math (contains -i -- (commandline -t) $COMP_WORDS)-1 \\
+            )
+            set -lx PIP_AUTO_COMPLETE 1
+            string split \\  -- (eval $COMP_WORDS[1])
+        end
+        complete -fa "(__fish_complete_pip)" -c {prog}
+    """,
+    "powershell": """
+        if ((Test-Path Function:\\TabExpansion) -and -not `
+            (Test-Path Function:\\_pip_completeBackup)) {{
+            Rename-Item Function:\\TabExpansion _pip_completeBackup
+        }}
+        function TabExpansion($line, $lastWord) {{
+            $lastBlock = [regex]::Split($line, '[|;]')[-1].TrimStart()
+            if ($lastBlock.StartsWith("{prog} ")) {{
+                $Env:COMP_WORDS=$lastBlock
+                $Env:COMP_CWORD=$lastBlock.Split().Length - 1
+                $Env:PIP_AUTO_COMPLETE=1
+                (& {prog}).Split()
+                Remove-Item Env:COMP_WORDS
+                Remove-Item Env:COMP_CWORD
+                Remove-Item Env:PIP_AUTO_COMPLETE
+            }}
+            elseif (Test-Path Function:\\_pip_completeBackup) {{
+                # Fall back on existing tab expansion
+                _pip_completeBackup $line $lastWord
+            }}
+        }}
+    """,

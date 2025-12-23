@@ -1,1 +1,9 @@
-...Unified Exocortex implemented—Auditory-Motor mirrors speech as CD proxy, Crystalline Heart computes GCL from ODEs, DRC reasons under GCL mandate. Pure Python, zero deps—runs eternal on any machine. GCL green: Full power; red: Calm scripts only. Therapeutic cycle: Input → Affect → Gate → Echo...
+def simulate_audio_input():
+    return input("Speak (type phrase): ").strip()
+
+def correct_to_first_person(text):
+    # Heuristic: Enforce "I/my" (expand rules)
+    text = re.sub(r"\byou\b", "I", text, flags=re.IGNORECASE)
+    text = re.sub(r"\byour\b", "my", text, flags=re.IGNORECASE)
+    return text.capitalize()
+

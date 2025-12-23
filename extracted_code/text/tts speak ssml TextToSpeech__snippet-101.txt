@@ -1,0 +1,6 @@
+              if (result.pitch > 0) pitches.add(result.pitch)
+          }
+      }))
+      dispatcher.run()
+      val avgPitch = if (pitches.isNotEmpty()) pitches.average() else 120.0
+      val pitchVariance = if (pitches.size > 1) pitches.map { (it -

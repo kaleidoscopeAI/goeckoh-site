@@ -1,0 +1,22 @@
+"""
+Interpret a marker and return a result depending on environment.
+
+:param marker: The marker to interpret.
+:type marker: str
+:param execution_context: The context used for name lookup.
+:type execution_context: mapping
+"""
+try:
+    expr, rest = parse_marker(marker)
+except Exception as e:
+    raise SyntaxError('Unable to interpret marker syntax: %s: %s' %
+                      (marker, e))
+if rest and rest[0] != '#':
+    raise SyntaxError('unexpected trailing data in marker: %s: %s' %
+                      (marker, rest))
+context = dict(DEFAULT_CONTEXT)
+if execution_context:
+    context.update(execution_context)
+return evaluator.evaluate(expr, context)
+
+

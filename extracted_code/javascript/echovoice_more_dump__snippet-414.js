@@ -1,2 +1,1 @@
-const mods = computeModulators(node);
-const allowedMods = applyRegulatoryFilter(node, mods, true);
+export const DEFAULT_EMOTIONS: EmotionName[] = [

@@ -1,24 +1,25 @@
-from .pragmatic_engine import PragmaticEngine
+Pythonfrom __future__ import annotations
 
-class SpeechLoop:
-    # ...
+import re
 
-    async def handle_chunk(self, chunk: np.ndarray) -> None:
-        # ... (transcription)
+class GrammarCorrector:
+    def __init__(self):
+        # Pure Python spell dict (small sample; expand)
+        self.spell_dict = {"imrpove": "improve", "clonning": "cloning", "dependancy": "dependency"}
+        # Grammar rules: Simple patterns
+        self.rules = [
+            (r"\bi\s+is\b", "I am"),  # Subject-verb
+            (r"\byou\s+is\b", "you are"),
+        ]
 
-        analysis = self.semantic.analyze(raw)  # Now dict with semantic + pragmatic
+    def correct(self, text: str) -> str:
+        # Spell correction
+        words = text.split()
+        corrected_words = [self.spell_dict.get(word.lower(), word) for word in words]
+        corrected = " ".join(corrected_words)
 
-        pragmatic = analysis["pragmatic"]
+        # Grammar rules
+        for pattern, replacement in self.rules:
+            corrected = re.sub(pattern, replacement, corrected, flags=re.IGNORECASE)
 
-        # Adjust based on pragmatics
-        if pragmatic.type == "sarcasm":
-            style = "calm"  # Soften response
-            corrected = f"I sense frustration... {corrected}"  # Optional rephrase
-
-        # Stimulus from pragmatic confidence
-        stimulus = np.random.rand(self.heart.n_nodes, 5)
-        stimulus[:, 1] += pragmatic.confidence  # Boost valence based on pragmatics
-
-        self.heart.step(stimulus)
-
-        # ... (echo with pragmatic-aware style)
+        return corrected

@@ -1,0 +1,7 @@
+  "status":"implemented",
+    "description" : "utility scripts and classes are available here for data flow and data handling and parsing",
+   "submodules": [
+        "__init__.py":{ "status": "implemented","description":"Marks a direct as module."},
+       "validation.py":{  "status":"implemented" , "description": "validates raw data sources. "},
+        "config.py":{ "status":"implemented", "description": "Configuration object data classes to ensure modular system"}
+      ]

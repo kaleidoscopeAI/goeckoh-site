@@ -1,2 +1,4 @@
-  command 'python3' from deb python3
-  command 'python' from deb python-is-python3
+    - Acquire knowledge from external resources.
+    - Share and receive information with/from other nodes.
+    - Replicate when thresholds are met (e.g., memory, energy, or complexity).
+  - Alignment

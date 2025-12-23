@@ -1,0 +1,2 @@
+  os.environ["GOOGLE_CLOUD_PROJECT"] = staging_project_id
+  print(f"Set GOOGLE_CLOUD_PROJECT environment variable to:

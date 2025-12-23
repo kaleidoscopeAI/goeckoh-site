@@ -1,1 +1,2 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+Important: We are using ES6 classes and modern JavaScript features.
+

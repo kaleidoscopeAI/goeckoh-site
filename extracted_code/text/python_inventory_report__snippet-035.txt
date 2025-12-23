@@ -1,0 +1,2 @@
+doc: Rich, responsive caregiver dashboard for the autism speech companion.
+functions: _load_rows, _load_guidance, _voice_profile_counts, _recent_behavior_events, _cca_summary, _summarize_metrics, create_app, main

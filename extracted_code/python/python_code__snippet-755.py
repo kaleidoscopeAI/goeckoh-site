@@ -1,9 +1,7 @@
-def _coerce_parse_result(results: Union[ParseResults, List[Any]]) -> List[Any]:
-    if isinstance(results, ParseResults):
-        return [_coerce_parse_result(i) for i in results]
-    else:
-        return results
-
-
-def _format_marker(
-    marker: Union[List[str], Tuple[Node, ...], str], first: Optional[bool] = True
+def build_wheel_legacy(
+    name: str,
+    setup_py_path: str,
+    source_dir: str,
+    global_options: List[str],
+    build_options: List[str],
+    tempd: str,

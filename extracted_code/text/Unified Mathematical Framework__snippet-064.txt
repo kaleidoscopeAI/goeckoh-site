@@ -1,0 +1,5 @@
+Voice facet recording screen (records 3–5 samples → saves to voices/)
+Calming phrase recorder (records parent → plays in child voice on trigger or manual)
+Live waveform + emotion indicator
+Dashboard with charts
+

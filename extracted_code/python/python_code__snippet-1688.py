@@ -1,154 +1,29 @@
-def run_complete_system_demo():
-    """Run comprehensive demonstration of the complete unified system"""
-    print("\n" + "="*100)
-    print("🚀 COMPLETE UNIFIED NEURO-ACOUSTIC AGI SYSTEM - COMPREHENSIVE DEMO")
-    print("="*100)
-    
-    system = CompleteUnifiedSystem()
-    
-    # Comprehensive test scenarios with enhanced sensory data
-    test_scenarios = [
-        {
-            'name': 'Echo V4 Core Integration',
-            'input': 'Hello, I am testing the complete system',
-            'sensory': {'sentiment': 0.5, 'anxiety': 0.2, 'focus': 0.8},
-            'description': 'Test Echo V4 Core PsiState integration'
-        },
-        {
-            'name': 'Autism-Optimized Processing',
-            'input': 'I... need... time... to... process... this...',
-            'sensory': {'sentiment': 0.3, 'anxiety': 0.4, 'focus': 0.3},
-            'description': 'Test autism-optimized pause respect'
-        },
-        {
-            'name': 'ABA Therapeutics Integration',
-            'input': 'I feel overwhelmed and anxious',
-            'sensory': {'sentiment': -0.5, 'anxiety': 0.8, 'focus': 0.1, 'overwhelm': 0.7},
-            'description': 'Test ABA intervention system'
-        },
-        {
-            'name': 'Voice Crystal Adaptation',
-            'input': 'Great job! This is amazing!',
-            'sensory': {'sentiment': 0.9, 'anxiety': 0.1, 'focus': 0.9},
-            'description': 'Test voice adaptation and prosody'
-        },
-        {
-            'name': 'Mathematical Framework',
-            'input': 'Show me the Hamiltonian dynamics and quantum evolution',
-            'sensory': {'sentiment': 0.4, 'anxiety': 0.3, 'focus': 0.7},
-            'description': 'Test mathematical framework integration'
-        },
-        {
-            'name': 'Audio System Integration',
-            'input': 'Test all audio engines working together',
-            'sensory': {'sentiment': 0.6, 'anxiety': 0.2, 'focus': 0.8},
-            'description': 'Test Rust + Neural + Python audio synthesis'
-        },
-        {
-            'name': 'Memory and Persistence',
-            'input': 'Remember this important information',
-            'sensory': {'sentiment': 0.7, 'anxiety': 0.2, 'focus': 0.9},
-            'description': 'Test memory encoding and persistence'
-        },
-        {
-            'name': 'Cyber-Physical Control',
-            'input': 'Adjust system parameters based on my emotional state',
-            'sensory': {'sentiment': 0.5, 'anxiety': 0.3, 'focus': 0.7},
-            'description': 'Test cyber-physical hardware mapping'
-        }
-    ]
-    
-    results = []
-    
-    for i, scenario in enumerate(test_scenarios, 1):
-        print(f"\n🧪 Complete Test {i}/{len(test_scenarios)}: {scenario['name']}")
-        print(f"📝 Description: {scenario['description']}")
-        print(f"💬 Input: '{scenario['input']}'")
-        
-        try:
-            # Process with complete system
-            result = system.process_input(scenario['input'], sensory_data=scenario['sensory'])
-            
-            # Display comprehensive results
-            print(f"🤖 Response: '{result['response_text']}'")
-            print(f"🎵 Audio Generated: {len(result['audio_data'])} samples")
-            print(f"🎭 Voice Style: {result['voice_style']}")
-            print(f"🧠 PsiState Time: {result['psi_state'].t}")
-            
-            # ABA intervention
-            aba = result['aba_intervention']
-            if any(aba.values()):
-                print(f"🧩 ABA Intervention: {aba.get('strategy', 'None')}")
-            
-            # Metrics
-            metrics = result['metrics']
-            print(f"📊 GCL: {metrics.gcl:.3f}")
-            print(f"🌡️  Stress: {metrics.stress:.3f}")
-            print(f"❤️  Life Intensity: {metrics.life_intensity:.3f}")
-            print(f"🎭 Mode: {metrics.mode}")
-            
-            # Audio engines status
-            audio_engines = result['audio_engines']
-            print(f"🦀 Rust Engine: {audio_engines['rust_available']}")
-            print(f"🧠 Neural TTS: {audio_engines['neural_tts_available']}")
-            print(f"🔊 Audio Device: {audio_engines['audio_device_available']}")
-            
-            # Integrated components
-            components = result['integrated_components']
-            active_components = [name for name, active in components.items() if active]
-            print(f"🔧 Active Components: {len(active_components)}/{len(components)}")
-            
-            results.append(result)
-            
-        except Exception as e:
-            print(f"❌ Error in test {i}: {e}")
-            import traceback
-            traceback.print_exc()
-        
-        time.sleep(0.5)
-    
-    # Final comprehensive overview
-    print(f"\n{'='*100}")
-    print("📈 COMPLETE SYSTEM OVERVIEW - ALL INTEGRATION WORKING")
-    print("="*100)
-    
-    final_status = system.get_complete_system_status()
-    
-    print(f"🧠 Final GCL: {final_status['gcl']:.3f}")
-    print(f"🌡️  Final Stress: {final_status['stress']:.3f}")
-    print(f"❤️  Final Life Intensity: {final_status['life_intensity']:.3f}")
-    print(f"🎭 Final Mode: {final_status['system_mode']}")
-    print(f"⏰ Uptime: {final_status['uptime']:.1f}s")
-    
-    # Component integration status
-    integrated = final_status['integrated_systems']
-    active_count = sum(1 for active in integrated.values() if active)
-    print(f"🔧 Integrated Components: {active_count}/{len(integrated)} active")
-    
-    # Audio system status
-    audio_status = final_status.get('performance_metrics', {}).get('audio_system_status', {})
-    print(f"🦀 Rust Engine: {'✅' if audio_status.get('rust_engine_available', False) else '❌'}")
-    print(f"🧠 Neural TTS: {'✅' if audio_status.get('neural_tts_available', False) else '❌'}")
-    print(f"🔊 Audio Device: {'✅' if audio_status.get('audio_device_available', False) else '❌'}")
-    
-    # Performance
-    if results:
-        processing_times = [r['processing_time'] for r in results]
-        avg_time = np.mean(processing_times) * 1000
-        print(f"⚡ Average Processing Time: {avg_time:.1f}ms")
-        print(f"🎯 Tests Passed: {len(results)}/{len(test_scenarios)}")
-    
-    print(f"\n🎉 COMPLETE DEMO FINISHED!")
-    print(f"📚 ALL PYTHON SCRIPTS SUCCESSFULLY INTEGRATED:")
-    
-    for component, active in integrated.items():
-        status = "✅" if active else "❌"
-        component_name = component.replace('_', ' ').title()
-        print(f"  {status} {component_name}")
-    
-    print(f"\n💡 This complete system represents the full integration of ALL Python scripts")
-    print(f"   from the root directory and subdirectories into one unified AGI system.")
-    print(f"   Ready for production deployment with comprehensive functionality.")
-    
-    return results
+from .console import Console
+from .table import Table
+from .text import Text
+
+console = Console()
+
+table = Table(show_footer=False, show_edge=True)
+table.add_column("Color", width=10, overflow="ellipsis")
+table.add_column("Number", justify="right", style="yellow")
+table.add_column("Name", style="green")
+table.add_column("Hex", style="blue")
+table.add_column("RGB", style="magenta")
+
+colors = sorted((v, k) for k, v in ANSI_COLOR_NAMES.items())
+for color_number, name in colors:
+    if "grey" in name:
+        continue
+    color_cell = Text(" " * 10, style=f"on {name}")
+    if color_number < 16:
+        table.add_row(color_cell, f"{color_number}", Text(f'"{name}"'))
+    else:
+        color = EIGHT_BIT_PALETTE[color_number]  # type: ignore[has-type]
+        table.add_row(
+            color_cell, str(color_number), Text(f'"{name}"'), color.hex, color.rgb
+        )
+
+console.print(table)
+
 

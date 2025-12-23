@@ -1,1 +1,1 @@
-@StateObject private var metricsModel = ParentMetricsModel()
+private fun startRecording() {

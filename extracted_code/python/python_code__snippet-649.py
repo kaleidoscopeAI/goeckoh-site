@@ -1,4 +1,10 @@
-    def _should_collect_from_parameters(t):
-        return isinstance(
-            t, (typing._GenericAlias, _types.GenericAlias, _types.UnionType)
-        )
+import contextlib
+import functools
+import os
+import sys
+from typing import TYPE_CHECKING, List, Optional, Type, cast
+
+from pip._internal.utils.misc import strtobool
+
+from .base import BaseDistribution, BaseEnvironment, FilesystemWheel, MemoryWheel, Wheel
+

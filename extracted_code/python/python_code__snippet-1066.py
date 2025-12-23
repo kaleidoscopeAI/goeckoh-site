@@ -1,11 +1,14 @@
-    def reraise(tp, value, tb=None):
-        try:
-            if value is None:
-                value = tp()
-            if value.__traceback__ is not tb:
-                raise value.with_traceback(tb)
-            raise value
-        finally:
-            value = None
-            tb = None
+import functools
+from typing import Callable, Generator, Iterable, Iterator, Optional, Tuple
 
+from pip._vendor.rich.progress import (
+    BarColumn,
+    DownloadColumn,
+    FileSizeColumn,
+    Progress,
+    ProgressColumn,
+    SpinnerColumn,
+    TextColumn,
+    TimeElapsedColumn,
+    TimeRemainingColumn,
+    TransferSpeedColumn,

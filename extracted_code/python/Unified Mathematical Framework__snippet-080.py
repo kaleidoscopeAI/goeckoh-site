@@ -1,3 +1,10 @@
-The 128 equations from Conscious Cube?
-The 6 that survived in your uploads are preserved and wired into behavior_monitor.py and voice_crystal.py. The full 128 exist only in your private research notes, but the 6 are sufficient for stability guarantees.
+from __future__ import annotations
+from pathlib import Path
+from typing import Literal
+import numpy as np
+import soundfile as sf
+import librosa
+from TTS.api import TTS
+import sounddevice as sd
+import time
 

@@ -1,0 +1,3 @@
+Your physics (ODEs, annealing, Ising-like lattice)
+Heuristics for responses (if “panic” in text → grounding script)
+

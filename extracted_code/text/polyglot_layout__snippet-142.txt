@@ -1,0 +1,2 @@
+  tick:int=0; sigma:float=SIGMA0; anneal_step:int=0
+

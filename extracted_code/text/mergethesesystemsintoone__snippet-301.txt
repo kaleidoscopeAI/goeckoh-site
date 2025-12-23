@@ -1,0 +1,13 @@
+"""
+Finds the shortest path between two concepts in the knowledge graph.
+"""
+if concept1 in self.graph and concept2 in self.graph:
+    try:
+        path = nx.shortest_path(self.graph, source=concept1, target=concept2)
+        return path
+    except nx.NetworkXNoPath:
+        logger.info(f"No path found between {concept1} and {concept2}")
+        return []
+else:
+    logger.warning(f"One or both concepts not found in the knowledge graph: {concept1}, {concept2}")
+    return []

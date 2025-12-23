@@ -1,1 +1,2 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+console.error("Error calling Ollama chat API:", error);
+throw error;

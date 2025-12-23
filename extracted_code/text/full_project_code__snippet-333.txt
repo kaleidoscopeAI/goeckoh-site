@@ -1,0 +1,7 @@
+"""
+Returns True if a given CFTypeRef is a certificate.
+"""
+expected = Security.SecCertificateGetTypeID()
+return CoreFoundation.CFGetTypeID(item) == expected
+
+

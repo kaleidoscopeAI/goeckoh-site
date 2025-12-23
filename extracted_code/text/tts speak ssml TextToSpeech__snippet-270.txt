@@ -1,0 +1,7 @@
+      at org.gradle.internal.progress.DefaultBuildOperationExecutor.execute(DefaultBuildOperationExecutor.java:199)
+      at org.gradle.internal.progress.DefaultBuildOperationExecutor.run(DefaultBuildOperationExecutor.java:110)
+      at org.gradle.api.internal.plugins.DefaultPluginManager.doApply(DefaultPluginManager.java:144)
+      at org.gradle.api.internal.plugins.DefaultPluginManager.apply(DefaultPluginManager.java:117)
+      at org.gradle.plugin.use.internal.DefaultPluginRequestApplicator$4.run(DefaultPluginRequestApplicator.java:162)
+      at org.gradle.plugin.use.internal.DefaultPluginRequestApplicator.applyPlugin(DefaultPluginRequestApplicator.java:225)
+      at

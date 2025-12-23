@@ -1,4 +1,2 @@
-    Added proper error conversion from ProcessingError to CrystalError
-
-    Improved error handling in image processing
-
+help: if you import `Pattern`, refer to it directly
+   |

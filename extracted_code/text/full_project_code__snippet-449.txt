@@ -1,0 +1,2 @@
+(?: vi | vim | ex ) (?: [<=>]? \d* )? :
+.* (?: ft | filetype | syn | syntax ) = ( [^:\s]+ )

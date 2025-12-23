@@ -1,0 +1,7 @@
+return (
+    f"defaultdict({_object.default_factory!r}, {{",
+    "})",
+    f"defaultdict({_object.default_factory!r}, {{}})",
+)
+
+

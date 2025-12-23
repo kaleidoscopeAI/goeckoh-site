@@ -1,1 +1,1 @@
-const doc = await db.doc("actuation/current").get();
+const spriteGroup = new THREE.Group();

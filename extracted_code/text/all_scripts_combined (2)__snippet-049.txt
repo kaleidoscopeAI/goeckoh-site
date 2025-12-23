@@ -1,10 +1,8 @@
-class VoiceFacet:
-    """One voice sample tracked for passive adaptation."""
+class AgentDecision:
+    """
+    Represents a decision made by the agent.
+    """
 
-    path: Path
-    style: Literal["neutral", "calm", "excited"]
-    duration_s: float
-    rms: float
-    quality_score: float
-    recorded_at: Timestamp
-
+    target_text: str
+    mode: Mode = "inner"
+    metadata: dict | None = None

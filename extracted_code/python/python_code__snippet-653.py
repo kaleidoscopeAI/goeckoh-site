@@ -1,26 +1,15 @@
-    class _AnyMeta(type):
-        def __instancecheck__(self, obj):
-            if self is Any:
-                raise TypeError("typing_extensions.Any cannot be used with isinstance()")
-            return super().__instancecheck__(obj)
+    This returns a Distribution instance from the chosen backend sourced from the data
+    in `metadata_contents`.
 
-        def __repr__(self):
-            if self is Any:
-                return "typing_extensions.Any"
-            return super().__repr__()
-
-    class Any(metaclass=_AnyMeta):
-        """Special type indicating an unconstrained type.
-        - Any is compatible with every type.
-        - Any assumed to have all methods.
-        - All values assumed to be instances of Any.
-        Note that all the above statements are true from the point of view of
-        static type checkers. At runtime, Any should not be used with instance
-        checks.
-        """
-        def __new__(cls, *args, **kwargs):
-            if cls is Any:
-                raise TypeError("Any cannot be instantiated")
-            return super().__new__(cls, *args, **kwargs)
+    :param metadata_contents: Contents of a METADATA file within a dist, or one served
+                              via PEP 658.
+    :param filename: Filename for the dist this metadata represents.
+    :param canonical_name: Normalized project name of the given dist.
+    """
+    return select_backend().Distribution.from_metadata_file_contents(
+        metadata_contents,
+        filename,
+        canonical_name,
+    )
 
 

@@ -1,3 +1,2 @@
-const PAD = 40;
-const innerW = width - PAD * 2;
-const innerH = height - PAD * 2;
+// @ts-ignore access private W
+const W: any = (svc as any).W;

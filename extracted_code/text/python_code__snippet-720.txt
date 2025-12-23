@@ -1,0 +1,4 @@
+"""Check if an object was created with attrs module."""
+return _has_attrs and _attr_module.has(type(obj))
+
+

@@ -1,4 +1,2 @@
-    def raise_from(value, from_value):
-        raise value
-
-
+def get_download_progress_renderer(
+    *, bar_type: str, size: Optional[int] = None

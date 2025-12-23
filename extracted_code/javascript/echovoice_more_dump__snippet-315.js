@@ -1,3 +1,1 @@
-const m = this.cfg.speciesCount;
-const base = nodeIdx * m;
-for (let k = 0; k < m; k++) out[base + k] = 0;
+const spike = new Array(12).fill(0);

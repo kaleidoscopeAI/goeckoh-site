@@ -1,10 +1,13 @@
-from .compat import json as complexjson
-from .compat import urlencode, urlsplit, urlunparse
-from .cookies import _copy_cookie_jar, cookiejar_from_dict, get_cookie_header
-from .exceptions import (
-    ChunkedEncodingError,
-    ConnectionError,
-    ContentDecodingError,
-    HTTPError,
-    InvalidJSONError,
-    InvalidURL,
+import hashlib
+import os
+import re
+import threading
+import time
+import warnings
+from base64 import b64encode
+
+from ._internal_utils import to_native_string
+from .compat import basestring, str, urlparse
+from .cookies import extract_cookies_to_jar
+from .utils import parse_dict_header
+

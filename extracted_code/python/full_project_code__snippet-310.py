@@ -1,1 +1,1 @@
-    from msvcrt import get_osfhandle
+    from unittest.mock import patch, Mock

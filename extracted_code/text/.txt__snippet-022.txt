@@ -1,1 +1,239 @@
-class AudioSettings:
+<style>
+body {
+margin: 0;
+font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+background: radial-gradient(circle at top, #0f172a, #020617);
+color: #e2e8f0;
+}
+.shell {
+max-width: 1100px;
+margin: 0 auto;
+padding: 24px;
+}
+.card {
+border-radius: 18px;
+border: 1px solid rgba(148, 163, 184, 0.35);
+background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), rgba(15, 23, 42, 0.95));
+padding: 18px 20px;
+box-shadow: 0 24px 60px rgba(15, 23, 42, 0.9);
+}
+.muted {
+color: #94a3b8;
+font-size: 12px;
+}
+.pill {
+display: inline-flex;
+align-items: center;
+gap: 6px;
+padding: 4px 10px;
+border-radius: 999px;
+background: rgba(56, 189, 248, 0.2);
+color: #e0f2fe;
+font-size: 11px;
+}
+.pill-dot {
+width: 7px;
+height: 7px;
+border-radius: 999px;
+background: #38bdf8;
+box-shadow: 0 0 12px #38bdf8;
+}
+h1 {
+font-size: 20px;
+letter-spacing: 0.05em;
+text-transform: uppercase;
+}
+h2 {
+font-size: 14px;
+margin: 0;
+}
+table {
+width: 100%;
+border-collapse: collapse;
+margin-top: 6px;
+font-size: 12px;
+}
+th, td {
+Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+21/95padding: 4px 6px;
+text-align: left;
+}
+th {
+color: #94a3b8;
+font-weight: 500;
+}
+tr:nth-child(even) td {
+background: rgba(15, 23, 42, 0.55);
+}
+code {
+font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+font-size: 11px;
+background: rgba(15, 23, 42, 0.8);
+border-radius: 6px;
+padding: 2px 4px;
+}
+.grid {
+display: grid;
+grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+gap: 18px;
+margin-top: 18px;
+}
+.metric-label {
+font-size: 11px;
+color: #94a3b8;
+}
+.metric-value {
+font-size: 18px;
+font-variant-numeric: tabular-nums;
+}
+</style>
+</head>
+<body>
+<div class="shell">
+<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
+<div>
+<h1>Echo Companion</h1>
+<div class="muted">Live emotional & speech metrics for <strong>{{ child_name }}</strong></div>
+</div>
+<div class="pill">
+<div class="pill-dot"></div>
+<span id="live-status-text">Listening</span>
+</div>
+</div>
+<div class="grid">
+<!-- Live snapshot -->
+<div class="card">
+<h2>Live utterance snapshot</h2>
+<div class="muted">Automatically refreshes every 2 seconds.</div>
+<div id="live-ts" class="muted" style="margin-top: 6px;">No data yet.</div>
+<div style="margin-top: 10px;">
+<div class="metric-label">What I said (raw)</div>
+<div id="live-raw" class="metric-value" style="margin-top: 2px; min-height: 24px;">—</div>
+</div>
+<div style="margin-top: 10px;">
+<div class="metric-label">Echoed back (corrected)</div>
+<div id="live-corrected" class="metric-value" style="margin-top: 2px; min-height: 24px;">—</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 14px;">
+<div>
+<div class="metric-label">Arousal</div>
+<div id="m-arousal" class="metric-value">0.0</div>
+</div>
+<div>
+<div class="metric-label">Valence</div>
+<div id="m-valence" class="metric-value">0.0</div>
+</div>
+<div>
+<div class="metric-label">Temp</div>
+<div id="m-temp" class="metric-value">0.0</div>
+</div>
+<div>
+<div class="metric-label">Coherence</div>
+<div id="m-coh" class="metric-value">0.0</div>
+</div>
+</div>
+<div style="margin-top: 12px;">
+<div class="metric-label">Inner voice (last)</div>
+<div class="muted">Shown in terminal; spoken in the child's voice.</div>
+</div>
+</div>
+<!-- Phrase stats -->
+<div class="card">
+<h2>Phrase difficulty</h2>
+<div class="muted">Which phrases currently need the most support.</div>
+<canvas id="phraseChart" style="margin-top: 12px; height: 220px;"></canvas>
+</div>
+</div>
+<div class="card" style="margin-top: 18px;">
+<h2>Raw attempt log (recent)</h2>
+<div class="muted">Simplified view of the most recent phrases and their correction rate.</div>
+<table id="phraseTable">
+<thead>
+<tr>
+<th>Phrase</th>
+<th>Attempts</th>
+<th>Corrections</th>
+<th>Correction rate</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+22/95</div>
+</div>
+<script>
+let phraseChart = null;
+async function fetchJSON(url) {
+const res = await fetch(url);
+if (!res.ok) return null;
+return await res.json();
+}
+function updateLive(data) {
+const ts = data.timestamp_iso || null;
+document.getElementById("live-ts").textContent = ts ? ("Last utterance at " + ts) : "No data yet.";
+document.getElementById("live-raw").textContent = data.raw_text || "—";
+document.getElementById("live-corrected").textContent = data.corrected_text || "—";
+document.getElementById("m-arousal").textContent = (data.arousal ?? 0).toFixed(2);
+document.getElementById("m-valence").textContent = (data.valence ?? 0).toFixed(2);
+document.getElementById("m-temp").textContent = (data.temperature ?? 0).toFixed(3);
+document.getElementById("m-coh").textContent = (data.coherence ?? 0).toFixed(3);
+}
+function updateStats(stats) {
+const labels = [];
+const values = [];
+const rows = [];
+for (const [phrase, s] of Object.entries(stats)) {
+labels.push(phrase || "<empty>");
+values.push(s.correction_rate || 0.0);
+rows.push({
+phrase: phrase || "<empty>",
+attempts: s.attempts || 0,
+corrections: s.corrections || 0,
+rate: s.correction_rate || 0.0,
+});
+}
+// Update chart
+const ctx = document.getElementById("phraseChart").getContext("2d");
+if (phraseChart) {
+phraseChart.data.labels = labels;
+phraseChart.data.datasets[0].data = values;
+phraseChart.update();
+} else {
+phraseChart = new Chart(ctx, {
+type: "bar",
+data: {
+labels: labels,
+datasets: [{
+label: "Correction rate",
+data: values,
+}],
+},
+options: {
+scales: {
+y: { min: 0, max: 1 },
+},
+},
+});
+}
+}
+// Update table
+const tbody = document.querySelector("#phraseTable tbody");
+tbody.innerHTML = "";
+rows.sort((a, b) => b.correction_rate - a.correction_rate);
+for (const r of rows.slice(0, 15)) {
+const tr = document.createElement("tr");
+tr.innerHTML =
+"<td>" + r.phrase + "</td>" +
+"<td>" + r.attempts + "</td>" +
+"<td>" + r.corrections + "</td>" +
+"<td>" + (r.rate * 100).toFixed(1) + "%</td>";
+tbody.appendChild(tr);
+}
+async function tick() {
+const live = await fetchJSON("/api/latest");
+if (live) updateLive(live);
+const stats = await fetchJSON("/api/stats");
+if (stats) updateStats(stats);
+}
+setInterval(tick, 2000);
+tick();

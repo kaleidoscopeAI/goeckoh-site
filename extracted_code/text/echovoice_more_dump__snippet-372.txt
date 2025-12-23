@@ -1,1 +1,7 @@
-+ * TEBD stub using cluster-level finite difference directional derivative.
+pub molecular_weight: Option<f64>,
+pub formula: Option<String>,
+pub smiles: Option<String>,
+pub atom_types: Vec<String>,
+pub bond_types: Vec<String>,
+pub ring_count: usize,
+pub is_aromatic: bool,

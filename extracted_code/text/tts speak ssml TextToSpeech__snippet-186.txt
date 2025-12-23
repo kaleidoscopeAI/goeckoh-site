@@ -1,0 +1,4 @@
+      vadModeSpinner.adapter = adapter
+      vadModeSpinner.setSelection(sharedPrefs.getInt("vad_mode", 0))
+
+      silenceDurationSeekBar.progress = sharedPrefs.getInt("silence_ms",

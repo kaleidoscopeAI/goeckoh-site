@@ -1,2 +1,5 @@
-Attach to: class CellularChaosGenerator:
-
+String,
+Number,
+Boolean,
+DateTime,
+Unknown,

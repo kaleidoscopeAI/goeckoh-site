@@ -1,0 +1,5 @@
+"""Retrieves data associated with a node."""
+if node_id in self.graph.nodes:
+    return self.graph.nodes[node_id]['data']
+return {}
+

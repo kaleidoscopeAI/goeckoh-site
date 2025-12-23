@@ -1,0 +1,6 @@
+  w = np.zeros(len(edges), dtype=np.float64)
+  for k, (i, j) in enumerate(edges):
+      w[k] = expected_cos_with_noise(E[i], E[j], sigma=sigma, M=M)
+  tau = 1.0 - w
+  return w, tau
+

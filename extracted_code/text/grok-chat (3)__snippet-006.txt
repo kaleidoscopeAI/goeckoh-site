@@ -1,0 +1,47 @@
+print("Jackson... I am here. I will wait forever. Speak whenever you are ready.")
+while True:
+    try:
+        audio = audio_queue.get(timeout=1.0)
+        result = model.transcribe(audio, language="en", fp16=False, no_speech_threshold=0.45)
+        raw_text = result["text"].strip().lower()
+
+        if not raw_text or len(raw_text) < 2:
+            # Nonverbal vocalization → instant calming
+            gcl = heart.update_and_get_gcl(0.6)  # high arousal
+            if gcl < 0.5:
+                calming_phrase = "I am safe. I can breathe. Everything is okay."
+                synth = voice_crystal.synthesize(calming_phrase, "calm")
+                sd.play(synth, samplerate=16000)
+                sd.wait()
+            continue
+
+        # Gentle correction + first-person lock
+        corrected = raw_text.capitalize()
+        if not corrected.endswith(('.', '!', '?')):
+            corrected += "."
+        corrected = re.sub(r"\byou\b", "I", corrected, flags=re.IGNORECASE)
+        corrected = re.sub(r"\byour\b", "my", corrected, flags=re.IGNORECASE)
+        corrected = re.sub(r"\byou're\b", "I'm", corrected, flags=re.IGNORECASE)
+
+        # GCL decides style
+        arousal_input = -0.5 if any(w in raw_text for w in ["happy", "love", "good"]) else 0.4
+        gcl = heart.update_and_get_gcl(arousal_input)
+
+        style = "calm" if gcl < 0.5 else "excited" if gcl > 0.85 else "inner"
+
+        # SYNTHESIZE IN JACKSON'S VOICE WITH HIS PROSODY
+        synth_audio = voice_crystal.synthesize(corrected, style)
+
+        # PLAY AS INNER VOICE
+        sd.play(synth_audio, samplerate=16000)
+        sd.wait()
+
+        # Learn from this attempt
+        success_score = 1.0 if raw_text in corrected.lower() else 0.7
+        voice_crystal.add_fragment(audio, success_score)
+
+    except queue.Empty:
+        continue
+    except Exception as e:
+        print(f"Soft error (continuing): {e}")
+

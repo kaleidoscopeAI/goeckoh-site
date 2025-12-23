@@ -1,2 +1,12 @@
-# <REDACTED: potential secret detected>
+class CERT_SIMPLE_CHAIN(Structure):
+    _fields_ = (
+        ("cbSize", DWORD),
+        ("TrustStatus", CERT_TRUST_STATUS),
+        ("cElement", DWORD),
+        ("rgpElement", POINTER(PCERT_CHAIN_ELEMENT)),
+        ("pTrustListInfo", c_void_p),
+        ("fHasRevocationFreshnessTime", BOOL),
+        ("dwRevocationFreshnessTime", DWORD),
+    )
+
 

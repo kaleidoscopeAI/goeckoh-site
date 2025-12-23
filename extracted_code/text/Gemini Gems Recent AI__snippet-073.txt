@@ -1,0 +1,22 @@
+html.H1("Kaleidoscope AI - Molecular Cube"),
+
+# 3D Visualization
+dcc.Graph(id='molecular-cube', style={'height': '600px'}),  # Adjust height as needed
+
+# Input and controls
+dbc.Row([
+    dbc.Col([
+        dcc.Input(id='smiles-input', type='text', placeholder='Enter SMILES'),
+        html.Button('Find Similar (Classical)', id='find-similar-button', n_clicks=0),
+        html.Button('Find Similar (Quantum)', id='find-similar-quantum-button', n_clicks=0),
+        html.Button('Get Details', id='get-details-button', n_clicks=0),
+    ], width=6),
+    dbc.Col([
+        html.Div(id='similarity-results'),  # Display similarity results
+        html.Div(id='molecule-details'),  # Display molecule details
+    ], width=6),
+]),
+#Store cube data in a hidden div as JSON
+html.Div(id='cube-data', style={'display': 'none'}, children=cube.graph.nodes),
+dcc.Store(id='selected-molecule', data=None) #Store selected molecule data
+

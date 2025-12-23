@@ -1,0 +1,2 @@
+- Conduct a simple hearing screen (e.g., basic audiometric or at least threshold/comfort-level checks for the test frequencies).
+- Start playback at low volume and gradually increase to the intended level while asking participants to indicate if the sound becomes uncomfortable; cap at a conservative level even if they tolerate more.[^12_8]

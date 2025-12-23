@@ -1,0 +1,4 @@
+  sys_p = "You optimize a spring-mesh cube. Reply STRICT JSON only: {\"k_scale\":float, \"rest_scale\":float}."
+  user_p = f"Metrics: {metrics}\nReflection: {reflection}\nReturn only JSON."
+  try:
+       r = requests.post(f"{OLLAMA_URL}/api/chat", json={"model": OLLAMA_MODEL, "messages": [{"role": "system", "content": sys_p}, {"role":

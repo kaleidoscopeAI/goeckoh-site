@@ -1,0 +1,7 @@
+offset: int
+filename: str
+line: str
+lineno: int
+msg: str
+
+

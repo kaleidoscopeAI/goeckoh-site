@@ -1,3 +1,2 @@
-• Data Ingestion: Data is ingested and preprocessed by nodes using their ProcessingUnit.
-• Pattern Recognition: Patterns and features are extracted by nodes using EnhancedPatternRecognition.
+Tests: No unit tests are provided.Fix: Add tests for each module (e.g., using unittest or pytest) to verify functionality.
 

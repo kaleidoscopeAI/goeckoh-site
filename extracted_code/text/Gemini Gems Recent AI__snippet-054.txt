@@ -1,0 +1,3 @@
+	process_insight(insight)	Modifies energy/stress based on the insight type.
+	replicate(topo_signal, confidence)	Creates a new node with potential SMILES mutation.
+	compute_similarity(other_node)	Calculates Tanimoto similarity of Morgan fingerprints.

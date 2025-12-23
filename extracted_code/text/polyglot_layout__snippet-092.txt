@@ -1,0 +1,25 @@
+  id2sum = fetch_summaries(db_path)
+  by_t: Dict[int, List[Tuple[List[int], List[float]]]] = {}
+  T = 0
+  for rec in shapes["shapes"]:
+      t = int(rec["t"])
+      T = max(T, t + 1)
+      by_t.setdefault(t, []).append((rec["ids"], rec["weights"]))
+  caps = []
+  t0 = 0
+  while t0 < T:
+      t1 = min(T - 1, t0 + window - 1)
+      score: Dict[int, float] = {}
+      denom = 0.0
+      for t in range(t0, t1 + 1):
+          for ids, wts in by_t.get(t, []):
+              for i, w in zip(ids, wts):
+                   score[i] = score.get(i, 0.0) + float(w)
+                   denom += float(w)
+      if denom > 0:
+          for i in list(score.keys()):
+              score[i] /= denom
+      top = sorted(score.items(), key=lambda x: -x[1])[:top_k]
+      top_ids = [i for i, _ in top]
+      phrases = [kw(id2sum.get(i, ""), 10) for i in top_ids]
+      cap = {"t_start_frame": t0, "t_end_frame": t1, "top_ids": top_ids, "weights": [float(w) for _, w in top], "caption": "; ".join([p for p

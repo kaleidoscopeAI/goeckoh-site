@@ -1,0 +1,5 @@
+7,  # Bell
+8,  # Backspace
+11,  # Vertical tab
+12,  # Form feed
+13,  # Carriage return

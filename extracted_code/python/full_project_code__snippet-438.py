@@ -1,1 +1,6 @@
-The ``codes`` object defines a mapping from common names for HTTP statuses
+from collections import OrderedDict
+from collections.abc import Callable, Mapping, MutableMapping
+from http import cookiejar as cookielib
+from http.cookies import Morsel
+from io import StringIO
+

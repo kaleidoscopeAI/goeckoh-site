@@ -1,1 +1,1 @@
-async def init_llm():
+def entropy(self, data: List[float]) -> float:

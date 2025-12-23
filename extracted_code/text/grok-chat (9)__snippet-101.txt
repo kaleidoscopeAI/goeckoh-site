@@ -1,0 +1,6 @@
+152          self._sherpa_tts = None
+153 +        self._use_rust_vc = RUST_VC_AVAILABLE and os.environ.get("GOECK
+     OH_USE_RUST_VC", "").lower() in ("1", "true", "yes")
+154 +        self._rust_vc: Optional[VoiceSynthesizerEngine] = None
+155
+

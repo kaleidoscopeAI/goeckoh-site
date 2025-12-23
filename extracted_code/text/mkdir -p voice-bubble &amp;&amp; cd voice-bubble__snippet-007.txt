@@ -1,1 +1,4 @@
-r_estimated = (SD_cond1² + SD_cond2² - SD_diff²) / (2 * SD_cond1 * SD_cond2)
+Whisper tiny: ~150MB
+Piper voice: ~100MB  
+Ringbufs + state: ~50MB
+Total: <350MB → ✅ iPhone XR / mid Android viable

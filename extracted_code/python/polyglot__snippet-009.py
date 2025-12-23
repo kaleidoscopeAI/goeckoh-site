@@ -1,2 +1,1 @@
-class AGIMathematics:
-def __init__(self) -> None:
+def integrated_information(self, vec: List[float]) -> float:

@@ -1,20 +1,4 @@
-    def _fuse_memories(self):
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    def _perform_memory_fusion(self, mem1: Memory, mem2: Memory):
-
+import hashlib
+h = hashlib.sha256((salt + s).encode("utf-8", "ignore")).digest()
+return int.from_bytes(h[:8], "little")
 

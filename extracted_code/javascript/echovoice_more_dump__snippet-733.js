@@ -1,1 +1,2 @@
-Server analysis: the server endpoints let you compute top nodes and export CSVs easily for offline analysis.
+const W_DIR = path.join(__dirname, "persisted_w");
+function performRollback(id: string) {

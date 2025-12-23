@@ -1,36 +1,32 @@
-    from processing latency.
-  - Validation script: scripts/validate_mirror_metrics.py reads backend/.run/
-    mirror_metrics.jsonl, prints p50/p95 latency/playback, GCL, drift; plotting
-    is opt-in via PLOT=1 to avoid numpy/matplotlib issues.
-  - Neurocoherence Lattice naming exposed in API/UI; start script documents how
-    to enable the Rust voice path.
-
-  Build step completed
-
-  - cargo build --release in audio_kernel/ succeeded; libgoeckoh_core.so is
-    ready for use by the Python bridge.
-
-  Notes/remaining gaps vs. goals
-
-  - No mirror telemetry file yet (backend/.run/mirror_metrics.jsonl missing) —
-    run the mirror once to generate data, then rerun the validation script.
-  - Processing latency now excludes playback duration; playback duration is
-    tracked separately, but true hardware round-trip latency still needs
-    measurement with a loopback test.
-  - The 1024-node ODE lattice in Python remains heuristic; Rust lattice exists
-    but isn’t yet surfaced to /status or UI.
-  - Mobile/Flutter client and shared PPP assets still not integrated.
-
-  Recommended next actions
-
-  1. Run the mirror with GOECKOH_USE_RUST_VC=1 and
-     GOECKOH_LATENCY_P95_TARGET=350 (or your target), then re-run python
-     scripts/validate_mirror_metrics.py to see p95 latency vs. target.
-  2. Surface the Rust lattice’s affective snapshot into /status (parallel to the
-     Python lattice) and plot both on the Dashboard for verification.
-  3. Add a lightweight loopback latency test (play/record a chirp) to populate
-     true end-to-end latency into the validation summary.
-  4. Wire the Flutter app to /mirror/*, sharing PPP fragments/cache, to prove
-     cross-surface continuity.
-
+    910 +    def mirror_stream_events(self):
+    911 +        """
+    912 +        Server-Sent Events (SSE) stream of latest transcript/corrected/
+         GCL for visualizers.
+    913 +        Polls the live status every 0.5s and emits JSON payloads.
+    914 +        """
+    915 +        if not self.mirror_service:
+    916 +            return jsonify({"error": "Mirror service not available"}),
+         503
+    917 +
+    918 +        def event_stream():
+    919 +            import json
+    920 +            last_sent = None
+    921 +            while True:
+    922 +                st = self.mirror_service.status()
+    923 +                payload = {
+    924 +                    "ts": time.time(),
+    925 +                    "transcript": st.last_transcript,
+    926 +                    "corrected": st.last_corrected,
+    927 +                    "gcl": st.gcl,
+    928 +                    "phenotype_counts": st.phenotype_counts,
+    929 +                }
+    930 +                data = json.dumps(payload, ensure_ascii=False)
+    931 +                if data != last_sent:
+    932 +                    yield f"data: {data}\n\n"
+    933 +                    last_sent = data
+    934 +                time.sleep(0.5)
+    935 +
+    936 +        return self.app.response_class(event_stream(), mimetype="text/e
+         vent-stream")
+    937
 

@@ -1,0 +1,7 @@
+DirectoryUrlHashUnsupported,
+HashMismatch,
+HashUnpinned,
+InstallationError,
+MetadataInconsistent,
+NetworkConnectionError,
+VcsHashUnsupported,

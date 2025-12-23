@@ -1,1 +1,2 @@
-The function of the service is to take the entire set of Knowledge Observables (Ki​) from the 5,000 nodes and compress it into a few meaningful,
+7. Persist a learned W from runtime:
+Programmatically call POST /w/save with the current W (e.g., fetch from Node or curl) to create a versioned snapshot.

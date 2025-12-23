@@ -1,1 +1,3 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+llm_adapter.ts: Real HTTP to Ollama for self-modeling (prompt with torque/state, re-embed output for meta).
+All others as before, now real (e.g., det uses math.det).
+

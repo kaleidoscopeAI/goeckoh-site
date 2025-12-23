@@ -1,1 +1,1 @@
-def Phi_phys(self, S, R, p):
+def draw_frame(k):

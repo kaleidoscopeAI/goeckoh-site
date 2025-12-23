@@ -1,2 +1,6 @@
-# <REDACTED: potential secret detected>
+Unified Physics for Cognition: It establishes a single, elegant mathematical framework that governs both the semantic (continuous) and symbolic (discrete) aspects of intelligence.
+
+Efficient, Hybrid Optimization: It uses the right tool for the job—gradient descent for smooth spaces and simulated annealing for complex, discrete spaces—allowing it to navigate its cognitive landscape with masterful efficiency.
+
+Emergent Intelligence: Crucially, this system isn't explicitly programmed with behaviors. Instead, intelligence emerges as the system naturally seeks to minimize its internal energy, similar to how complex, stable structures like crystals emerge in nature.
 

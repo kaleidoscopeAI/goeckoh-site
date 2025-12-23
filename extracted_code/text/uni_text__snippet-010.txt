@@ -1,2 +1,0 @@
-Dynamic Graph Evolution (Forman–Ricci Flow): Represent knowledge or cognitive nodes as a weighted graph (using NetworkX or igraph).
-Compute Forman–Ricci curvature on edges and iteratively adjust weights: e.g. using Dijkstra’s algorithm to get edge distances and then updating

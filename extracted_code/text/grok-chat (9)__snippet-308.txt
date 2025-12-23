@@ -1,0 +1,10 @@
+       GOECKOH_TEST_ECHO=0 \
+       KIVY_NO_ARGS=1 USE_HEADLESS=1 \
+       GOECKOH_DISABLE_TTS=1 GOECKOH_DISABLE_RTVC=1 GOECKOH_DISABLE_AUDIO_PLAYBACK=1 \
+       GOECKOH_DISABLE_TORCH=1 \
+       GOECKOH_USE_RUST_VC=1 \
+       GOECKOH_MIRROR_METRICS_LOG=backend/.run/mirror_metrics.jsonl \
+       GOECKOH_LATENCY_P95_TARGET=350 \
+       ./.venv/bin/python -m goeckoh.apps.real_unified_system --api --config real_system_config.ini \
+       >/tmp/goeckoh_backend.log 2>&1 &
+

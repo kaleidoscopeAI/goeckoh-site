@@ -1,0 +1,10 @@
+798                  _ = self._heart.process_sample(rms, dt)
+799 -                _, _, coherence = self._heart.get_affective_state()
+799 +                val, ar, coherence = self._heart.get_affective_state()
+800 +                self._heart_valence = float(val)
+801 +                self._heart_arousal = float(ar)
+802                  # Treat coherence as a GCL-like scalar for gating.
+803                  self._last_gcl = float(coherence)
+804 +                self._heart_coherence = float(coherence)
+805              except Exception:
+

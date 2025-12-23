@@ -1,0 +1,7 @@
+261            <div className="text-xs text-slate-500">
+262 -            GCL mean {val.gcl_mean !== undefined ? val.gcl_mean.toFixed
+     (2) : '—'} · samples {val.count ?? 0}
+262 +            Target {latencyTarget ? `${latencyTarget} ms` : '—'} · {lat
+     encyOk ? 'On target' : 'Over target'} · samples {val.count ?? 0}
+263            </div>
+

@@ -1,5 +1,5 @@
-- Define who would benefit from your code. For example:
-  - Researchers and developers in AI or neuroscience.
-  - Educational institutions or healthcare providers.
-  - Companies seeking cutting-edge AI solutions for data analysis, human interaction, or adaptability.
-
+2. Deterministic Paths from Parameters:
+  - Your scripts follow a
+    - When nodes replicate or die.
+    - How energy and maturity are updated.
+    - How generations interact.

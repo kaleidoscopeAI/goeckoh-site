@@ -1,0 +1,5 @@
+sample_rate: int = 16000
+chunk_size: int = 2048
+silence_rms_threshold: float = 0.01
+vad_aggressiveness: int = 3
+

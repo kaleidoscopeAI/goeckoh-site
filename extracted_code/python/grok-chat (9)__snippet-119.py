@@ -1,4 +1,6 @@
-• The logs still show "Crystalline Heart" from the unified system's runtime prints, likely because the initialization strings in
-  complete_unified_system haven't been fully renamed yet. Next, I'll verify and update those early log statements to the new
-  naming.
+ to SSE:
 
+ const es = new EventSource('http://localhost:8080/mirror/stream');
+ es.onmessage = (e) => {
+   const { corrected, gcl } = JSON.parse(e.data);
+   // drive your 3D scene from `corrected` text and modulate visuals with

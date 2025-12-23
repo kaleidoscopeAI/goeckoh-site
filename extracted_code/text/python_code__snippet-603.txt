@@ -1,0 +1,12 @@
+"""Replace control codes with their "escaped" equivalent in the given text.
+(e.g. "\b" becomes "\\b")
+
+Args:
+    text (str): A string possibly containing control codes.
+
+Returns:
+    str: String with control codes replaced with their escaped version.
+"""
+return text.translate(_translate_table)
+
+

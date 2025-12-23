@@ -1,1 +1,2 @@
-const regret = replayLogs ? (replayLogs[t]?.regret ?? (Math.random()-0.5) * 0.3) : (Math.random() - 0.5) * 0.5;
++ const y2: number[][] = new Array(m);
++ for (let i = 0; i < m; i++) {

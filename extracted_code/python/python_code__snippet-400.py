@@ -1,68 +1,65 @@
-from typing import Optional, Union
+    import random
+    import time
 
-from .chardistribution import CharDistributionAnalysis
-from .charsetprober import CharSetProber
-from .codingstatemachine import CodingStateMachine
-from .enums import LanguageFilter, MachineState, ProbingState
+    from .panel import Panel
+    from .rule import Rule
+    from .syntax import Syntax
+    from .table import Table
 
+    syntax = Syntax(
+        '''def loop_last(values: Iterable[T]) -> Iterable[Tuple[bool, T]]:
+    """Iterate and generate a tuple with a flag for last value."""
+    iter_values = iter(values)
+    try:
+        previous_value = next(iter_values)
+    except StopIteration:
+        return
+    for value in iter_values:
+        yield False, previous_value
+        previous_value = value
+    yield True, previous_value''',
+        "python",
+        line_numbers=True,
+    )
 
-class MultiByteCharSetProber(CharSetProber):
-    """
-    MultiByteCharSetProber
-    """
+    table = Table("foo", "bar", "baz")
+    table.add_row("1", "2", "3")
 
-    def __init__(self, lang_filter: LanguageFilter = LanguageFilter.NONE) -> None:
-        super().__init__(lang_filter=lang_filter)
-        self.distribution_analyzer: Optional[CharDistributionAnalysis] = None
-        self.coding_sm: Optional[CodingStateMachine] = None
-        self._last_char = bytearray(b"\0\0")
+    progress_renderables = [
+        "Text may be printed while the progress bars are rendering.",
+        Panel("In fact, [i]any[/i] renderable will work"),
+        "Such as [magenta]tables[/]...",
+        table,
+        "Pretty printed structures...",
+        {"type": "example", "text": "Pretty printed"},
+        "Syntax...",
+        syntax,
+        Rule("Give it a try!"),
+    ]
 
-    def reset(self) -> None:
-        super().reset()
-        if self.coding_sm:
-            self.coding_sm.reset()
-        if self.distribution_analyzer:
-            self.distribution_analyzer.reset()
-        self._last_char = bytearray(b"\0\0")
+    from itertools import cycle
 
-    def feed(self, byte_str: Union[bytes, bytearray]) -> ProbingState:
-        assert self.coding_sm is not None
-        assert self.distribution_analyzer is not None
+    examples = cycle(progress_renderables)
 
-        for i, byte in enumerate(byte_str):
-            coding_state = self.coding_sm.next_state(byte)
-            if coding_state == MachineState.ERROR:
-                self.logger.debug(
-                    "%s %s prober hit error at byte %s",
-                    self.charset_name,
-                    self.language,
-                    i,
-                )
-                self._state = ProbingState.NOT_ME
-                break
-            if coding_state == MachineState.ITS_ME:
-                self._state = ProbingState.FOUND_IT
-                break
-            if coding_state == MachineState.START:
-                char_len = self.coding_sm.get_current_charlen()
-                if i == 0:
-                    self._last_char[1] = byte
-                    self.distribution_analyzer.feed(self._last_char, char_len)
-                else:
-                    self.distribution_analyzer.feed(byte_str[i - 1 : i + 1], char_len)
+    console = Console(record=True)
 
-        self._last_char[0] = byte_str[-1]
+    with Progress(
+        SpinnerColumn(),
+        *Progress.get_default_columns(),
+        TimeElapsedColumn(),
+        console=console,
+        transient=False,
+    ) as progress:
 
-        if self.state == ProbingState.DETECTING:
-            if self.distribution_analyzer.got_enough_data() and (
-                self.get_confidence() > self.SHORTCUT_THRESHOLD
-            ):
-                self._state = ProbingState.FOUND_IT
+        task1 = progress.add_task("[red]Downloading", total=1000)
+        task2 = progress.add_task("[green]Processing", total=1000)
+        task3 = progress.add_task("[yellow]Thinking", total=None)
 
-        return self.state
-
-    def get_confidence(self) -> float:
-        assert self.distribution_analyzer is not None
-        return self.distribution_analyzer.get_confidence()
+        while not progress.finished:
+            progress.update(task1, advance=0.5)
+            progress.update(task2, advance=0.3)
+            time.sleep(0.01)
+            if random.randint(0, 100) < 1:
+                progress.log(next(examples))
 
 

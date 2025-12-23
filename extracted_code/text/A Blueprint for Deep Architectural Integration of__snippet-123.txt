@@ -1,0 +1,3 @@
+\item \(U(S_k)\) quantifies the cognitive uncertainty at step \(k\),
+\item \(Perf_k\) captures knowledge acquisition effectiveness,
+\item \(\rho, \alpha, \sigma\) are tunable parameters controlling tension dynamics.

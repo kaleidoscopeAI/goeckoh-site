@@ -1,0 +1,8 @@
+- Represent cognitive state vectors quantized to fixed-size bitvectors (e.g., `Vec<u64>`) for state $S_k$.
+- Implement Thought Engines as bit manipulation pipelines or compact lookup tables in CPU memory.
+- Store routing matrix $R$ as boolean/bitflag matrices enabling fast bitwise routing computation.
+- Curiosity bit $b_k$ updated via fast threshold comparison and stored as processor flag or single bit.
+- Noise modeled via bit-flips simulated by XOR with pseudo-random bitmasks.
+- External calls (e.g., Hugging Face inference) can be batched asynchronously, results downsampled to embeddings encoded as bits.
+
+

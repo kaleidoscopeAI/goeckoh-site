@@ -1,0 +1,5 @@
+_EXCLUDED_ATTRS |= {
+    "_gorg", "__next_in_mro__", "__extra__", "__tree_hash__", "__args__",
+    "__origin__"
+}
+

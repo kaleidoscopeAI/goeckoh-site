@@ -1,7 +1,7 @@
-class CompanionConfig:
-    child_name: str = "Jackson"
-    paths: Paths = field(default_factory=Paths)
-    audio: AudioSettings = field(default_factory=AudioSettings)
-    speech: SpeechModelSettings = field(default_factory=SpeechModelSettings)
-    behavior: BehaviorSettings = field(default_factory=BehaviorSettings)
+class VoiceSample:
+    path: Path
+    style: Style
+    rms: float
+    duration_s: float
+    added_ts: float
 

@@ -1,0 +1,8 @@
+"""Combine a number of regexes in to a single regex.
+
+Returns:
+    str: New regex with all regexes ORed together.
+"""
+return "|".join(regexes)
+
+

@@ -1,0 +1,39 @@
+"""Main entry point"""
+parser = argparse.ArgumentParser(description="Kaleidoscope AI Platform")
+parser.add_argument("path", help="Root path of the software system")
+parser.add_argument(
+    "--mode",
+    choices=["analyze", "upgrade", "decompile", "full"],
+    default="full",
+    help="Operation mode"
+)
+parser.add_argument(
+    "--strategy",
+    choices=[s.name.lower() for s in UpgradeStrategy],
+    default="in_place",
+    help="Upgrade strategy"
+)
+parser.add_argument(
+    "--language",
+    choices=[l.name.lower() for l in LanguageType],
+    default="python",
+    help="Target language for upgrades"
+)
+parser.add_argument("--no-llm", action="store_true", help="Disable LLM usage")
+
+args = parser.parse_args()
+
+config = KaleidoscopeConfig(
+    root_path=args.path,
+    operation_mode=args.mode,
+    upgrade_strategy=UpgradeStrategy[args.strategy.upper()],
+    target_language=LanguageType[args.language.upper()],
+    use_llm=not args.no_llm
+)
+
+platform = KaleidoscopePlatform(config)
+results = platform.run()
+
+# Output results (simplified for now)
+print(f"Results: {results}")
+

@@ -1,0 +1,20 @@
+  """
+    Stores and transforms incoming data into the system
+    : param  data : Dictionary with key properties describing the pattern, may include metadata such as category etc.
+    : return id of stored resonance if valid
+
+    Implements pattern extraction to identify features to capture in resonant representations in 2d numpy fields
+  """
+  frequency = self._hash_to_frequency (str(data)) # Transforms Data (numerical vector) into an indexable item in Memory (vector frequency)
+  amplitude = self._generate_amplitude (data) # Returns vector based on data input
+  phase = self._generate_phase(data) # Maps patterns to time dimension. (vector complex space for frequency)
+  pattern_id = str(uuid.uuid4())
+  resonance = MemoryResonance(
+  pattern_id=pattern_id, # unique id for each generated memory/pattern
+  frequency=frequency, # unique frequency profile to represent patten characteristics/meaning
+  amplitude=amplitude,
+  phase=phase)
+  self.resonances[pattern_id] = resonance # store it
+  self._update_field_state()
+  return pattern_id
+

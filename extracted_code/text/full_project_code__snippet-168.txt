@@ -1,0 +1,3 @@
+setattr(_MovedItems, attr.name, attr)
+if isinstance(attr, MovedModule):
+    _importer._add_module(attr, "moves." + attr.name)

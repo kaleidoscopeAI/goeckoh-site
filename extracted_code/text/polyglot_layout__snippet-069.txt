@@ -1,0 +1,11 @@
+  chroma_idx = (midi_rounded % 12)
+  n_time = S.shape[1]
+  chroma = np.zeros((12, n_time), dtype=np.float32)
+  for pc in range(12):
+      mask = (chroma_idx == pc)
+      if np.any(mask):
+          chroma[pc, :] = np.sum(S_valid[mask, :], axis=0)
+  chroma_sum = np.sum(chroma, axis=0, keepdims=True) + 1e-12
+  chroma = chroma / chroma_sum
+  return chroma
+

@@ -1,0 +1,8 @@
+MachineState.START,      3, MachineState.ERROR, MachineState.START, MachineState.START, MachineState.START, MachineState.START, MachineState.START, # 00-07
+MachineState.START, MachineState.ERROR, MachineState.ERROR, MachineState.ERROR, MachineState.ERROR, MachineState.ERROR, MachineState.ERROR, MachineState.ERROR, # 08-0f
+MachineState.ERROR, MachineState.ERROR, MachineState.ITS_ME, MachineState.ITS_ME, MachineState.ITS_ME, MachineState.ITS_ME, MachineState.ITS_ME, MachineState.ITS_ME, # 10-17
+MachineState.ITS_ME, MachineState.ITS_ME, MachineState.ITS_ME, MachineState.ERROR, MachineState.ERROR, MachineState.ERROR,      4, MachineState.ERROR, # 18-1f
+MachineState.ERROR, MachineState.ERROR, MachineState.ERROR, MachineState.ITS_ME, MachineState.ERROR, MachineState.ERROR, MachineState.ERROR, MachineState.ERROR, # 20-27
+    5,      6, MachineState.ERROR, MachineState.ERROR, MachineState.ERROR, MachineState.ERROR, MachineState.ERROR, MachineState.ERROR, # 28-2f
+MachineState.ERROR, MachineState.ERROR, MachineState.ERROR, MachineState.ITS_ME, MachineState.ERROR, MachineState.ERROR, MachineState.ERROR, MachineState.ERROR, # 30-37
+MachineState.ERROR, MachineState.ERROR, MachineState.ERROR, MachineState.ERROR, MachineState.ERROR, MachineState.ITS_ME, MachineState.ERROR, MachineState.START, # 38-3f

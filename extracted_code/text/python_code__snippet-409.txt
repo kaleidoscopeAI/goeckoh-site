@@ -1,0 +1,1 @@
+lambda s, l, t: Marker(s[t._original_start : t._original_end])

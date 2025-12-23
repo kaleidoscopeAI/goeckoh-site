@@ -1,20 +1,21 @@
-def open(
-    file: Union[str, "PathLike[str]", bytes],
-    mode: Union[Literal["rt"], Literal["r"]],
-    buffering: int = -1,
-    encoding: Optional[str] = None,
-    errors: Optional[str] = None,
-    newline: Optional[str] = None,
-    *,
-    total: Optional[int] = None,
-    description: str = "Reading...",
-    auto_refresh: bool = True,
-    console: Optional[Console] = None,
-    transient: bool = False,
-    get_time: Optional[Callable[[], float]] = None,
-    refresh_per_second: float = 10,
-    style: StyleType = "bar.back",
-    complete_style: StyleType = "bar.complete",
-    finished_style: StyleType = "bar.finished",
-    pulse_style: StyleType = "bar.pulse",
-    disable: bool = False,
+from pip._vendor import requests, urllib3
+from pip._vendor.cachecontrol import CacheControlAdapter as _BaseCacheControlAdapter
+from pip._vendor.requests.adapters import DEFAULT_POOLBLOCK, BaseAdapter
+from pip._vendor.requests.adapters import HTTPAdapter as _BaseHTTPAdapter
+from pip._vendor.requests.models import PreparedRequest, Response
+from pip._vendor.requests.structures import CaseInsensitiveDict
+from pip._vendor.urllib3.connectionpool import ConnectionPool
+from pip._vendor.urllib3.exceptions import InsecureRequestWarning
+
+from pip import __version__
+from pip._internal.metadata import get_default_environment
+from pip._internal.models.link import Link
+from pip._internal.network.auth import MultiDomainBasicAuth
+from pip._internal.network.cache import SafeFileCache
+
+# Import ssl from compat so the initial import occurs in only one place.
+from pip._internal.utils.compat import has_tls
+from pip._internal.utils.glibc import libc_ver
+from pip._internal.utils.misc import build_url_from_netloc, parse_netloc
+from pip._internal.utils.urls import url_to_path
+

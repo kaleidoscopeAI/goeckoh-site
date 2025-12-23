@@ -1,0 +1,3 @@
+- Thought Engine operator $O_i$ as a Lipschitz-bounded transformation
+- Neural net form of parameterized operators
+- Routing matrix $R$, constraints, connectivity

@@ -1,0 +1,7 @@
+if gcl < SETTINGS.gcl_low:
+    return "low"
+if gcl > SETTINGS.gcl_high:
+    return "high"
+return "mid"
+
+

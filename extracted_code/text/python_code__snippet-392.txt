@@ -1,0 +1,8 @@
+"""
+Pack object `o` and return packed bytes
+
+See :class:`Packer` for options.
+"""
+return Packer(**kwargs).pack(o)
+
+

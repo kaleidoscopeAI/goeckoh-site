@@ -1,1 +1,0 @@
-where Q encodes pairwise costs/compatibilities; solve using classical annealing or LQA. Affective memory biases modify b (positive valence → negative

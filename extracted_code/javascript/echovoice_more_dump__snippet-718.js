@@ -1,4 +1,3 @@
-let csv = "construct,activation,topNodeIds,topNodeContribs\n";
-for (const s of summaries) {
-const ids = s.topNodes.map((t:any)=>t.id).join("|");
-const contribs = s.topNodes.map((t:any)=>t.contrib.toFixed(6)).join("|");
+let sum = 0;
+for (let d=0; d<d_K; d++) {
+const a_d = (Kj[d] * (invNormKi*invNormKj)) - (coef * Ki[d]);

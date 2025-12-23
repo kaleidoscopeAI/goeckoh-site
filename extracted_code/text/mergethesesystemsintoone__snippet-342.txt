@@ -1,0 +1,4 @@
+  'type': 'visual_pattern',
+  'edges': edges.tolist(),
+  'shapes': shapes,
+  'texture': texture

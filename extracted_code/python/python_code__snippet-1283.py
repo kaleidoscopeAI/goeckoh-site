@@ -1,7 +1,13 @@
-def build_wheel_legacy(
-    name: str,
-    setup_py_path: str,
-    source_dir: str,
-    global_options: List[str],
-    build_options: List[str],
-    tempd: str,
+"""Abstract base class for retry strategies."""
+
+@abc.abstractmethod
+def __call__(self, retry_state: "RetryCallState") -> bool:
+    pass
+
+def __and__(self, other: "retry_base") -> "retry_all":
+    return retry_all(self, other)
+
+def __or__(self, other: "retry_base") -> "retry_any":
+    return retry_any(self, other)
+
+

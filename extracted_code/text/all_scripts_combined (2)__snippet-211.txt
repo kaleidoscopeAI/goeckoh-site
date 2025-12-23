@@ -1,0 +1,4 @@
+(r"\byou are\b", "I am"), (r"\byou're\b", "I'm"),
+(r"\byou were\b", "I was"), (r"\byou'll\b", "I'll"),
+(r"\byou've\b", "I've"), (r"\byour\b", "my"),
+(r"\byours\b", "mine"), (r"\byou\b", "I"),

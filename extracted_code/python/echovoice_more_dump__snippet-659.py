@@ -1,1 +1,1 @@
-def Lambda_LLM(self, S, I, p):
+from matplotlib.collections import LineCollection

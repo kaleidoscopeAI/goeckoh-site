@@ -1,0 +1,6 @@
+cmd_opts.add_option(platforms())
+cmd_opts.add_option(python_version())
+cmd_opts.add_option(implementation())
+cmd_opts.add_option(abis())
+
+

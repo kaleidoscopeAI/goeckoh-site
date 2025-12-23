@@ -1,12 +1,32 @@
-import logging
-from typing import List, Optional, Tuple
+"""Abstract base class for highlighters."""
 
-from pip._internal.utils.misc import HiddenText, display_path
-from pip._internal.utils.subprocess import make_command
-from pip._internal.utils.urls import path_to_url
-from pip._internal.vcs.versioncontrol import (
-    AuthInfo,
-    RemoteNotFoundError,
-    RevOptions,
-    VersionControl,
-    vcs,
+def __call__(self, text: Union[str, Text]) -> Text:
+    """Highlight a str or Text instance.
+
+    Args:
+        text (Union[str, ~Text]): Text to highlight.
+
+    Raises:
+        TypeError: If not called with text or str.
+
+    Returns:
+        Text: A test instance with highlighting applied.
+    """
+    if isinstance(text, str):
+        highlight_text = Text(text)
+    elif isinstance(text, Text):
+        highlight_text = text.copy()
+    else:
+        raise TypeError(f"str or Text instance required, not {text!r}")
+    self.highlight(highlight_text)
+    return highlight_text
+
+@abstractmethod
+def highlight(self, text: Text) -> None:
+    """Apply highlighting in place to text.
+
+    Args:
+        text (~Text): A text object highlight.
+    """
+
+

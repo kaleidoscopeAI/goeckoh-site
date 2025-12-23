@@ -1,0 +1,12 @@
+57
+58 -    // Whisper (TFLite runtime)
+59 -    implementation("org.tensorflow:tensorflow-lite:2.15.0")
+58 +    // Vosk STT
+59 +    implementation("com.alphacephei:vosk-android:0.3.47")
+60
+61 -    // Silero VAD (via published artifact if available)
+62 -    implementation("org.silero:silero-vad:1.0.0")
+61 +    // WebRTC VAD
+62 +    implementation("com.github.gkonovalov.android-vad:webrtc:2.0.10")
+63
+

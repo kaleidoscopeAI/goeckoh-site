@@ -1,7 +1,0 @@
-class Strategy:
-    category: str
-    title: str
-    description: str
-    cues: List[str] = field(default_factory=list)
-
-

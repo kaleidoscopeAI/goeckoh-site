@@ -1,1 +1,1 @@
-export function maybeScheduleReflection(node: NodeState, mods: Modulators) {
+const constructKeys = Object.keys(node.constructs);

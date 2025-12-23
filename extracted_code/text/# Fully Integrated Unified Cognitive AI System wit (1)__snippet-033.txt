@@ -1,0 +1,3 @@
+- `backend/` - contains `backend.py` and all Python dependencies and modules.
+- `frontend/` - React/Three.js/Plotly frontend code including `App.tsx`, `package.json`, manifest, HTML, etc.
+- `scripts/` - build and run scripts for backend and frontend.

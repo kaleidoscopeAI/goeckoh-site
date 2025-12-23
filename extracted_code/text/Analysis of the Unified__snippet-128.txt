@@ -1,0 +1,3 @@
+print('client connected')
+emit('hello', {'msg':'welcome'})
+

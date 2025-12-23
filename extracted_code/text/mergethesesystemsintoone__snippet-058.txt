@@ -1,2 +1,2 @@
-ProcessingUnit: Abstract base class that provides a basis for specialized processing of text, images, and numerical data.
+Since you own artificialthinker.com hosted by GoDaddy with cPanel but don’t have a webhook URL set up yet, we can modify the enhanced unravel_ai_task_manager.py to work without requiring a webhook URL. We'll make the webhook feature optional and provide alternatives for notifications (like email or local logging). Additionally, I’ll guide you on how you could set up a simple webhook server later if desired, using your GoDaddy hosting.
 

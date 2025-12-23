@@ -1,0 +1,7 @@
+       return ""
+  try:
+       data = p.read_text(encoding="utf-8", errors="ignore")
+       return data[:max_bytes]
+  except Exception:
+       return ""
+

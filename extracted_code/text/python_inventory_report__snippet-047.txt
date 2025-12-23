@@ -1,0 +1,2 @@
+functions: _interp_to_num_frames, apply_prosody_to_tts
+classes: AudioData, Information, ExpressionGear

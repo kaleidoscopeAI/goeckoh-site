@@ -1,0 +1,5 @@
+score: int = 0  # 0–100
+level: str = "No data yet"
+message: str = ""
+
+

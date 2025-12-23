@@ -1,0 +1,2 @@
+name="GoeckohOrchestrator",
+sub_agents=[correction_agent]

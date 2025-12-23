@@ -1,2 +1,3 @@
-const docRef = doc(this.firestore, "actuation", "latestProjection");
-const payload = {
+const s = species[i]; // m-vector
+const modulators = {};
+for (const X of constructs) {

@@ -1,1 +1,6 @@
-In App.tsx we receive the e vector from the hook. Push this into your simulation at the point where externalInputs or driver vectors are computed
+import express from "express";
+import bodyParser from "body-parser";
+import cors from "cors";
+import admin from "firebase-admin";
+import serviceAccount from "./firebaseServiceAccount.json";
+import { DEFAULT_EMOTIONS } from "../src/services/actuationService";

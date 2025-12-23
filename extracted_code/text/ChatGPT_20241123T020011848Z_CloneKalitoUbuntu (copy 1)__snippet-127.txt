@@ -1,0 +1,1 @@
+self._drawn_artists = self._init_func()

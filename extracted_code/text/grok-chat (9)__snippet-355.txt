@@ -1,0 +1,2 @@
+loop latency well under 200 ms, richer lattice state exposure and safety gating hardening tied to GCL.
+

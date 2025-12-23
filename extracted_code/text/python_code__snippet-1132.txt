@@ -1,0 +1,16 @@
+"""Computes the version of packages after installing to_install."""
+# Keep track of packages that were installed
+installed = set()
+
+# Modify it as installing requirement_set would (assuming no errors)
+for inst_req in to_install:
+    abstract_dist = make_distribution_for_install_requirement(inst_req)
+    dist = abstract_dist.get_metadata_distribution()
+    name = dist.canonical_name
+    package_set[name] = PackageDetails(dist.version, list(dist.iter_dependencies()))
+
+    installed.add(name)
+
+return installed
+
+

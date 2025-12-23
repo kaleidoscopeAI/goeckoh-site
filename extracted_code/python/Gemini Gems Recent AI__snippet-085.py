@@ -1,41 +1,13 @@
-const MolecularCube = () => {
-  const mountRef = useRef(null); // Ref for Three.js mount
+def add_molecule():
+    smiles = request.json.get('smiles')
+    mol = Chem.MolFromSmiles(smiles)
+    if mol:
+        existing_molecule = Molecule.query.filter_by(smiles=smiles).first()
+        if existing_molecule:
+            return jsonify({'message': 'Molecule already exists'}), 400
+        new_molecule = Molecule(smiles)
+        db.session.add(new_molecule)
+        db.session.commit()
+        return jsonify({'message': 'Molecule added'}), 201
+    return jsonify({'message': 'Invalid SMILES'}), 400
 
-  useEffect(() => {
-    // Scene, camera, renderer setup (Three.js)
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(width, height);
-    mountRef.current.appendChild(renderer.domElement);
-
-    // Load molecular data from API (using fetch or Axios)
-    fetch('/api/molecules')
-    .then(res => res.json())
-    .then(molecules => {
-        // Create 3D objects (points, spheres, etc.) for each molecule
-        molecules.forEach(molecule => {
-          const geometry = new THREE.SphereGeometry(0.1, 32, 32);
-          const material = new THREE.MeshBasicMaterial({ color: 0xffa500 });
-          const sphere = new THREE.Mesh(geometry, material);
-          //... Set position based on molecule data
-          scene.add(sphere);
-        });
-      });
-
-    // Animation loop
-    const animate = function () {
-      requestAnimationFrame(animate);
-      //... Update scene, camera, etc.
-      renderer.render(scene, camera);
-    };
-
-    animate();
-
-    // Cleanup on unmount
-    return () => {
-      mountRef.current.removeChild(renderer.domElement);
-    };
-  },); // Empty dependency array means this runs only once on mount
-
-  return <div ref={mountRef} />; // Mount point for Three.js

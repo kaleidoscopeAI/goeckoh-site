@@ -1,0 +1,4 @@
+- Targeting a 10Hz main loop for LLM inference and simultaneous crawling on classical CPUs is optimistic and depends highly on model size and efficiency.
+- **Mitigation:** Prioritize model distillation, quantization (GGUF, Q4_K_M), and caching of frequent queries to reduce load. Utilize asynchronous task queues and prioritize queries based on curiosity magnitude to spread computation over time.
+- Replace the **Arc<RwLock<GlobalState>>** with fine-grained or lock-free concurrency primitives (e.g., atomic pointers, message passing architectures) to minimize contention and improve scalability.
+

@@ -1,0 +1,26 @@
+JNIEnv *env, jobject thiz, jlong handle, 
+jshortArray in_l, jshortArray in_h, 
+jshortArray out_l, jshortArray out_h) {
+
+if (handle == 0) return -1;
+
+auto* ns = reinterpret_cast<webrtc::NoiseSuppressor*>(handle);
+
+jshort* in_l_ptr = env->GetShortArrayElements(in_l, nullptr);
+jsize length = env->GetArrayLength(in_l);
+
+// Process audio (simplified - real implementation would use WebRTC AudioBuffer)
+webrtc::AudioBuffer audio_buffer(16000, 1, 16000, 1, 16000, 1);
+// Fill audio_buffer with input data...
+
+ns->AnalyzeCaptureAudio(&audio_buffer);
+ns->ProcessCaptureAudio(&audio_buffer);
+
+// Copy processed data to output...
+jshort* out_l_ptr = env->GetShortArrayElements(out_l, nullptr);
+// Copy processed samples to out_l_ptr...
+
+env->ReleaseShortArrayElements(in_l, in_l_ptr, JNI_ABORT);
+env->ReleaseShortArrayElements(out_l, out_l_ptr, 0);
+
+return 0;

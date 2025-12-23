@@ -1,0 +1,8 @@
+prefix = {
+    "INFO": "[*]",
+    "OK": f"{Colors.GREEN}[+]{Colors.ENDC}",
+    "WARN": f"{Colors.YELLOW}[!]{Colors.ENDC}",
+    "ERR": f"{Colors.FAIL}[x]{Colors.ENDC}"
+}.get(type, "[?]")
+print(f"{prefix} {msg}")
+

@@ -1,0 +1,5 @@
+x_norm = (x - edge0) / (edge1 - edge0 + 1e-8)
+x_norm = np.clip(x_norm, 0.0, 1.0)
+return float(x_norm * x_norm * (3.0 - 2.0 * x_norm))
+
+

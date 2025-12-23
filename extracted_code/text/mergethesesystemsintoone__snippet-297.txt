@@ -1,0 +1,4 @@
+"""Updates the data associated with a node."""
+if node_id in self.graph.nodes:
+    self.graph.nodes[node_id]['data'].update(data)
+

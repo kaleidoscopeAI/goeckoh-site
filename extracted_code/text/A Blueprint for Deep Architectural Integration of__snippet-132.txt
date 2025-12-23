@@ -1,0 +1,4 @@
+    - $0 < \rho < 1$ is a decay factor,
+    - $\sigma > 0$ is a performance gain,
+    - $\text{Perf}_k$ is a performance signal (e.g., reduction in cognitive uncertainty),
+    - $u_k$ is an external curiosity drive (optional).

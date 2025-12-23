@@ -1,23 +1,19 @@
-    import argparse
-    import io
+import json
+import logging
+from optparse import Values
+from typing import TYPE_CHECKING, Generator, List, Optional, Sequence, Tuple, cast
 
-    from pip._vendor.rich.console import Console
-    from pip._vendor.rich.table import Table
-    from pip._vendor.rich.text import Text
+from pip._vendor.packaging.utils import canonicalize_name
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--html", action="store_true", help="Export as HTML table")
-    args = parser.parse_args()
-    html: bool = args.html
-    console = Console(record=True, width=70, file=io.StringIO()) if html else Console()
-
-    table = Table("Name", "Styling")
-
-    for style_name, style in DEFAULT_STYLES.items():
-        table.add_row(Text(style_name, style=style), str(style))
-
-    console.print(table)
-    if html:
-        print(console.export_html(inline_styles=True))
-
+from pip._internal.cli import cmdoptions
+from pip._internal.cli.req_command import IndexGroupCommand
+from pip._internal.cli.status_codes import SUCCESS
+from pip._internal.exceptions import CommandError
+from pip._internal.index.collector import LinkCollector
+from pip._internal.index.package_finder import PackageFinder
+from pip._internal.metadata import BaseDistribution, get_environment
+from pip._internal.models.selection_prefs import SelectionPreferences
+from pip._internal.network.session import PipSession
+from pip._internal.utils.compat import stdlib_pkgs
+from pip._internal.utils.misc import tabulate, write_output
 

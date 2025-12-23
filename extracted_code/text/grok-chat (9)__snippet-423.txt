@@ -1,0 +1,2 @@
+  - Don’t set GOECKOH_DISABLE_AUDIO_PLAYBACK; ensure a working output device (or loopback on the test box).
+

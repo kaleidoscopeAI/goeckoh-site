@@ -1,0 +1,8 @@
+"""
+Determine if the Python version supports abi3.
+
+PEP 384 was first implemented in Python 3.2.
+"""
+return len(python_version) > 1 and tuple(python_version) >= (3, 2)
+
+

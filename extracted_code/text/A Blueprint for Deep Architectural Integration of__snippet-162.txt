@@ -1,0 +1,4 @@
+- Stability guaranteed via contraction of bitwise operators simulating continuous counterparts.
+- Bitwise noise modeled as probabilistic bit flips.
+- Routing and curiosity logic as threshold gates form a stable discrete dynamical system.
+

@@ -1,0 +1,3 @@
+# Use getusersitepackages if this is present, as it ensures that the
+# value is initialised properly.
+user_site: typing.Optional[str] = site.getusersitepackages()

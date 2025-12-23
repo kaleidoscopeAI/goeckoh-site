@@ -1,1 +1,1 @@
-    import ipaddress
+    from types import SimpleNamespace as Container

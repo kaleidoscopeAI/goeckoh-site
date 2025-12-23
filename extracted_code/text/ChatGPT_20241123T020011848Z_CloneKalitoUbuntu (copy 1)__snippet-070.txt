@@ -1,0 +1,3 @@
+ContextualPattern({"content": "AI model"}, {"context": "learning"}),
+ContextualPattern({"content": "self-reflection"}, {"context": "adaptation"}),
+ContextualPattern({"content": "resource management"}, {"context": "conservation"})

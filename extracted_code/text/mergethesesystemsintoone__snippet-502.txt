@@ -1,0 +1,35 @@
+# Initialize the pharmaceutical knowledge graph
+pharma_graph = GlobalPharmaceuticalKnowledgeGraph()
+
+# Create nodes
+node_a = KnowledgeNode("Node_A", specialization="oncology")
+node_b = KnowledgeNode("Node_B", specialization="virology")
+
+# Add nodes to the graph
+pharma_graph.add_node(node_a)
+pharma_graph.add_node(node_b)
+
+# Connect nodes
+pharma_graph.connect_nodes("Node_A", "Node_B")
+
+# Simulate insight distribution
+insights = [
+    {"content": "Study on cancer treatment", "tags": ["oncology"]},
+    {"content": "Research on viral vaccines", "tags": ["virology"]},
+    {"content": "Global drug approval trends", "tags": ["regulatory"]},
+]
+pharma_graph.distribute_insights(insights)
+
+# Propagate insights
+pharma_graph.propagate_insights()
+
+# Summarize knowledge
+print("Knowledge Summary:", pharma_graph.summarize_knowledge())
+
+# Visualize the graph
+pharma_graph.visualize()
+
+
+
+
+

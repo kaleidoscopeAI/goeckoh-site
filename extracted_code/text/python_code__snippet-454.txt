@@ -1,0 +1,6 @@
+"""
+A name was attempted to be used that does not exist inside of the
+environment.
+"""
+
+

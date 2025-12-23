@@ -1,0 +1,4 @@
+- Low-level bitwise logic bypasses floating-point overhead, improving throughput and reducing memory footprint.
+- Highly compatible with existing CPU vector instructions, caches, and branch prediction.
+- Provides groundwork for hybrid CPU+FPGA or specialized accelerator implementations.
+

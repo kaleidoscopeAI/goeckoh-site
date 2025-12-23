@@ -1,0 +1,4 @@
+rm -rf ~/.local/share/Google/AndroidStudio*/plugins/gradle-metric*
+rm -rf ~/.local/share/Google/AndroidStudio*/plugins/com.drakklord.gradle.metric.core*
+(On macOS, the path is ~/Library/Application Support/Google/AndroidStudio*/plugins/…)
+

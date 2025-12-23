@@ -1,21 +1,56 @@
-from pip._vendor import requests, urllib3
-from pip._vendor.cachecontrol import CacheControlAdapter as _BaseCacheControlAdapter
-from pip._vendor.requests.adapters import DEFAULT_POOLBLOCK, BaseAdapter
-from pip._vendor.requests.adapters import HTTPAdapter as _BaseHTTPAdapter
-from pip._vendor.requests.models import PreparedRequest, Response
-from pip._vendor.requests.structures import CaseInsensitiveDict
-from pip._vendor.urllib3.connectionpool import ConnectionPool
-from pip._vendor.urllib3.exceptions import InsecureRequestWarning
+class _Immutable:
+    """Mixin to indicate that object should not be copied."""
+    __slots__ = ()
 
-from pip import __version__
-from pip._internal.metadata import get_default_environment
-from pip._internal.models.link import Link
-from pip._internal.network.auth import MultiDomainBasicAuth
-from pip._internal.network.cache import SafeFileCache
+    def __copy__(self):
+        return self
 
-# Import ssl from compat so the initial import occurs in only one place.
-from pip._internal.utils.compat import has_tls
-from pip._internal.utils.glibc import libc_ver
-from pip._internal.utils.misc import build_url_from_netloc, parse_netloc
-from pip._internal.utils.urls import url_to_path
+    def __deepcopy__(self, memo):
+        return self
+
+class ParamSpecArgs(_Immutable):
+    """The args for a ParamSpec object.
+
+    Given a ParamSpec object P, P.args is an instance of ParamSpecArgs.
+
+    ParamSpecArgs objects have a reference back to their ParamSpec:
+
+    P.args.__origin__ is P
+
+    This type is meant for runtime introspection and has no special meaning to
+    static type checkers.
+    """
+    def __init__(self, origin):
+        self.__origin__ = origin
+
+    def __repr__(self):
+        return f"{self.__origin__.__name__}.args"
+
+    def __eq__(self, other):
+        if not isinstance(other, ParamSpecArgs):
+            return NotImplemented
+        return self.__origin__ == other.__origin__
+
+class ParamSpecKwargs(_Immutable):
+    """The kwargs for a ParamSpec object.
+
+    Given a ParamSpec object P, P.kwargs is an instance of ParamSpecKwargs.
+
+    ParamSpecKwargs objects have a reference back to their ParamSpec:
+
+    P.kwargs.__origin__ is P
+
+    This type is meant for runtime introspection and has no special meaning to
+    static type checkers.
+    """
+    def __init__(self, origin):
+        self.__origin__ = origin
+
+    def __repr__(self):
+        return f"{self.__origin__.__name__}.kwargs"
+
+    def __eq__(self, other):
+        if not isinstance(other, ParamSpecKwargs):
+            return NotImplemented
+        return self.__origin__ == other.__origin__
 

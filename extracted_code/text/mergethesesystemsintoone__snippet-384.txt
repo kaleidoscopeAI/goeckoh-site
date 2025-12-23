@@ -1,0 +1,5 @@
+    """Transforms input into complex frequency based on hashing """
+    hash_value = int (hashlib.sha1 (data_str.encode()).hexdigest(), 16) # hash input data
+    rng = np.random.RandomState (hash_value) # initilized a pseudo-random vector for this specific piece of data
+    return rng.normal(0,1,self.dimensions)
+

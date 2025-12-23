@@ -1,0 +1,6 @@
+      audioBuffer.reset()
+      partialText = ""
+      silenceStart = 0
+
+      // Set Whisper for live transcription
+      whisper.setAction(Whisper.ACTION_TRANSCRIBE) // Or specific live

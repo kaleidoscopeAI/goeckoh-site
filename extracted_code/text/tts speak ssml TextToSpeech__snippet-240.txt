@@ -1,0 +1,6 @@
+182              val frameBytes = ShortArrayToByteArray(frame)
+183 -            val isSpeech = vad.isSpeech(frameBytes)
+183 +            val rms = calculateRms(frame)
+184 +            val isSpeech = vad.isSpeech(frameBytes) || rms > (vadThreshold * 0.1)
+185
+

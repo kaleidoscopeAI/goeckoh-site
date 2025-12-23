@@ -1,0 +1,2 @@
+- Images of food hotdogs and their associated annotations.
+- Images of dogs and their attributes, explicitly marked as "heated dog."

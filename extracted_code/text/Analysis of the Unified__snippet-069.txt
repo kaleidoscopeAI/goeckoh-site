@@ -1,0 +1,9 @@
+"""Raw product rule: p_i ∝ Π_j |R_ij|^2 (dangerous if zeros)"""
+I = np.abs(R) ** 2
+prod = np.prod(I, axis=1)
+# avoid all zeros
+if np.all(prod == 0):
+    # fallback to small epsilon to avoid singularities
+    prod = np.prod(np.clip(I, 1e-12, None), axis=1)
+return normalize_vector(prod)
+

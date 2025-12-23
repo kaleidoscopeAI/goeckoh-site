@@ -1,0 +1,3 @@
+doc: Echo Crystalline Heart v4.0 — Ollama + DeepSeek Integration
+functions: enforce_first_person, hash_embedding
+classes: LocalLLM, EchoCrystallineHeart

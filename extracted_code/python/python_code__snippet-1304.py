@@ -1,7 +1,3 @@
-def get_scheme(
-    dist_name: str,
-    user: bool = False,
-    home: typing.Optional[str] = None,
-    root: typing.Optional[str] = None,
-    isolated: bool = False,
-    prefix: typing.Optional[str] = None,
+# Python 3.8 compatibility
+def _in_proc_script_path():
+    return resources.path(__package__, '_in_process.py')

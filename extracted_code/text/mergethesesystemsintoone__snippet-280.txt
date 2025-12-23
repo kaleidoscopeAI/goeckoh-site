@@ -1,0 +1,1 @@
+result = [contour[0], contour[-1]]

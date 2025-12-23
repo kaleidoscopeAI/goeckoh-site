@@ -1,2 +1,1 @@
-for (let j = 0; j < M; j++) {
-const a = activ[j] ?? 1;
+const filePath = path.join(EXP_DIR, `${id}.json`);

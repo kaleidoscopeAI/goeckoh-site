@@ -1,3 +1,9 @@
-from pip._vendor.pygments.formatter import Formatter
-from pip._vendor.pygments.util import get_bool_opt
+def escape_html(text):
+    """Escape &, <, > as well as single and double quotes for HTML."""
+    return text.replace('&', '&amp;').  \
+                replace('<', '&lt;').   \
+                replace('>', '&gt;').   \
+                replace('"', '&quot;'). \
+                replace("'", '&#39;')
+
 

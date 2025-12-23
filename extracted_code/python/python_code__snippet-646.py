@@ -1,101 +1,50 @@
-    # ABCs (from collections.abc).
-    'Awaitable',
-    'AsyncIterator',
-    'AsyncIterable',
-    'Coroutine',
-    'AsyncGenerator',
-    'AsyncContextManager',
-    'Buffer',
-    'ChainMap',
+def json_name(field: str) -> str:
+    return field.lower().replace("-", "_")
 
-    # Concrete collection types.
-    'ContextManager',
-    'Counter',
-    'Deque',
-    'DefaultDict',
-    'NamedTuple',
-    'OrderedDict',
-    'TypedDict',
 
-    # Structural checks, a.k.a. protocols.
-    'SupportsAbs',
-    'SupportsBytes',
-    'SupportsComplex',
-    'SupportsFloat',
-    'SupportsIndex',
-    'SupportsInt',
-    'SupportsRound',
+def msg_to_json(msg: Message) -> Dict[str, Any]:
+    """Convert a Message object into a JSON-compatible dictionary."""
 
-    # One-off things.
-    'Annotated',
-    'assert_never',
-    'assert_type',
-    'clear_overloads',
-    'dataclass_transform',
-    'deprecated',
-    'get_overloads',
-    'final',
-    'get_args',
-    'get_origin',
-    'get_original_bases',
-    'get_protocol_members',
-    'get_type_hints',
-    'IntVar',
-    'is_protocol',
-    'is_typeddict',
-    'Literal',
-    'NewType',
-    'overload',
-    'override',
-    'Protocol',
-    'reveal_type',
-    'runtime',
-    'runtime_checkable',
-    'Text',
-    'TypeAlias',
-    'TypeAliasType',
-    'TypeGuard',
-    'TYPE_CHECKING',
-    'Never',
-    'NoReturn',
-    'Required',
-    'NotRequired',
+    def sanitise_header(h: Union[Header, str]) -> str:
+        if isinstance(h, Header):
+            chunks = []
+            for bytes, encoding in decode_header(h):
+                if encoding == "unknown-8bit":
+                    try:
+                        # See if UTF-8 works
+                        bytes.decode("utf-8")
+                        encoding = "utf-8"
+                    except UnicodeDecodeError:
+                        # If not, latin1 at least won't fail
+                        encoding = "latin1"
+                chunks.append((bytes, encoding))
+            return str(make_header(chunks))
+        return str(h)
 
-    # Pure aliases, have always been in typing
-    'AbstractSet',
-    'AnyStr',
-    'BinaryIO',
-    'Callable',
-    'Collection',
-    'Container',
-    'Dict',
-    'ForwardRef',
-    'FrozenSet',
-    'Generator',
-    'Generic',
-    'Hashable',
-    'IO',
-    'ItemsView',
-    'Iterable',
-    'Iterator',
-    'KeysView',
-    'List',
-    'Mapping',
-    'MappingView',
-    'Match',
-    'MutableMapping',
-    'MutableSequence',
-    'MutableSet',
-    'Optional',
-    'Pattern',
-    'Reversible',
-    'Sequence',
-    'Set',
-    'Sized',
-    'TextIO',
-    'Tuple',
-    'Union',
-    'ValuesView',
-    'cast',
-    'no_type_check',
-    'no_type_check_decorator',
+    result = {}
+    for field, multi in METADATA_FIELDS:
+        if field not in msg:
+            continue
+        key = json_name(field)
+        if multi:
+            value: Union[str, List[str]] = [
+                sanitise_header(v) for v in msg.get_all(field)  # type: ignore
+            ]
+        else:
+            value = sanitise_header(msg.get(field))  # type: ignore
+            if key == "keywords":
+                # Accept both comma-separated and space-separated
+                # forms, for better compatibility with old data.
+                if "," in value:
+                    value = [v.strip() for v in value.split(",")]
+                else:
+                    value = value.split()
+        result[key] = value
+
+    payload = msg.get_payload()
+    if payload:
+        result["description"] = payload
+
+    return result
+
+

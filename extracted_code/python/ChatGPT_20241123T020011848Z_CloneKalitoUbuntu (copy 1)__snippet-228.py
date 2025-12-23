@@ -1,2 +1,4 @@
-  command 'python3' from deb python3
-  command 'python' from deb python-is-python3
+  - Unique insights from all nodes are periodically synchronized to a global library.
+
+
+

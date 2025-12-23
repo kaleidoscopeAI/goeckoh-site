@@ -1,0 +1,5 @@
+DORMANT = auto()
+GROWING = auto()
+MATURE = auto()
+DECLINING = auto()
+

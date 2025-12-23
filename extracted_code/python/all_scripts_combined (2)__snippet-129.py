@@ -1,2 +1,6 @@
-    import ollama
-    HAS_OLLAMA = True
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+from typing import Dict, List
+
+

@@ -1,0 +1,4 @@
+"""Helper parser action to replace common HTML entities with their special characters"""
+return _htmlEntityMap.get(t.entity)
+
+

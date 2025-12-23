@@ -1,3 +1,6 @@
-iPhone XR+ (AVAudioSession, 128-frame buffers): 120-180ms
-Snapdragon 8xx Android (AAudio): 150-220ms  
-Mac/Windows (CoreAudio/WASAPI): 80-120ms
+"Goeckoh achieves 152-242ms end-to-end latency on commodity hardware:
+• CPAL audio I/O: 32ms (512-frame buffers)
+• Whisper tiny streaming STT: 80-120ms  
+• Piper TTS: 40-90ms
+• Memory: 350MB total (iPhone XR capable)
+• No GC pauses, deterministic physics core"

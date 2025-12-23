@@ -1,4 +1,14 @@
-from .before_sleep import before_sleep_log  # noqa
-from .before_sleep import before_sleep_nothing  # noqa
+""":return: videos folder for the Android OS"""
+# Get directories with pyjnius
+try:
+    from jnius import autoclass
 
-# Replace a conditional import with a hard-coded None so that pip does
+    context = autoclass("android.content.Context")
+    environment = autoclass("android.os.Environment")
+    videos_dir: str = context.getExternalFilesDir(environment.DIRECTORY_DCIM).getAbsolutePath()
+except Exception:  # noqa: BLE001
+    videos_dir = "/storage/emulated/0/DCIM/Camera"
+
+return videos_dir
+
+

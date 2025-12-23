@@ -1,4 +1,1 @@
-import React from "react";
-import { useEmotionalActuation } from "../hooks/useEmotionalActuation";
-export default function ActuationHeatmap() {
-const { e } = useEmotionalActuation();
+const payload = { ts: Date.now(), note: "manual run from dashboard", hyper: { lr: 5e-4 } };

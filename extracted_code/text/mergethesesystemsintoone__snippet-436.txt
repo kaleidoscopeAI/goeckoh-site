@@ -1,0 +1,2 @@
+"PatternStrand": "Represents an abstraction for understanding sequences and time series for input data",
+  "VisualStrand": "Represents pattern structures for all visual data for the purposes of abstract analysis using other methods ",

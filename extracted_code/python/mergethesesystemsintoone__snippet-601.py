@@ -1,33 +1,25 @@
-class Dashboard:
-    @staticmethod
-    def create_dashboard(insights, nodes):
-        app = Dash(__name__)
+def __init__(self):
+    self.rules = []
 
-        app.layout = html.Div([
-            html.H1("Unified Node System Dashboard"),
-            dcc.Graph(
-                id="data-vs-insights",
-                figure={
-                    "data": [
-                        go.Pie(labels=["Raw Data", "Insights"], values=[len(nodes), len(insights)], hole=0.4)
-                    ],
-                    "layout": {"title": "Data vs Insights"}
-                }
-            ),
-            dcc.Graph(
-                id="node-energy",
-                figure={
-                    "data": [
-                        go.Bar(
-                            x=[node.node_id for node in nodes],
-                            y=[node.energy for node in nodes]
-                        )
-                    ],
-                    "layout": {"title": "Node Energy Levels"}
-                }
-            )
-        ])
+def add_rule(self, rule: Dict):
+    """Adds a rule to the rule engine."""
+    self.rules.append(rule)
 
-        # Disable debug mode in production
-        app.run_server(debug=False)
+def apply(self, concept: Dict) -> List[Dict]:
+    """Applies rules to a concept and returns results."""
+    results = []
+    for rule in self.rules:
+        if self._rule_matches(concept, rule['condition']):
+            results.append({'rule_id': rule['id'], 'result': rule['action'](concept)})
+    return results
+
+def _rule_matches(self, concept: Dict, condition: Dict) -> bool:
+    """Checks if a concept matches a rule condition."""
+    for key, value in condition.items():
+        if key == 'pattern_type':
+            if not any(pattern.get('type') == value for pattern in concept.get('patterns', [])):
+                return False
+        elif concept.get(key) != value:
+            return False
+    return True
 

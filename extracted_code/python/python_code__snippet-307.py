@@ -1,9 +1,7 @@
-import re
-import sys
-import os
+import time
+from ctypes import Structure, byref, wintypes
+from typing import IO, NamedTuple, Type, cast
 
-from .ansi import AnsiFore, AnsiBack, AnsiStyle, Style, BEL
-from .winterm import enable_vt_processing, WinTerm, WinColor, WinStyle
-from .win32 import windll, winapi_test
-
+from pip._vendor.rich.color import ColorSystem
+from pip._vendor.rich.style import Style
 

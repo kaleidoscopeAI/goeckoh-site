@@ -1,1 +1,1 @@
-pub extern \"system\" fn jni_verify_control(
+pub extern \"system\" fn Java_com_kaleidoscope_body_DeviceHAL_nativeRegisterCpu(", "

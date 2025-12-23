@@ -1,12 +1,5 @@
-async def autonomous_loop():
-    while True:
-        try:
-            # perform small maintenance: run one crawl step and sleep
-            await crawler.crawl_once(max_docs=1)
-            await asyncio.sleep(1.0)
-        except asyncio.CancelledError:
-            break
-        except Exception as e:
-            logging.error(f'Autonomous loop error: {e}')
-            await asyncio.sleep(2.0)
-
+• The adaptive mechanism can be viewed as a controller aiming to steer the Cube's state (representing "understanding") towards a desired reference state (e.g., a state of high consistency, low prediction error, or alignment with some target interpretation).
+• MRAC provides a structure where the system's current interpretation is compared against an ideal or target interpretation, and the discrepancy drives adaptation.8
+• Stability analysis techniques from AC can be used to design adaptation rules that guarantee the process does not become unstable (e.g., parameters diverging, oscillations). This is particularly important given the complex feedback loops involving data, internal state, and potentially LLM interactions.
+• Techniques from AC like high-order tuners or specifically designed time-varying learning rates might lead to faster and more robust convergence compared to standard gradient descent methods used in ML.62
+• Hybrid AC-RL approaches combine the strengths of both: RL learns complex policies or optimizes high-level goals, while AC provides underlying stability and parameter adaptation mechanisms.57

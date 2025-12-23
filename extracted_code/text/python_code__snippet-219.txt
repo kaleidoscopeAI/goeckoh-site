@@ -1,2 +1,3 @@
-# <REDACTED: potential secret detected>
+_finder_registry[type(loader)] = finder_maker
+
 

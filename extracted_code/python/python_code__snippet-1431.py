@@ -1,11 +1,13 @@
-def _get_http_response_size(resp: Response) -> Optional[int]:
-    try:
-        return int(resp.headers["content-length"])
-    except (ValueError, KeyError, TypeError):
-        return None
+@_ExtensionsSpecialForm
+def TypeAlias(self, parameters):
+    """Special marker indicating that an assignment should
+    be recognized as a proper type alias definition by type
+    checkers.
 
+    For example::
 
-def _prepare_download(
-    resp: Response,
-    link: Link,
-    progress_bar: str,
+        Predicate: TypeAlias = Callable[..., bool]
+
+    It's invalid when used anywhere except as in the example above.
+    """
+    raise TypeError(f"{self} is not subscriptable")

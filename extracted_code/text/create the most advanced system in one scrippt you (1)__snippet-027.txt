@@ -1,0 +1,4 @@
+- Pilot with clinician-supervised users; define a stop gesture or hardware mute that instant-cuts the loop.
+- Log “panic signatures” (rapid arousal rise, coherence drop, user-initiated abort) and tune lattice damping and DSP filters to avoid repeating those patterns.[^10_5][^10_6]
+
+

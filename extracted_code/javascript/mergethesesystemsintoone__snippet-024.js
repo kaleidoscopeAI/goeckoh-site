@@ -1,3 +1,8 @@
-class AGIMathematics {
-private array $tempSubset = [];
-public function entropy(array $data): float {
+async function sendQuery() {
+  const text = document.getElementById('input').value;
+  const response = await fetch('/think', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({text})
+  });
+  const data = await response.json();

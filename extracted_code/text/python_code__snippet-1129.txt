@@ -1,0 +1,1 @@
+package_set: PackageSet, should_ignore: Optional[Callable[[str], bool]] = None

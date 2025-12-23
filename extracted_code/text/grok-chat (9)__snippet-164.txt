@@ -1,0 +1,5 @@
+> agi-thought-visualizer@0.0.0 build
+… +16 lines
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 11.26s
+

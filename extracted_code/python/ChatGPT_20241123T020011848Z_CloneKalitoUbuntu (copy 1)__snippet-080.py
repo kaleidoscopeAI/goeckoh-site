@@ -1,14 +1,42 @@
-def manage_resources(nodes):
+from core import Node
+from node_creation import create_new_node
+from learning import crawl_and_learn
+from resource_management import manage_resources
+from mirrored_network import MirroredNetwork
+
+# Initialize nodes and mirrored network
+initial_node = Node(0, "seed_dna", {"energy": 1.0})
+nodes = [initial_node]
+network = MirroredNetwork()
+network.add_node(initial_node)
+
+# Run simulation
+threshold = 2
+topics = ["Artificial Intelligence", "Hot Dog", "Elephant"]
+
+for epoch in range(10):
+    print(f"Epoch {epoch}:")
+
+    # Learn and share knowledge
     for node in nodes:
-        if "energy" in node.resources:
-            node.resources["energy"] -= 0.1
-            if node.resources["energy"] < 0.1:
-                node.logs.append("Energy critically low. Seeking shared resources.")
-                # Example resource sharing logic
-                for other_node in nodes:
-                    if other_node.node_id != node.node_id and "energy" in other_node.resources:
-                        shared_energy = other_node.resources["energy"] * 0.1
-                        node.resources["energy"] += shared_energy
-                        other_node.resources["energy"] -= shared_energy
-                        node.logs.append(f"Received {shared_energy:.2f} energy from Node {other_node.node_id}.")
+        topic = topics[epoch % len(topics)]
+        crawl_and_learn(node, topic)
+    
+    # Manage resources
+    manage_resources(nodes)
+
+    # Replicate nodes if threshold met
+    new_node = create_new_node(nodes, "seed_dna", threshold)
+    if new_node:
+        network.add_node(new_node)
+        network.add_edge(new_node.node_id, initial_node.node_id)
+
+    # Visualize network
+    if epoch % 5 == 0:
+        network.visualize()
+
+# Save logs
+for node in nodes:
+    with open(f"node_{node.node_id}.json", "w") as log_file:
+        log_file.write(node.to_json())
 

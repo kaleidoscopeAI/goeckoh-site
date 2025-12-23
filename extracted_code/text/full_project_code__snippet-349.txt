@@ -1,0 +1,5 @@
+# UnsupportedExtension is gone in cryptography >= 2.1.0
+class UnsupportedExtension(Exception):
+    pass
+
+

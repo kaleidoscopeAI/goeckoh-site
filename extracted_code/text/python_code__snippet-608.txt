@@ -1,0 +1,42 @@
+console = Console(
+    file=io.StringIO(),
+    force_terminal=True,
+)
+test_card = make_test_card()
+
+# Print once to warm cache
+start = process_time()
+console.print(test_card)
+pre_cache_taken = round((process_time() - start) * 1000.0, 1)
+
+console.file = io.StringIO()
+
+start = process_time()
+console.print(test_card)
+taken = round((process_time() - start) * 1000.0, 1)
+
+c = Console(record=True)
+c.print(test_card)
+
+print(f"rendered in {pre_cache_taken}ms (cold cache)")
+print(f"rendered in {taken}ms (warm cache)")
+
+from pip._vendor.rich.panel import Panel
+
+console = Console()
+
+sponsor_message = Table.grid(padding=1)
+sponsor_message.add_column(style="green", justify="right")
+sponsor_message.add_column(no_wrap=True)
+
+sponsor_message.add_row(
+    "Textualize",
+    "[u blue link=https://github.com/textualize]https://github.com/textualize",
+)
+sponsor_message.add_row(
+    "Twitter",
+    "[u blue link=https://twitter.com/willmcgugan]https://twitter.com/willmcgugan",
+)
+
+intro_message = Text.from_markup(
+    """\

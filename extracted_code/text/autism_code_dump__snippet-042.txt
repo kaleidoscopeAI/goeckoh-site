@@ -1,0 +1,12 @@
+raw_fp = enforce_first_person(raw_text)
+cor_fp = enforce_first_person(corrected_text)
+is_new = not ATTEMPTS_CSV.exists()
+with ATTEMPTS_CSV.open("a", newline="", encoding="utf-8") as f:
+    writer = csv.writer(f)
+    if is_new:
+        writer.writerow(
+            ["timestamp", "raw_text", "corrected_text", "dtw_score", "success"]
+        )
+    writer.writerow([timestamp, raw_fp, cor_fp, f"{dtw_score:.4f}", success])
+
+

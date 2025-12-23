@@ -1,0 +1,9 @@
+33  3) Provide a validation notebook: run loop on sample audio, export laten
+    cy histogram, drift over time, and PPP fragment scores.
+34 -4) Surface Crystalline Heart outputs via `/status` and show them on Dash
+    board (even if simulated) to make GCL provenance explicit.
+34 +4) Surface Neurocoherence Lattice outputs via `/status` and show them on
+     Dashboard (even if simulated) to make GCL provenance explicit.
+35  5) Connect Flutter app to the same `/mirror/*` API and ship shared PPP f
+    ragment cache.
+

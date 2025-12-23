@@ -1,0 +1,6 @@
+*   **Data In:** Text, Emotional Intensity.
+*   **Flow:** Routes incoming data to relevant `backend` modules.
+*   `backend/core/emotion_processor.py` (hypothetical new script): Would receive `echo_prime.py`'s emotional data.
+*   `backend/memory/crystalline_memory.py`: Encodes text and emotional context into the AGI's memory.
+*   `backend/engines/thought_engines.py`: Receives text for analysis (e.g., semantic content, child's intent).
+

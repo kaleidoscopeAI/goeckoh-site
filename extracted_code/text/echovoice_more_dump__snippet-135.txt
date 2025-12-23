@@ -1,1 +1,1 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+eigenvectors with a robust power-iteration + deflation routine. Project each construct into 2D using those two components. (This is effectively PCA on

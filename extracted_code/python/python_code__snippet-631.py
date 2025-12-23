@@ -1,39 +1,17 @@
-def iglob(path_glob):
-    """Extended globbing function that supports ** and {opt1,opt2,opt3}."""
-    if _CHECK_RECURSIVE_GLOB.search(path_glob):
-        msg = """invalid glob %r: recursive glob "**" must be used alone"""
-        raise ValueError(msg % path_glob)
-    if _CHECK_MISMATCH_SET.search(path_glob):
-        msg = """invalid glob %r: mismatching set marker '{' or '}'"""
-        raise ValueError(msg % path_glob)
-    return _iglob(path_glob)
+import hashlib
+import json
+import logging
+import os
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
+from pip._vendor.packaging.tags import Tag, interpreter_name, interpreter_version
+from pip._vendor.packaging.utils import canonicalize_name
 
-def _iglob(path_glob):
-    rich_path_glob = RICH_GLOB.split(path_glob, 1)
-    if len(rich_path_glob) > 1:
-        assert len(rich_path_glob) == 3, rich_path_glob
-        prefix, set, suffix = rich_path_glob
-        for item in set.split(','):
-            for path in _iglob(''.join((prefix, item, suffix))):
-                yield path
-    else:
-        if '**' not in path_glob:
-            for item in std_iglob(path_glob):
-                yield item
-        else:
-            prefix, radical = path_glob.split('**', 1)
-            if prefix == '':
-                prefix = '.'
-            if radical == '':
-                radical = '*'
-            else:
-                # we support both
-                radical = radical.lstrip('/')
-                radical = radical.lstrip('\\')
-            for path, dir, files in os.walk(prefix):
-                path = os.path.normpath(path)
-                for fn in _iglob(os.path.join(path, radical)):
-                    yield fn
-
+from pip._internal.exceptions import InvalidWheelFilename
+from pip._internal.models.direct_url import DirectUrl
+from pip._internal.models.link import Link
+from pip._internal.models.wheel import Wheel
+from pip._internal.utils.temp_dir import TempDirectory, tempdir_kinds
+from pip._internal.utils.urls import path_to_url
 

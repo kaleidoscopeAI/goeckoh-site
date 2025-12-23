@@ -1,8 +1,18 @@
-from __future__ import annotations
+class VoiceEngine:
+    def __init__(self):
+        self.use_neural = COQUI_AVAILABLE
+        if self.use_neural:
+            print("Loading AI Voice Model...")
+            # Using 'your_tts' for zero-shot cloning support
+            self.model = TTS("tts_models/multilingual/multi-dataset/your_tts", gpu=False)
 
-import calendar
-import time
-from datetime import datetime, timedelta, timezone
-from email.utils import formatdate, parsedate, parsedate_tz
-from typing import TYPE_CHECKING, Any, Mapping
+    def generate_speech_pcm(self, text: str, clone_ref_wav: str = None) -> np.ndarray:
+        try:
+            if self.use_neural and clone_ref_wav:
+                wav = self.model.tts(text=text, speaker_wav=clone_ref_wav, language="en")
+                return np.array(wav, dtype=np.float32)
+            return None
+        except Exception as e:
+            print(f"[TTS Gen Error] {e}")
+            return None
 

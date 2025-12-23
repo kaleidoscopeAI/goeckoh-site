@@ -1,0 +1,4 @@
+content: Dict
+confidence: float = 0.5
+timestamp: float = field(default_factory=time.time)
+

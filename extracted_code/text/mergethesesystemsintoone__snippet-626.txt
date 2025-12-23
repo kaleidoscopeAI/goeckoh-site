@@ -1,0 +1,8 @@
+"""Configuration for the Kaleidoscope platform"""
+root_path: str
+operation_mode: str  # 'analyze', 'upgrade', 'decompile', 'full'
+upgrade_strategy: UpgradeStrategy = UpgradeStrategy.IN_PLACE
+target_language: LanguageType = LanguageType.PYTHON
+use_llm: bool = True
+max_parallel_processes: int = 4
+

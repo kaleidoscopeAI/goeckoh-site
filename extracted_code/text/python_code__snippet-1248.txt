@@ -1,0 +1,13 @@
+"""Return a list of formatted rows and a list of column sizes.
+
+For example::
+
+>>> tabulate([['foobar', 2000], [0xdeadbeef]])
+(['foobar     2000', '3735928559'], [10, 4])
+"""
+rows = [tuple(map(str, row)) for row in rows]
+sizes = [max(map(len, col)) for col in zip_longest(*rows, fillvalue="")]
+table = [" ".join(map(str.ljust, row, sizes)).rstrip() for row in rows]
+return table, sizes
+
+

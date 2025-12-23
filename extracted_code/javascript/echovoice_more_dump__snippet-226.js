@@ -1,4 +1,4 @@
-const m = this.cfg.speciesCount;
-const base = nodeIdx * m;
-const alpha = this.cfg.reactParams.alpha;
-const beta = this.cfg.reactParams.beta;
+const n = this.graph.n, m = this.cfg.speciesCount;
+const N = n * m;
+const k1 = new Float32Array(N), k2 = new Float32Array(N), k3 = new Float32Array(N), k4 = new Float32Array(N);
+const Sbackup = new Float32Array(this.S);

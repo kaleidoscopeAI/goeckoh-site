@@ -1,12 +1,8 @@
-    import time
+import logging
+import warnings
+from typing import Any, Optional, TextIO, Type, Union
 
-    console.show_cursor(False)
-    for n in range(0, 101, 1):
-        bar.update(n)
-        console.print(bar)
-        console.file.write("\r")
-        time.sleep(0.05)
-    console.show_cursor(True)
-    console.print()
+from pip._vendor.packaging.version import parse
 
+from pip import __version__ as current_version  # NOTE: tests patch this name.
 

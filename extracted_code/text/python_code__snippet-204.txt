@@ -1,2 +1,2 @@
-# <REDACTED: potential secret detected>
+"""A metadata value is invalid"""
 

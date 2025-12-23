@@ -1,9 +1,4 @@
-import encodings.idna  # noqa: F401
-from io import UnsupportedOperation
+import re
 
-from pip._vendor.urllib3.exceptions import (
-    DecodeError,
-    LocationParseError,
-    ProtocolError,
-    ReadTimeoutError,
-    SSLError,
+from .compat import builtin_str
+

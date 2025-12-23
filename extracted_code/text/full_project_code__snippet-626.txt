@@ -1,0 +1,11 @@
+Tuple[
+    InfixNotationOperatorArgType,
+    int,
+    OpAssoc,
+    typing.Optional[ParseAction],
+],
+Tuple[
+    InfixNotationOperatorArgType,
+    int,
+    OpAssoc,
+],

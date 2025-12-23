@@ -1,0 +1,43 @@
+ 17    final EchoBrain _brain = EchoBrain(); // EchoBrain might be adapted to process backend response
+ 18 -  final ApiService _apiService = ApiService('http://localhost:8080'); // Initialize API service
+ 18 +  final ApiService _apiService = ApiService(); // Defaults to emulator loopback (10.0.2.2)
+ 19
+    ⋮
+ 21    Stream<EchoState> get stateStream => _stateController.stream;
+ 22 +  final _mirrorController = StreamController<Map<String, dynamic>>.broadcast();
+ 23 +  Stream<Map<String, dynamic>> get mirrorStream => _mirrorController.stream;
+ 24
+    ⋮
+ 31    bool _isSessionActive = false;
+ 32 +  Timer? _mirrorPoller;
+ 33
+    ⋮
+ 43        _isSessionActive = true;
+ 44 +      _startMirrorPolling();
+ 45        await _startRecordingLoop();
+    ⋮
+ 51      _recorder.stop();
+ 52 +    _mirrorPoller?.cancel();
+ 53      _stateController.add(EchoState.IDLE);
+    ⋮
+116    }
+117 +
+118 +  void _startMirrorPolling() {
+119 +    _mirrorPoller?.cancel();
+120 +    _mirrorPoller = Timer.periodic(const Duration(seconds: 2), (_) async {
+121 +      try {
+122 +        final status = await _apiService.getSystemStatus();
+123 +        final mirror = await _apiService.pollMirror();
+124 +        _mirrorController.add({
+125 +          "gcl": status["gcl"],
+126 +          "mode": status["system_mode"],
+127 +          "latency_ms": mirror["latency_ms"],
+128 +          "heart": mirror["heart_rust"] ?? mirror["heart"] ?? {},
+129 +        });
+130 +      } catch (_) {
+131 +        // swallow to keep UI responsive
+132 +      }
+133 +    });
+134 +  }
+135  }
+

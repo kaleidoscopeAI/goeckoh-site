@@ -1,0 +1,3 @@
+  - /process (Light Mode): p50 2.5 ms, p95 4.4 ms, 10/10 echo match (scripts/run_digit_batch.py --limit 3).
+  - /asr (Sherpa + digits grammar): Accuracy 8/10, p50 ~17 ms, p95 ~456 ms (scripts/run_digit_asr.py --limit 10).
+

@@ -1,0 +1,3 @@
+doc: Echo v4.0 Crystalline Heart - Complete Build & Package System
+functions: main
+classes: EchoBuilder

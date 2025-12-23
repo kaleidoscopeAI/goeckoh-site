@@ -1,0 +1,5 @@
+url_frontier: PriorityUrlFrontier,  // Prioritized URLs to visit
+politeness_policy: PolitenessPolicy,
+summarizer: Arc<HuggingFaceThoughtEngine>,  // LLM reference
+knowledge_base: Arc<KnowledgeGraph>,
+max_depth: usize,

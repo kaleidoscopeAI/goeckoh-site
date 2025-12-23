@@ -1,2 +1,1 @@
-class QuantumAwareCodeAnalyzer:
-def __init__(self, dimensions: int = 4):
+def get_analysis_report(self) -> Dict:

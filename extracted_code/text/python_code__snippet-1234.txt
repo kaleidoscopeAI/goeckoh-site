@@ -1,0 +1,11 @@
+try:
+    prog = os.path.basename(sys.argv[0])
+    if prog in ("__main__.py", "-c"):
+        return f"{sys.executable} -m pip"
+    else:
+        return prog
+except (AttributeError, TypeError, IndexError):
+    pass
+return "pip"
+
+

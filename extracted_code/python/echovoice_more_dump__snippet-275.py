@@ -1,17 +1,26 @@
-    # ... (summarize state and get ai_thought from Ollama) ...
-    ai_thought = cognitive_engine.reflect_with_ollama(prompt)
-    visualizer.update_from_thought(ai_thought)
+fn load_or_process_dataset(path: &str, url: &str) -> Result<Vec<Graph>, CrystalError> {
+    let p = Path::new(path);
+    let ext = p.extension().and_then(|os| os.to_str()).unwrap_or("");
 
-    # 🧠 NEW: Apply cognitive feedback
-    # The total dimension of X_bar is node_count * vec_dim
-    total_vec_dim = node_count * vec_dim 
-    nudge_vector = thought_to_vector(ai_thought, total_vec_dim)
-    
-    # Apply the nudge to the Hamiltonian's target state
-    ham.X_bar += nudge_vector 
-    # Normalize to prevent drift
-    ham.X_bar /= (np.linalg.norm(ham.X_bar) + 1e-9) 
-    
-    print("[Cognitive Engine] Feedback applied. Hamiltonian target state has been nudged.")
-    time.sleep(1)
-
+    if ext == "parquet" {
+        // Ensure the parquet file exists by downloading if needed and URL is not empty
+        if !p.exists() && !url.is_empty() {
+            ensure_dataset_exists(path, url)?;
+        }
+        load_mutag_dataset(path)
+    } else {
+        // For non-parquet, we don't download from the URL. We assume the file exists locally.
+        let engine = UniversalMutagEngine::new();
+        let runtime = tokio::runtime::Runtime::new().unwrap();
+        let processed = runtime.block_on(engine.process(p)).map_err(|e| ...)?;
+        // Convert processed graphs (Vec<ProcessedGraph>) to Vec<Graph>
+        processed.into_iter().map(|pg| {
+            Graph {
+                x: pg.mutag_entry.x,
+                edge_index: pg.mutag_entry.edge_index,
+                edge_attr: pg.mutag_entry.edge_attr,
+                y: pg.mutag_entry.y,
+                chemical_features: pg.metadata.chemical_properties.map(|cp| ...),
+            }
+        }).collect()
+    }

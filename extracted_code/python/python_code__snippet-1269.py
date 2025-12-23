@@ -1,19 +1,27 @@
-def create_package_set_from_installed() -> Tuple[PackageSet, bool]:
-    """Converts a list of distributions into a PackageSet."""
-    package_set = {}
-    problems = False
-    env = get_default_environment()
-    for dist in env.iter_installed_distributions(local_only=False, skip=()):
-        name = dist.canonical_name
-        try:
-            dependencies = list(dist.iter_dependencies())
-            package_set[name] = PackageDetails(dist.version, dependencies)
-        except (OSError, ValueError) as e:
-            # Don't crash on unreadable or broken metadata.
-            logger.warning("Error parsing requirements for %s: %s", name, e)
-            problems = True
-    return package_set, problems
+import pytest
+import math
+from goeckoh.heart.logic_core import CrystallineHeart
 
+def test_gcl_stability():
+    heart = CrystallineHeart()
+    
+    # Test 1: Idle state should be stable
+    metrics = heart.compute_metrics()
+    assert metrics.gcl > 0.9
+    assert metrics.mode_label == "FLOW"
 
-def check_package_set(
-    package_set: PackageSet, should_ignore: Optional[Callable[[str], bool]] = None
+    # Test 2: Meltdown injection
+    # Massively increase lattice energy
+    heart.nodes = [10.0] * 1024
+    metrics = heart.compute_metrics()
+    
+    assert metrics.gcl < 0.2
+    assert metrics.mode_label == "MELTDOWN"
+
+def test_input_normalization():
+    heart = CrystallineHeart()
+    resp, _ = heart.process_input("You are bad")
+    # Ensure semantic mirror works
+    assert "I" in resp
+    assert "bad" in resp
+    assert "You" not in resp.lower()

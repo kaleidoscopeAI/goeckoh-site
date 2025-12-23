@@ -1,0 +1,2 @@
+*   `gui/avatar_widget.py`: Renders the 2D projection of the Crystal Avatar.
+*   `gui/app.py`: Main KivyMD application with `ChildScreen` (Jackson view), `ParentScreen` (Molly Dashboard), and `VoiceSetupScreen` (for recording and testing voice samples, mic check, volume tuning).

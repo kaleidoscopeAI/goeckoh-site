@@ -1,0 +1,7 @@
+"""Strategies for system upgrades"""
+IN_PLACE = auto()  # Modify existing codebase
+INCREMENTAL = auto()  # Upgrade component by component
+FULL_REWRITE = auto()  # Complete rewrite with same language
+LANGUAGE_MIGRATION = auto()  # Rewrite in different language
+WRAPPER = auto()  # Create wrapper around existing system
+

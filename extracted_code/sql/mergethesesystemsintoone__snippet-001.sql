@@ -1,2 +1,5 @@
-self.cur.execute("SELECT dna FROM dna WHERE gen=?", (gen,))
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+con = sqlite3.connect(db_path); cur = con.cursor()
+cur.execute("SELECT id, summary FROM facets")
+out = {int(i): (s or "") for (i, s) in cur.fetchall()}
+con.close(); return out
+

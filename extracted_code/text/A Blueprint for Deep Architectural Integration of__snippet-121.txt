@@ -1,0 +1,4 @@
+\item Support for asynchronous execution of independent cognitive modules.
+\item Management of state updates with event-driven scheduling.
+\item High concurrency and parallelism for scaling complex cognition.
+\item Introspection and visualization tools to monitor state trajectories, curiosity tension dynamics, and routing matrix evolution.

@@ -1,22 +1,22 @@
-from .chardistribution import GB2312DistributionAnalysis
+from .chardistribution import EUCKRDistributionAnalysis
 from .codingstatemachine import CodingStateMachine
 from .mbcharsetprober import MultiByteCharSetProber
-from .mbcssm import GB2312_SM_MODEL
+from .mbcssm import EUCKR_SM_MODEL
 
 
-class GB2312Prober(MultiByteCharSetProber):
+class EUCKRProber(MultiByteCharSetProber):
     def __init__(self) -> None:
         super().__init__()
-        self.coding_sm = CodingStateMachine(GB2312_SM_MODEL)
-        self.distribution_analyzer = GB2312DistributionAnalysis()
+        self.coding_sm = CodingStateMachine(EUCKR_SM_MODEL)
+        self.distribution_analyzer = EUCKRDistributionAnalysis()
         self.reset()
 
     @property
     def charset_name(self) -> str:
-        return "GB2312"
+        return "EUC-KR"
 
     @property
     def language(self) -> str:
-        return "Chinese"
+        return "Korean"
 
 

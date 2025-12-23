@@ -1,0 +1,4 @@
+My temperature literally controls how “autistic” or “poetic” the LLM is
+High arousal → LLM temperature rises → more emotional, less literal
+Low coherence → top_p widens → more creative metaphors, flapping language
+

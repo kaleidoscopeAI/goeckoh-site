@@ -1,0 +1,9 @@
+  companion object {
+      lateinit var instance: ExocortexApplication
+  }
+
+  override fun onCreate() {
+      super.onCreate()
+      instance = this
+      Vosk.init(this)
+  }

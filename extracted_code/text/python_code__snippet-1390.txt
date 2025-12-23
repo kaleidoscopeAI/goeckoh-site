@@ -1,0 +1,60 @@
+logger.verbose("Keyring provider requested: %s", provider)
+
+# keyring has previously failed and been disabled
+if KEYRING_DISABLED:
+    provider = "disabled"
+if provider in ["import", "auto"]:
+    try:
+        impl = KeyRingPythonProvider()
+        logger.verbose("Keyring provider set: import")
+        return impl
+    except ImportError:
+        pass
+    except Exception as exc:
+        # In the event of an unexpected exception
+        # we should warn the user
+        msg = "Installed copy of keyring fails with exception %s"
+        if provider == "auto":
+            msg = msg + ", trying to find a keyring executable as a fallback"
+        logger.warning(msg, exc, exc_info=logger.isEnabledFor(logging.DEBUG))
+if provider in ["subprocess", "auto"]:
+    cli = shutil.which("keyring")
+    if cli and cli.startswith(sysconfig.get_path("scripts")):
+        # all code within this function is stolen from shutil.which implementation
+        @typing.no_type_check
+        def PATH_as_shutil_which_determines_it() -> str:
+            path = os.environ.get("PATH", None)
+            if path is None:
+                try:
+                    path = os.confstr("CS_PATH")
+                except (AttributeError, ValueError):
+                    # os.confstr() or CS_PATH is not available
+                    path = os.defpath
+            # bpo-35755: Don't use os.defpath if the PATH environment variable is
+            # set to an empty string
+
+            return path
+
+        scripts = Path(sysconfig.get_path("scripts"))
+
+        paths = []
+        for path in PATH_as_shutil_which_determines_it().split(os.pathsep):
+            p = Path(path)
+            try:
+                if not p.samefile(scripts):
+                    paths.append(path)
+            except FileNotFoundError:
+                pass
+
+        path = os.pathsep.join(paths)
+
+        cli = shutil.which("keyring", path=path)
+
+    if cli:
+        logger.verbose("Keyring provider set: subprocess with executable %s", cli)
+        return KeyRingCliProvider(cli)
+
+logger.verbose("Keyring provider set: disabled")
+return KeyRingNullProvider()
+
+

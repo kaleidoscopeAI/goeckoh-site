@@ -1,17 +1,71 @@
-    class _ConcatenateForm(_ExtensionsSpecialForm, _root=True):
-        def __getitem__(self, parameters):
-            return _concatenate_getitem(self, parameters)
+class PipReporter(BaseReporter):
+    def __init__(self) -> None:
+        self.reject_count_by_package: DefaultDict[str, int] = defaultdict(int)
 
-    Concatenate = _ConcatenateForm(
-        'Concatenate',
-        doc="""Used in conjunction with ``ParamSpec`` and ``Callable`` to represent a
-        higher order function which adds, removes or transforms parameters of a
-        callable.
+        self._messages_at_reject_count = {
+            1: (
+                "pip is looking at multiple versions of {package_name} to "
+                "determine which version is compatible with other "
+                "requirements. This could take a while."
+            ),
+            8: (
+                "pip is still looking at multiple versions of {package_name} to "
+                "determine which version is compatible with other "
+                "requirements. This could take a while."
+            ),
+            13: (
+                "This is taking longer than usual. You might need to provide "
+                "the dependency resolver with stricter constraints to reduce "
+                "runtime. See https://pip.pypa.io/warnings/backtracking for "
+                "guidance. If you want to abort this run, press Ctrl + C."
+            ),
+        }
 
-        For example::
+    def rejecting_candidate(self, criterion: Any, candidate: Candidate) -> None:
+        self.reject_count_by_package[candidate.name] += 1
 
-           Callable[Concatenate[int, P], int]
+        count = self.reject_count_by_package[candidate.name]
+        if count not in self._messages_at_reject_count:
+            return
 
-        See PEP 612 for detailed information.
-        """)
+        message = self._messages_at_reject_count[count]
+        logger.info("INFO: %s", message.format(package_name=candidate.name))
+
+        msg = "Will try a different candidate, due to conflict:"
+        for req_info in criterion.information:
+            req, parent = req_info.requirement, req_info.parent
+            # Inspired by Factory.get_installation_error
+            msg += "\n    "
+            if parent:
+                msg += f"{parent.name} {parent.version} depends on "
+            else:
+                msg += "The user requested "
+            msg += req.format_for_error()
+        logger.debug(msg)
+
+
+class PipDebuggingReporter(BaseReporter):
+    """A reporter that does an info log for every event it sees."""
+
+    def starting(self) -> None:
+        logger.info("Reporter.starting()")
+
+    def starting_round(self, index: int) -> None:
+        logger.info("Reporter.starting_round(%r)", index)
+
+    def ending_round(self, index: int, state: Any) -> None:
+        logger.info("Reporter.ending_round(%r, state)", index)
+
+    def ending(self, state: Any) -> None:
+        logger.info("Reporter.ending(%r)", state)
+
+    def adding_requirement(self, requirement: Requirement, parent: Candidate) -> None:
+        logger.info("Reporter.adding_requirement(%r, %r)", requirement, parent)
+
+    def rejecting_candidate(self, criterion: Any, candidate: Candidate) -> None:
+        logger.info("Reporter.rejecting_candidate(%r, %r)", criterion, candidate)
+
+    def pinning(self, candidate: Candidate) -> None:
+        logger.info("Reporter.pinning(%r)", candidate)
+
 

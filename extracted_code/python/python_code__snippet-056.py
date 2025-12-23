@@ -1,4 +1,6 @@
-    def advance_iterator(it):
-        return it.next()
+import logging
+import re
 
+from .compat import string_types
+from .util import parse_requirement
 

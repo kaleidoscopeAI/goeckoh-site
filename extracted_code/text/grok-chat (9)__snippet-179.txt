@@ -1,0 +1,3 @@
+ phrases like “dog chasing car” spawn scene objects; I can implement a
+ lightweight keyword→model/color map next.
+

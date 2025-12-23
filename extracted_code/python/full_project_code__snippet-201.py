@@ -1,9 +1,8 @@
-def where() -> str:
-    return DEBIAN_CA_CERTS_PATH
+import sys
 
-
-def contents() -> str:
-    with open(where(), "r", encoding="ascii") as data:
-        return data.read()
+from docutils import nodes
+from docutils.statemachine import ViewList
+from docutils.parsers.rst import Directive
+from sphinx.util.nodes import nested_parse_with_titles
 
 

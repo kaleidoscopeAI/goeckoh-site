@@ -1,0 +1,3 @@
+// We must keep these streams alive, or audio stops immediately.
+_input_stream: cpal::Stream,
+_output_stream: cpal::Stream,

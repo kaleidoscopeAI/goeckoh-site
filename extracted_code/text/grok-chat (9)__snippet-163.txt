@@ -1,0 +1,18 @@
+257          <div className="bg-white border border-slate-200 rounded-xl p-6
+      shadow-sm">
+258 +          <div className="text-xs text-slate-400 uppercase tracking-wid
+     e mb-2">Mirror Heart</div>
+259 +          <div className="text-sm text-slate-600">
+260 +            Coherence {heartMirror.coherence !== undefined ? heartMirro
+     r.coherence.toFixed(3) : '—'} ·
+261 +            Arousal {heartMirror.arousal !== undefined ? heartMirror.ar
+     ousal.toFixed(3) : '—'} ·
+262 +            Valence {heartMirror.valence !== undefined ? heartMirror.va
+     lence.toFixed(3) : '—'}
+263 +          </div>
+264 +        </div>
+265 +        <div className="bg-white border border-slate-200 rounded-xl p-6
+      shadow-sm">
+266            <div className="text-xs text-slate-400 uppercase tracking-wid
+     e mb-2">Validation (p95 latency)</div>
+

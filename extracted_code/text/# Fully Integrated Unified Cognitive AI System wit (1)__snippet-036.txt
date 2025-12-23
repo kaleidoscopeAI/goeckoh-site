@@ -1,0 +1,3 @@
+"health": 0.95,
+"coherence": 0.87,
+// Other organic metrics...

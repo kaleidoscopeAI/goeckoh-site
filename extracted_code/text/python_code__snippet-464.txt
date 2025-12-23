@@ -1,0 +1,7 @@
+version = "{0.major}.{0.minor}.{0.micro}".format(info)
+kind = info.releaselevel
+if kind != "final":
+    version += kind[0] + str(info.serial)
+return version
+
+

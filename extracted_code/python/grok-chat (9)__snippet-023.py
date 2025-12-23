@@ -1,3 +1,4 @@
-  files). These directories are excluded from snapshots and undo cleanup. Adjust
-  `ghost_snapshot.ignore_large_untracked_dirs` to change this behavior.
+• I'm planning to import matplotlib lazily inside the plotting check with try/
+  except to suppress import errors caused by numpy mismatches, accepting some
+  noisy stderr messages but avoiding script failure.
 

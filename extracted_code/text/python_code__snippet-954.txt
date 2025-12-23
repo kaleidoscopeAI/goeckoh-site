@@ -1,0 +1,10 @@
+"""Return a current distribution object for a Requirement or string"""
+if isinstance(dist, str):
+    dist = Requirement.parse(dist)
+if isinstance(dist, Requirement):
+    dist = get_provider(dist)
+if not isinstance(dist, Distribution):
+    raise TypeError("Expected string, Requirement, or Distribution", dist)
+return dist
+
+

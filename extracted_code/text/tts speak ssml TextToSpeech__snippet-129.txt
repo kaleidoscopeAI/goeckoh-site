@@ -1,0 +1,9 @@
+          .setBufferSizeInBytes(bufferSize)
+          .setTransferMode(AudioTrack.MODE_STREAM)
+          .build()
+
+      audioTrack.play()
+      audioTrack.write(samples, 0, samples.size, AudioTrack.WRITE_BLOCKING)
+      audioTrack.stop()
+      audioTrack.release()
+  }

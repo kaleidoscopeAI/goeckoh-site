@@ -1,1 +1,0 @@
-Integration: Use React state or a central store (Redux or Context) for incoming data from the WebSocket (from FastAPI). On each update, rerender the 3D graph and update Plotly figures. The dual layers (3D scene vs charts) can be arranged via CSS or as separate React components.

@@ -1,0 +1,2 @@
+cls_fields.append(_get_field(cls, name, type, kw_only))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

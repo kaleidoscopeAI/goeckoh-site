@@ -1,1 +1,2 @@
-const [draft, setDraft] = useState<EVector>(() => ({ ...value }));
+const N = W.length;
+const M = W[0].length;

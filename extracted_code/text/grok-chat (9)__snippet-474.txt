@@ -1,0 +1,2 @@
+              new_content = llm_response.content.model_copy(deep=True)
+              if new_content.parts and isinstance(new_content.parts[0],

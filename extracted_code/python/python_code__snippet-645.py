@@ -1,11 +1,6 @@
-import abc
-import collections
-import collections.abc
-import functools
-import inspect
-import operator
-import sys
-import types as _types
-import typing
-import warnings
+# Extracted from https://github.com/pfmoore/pkg_metadata
+
+from email.header import Header, decode_header, make_header
+from email.message import Message
+from typing import Any, Dict, List, Union
 

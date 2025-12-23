@@ -1,0 +1,3 @@
+asr_session: Arc<Session>,
+tts_session: Arc<Session>,
+input_buffer: Arc<Mutex<Vec<f32>>>,

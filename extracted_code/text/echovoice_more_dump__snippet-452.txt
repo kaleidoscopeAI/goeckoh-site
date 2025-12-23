@@ -1,9 +1,2 @@
-class SystemState(Enum):
-    INITIALIZING = "initializing"
-    LEARNING = "learning"
-    INTEGRATING = "integrating"
-    EVOLVING = "evolving"
-    MAINTAINING = "maintaining"
-    EMERGENT = "emergent"
-    CRITICAL = "critical"
-
+web_interface: WebInterface,
+email_notifier: EmailNotifier,

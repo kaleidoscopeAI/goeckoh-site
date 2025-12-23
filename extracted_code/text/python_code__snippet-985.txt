@@ -1,0 +1,4 @@
+"""Normalize a file/dir name for comparison purposes"""
+return os.path.normcase(os.path.realpath(os.path.normpath(_cygwin_patch(filename))))
+
+

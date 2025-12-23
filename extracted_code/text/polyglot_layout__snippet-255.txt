@@ -1,0 +1,3 @@
+<div class="pill">3D Avatar</div>
+<div class="pill" id="status">connecting…</div>
+<div class="pill"><a href="#" id="reset">reset view</a></div>

@@ -1,0 +1,3 @@
+doc: Unified Autonomous AI — Sandboxed Simulation
+functions: cos_sim, mock_encode_text_to_vec, mock_crawl_source, role_rho, compute_B_matrix, compute_W_matrix, decoherence, speculation_operator, step_update, create_nodes, run_simulation, main
+classes: Config, Node

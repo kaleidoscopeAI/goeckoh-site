@@ -1,0 +1,1 @@
+_STDIN_FILENO = sys.__stdin__.fileno()

@@ -1,0 +1,10 @@
+52      // Audio / DSP
+53 -    implementation("com.github.JorenSix:TarsosDSP:2.5")
+53 +    implementation("be.tarsos:tarsosdsp:2.4")
+54
+   ⋮
+61      // Piper / Sherpa TTS
+62 -    implementation("com.k2fsa.sherpa.onnx:sherpa-onnx-android:1.10.12")
+62 +    implementation("com.k2fsa.sherpa-onnx:sherpa-onnx-android:1.10.12")
+63
+

@@ -1,1 +1,1 @@
-def __init__(self, cfg: EchoConfig):
+def reset(self):

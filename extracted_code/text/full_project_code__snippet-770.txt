@@ -1,0 +1,7 @@
+MachineState.ERROR,MachineState.START,     3,MachineState.ERROR,MachineState.START,MachineState.START,     4,     5,MachineState.ERROR,     6, # MachineState.START
+MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR, # MachineState.ERROR
+MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME, # MachineState.ITS_ME
+MachineState.ERROR,MachineState.ERROR,MachineState.START,MachineState.START,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.START,MachineState.START,MachineState.START, # 3
+MachineState.ERROR,MachineState.ERROR,MachineState.START,MachineState.START,MachineState.START,MachineState.START,MachineState.START,MachineState.START,MachineState.START,MachineState.START, # 4
+MachineState.ERROR,MachineState.START,MachineState.START,MachineState.START,MachineState.START,MachineState.START,MachineState.START,MachineState.START,MachineState.START,MachineState.START, # 5
+MachineState.ERROR,MachineState.START,MachineState.START,MachineState.START,MachineState.START,MachineState.ERROR,MachineState.ERROR,MachineState.START,MachineState.START,MachineState.START, # 6

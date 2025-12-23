@@ -1,9 +1,7 @@
-import re
-import sys
-from contextlib import suppress
-from typing import Iterable, NamedTuple, Optional
-
-from .color import Color
-from .style import Style
-from .text import Text
-
+def get_scheme(
+    dist_name: str,
+    user: bool = False,
+    home: typing.Optional[str] = None,
+    root: typing.Optional[str] = None,
+    isolated: bool = False,
+    prefix: typing.Optional[str] = None,

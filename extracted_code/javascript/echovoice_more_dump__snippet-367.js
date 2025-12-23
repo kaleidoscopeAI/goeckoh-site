@@ -1,1 +1,1 @@
-const currentEmotion = actuationService.getEmotionVector();
+const regret = Math.random() * 0.1;

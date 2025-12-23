@@ -1,0 +1,2 @@
+- $K_t = \sum_i \frac{1}{2} m v_i^2$ → arousal proxy (after normalization to ).[^10_13]
+- $U_t = \sum_{\langle i,j\rangle} \frac{1}{2} k (x_i - x_j)^2$ and a coherence measure (e.g., mean phase alignment or low spatial variance) → valence proxy.

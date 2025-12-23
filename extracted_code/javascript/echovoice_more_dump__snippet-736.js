@@ -1,2 +1,1 @@
-const W = req.body.W;
-const meta = req.body.meta ?? {};
+Value function (V_i):

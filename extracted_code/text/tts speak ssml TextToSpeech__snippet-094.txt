@@ -1,0 +1,7 @@
+      } else {
+          voskModel = Model(modelPath.absolutePath)
+      }
+  }
+
+  fun listenAndProcess(callback: (String, Prosody) -> Unit) {
+      if (voskModel == null || ContextCompat.checkSelfPermission(context,

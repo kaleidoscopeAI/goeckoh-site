@@ -1,0 +1,7 @@
+global _lib
+if _lib is None:
+    load_rust()
+arr = np.ascontiguousarray(vec.astype(np.float64))
+ptr = arr.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
+return float(_lib.eval_energy(ptr, arr.size))
+

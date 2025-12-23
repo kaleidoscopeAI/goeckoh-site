@@ -1,0 +1,3 @@
+with open("audit.log", "a") as f:
+    f.write(f"{time.ctime()} | ACTION: {action} | CONFIDENCE: {confidence:.3f} | REASON: {reason}\n")
+

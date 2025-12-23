@@ -1,4 +1,16 @@
-def home():
-    # Inline UI similar to provided, but simplified for brevity.
-    return "<html><body><h1>Seed-Crystal AGI</h1><p>Access /status or /ws for real-time.</p></body></html>"
+def ensure_venv_and_reexec():
+    ROOT.mkdir(parents=True, exist_ok=True)
+    if os.environ.get("KA_BOOTED") == "1":
+        return
+    if not VENV.exists():
+        print("Creating venv at", VENV)
+        venv.create(VENV, with_pip=True)
+    pip = VENV / ("Scripts/pip.exe" if os.name == "nt" else "bin/pip")
+    py = VENV / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
+    print("Upgrading pip and installing deps")
+    subprocess.check_call([str(pip), "install", "--upgrade", "pip"])
+    subprocess.check_call([str(pip), "install"] + REQ)
+    env = os.environ.copy(); env["KA_BOOTED"] = "1"
+    print("Relaunching inside venv")
+    os.execvpe(str(py), [str(py), __file__], env)
 

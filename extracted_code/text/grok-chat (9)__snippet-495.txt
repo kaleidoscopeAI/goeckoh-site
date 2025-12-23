@@ -1,0 +1,1 @@
+      elif event.is_final_response() and event.content and

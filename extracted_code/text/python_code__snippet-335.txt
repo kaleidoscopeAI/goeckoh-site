@@ -1,0 +1,6 @@
+# for pickling:
+def_mod = _caller(depth=3)
+if def_mod != 'typing_extensions':
+    typevarlike.__module__ = def_mod
+
+

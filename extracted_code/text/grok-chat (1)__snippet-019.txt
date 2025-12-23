@@ -1,6 +1,1 @@
-class GuidanceEvent:
-    timestamp: float
-    event_type: EventType
-    title: str
-    message: str
-
+...Real-time transcription wired—using faster-whisper for offline, autism-tuned STT. Low threshold for pauses, gentle on stutters. Integrated into speech_loop.py for seamless echo. Lattice pulsing with input stimulus...

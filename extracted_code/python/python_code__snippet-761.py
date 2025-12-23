@@ -1,10 +1,9 @@
-import collections
-import functools
+import logging
 import os
-import re
-import struct
-import sys
-import warnings
-from typing import IO, Dict, Iterator, NamedTuple, Optional, Tuple
 
-
+from pip._internal.build_env import BuildEnvironment
+from pip._internal.cli.spinners import open_spinner
+from pip._internal.exceptions import (
+    InstallationError,
+    InstallationSubprocessError,
+    MetadataGenerationFailed,

@@ -1,1 +1,1 @@
-Updated native crate with owner-mode sysfs write support (owner-only), security, and ethics modules (already present from v4).
+- \( \theta_r \): Rule threshold (from ruleset dict).

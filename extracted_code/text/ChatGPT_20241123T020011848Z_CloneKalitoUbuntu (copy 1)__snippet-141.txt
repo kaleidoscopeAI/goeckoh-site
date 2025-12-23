@@ -1,0 +1,4 @@
+crawler = WikiCrawler("Artificial intelligence")
+crawler.crawl(depth=2)
+crawler.visualize()
+

@@ -1,4 +1,5 @@
-class TryAgain(Exception):
-    """Always retry the executed function when raised."""
+        bool: True if the function succeeds, otherwise False.
+    """
+    return bool(_SetConsoleCursorPosition(std_handle, coords))
 
 

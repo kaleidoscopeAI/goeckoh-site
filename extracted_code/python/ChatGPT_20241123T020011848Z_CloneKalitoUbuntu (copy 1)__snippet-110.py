@@ -1,2 +1,2 @@
-- For example, if a node specializing in coding learns a new debugging technique, it could relay that information to other nodes that may benefit from it, accelerating problem-solving across the entire system.
+With each new node learning independently and cross-learning from others, the knowledge base also grows exponentially but is reinforced by compound learning.
 

@@ -1,1 +1,2 @@
-private lateinit var engine: KaleidoscopeEngine
+    |                                                  ^^^^^^ private field
+    |

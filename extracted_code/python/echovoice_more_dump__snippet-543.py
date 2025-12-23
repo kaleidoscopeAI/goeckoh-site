@@ -1,2 +1,2 @@
+Let node (i) hold transformer embedding (L_i\in\mathbb{R}^{d_L}). Define context keys/values from neighbors:
 Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
-95/1412. Add GUI controls in the Dashboard to run parameter sweeps from the UI and stream progress to the page.

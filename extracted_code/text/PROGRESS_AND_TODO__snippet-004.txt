@@ -1,0 +1,4 @@
+*   `math.py`: Implemented core energetic formulas (information energy, field stability, Lyapunov loss, coherence, integrated information).
+*   `store.py`: Manages SQLite database with schemas for memories, energetics, voice profiles, audio snippets, and triggers.
+*   `core.py`: Implements `CrystalBrain` for hash-based embeddings, memory storage, annealing, metrics computation, and caption generation.
+*   `api.py`: Initial stub for API boundary (though `SystemState` is the primary in-process communication).

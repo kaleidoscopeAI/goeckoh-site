@@ -1,12 +1,4 @@
-import os
-import asyncio
-import logging
-import json
-import math
-import random
-import time
-from dataclasses import dataclass, field
-from typing import List, Dict, Any, Optional
-from collections import deque, defaultdict
-from datetime import datetime
-
+import openai
+from .client import LLMClient
+class OpenAIClient(LLMClient):
+def __init__(self, model="gpt-4-turbo", **kwargs):

@@ -1,1 +1,2 @@
-│ (M_i: learns from peers/sources)
+class NodeManager:
+def __init__(self):

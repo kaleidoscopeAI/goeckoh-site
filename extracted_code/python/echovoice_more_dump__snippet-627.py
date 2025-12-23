@@ -1,1 +1,1 @@
-import networkx as nx
+def G(self, S, P, R, I, Q):

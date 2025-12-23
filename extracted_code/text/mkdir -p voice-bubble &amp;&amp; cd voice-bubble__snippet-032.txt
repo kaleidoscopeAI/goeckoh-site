@@ -1,2 +1,4 @@
-# <REDACTED: potential secret detected>
-
+<label style="display:flex;gap:10px;align-items:center;font-size:13px;">
+  <input id="monitorOn" type="checkbox"/>
+  <span>Hear lattice DSP</span>
+</label>

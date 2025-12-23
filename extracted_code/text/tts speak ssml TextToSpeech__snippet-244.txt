@@ -1,0 +1,2 @@
+multi-lang Vosk recognizers with confidence-based selection, prosody extraction, Piper TTS prosody transfer, metrics
+broadcasts, and error handling (no Whisper stubs).

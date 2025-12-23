@@ -1,4 +1,3 @@
-    - Node A crawls content from Wikipedia on topic X.
-    - Node B gathers annotated images related to topic X from image APIs.
-  - Implementation
-    - Assign
+*"a ready for anything environment" with resources and frameworks the nodes can utilize and pick from if needed allowing them to grow smaller communities of different abilities and function. Like object detection eventually etc
+
+

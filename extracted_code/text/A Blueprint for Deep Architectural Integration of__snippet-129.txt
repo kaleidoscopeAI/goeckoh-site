@@ -1,0 +1,4 @@
+- When curiosity tension is high enough, $b_k=1$, triggering web crawling engine activation.
+- When performance feedback sufficiently reduces tension, the state toggles back to $b_k=0$, deactivating curiosity.
+- This bistable, bit-level operator model enables hardware or low-level digital abstraction of curiosity dynamics while preserving core functional behavior.
+

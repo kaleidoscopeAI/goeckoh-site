@@ -1,0 +1,4 @@
+Problem: The current system is primarily for analysis. It doesn't directly support the design of new molecules.
+
+Novel Approach: Integrate generative models for molecular design. Use techniques like Generative Adversarial Networks (GANs) or Variational Autoencoders (VAEs) to generate new molecules with desired properties. These models could be trained on the data in the Molecular Cube, allowing them to learn the relationships between molecular structure and properties. Users could then interact with the cube to guide the generative process and design new molecules with specific characteristics.
+

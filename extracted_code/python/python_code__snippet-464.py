@@ -1,1 +1,4 @@
-    from pip._vendor.urllib3.contrib import pyopenssl
+def _emoji_replace(
+    text: str,
+    default_variant: Optional[str] = None,
+    _emoji_sub: _EmojiSubMethod = re.compile(r"(:(\S*?)(?:(?:\-)(emoji|text))?:)").sub,

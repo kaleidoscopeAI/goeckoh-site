@@ -1,73 +1,17 @@
-    def query(self, pattern_prefix: str, min_confidence: float = 0.5) -> List[Tuple[str, LearningPattern]]:
-
-
-
-
-
-
-
-
-    def get_insights(self) -> Dict:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    def save_state(self, filepath: str) -> None:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
-
-
-
-
-    def load_state(self, filepath: str) -> None:
-
-
-
-
-            
-
-
-
-
-
-
-
-
-
-
-
-        
-
-
-
-
-
-
+def __init__(self) -> None:
+    self.phi_history: List[float] = []
+
+def entropy(self, data: List[float]) -> float:
+    tensor = torch.tensor(data, dtype=torch.float32)
+    probs = torch.softmax(tensor, dim=0)
+    return -torch.sum(probs * torch.log(probs + 1e-10)).item()
+
+def integrated_information(self, vec: List[float]) -> float:
+    n = len(vec)
+    parts = max(1, n // 2)
+    sys_ent = self.entropy(vec)
+    part_ent = sum(self.entropy(vec[i::parts]) for i in range(parts)) / parts
+    phi_val = max(0.0, sys_ent - part_ent)
+    self.phi_history.append(phi_val)
+    return phi_val
 

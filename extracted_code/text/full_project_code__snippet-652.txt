@@ -1,0 +1,1 @@
+instring: str, loc: int, expr: "ParserElement", cache_hit: bool = False

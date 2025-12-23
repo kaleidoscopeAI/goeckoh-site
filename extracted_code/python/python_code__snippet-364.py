@@ -1,9 +1,4 @@
-from typing import List, Union
+    from pip._vendor.typing_extensions import Final  # pragma: no cover
 
-from .charsetgroupprober import CharSetGroupProber
-from .charsetprober import CharSetProber
-from .enums import InputState
-from .resultdict import ResultDict
-from .universaldetector import UniversalDetector
-from .version import VERSION, __version__
+from .segment import ControlCode, ControlType, Segment
 

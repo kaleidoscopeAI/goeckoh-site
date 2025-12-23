@@ -1,27 +1,45 @@
-def list_categories() -> List[str]:
-    return sorted({s.category for s in STRATEGIES})
-
-
-def by_category(category: str) -> List[Strategy]:
-    return [s for s in STRATEGIES if s.category == category]
-
-
-def suggest_for_event(event: str) -> List[Strategy]:
-    cats = EVENT_TO_CATEGORIES.get(event)
-    if not cats:
-        return STRATEGIES[:3]
-    ordered: List[Strategy] = []
-    for cat in cats:
-        ordered.extend(by_category(cat))
-    return ordered or STRATEGIES[:3]
-
-
-class StrategyAdvisor:
-    """Tiny helper used by the realtime loop for context-aware nudges."""
-
-    def __init__(self) -> None:
-        self.events_seen: Dict[str, int] = {}
-
-    def suggest(self, event: str) -> List[Strategy]:
-        self.events_seen[event] = self.events_seen.get(event, 0) + 1
-        return suggest_for_event(event)
+class EchoBuilder:
+    def __init__(self, platform, clean=False):
+        self.platform = platform
+        self.clean = clean
+        self.project_root = Path.cwd()
+        self.build_dir = self.project_root / "build"
+        self.dist_dir = self.project_root / "dist"
+        
+    def clean_build_dirs(self):
+        """Remove old build artifacts"""
+        print("🧹 Cleaning build directories...")
+        for dir_path in [self.build_dir, self.dist_dir]:
+            if dir_path.exists():
+                shutil.rmtree(dir_path)
+        print("✓ Clean complete")
+    
+    def check_dependencies(self):
+        """Verify all required tools are installed"""
+        print("🔍 Checking dependencies...")
+        
+        required = {
+            "python": "Python 3.10+",
+            "pip": "pip",
+        }
+        
+        for cmd, name in required.items():
+            if shutil.which(cmd) is None:
+                print(f"❌ {name} not found!")
+                sys.exit(1)
+        
+        # Check PyInstaller
+        try:
+            import PyInstaller
+            print("✓ PyInstaller found")
+        except ImportError:
+            print("📦 Installing PyInstaller...")
+            subprocess.check_call([sys.executable, "-m", "pip", "install", "pyinstaller"])
+        
+        print("✓ All dependencies satisfied")
+    
+    def create_spec_file(self):
+        """Generate PyInstaller spec file"""
+        print("📝 Creating PyInstaller spec file...")
+        
+        spec_content = f'''

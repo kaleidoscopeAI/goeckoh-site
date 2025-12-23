@@ -1,0 +1,12 @@
+filters = []
+if not f_strs:
+    return filters
+for f_str in f_strs:
+    if ':' in f_str:
+        fname, fopts = f_str.split(':', 1)
+        filters.append((fname, _parse_options([fopts])))
+    else:
+        filters.append((f_str, {}))
+return filters
+
+

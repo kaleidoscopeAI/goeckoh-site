@@ -1,15 +1,25 @@
-def preprocess(content: str) -> ReqFileLines:
-    """Split, filter, and join lines, and return a line iterator
+r"""Transform (only) ASCII letters to lower case: A-Z is mapped to a-z.
 
-    :param content: the content of the requirements file
-    """
-    lines_enum: ReqFileLines = enumerate(content.splitlines(), start=1)
-    lines_enum = join_lines(lines_enum)
-    lines_enum = ignore_comments(lines_enum)
-    lines_enum = expand_env_variables(lines_enum)
-    return lines_enum
+:param string: An Unicode string.
+:returns: A new Unicode string.
+
+This is used for `ASCII case-insensitive
+<http://encoding.spec.whatwg.org/#ascii-case-insensitive>`_
+matching of encoding labels.
+The same matching is also used, among other things,
+for `CSS keywords <http://dev.w3.org/csswg/css-values/#keywords>`_.
+
+This is different from the :meth:`~py:str.lower` method of Unicode strings
+which also affect non-ASCII characters,
+sometimes mapping them into the ASCII range:
+
+    >>> keyword = u'Bac\N{KELVIN SIGN}ground'
+    >>> assert keyword.lower() == u'background'
+    >>> assert ascii_lower(keyword) != keyword.lower()
+    >>> assert ascii_lower(keyword) == u'bac\N{KELVIN SIGN}ground'
+
+"""
+# This turns out to be faster than unicode.translate()
+return string.encode('utf8').lower().decode('utf8')
 
 
-def handle_requirement_line(
-    line: ParsedLine,
-    options: Optional[optparse.Values] = None,

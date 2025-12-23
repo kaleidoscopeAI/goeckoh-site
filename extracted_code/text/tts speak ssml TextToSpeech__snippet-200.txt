@@ -1,0 +1,54 @@
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <TextView
+      android:id="@+id/id_status"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Status"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent" />
+
+  <Button
+      android:id="@+id/id_start"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Start Listening"
+      app:layout_constraintTop_toBottomOf="@id/id_status"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent" />
+
+  <Spinner
+      android:id="@+id/vad_mode_spinner"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:layout_constraintTop_toBottomOf="@id/id_start"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent" />
+
+  <SeekBar
+      android:id="@+id/silence_duration_seekbar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:layout_constraintTop_toBottomOf="@id/vad_mode_spinner"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent" />
+
+  <SeekBar
+      android:id="@+id/vad_threshold_seekbar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:layout_constraintTop_toBottomOf="@id/silence_duration_seekbar"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent" />
+
+  <Button
+      android:id="@+id/apply_vad_button"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Apply VAD Settings"
+      app:layout_constraintTop_toBottomOf="@id/vad_threshold_seekbar"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent" />

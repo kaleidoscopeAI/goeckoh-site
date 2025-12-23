@@ -1,0 +1,2 @@
+arousal/valence and a subtle lattice profile bar; uses new heart_name when
+present.

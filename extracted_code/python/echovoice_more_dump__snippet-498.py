@@ -1,6 +1,1 @@
-import React from "react";
-import { useEmotionalActuation } from "../hooks/useEmotionalActuation";
-import EmotionalDial from "./EmotionalDial";
-import { DEFAULT_EMOTIONS } from "../services/actuationService";
-export default function ActuationTestHarness() {
-const { e, setE, resetNeutral } = useEmotionalActuation();
+(the projection masks mapping species → constructs). The optimizer computes a proxy gradient mapping from W updates and activations to

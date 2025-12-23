@@ -1,2 +1,1 @@
-package com.kaleidoscope.body
-import kotlin.math.*
+// Sel_i - choose the best d from inputs and nearby outputs

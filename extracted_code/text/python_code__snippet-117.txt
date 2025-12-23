@@ -1,2 +1,1 @@
-# <REDACTED: potential secret detected>
-
+# in-process. If you understand and accept the implications of using pip

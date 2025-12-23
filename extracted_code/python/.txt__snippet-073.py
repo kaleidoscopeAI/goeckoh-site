@@ -1,1 +1,1 @@
-At the top of echo_companion_gui.py, update the Flask import and add base64 + io:
+def step(self, audio: np.ndarray, transcript: str) -> Dict[str, Any]:

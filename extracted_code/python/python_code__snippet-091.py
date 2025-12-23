@@ -1,108 +1,140 @@
-    def _retry_on_intr(fn, timeout):
-        if timeout is None:
-            deadline = float("inf")
-        else:
-            deadline = monotonic() + timeout
+    from collections import MutableMapping
 
-        while True:
-            try:
-                return fn(timeout)
-            # OSError for 3 <= pyver < 3.5, select.error for pyver <= 2.7
-            except (OSError, select.error) as e:
-                # 'e.args[0]' incantation works for both OSError and select.error
-                if e.args[0] != errno.EINTR:
-                    raise
-                else:
-                    timeout = deadline - monotonic()
-                    if timeout < 0:
-                        timeout = 0
-                    if timeout == float("inf"):
-                        timeout = None
-                    continue
-
-
-def select_wait_for_socket(sock, read=False, write=False, timeout=None):
-    if not read and not write:
-        raise RuntimeError("must specify at least one of read=True, write=True")
-    rcheck = []
-    wcheck = []
-    if read:
-        rcheck.append(sock)
-    if write:
-        wcheck.append(sock)
-    # When doing a non-blocking connect, most systems signal success by
-    # marking the socket writable. Windows, though, signals success by marked
-    # it as "exceptional". We paper over the difference by checking the write
-    # sockets for both conditions. (The stdlib selectors module does the same
-    # thing.)
-    fn = partial(select.select, rcheck, wcheck, wcheck)
-    rready, wready, xready = _retry_on_intr(fn, timeout)
-    return bool(rready or wready or xready)
-
-
-def poll_wait_for_socket(sock, read=False, write=False, timeout=None):
-    if not read and not write:
-        raise RuntimeError("must specify at least one of read=True, write=True")
-    mask = 0
-    if read:
-        mask |= select.POLLIN
-    if write:
-        mask |= select.POLLOUT
-    poll_obj = select.poll()
-    poll_obj.register(sock, mask)
-
-    # For some reason, poll() takes timeout in milliseconds
-    def do_poll(t):
-        if t is not None:
-            t *= 1000
-        return poll_obj.poll(t)
-
-    return bool(_retry_on_intr(do_poll, timeout))
-
-
-def null_wait_for_socket(*args, **kwargs):
-    raise NoWayToWaitForSocketError("no select-equivalent available")
-
-
-def _have_working_poll():
-    # Apparently some systems have a select.poll that fails as soon as you try
-    # to use it, either due to strange configuration or broken monkeypatching
-    # from libraries like eventlet/greenlet.
     try:
-        poll_obj = select.poll()
-        _retry_on_intr(poll_obj.poll, 0)
-    except (AttributeError, OSError):
-        return False
-    else:
-        return True
+        from reprlib import recursive_repr as _recursive_repr
+    except ImportError:
 
+        def _recursive_repr(fillvalue='...'):
+            '''
+            Decorator to make a repr function return fillvalue for a recursive
+            call
+            '''
 
-def wait_for_socket(*args, **kwargs):
-    # We delay choosing which implementation to use until the first time we're
-    # called. We could do it at import time, but then we might make the wrong
-    # decision if someone goes wild with monkeypatching select.poll after
-    # we're imported.
-    global wait_for_socket
-    if _have_working_poll():
-        wait_for_socket = poll_wait_for_socket
-    elif hasattr(select, "select"):
-        wait_for_socket = select_wait_for_socket
-    else:  # Platform-specific: Appengine.
-        wait_for_socket = null_wait_for_socket
-    return wait_for_socket(*args, **kwargs)
+            def decorating_function(user_function):
+                repr_running = set()
 
+                def wrapper(self):
+                    key = id(self), get_ident()
+                    if key in repr_running:
+                        return fillvalue
+                    repr_running.add(key)
+                    try:
+                        result = user_function(self)
+                    finally:
+                        repr_running.discard(key)
+                    return result
 
-def wait_for_read(sock, timeout=None):
-    """Waits for reading to be available on a given socket.
-    Returns True if the socket is readable, or False if the timeout expired.
-    """
-    return wait_for_socket(sock, read=True, timeout=timeout)
+                # Can't use functools.wraps() here because of bootstrap issues
+                wrapper.__module__ = getattr(user_function, '__module__')
+                wrapper.__doc__ = getattr(user_function, '__doc__')
+                wrapper.__name__ = getattr(user_function, '__name__')
+                wrapper.__annotations__ = getattr(user_function,
+                                                  '__annotations__', {})
+                return wrapper
 
+            return decorating_function
 
-def wait_for_write(sock, timeout=None):
-    """Waits for writing to be available on a given socket.
-    Returns True if the socket is readable, or False if the timeout expired.
-    """
-    return wait_for_socket(sock, write=True, timeout=timeout)
+    class ChainMap(MutableMapping):
+        '''
+        A ChainMap groups multiple dicts (or other mappings) together
+        to create a single, updateable view.
+
+        The underlying mappings are stored in a list.  That list is public and can
+        accessed or updated using the *maps* attribute.  There is no other state.
+
+        Lookups search the underlying mappings successively until a key is found.
+        In contrast, writes, updates, and deletions only operate on the first
+        mapping.
+        '''
+
+        def __init__(self, *maps):
+            '''Initialize a ChainMap by setting *maps* to the given mappings.
+            If no mappings are provided, a single empty dictionary is used.
+
+            '''
+            self.maps = list(maps) or [{}]  # always at least one map
+
+        def __missing__(self, key):
+            raise KeyError(key)
+
+        def __getitem__(self, key):
+            for mapping in self.maps:
+                try:
+                    return mapping[
+                        key]  # can't use 'key in mapping' with defaultdict
+                except KeyError:
+                    pass
+            return self.__missing__(
+                key)  # support subclasses that define __missing__
+
+        def get(self, key, default=None):
+            return self[key] if key in self else default
+
+        def __len__(self):
+            return len(set().union(
+                *self.maps))  # reuses stored hash values if possible
+
+        def __iter__(self):
+            return iter(set().union(*self.maps))
+
+        def __contains__(self, key):
+            return any(key in m for m in self.maps)
+
+        def __bool__(self):
+            return any(self.maps)
+
+        @_recursive_repr()
+        def __repr__(self):
+            return '{0.__class__.__name__}({1})'.format(
+                self, ', '.join(map(repr, self.maps)))
+
+        @classmethod
+        def fromkeys(cls, iterable, *args):
+            'Create a ChainMap with a single dict created from the iterable.'
+            return cls(dict.fromkeys(iterable, *args))
+
+        def copy(self):
+            'New ChainMap or subclass with a new copy of maps[0] and refs to maps[1:]'
+            return self.__class__(self.maps[0].copy(), *self.maps[1:])
+
+        __copy__ = copy
+
+        def new_child(self):  # like Django's Context.push()
+            'New ChainMap with a new dict followed by all previous maps.'
+            return self.__class__({}, *self.maps)
+
+        @property
+        def parents(self):  # like Django's Context.pop()
+            'New ChainMap from maps[1:].'
+            return self.__class__(*self.maps[1:])
+
+        def __setitem__(self, key, value):
+            self.maps[0][key] = value
+
+        def __delitem__(self, key):
+            try:
+                del self.maps[0][key]
+            except KeyError:
+                raise KeyError(
+                    'Key not found in the first mapping: {!r}'.format(key))
+
+        def popitem(self):
+            'Remove and return an item pair from maps[0]. Raise KeyError is maps[0] is empty.'
+            try:
+                return self.maps[0].popitem()
+            except KeyError:
+                raise KeyError('No keys found in the first mapping.')
+
+        def pop(self, key, *args):
+            'Remove *key* from maps[0] and return its value. Raise KeyError if *key* not in maps[0].'
+            try:
+                return self.maps[0].pop(key, *args)
+            except KeyError:
+                raise KeyError(
+                    'Key not found in the first mapping: {!r}'.format(key))
+
+        def clear(self):
+            'Clear maps[0], leaving maps[1:] intact.'
+            self.maps[0].clear()
 
 

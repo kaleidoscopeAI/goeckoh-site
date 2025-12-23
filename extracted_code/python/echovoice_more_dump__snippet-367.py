@@ -1,1 +1,1 @@
-def _plot_node_heatmap(self, organic_ai):
+async def search_and_ingest(self, query, max_results=5):

@@ -1,1 +1,1 @@
-Persist the E vector across collaborative users using Firestore.
+ Evolution Equation.

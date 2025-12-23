@@ -1,1 +1,0 @@
-- \$ \sigma: \mathbb{R}^{d_{out}} \to \mathbb{R}^{d_{out}} \$ is a nonlinear activation function applied componentwise,

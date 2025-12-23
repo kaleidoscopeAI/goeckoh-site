@@ -1,2 +1,1 @@
-# <REDACTED: potential secret detected>
-
+The `VoiceMimic` class is responsible for:

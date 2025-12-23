@@ -1,0 +1,13 @@
+"""Try to figure out the best way to invoke the current Python."""
+exe = sys.executable
+exe_name = os.path.basename(exe)
+
+# Try to use the basename, if it's the first executable.
+found_executable = shutil.which(exe_name)
+if found_executable and os.path.samefile(found_executable, exe):
+    return exe_name
+
+# Use the full executable name, because we couldn't find something simpler.
+return exe
+
+

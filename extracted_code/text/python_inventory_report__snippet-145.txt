@@ -1,0 +1,2 @@
+doc: Thought pipeline that converts a sensory packet + memory context into a list of
+classes: ThoughtPipeline

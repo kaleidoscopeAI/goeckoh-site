@@ -1,0 +1,2 @@
+- Use low-latency, exclusive audio modes and fixed buffer sizes.
+- Log buffer submission times and correlate with EEG event markers; check that inter-trial jitter is in the sub-millisecond to a few milliseconds range, which is acceptable relative to the ~100 ms N1 latency.[^12_7][^12_4]

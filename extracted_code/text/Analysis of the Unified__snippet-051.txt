@@ -1,0 +1,16 @@
+  cognitive_state = {  # Fast-changing (ms)
+      'attention_focus': vector,
+      'processing_intensity': float,
+      'temporal_context': deque
+  }
+  emotional_state = {  # Medium-changing (s)
+      'valence': float,      # Positive/negative affect
+      'arousal': float,      # Activation level  
+      'coherence': float,    # Emotional consistency
+      'resonance': float     # Synchronization with peers
+  }
+  structural_state = {  # Slow-changing (min/hr)
+      'knowledge_capacity': float,
+      'connection_strengths': matrix,
+      'learning_parameters': dict
+  }

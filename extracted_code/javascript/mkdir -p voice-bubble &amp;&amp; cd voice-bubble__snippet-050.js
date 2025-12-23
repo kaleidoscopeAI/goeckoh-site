@@ -1,1 +1,1 @@
-const lag = Math.round(sr / f0);
+const h = 10 * Math.log10(ratio / (1 - ratio));

@@ -1,3 +1,3 @@
-const files = fs.readdirSync(EXP_DIR).filter(f => f.endsWith(".json"));
-const items = files.map(f => {
-const p = JSON.parse(fs.readFileSync(path.join(EXP_DIR, f), "utf8"));
++ for (let i = 0; i < D; i++) v[i] /= nrm;
++ let lambdaOld = 0;
++ for (let it = 0; it < maxIter; it++) {

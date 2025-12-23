@@ -1,0 +1,2 @@
+  return max(sigma0 * (gamma ** step), sigma_min)
+

@@ -1,3 +1,7 @@
-*"a ready for anything environment" with resources and frameworks the nodes can utilize and pick from if needed allowing them to grow smaller communities of different abilities and function. Like object detection eventually etc
+def __init__(self, traits):
+    self.traits = traits
 
+def evolve_from_experience(self, experience, weight):
+    # Adjust traits based on experience and weight
+    self.traits = [trait + (experience * 0.1 * weight) for trait in self.traits]
 

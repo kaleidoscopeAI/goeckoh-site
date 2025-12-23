@@ -1,4 +1,2 @@
-let ca = compute_commitment_vec(&va);
-let cb = compute_commitment_vec(&vb);
-let mut same = 0usize;
-let tot = std::cmp::min(ca.len(), cb.len());
+if let Ok(mut r) = CPU_REGISTRY.lock() {
+if let Some(core) = r.get_mut(&core_id) {

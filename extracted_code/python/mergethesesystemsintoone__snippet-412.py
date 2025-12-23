@@ -1,1 +1,1 @@
-• We need to modify each part of the architecture from data input all the way through output for the following tasks
+Pass these nodes to NodeManager (assumed from context) and register them with AdvancedOrchestrator.

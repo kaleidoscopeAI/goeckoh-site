@@ -1,0 +1,4 @@
+category: str
+title: str
+description: str
+

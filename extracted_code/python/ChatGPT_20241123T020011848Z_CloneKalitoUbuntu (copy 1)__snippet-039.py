@@ -1,20 +1,28 @@
-# complete_demo.py
+from core_node import Node
 
-from enhanced_adaptive_node import EnhancedAdaptiveNode
+class MirroredNetwork:
+    def __init__(self):
+        self.primary_node = Node()
+        self.mirrored_node = Node()
 
-# Initialize node
-node = EnhancedAdaptiveNode(id="test_node")
+    def cross_validate(self):
+        """Cross-validate knowledge between nodes."""
+        common_keys = set(self.primary_node.knowledge.keys()) & set(self.mirrored_node.knowledge.keys())
+        unique_primary = set(self.primary_node.knowledge.keys()) - common_keys
+        unique_mirrored = set(self.mirrored_node.knowledge.keys()) - common_keys
 
-# Mock input data and context
-data = {'pattern': 'Example Data'}
-context = {'threat_level': 0.3, 'uncertainty': 0.2}
+        return {
+            "Common Knowledge": len(common_keys),
+            "Primary Unique": len(unique_primary),
+            "Mirrored Unique": len(unique_mirrored)
+        }
 
-# Run integrated tests
-print("Running full node demo...")
-
-for i in range(5):
-    print(f"\n-- Cycle {i+1} --")
-    result = node.process_input(data, context)
-    print("Processing Result:", result)
-    print("Current State:", node.get_state())
+    def simulate(self, iterations=50):
+        """Simulate the learning and mirroring process."""
+        for i in range(iterations):
+            self.primary_node.learn({"Topic": f"Data-{i}"})
+            self.mirrored_node.learn({"Topic": f"Data-{i}"})
+            self.primary_node.share_resources(self.mirrored_node)
+            self.mirrored_node.share_resources(self.primary_node)
+            print(self.cross_validate())
 

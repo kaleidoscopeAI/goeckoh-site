@@ -1,2 +1,23 @@
-class ImageProcessingUnit(ProcessingUnit):
-def init(self):
+    async def _apply_processing(
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+            
+
+
+
+
+
+        
+

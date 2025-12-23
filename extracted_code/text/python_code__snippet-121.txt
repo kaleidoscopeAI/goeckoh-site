@@ -1,8 +1,27 @@
-    # information about optional and required keys when using Required or NotRequired.
-    # Generic TypedDicts are also impossible using typing.TypedDict on Python <3.11.
-    # Aaaand on 3.12 we add __orig_bases__ to TypedDict
-    # to enable better runtime introspection.
-    # On 3.13 we deprecate some odd ways of creating TypedDicts.
-    TypedDict = typing.TypedDict
-    _TypedDictMeta = typing._TypedDictMeta
-    is_typeddict = typing.is_typeddict
+class UnifiedState:
+    """Complete system universe Ψ_t = (world, body, self_model, history, emotion, quantum)"""
+    t: int = 0
+    
+    # World representation
+    world: Dict[str, Any] = field(default_factory=dict)
+    
+    # Body/hardware state (L0-L4 levels)
+    body: Dict[str, float] = field(default_factory=dict)
+    
+    # Self-model and policy
+    self_model: Dict[str, Any] = field(default_factory=dict)
+    
+    # Compressed history
+    history_hashes: List[int] = field(default_factory=list)
+    
+    # Multi-dimensional emotional state
+    emotion_5d: EmotionalState = field(default_factory=EmotionalState)
+    emotion_lattice: np.ndarray = field(default_factory=lambda: np.zeros(5))
+    
+    # Quantum substrate
+    quantum: QuantumState = field(default_factory=QuantumState)
+    
+    # Memory and consciousness
+    memory_crystal: np.ndarray = field(default_factory=lambda: np.random.rand(64, 64, 64))
+    consciousness_level: float = 0.0
+

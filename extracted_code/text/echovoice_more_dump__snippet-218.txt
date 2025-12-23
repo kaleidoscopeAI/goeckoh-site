@@ -1,1 +1,2 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+• Mean Reversion: The defining characteristic. The drift term, (\theta (\mu - X_t) dt), actively pulls the process back towards (\mu). If (X_t > \mu), the drift is negative; if (X_t < \mu), the drift is positive. This captures the idea of a system settling towards a stable interpretation or state.
+• Stationarity: Unlike Brownian motion, the OU process is statistically stationary (assuming (t \to \infty)). Its long-term mean and variance are constant, reflecting a stable equilibrium despite ongoing fluctuations.

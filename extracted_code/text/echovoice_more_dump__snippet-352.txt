@@ -1,1 +1,6 @@
-4. Implement estimate_rho using power iteration and test on small networks by building the full J via finite differences for validation.
+crystal_ai_os_full_system.py: This is the most complete and rigorous implementation of the core physics. It defines the SemanticHamiltonian, the HybridState, and the GradientFlow and MetropolisEngine algorithms that drive the system's evolution. It also includes scaffolding for advanced features like error correction and category theory.
+
+unified_autonomous_ai_simulation_script_sandboxed.py: This script is a higher-level mathematical simulation of the multi-agent dynamics. It models concepts like stress (B matrix), mimicry (M vector), and decoherence (Phi) without the low-level Hamiltonian formalism.
+
+universal_agi_system.py: This is a conceptual sketch that bridges the gap, illustrating how low-level QuantumBits could form ThoughtNodes within a CognitiveCube, which are then clustered into SuperNodes for reflection via a transformer.
+

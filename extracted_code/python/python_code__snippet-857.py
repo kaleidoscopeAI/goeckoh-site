@@ -1,106 +1,129 @@
-    import random
-    import time
-    from itertools import cycle
-    from typing import Dict, List, Tuple
+class Hashes:
+    """A wrapper that builds multiple hashes at once and checks them against
+    known-good values
 
-    from .align import Align
-    from .console import Console
-    from .live import Live as Live
-    from .panel import Panel
-    from .rule import Rule
-    from .syntax import Syntax
-    from .table import Table
+    """
 
-    console = Console()
+    def __init__(self, hashes: Optional[Dict[str, List[str]]] = None) -> None:
+        """
+        :param hashes: A dict of algorithm names pointing to lists of allowed
+            hex digests
+        """
+        allowed = {}
+        if hashes is not None:
+            for alg, keys in hashes.items():
+                # Make sure values are always sorted (to ease equality checks)
+                allowed[alg] = sorted(keys)
+        self._allowed = allowed
 
-    syntax = Syntax(
-        '''def loop_last(values: Iterable[T]) -> Iterable[Tuple[bool, T]]:
-    """Iterate and generate a tuple with a flag for last value."""
-    iter_values = iter(values)
-    try:
-        previous_value = next(iter_values)
-    except StopIteration:
-        return
-    for value in iter_values:
-        yield False, previous_value
-        previous_value = value
-    yield True, previous_value''',
-        "python",
-        line_numbers=True,
-    )
+    def __and__(self, other: "Hashes") -> "Hashes":
+        if not isinstance(other, Hashes):
+            return NotImplemented
 
-    table = Table("foo", "bar", "baz")
-    table.add_row("1", "2", "3")
+        # If either of the Hashes object is entirely empty (i.e. no hash
+        # specified at all), all hashes from the other object are allowed.
+        if not other:
+            return self
+        if not self:
+            return other
 
-    progress_renderables = [
-        "You can make the terminal shorter and taller to see the live table hide"
-        "Text may be printed while the progress bars are rendering.",
-        Panel("In fact, [i]any[/i] renderable will work"),
-        "Such as [magenta]tables[/]...",
-        table,
-        "Pretty printed structures...",
-        {"type": "example", "text": "Pretty printed"},
-        "Syntax...",
-        syntax,
-        Rule("Give it a try!"),
-    ]
+        # Otherwise only hashes that present in both objects are allowed.
+        new = {}
+        for alg, values in other._allowed.items():
+            if alg not in self._allowed:
+                continue
+            new[alg] = [v for v in values if v in self._allowed[alg]]
+        return Hashes(new)
 
-    examples = cycle(progress_renderables)
+    @property
+    def digest_count(self) -> int:
+        return sum(len(digests) for digests in self._allowed.values())
 
-    exchanges = [
-        "SGD",
-        "MYR",
-        "EUR",
-        "USD",
-        "AUD",
-        "JPY",
-        "CNH",
-        "HKD",
-        "CAD",
-        "INR",
-        "DKK",
-        "GBP",
-        "RUB",
-        "NZD",
-        "MXN",
-        "IDR",
-        "TWD",
-        "THB",
-        "VND",
-    ]
-    with Live(console=console) as live_table:
-        exchange_rate_dict: Dict[Tuple[str, str], float] = {}
+    def is_hash_allowed(self, hash_name: str, hex_digest: str) -> bool:
+        """Return whether the given hex digest is allowed."""
+        return hex_digest in self._allowed.get(hash_name, [])
 
-        for index in range(100):
-            select_exchange = exchanges[index % len(exchanges)]
+    def check_against_chunks(self, chunks: Iterable[bytes]) -> None:
+        """Check good hashes against ones built from iterable of chunks of
+        data.
 
-            for exchange in exchanges:
-                if exchange == select_exchange:
-                    continue
-                time.sleep(0.4)
-                if random.randint(0, 10) < 1:
-                    console.log(next(examples))
-                exchange_rate_dict[(select_exchange, exchange)] = 200 / (
-                    (random.random() * 320) + 1
+        Raise HashMismatch if none match.
+
+        """
+        gots = {}
+        for hash_name in self._allowed.keys():
+            try:
+                gots[hash_name] = hashlib.new(hash_name)
+            except (ValueError, TypeError):
+                raise InstallationError(f"Unknown hash name: {hash_name}")
+
+        for chunk in chunks:
+            for hash in gots.values():
+                hash.update(chunk)
+
+        for hash_name, got in gots.items():
+            if got.hexdigest() in self._allowed[hash_name]:
+                return
+        self._raise(gots)
+
+    def _raise(self, gots: Dict[str, "_Hash"]) -> "NoReturn":
+        raise HashMismatch(self._allowed, gots)
+
+    def check_against_file(self, file: BinaryIO) -> None:
+        """Check good hashes against a file-like object
+
+        Raise HashMismatch if none match.
+
+        """
+        return self.check_against_chunks(read_chunks(file))
+
+    def check_against_path(self, path: str) -> None:
+        with open(path, "rb") as file:
+            return self.check_against_file(file)
+
+    def has_one_of(self, hashes: Dict[str, str]) -> bool:
+        """Return whether any of the given hashes are allowed."""
+        for hash_name, hex_digest in hashes.items():
+            if self.is_hash_allowed(hash_name, hex_digest):
+                return True
+        return False
+
+    def __bool__(self) -> bool:
+        """Return whether I know any known-good hashes."""
+        return bool(self._allowed)
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Hashes):
+            return NotImplemented
+        return self._allowed == other._allowed
+
+    def __hash__(self) -> int:
+        return hash(
+            ",".join(
+                sorted(
+                    ":".join((alg, digest))
+                    for alg, digest_list in self._allowed.items()
+                    for digest in digest_list
                 )
-                if len(exchange_rate_dict) > len(exchanges) - 1:
-                    exchange_rate_dict.pop(list(exchange_rate_dict.keys())[0])
-                table = Table(title="Exchange Rates")
+            )
+        )
 
-                table.add_column("Source Currency")
-                table.add_column("Destination Currency")
-                table.add_column("Exchange Rate")
 
-                for ((source, dest), exchange_rate) in exchange_rate_dict.items():
-                    table.add_row(
-                        source,
-                        dest,
-                        Text(
-                            f"{exchange_rate:.4f}",
-                            style="red" if exchange_rate < 1.0 else "green",
-                        ),
-                    )
+class MissingHashes(Hashes):
+    """A workalike for Hashes used when we're missing a hash for a requirement
 
-                live_table.update(Align.center(table))
+    It computes the actual hash of the requirement and raises a HashMissing
+    exception showing it to the user.
+
+    """
+
+    def __init__(self) -> None:
+        """Don't offer the ``hashes`` kwarg."""
+        # Pass our favorite hash in to generate a "gotten hash". With the
+        # empty list, it will never match, so an error will always raise.
+        super().__init__(hashes={FAVORITE_HASH: []})
+
+    def _raise(self, gots: Dict[str, "_Hash"]) -> "NoReturn":
+        raise HashMissing(gots[FAVORITE_HASH].hexdigest())
 
 

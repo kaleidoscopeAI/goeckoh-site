@@ -1,13 +1,6 @@
-class GrowthState(Enum):
-    DORMANT = auto()
-    GROWING = auto()
-    MATURE = auto()
-    DECLINING = auto()
-
-class TraitCategory(Enum):
-    COGNITIVE = auto()
-    PHYSICAL = auto()
-    ADAPTIVE = auto()
-    SOCIAL = auto()
-    SPECIALIZED = auto()
+class LLMProvider(str, Enum):
+    """Supported LLM providers"""
+    LLAMACPP_PYTHON = "llamacpp_python"
+    LLAMACPP_API = "llamacpp_api"
+    OLLAMA = "ollama"
 

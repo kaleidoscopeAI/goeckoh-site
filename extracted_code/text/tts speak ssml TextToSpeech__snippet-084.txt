@@ -1,0 +1,1 @@
+          task.contains("plan", ignoreCase = true) -> "Plan for $task: 1.

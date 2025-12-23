@@ -1,0 +1,1 @@
+self, mode="r", buffering=None, encoding=None, errors=None, newline=None

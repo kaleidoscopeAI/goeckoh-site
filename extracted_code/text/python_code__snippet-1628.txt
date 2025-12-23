@@ -1,0 +1,4 @@
+iterable: Iterable[bytes],
+*,
+bar_type: str,
+size: int,

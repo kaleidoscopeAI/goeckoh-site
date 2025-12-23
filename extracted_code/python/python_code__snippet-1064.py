@@ -1,21 +1,18 @@
-    def b(s):
-        return s
-    # Workaround for standalone backslash
+def hidden_cursor(file: IO[str]) -> Generator[None, None, None]:
+    # The Windows terminal does not support the hide/show cursor ANSI codes,
+    # even via colorama. So don't even try.
+    if WINDOWS:
+        yield
+    # We don't want to clutter the output with control characters if we're
+    # writing to a file, or if the user is running with --quiet.
+    # See https://github.com/pypa/pip/issues/3418
+    elif not file.isatty() or logger.getEffectiveLevel() > logging.INFO:
+        yield
+    else:
+        file.write(HIDE_CURSOR)
+        try:
+            yield
+        finally:
+            file.write(SHOW_CURSOR)
 
-    def u(s):
-        return unicode(s.replace(r'\\', r'\\\\'), "unicode_escape")
-    unichr = unichr
-    int2byte = chr
 
-    def byte2int(bs):
-        return ord(bs[0])
-
-    def indexbytes(buf, i):
-        return ord(buf[i])
-    iterbytes = functools.partial(itertools.imap, ord)
-    import StringIO
-    StringIO = BytesIO = StringIO.StringIO
-    _assertCountEqual = "assertItemsEqual"
-    _assertRaisesRegex = "assertRaisesRegexp"
-    _assertRegex = "assertRegexpMatches"
-    _assertNotRegex = "assertNotRegexpMatches"

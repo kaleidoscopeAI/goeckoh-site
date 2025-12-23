@@ -1,0 +1,7 @@
+"name": "Package Index Options",
+"options": [
+    index_url,
+    extra_index_url,
+    no_index,
+    find_links,
+],

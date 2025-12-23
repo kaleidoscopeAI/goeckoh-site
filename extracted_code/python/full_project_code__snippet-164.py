@@ -1,8 +1,1 @@
-    class UnsupportedExtension(Exception):
-        pass
-
-
-from io import BytesIO
-from socket import error as SocketError
-from socket import timeout
-
+# Map from urllib3 to PyOpenSSL compatible parameter-values.

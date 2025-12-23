@@ -1,2 +1,4 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+|                           ^^^^^^^^^^^^^^^^ unknown field
+|
+= note: available fields are: `target_acceptance_rate`, `adjustment_factor`, `window_size`
 

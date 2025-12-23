@@ -1,0 +1,5 @@
+  d = self._perpendicular_distance(contour[i], contour[0], contour[-1])
+  if d > dmax:
+      index = i
+      dmax = d
+

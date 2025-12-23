@@ -1,0 +1,5 @@
+efficiently.
+… +40 lines
+            Manually overload the Window DPI (for testing only.)
+
+

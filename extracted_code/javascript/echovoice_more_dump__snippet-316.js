@@ -1,2 +1,1 @@
-const decayRate = 0.1;
-for (let k = 0; k < m; k++) {
+for (let v of svc.S) expect(Number.isFinite(v)).toBeTruthy();

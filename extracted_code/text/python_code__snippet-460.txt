@@ -1,0 +1,8 @@
+"in": lambda lhs, rhs: lhs in rhs,
+"not in": lambda lhs, rhs: lhs not in rhs,
+"<": operator.lt,
+"<=": operator.le,
+"==": operator.eq,
+"!=": operator.ne,
+">=": operator.ge,
+">": operator.gt,

@@ -1,1 +1,1 @@
-CrystallineHeart + LocalLLM (from Echo v4) = inner emotional brain.
+goodness from advanced_voice_mimic.py.

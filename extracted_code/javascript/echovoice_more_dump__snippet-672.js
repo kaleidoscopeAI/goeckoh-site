@@ -1,1 +1,2 @@
-const Ki = nodes.map(n => Number(n.Ki) || 0);
+async function handleLoadW(id: string) {
+const resp = await axios.get(`http://localhost:4201/w/get/${id}`);

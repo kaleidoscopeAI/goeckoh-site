@@ -1,0 +1,2 @@
+ plays the sound through the speakers via sounddevice. This non-blocking architecture ensures the main loop can immediately
+ begin processing the next utterance.

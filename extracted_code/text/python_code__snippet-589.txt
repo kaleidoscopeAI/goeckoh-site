@@ -1,0 +1,5 @@
+*objects: Any,
+sep: str = " ",
+end: str = "\n",
+file: Optional[IO[str]] = None,
+flush: bool = False,

@@ -1,0 +1,5 @@
+CONFIG.behavior.correction_echo_enabled → optionally repeats back the corrected version of what the user said (“You said ‘u help me job’, I think you mean ‘Can you help me with a job?’”)
+CONFIG.behavior.support_voice_enabled → can give supportive/encouraging responses
+Settings are stored in settings.json and hot-reloaded
+Flask backend on port 8765 (probably for a dashboard or remote control)
+

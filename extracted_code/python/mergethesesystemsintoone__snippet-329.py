@@ -1,2 +1,12 @@
-class KnowledgeGraph:
-def init(self):
+class ConceptFormationSystem:
+
+
+    def __init__(self):
+
+
+
+
+
+
+        
+

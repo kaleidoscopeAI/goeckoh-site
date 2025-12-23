@@ -1,84 +1,135 @@
-class AGIStatus:
-    """A lightweight snapshot of the AGI state for display purposes."""
+from __future__ import annotations
 
-    freq_GHz: float = 0.0
-    temp_C: float = 0.0
-    DA: float = 0.0
-    Ser: float = 0.0
-    NE: float = 0.0
-    coherence: float = 0.0
-    awareness: float = 0.0
-    phi_proxy: float = 0.0
+import argparse
+import asyncio
+
+from .config import CompanionConfig, CONFIG
+from .data_store import DataStore
+from .speech_loop import SpeechLoop
+from .reports import summarize
+from .dashboard import create_app
+from .calming_strategies import list_categories, by_category, suggest_for_event
+from .guidance import GUIDANCE_SCRIPTS
+from .advanced_voice_mimic import Style
 
 
-class KQBCAgent:
-    """Agent wrapper around the unified AGI system.
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Autism speech companion control CLI")
+    sub = parser.add_subparsers(dest="command")
 
-    Each instance owns an ``AGISystem`` and maintains the last log item
-    returned from its step function.  The agent provides two main
-    methods: ``evaluate_correction`` determines whether an utterance
-    requires correction, and ``update_state`` feeds the utterance into
-    the AGI and stores the resulting log.  Callers can retrieve a
-    simple status dict via ``get_status`` for use in the GUI.
-    """
+    rec = sub.add_parser("record", help="Record a canonical phrase")
+    rec.add_argument("--text", required=True, help="Phrase text to associate with the recording")
+    rec.add_argument("--seconds", type=float, default=3.0, help="Recording length")
 
-    def __init__(self, config: Optional[CompanionConfig] = None, similarity_threshold: float = 0.78) -> None:
-        self.config = config or CompanionConfig()
-        self.agi = AGISystem()
-        self.similarity_threshold = similarity_threshold
-        self.last_log: Optional[Dict[str, object]] = None
+    sub.add_parser("list", help="List known phrases")
+    sub.add_parser("summary", help="Show metrics CSV path")
 
-    def _string_similarity(self, a: str, b: str) -> float:
-        """Compute a simple similarity ratio between two strings.
+    run = sub.add_parser("run", help="Start the realtime loop")
 
-        This uses Python's built-in ``difflib.SequenceMatcher`` which
-        returns a value between 0 and 1 where 1 indicates identical
-        strings.  It is sufficient for short phrases and avoids any
-        heavy ML dependencies.
-        """
-        return SequenceMatcher(None, a.strip().lower(), b.strip().lower()).ratio()
+    dash = sub.add_parser("dashboard", help="Launch therapist dashboard")
+    dash.add_argument("--host", default="0.0.0.0")
+    dash.add_argument("--port", type=int, default=8765)
 
-    def evaluate_correction(self, target_phrase: str, child_utterance: str) -> bool:
-        """Return True if the utterance differs substantially from the target.
+    sub.add_parser("gui", help="Launch the local Tkinter caregiver/child dashboard")
 
-        The default implementation computes a simple similarity ratio and
-        compares it against ``self.similarity_threshold``.  If the ratio
-        falls below the threshold the method returns True to indicate a
-        correction should be suggested.
-        """
-        similarity = self._string_similarity(target_phrase, child_utterance)
-        return similarity < self.similarity_threshold
+    strat = sub.add_parser("strategies", help="Show calming strategies catalog")
+    strat.add_argument("--category", choices=list_categories(), help="Filter by category")
+    strat.add_argument(
+        "--event",
+        choices=[
+            "meltdown",
+            "transition",
+            "anxious_speech",
+            "anxious",
+            "hyperactivity",
+            "high_energy",
+            "care_team_sync",
+            "school_meeting",
+            "communication_practice",
+            "caregiver_reset",
+            "interest_planning",
+            "perseveration",
+            "encouragement",
+        ],
+        help="Filter by event trigger",
+    )
 
-    def update_state(self, user_input: str) -> None:
-        """Step the AGI system with the given user input.
+    comfort = sub.add_parser("comfort", help="Play a supportive prompt right now")
+    comfort.add_argument("--event", choices=sorted(GUIDANCE_SCRIPTS.keys()), required=True)
+    comfort.add_argument("--message", help="Override guidance text with a custom message")
 
-        The AGI maintains an internal time and hardware state; each call
-        polls sensors, updates thought engines, emotional chemistry and
-        relational links, selects an action and logs the result.  The
-        resulting log is stored on the agent for later retrieval.
-        """
-        log_item = self.agi.step(user_input=user_input)
-        self.last_log = log_item
+    # New commands for Voice Crystal
+    record_facet = sub.add_parser("record-voice-facet", help="Record a voice sample for a specific style (facet)")
+    record_facet.add_argument("style", choices=["neutral", "calm", "excited"], help="Style label for this facet")
+    record_facet.add_argument("--seconds", type=float, default=3.0, help="Duration of the recording in seconds")
+    record_facet.add_argument("--name", help="Optional name suffix stored with the sample")
 
-    def get_status(self) -> AGIStatus:
-        """Return the current AGI status as a plain dataclass.
+    sub.add_parser("show-voice-profile", help="Show the current VoiceProfile facets")
 
-        If the agent has not yet been updated, returns default values.
-        """
-        if self.last_log is None:
-            return AGIStatus()
-        hw = self.last_log.get("hw", {})
-        emotion = self.last_log.get("emotion", {})
-        consciousness = self.last_log.get("consciousness", {})
-        return AGIStatus(
-            freq_GHz=float(hw.get("freq_GHz", 0.0)),
-            temp_C=float(hw.get("temp_C", 0.0)),
-            DA=float(emotion.get("DA", 0.0)),
-            Ser=float(emotion.get("Ser", 0.0)),
-            NE=float(emotion.get("NE", 0.0)),
-            coherence=float(consciousness.get("coherence", 0.0)),
-            awareness=float(consciousness.get("awareness", 0.0)),
-            phi_proxy=float(consciousness.get("phi_proxy", 0.0)),
-        )-e 
+    return parser
+
+
+def cmd_record(loop: SpeechLoop, args: argparse.Namespace) -> None:
+    phrase = loop.record_phrase(args.text, args.seconds)
+    print(f"Recorded phrase '{phrase.text}' as {phrase.audio_file}")
+
+
+def cmd_list(config: CompanionConfig) -> None:
+    data = DataStore(config)
+    for phrase in data.list_phrases():
+        print(f"{phrase.phrase_id}: '{phrase.text}' -> {phrase.audio_file}")
+
+
+def cmd_summary(config: CompanionConfig) -> None:
+    stats = summarize(config)
+    if not stats:
+        print("No attempts logged yet.")
+        return
+    print(f"Metrics CSV: {config.paths.metrics_csv}")
+    for phrase_id, row in stats.items():
+        rate = row.corrections / row.attempts if row.attempts else 0.0
+        print(f"{phrase_id}: attempts={row.attempts} corrections={row.corrections} correction_rate={rate:.2f}")
+    if config.paths.guidance_csv.exists():
+        with config.paths.guidance_csv.open() as f:
+            guidance_events = sum(1 for _ in f) - 1
+        if guidance_events > 0:
+            print(f"Guidance events logged: {guidance_events} (see {config.paths.guidance_csv})")
+
+
+def cmd_run(loop: SpeechLoop) -> None:
+    print("Starting realtime speech companion. Press Ctrl+C to exit.")
+    try:
+        asyncio.run(loop.run())
+    except KeyboardInterrupt:
+        print("Stopped.")
+
+
+def cmd_dashboard(config: CompanionConfig, host: str, port: int) -> None:
+    app = create_app(config)
+    print(f"Dashboard running at http://{host}:{port}")
+    app.run(host=host, port=port, debug=False)
+
+
+def cmd_gui(config: CompanionConfig) -> None:
+    from .tk_gui import run_gui  # Lazy import to avoid tkinter dependency for non-GUI usage
+
+    run_gui(config)
+
+
+def cmd_strategies(category: str | None, event: str | None) -> None:
+    if event:
+        strategies = suggest_for_event(event)
+    elif category:
+        strategies = by_category(category)
+    else:
+        strategies = suggest_for_event("anxious_speech")
+    print("Recommended calming strategies:")
+    for strategy in strategies:
+        cues = f" (cues: {', '.join(strategy.cues)})" if strategy.cues else ""
+        print(f"- [{strategy.category}] {strategy.title}{cues}\n  {strategy.description}\n")
+
+
+def cmd_comfort(loop: SpeechLoop, event: str, message: str | None) -> None:
+    loop.coach.speak(event, override_text=message)
 
 

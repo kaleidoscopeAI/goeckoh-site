@@ -1,0 +1,6 @@
+    """Transform data into a matrix of phases based on a simplified hashing method"""
+    combined = str (sorted(data.items()))
+    hash_val = int (hashlib.shake_256 (combined.encode()).hexdigest (256), 16)
+    rng = np.random.RandomState (hash_val)
+    return rng.uniform(0, 2 * np.pi, self.dimensions) # creates unique 2d vectors
+

@@ -1,2 +1,1 @@
-const svc = new ProjectionService({ constructs: ["A","B","C"], seed: 42 });
-const constructs = svc.update(nodes);
+for (let d=0; d<d_N; d++) Y[i][d] += η * dw * (N[j][d] - N[i][d]);

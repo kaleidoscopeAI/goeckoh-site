@@ -1,0 +1,4 @@
+""" Base exception for all IDNA-encoding related problems """
+pass
+
+

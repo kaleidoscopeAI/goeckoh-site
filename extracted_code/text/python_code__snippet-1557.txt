@@ -1,0 +1,6 @@
+Option,
+"--no-color",
+dest="no_color",
+action="store_true",
+default=False,
+help="Suppress colored output.",

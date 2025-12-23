@@ -1,20 +1,45 @@
-    fn new() -> Self {
-        let mut atom_types = HashMap::new();
-        let atoms = ["C", "N", "O", "F", "P", "S", "Cl", "Br", "I", "H", "Unknown"];
-        for (i, atom) in atoms.iter().enumerate() {
-            atom_types.insert(atom.to_string(), i);
-        }
-        Self { atom_types }
-    }
+    pub fn new() -> Self { Self }
 
-    fn encode(&self, symbol: &str, _x: f64, _y: f64, _z: f64) -> Vec<f64> { // Coordinates not used in encoding for simplicity
-        let mut features = vec![0.0; 11];
-        
-        if let Some(&idx) = self.atom_types.get(symbol) {
-            features[idx.min(10)] = 1.0;
-        } else {
-            features[10] = 1.0; // Unknown
+    async fn build_graph_from_kg(&self, content: &str) -> MutagEntry {
+        // Simple triple parser for RDF-like
+        let lines = content.lines();
+        let mut node_map = HashMap::new();
+        let mut next_id = 0;
+        let mut edge_index = Vec::new();
+        let mut edge_attr = Vec::new();
+        for line in lines {
+            let parts = line.split_whitespace().collect::<Vec<&str>>();
+            if parts.len() >= 3 {
+                let sub = parts[0].to_string();
+                let pred = parts[1];
+                let obj = parts[2].to_string();
+
+                let sub_id = *node_map.entry(sub).or_insert_with(|| {
+                    let id = next_id;
+                    next_id += 1;
+                    id
+                });
+                let obj_id = *node_map.entry(obj).or_insert_with(|| {
+                    let id = next_id;
+                    next_id += 1;
+                    id
+                });
+
+                edge_index.push(vec![sub_id, obj_id]);
+                edge_index.push(vec![obj_id, sub_id]);
+                // Edge feature based on pred hash mod 4
+                let mut attr = vec![0.0; 4];
+                attr[(pred.len() % 4)] = 1.0;
+                edge_attr.push(attr.clone());
+                edge_attr.push(attr);
+            }
         }
 
-        features
+        let num_nodes = node_map.len();
+        let mut x = vec![vec![0.0; 11]; num_nodes];
+        for i in 0..num_nodes {
+            x[i][i % 11] = 1.0;
+        }
+
+        MutagEntry { x, edge_index, edge_attr, y: 0 }
     }

@@ -1,2 +1,1 @@
-const resetNeutral = async () => {
-const svc = svcRef.current!;
+const pts = c.history.map(h => worldToScreen(h.x, h.y));

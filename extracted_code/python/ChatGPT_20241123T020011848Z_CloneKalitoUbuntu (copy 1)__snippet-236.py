@@ -1,4 +1,4 @@
-  - A central hub aggregates data from all nodes, acting as a meta-node for higher-level reasoning.
+- Build from foundational files (e.g.,
 
 
 

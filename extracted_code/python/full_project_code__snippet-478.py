@@ -1,27 +1,11 @@
-    import logging
-
-    from pip._vendor.tenacity import RetryCallState
-
-
-def before_nothing(retry_state: "RetryCallState") -> None:
-    """Before call strategy that does nothing."""
-
-
-def before_log(logger: "logging.Logger", log_level: int) -> typing.Callable[["RetryCallState"], None]:
-    """Before call strategy that logs to some logger the attempt."""
-
-    def log_it(retry_state: "RetryCallState") -> None:
-        if retry_state.fn is None:
-            # NOTE(sileht): can't really happen, but we must please mypy
-            fn_name = "<unknown>"
-        else:
-            fn_name = _utils.get_callback_name(retry_state.fn)
-        logger.log(
-            log_level,
-            f"Starting call to '{fn_name}', "
-            f"this is the {_utils.to_ordinal(retry_state.attempt_number)} time calling it.",
-        )
-
-    return log_it
-
-
+def retry(
+    sleep: t.Callable[[t.Union[int, float]], None] = sleep,
+    stop: "StopBaseT" = stop_never,
+    wait: "WaitBaseT" = wait_none(),
+    retry: "RetryBaseT" = retry_if_exception_type(),
+    before: t.Callable[["RetryCallState"], None] = before_nothing,
+    after: t.Callable[["RetryCallState"], None] = after_nothing,
+    before_sleep: t.Optional[t.Callable[["RetryCallState"], None]] = None,
+    reraise: bool = False,
+    retry_error_cls: t.Type["RetryError"] = RetryError,
+    retry_error_callback: t.Optional[t.Callable[["RetryCallState"], t.Any]] = None,

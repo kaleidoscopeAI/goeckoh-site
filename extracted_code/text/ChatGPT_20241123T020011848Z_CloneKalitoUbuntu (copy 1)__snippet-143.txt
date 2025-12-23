@@ -1,0 +1,8 @@
+"""Simulate resource sharing in the network."""
+for step in range(steps):
+    print(f"Step {step}")
+    for node in nodes:
+        node.share_resources()
+        print(f"Node {node.node_id}: Energy {node.energy:.2f}")
+    print("-" * 30)
+

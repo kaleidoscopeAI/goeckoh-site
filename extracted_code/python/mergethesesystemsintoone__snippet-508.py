@@ -1,30 +1,6 @@
-class ClusterManager:
-
-    def __init__(self, dynamic_node_management=False, enable_supernode_integration=False):
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    def form_clusters(self, nodes):
-
-
-
-
-
-
-
-
-
-
-
+from scipy.signal import get_window
+win = get_window(window, n_fft)
+f, t, Zxx = stft(x, fs=sr, window=win, nperseg=n_fft, noverlap=n_fft - hop_length, boundary=None, padded=True)
+S = np.abs(Zxx)**2
+return f, t, S
 

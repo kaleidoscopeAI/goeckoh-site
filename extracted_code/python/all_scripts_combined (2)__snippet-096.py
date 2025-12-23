@@ -1,38 +1,65 @@
-class MemorySystem:
-    def __init__(self, embedding_dim: int = 128, capacity: int = 10000):
-        self.embedding_dim = embedding_dim
-        self.capacity = capacity
-        self.episodic = []  # list of (ts, emb, text)
-        self.semantic = {}  # key -> emb
-        self._rng = np.random.RandomState(12345)
-        # We'll derive a deterministic random projection matrix seeded by a constant
-        self.random_proj = self._rng.randn(self.embedding_dim, 256) * 0.01
+from __future__ import annotations
+import numpy as np
+from faster_whisper import WhisperModel
+import language_tool_python
+from core.settings import SpeechSettings
+from .gears import Information, AudioData, SpeechData
 
-    def embed(self, text: str) -> np.ndarray:
-        b = stable_hash_bytes(text, length=256)
-        arr = np.frombuffer(b, dtype=np.uint8).astype(np.float32)
-        emb = self.random_proj @ arr
-        n = np.linalg.norm(emb)
-        return emb / (n + 1e-12)
+class SpeechProcessorGear:
+    """
+    A gear that processes audio data into raw and corrected text.
+    """
+    def __init__(self, speech_cfg: SpeechSettings, device: str = "cpu"):
+        self.config = speech_cfg
+        self.device = device
+        
+        # Load Whisper model (using int8 for CPU performance)
+        print(f"Loading Whisper model: {self.config.whisper_model}...")
+        self.model = WhisperModel(self.config.whisper_model, device=self.device, compute_type="int8")
+        
+        # Initialize LanguageTool
+        print("Loading LanguageTool...")
+        try:
+            if self.config.language_tool_server:
+                self.lt = language_tool_python.LanguageTool('en-US', remote_server=self.config.language_tool_server)
+            else:
+                self.lt = language_tool_python.LanguageTool('en-US')
+        except Exception as e:
+            print(f"Warning: Could not initialize LanguageTool. Grammar correction will be disabled. Error: {e}")
+            self.lt = None
 
-    def store_episode(self, text: str):
-        emb = self.embed(text)
-        ts = now_seconds()
-        if len(self.episodic) >= self.capacity:
-            self.episodic.pop(0)
-        self.episodic.append((ts, emb, text))
+    def process(self, audio_info: Information) -> Information:
+        """
+        Transcribes and corrects speech from an audio Information object.
+        """
+        if not isinstance(audio_info.payload, AudioData):
+            raise TypeError("SpeechProcessorGear expects an Information object with an AudioData payload.")
 
-    def retrieve(self, query: str, top_k: int = 5):
-        q_emb = self.embed(query)
-        sims = []
-        for ts, emb, text in self.episodic:
-            sims.append((float(np.dot(q_emb, emb)), ts, text))
-        sims.sort(reverse=True, key=lambda x: x[0])
-        return sims[:top_k]
+        audio_waveform = audio_info.payload.waveform
+        
+        # 1. Transcribe audio using faster-whisper
+        # The model expects a float32 numpy array.
+        segments, info = self.model.transcribe(audio_waveform, beam_size=5)
+        raw_text = " ".join([s.text for s in segments]).strip()
+        
+        if not raw_text:
+            return audio_info.new(
+                payload=SpeechData(raw_text="", corrected_text="", is_final=True),
+                source_gear="SpeechProcessorGear"
+            )
 
-    def store_semantic(self, key: str, text: str):
-        self.semantic[key] = self.embed(text)
+        # 2. Correct grammar using LanguageTool
+        corrected_text = raw_text
+        if self.lt:
+            try:
+                matches = self.lt.check(raw_text)
+                corrected_text = language_tool_python.utils.correct(raw_text, matches)
+            except Exception as e:
+                print(f"Warning: LanguageTool correction failed. Using raw text. Error: {e}")
 
-    def lookup_semantic(self, key: str):
-        return self.semantic.get(key, None)
+        return audio_info.new(
+            payload=SpeechData(raw_text=raw_text, corrected_text=corrected_text, is_final=True),
+            source_gear="SpeechProcessorGear"
+        )-e 
+
 

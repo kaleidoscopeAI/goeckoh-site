@@ -1,0 +1,11 @@
+while True:
+    try:
+        # perform small maintenance: run one crawl step and sleep
+        await crawler.crawl_once(max_docs=1)
+        await asyncio.sleep(1.0)
+    except asyncio.CancelledError:
+        break
+    except Exception as e:
+        logging.error(f'Autonomous loop error: {e}')
+        await asyncio.sleep(2.0)
+

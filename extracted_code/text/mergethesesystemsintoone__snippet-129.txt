@@ -1,1 +1,1 @@
-class EmergentPatternDetector.txt
+Abstract base class (CodeTransformer) for language-specific transformers.

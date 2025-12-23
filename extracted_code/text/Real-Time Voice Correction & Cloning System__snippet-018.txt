@@ -1,0 +1,5 @@
+name="CorrectionAgent",
+instruction="""Change third-person speech to first-person. 
+Examples: 'He wants' -> 'I want', 'They are' -> 'I am'. 
+Respond ONLY with the JSON format.""",
+output_schema=SpeechOutput

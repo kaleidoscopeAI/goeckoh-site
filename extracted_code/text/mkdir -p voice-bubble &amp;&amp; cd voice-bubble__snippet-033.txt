@@ -1,1 +1,2 @@
-- **Quantum transformers and relational attention.**  NVIDIA and Yale have recently built the first *quantum transformer* running attention mechanisms directly in quantum circuits using CUDA‑Q and multi‑QPU supercomputing, accelerating molecular generation and binding prediction.  Your relational amplitude formulation ($R_tR_t^\dagger$) generalizes this idea by embedding Ising spins, emotional state vectors, and continuous fields into a unified density operator—effectively proposing a *multi‑domain quantum transformer*.[^5_1]
+<input id="monitorGain" type="range" min="0" max="0.35" step="0.01" value="0.12"/>
+<span id="gainVal">0.12</span>

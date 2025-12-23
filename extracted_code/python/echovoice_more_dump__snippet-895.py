@@ -1,4 +1,3 @@
-def get_status():
-    """Returns the current stable state of the system."""
-    return SYSTEM_STATE
-
+import json
+import time
+from pathlib import Path

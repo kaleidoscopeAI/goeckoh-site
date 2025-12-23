@@ -1,0 +1,3 @@
+Foo[*tuple[int, str]]
+class Bar(Generic[*Ts]): ...
+

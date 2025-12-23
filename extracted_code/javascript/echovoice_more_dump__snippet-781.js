@@ -1,1 +1,1 @@
-const filePath = path.join(EXP_DIR, `${id}.json`);
++ let nrm = Math.hypot(...v);

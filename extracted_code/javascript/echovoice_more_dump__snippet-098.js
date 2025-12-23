@@ -1,5 +1,2 @@
-  for (const [idx, n] of [...this.nodes.entries()].entries()) { // Fix index
-    // ... 
-    const varX = hist.reduce((sum, h) => sum + len(sub(h.pos, meanPos)) ** 2, 0) / this.crystalWindow;
-    // ...
-  }
+  const replicas = [this.temperature, this.temperature * 2]; // 2 temps
+  // Simulate high T escape, exchange if exp(-ΔH Δ(1/T)) > rand

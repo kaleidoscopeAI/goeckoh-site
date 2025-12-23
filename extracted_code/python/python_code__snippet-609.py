@@ -1,26 +1,652 @@
-from __future__ import unicode_literals
+def get_distribution(dist):
+    """Return a current distribution object for a Requirement or string"""
+    if isinstance(dist, str):
+        dist = Requirement.parse(dist)
+    if isinstance(dist, Requirement):
+        dist = get_provider(dist)
+    if not isinstance(dist, Distribution):
+        raise TypeError("Expected string, Requirement, or Distribution", dist)
+    return dist
 
-import base64
-import codecs
-import datetime
-from email import message_from_file
-import hashlib
-import json
-import logging
-import os
-import posixpath
-import re
-import shutil
-import sys
-import tempfile
-import zipfile
 
-from . import __version__, DistlibException
-from .compat import sysconfig, ZipFile, fsdecode, text_type, filter
-from .database import InstalledDistribution
-from .metadata import Metadata, WHEEL_METADATA_FILENAME, LEGACY_METADATA_FILENAME
-from .util import (FileOperator, convert_path, CSVReader, CSVWriter, Cache,
-                   cached_property, get_cache_base, read_exports, tempdir,
-                   get_platform)
-from .version import NormalizedVersion, UnsupportedVersionError
+def load_entry_point(dist, group, name):
+    """Return `name` entry point of `group` for `dist` or raise ImportError"""
+    return get_distribution(dist).load_entry_point(group, name)
+
+
+def get_entry_map(dist, group=None):
+    """Return the entry point map for `group`, or the full entry map"""
+    return get_distribution(dist).get_entry_map(group)
+
+
+def get_entry_info(dist, group, name):
+    """Return the EntryPoint object for `group`+`name`, or ``None``"""
+    return get_distribution(dist).get_entry_info(group, name)
+
+
+class IMetadataProvider:
+    def has_metadata(name):
+        """Does the package's distribution contain the named metadata?"""
+
+    def get_metadata(name):
+        """The named metadata resource as a string"""
+
+    def get_metadata_lines(name):
+        """Yield named metadata resource as list of non-blank non-comment lines
+
+        Leading and trailing whitespace is stripped from each line, and lines
+        with ``#`` as the first non-blank character are omitted."""
+
+    def metadata_isdir(name):
+        """Is the named metadata a directory?  (like ``os.path.isdir()``)"""
+
+    def metadata_listdir(name):
+        """List of metadata names in the directory (like ``os.listdir()``)"""
+
+    def run_script(script_name, namespace):
+        """Execute the named script in the supplied namespace dictionary"""
+
+
+class IResourceProvider(IMetadataProvider):
+    """An object that provides access to package resources"""
+
+    def get_resource_filename(manager, resource_name):
+        """Return a true filesystem path for `resource_name`
+
+        `manager` must be an ``IResourceManager``"""
+
+    def get_resource_stream(manager, resource_name):
+        """Return a readable file-like object for `resource_name`
+
+        `manager` must be an ``IResourceManager``"""
+
+    def get_resource_string(manager, resource_name):
+        """Return a string containing the contents of `resource_name`
+
+        `manager` must be an ``IResourceManager``"""
+
+    def has_resource(resource_name):
+        """Does the package contain the named resource?"""
+
+    def resource_isdir(resource_name):
+        """Is the named resource a directory?  (like ``os.path.isdir()``)"""
+
+    def resource_listdir(resource_name):
+        """List of resource names in the directory (like ``os.listdir()``)"""
+
+
+class WorkingSet:
+    """A collection of active distributions on sys.path (or a similar list)"""
+
+    def __init__(self, entries=None):
+        """Create working set from list of path entries (default=sys.path)"""
+        self.entries = []
+        self.entry_keys = {}
+        self.by_key = {}
+        self.normalized_to_canonical_keys = {}
+        self.callbacks = []
+
+        if entries is None:
+            entries = sys.path
+
+        for entry in entries:
+            self.add_entry(entry)
+
+    @classmethod
+    def _build_master(cls):
+        """
+        Prepare the master working set.
+        """
+        ws = cls()
+        try:
+            from __main__ import __requires__
+        except ImportError:
+            # The main program does not list any requirements
+            return ws
+
+        # ensure the requirements are met
+        try:
+            ws.require(__requires__)
+        except VersionConflict:
+            return cls._build_from_requirements(__requires__)
+
+        return ws
+
+    @classmethod
+    def _build_from_requirements(cls, req_spec):
+        """
+        Build a working set from a requirement spec. Rewrites sys.path.
+        """
+        # try it without defaults already on sys.path
+        # by starting with an empty path
+        ws = cls([])
+        reqs = parse_requirements(req_spec)
+        dists = ws.resolve(reqs, Environment())
+        for dist in dists:
+            ws.add(dist)
+
+        # add any missing entries from sys.path
+        for entry in sys.path:
+            if entry not in ws.entries:
+                ws.add_entry(entry)
+
+        # then copy back to sys.path
+        sys.path[:] = ws.entries
+        return ws
+
+    def add_entry(self, entry):
+        """Add a path item to ``.entries``, finding any distributions on it
+
+        ``find_distributions(entry, True)`` is used to find distributions
+        corresponding to the path entry, and they are added.  `entry` is
+        always appended to ``.entries``, even if it is already present.
+        (This is because ``sys.path`` can contain the same value more than
+        once, and the ``.entries`` of the ``sys.path`` WorkingSet should always
+        equal ``sys.path``.)
+        """
+        self.entry_keys.setdefault(entry, [])
+        self.entries.append(entry)
+        for dist in find_distributions(entry, True):
+            self.add(dist, entry, False)
+
+    def __contains__(self, dist):
+        """True if `dist` is the active distribution for its project"""
+        return self.by_key.get(dist.key) == dist
+
+    def find(self, req):
+        """Find a distribution matching requirement `req`
+
+        If there is an active distribution for the requested project, this
+        returns it as long as it meets the version requirement specified by
+        `req`.  But, if there is an active distribution for the project and it
+        does *not* meet the `req` requirement, ``VersionConflict`` is raised.
+        If there is no active distribution for the requested project, ``None``
+        is returned.
+        """
+        dist = self.by_key.get(req.key)
+
+        if dist is None:
+            canonical_key = self.normalized_to_canonical_keys.get(req.key)
+
+            if canonical_key is not None:
+                req.key = canonical_key
+                dist = self.by_key.get(canonical_key)
+
+        if dist is not None and dist not in req:
+            # XXX add more info
+            raise VersionConflict(dist, req)
+        return dist
+
+    def iter_entry_points(self, group, name=None):
+        """Yield entry point objects from `group` matching `name`
+
+        If `name` is None, yields all entry points in `group` from all
+        distributions in the working set, otherwise only ones matching
+        both `group` and `name` are yielded (in distribution order).
+        """
+        return (
+            entry
+            for dist in self
+            for entry in dist.get_entry_map(group).values()
+            if name is None or name == entry.name
+        )
+
+    def run_script(self, requires, script_name):
+        """Locate distribution for `requires` and run `script_name` script"""
+        ns = sys._getframe(1).f_globals
+        name = ns['__name__']
+        ns.clear()
+        ns['__name__'] = name
+        self.require(requires)[0].run_script(script_name, ns)
+
+    def __iter__(self):
+        """Yield distributions for non-duplicate projects in the working set
+
+        The yield order is the order in which the items' path entries were
+        added to the working set.
+        """
+        seen = {}
+        for item in self.entries:
+            if item not in self.entry_keys:
+                # workaround a cache issue
+                continue
+
+            for key in self.entry_keys[item]:
+                if key not in seen:
+                    seen[key] = 1
+                    yield self.by_key[key]
+
+    def add(self, dist, entry=None, insert=True, replace=False):
+        """Add `dist` to working set, associated with `entry`
+
+        If `entry` is unspecified, it defaults to the ``.location`` of `dist`.
+        On exit from this routine, `entry` is added to the end of the working
+        set's ``.entries`` (if it wasn't already present).
+
+        `dist` is only added to the working set if it's for a project that
+        doesn't already have a distribution in the set, unless `replace=True`.
+        If it's added, any callbacks registered with the ``subscribe()`` method
+        will be called.
+        """
+        if insert:
+            dist.insert_on(self.entries, entry, replace=replace)
+
+        if entry is None:
+            entry = dist.location
+        keys = self.entry_keys.setdefault(entry, [])
+        keys2 = self.entry_keys.setdefault(dist.location, [])
+        if not replace and dist.key in self.by_key:
+            # ignore hidden distros
+            return
+
+        self.by_key[dist.key] = dist
+        normalized_name = packaging.utils.canonicalize_name(dist.key)
+        self.normalized_to_canonical_keys[normalized_name] = dist.key
+        if dist.key not in keys:
+            keys.append(dist.key)
+        if dist.key not in keys2:
+            keys2.append(dist.key)
+        self._added_new(dist)
+
+    def resolve(
+        self,
+        requirements,
+        env=None,
+        installer=None,
+        replace_conflicting=False,
+        extras=None,
+    ):
+        """List all distributions needed to (recursively) meet `requirements`
+
+        `requirements` must be a sequence of ``Requirement`` objects.  `env`,
+        if supplied, should be an ``Environment`` instance.  If
+        not supplied, it defaults to all distributions available within any
+        entry or distribution in the working set.  `installer`, if supplied,
+        will be invoked with each requirement that cannot be met by an
+        already-installed distribution; it should return a ``Distribution`` or
+        ``None``.
+
+        Unless `replace_conflicting=True`, raises a VersionConflict exception
+        if
+        any requirements are found on the path that have the correct name but
+        the wrong version.  Otherwise, if an `installer` is supplied it will be
+        invoked to obtain the correct version of the requirement and activate
+        it.
+
+        `extras` is a list of the extras to be used with these requirements.
+        This is important because extra requirements may look like `my_req;
+        extra = "my_extra"`, which would otherwise be interpreted as a purely
+        optional requirement.  Instead, we want to be able to assert that these
+        requirements are truly required.
+        """
+
+        # set up the stack
+        requirements = list(requirements)[::-1]
+        # set of processed requirements
+        processed = {}
+        # key -> dist
+        best = {}
+        to_activate = []
+
+        req_extras = _ReqExtras()
+
+        # Mapping of requirement to set of distributions that required it;
+        # useful for reporting info about conflicts.
+        required_by = collections.defaultdict(set)
+
+        while requirements:
+            # process dependencies breadth-first
+            req = requirements.pop(0)
+            if req in processed:
+                # Ignore cyclic or redundant dependencies
+                continue
+
+            if not req_extras.markers_pass(req, extras):
+                continue
+
+            dist = self._resolve_dist(
+                req, best, replace_conflicting, env, installer, required_by, to_activate
+            )
+
+            # push the new requirements onto the stack
+            new_requirements = dist.requires(req.extras)[::-1]
+            requirements.extend(new_requirements)
+
+            # Register the new requirements needed by req
+            for new_requirement in new_requirements:
+                required_by[new_requirement].add(req.project_name)
+                req_extras[new_requirement] = req.extras
+
+            processed[req] = True
+
+        # return list of distros to activate
+        return to_activate
+
+    def _resolve_dist(
+        self, req, best, replace_conflicting, env, installer, required_by, to_activate
+    ):
+        dist = best.get(req.key)
+        if dist is None:
+            # Find the best distribution and add it to the map
+            dist = self.by_key.get(req.key)
+            if dist is None or (dist not in req and replace_conflicting):
+                ws = self
+                if env is None:
+                    if dist is None:
+                        env = Environment(self.entries)
+                    else:
+                        # Use an empty environment and workingset to avoid
+                        # any further conflicts with the conflicting
+                        # distribution
+                        env = Environment([])
+                        ws = WorkingSet([])
+                dist = best[req.key] = env.best_match(
+                    req, ws, installer, replace_conflicting=replace_conflicting
+                )
+                if dist is None:
+                    requirers = required_by.get(req, None)
+                    raise DistributionNotFound(req, requirers)
+            to_activate.append(dist)
+        if dist not in req:
+            # Oops, the "best" so far conflicts with a dependency
+            dependent_req = required_by[req]
+            raise VersionConflict(dist, req).with_context(dependent_req)
+        return dist
+
+    def find_plugins(self, plugin_env, full_env=None, installer=None, fallback=True):
+        """Find all activatable distributions in `plugin_env`
+
+        Example usage::
+
+            distributions, errors = working_set.find_plugins(
+                Environment(plugin_dirlist)
+            )
+            # add plugins+libs to sys.path
+            map(working_set.add, distributions)
+            # display errors
+            print('Could not load', errors)
+
+        The `plugin_env` should be an ``Environment`` instance that contains
+        only distributions that are in the project's "plugin directory" or
+        directories. The `full_env`, if supplied, should be an ``Environment``
+        contains all currently-available distributions.  If `full_env` is not
+        supplied, one is created automatically from the ``WorkingSet`` this
+        method is called on, which will typically mean that every directory on
+        ``sys.path`` will be scanned for distributions.
+
+        `installer` is a standard installer callback as used by the
+        ``resolve()`` method. The `fallback` flag indicates whether we should
+        attempt to resolve older versions of a plugin if the newest version
+        cannot be resolved.
+
+        This method returns a 2-tuple: (`distributions`, `error_info`), where
+        `distributions` is a list of the distributions found in `plugin_env`
+        that were loadable, along with any other distributions that are needed
+        to resolve their dependencies.  `error_info` is a dictionary mapping
+        unloadable plugin distributions to an exception instance describing the
+        error that occurred. Usually this will be a ``DistributionNotFound`` or
+        ``VersionConflict`` instance.
+        """
+
+        plugin_projects = list(plugin_env)
+        # scan project names in alphabetic order
+        plugin_projects.sort()
+
+        error_info = {}
+        distributions = {}
+
+        if full_env is None:
+            env = Environment(self.entries)
+            env += plugin_env
+        else:
+            env = full_env + plugin_env
+
+        shadow_set = self.__class__([])
+        # put all our entries in shadow_set
+        list(map(shadow_set.add, self))
+
+        for project_name in plugin_projects:
+            for dist in plugin_env[project_name]:
+                req = [dist.as_requirement()]
+
+                try:
+                    resolvees = shadow_set.resolve(req, env, installer)
+
+                except ResolutionError as v:
+                    # save error info
+                    error_info[dist] = v
+                    if fallback:
+                        # try the next older version of project
+                        continue
+                    else:
+                        # give up on this project, keep going
+                        break
+
+                else:
+                    list(map(shadow_set.add, resolvees))
+                    distributions.update(dict.fromkeys(resolvees))
+
+                    # success, no need to try any more versions of this project
+                    break
+
+        distributions = list(distributions)
+        distributions.sort()
+
+        return distributions, error_info
+
+    def require(self, *requirements):
+        """Ensure that distributions matching `requirements` are activated
+
+        `requirements` must be a string or a (possibly-nested) sequence
+        thereof, specifying the distributions and versions required.  The
+        return value is a sequence of the distributions that needed to be
+        activated to fulfill the requirements; all relevant distributions are
+        included, even if they were already activated in this working set.
+        """
+        needed = self.resolve(parse_requirements(requirements))
+
+        for dist in needed:
+            self.add(dist)
+
+        return needed
+
+    def subscribe(self, callback, existing=True):
+        """Invoke `callback` for all distributions
+
+        If `existing=True` (default),
+        call on all existing ones, as well.
+        """
+        if callback in self.callbacks:
+            return
+        self.callbacks.append(callback)
+        if not existing:
+            return
+        for dist in self:
+            callback(dist)
+
+    def _added_new(self, dist):
+        for callback in self.callbacks:
+            callback(dist)
+
+    def __getstate__(self):
+        return (
+            self.entries[:],
+            self.entry_keys.copy(),
+            self.by_key.copy(),
+            self.normalized_to_canonical_keys.copy(),
+            self.callbacks[:],
+        )
+
+    def __setstate__(self, e_k_b_n_c):
+        entries, keys, by_key, normalized_to_canonical_keys, callbacks = e_k_b_n_c
+        self.entries = entries[:]
+        self.entry_keys = keys.copy()
+        self.by_key = by_key.copy()
+        self.normalized_to_canonical_keys = normalized_to_canonical_keys.copy()
+        self.callbacks = callbacks[:]
+
+
+class _ReqExtras(dict):
+    """
+    Map each requirement to the extras that demanded it.
+    """
+
+    def markers_pass(self, req, extras=None):
+        """
+        Evaluate markers for req against each extra that
+        demanded it.
+
+        Return False if the req has a marker and fails
+        evaluation. Otherwise, return True.
+        """
+        extra_evals = (
+            req.marker.evaluate({'extra': extra})
+            for extra in self.get(req, ()) + (extras or (None,))
+        )
+        return not req.marker or any(extra_evals)
+
+
+class Environment:
+    """Searchable snapshot of distributions on a search path"""
+
+    def __init__(
+        self, search_path=None, platform=get_supported_platform(), python=PY_MAJOR
+    ):
+        """Snapshot distributions available on a search path
+
+        Any distributions found on `search_path` are added to the environment.
+        `search_path` should be a sequence of ``sys.path`` items.  If not
+        supplied, ``sys.path`` is used.
+
+        `platform` is an optional string specifying the name of the platform
+        that platform-specific distributions must be compatible with.  If
+        unspecified, it defaults to the current platform.  `python` is an
+        optional string naming the desired version of Python (e.g. ``'3.6'``);
+        it defaults to the current version.
+
+        You may explicitly set `platform` (and/or `python`) to ``None`` if you
+        wish to map *all* distributions, not just those compatible with the
+        running platform or Python version.
+        """
+        self._distmap = {}
+        self.platform = platform
+        self.python = python
+        self.scan(search_path)
+
+    def can_add(self, dist):
+        """Is distribution `dist` acceptable for this environment?
+
+        The distribution must match the platform and python version
+        requirements specified when this environment was created, or False
+        is returned.
+        """
+        py_compat = (
+            self.python is None
+            or dist.py_version is None
+            or dist.py_version == self.python
+        )
+        return py_compat and compatible_platforms(dist.platform, self.platform)
+
+    def remove(self, dist):
+        """Remove `dist` from the environment"""
+        self._distmap[dist.key].remove(dist)
+
+    def scan(self, search_path=None):
+        """Scan `search_path` for distributions usable in this environment
+
+        Any distributions found are added to the environment.
+        `search_path` should be a sequence of ``sys.path`` items.  If not
+        supplied, ``sys.path`` is used.  Only distributions conforming to
+        the platform/python version defined at initialization are added.
+        """
+        if search_path is None:
+            search_path = sys.path
+
+        for item in search_path:
+            for dist in find_distributions(item):
+                self.add(dist)
+
+    def __getitem__(self, project_name):
+        """Return a newest-to-oldest list of distributions for `project_name`
+
+        Uses case-insensitive `project_name` comparison, assuming all the
+        project's distributions use their project's name converted to all
+        lowercase as their key.
+
+        """
+        distribution_key = project_name.lower()
+        return self._distmap.get(distribution_key, [])
+
+    def add(self, dist):
+        """Add `dist` if we ``can_add()`` it and it has not already been added"""
+        if self.can_add(dist) and dist.has_version():
+            dists = self._distmap.setdefault(dist.key, [])
+            if dist not in dists:
+                dists.append(dist)
+                dists.sort(key=operator.attrgetter('hashcmp'), reverse=True)
+
+    def best_match(self, req, working_set, installer=None, replace_conflicting=False):
+        """Find distribution best matching `req` and usable on `working_set`
+
+        This calls the ``find(req)`` method of the `working_set` to see if a
+        suitable distribution is already active.  (This may raise
+        ``VersionConflict`` if an unsuitable version of the project is already
+        active in the specified `working_set`.)  If a suitable distribution
+        isn't active, this method returns the newest distribution in the
+        environment that meets the ``Requirement`` in `req`.  If no suitable
+        distribution is found, and `installer` is supplied, then the result of
+        calling the environment's ``obtain(req, installer)`` method will be
+        returned.
+        """
+        try:
+            dist = working_set.find(req)
+        except VersionConflict:
+            if not replace_conflicting:
+                raise
+            dist = None
+        if dist is not None:
+            return dist
+        for dist in self[req.key]:
+            if dist in req:
+                return dist
+        # try to download/install
+        return self.obtain(req, installer)
+
+    def obtain(self, requirement, installer=None):
+        """Obtain a distribution matching `requirement` (e.g. via download)
+
+        Obtain a distro that matches requirement (e.g. via download).  In the
+        base ``Environment`` class, this routine just returns
+        ``installer(requirement)``, unless `installer` is None, in which case
+        None is returned instead.  This method is a hook that allows subclasses
+        to attempt other ways of obtaining a distribution before falling back
+        to the `installer` argument."""
+        if installer is not None:
+            return installer(requirement)
+
+    def __iter__(self):
+        """Yield the unique project names of the available distributions"""
+        for key in self._distmap.keys():
+            if self[key]:
+                yield key
+
+    def __iadd__(self, other):
+        """In-place addition of a distribution or environment"""
+        if isinstance(other, Distribution):
+            self.add(other)
+        elif isinstance(other, Environment):
+            for project in other:
+                for dist in other[project]:
+                    self.add(dist)
+        else:
+            raise TypeError("Can't add %r to environment" % (other,))
+        return self
+
+    def __add__(self, other):
+        """Add an environment or distribution to an environment"""
+        new = self.__class__([], platform=None, python=None)
+        for env in self, other:
+            new += env
+        return new
+
 

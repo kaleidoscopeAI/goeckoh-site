@@ -1,0 +1,12 @@
+_fields_ = (
+    ("cbSize", DWORD),
+    ("TrustStatus", CERT_TRUST_STATUS),
+    ("cChain", DWORD),
+    ("rgpChain", POINTER(PCERT_SIMPLE_CHAIN)),
+    ("cLowerQualityChainContext", DWORD),
+    ("rgpLowerQualityChainContext", c_void_p),
+    ("fHasRevocationFreshnessTime", BOOL),
+    ("dwRevocationFreshnessTime", DWORD),
+)
+
+

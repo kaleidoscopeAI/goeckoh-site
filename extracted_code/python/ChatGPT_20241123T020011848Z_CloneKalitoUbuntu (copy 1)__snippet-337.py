@@ -1,0 +1,3 @@
+- Acquire knowledge from external resources.
+- Share and receive information with/from other nodes.
+- Replicate when thresholds are met (e.g., memory, energy, or complexity).

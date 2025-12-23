@@ -1,11 +1,4 @@
-import re
-from ast import literal_eval
-from operator import attrgetter
-from typing import Callable, Iterable, List, Match, NamedTuple, Optional, Tuple, Union
-
-from ._emoji_replace import _emoji_replace
-from .emoji import EmojiVariant
-from .errors import MarkupError
-from .style import Style
-from .text import Span, Text
+    # but import it soon enough that it is in memory and available during
+    # a pip reinstall.
+    from . import _distutils
 

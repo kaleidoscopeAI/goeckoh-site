@@ -1,0 +1,84 @@
+ 27
+ 28 +    <TextView
+ 29 +        android:id="@+id/label_mode"
+ 30 +        android:layout_width="0dp"
+ 31 +        android:layout_height="wrap_content"
+ 32 +        android:text="VAD Mode"
+ 33 +        android:textStyle="bold"
+ 34 +        app:layout_constraintTop_toBottomOf="@id/id_start"
+ 35 +        app:layout_constraintStart_toStartOf="parent"
+ 36 +        app:layout_constraintEnd_toEndOf="parent"
+ 37 +        android:layout_marginTop="16dp" />
+ 38 +
+ 39      <Spinner
+    ⋮
+ 42          android:layout_height="wrap_content"
+ 32 -        app:layout_constraintTop_toBottomOf="@id/id_start"
+ 43 +        app:layout_constraintTop_toBottomOf="@id/label_mode"
+ 44          app:layout_constraintStart_toStartOf="parent"
+ 45          app:layout_constraintEnd_toEndOf="parent"
+ 46 +        android:layout_marginTop="8dp" />
+ 47 +
+ 48 +    <TextView
+ 49 +        android:id="@+id/label_silence"
+ 50 +        android:layout_width="0dp"
+ 51 +        android:layout_height="wrap_content"
+ 52 +        android:text="Silence Duration (ms)"
+ 53 +        android:textStyle="bold"
+ 54 +        app:layout_constraintTop_toBottomOf="@id/vad_mode_spinner"
+ 55 +        app:layout_constraintStart_toStartOf="parent"
+ 56 +        app:layout_constraintEnd_toEndOf="parent"
+ 57          android:layout_marginTop="12dp" />
+    ⋮
+ 63          android:max="30"
+ 42 -        app:layout_constraintTop_toBottomOf="@id/vad_mode_spinner"
+ 64 +        app:layout_constraintTop_toBottomOf="@id/label_silence"
+ 65          app:layout_constraintStart_toStartOf="parent"
+    ⋮
+ 68
+ 69 +    <TextView
+ 70 +        android:id="@+id/silence_value"
+ 71 +        android:layout_width="0dp"
+ 72 +        android:layout_height="wrap_content"
+ 73 +        android:text="1200 ms"
+ 74 +        app:layout_constraintTop_toBottomOf="@id/silence_duration_seekbar"
+ 75 +        app:layout_constraintStart_toStartOf="parent"
+ 76 +        app:layout_constraintEnd_toEndOf="parent"
+ 77 +        android:layout_marginTop="4dp" />
+ 78 +
+ 79 +    <TextView
+ 80 +        android:id="@+id/label_threshold"
+ 81 +        android:layout_width="0dp"
+ 82 +        android:layout_height="wrap_content"
+ 83 +        android:text="VAD Threshold (0-1)"
+ 84 +        android:textStyle="bold"
+ 85 +        app:layout_constraintTop_toBottomOf="@id/silence_value"
+ 86 +        app:layout_constraintStart_toStartOf="parent"
+ 87 +        app:layout_constraintEnd_toEndOf="parent"
+ 88 +        android:layout_marginTop="16dp" />
+ 89 +
+ 90      <SeekBar
+    ⋮
+ 94          android:max="100"
+ 52 -        app:layout_constraintTop_toBottomOf="@id/silence_duration_seekbar"
+ 95 +        app:layout_constraintTop_toBottomOf="@id/label_threshold"
+ 96          app:layout_constraintStart_toStartOf="parent"
+    ⋮
+ 99
+100 +    <TextView
+101 +        android:id="@+id/threshold_value"
+102 +        android:layout_width="0dp"
+103 +        android:layout_height="wrap_content"
+104 +        android:text="0.50"
+105 +        app:layout_constraintTop_toBottomOf="@id/vad_threshold_seekbar"
+106 +        app:layout_constraintStart_toStartOf="parent"
+107 +        app:layout_constraintEnd_toEndOf="parent"
+108 +        android:layout_marginTop="4dp" />
+109 +
+110      <Button
+    ⋮
+114          android:text="Apply VAD Settings"
+ 62 -        app:layout_constraintTop_toBottomOf="@id/vad_threshold_seekbar"
+115 +        app:layout_constraintTop_toBottomOf="@id/threshold_value"
+116          app:layout_constraintStart_toStartOf="parent"
+

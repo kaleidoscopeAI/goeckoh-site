@@ -1,0 +1,1 @@
+profile, and shown on the dashboard. (backend/goeckoh/systems/complete_unified_system.py, frontend/pages/Dashboard.tsx)

@@ -1,0 +1,5 @@
+tts_wav: np.ndarray,
+tts_sample_rate: int,
+prosody: ProsodyProfile,
+strength_pitch: float = 1.0,
+strength_energy: float = 1.0,

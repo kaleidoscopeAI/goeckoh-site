@@ -1,0 +1,4 @@
+This suggests that the code is trying to build a Metrics struct and is using a field total_predictions that doesn't exist.
+
+We must check the definition of Metrics and see what fields it has.
+

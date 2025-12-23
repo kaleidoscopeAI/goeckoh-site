@@ -1,0 +1,1 @@
+TypeAlias = typing.TypeAlias

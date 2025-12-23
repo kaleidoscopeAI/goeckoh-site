@@ -1,1 +1,3 @@
-def update_super_node(self, sid: str, new_vector: np.ndarray, metadata: Optional[Dict]=None):
+import networkx as nx
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation

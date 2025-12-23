@@ -1,1 +1,7 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+# Original calculation
+en = {}  # Implement as before
+# Add Φ
+phis = np.array([calculate_phi(E[i]) for i in range(E.shape[0])])
+en["avg_phi"] = float(np.mean(phis))
+return en
+

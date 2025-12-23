@@ -1,0 +1,3 @@
+  - GOECKOH_LIGHT_MODE=1 (ultra-fast) already present.
+  - New GOECKOH_PERF_MODE=1 keeps core outputs but skips heavy quantum/hamiltonian work for faster p95 while retaining
+    lattice snapshots. (backend/goeckoh/systems/complete_unified_system.py)

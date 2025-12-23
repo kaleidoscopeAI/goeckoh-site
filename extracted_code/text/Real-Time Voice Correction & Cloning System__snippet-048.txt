@@ -1,0 +1,2 @@
+name="Coordinator",
+sub_agents=[correction_agent]

@@ -1,2 +1,2 @@
-const y = Math.log(mags[k]);
-const xh = Math.log(f);
+let lastT = performance.now();
+function tick(now) {

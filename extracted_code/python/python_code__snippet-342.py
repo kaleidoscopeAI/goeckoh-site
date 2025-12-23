@@ -1,57 +1,86 @@
-from typing import Union
+class JupyterRenderable:
+    """A shim to write html to Jupyter notebook."""
 
-from .charsetprober import CharSetProber
-from .codingstatemachine import CodingStateMachine
-from .enums import MachineState, ProbingState
-from .mbcssm import UTF8_SM_MODEL
+    def __init__(self, html: str, text: str) -> None:
+        self.html = html
+        self.text = text
+
+    def _repr_mimebundle_(
+        self, include: Sequence[str], exclude: Sequence[str], **kwargs: Any
+    ) -> Dict[str, str]:
+        data = {"text/plain": self.text, "text/html": self.html}
+        if include:
+            data = {k: v for (k, v) in data.items() if k in include}
+        if exclude:
+            data = {k: v for (k, v) in data.items() if k not in exclude}
+        return data
 
 
-class UTF8Prober(CharSetProber):
-    ONE_CHAR_PROB = 0.5
+class JupyterMixin:
+    """Add to an Rich renderable to make it render in Jupyter notebook."""
 
-    def __init__(self) -> None:
-        super().__init__()
-        self.coding_sm = CodingStateMachine(UTF8_SM_MODEL)
-        self._num_mb_chars = 0
-        self.reset()
+    __slots__ = ()
 
-    def reset(self) -> None:
-        super().reset()
-        self.coding_sm.reset()
-        self._num_mb_chars = 0
+    def _repr_mimebundle_(
+        self: "ConsoleRenderable",
+        include: Sequence[str],
+        exclude: Sequence[str],
+        **kwargs: Any,
+    ) -> Dict[str, str]:
+        console = get_console()
+        segments = list(console.render(self, console.options))
+        html = _render_segments(segments)
+        text = console._render_buffer(segments)
+        data = {"text/plain": text, "text/html": html}
+        if include:
+            data = {k: v for (k, v) in data.items() if k in include}
+        if exclude:
+            data = {k: v for (k, v) in data.items() if k not in exclude}
+        return data
 
-    @property
-    def charset_name(self) -> str:
-        return "utf-8"
 
-    @property
-    def language(self) -> str:
-        return ""
+def _render_segments(segments: Iterable[Segment]) -> str:
+    def escape(text: str) -> str:
+        """Escape html."""
+        return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
-    def feed(self, byte_str: Union[bytes, bytearray]) -> ProbingState:
-        for c in byte_str:
-            coding_state = self.coding_sm.next_state(c)
-            if coding_state == MachineState.ERROR:
-                self._state = ProbingState.NOT_ME
-                break
-            if coding_state == MachineState.ITS_ME:
-                self._state = ProbingState.FOUND_IT
-                break
-            if coding_state == MachineState.START:
-                if self.coding_sm.get_current_charlen() >= 2:
-                    self._num_mb_chars += 1
+    fragments: List[str] = []
+    append_fragment = fragments.append
+    theme = DEFAULT_TERMINAL_THEME
+    for text, style, control in Segment.simplify(segments):
+        if control:
+            continue
+        text = escape(text)
+        if style:
+            rule = style.get_html_style(theme)
+            text = f'<span style="{rule}">{text}</span>' if rule else text
+            if style.link:
+                text = f'<a href="{style.link}" target="_blank">{text}</a>'
+        append_fragment(text)
 
-        if self.state == ProbingState.DETECTING:
-            if self.get_confidence() > self.SHORTCUT_THRESHOLD:
-                self._state = ProbingState.FOUND_IT
+    code = "".join(fragments)
+    html = JUPYTER_HTML_FORMAT.format(code=code)
 
-        return self.state
+    return html
 
-    def get_confidence(self) -> float:
-        unlike = 0.99
-        if self._num_mb_chars < 6:
-            unlike *= self.ONE_CHAR_PROB**self._num_mb_chars
-            return 1.0 - unlike
-        return unlike
+
+def display(segments: Iterable[Segment], text: str) -> None:
+    """Render segments to Jupyter."""
+    html = _render_segments(segments)
+    jupyter_renderable = JupyterRenderable(html, text)
+    try:
+        from IPython.display import display as ipython_display
+
+        ipython_display(jupyter_renderable)
+    except ModuleNotFoundError:
+        # Handle the case where the Console has force_jupyter=True,
+        # but IPython is not installed.
+        pass
+
+
+def print(*args: Any, **kwargs: Any) -> None:
+    """Proxy for Console print."""
+    console = get_console()
+    return console.print(*args, **kwargs)
 
 

@@ -1,0 +1,4 @@
+if unicodedata.normalize('NFC', label) != label:
+    raise IDNAError('Label must be in Normalization Form C')
+
+

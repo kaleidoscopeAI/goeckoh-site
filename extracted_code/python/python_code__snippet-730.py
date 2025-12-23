@@ -1,17 +1,7 @@
-import abc
-import functools
-import itertools
-import re
-import warnings
-from typing import (
-    Callable,
-    Dict,
-    Iterable,
-    Iterator,
-    List,
-    Optional,
-    Pattern,
-    Set,
-    Tuple,
-    TypeVar,
-    Union,
+from pip._internal.utils.hashes import Hashes, MissingHashes
+from pip._internal.utils.logging import indent_log
+from pip._internal.utils.misc import (
+    display_path,
+    hash_file,
+    hide_url,
+    redact_auth_from_requirement,

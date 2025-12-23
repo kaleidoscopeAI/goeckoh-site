@@ -1,1 +1,3 @@
-def coherence(self) -> float:
+import SwiftUI
+import WebKit
+final class GameWebViewCoordinator: NSObject, WKScriptMessageHandler {

@@ -1,3 +1,4 @@
-def status():
-    return {"ok": True, "state": orch.snapshot()}
+def home():
+    # Inline UI similar to provided, but simplified for brevity.
+    return "<html><body><h1>Seed-Crystal AGI</h1><p>Access /status or /ws for real-time.</p></body></html>"
 

@@ -1,0 +1,1 @@
+unescape = HTMLParser().unescape

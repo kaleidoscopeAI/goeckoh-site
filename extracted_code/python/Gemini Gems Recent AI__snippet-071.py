@@ -1,10 +1,5 @@
-def get_molecule_details(n_clicks, smiles):
-    if n_clicks > 0 and smiles:
-        for node in cube.graph.nodes:
-            if cube.graph.nodes[node]['smiles'] == smiles:
-                features = cube.graph.nodes[node]['features']
-                details_text = html.Ul([html.Li(f"{feature_name}: {feature_value:.2f}") for feature_name, feature_value in zip(['Mol. Wt.', '# Rot. Bonds', 'LogP', 'TPSA', '# HBD', '# HBA', 'Binding Affinity'], features)])
-                return details_text
-        return "Molecule details not found."
-    return ""
+from flask import Flask, jsonify, request
+from.models import Molecule  # SQLAlchemy/MongoDB models
+from.tasks import calculate_similarity  # Celery task
+from.utils import get_mol_from_smiles #RDKit utility functions
 

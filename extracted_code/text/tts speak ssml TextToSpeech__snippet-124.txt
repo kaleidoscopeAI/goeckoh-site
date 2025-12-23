@@ -1,0 +1,6 @@
+      // Adjust rate (time stretch)
+      val rateTransposer = RateTransposer(prosody.rate)
+      dispatcher.addAudioProcessor(rateTransposer)
+
+      // Adjust pitch
+      val pitchShiftFactor = prosody.pitch / 120.0 // Assume base pitch

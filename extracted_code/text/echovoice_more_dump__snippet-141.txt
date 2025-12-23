@@ -1,6 +1,2 @@
-  ollama:  # Optional, if using local Ollama
-    image: ollama/ollama
-    ports:
-      - "11434:11434"
-    volumes:
-      - ollama:/root/.ollama
+# <REDACTED: potential secret detected>
+

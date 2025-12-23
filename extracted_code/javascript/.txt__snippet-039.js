@@ -1,1 +1,1 @@
-guard let url = currentFileURL else { return }
+const ts = new Date().toLocaleTimeString();

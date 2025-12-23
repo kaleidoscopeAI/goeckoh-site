@@ -1,2 +1,0 @@
-Weights are updated using policy gradient methods:
-

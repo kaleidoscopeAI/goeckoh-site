@@ -1,61 +1,96 @@
-class BitRegister:
-    def __init__(self, name: str, size: int = 128):
-        self.name = name
-        self.size = size
-        self.bits = np.zeros(size, dtype=np.uint8)
-        self.noise_rate = 2e-6
-        self.lock = Lock()
+class DataStore:
+    """Thin abstraction around the folder layout described in the docs."""
 
-    def write_int(self, value: int):
-        with self.lock:
-            for i in range(self.size):
-                self.bits[i] = (value >> i) & 1
+    config: CompanionConfig
+    metadata_file: Path = field(init=False)
 
-    def read_int(self) -> int:
-        with self.lock:
-            if random.random() < self.noise_rate:
-                idx = random.randrange(self.size)
-                self.bits[idx] ^= 1
-            out = 0
-            for i in range(self.size):
-                out |= int(self.bits[i]) << i
-            return out
+    def __post_init__(self) -> None:
+        self.config.paths.ensure()
+        self.metadata_file = self.config.paths.voices_dir / f"{self.config.child_id}_phrases.json"
 
-    def set_bit(self, idx: int, val: int):
-        with self.lock:
-            self.bits[idx % self.size] = 1 if val else 0
+    def _load_metadata(self) -> Dict[str, dict]:
+        if not self.metadata_file.exists():
+            return {}
+        return json.loads(self.metadata_file.read_text())
 
-    def get_bit(self, idx: int) -> int:
-        with self.lock:
-            return int(self.bits[idx % self.size])
+    def _save_metadata(self, meta: Dict[str, dict]) -> None:
+        self.metadata_file.write_text(json.dumps(meta, indent=2))
 
-    def as_bitstring(self) -> str:
-        with self.lock:
-            return ''.join(str(int(b)) for b in self.bits[::-1])
+    def list_phrases(self) -> List[Phrase]:
+        phrases = []
+        for pid, data in self._load_metadata().items():
+            phrases.append(
+                Phrase(
+                    phrase_id=pid,
+                    text=data["text"],
+                    audio_file=Path(data["file"]),
+                    duration=data.get("duration", 0.0),
+                    normalized_text=data.get("normalized_text") or normalize_simple(data["text"]),
+                )
+            )
+        return phrases
 
-class SimulatedHardware:
-    def __init__(self, adc_channels: int = 16):
-        self.cpu_register = BitRegister("CPU_REG", size=256)
-        self.gpio = BitRegister("GPIO", size=64)
-        self.adc = np.zeros(adc_channels, dtype=float)
-        self.temp_C = 35.0
-        self.freq_GHz = 1.2
-
-    def poll_sensors(self):
-        # realistic sensor noise and drift
-        self.adc += np.random.randn(len(self.adc)) * 0.005
-        self.adc = np.clip(self.adc, -5.0, 5.0)
-        self.temp_C += (self.freq_GHz - 1.0) * 0.02 + np.random.randn() * 0.01
-
-    def set_frequency(self, ghz: float):
-        self.freq_GHz = float(max(0.2, min(ghz, 5.0)))
-
-    def as_status(self):
-        return {
-            "freq_GHz": round(self.freq_GHz, 3),
-            "temp_C": round(self.temp_C, 3),
-            "cpu_reg": self.cpu_register.as_bitstring(),
-            "gpio": self.gpio.as_bitstring(),
-            "adc": [round(float(x), 4) for x in self.adc.tolist()],
+    def save_phrase(self, phrase_id: str, text: str, audio_file: Path, duration: float) -> None:
+        meta = self._load_metadata()
+        meta[phrase_id] = {
+            "text": text,
+            "file": str(audio_file),
+            "duration": duration,
+            "normalized_text": normalize_simple(text),
         }
+        self._save_metadata(meta)
 
+    def log_attempt(
+        self,
+        phrase_id: Optional[str],
+        phrase_text: Optional[str],
+        attempt_audio: Optional[Path],
+        stt_text: str,
+        corrected_text: str,
+        similarity: float,
+        needs_correction: bool,
+    ) -> None:
+        header = [
+            "timestamp_iso",
+            "child_id",
+            "phrase_id",
+            "phrase_text",
+            "attempt_audio",
+            "raw_text",
+            "corrected_text",
+            "similarity",
+            "needs_correction",
+        ]
+        new_row = [
+            datetime.utcnow().isoformat(),
+            self.config.child_id,
+            phrase_id or "",
+            phrase_text or "",
+            str(attempt_audio) if attempt_audio else "",
+            stt_text,
+            corrected_text,
+            f"{similarity:.3f}",
+            "1" if needs_correction else "0",
+        ]
+        csv_exists = self.config.paths.metrics_csv.exists()
+        with self.config.paths.metrics_csv.open("a", newline="") as f:
+            writer = csv.writer(f)
+            if not csv_exists:
+                writer.writerow(header)
+            writer.writerow(new_row)
+
+    def log_guidance_event(self, event: str, title: str, message: str) -> None:
+        header = ["timestamp_iso", "child_id", "event", "title", "message"]
+        new_row = [
+            datetime.utcnow().isoformat(),
+            self.config.child_id,
+            event,
+            title,
+            message,
+        ]
+        csv_exists = self.config.paths.guidance_csv.exists()
+        with self.config.paths.guidance_csv.open("a", newline="") as f:
+            writer = csv.writer(f)
+            if not csv_exists:
+                writer.writerow(header)
+            writer.writerow(new_row)

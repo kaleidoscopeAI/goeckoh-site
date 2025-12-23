@@ -1,3 +1,1 @@
-package com.kaleidoscope.body
-import kotlin.math.sqrt
-import kotlin.random.Random
+1. Compute routing R(k) from Sk via formula in Sec. 4.1.

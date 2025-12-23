@@ -1,2 +1,1 @@
-# <REDACTED: potential secret detected>
-
+processors: Vec<Arc<dyn UniversalProcessor>>,

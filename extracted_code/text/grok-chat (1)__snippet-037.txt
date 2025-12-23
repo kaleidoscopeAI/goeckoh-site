@@ -1,0 +1,6 @@
+lat = CrystallineLattice(n_nodes=32, bit_dim=64, seed=42)
+for _ in range(5):
+    stim = np.zeros_like(lat.emotions)
+    stim[:4, 0] = 1.0  # arousal bump on first 4 nodes
+    m = lat.step(input_stimulus=stim, dt=0.05)
+    print(m)

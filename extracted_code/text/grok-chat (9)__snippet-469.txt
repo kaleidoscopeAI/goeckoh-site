@@ -1,0 +1,2 @@
+          # Regex to find and remove ```<lang> and ```
+          # re.DOTALL allows . to match newlines, \s* matches any

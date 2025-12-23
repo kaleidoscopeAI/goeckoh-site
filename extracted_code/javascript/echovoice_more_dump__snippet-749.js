@@ -1,1 +1,1 @@
-const activePath = path.join(W_DIR, `w_active.json`);
++export function specDelta(node: NodeState, gammaSpec = 0.05) {

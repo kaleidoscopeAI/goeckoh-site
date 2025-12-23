@@ -1,0 +1,22 @@
+      } else {
+          initSystem()
+      }
+
+      startButton.setOnClickListener {
+          if (!isServiceRunning) {
+              startService(Intent(this, ExocortexService::class.java))
+              startButton.text = "Stop Listening"
+              isServiceRunning = true
+          } else {
+              stopService(Intent(this, ExocortexService::class.java))
+              startButton.text = "Start Listening"
+              isServiceRunning = false
+          }
+      }
+  }
+
+  override fun onInit(status: Int) {
+      if (status == TextToSpeech.SUCCESS) {
+          tts.language = Locale.US
+      } else {
+          Toast.makeText(this, "TTS Initialization Failed",

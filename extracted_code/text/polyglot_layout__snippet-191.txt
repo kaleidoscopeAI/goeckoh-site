@@ -1,0 +1,12 @@
+                  continue
+              if m.is_dir():
+                  target.mkdir(parents=True, exist_ok=True)
+              else:
+                  target.parent.mkdir(parents=True, exist_ok=True)
+                  with z.open(m) as src, open(target, 'wb') as dst:
+                      dst.write(src.read())
+              count += 1
+      return True, "ok", count
+  except Exception as e:
+      return False, repr(e), 0
+

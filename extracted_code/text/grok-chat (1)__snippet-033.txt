@@ -1,0 +1,7 @@
+child_id: str = "child_001"
+child_name: str = "Companion User"
+paths: Paths = field(default_factory=Paths)
+audio: AudioSettings = field(default_factory=AudioSettings)
+speech: SpeechModelSettings = field(default_factory=SpeechModelSettings)
+behavior: BehaviorSettings = field(default_factory=BehaviorSettings)
+

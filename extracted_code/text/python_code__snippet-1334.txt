@@ -1,0 +1,5 @@
+".tar.xz",
+".txz",
+".tlz",
+".tar.lz",
+".tar.lzma",

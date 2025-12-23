@@ -1,1 +1,1 @@
-const p = Math.abs(d) / sum;
+function splitText(s: string): string[] {

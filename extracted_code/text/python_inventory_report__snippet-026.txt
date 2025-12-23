@@ -1,0 +1,2 @@
+doc: Central configuration for the autism speech companion.
+classes: Paths, AudioSettings, SpeechModelSettings, BehaviorSettings, CompanionConfig

@@ -1,1 +1,3 @@
-class ActuationService {
+1. LLMs as advisors: Using LLM outputs to suggest or guide the tuning of parameters within the adaptive mechanisms.
+2. LLMs as interpreters: Employing LLMs to generate semantic interpretations or summaries of the Cube's current state or detected patterns.
+3. LLMs as actors: Leveraging LLM tool-use capabilities to enable the Cube system to interact with external data or APIs.

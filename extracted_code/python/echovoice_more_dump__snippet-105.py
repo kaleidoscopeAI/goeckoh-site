@@ -1,7 +1,6 @@
 package com.kaleidoscope.body
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
 import android.util.Log
-import androidx.work.CoroutineWorker
-import androidx.work.WorkerParameters
-class SyncWorker(appContext: Context, params: WorkerParameters) : CoroutineWorker(appContext, params) {
-private val TAG = "SyncWorker"
+class KillSwitchReceiver : BroadcastReceiver() {

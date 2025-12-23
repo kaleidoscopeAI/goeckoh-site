@@ -1,1 +1,3 @@
-If we allow continual fine-tuning using node-local objectives:
+# Run a simulation for 500 steps
+build_and_run_system(steps=500)
+

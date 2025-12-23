@@ -1,2 +1,2 @@
-This file includes the main `EnhancedAdaptiveNode` class and the `EmotionalState` enum.
+so we are using the 'hotdog' as building data?
 

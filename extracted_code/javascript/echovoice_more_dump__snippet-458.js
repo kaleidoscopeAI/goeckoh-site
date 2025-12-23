@@ -1,1 +1,1 @@
-const renderer = new THREE.WebGLRenderer({ antialias: true });
+const onUp = (upEv: PointerEvent) => {

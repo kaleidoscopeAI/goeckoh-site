@@ -1,3 +1,3 @@
-    from pip._vendor.tenacity.tornadoweb import TornadoRetrying
+from collections.abc import Callable
 
 

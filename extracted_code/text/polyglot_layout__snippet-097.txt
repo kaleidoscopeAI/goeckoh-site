@@ -1,0 +1,5 @@
+  a: int
+  b: int
+  k: float = 0.15
+  rest: float = 1.0
+

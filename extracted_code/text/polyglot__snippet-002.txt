@@ -1,1 +1,1 @@
-generation is lacking . it should be using the nodes like the zip folder i showed you implies. it controls 18000 nodes to create the avatar and images etc. please reflect on the
+class AGIMathematics {

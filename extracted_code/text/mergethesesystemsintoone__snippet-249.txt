@@ -1,1 +1,3 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+redis.close()
+await redis.wait_closed()
+

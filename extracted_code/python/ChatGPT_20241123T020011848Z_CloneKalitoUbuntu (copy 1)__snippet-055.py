@@ -1,40 +1,37 @@
-import numpy as np
+import networkx as nx
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
 
-class Node:
-    def __init__(self, node_id, energy):
-        self.node_id = node_id
-        self.energy = energy
-        self.neighbors = []
+class MirroredNetwork:
+    def __init__(self):
+        self.graph = nx.Graph()
+        self.step = 0
 
-    def share_resources(self):
-        """Share energy with neighbors."""
-        if self.energy > 0.5:
-            shared_energy = self.energy * 0.1  # Share 10% of energy
-            for neighbor in self.neighbors:
-                neighbor.energy += shared_energy
-            self.energy -= shared_energy * len(self.neighbors)
+    def add_node(self, node_id):
+        self.graph.add_node(node_id)
     
-    def connect(self, other_node):
-        self.neighbors.append(other_node)
-        other_node.neighbors.append(self)
+    def add_edge(self, node1, node2):
+        self.graph.add_edge(node1, node2)
 
-def create_network(num_nodes=5):
-    """Create a network of connected nodes."""
-    nodes = [Node(i, np.random.rand()) for i in range(num_nodes)]
-    for i in range(num_nodes - 1):
-        nodes[i].connect(nodes[i + 1])
-    return nodes
+    def update(self):
+        """Simulate network updates."""
+        self.add_node(self.step)
+        if self.step > 0:
+            self.add_edge(self.step, self.step - 1)
+        self.step += 1
 
-def simulate_network(nodes, steps=10):
-    """Simulate resource sharing in the network."""
-    for step in range(steps):
-        print(f"Step {step}")
-        for node in nodes:
-            node.share_resources()
-            print(f"Node {node.node_id}: Energy {node.energy:.2f}")
-        print("-" * 30)
+    def visualize(self):
+        """Animate the network."""
+        fig, ax = plt.subplots(figsize=(8, 6))
+        ani = FuncAnimation(fig, self._animate, fargs=(ax,), interval=500, repeat=False)
+        plt.show()
+
+    def _animate(self, frame, ax):
+        self.update()
+        ax.clear()  # Clear the previous frame
+        nx.draw(self.graph, ax=ax, with_labels=True, node_size=500, font_size=10, node_color="lightgreen")
 
 if __name__ == "__main__":
-    nodes = create_network()
-    simulate_network(nodes)
+    network = MirroredNetwork()
+    network.visualize()
 

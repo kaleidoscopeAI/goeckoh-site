@@ -1,0 +1,4 @@
+assert string == string.lower()
+return string
+
+

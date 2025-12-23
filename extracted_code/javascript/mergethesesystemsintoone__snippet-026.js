@@ -1,3 +1,2 @@
-class KnowledgeDNA {
-public int $generation = 0;
-public function replicate(): void { $this->generation++; }
+        const App = () => <div>Groundbreaking AGI - Phi: {Math.random().toFixed(2)} | History: {Math.floor(Math.random()*1000)}</div>;
+        ReactDOM.render(<App />, document.getElementById('root'));

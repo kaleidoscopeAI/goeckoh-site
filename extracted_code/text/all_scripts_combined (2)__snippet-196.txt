@@ -1,0 +1,3 @@
+"self_care": ["brush teeth", "wash hands", "dress self", "take medication"],
+"communication": ["greet others", "ask for help", "express feelings", "use AAC device"],
+"social_tom": ["share toys", "take turns", "understand emotions", "empathy response"]

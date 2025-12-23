@@ -1,2 +1,2 @@
-Now, note that the ensure_dataset_exists function might return an error if the download fails. We don't change that.
+The CrystalError enum does not have a Data variant. We can use the msg function to create an error.
 

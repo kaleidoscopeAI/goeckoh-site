@@ -1,1 +1,2 @@
-Selecting previously unselected package libpython3.12-dev:amd64.
+This file will contain the `EnhancedSharedKnowledgePool` class to be shared between `knowledge_pool.py` and `reflection_analysis.py`.
+

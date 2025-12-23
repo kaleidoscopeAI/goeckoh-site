@@ -1,0 +1,8 @@
+334              self._refractory_until = 0.0
+335 -            self._tts_mode = (tts_mode or "xtts").lower()
+335 +            if self._use_rust_vc:
+336 +                self._tts_mode = "rust_vc"
+337 +            else:
+338 +                self._tts_mode = (tts_mode or "xtts").lower()
+339              self._asr_mode = (asr_mode or "sherpa").lower()
+

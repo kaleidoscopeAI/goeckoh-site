@@ -1,0 +1,5 @@
+parser = build_parser()
+args = parser.parse_args(argv)
+return run_cli(args)
+
+

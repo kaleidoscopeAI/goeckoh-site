@@ -1,0 +1,3 @@
+doc: expression_gears.py
+functions: _interp_to_num_frames, apply_prosody_to_tts
+classes: VoiceSample, VoiceProfile, ExpressionGear

@@ -1,11 +1,10 @@
-import os.path
-import socket  # noqa: F401
+import json
+import platform
+import ssl
+import sys
 
-from pip._vendor.urllib3.exceptions import ClosedPoolError, ConnectTimeoutError
-from pip._vendor.urllib3.exceptions import HTTPError as _HTTPError
-from pip._vendor.urllib3.exceptions import InvalidHeader as _InvalidHeader
-from pip._vendor.urllib3.exceptions import (
-    LocationValueError,
-    MaxRetryError,
-    NewConnectionError,
-    ProtocolError,
+from pip._vendor import idna
+from pip._vendor import urllib3
+
+from . import __version__ as requests_version
+

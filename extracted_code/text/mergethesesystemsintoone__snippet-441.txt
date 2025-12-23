@@ -1,0 +1,3 @@
+ "Module Details":
+      { "MemoryField" : "stores the memory (frequencies) of discovered concepts. implements resonance interaction."
+   ,"  WikiNode": "The primary agent-based simulation nodes. manages resources and all aspects of behavior.",

@@ -1,2 +1,2 @@
-+ const WA = Array.from({ length: 8 }, () => Array.from({ length: 4 }, () => (Math.random() - 0.5) * 0.1)); // P x dE
-+ const Winj = Array.from({ length: m }, () => Array.from({ length: WA.length }, () => Math.random() * 1e-3));
+const angle = p5.frameCount * 0.05 + i * 2 * Math.PI / p.symbols.length;
+p5.text(sym, projX + Math.cos(angle) * size * 1.2, projY + Math.sin(angle) * size * 1.2);

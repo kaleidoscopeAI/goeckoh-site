@@ -1,0 +1,3 @@
+                  return llm_response
+          else:
+              logger.debug("--- Callback: No markdown code block found.

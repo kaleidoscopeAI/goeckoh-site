@@ -1,0 +1,6 @@
+Option,
+"--root-user-action",
+dest="root_user_action",
+default="warn",
+choices=["warn", "ignore"],
+help="Action if pip is run as a root user. By default, a warning message is shown.",

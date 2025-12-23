@@ -1,0 +1,9 @@
+if not is_32bit:
+    return arch
+
+if arch.startswith("ppc"):
+    return "ppc"
+
+return "i386"
+
+

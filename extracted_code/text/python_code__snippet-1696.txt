@@ -1,0 +1,5 @@
+{
+    "name": "Default Hybrid",
+    "kind": "hybrid",
+    "description": "Standard balanced voice"
+}

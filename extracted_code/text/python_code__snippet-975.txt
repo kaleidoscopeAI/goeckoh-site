@@ -1,0 +1,15 @@
+"""
+Attempt to list contents of path, but suppress some exceptions.
+"""
+try:
+    return os.listdir(path)
+except (PermissionError, NotADirectoryError):
+    pass
+except OSError as e:
+    # Ignore the directory if does not exist, not a directory or
+    # permission denied
+    if e.errno not in (errno.ENOTDIR, errno.EACCES, errno.ENOENT):
+        raise
+return ()
+
+

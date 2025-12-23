@@ -1,0 +1,11 @@
+"""Complete document representation"""
+url: str
+content: str
+timestamp: float
+embedding: Optional[np.ndarray] = None
+quantum_state: QuantumInformationState = field(default_factory=QuantumInformationState)
+emotional_sig: EmotionalSignature = field(default_factory=EmotionalSignature)
+ciae_score: float = 0.0
+discovered_links: List[str] = field(default_factory=list)
+pii_redactions: Dict[str, int] = field(default_factory=dict)
+

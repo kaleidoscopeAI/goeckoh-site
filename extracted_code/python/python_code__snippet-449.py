@@ -1,1 +1,4 @@
-    from pip._vendor.urllib3.contrib.socks import SOCKSProxyManager
+import sys
+from itertools import chain
+from typing import TYPE_CHECKING, Iterable, Optional
+

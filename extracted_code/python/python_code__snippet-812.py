@@ -1,7 +1,17 @@
-import time
-from ctypes import Structure, byref, wintypes
-from typing import IO, NamedTuple, Type, cast
-
-from pip._vendor.rich.color import ColorSystem
-from pip._vendor.rich.style import Style
-
+import errno
+import itertools
+import logging
+import os.path
+import tempfile
+import traceback
+from contextlib import ExitStack, contextmanager
+from pathlib import Path
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    Generator,
+    List,
+    Optional,
+    TypeVar,
+    Union,

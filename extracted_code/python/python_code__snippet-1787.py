@@ -1,61 +1,163 @@
-import os, subprocess, sys, platform
+"""Resource support for zips and eggs"""
 
-def build_rust_kernel():
-    print("--- Building Rust Audio Kernel ---")
-    rust_path = "rust_core"
-    if not os.path.exists(rust_path):
-        print(f"[ERROR] Rust project not found at '{rust_path}'"); return False
-    try:
-        # Use capture_output to hide build messages unless there's an error
-        result = subprocess.run(
-            ["cargo", "build", "--release"], 
-            cwd=rust_path, 
-            check=True, 
-            capture_output=True, 
-            text=True
+eagers = None
+_zip_manifests = MemoizedZipManifests()
+
+def __init__(self, module):
+    super().__init__(module)
+    self.zip_pre = self.loader.archive + os.sep
+
+def _zipinfo_name(self, fspath):
+    # Convert a virtual filename (full path to file) into a zipfile subpath
+    # usable with the zipimport directory cache for our target archive
+    fspath = fspath.rstrip(os.sep)
+    if fspath == self.loader.archive:
+        return ''
+    if fspath.startswith(self.zip_pre):
+        return fspath[len(self.zip_pre) :]
+    raise AssertionError("%s is not a subpath of %s" % (fspath, self.zip_pre))
+
+def _parts(self, zip_path):
+    # Convert a zipfile subpath into an egg-relative path part list.
+    # pseudo-fs path
+    fspath = self.zip_pre + zip_path
+    if fspath.startswith(self.egg_root + os.sep):
+        return fspath[len(self.egg_root) + 1 :].split(os.sep)
+    raise AssertionError("%s is not a subpath of %s" % (fspath, self.egg_root))
+
+@property
+def zipinfo(self):
+    return self._zip_manifests.load(self.loader.archive)
+
+def get_resource_filename(self, manager, resource_name):
+    if not self.egg_name:
+        raise NotImplementedError(
+            "resource_filename() only supported for .egg, not .zip"
         )
-        
-        os_platform = platform.system()
-        ext, target_name = ("", "")
-        if os_platform == "Windows": ext, target_name = ".dll", "bio_audio.pyd"
-        elif os_platform == "Linux": ext, target_name = ".so", "bio_audio.so"
-        elif os_platform == "Darwin": ext, target_name = ".dylib", "bio_audio.so"
-        else: print(f"[ERROR] Unsupported OS: {os_platform}"); return False
-        
-        source = os.path.join(rust_path, "target", "release", f"libbio_audio{ext}")
-        if os.path.exists(source):
-            if os.path.exists(target_name): os.remove(target_name)
-            # Use os.rename for efficiency
-            os.rename(source, target_name)
-            print(f"--- Rust Kernel built successfully: -> {target_name} ---")
-            return True
-        else:
-            print(f"[ERROR] Build artifact not found at '{source}'"); return False
-    except subprocess.CalledProcessError as e:
-        print(f"[ERROR] Failed to build Rust kernel. Cargo exited with code {e.returncode}.")
-        print(f"--- Cargo stderr ---\n{e.stderr}")
-        return False
-    except Exception as e:
-        print(f"[ERROR] An unexpected error occurred during build: {e}"); return False
+    # no need to lock for extraction, since we use temp names
+    zip_path = self._resource_to_zip(resource_name)
+    eagers = self._get_eager_resources()
+    if '/'.join(self._parts(zip_path)) in eagers:
+        for name in eagers:
+            self._extract_resource(manager, self._eager_to_zip(name))
+    return self._extract_resource(manager, zip_path)
 
-def main():
-    print("--- NEURO-ACOUSTIC EXOCORTEX LAUNCHER ---")
-    if not build_rust_kernel():
-        print("--- Aborting due to build failure. ---")
-        sys.exit(1)
-    
-    print("\n--- Starting GUI ---")
+@staticmethod
+def _get_date_and_size(zip_stat):
+    size = zip_stat.file_size
+    # ymdhms+wday, yday, dst
+    date_time = zip_stat.date_time + (0, 0, -1)
+    # 1980 offset already done
+    timestamp = time.mktime(date_time)
+    return timestamp, size
+
+# FIXME: 'ZipProvider._extract_resource' is too complex (12)
+def _extract_resource(self, manager, zip_path):  # noqa: C901
+    if zip_path in self._index():
+        for name in self._index()[zip_path]:
+            last = self._extract_resource(manager, os.path.join(zip_path, name))
+        # return the extracted directory name
+        return os.path.dirname(last)
+
+    timestamp, size = self._get_date_and_size(self.zipinfo[zip_path])
+
+    if not WRITE_SUPPORT:
+        raise IOError(
+            '"os.rename" and "os.unlink" are not supported ' 'on this platform'
+        )
     try:
-        # Ensure the project root is in the Python path
-        sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
-        
-        # The main app is now inside the goeckoh package, so we run it as a module
-        subprocess.run([sys.executable, "-m", "goeckoh.gui_main"], check=True)
-    except FileNotFoundError:
-        print("[ERROR] Could not find 'goeckoh/gui_main.py'. Make sure the script was created correctly.")
-    except subprocess.CalledProcessError as e:
-        print(f"[ERROR] GUI process failed with exit code {e.returncode}")
-    except Exception as e:
-        print(f"[ERROR] An unexpected error occurred while starting the GUI: {e}")
+        real_path = manager.get_cache_path(self.egg_name, self._parts(zip_path))
+
+        if self._is_current(real_path, zip_path):
+            return real_path
+
+        outf, tmpnam = _mkstemp(
+            ".$extract",
+            dir=os.path.dirname(real_path),
+        )
+        os.write(outf, self.loader.get_data(zip_path))
+        os.close(outf)
+        utime(tmpnam, (timestamp, timestamp))
+        manager.postprocess(tmpnam, real_path)
+
+        try:
+            rename(tmpnam, real_path)
+
+        except os.error:
+            if os.path.isfile(real_path):
+                if self._is_current(real_path, zip_path):
+                    # the file became current since it was checked above,
+                    #  so proceed.
+                    return real_path
+                # Windows, del old file and retry
+                elif os.name == 'nt':
+                    unlink(real_path)
+                    rename(tmpnam, real_path)
+                    return real_path
+            raise
+
+    except os.error:
+        # report a user-friendly error
+        manager.extraction_error()
+
+    return real_path
+
+def _is_current(self, file_path, zip_path):
+    """
+    Return True if the file_path is current for this zip_path
+    """
+    timestamp, size = self._get_date_and_size(self.zipinfo[zip_path])
+    if not os.path.isfile(file_path):
+        return False
+    stat = os.stat(file_path)
+    if stat.st_size != size or stat.st_mtime != timestamp:
+        return False
+    # check that the contents match
+    zip_contents = self.loader.get_data(zip_path)
+    with open(file_path, 'rb') as f:
+        file_contents = f.read()
+    return zip_contents == file_contents
+
+def _get_eager_resources(self):
+    if self.eagers is None:
+        eagers = []
+        for name in ('native_libs.txt', 'eager_resources.txt'):
+            if self.has_metadata(name):
+                eagers.extend(self.get_metadata_lines(name))
+        self.eagers = eagers
+    return self.eagers
+
+def _index(self):
+    try:
+        return self._dirindex
+    except AttributeError:
+        ind = {}
+        for path in self.zipinfo:
+            parts = path.split(os.sep)
+            while parts:
+                parent = os.sep.join(parts[:-1])
+                if parent in ind:
+                    ind[parent].append(parts[-1])
+                    break
+                else:
+                    ind[parent] = [parts.pop()]
+        self._dirindex = ind
+        return ind
+
+def _has(self, fspath):
+    zip_path = self._zipinfo_name(fspath)
+    return zip_path in self.zipinfo or zip_path in self._index()
+
+def _isdir(self, fspath):
+    return self._zipinfo_name(fspath) in self._index()
+
+def _listdir(self, fspath):
+    return list(self._index().get(self._zipinfo_name(fspath), ()))
+
+def _eager_to_zip(self, resource_name):
+    return self._zipinfo_name(self._fn(self.egg_root, resource_name))
+
+def _resource_to_zip(self, resource_name):
+    return self._zipinfo_name(self._fn(self.module_path, resource_name))
 
 

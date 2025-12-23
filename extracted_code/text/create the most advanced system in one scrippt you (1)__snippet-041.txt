@@ -1,0 +1,2 @@
+- Combine the above with the EEG experiment: for each trial, store measured latency and N1 amplitude; verify that trials within your target latency band show stronger N1 suppression than out-of-band trials, strengthening the argument that your timing meets the corollary discharge window.
+

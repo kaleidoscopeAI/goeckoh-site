@@ -1,10 +1,19 @@
-class InstallationResult:
-    def __init__(self, name: str) -> None:
-        self.name = name
+"""
+Returns the sequence of tag triples for the running interpreter.
 
-    def __repr__(self) -> str:
-        return f"InstallationResult(name={self.name!r})"
+The order of the sequence corresponds to priority order for the
+interpreter, from most to least important.
+"""
+
+interp_name = interpreter_name()
+if interp_name == "cp":
+    yield from cpython_tags(warn=warn)
+else:
+    yield from generic_tags()
+
+if interp_name == "pp":
+    yield from compatible_tags(interpreter="pp3")
+else:
+    yield from compatible_tags()
 
 
-def _validate_requirements(
-    requirements: List[InstallRequirement],

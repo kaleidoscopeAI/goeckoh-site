@@ -1,0 +1,3 @@
+              "</prosody></speak>"
+      tts.speak(ssml, TextToSpeech.QUEUE_FLUSH, null, "exocortex")
+      tts.setOnUtteranceProgressListener(object :

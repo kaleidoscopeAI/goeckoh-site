@@ -1,16 +1,11 @@
-    def assert_type(__val, __typ):
-        """Assert (to the type checker) that the value is of the given type.
+from pip._vendor.packaging.requirements import Requirement
+from pip._vendor.packaging.utils import NormalizedName, canonicalize_name
+from pip._vendor.packaging.version import parse as parse_version
 
-        When the type checker encounters a call to assert_type(), it
-        emits an error if the value is not of the specified type::
-
-            def greet(name: str) -> None:
-                assert_type(name, str)  # ok
-                assert_type(name, int)  # type checker error
-
-        At runtime this returns the first argument unchanged and otherwise
-        does nothing.
-        """
-        return __val
-
-
+from pip._internal.exceptions import InvalidWheel, UnsupportedWheel
+from pip._internal.metadata.base import (
+    BaseDistribution,
+    BaseEntryPoint,
+    DistributionVersion,
+    InfoPath,
+    Wheel,

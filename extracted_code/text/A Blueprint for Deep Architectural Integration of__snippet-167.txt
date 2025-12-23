@@ -1,0 +1,4 @@
+- A fully annotated, ready-to-build Rust project integrating these components.
+- Detailed simulation code and parameter setup.
+- Whitepapers or presentations for academic or industrial dissemination.
+

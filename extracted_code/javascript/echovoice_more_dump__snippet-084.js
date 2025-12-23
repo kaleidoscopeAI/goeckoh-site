@@ -1,9 +1,13 @@
-function rk4Step(f: (y: number[]) => number[], y: number[], dt: number): number[] {
-  const k1 = f(y);
-  const y2 = y.map((v, i) => v + dt * 0.5 * k1[i]);
-  const k2 = f(y2);
-  const y3 = y.map((v, i) => v + dt * 0.5 * k2[i]);
-  const k3 = f(y3);
-  const y4 = y.map((v, i) => v + dt * k3[i]);
-  const k4 = f(y4);
-  return y.map((v, i) => v + (dt / 6) * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]));
+  const states: number[][] = [];
+  for (const n of this.nodes.values()) {
+    states.push([...n.pos, n.b, n.h, n.kappa, n.mu]); // 7D
+  }
+  if (states.length < 2) return 0;
+  const cov = computeCovariance(states);
+  const mid = Math.floor(states.length / 2);
+  const covA = computeCovariance(states.slice(0, mid));
+  const covB = computeCovariance(states.slice(mid));
+  const d = det(cov) + 1e-10;
+  const dA = det(covA) + 1e-10;
+  const dB = det(covB) + 1e-10;
+  return 0.5 * Math.log(d / (dA * dB));

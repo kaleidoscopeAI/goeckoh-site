@@ -1,0 +1,7 @@
+if not csv_path.exists():
+    return []
+with csv_path.open() as f:
+    reader = csv.DictReader(f)
+    return list(reader)
+
+

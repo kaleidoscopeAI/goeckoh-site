@@ -1,1 +1,1 @@
-def embed_text(text: str) -> np.ndarray:
+async def run(self):

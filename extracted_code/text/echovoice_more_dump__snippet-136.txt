@@ -1,2 +1,1 @@
-# <REDACTED: potential secret detected>
-
+using power iteration + deflation (works efficiently because M is small).

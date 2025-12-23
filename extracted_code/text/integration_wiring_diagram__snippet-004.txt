@@ -1,0 +1,6 @@
+*   `main.py`, `server.py`: Core application logic and web server (`Quart`).
+*   `core/`: Foundational logic, utilities.
+*   `data/`: Data models, storage interfaces.
+*   `engines/`: "Thought Engines" (e.g., Kaleidoscope, Perspective).
+*   `memory/`: "Crystalline Memory" implementation (`faiss-cpu` suggests vector memory).
+*   `utils/`: Helper functions.

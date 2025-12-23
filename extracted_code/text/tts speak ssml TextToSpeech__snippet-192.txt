@@ -1,0 +1,10 @@
+      whisper.loadModel(modelPath, vocabPath, true) // multilingual = true
+
+      // Init Recorder
+      recorder = Recorder(context)
+
+      // Init Silero VAD
+      sileroVad = SileroVad.load(context) // Assume model loaded
+
+      // Load prefs
+      sharedPrefs = context.getSharedPreferences("vad_prefs",

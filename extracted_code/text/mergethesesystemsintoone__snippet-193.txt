@@ -1,2 +1,10 @@
-Builds a dependency graph (dependencies_graph) using NetworkX.
-Detects potential security issues using regex-based pattern matching.
+n = x.shape[0]
+n_frames = 1 + int(np.ceil((n - frame_length) / hop_length)) if n >= frame_length else 1
+total_len = (n_frames - 1) * hop_length + frame_length
+pad = total_len - n
+if pad > 0:
+    x = np.pad(x, (0, pad), mode="constant")
+strides = (x.strides[0]*hop_length, x.strides[0])
+frames = np.lib.stride_tricks.as_strided(x, shape=(n_frames, frame_length), strides=strides, writeable=False)
+return frames, pad
+

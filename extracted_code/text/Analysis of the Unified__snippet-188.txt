@@ -1,0 +1,4 @@
+Stress Tensor (σi​): Represents internal cognitive tension, based on the conflict between Knowledge, Awareness, and Beliefs. It drives the structural changes in M and U.
+
+Cognitive Actuation (C∧): The mechanism that grounds the abstract state. The node's state is projected onto an 8-dimensional E8 lattice, creating a "Kaleidoscope force" that influences its position and emotional state (valence and arousal).
+

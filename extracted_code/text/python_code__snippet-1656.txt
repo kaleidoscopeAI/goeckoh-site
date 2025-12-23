@@ -1,0 +1,8 @@
+if not (PROSODY_AVAILABLE and audio_i16 is not None):
+    return None
+try:
+    return extract_prosody_from_int16(audio_i16, sr)
+except Exception:
+    return None
+
+

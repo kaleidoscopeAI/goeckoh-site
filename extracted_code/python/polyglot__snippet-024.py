@@ -1,1 +1,2 @@
-def analyze_file(self, file_path: str) -> str:
+class UnravelAICore:
+def __init__(self, work_dir: str = None):

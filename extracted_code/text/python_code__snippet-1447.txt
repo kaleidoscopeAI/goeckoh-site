@@ -1,0 +1,5 @@
+parsed_req: ParsedRequirement,
+isolated: bool = False,
+use_pep517: Optional[bool] = None,
+user_supplied: bool = False,
+config_settings: Optional[Dict[str, Union[str, List[str]]]] = None,

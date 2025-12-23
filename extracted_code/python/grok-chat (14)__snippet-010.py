@@ -1,1 +1,0 @@
-I'm now focusing on a Text-to-Speech engine integration, aiming to make the model capable of full speech generation from text. The primary goal is to link text input directly to voice manipulation via the point structure. I'm exploring component separation to meet this requirement.

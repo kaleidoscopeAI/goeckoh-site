@@ -1,0 +1,10 @@
+      at org.gradle.api.internal.project.AbstractPluginAware.apply(AbstractPluginAware.java:46)
+      at com.android.build.gradle.BasePlugin.apply(BasePlugin.kt:29)
+      at com.android.build.gradle.AppPlugin.apply(AppPlugin.kt:26)
+      at com.android.build.gradle.AppPlugin.apply(AppPlugin.kt:24)
+      at org.gradle.api.internal.plugins.ImperativeOnlyPluginTarget.applyImperative(ImperativeOnlyPluginTarget.java:42)
+      at org.gradle.api.internal.plugins.RuleBasedPluginTarget.applyImperative(RuleBasedPluginTarget.java:50)
+      at org.gradle.api.internal.plugins.DefaultPluginManager.addPlugin(DefaultPluginManager.java:165)
+      at org.gradle.api.internal.plugins.DefaultPluginManager.access$200(DefaultPluginManager.java:47)
+      at org.gradle.api.internal.plugins.DefaultPluginManager$AddPluginBuildOperation.run(DefaultPluginManager.java:252)
+      at

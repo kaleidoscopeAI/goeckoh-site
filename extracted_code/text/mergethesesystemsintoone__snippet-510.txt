@@ -1,0 +1,26 @@
+# ... existing initialization code ...
+
+# Initialize Memory Graph
+memory_graph = MemoryGraph()
+
+# Initialize engines with MemoryGraph
+kaleidoscope_engine = KaleidoscopeEngine(memory_graph=memory_graph)
+mirrored_engine = MirroredEngine(memory_graph=memory_graph)
+quantum_engine = QuantumEngine()
+
+# Create some initial nodes with MemoryGraph
+initial_nodes = 5
+for i in range(initial_nodes):
+    node_id = f"node_{i}"
+    node_manager.create_node(
+        node_id,
+        dna=GeneticCode(),  # Assuming default values
+        memory_graph=memory_graph
+    )
+    energy_manager.allocate_node_energy(node_id, 100.0)  # Allocate energy to each node
+
+# ... rest of the main loop ...
+
+
+
+

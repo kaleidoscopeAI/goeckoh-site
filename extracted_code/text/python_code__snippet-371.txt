@@ -1,0 +1,7 @@
+"debian_version",
+"lsb-release",
+"oem-release",
+_OS_RELEASE_BASENAME,
+"system-release",
+"plesk-release",
+"iredmail-release",

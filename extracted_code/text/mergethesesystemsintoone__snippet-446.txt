@@ -1,0 +1,2 @@
+ "Drug Discovery":"Identifity novel pathways and potent bio-active compounds that will produce desired physiological results by generating robust data on compound and pathways alike, with iterative results and self adaption . all within local testing and simulated enviroments.",
+"Financial Prediction":"By transforming numeric market data into time-series events to then simulate the future values by leveraging past information.",

@@ -1,1 +1,1 @@
-export const DEFAULT_PARAMS = {
+let mounted = true;

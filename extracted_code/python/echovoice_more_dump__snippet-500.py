@@ -1,2 +1,1 @@
-import { EVector, DEFAULT_EMOTIONS } from "./actuationService";
-export function mapEToSpecies(
+// In practice the projection service should load from this doc at startup.

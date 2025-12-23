@@ -1,3 +1,9 @@
-    import bio_audio
-    if hasattr(bio_audio, "BioAcousticEngine") or hasattr(bio_audio, "BioEngine"):
-        RUST_AVAILABLE = True
+"""
+Traditional FileCache: body is stored in memory, so not suitable for large
+downloads.
+"""
+
+def delete(self, key: str) -> None:
+    self._delete(key, "")
+
+

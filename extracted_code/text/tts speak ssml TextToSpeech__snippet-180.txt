@@ -1,0 +1,17 @@
+              val correctedText = correctToFirstPerson(rawText)
+              speakCorrectedText(correctedText, prosody)
+              callback(correctedText, prosody)
+          }
+      })
+
+      // Set Recorder listener
+      recorder.setListener(object : IRecorderListener {
+          override fun onUpdateReceived(message: String) {
+              Log.d("Recorder", message)
+          }
+
+          override fun onDataReceived(samples: FloatArray) {
+              // Convert float[] to byte[] for VAD (16-bit PCM)
+              val byteArray = ByteArray(samples.size * 2)
+              val shortBuffer = ByteBuffer.wrap(byteArray).asShortBuffer()
+              samples.forEach { shortBuffer.put((it *

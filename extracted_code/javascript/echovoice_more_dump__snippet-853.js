@@ -1,1 +1,1 @@
-const pending = path.join(W_DIR, `rollback_pending_${id}.json`);
+if (step % 200 === 0) console.log("step", step, "constructs example:", constructs.slice(0, 3).map((c) => c.toFixed(4)));

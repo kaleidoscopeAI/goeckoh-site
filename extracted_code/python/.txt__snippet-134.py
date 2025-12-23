@@ -1,3 +1,1 @@
-import Foundation
-import AVFoundation
-final class EchoClient: ObservableObject {
+def bootstrap_whisper(paths: InstallPaths):

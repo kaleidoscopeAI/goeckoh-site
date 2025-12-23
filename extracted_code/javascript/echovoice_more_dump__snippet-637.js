@@ -1,1 +1,1 @@
-Instantiate once and reuse: const svc = new ProjectionService({ constructs: [...], persistenceDecay: 0.94 }).
+const pairs = s.split(" ");

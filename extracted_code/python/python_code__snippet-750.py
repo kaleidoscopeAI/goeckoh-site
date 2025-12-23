@@ -1,19 +1,8 @@
-def _py_interpreter_range(py_version: PythonVersion) -> Iterator[str]:
-    """
-    Yields Python versions in descending order.
+import logging
+import os
+from typing import Optional
 
-    After the latest version, the major-only version will be yielded, and then
-    all previous versions of that major version.
-    """
-    if len(py_version) > 1:
-        yield f"py{_version_nodot(py_version[:2])}"
-    yield f"py{py_version[0]}"
-    if len(py_version) > 1:
-        for minor in range(py_version[1] - 1, -1, -1):
-            yield f"py{_version_nodot((py_version[0], minor))}"
+from pip._vendor.pyproject_hooks import BuildBackendHookCaller, HookMissing
 
+from pip._internal.utils.subprocess import runner_with_spinner_message
 
-def compatible_tags(
-    python_version: Optional[PythonVersion] = None,
-    interpreter: Optional[str] = None,
-    platforms: Optional[Iterable[str]] = None,

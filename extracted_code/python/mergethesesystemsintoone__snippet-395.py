@@ -1,27 +1,31 @@
-class Trait:
-    name: str
-    value: float
-    category: TraitCategory
-    min_value: float = 0.0
-    max_value: float = 1.0
-    mutation_probability: float = 0.2
-    dependencies: Set[str] = field(default_factory=set)
-    antagonists: Set[str] = field(default_factory=set)
-    plasticity: float = 0.6
-
-    def __post_init__(self):
-        self._validate()
-        self._initialize_metadata()
-
-    def _validate(self):
-        if not 0 <= self.value <= 1:
-            raise ValueError(f"Trait value must be between 0 and 1, got {self.value}")
-        if not 0 <= self.plasticity <= 1:
-            raise ValueError(f"Plasticity must be between 0 and 1, got {self.plasticity}")
-
-    def _initialize_metadata(self):
-        self.history = []
-        self.adaptation_score = 1.0
-        self.last_update = 0
-        self.interaction_strength = {}
-
+    def create_unravel_tasks(self, input_directory: str, target_language: Optional[str] = None, 
+                            extra_tasks: List[str] = None) -> List[str]:
+        """Create a set of tasks for processing a codebase with UnravelAI"""
+        logger.info(f"Creating UnravelAI tasks for {input_directory}")
+        
+        # Ensure input directory exists
+        if not os.path.exists(input_directory):
+            raise ValueError(f"Input directory not found: {input_directory}")
+        
+        # Generate session ID
+        session_id = str(uuid.uuid4())[:8]
+        session_dir = self.analysis_dir / session_id
+        session_dir.mkdir(exist_ok=True)
+        
+        # Task IDs for tracking
+        task_ids = []
+        
+        # 1. Create setup task
+        setup_task = TaskConfig(
+            task_name=f"unravel_setup_{session_id}",
+            description="Setup and preparation for UnravelAI analysis",
+            priority=10,
+            command=["python", "-c", f"import os; os.makedirs('{session_dir}', exist_ok=True); print('Setup complete')"],
+            status="pending"
+        )
+        task_ids.append(self.add_task(setup_task))
+        
+        # ... (rest of the function remains the same)
+        
+        logger.info(f"Created {len(task_ids)} UnravelAI tasks for session {session_id}")
+        return task_ids

@@ -1,3 +1,4 @@
-export function computeModulators(node: NodeState): Modulators {
 const s = node.species;
-const m = s.length;
+const h = node.homeostasis;
+let homeoPenalty = 0;
+for (let i = 0; i < s.length; i++) {

@@ -1,12 +1,21 @@
-class Hypercube:
-    def __init__(self, dim: int = 16):
-        self.dim = dim
-        self.graph = nx.hypercube_graph(dim)
+def add_rule(self, rule: Dict):
+    """Adds a rule to the rule engine."""
+    self.rules.append(rule)
 
-    @lru_cache(maxsize=1024)
-    def project_batch(self, points: Tuple[np.ndarray]) -> List[np.ndarray]:
-        from sklearn.decomposition import PCA
-        pca = PCA(n_components=3)
-        points_array = np.vstack(points)
-        return pca.fit_transform(points_array).tolist()
+def apply(self, concept: Dict) -> List[Dict]:
+    """Applies rules to a concept and returns results."""
+    results = []
+    for rule in self.rules:
+        if self._rule_matches(concept, rule['condition']):
+            results.append({'rule_id': rule['id'], 'result': rule['action'](concept)})
+    return results
 
+def _rule_matches(self, concept: Dict, condition: Dict) -> bool:
+    """Checks if a concept matches a rule condition."""
+    for key, value in condition.items():
+        if key == 'pattern_type':
+            if not any(pattern.get('type') == value for pattern in concept.get('patterns', [])):
+                return False
+        elif concept.get(key) != value:
+            return False
+    return True

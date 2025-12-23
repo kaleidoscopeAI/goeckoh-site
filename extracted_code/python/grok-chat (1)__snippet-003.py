@@ -1,1 +1,12 @@
-The contemporary landscape of assistive technology stands at a critical juncture, characterized by a fundamental tension between computational capability and biological necessity. For decades, the domain has been dominated by the paradigm of Augmentative and Alternative Communication (AAC). These systems, ranging from rudimentary Picture Exchange Communication Systems (PECS) to sophisticated speech-generating devices (SGDs), operate under a utilitarian teleology: they exist to externalize intent. They function as amplifiers, assuming that the user's cognitive architecture for communication is intact but effectively "locked in" by motoric or articulatory deficits.
+import os
+import numpy as np
+import torch
+import sounddevice as sd
+import queue
+import threading
+import librosa
+import pyttsx3  # Fallback TTS for mimicry simulation (adjust rate/pitch to mimic)
+import logging
+from dataclasses import dataclass
+from typing import Optional
+

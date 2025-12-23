@@ -1,0 +1,10 @@
+"""
+yield all parents of path including path
+"""
+last = None
+while path != last:
+    yield path
+    last = path
+    path, _ = os.path.split(path)
+
+

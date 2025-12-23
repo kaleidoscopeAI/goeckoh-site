@@ -1,1 +1,1 @@
-const dt = clamp(newFeat.dt ?? feat.dt, 0.002, 0.05);
+const f0In = (newFeat.f0 ?? 0);

@@ -1,1 +1,0 @@
-I'll lay it out file by file, with a quick spoken-style intro for each, so you can hear it in your head as you read. Drop these into a Python package called 'autism' or whatever suits your setup. Run it with a venv, and you're golden. If something needs tweaking, just holler – I'm here to mimic and adapt on the fly.

@@ -1,1 +1,1 @@
-    import socks
+    import ssl

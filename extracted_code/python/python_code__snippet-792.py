@@ -1,5 +1,12 @@
-    from pip._vendor.rich.console import Console
-    from pip._vendor.rich.syntax import Syntax
-    from pip._vendor.rich.text import Text
+import importlib.util
+import os
+from collections import namedtuple
+from typing import Any, List, Optional
 
-    code = """from rich.console import Console
+from pip._vendor import tomli
+from pip._vendor.packaging.requirements import InvalidRequirement, Requirement
+
+from pip._internal.exceptions import (
+    InstallationError,
+    InvalidPyProjectBuildRequires,
+    MissingPyProjectBuildRequires,

@@ -1,0 +1,21 @@
+"""
+Decode a single string.
+
+:param input: A byte string
+:param fallback_encoding:
+    An :class:`Encoding` object or a label string.
+    The encoding to use if :obj:`input` does note have a BOM.
+:param errors: Type of error handling. See :func:`codecs.register`.
+:raises: :exc:`~exceptions.LookupError` for an unknown encoding label.
+:return:
+    A ``(output, encoding)`` tuple of an Unicode string
+    and an :obj:`Encoding`.
+
+"""
+# Fail early if `encoding` is an invalid label.
+fallback_encoding = _get_encoding(fallback_encoding)
+bom_encoding, input = _detect_bom(input)
+encoding = bom_encoding or fallback_encoding
+return encoding.codec_info.decode(input, errors)[0], encoding
+
+

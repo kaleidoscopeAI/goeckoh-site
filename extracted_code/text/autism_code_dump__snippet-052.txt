@@ -1,0 +1,7 @@
+server = ThreadedHTTPServer((host, port), APIServerHandler)
+t = threading.Thread(target=server.serve_forever, daemon=True)
+t.start()
+print(f"[API] http://{host}:{port} (kill: /kill, wipe: /wipe)")
+return server
+
+

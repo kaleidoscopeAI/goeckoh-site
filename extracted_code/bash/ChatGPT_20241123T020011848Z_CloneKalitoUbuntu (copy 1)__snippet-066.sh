@@ -1,2 +1,2 @@
-python resource_sharing_demo.py
+python3 mirrored_network_demo.py
 

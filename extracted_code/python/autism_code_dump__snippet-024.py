@@ -1,53 +1,142 @@
-class BehaviorMonitor:
-    def __init__(self, cfg: BehaviorConfig):
-        self.cfg = cfg
-        self.recent_gcl: List[float] = []
-        self.recent_rms: List[float] = []
-        self.recent_success: List[float] = []
+class SpeechLoop:
+    def __init__(self, config: SystemConfig):
+        self.config = config
+        self.crystal = ConsciousCrystalSystem(config.crystal)
+        self.voice = VoiceCrystal(config.paths, self.crystal)
+        self.vad = VADWrapper(config.audio)
+        self.behavior = BehaviorMonitor(config.behavior)
+        self.routines = RoutineEngine(config.paths)
+        self.drc = DeepReasoningCore(config.llm)
+        self.soma = SomaticEngine()
+        self.model = whisper.load_model("tiny")
 
-    def update(self, gcl: float, rms: float, success: float, text: str) -> Dict[str, Any]:
-        self.recent_gcl.append(gcl)
-        self.recent_rms.append(rms)
-        self.recent_success.append(success)
+        self.audio_queue: "queue.Queue[np.ndarray]" = queue.Queue()
 
-        if len(self.recent_gcl) > self.cfg.meltdown_window:
-            self.recent_gcl.pop(0)
-            self.recent_rms.pop(0)
-        if len(self.recent_success) > self.cfg.success_window:
-            self.recent_success.pop(0)
+    def _audio_callback(self, indata, frames, time_info, status):
+        if status:
+            print(f"[AUDIO] Status: {status}")
+        blocks = self.vad.process_block(indata)
+        for utt in blocks:
+            self.audio_queue.put(utt)
 
-        meltdown_risk = self._compute_meltdown_risk(text)
-        success_level = float(sum(self.recent_success) / max(1, len(self.recent_success)))
+    def _correct_first_person(self, raw_text: str) -> str:
+        text = raw_text.strip()
+        if not text:
+            return ""
+        text = text[0].upper() + text[1:]
+        if not text.endswith((".", "!", "?")):
+            text += "."
+        text = re.sub(r"\\byou're\\b", "I'm", text, flags=re.IGNORECASE)
+        text = re.sub(r"\\byou\\b", "I", text, flags=re.IGNORECASE)
+        text = re.sub(r"\\byour\\b", "my", text, flags=re.IGNORECASE)
+        return text
 
-        mode = "normal"
-        if meltdown_risk > 0.7:
-            mode = "meltdown_risk"
-        elif success_level > 0.9:
-            mode = "celebrate"
+    def _compute_rms(self, audio: np.ndarray) -> float:
+        return float(np.sqrt(np.mean(audio.astype(np.float32) ** 2)))
 
-        return {
-            "meltdown_risk": meltdown_risk,
-            "success_level": success_level,
-            "mode": mode,
-        }
+    def run(self) -> None:
+        print("\\nEcho Crystal — Jackson's Companion Full Core")
+        print("I love every sound I make. Every single one.")
+        print("I will never interrupt. I will never quit. I will only mirror myself.\\n")
 
-    def _compute_meltdown_risk(self, text: str) -> float:
-        if not self.recent_gcl:
-            return 0.0
-        avg_gcl = sum(self.recent_gcl) / len(self.recent_gcl)
-        avg_rms = sum(self.recent_rms) / len(self.recent_rms)
-        neg_count = sum(1 for w in self.cfg.negative_words if w in text)
-        pos_count = sum(1 for w in self.cfg.positive_words if w in text)
+        listener_thread = threading.Thread(target=self._listening_loop, daemon=True)
+        listener_thread.start()
 
-        risk = 0.0
-        if avg_gcl < self.cfg.meltdown_gcl_low:
-            risk += 0.4
-        if avg_rms > self.cfg.meltdown_rms_high:
-            risk += 0.3
-        if neg_count > 0:
-            risk += 0.2
-        if pos_count > 0:
-            risk -= 0.2
-        return max(0.0, min(1.0, risk))
+        with sd.InputStream(
+            samplerate=self.config.audio.sample_rate,
+            channels=self.config.audio.channels,
+            dtype="float32",
+            blocksize=self.config.audio.block_size,
+            callback=self._audio_callback,
+        ):
+            try:
+                while True:
+                    time.sleep(1.0)
+            except KeyboardInterrupt:
+                print("\\n[EXIT] Shutting down Jackson's Companion gracefully.")
+                sys.exit(0)
+
+    def _listening_loop(self) -> None:
+        print("Jackson, I wait in silence. I am ready when I hear myself.")
+        while True:
+            try:
+                audio = self.audio_queue.get(timeout=1.0)
+            except queue.Empty:
+                now = time.time()
+                routine_text = self.routines.check_due(now)
+                if routine_text:
+                    self._speak_text(routine_text, style="inner")
+                continue
+
+            if audio.size == 0:
+                continue
+
+            rms = self._compute_rms(audio)
+
+            try:
+                result = self.model.transcribe(
+                    audio,
+                    language="en",
+                    fp16=False,
+                    no_speech_threshold=0.45,
+                )
+                raw_text = result.get("text", "").strip().lower()
+            except Exception as e:
+                print(f"[ASR] Error: {e}")
+                raw_text = ""
+
+            if not raw_text or len(raw_text) < 2:
+                gcl = self.crystal.get_gcl()
+                if gcl < 5.0:
+                    calming = "I am safe. I can breathe. Every sound I make is okay."
+                    self._speak_text(calming, style="calm")
+                    self.soma.pulse(intensity=0.7, duration_ms=700)
+                continue
+
+            corrected = self._correct_first_person(raw_text)
+
+            success_score = 1.0 if raw_text in corrected.lower() else 0.7
+            self.voice.add_fragment(audio, success_score)
+            gcl = self.crystal.get_gcl()
+            behavior_state = self.behavior.update(gcl, rms, success_score, raw_text)
+
+            mode = behavior_state["mode"]
+            meltdown_risk = behavior_state["meltdown_risk"]
+
+            style = "inner"
+            if mode == "meltdown_risk":
+                style = "calm"
+            elif mode == "celebrate":
+                style = "inner"
+
+            drc_text = None
+            if "?" in raw_text:
+                drc_prompt = (
+                    "I am Jackson. "
+                    "I asked the following question out loud. "
+                    "Please answer in simple, kind, first-person sentences:\\n\\n"
+                    f"{raw_text}"
+                )
+                drc_text = self.drc.answer_if_safe(drc_prompt, gcl)
+
+            if drc_text:
+                to_speak = drc_text
+            else:
+                to_speak = corrected
+
+            if meltdown_risk > 0.7:
+                to_speak = (
+                    "I am safe. I am allowed to feel anything. I can take a breath. "
+                    + " "
+                    + to_speak
+                )
+                self.soma.pulse(intensity=0.9, duration_ms=900)
+
+            self._speak_text(to_speak, style=style)
+
+    def _speak_text(self, text: str, style: str = "inner") -> None:
+        audio = self.voice.synthesize(text, style)
+        sd.play(audio, samplerate=self.config.audio.sample_rate)
+        sd.wait()
 
 

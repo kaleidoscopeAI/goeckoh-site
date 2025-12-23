@@ -1,6 +1,9 @@
-    from mock import patch, Mock
-
-from ..ansitowin32 import StreamWrapper
-from ..initialise import init, just_fix_windows_console, _wipe_internal_state_for_tests
-from .utils import osname, replace_by
+def replace_original_by(stream):
+    orig_stdout = sys.__stdout__
+    orig_stderr = sys.__stderr__
+    sys.__stdout__ = stream
+    sys.__stderr__ = stream
+    yield
+    sys.__stdout__ = orig_stdout
+    sys.__stderr__ = orig_stderr
 

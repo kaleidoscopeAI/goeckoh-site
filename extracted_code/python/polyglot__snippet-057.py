@@ -1,1 +1,1 @@
-def redistribute(self, threshold: float = 50.0):
+def propagate(self):

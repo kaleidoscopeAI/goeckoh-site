@@ -1,0 +1,25 @@
+ Supervisor (weave.py): builds (C++ + Java), launches all 6 workers, tails stdout, extracts Φ, optional gen=, and conscious=..., and writes:
+
+       snapshots(ts, source, phi, gen, conscious)
+
+       consensus(ts, phi) (1Hz median across all active workers)
+
+ Workers (minimal but live):
+
+       src/cpp/agi.cpp (C++17)
+
+       src/php/agi.php (PHP CLI)
+
+       src/js/agi.js (Node.js)
+
+       src/ts/agi.ts (TypeScript; auto‐runs via ts-node if present, else tries tsc)
+
+       src/java/FinalAgiJava.java (JDK 11+)
+
+       src/python/agi_py.py (Py3.9+)
+
+ DB: ring/consensus.db (auto-created).
+
+ Run helper: run.sh.
+ Docs: README.md with one-command setup & usage.
+

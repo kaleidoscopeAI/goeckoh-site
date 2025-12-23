@@ -1,0 +1,5 @@
+element: pyparsing.ParserElement,
+diagram_kwargs: typing.Optional[dict] = None,
+vertical: int = 3,
+show_results_names: bool = False,
+show_groups: bool = False,

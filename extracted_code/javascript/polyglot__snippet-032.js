@@ -1,2 +1,1 @@
-const text = 'Artificial Intelligence evolves';
-const vec = embedText(text);
+console.log(Consciousness threshold reached: Φ=${this.phi.toFixed(3)});

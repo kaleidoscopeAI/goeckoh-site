@@ -1,1 +1,14 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+#[command(subcommand)]
+command: Commands,
+
+/// Configuration file path
+#[arg(long, global = true)]
+config: Option<String>,
+
+/// Verbose output
+#[arg(short, long, global = true, action = ArgAction::SetTrue)]
+verbose: bool,
+
+/// Show system information
+#[arg(long, global = true, action = ArgAction::SetTrue)]
+system_info: bool,

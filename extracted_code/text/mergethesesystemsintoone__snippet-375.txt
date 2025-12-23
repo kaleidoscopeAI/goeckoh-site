@@ -1,0 +1,3 @@
+"""Retrieves a memory resonance by its pattern_id."""
+return self.resonances.get(pattern_id)
+

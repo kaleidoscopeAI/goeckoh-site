@@ -1,4 +1,1 @@
-from __future__ import absolute_import
-
-import time
-
+    from importlib.util import cache_from_source  # Python >= 3.4

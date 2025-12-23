@@ -1,0 +1,7 @@
+init(*args, **kwargs)
+try:
+    yield
+finally:
+    deinit()
+
+

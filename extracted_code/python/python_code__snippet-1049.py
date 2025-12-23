@@ -1,5 +1,2 @@
-import ssl
-import sys
-import typing
-
-# Hold on to the original class so we can create it consistently
+def _handle_no_cache_dir(
+    option: Option, opt: str, value: str, parser: OptionParser

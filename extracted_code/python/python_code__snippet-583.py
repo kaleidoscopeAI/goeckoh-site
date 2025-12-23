@@ -1,28 +1,45 @@
-    from zipfile import ZipExtFile as BaseZipExtFile
+class BaseReporter(object):
+    """Delegate class to provider progress reporting for the resolver."""
 
-    class ZipExtFile(BaseZipExtFile):
+    def starting(self):
+        """Called before the resolution actually starts."""
 
-        def __init__(self, base):
-            self.__dict__.update(base.__dict__)
+    def starting_round(self, index):
+        """Called before each round of resolution starts.
 
-        def __enter__(self):
-            return self
+        The index is zero-based.
+        """
 
-        def __exit__(self, *exc_info):
-            self.close()
-            # return None, so if an exception occurred, it will propagate
+    def ending_round(self, index, state):
+        """Called before each round of resolution ends.
 
-    class ZipFile(BaseZipFile):
+        This is NOT called if the resolution ends at this round. Use `ending`
+        if you want to report finalization. The index is zero-based.
+        """
 
-        def __enter__(self):
-            return self
+    def ending(self, state):
+        """Called before the resolution ends successfully."""
 
-        def __exit__(self, *exc_info):
-            self.close()
-            # return None, so if an exception occurred, it will propagate
+    def adding_requirement(self, requirement, parent):
+        """Called when adding a new requirement into the resolve criteria.
 
-        def open(self, *args, **kwargs):
-            base = BaseZipFile.open(self, *args, **kwargs)
-            return ZipExtFile(base)
+        :param requirement: The additional requirement to be applied to filter
+            the available candidaites.
+        :param parent: The candidate that requires ``requirement`` as a
+            dependency, or None if ``requirement`` is one of the root
+            requirements passed in from ``Resolver.resolve()``.
+        """
+
+    def resolving_conflicts(self, causes):
+        """Called when starting to attempt requirement conflict resolution.
+
+        :param causes: The information on the collision that caused the backtracking.
+        """
+
+    def rejecting_candidate(self, criterion, candidate):
+        """Called when rejecting a candidate during backtracking."""
+
+    def pinning(self, candidate):
+        """Called when adding a candidate to the potential solution."""
 
 

@@ -1,1 +1,8 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+Incomplete Node class with semantic embeddings, mutation, and replication logic.
+Placeholder LLM mock with a real adapter (using Ollama via HTTP, with secure env vars).
+Incomplete physics with full Velocity-Verlet integration and adaptive stepping.
+Semantic diffusion, noise, and gating.
+Full backend with FastAPI, including speculation integration (flagged suggestions go to worker).
+Frontend with TSX/Three.js, using instanced meshes for performance.
+Dockerfiles and docker-compose for running the stack.
+

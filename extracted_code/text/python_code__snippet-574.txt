@@ -1,0 +1,2 @@
+wintypes.HANDLE,
+ctypes.POINTER(CONSOLE_CURSOR_INFO),

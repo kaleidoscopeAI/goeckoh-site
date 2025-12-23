@@ -1,0 +1,1 @@
+fn: ParseCondition, message: typing.Optional[str] = None, fatal: bool = False

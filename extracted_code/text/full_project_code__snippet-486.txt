@@ -1,0 +1,19 @@
+'white': 0,
+'black': 1,
+'blue': 2,
+'brightgreen': 3,
+'brightred': 4,
+'yellow': 5,
+'magenta': 6,
+'orange': 7,
+'green': 7, #compat w/ ansi
+'brightyellow': 8,
+'lightgreen': 9,
+'brightcyan': 9, # compat w/ ansi
+'cyan': 10,
+'lightblue': 11,
+'red': 11, # compat w/ ansi
+'brightblue': 12,
+'brightmagenta': 13,
+'brightblack': 14,
+'gray': 15,

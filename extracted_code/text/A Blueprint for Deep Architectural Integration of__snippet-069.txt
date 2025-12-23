@@ -1,0 +1,2 @@
+- The size of \$ \lambda_2(L) \$ (algebraic connectivity) gauges graph robustness and information flow capacity.
+

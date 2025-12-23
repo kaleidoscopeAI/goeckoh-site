@@ -1,0 +1,3 @@
+"""Replicate an existing node."""
+return node.replicate(new_node_id)
+

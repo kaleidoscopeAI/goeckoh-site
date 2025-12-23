@@ -1,6 +1,5 @@
-from typing import Optional, Union
+import os
+from typing import IO, TYPE_CHECKING, Any, Callable, Optional, Union
 
-from .charsetprober import CharSetProber
-from .enums import ProbingState
-from .sbcharsetprober import SingleByteCharSetProber
+from ._extension import load_ipython_extension  # noqa: F401
 

@@ -1,1 +1,1 @@
-def integrated_information(self, vec: List[float]) -> float:
+def forward(self, x: torch.Tensor) -> torch.Tensor:

@@ -1,0 +1,37 @@
+1940              }
+1941 +
+1942 +        # Performance-focused path: keep core outputs but skip expensive subsystems (quantum/hamiltonian/heavy lattice
+       ops).
+1943 +        if os.environ.get("GOECKOH_PERF_MODE", "").lower() in ("1", "true", "yes"):
+1944 +            gcl = float(self.crystalline_heart.gcl if hasattr(self.crystalline_heart, "gcl") else 0.9)
+1945 +            stress = 1.0 - gcl
+1946 +            heart_sample = []
+1947 +            heart_topk: List[Dict[str, Any]] = []
+1948 +            emotional_state = getattr(self, "emotional_state", EmotionalState())
+1949 +            try:
+1950 +                nodes = np.asarray(self.crystalline_heart.nodes, dtype=float)
+1951 +                if nodes.size >= 32:
+1952 +                    heart_sample = nodes.reshape(32, -1).mean(axis=1).tolist()
+1953 +                else:
+1954 +                    heart_sample = nodes.tolist()
+1955 +                flat = nodes.flatten()
+1956 +                topk_idx = np.argpartition(np.abs(flat), -32)[-32:]
+1957 +                sorted_idx = topk_idx[np.argsort(-np.abs(flat[topk_idx]))]
+1958 +                heart_topk = [{"index": int(i), "value": float(flat[i])} for i in sorted_idx]
+1959 +            except Exception:
+1960 +                pass
+1961 +            return {
+1962 +                "response_text": text_input,
+1963 +                "gcl": gcl,
+1964 +                "stress": stress,
+1965 +                "system_mode": "BASELINE",
+1966 +                "heart_name": "Neurocoherence Lattice",
+1967 +                "heart_sample": heart_sample,
+1968 +                "heart_topk": heart_topk,
+1969 +                "heart_rust": {},
+1970 +                "emotional_state": emotional_state,
+1971 +                "metrics": {"gcl": gcl, "mode": "BASELINE", "stress": stress, "timestamp": time.time()},
+1972 +                "processing_time": time.time() - start_time,
+1973 +            }
+1974          prosody_features = None
+

@@ -1,2 +1,1 @@
-const sx = PAD + ((x - bounds.minX) / (bounds.maxX - bounds.minX)) * innerW;
-const sy = PAD + (1 - (y - bounds.minY) / (bounds.maxY - bounds.minY)) * innerH;
+const regret = replayLogs ? (replayLogs[t]?.regret ?? (Math.random()-0.5) * 0.3) : (Math.random() - 0.5) * 0.5;

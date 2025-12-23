@@ -1,0 +1,3 @@
+- Active nodes, their tasks, and their learned knowledge.
+- How nodes collaborate and share resources.
+- The mirrored strands in action.

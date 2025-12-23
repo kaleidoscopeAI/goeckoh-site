@@ -1,0 +1,3 @@
+jacob/.local/lib/python3.12/site-packages/vosk/__init__.py', submodule_search_locations=['/home/jacob/.local/lib/python3.12/
+site-packages/vosk'])
+

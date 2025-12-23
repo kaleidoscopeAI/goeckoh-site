@@ -1,3 +1,11 @@
-    import weakref
+from __future__ import absolute_import
 
-    weakref_finalize = weakref.finalize
+import binascii
+import codecs
+import os
+from io import BytesIO
+
+from .fields import RequestField
+from .packages import six
+from .packages.six import b
+

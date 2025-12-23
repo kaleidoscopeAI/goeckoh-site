@@ -1,2 +1,5 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
-
+type: OmniMindModule,
+name: "omnimind_ai_os_crystal",
+author: "Cognitive Crystal AI OS Team",
+description: "Bit-Level Cognitive Crystal Kernel for Conscious AI OS",
+license: "GPL v2",

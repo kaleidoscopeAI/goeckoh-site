@@ -1,0 +1,5 @@
+print(f"\n-- Cycle {i+1} --")
+result = node.process_input(data, context)
+print("Processing Result:", result)
+print("Current State:", node.get_state())
+

@@ -1,2 +1,10 @@
-# <REDACTED: potential secret detected>
+class CERT_CONTEXT(Structure):
+    _fields_ = (
+        ("dwCertEncodingType", DWORD),
+        ("pbCertEncoded", c_void_p),
+        ("cbCertEncoded", DWORD),
+        ("pCertInfo", c_void_p),
+        ("hCertStore", HCERTSTORE),
+    )
+
 

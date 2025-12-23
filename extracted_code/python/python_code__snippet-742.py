@@ -1,44 +1,19 @@
-def _parse_version_parts(s: str) -> Iterator[str]:
-    for part in _legacy_version_component_re.split(s):
-        part = _legacy_version_replacement_map.get(part, part)
-
-        if not part or part == ".":
-            continue
-
-        if part[:1] in "0123456789":
-            # pad for numeric comparison
-            yield part.zfill(8)
-        else:
-            yield "*" + part
-
-    # ensure that alpha/beta/candidate are before final
-    yield "*final"
-
-
-def _legacy_cmpkey(version: str) -> LegacyCmpKey:
-
-    # We hardcode an epoch of -1 here. A PEP 440 version can only have a epoch
-    # greater than or equal to 0. This will effectively put the LegacyVersion,
-    # which uses the defacto standard originally implemented by setuptools,
-    # as before all PEP 440 versions.
-    epoch = -1
-
-    # This scheme is taken from pkg_resources.parse_version setuptools prior to
-    # it's adoption of the packaging library.
-    parts: List[str] = []
-    for part in _parse_version_parts(version.lower()):
-        if part.startswith("*"):
-            # remove "-" before a prerelease tag
-            if part < "*final":
-                while parts and parts[-1] == "*final-":
-                    parts.pop()
-
-            # remove trailing zeros from each series of numeric parts
-            while parts and parts[-1] == "00000000":
-                parts.pop()
-
-        parts.append(part)
-
-    return epoch, tuple(parts)
+def create_package_set_from_installed() -> Tuple[PackageSet, bool]:
+    """Converts a list of distributions into a PackageSet."""
+    package_set = {}
+    problems = False
+    env = get_default_environment()
+    for dist in env.iter_installed_distributions(local_only=False, skip=()):
+        name = dist.canonical_name
+        try:
+            dependencies = list(dist.iter_dependencies())
+            package_set[name] = PackageDetails(dist.version, dependencies)
+        except (OSError, ValueError) as e:
+            # Don't crash on unreadable or broken metadata.
+            logger.warning("Error parsing requirements for %s: %s", name, e)
+            problems = True
+    return package_set, problems
 
 
+def check_package_set(
+    package_set: PackageSet, should_ignore: Optional[Callable[[str], bool]] = None

@@ -1,2 +1,1 @@
-function computeWij(i,j): number — returns w_ij.
-function computeWijDerivatives(i,j): WeightDeriv — returns structure with functions/arrays that compute ∂w_ij/∂K_i, ∂w_ij/∂K_j, ∂w_ij/∂U_i, etc.
++function makeRandomNode(id: number, dK = 8, dD = 8, dPsi = 4, dU = 1, dM = 4, dL = 8, dE = 4): NodeState {

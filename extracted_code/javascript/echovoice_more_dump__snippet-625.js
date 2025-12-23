@@ -1,1 +1,1 @@
-const Ki = nodes.map(n => Number(n.Ki) || 0);
+let docRef: any = null;

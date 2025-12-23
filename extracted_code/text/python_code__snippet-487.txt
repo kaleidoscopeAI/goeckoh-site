@@ -1,0 +1,8 @@
+assert encode('é', 'latin1') == b'\xe9'
+assert encode('é', 'utf8') == b'\xc3\xa9'
+assert encode('é', 'utf8') == b'\xc3\xa9'
+assert encode('é', 'utf-16') == b'\xe9\x00'
+assert encode('é', 'utf-16le') == b'\xe9\x00'
+assert encode('é', 'utf-16be') == b'\x00\xe9'
+
+

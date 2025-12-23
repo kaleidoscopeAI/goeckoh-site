@@ -1,1 +1,1 @@
-const neutral = this._sanitizedZero();
+Instantiate once and reuse: const svc = new ProjectionService({ constructs: [...], persistenceDecay: 0.94 }).

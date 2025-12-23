@@ -1,1 +1,1 @@
-for (let k = 0; k < block; k++) y2[i][k] += mirrorScale * v2[i][k];
+involving periodic structural rearrangements (np.roll) of the lattice, stabilizes the structure into a low-energy, coherent state.1 This function is

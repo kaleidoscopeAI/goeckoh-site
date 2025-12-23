@@ -1,154 +1,146 @@
-class UnsupportedVersionError(ValueError):
-    """This is an unsupported version."""
-    pass
+    from pip._vendor.requests import PreparedRequest, Response
+    from pip._vendor.urllib3 import HTTPResponse
+
+    from pip._vendor.cachecontrol.cache import BaseCache
+    from pip._vendor.cachecontrol.heuristics import BaseHeuristic
+    from pip._vendor.cachecontrol.serialize import Serializer
 
 
-class Version(object):
-    def __init__(self, s):
-        self._string = s = s.strip()
-        self._parts = parts = self.parse(s)
-        assert isinstance(parts, tuple)
-        assert len(parts) > 0
+class CacheControlAdapter(HTTPAdapter):
+    invalidating_methods = {"PUT", "PATCH", "DELETE"}
 
-    def parse(self, s):
-        raise NotImplementedError('please implement in a subclass')
+    def __init__(
+        self,
+        cache: BaseCache | None = None,
+        cache_etags: bool = True,
+        controller_class: type[CacheController] | None = None,
+        serializer: Serializer | None = None,
+        heuristic: BaseHeuristic | None = None,
+        cacheable_methods: Collection[str] | None = None,
+        *args: Any,
+        **kw: Any,
+    ) -> None:
+        super().__init__(*args, **kw)
+        self.cache = DictCache() if cache is None else cache
+        self.heuristic = heuristic
+        self.cacheable_methods = cacheable_methods or ("GET",)
 
-    def _check_compatible(self, other):
-        if type(self) != type(other):
-            raise TypeError('cannot compare %r and %r' % (self, other))
+        controller_factory = controller_class or CacheController
+        self.controller = controller_factory(
+            self.cache, cache_etags=cache_etags, serializer=serializer
+        )
 
-    def __eq__(self, other):
-        self._check_compatible(other)
-        return self._parts == other._parts
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
-    def __lt__(self, other):
-        self._check_compatible(other)
-        return self._parts < other._parts
-
-    def __gt__(self, other):
-        return not (self.__lt__(other) or self.__eq__(other))
-
-    def __le__(self, other):
-        return self.__lt__(other) or self.__eq__(other)
-
-    def __ge__(self, other):
-        return self.__gt__(other) or self.__eq__(other)
-
-    # See http://docs.python.org/reference/datamodel#object.__hash__
-    def __hash__(self):
-        return hash(self._parts)
-
-    def __repr__(self):
-        return "%s('%s')" % (self.__class__.__name__, self._string)
-
-    def __str__(self):
-        return self._string
-
-    @property
-    def is_prerelease(self):
-        raise NotImplementedError('Please implement in subclasses.')
-
-
-class Matcher(object):
-    version_class = None
-
-    # value is either a callable or the name of a method
-    _operators = {
-        '<': lambda v, c, p: v < c,
-        '>': lambda v, c, p: v > c,
-        '<=': lambda v, c, p: v == c or v < c,
-        '>=': lambda v, c, p: v == c or v > c,
-        '==': lambda v, c, p: v == c,
-        '===': lambda v, c, p: v == c,
-        # by default, compatible => >=.
-        '~=': lambda v, c, p: v == c or v > c,
-        '!=': lambda v, c, p: v != c,
-    }
-
-    # this is a method only to support alternative implementations
-    # via overriding
-    def parse_requirement(self, s):
-        return parse_requirement(s)
-
-    def __init__(self, s):
-        if self.version_class is None:
-            raise ValueError('Please specify a version class')
-        self._string = s = s.strip()
-        r = self.parse_requirement(s)
-        if not r:
-            raise ValueError('Not valid: %r' % s)
-        self.name = r.name
-        self.key = self.name.lower()    # for case-insensitive comparisons
-        clist = []
-        if r.constraints:
-            # import pdb; pdb.set_trace()
-            for op, s in r.constraints:
-                if s.endswith('.*'):
-                    if op not in ('==', '!='):
-                        raise ValueError('\'.*\' not allowed for '
-                                         '%r constraints' % op)
-                    # Could be a partial version (e.g. for '2.*') which
-                    # won't parse as a version, so keep it as a string
-                    vn, prefix = s[:-2], True
-                    # Just to check that vn is a valid version
-                    self.version_class(vn)
-                else:
-                    # Should parse as a version, so we can create an
-                    # instance for the comparison
-                    vn, prefix = self.version_class(s), False
-                clist.append((op, vn, prefix))
-        self._parts = tuple(clist)
-
-    def match(self, version):
+    def send(
+        self,
+        request: PreparedRequest,
+        stream: bool = False,
+        timeout: None | float | tuple[float, float] | tuple[float, None] = None,
+        verify: bool | str = True,
+        cert: (None | bytes | str | tuple[bytes | str, bytes | str]) = None,
+        proxies: Mapping[str, str] | None = None,
+        cacheable_methods: Collection[str] | None = None,
+    ) -> Response:
         """
-        Check if the provided version matches the constraints.
-
-        :param version: The version to match against this instance.
-        :type version: String or :class:`Version` instance.
+        Send a request. Use the request information to see if it
+        exists in the cache and cache the response if we need to and can.
         """
-        if isinstance(version, string_types):
-            version = self.version_class(version)
-        for operator, constraint, prefix in self._parts:
-            f = self._operators.get(operator)
-            if isinstance(f, string_types):
-                f = getattr(self, f)
-            if not f:
-                msg = ('%r not implemented '
-                       'for %s' % (operator, self.__class__.__name__))
-                raise NotImplementedError(msg)
-            if not f(version, constraint, prefix):
-                return False
-        return True
+        cacheable = cacheable_methods or self.cacheable_methods
+        if request.method in cacheable:
+            try:
+                cached_response = self.controller.cached_request(request)
+            except zlib.error:
+                cached_response = None
+            if cached_response:
+                return self.build_response(request, cached_response, from_cache=True)
 
-    @property
-    def exact_version(self):
-        result = None
-        if len(self._parts) == 1 and self._parts[0][0] in ('==', '==='):
-            result = self._parts[0][1]
-        return result
+            # check for etags and add headers if appropriate
+            request.headers.update(self.controller.conditional_headers(request))
 
-    def _check_compatible(self, other):
-        if type(self) != type(other) or self.name != other.name:
-            raise TypeError('cannot compare %s and %s' % (self, other))
+        resp = super().send(request, stream, timeout, verify, cert, proxies)
 
-    def __eq__(self, other):
-        self._check_compatible(other)
-        return self.key == other.key and self._parts == other._parts
+        return resp
 
-    def __ne__(self, other):
-        return not self.__eq__(other)
+    def build_response(
+        self,
+        request: PreparedRequest,
+        response: HTTPResponse,
+        from_cache: bool = False,
+        cacheable_methods: Collection[str] | None = None,
+    ) -> Response:
+        """
+        Build a response by making a request or using the cache.
 
-    # See http://docs.python.org/reference/datamodel#object.__hash__
-    def __hash__(self):
-        return hash(self.key) + hash(self._parts)
+        This will end up calling send and returning a potentially
+        cached response
+        """
+        cacheable = cacheable_methods or self.cacheable_methods
+        if not from_cache and request.method in cacheable:
+            # Check for any heuristics that might update headers
+            # before trying to cache.
+            if self.heuristic:
+                response = self.heuristic.apply(response)
 
-    def __repr__(self):
-        return "%s(%r)" % (self.__class__.__name__, self._string)
+            # apply any expiration heuristics
+            if response.status == 304:
+                # We must have sent an ETag request. This could mean
+                # that we've been expired already or that we simply
+                # have an etag. In either case, we want to try and
+                # update the cache if that is the case.
+                cached_response = self.controller.update_cached_response(
+                    request, response
+                )
 
-    def __str__(self):
-        return self._string
+                if cached_response is not response:
+                    from_cache = True
+
+                # We are done with the server response, read a
+                # possible response body (compliant servers will
+                # not return one, but we cannot be 100% sure) and
+                # release the connection back to the pool.
+                response.read(decode_content=False)
+                response.release_conn()
+
+                response = cached_response
+
+            # We always cache the 301 responses
+            elif int(response.status) in PERMANENT_REDIRECT_STATUSES:
+                self.controller.cache_response(request, response)
+            else:
+                # Wrap the response file with a wrapper that will cache the
+                #   response when the stream has been consumed.
+                response._fp = CallbackFileWrapper(  # type: ignore[attr-defined]
+                    response._fp,  # type: ignore[attr-defined]
+                    functools.partial(
+                        self.controller.cache_response, request, response
+                    ),
+                )
+                if response.chunked:
+                    super_update_chunk_length = response._update_chunk_length  # type: ignore[attr-defined]
+
+                    def _update_chunk_length(self: HTTPResponse) -> None:
+                        super_update_chunk_length()
+                        if self.chunk_left == 0:
+                            self._fp._close()  # type: ignore[attr-defined]
+
+                    response._update_chunk_length = types.MethodType(  # type: ignore[attr-defined]
+                        _update_chunk_length, response
+                    )
+
+        resp: Response = super().build_response(request, response)  # type: ignore[no-untyped-call]
+
+        # See if we should invalidate the cache.
+        if request.method in self.invalidating_methods and resp.ok:
+            assert request.url is not None
+            cache_url = self.controller.cache_url(request.url)
+            self.cache.delete(cache_url)
+
+        # Give the request a from_cache attr to let people use it
+        resp.from_cache = from_cache  # type: ignore[attr-defined]
+
+        return resp
+
+    def close(self) -> None:
+        self.cache.close()
+        super().close()  # type: ignore[no-untyped-call]
 
 

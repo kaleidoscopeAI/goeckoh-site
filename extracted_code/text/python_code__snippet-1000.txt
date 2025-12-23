@@ -1,0 +1,25 @@
+"""Split a string or iterable thereof into (section, content) pairs
+
+Each ``section`` is a stripped version of the section header ("[section]")
+and each ``content`` is a list of stripped lines excluding blank lines and
+comment-only lines.  If there are any such lines before the first section
+header, they're returned in a first ``section`` of ``None``.
+"""
+section = None
+content = []
+for line in yield_lines(s):
+    if line.startswith("["):
+        if line.endswith("]"):
+            if section or content:
+                yield section, content
+            section = line[1:-1].strip()
+            content = []
+        else:
+            raise ValueError("Invalid section heading", line)
+    else:
+        content.append(line)
+
+# wrap up last segment
+yield section, content
+
+

@@ -1,0 +1,1 @@
+functions: read_genesis_key, send_master_command

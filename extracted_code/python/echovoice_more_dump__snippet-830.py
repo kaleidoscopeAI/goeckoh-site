@@ -1,3 +1,4 @@
-import * as THREE from 'three';
-import { EventEmitter } from 'events'; // For real-time events
+def index():
+    """Render the main page"""
+    return render_template('index.html')
 

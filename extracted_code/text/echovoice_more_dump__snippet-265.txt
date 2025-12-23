@@ -1,1 +1,2 @@
-3. MetaOptimizer.step() updates DEFAULT_P in-place using Adam-style rules.
+  including Hamiltonian components, CFL condition enforcement, and quantum coherence metrics. I will also provide
+  a shell script to compile this into a shared library that Python can use.

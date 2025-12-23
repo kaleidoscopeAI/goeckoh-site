@@ -1,5 +1,3 @@
-        bool: True if the function succeeds, otherwise False.
-    """
-    return bool(_SetConsoleCursorPosition(std_handle, coords))
+         """Get the function out of a possibly unbound function""")
 
 

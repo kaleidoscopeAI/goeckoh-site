@@ -1,0 +1,6 @@
+if task_result.data:
+    node_result = text_node.process(task_result.data)
+    combined_data = {"cycle": 1, "node_outputs": {text_node_id: node_result}}
+    patterns = pattern_recognizer.recognize_patterns(combined_data)
+    print("Patterns:", patterns)
+

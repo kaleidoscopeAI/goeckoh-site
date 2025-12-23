@@ -1,0 +1,4 @@
+    >>> vrp(r'C:\\foo/bar.txt')
+    Traceback (most recent call last):
+    ...
+    ValueError: Use of .. or absolute path in a resource path \

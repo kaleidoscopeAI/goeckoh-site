@@ -1,1 +1,2 @@
-from flask import Flask, jsonify, render_template_string
+class SpeechProcessor:
+def __init__(self, cfg: CompanionConfig) -> None:

@@ -1,1 +1,1 @@
-def llm_reflection(self, embedded_input, context_embeddings, torque):
+async def get_status():

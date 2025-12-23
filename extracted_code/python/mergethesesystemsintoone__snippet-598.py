@@ -1,31 +1,27 @@
-class PythonNode:
-    def __init__(self, node_id: int, traits: Dict[str, float], energy: float):
-        self.node_id = node_id
-        self.traits = traits
-        self.energy = energy
-        self.tasks_completed = 0
-        self.memory = []
+"""Configuration for the simulation parameters."""
+initial_resources: float = 1000.0
+resource_regeneration_rate: float = 5.0
+max_node_energy: float = 50.0
+reproduction_energy_threshold: float = 30.0
+energy_gain_min: float = 2.0
+energy_gain_max: float = 6.0
+knowledge_transfer_min: float = 1.0
+knowledge_transfer_max: float = 5.0
+mutation_probability: float = 0.2
+trait_plasticity: float = 0.6
+initial_nodes: int = 3
+simulation_steps: int = 20
+data_processing_types: List[str] = field(default_factory=lambda: ["text", "image", "numerical"])
+text_data_path: Optional[str] = "data/text_data.txt" # You need to provide these paths
+image_data_path: Optional[str] = "data/image_data.jpg" # You need to provide these paths
 
-    def specialize(self, task_type: str):
-        """Specialize the node for a specific task type."""
-        self.task_type = task_type
+def load_config(self, config_path: str):
+    """Loads configuration from a JSON file."""
+    with open(config_path, 'r') as f:
+        return json.load(f)
 
-    def perform_task(self):
-        """Perform a task, consuming energy."""
-        if self.energy > 1.0:  # Ensure a minimum energy threshold of 1.0
-            self.tasks_completed += 1
-            self.energy -= random.uniform(0.5, 2.0)
-            task_log = f"Node {self.node_id} performed a task in {self.task_type}."
-            self.memory.append(task_log)
-            logging.info(task_log)
-        else:
-            logging.warning(f"Node {self.node_id} does not have enough energy to perform a task.")
-
-    def dump_data(self) -> Dict:
-        """Dump processed data for analysis."""
-        return {
-            "node_id": self.node_id,
-            "data": random.random(),
-            "traits": self.traits
-        }
+def save_config(self, config_path: str):
+    """Saves the current configuration to a JSON file."""
+    with open(config_path, 'w') as f:
+        json.dump(self.__dict__, f, indent=4)
 

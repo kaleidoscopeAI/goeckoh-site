@@ -1,0 +1,21 @@
+assert decode(b'\x80', 'latin1') == ('€', lookup('latin1'))
+assert decode(b'\x80', lookup('latin1')) == ('€', lookup('latin1'))
+assert decode(b'\xc3\xa9', 'utf8') == ('é', lookup('utf8'))
+assert decode(b'\xc3\xa9', UTF8) == ('é', lookup('utf8'))
+assert decode(b'\xc3\xa9', 'ascii') == ('Ã©', lookup('ascii'))
+assert decode(b'\xEF\xBB\xBF\xc3\xa9', 'ascii') == ('é', lookup('utf8'))  # UTF-8 with BOM
+
+assert decode(b'\xFE\xFF\x00\xe9', 'ascii') == ('é', lookup('utf-16be'))  # UTF-16-BE with BOM
+assert decode(b'\xFF\xFE\xe9\x00', 'ascii') == ('é', lookup('utf-16le'))  # UTF-16-LE with BOM
+assert decode(b'\xFE\xFF\xe9\x00', 'ascii') == ('\ue900', lookup('utf-16be'))
+assert decode(b'\xFF\xFE\x00\xe9', 'ascii') == ('\ue900', lookup('utf-16le'))
+
+assert decode(b'\x00\xe9', 'UTF-16BE') == ('é', lookup('utf-16be'))
+assert decode(b'\xe9\x00', 'UTF-16LE') == ('é', lookup('utf-16le'))
+assert decode(b'\xe9\x00', 'UTF-16') == ('é', lookup('utf-16le'))
+
+assert decode(b'\xe9\x00', 'UTF-16BE') == ('\ue900', lookup('utf-16be'))
+assert decode(b'\x00\xe9', 'UTF-16LE') == ('\ue900', lookup('utf-16le'))
+assert decode(b'\x00\xe9', 'UTF-16') == ('\ue900', lookup('utf-16le'))
+
+

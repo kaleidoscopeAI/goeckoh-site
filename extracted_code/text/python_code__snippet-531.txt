@@ -1,0 +1,4 @@
+syntax = Syntax(code, "python", theme="monokai", line_numbers=True)
+
+markdown = Markdown(
+    """\

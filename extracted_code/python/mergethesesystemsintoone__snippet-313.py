@@ -1,6 +1,22 @@
-import json
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Any, Set, Tuple
-from enum import Enum, auto
+from sympy.core.containers import Tuple
 
-class GrowthState(Enum):
+
+
+
+
+class List(Tuple):
+
+
+    def __eq__(self, other):
+
+
+
+
+
+
+
+    def __hash__(self):
+
+
+
+

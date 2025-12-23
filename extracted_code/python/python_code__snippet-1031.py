@@ -1,2 +1,5 @@
-from ._api import SSLContext, extract_from_ssl, inject_into_ssl  # noqa: E402
-
+from pip._internal.utils.subprocess import (
+    CommandArgs,
+    call_subprocess,
+    format_command_args,
+    make_command,

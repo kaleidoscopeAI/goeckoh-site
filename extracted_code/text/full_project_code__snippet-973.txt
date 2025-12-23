@@ -1,0 +1,3 @@
+"""Before call strategy that does nothing."""
+
+

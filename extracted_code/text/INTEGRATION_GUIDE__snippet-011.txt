@@ -1,0 +1,6 @@
+energy: 0.7,
+f0: 220,
+clarity: 0.85,
+fluency: 0.78,
+volume: 0.6,
+pitchStability: 0.8

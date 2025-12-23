@@ -1,0 +1,7 @@
+  # Heuristic based on extension
+  if path.suffix.lower() in [".png",".jpg",".jpeg",".gif",".bmp",".tif",".tiff",".ico",
+                             ".mp3",".wav",".flac",".ogg",".zip",".tar",".gz",".xz",".7z",
+                             ".pdf",".parquet",".feather",".npy",".npz",".pt",".bin",".onnx",".tflite"]:
+      return False
+  return True
+

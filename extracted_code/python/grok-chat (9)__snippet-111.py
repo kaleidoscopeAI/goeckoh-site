@@ -1,8 +1,14 @@
-    1050 -                from scipy.signal import resample_poly  # type: ignore
-    1051 -                data = resample_poly(data, 16000, sr).astype(np.float32)
-    1050 +                # Lightweight resample to 16 kHz to avoid heavy SciPy dependency / ABI issues
-    1051 +                target_len = int(len(data) * 16000 / sr)
-    1052 +                idx = np.linspace(0, len(data), target_len, endpoint=False)
-    1053 +                data = np.interp(idx, np.arange(len(data)), data).astype(np.float32)
-    1054                  sr = 16000
+16  try:
+17 -    from goeckoh_ctypes_wrapper import CrystallineHeartEngine  # type: i
+    gnore
+17 +    from goeckoh_ctypes_wrapper import CrystallineHeartEngine, VoiceSynt
+    hesizerEngine  # type: ignore
+18      HEART_AVAILABLE = True
+19 +    RUST_VC_AVAILABLE = True
+20  except Exception:
+21      CrystallineHeartEngine = None  # type: ignore
+22 +    VoiceSynthesizerEngine = None  # type: ignore
+23      HEART_AVAILABLE = False
+24 +    RUST_VC_AVAILABLE = False
+25
 

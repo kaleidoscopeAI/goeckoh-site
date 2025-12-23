@@ -1,1 +1,2 @@
-class ProcReq(BaseModel):
+--> src/optimizer.rs:1116:42
+ |

@@ -1,18 +1,7 @@
-import logging
-from optparse import Values
-from typing import Any, Iterable, List, Optional, Union
+"""
+Return a dictionary containing key-value pairs for the information items
+from the distro release file data source of the current OS distribution.
+"""
+return _distro.uname_info()
 
-from pip._vendor.packaging.version import LegacyVersion, Version
-
-from pip._internal.cli import cmdoptions
-from pip._internal.cli.req_command import IndexGroupCommand
-from pip._internal.cli.status_codes import ERROR, SUCCESS
-from pip._internal.commands.search import print_dist_installation_info
-from pip._internal.exceptions import CommandError, DistributionNotFound, PipError
-from pip._internal.index.collector import LinkCollector
-from pip._internal.index.package_finder import PackageFinder
-from pip._internal.models.selection_prefs import SelectionPreferences
-from pip._internal.models.target_python import TargetPython
-from pip._internal.network.session import PipSession
-from pip._internal.utils.misc import write_output
 

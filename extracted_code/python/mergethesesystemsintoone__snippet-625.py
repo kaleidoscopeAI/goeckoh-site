@@ -1,11 +1,21 @@
-def resources(cpu_percent: float = 25.0, memory_percent: float = 10.0):
-    """
-    Decorator to specify resource requirements for a task
-    
-    Args:
+  """Extracts Concepts and runs reasoning modules to return results"""
+  # Extracts concepts and adds nodes to the graph for memory based inference
+  concepts = self.knowledge_graph.extract_concepts(input_data)
 
+  #Adds the nodes identified into the memory of the knowledgde graph
+  for concept in concepts:
+    self.knowledge_graph.add_node(concept["id"], concept)
 
+    # Applies the current reasoning modules based on what's available from this concept
+  insights = self.reasoning_engine.apply (concepts[0] if len (concepts) > 0 else {})
 
+  # Makes decisions on those inputs. for testing this does nothing as all steps will feed information forward sequentially
+  decisions = self.decision_maker.evaluate (insights)
+  self.belief_system.observe(insights)
 
-It looks like you've shared a portion of code involving a ResourceMonitor class and an OptimizedTaskScheduler class, which manage system resources and task scheduling with resource awareness. However, it seems the code snippet is incomplete (e.g., missing imports like threading, queue, and definitions for Task, TaskPriority, TaskStatus, TaskResult, etc.). I’ll assume this is meant to enhance the previous unravel_ai_task_manager.py script or serve as a standalone component.
+  return {
+      'insights': insights,
+        'decisions': decisions,
+        'updated_beliefs': self.belief_system.get_probabilities() # gets current network state probabilities to influence downstream operations
+       }
 

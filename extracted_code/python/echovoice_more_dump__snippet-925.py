@@ -1,7 +1,6 @@
-async def stop_crawl():
-    crawler.stop()
-    # cancel background tasks
-    for t in list(bg_tasks):
-        t.cancel()
-    return jsonify({'status': 'crawler_stopped'})
+def llm_reflect(supernode, ollama_client):
+    # Pseudo-interface for reflection loop
+    prompt = f"Reflect on prototype: {supernode.prototype.tolist()}"
+    suggestion = ollama_client.generate(prompt)
+    return np.tanh(np.array(suggestion.embedding))  # convert textual suggestion into numerical adjustment
 

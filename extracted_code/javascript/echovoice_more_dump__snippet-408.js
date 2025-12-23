@@ -1,2 +1,4 @@
-const N = this.S.length;
-const k = new Float32Array(N);
+const VECTOR_SCALE = 2.0;
+const CONSTRUCT_SCALE = 0.7;
+const PARTICLE_COUNT = 40;
+const TIMESTEP_MS = 50;

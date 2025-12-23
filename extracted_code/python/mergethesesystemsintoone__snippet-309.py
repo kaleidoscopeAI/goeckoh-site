@@ -1,13 +1,34 @@
-def process(self, data_wrapper: DataWrapper) -> np.ndarray:
-  """Processes text data using TF-IDF vectorization."""
-  text = data_wrapper.get_data()
+from collections import deque
+from typing import Any
 
-  # Fit and transform the text data using the vectorizer
-  tfidf_matrix = self.vectorizer.fit_transform([text])
+class MemoryBank:
+    """
+    Represents a memory bank for a node, storing data with a limited capacity.
+    """
+    def __init__(self, capacity: int = 100):
+        self.capacity = capacity
+        self.memory = deque(maxlen=capacity)
 
-  # Convert to a dense array
-  return tfidf_matrix.toarray()
+    def add_data(self, data: Any):
+        """
+        Adds data to the memory bank.
+        """
+        self.memory.append(data)
 
-def update_vectorizer(self, new_texts: List[str]):
-  """Updates the TF-IDF vectorizer with new text data."""
-  self.vectorizer.fit(new_texts)
+    def retrieve_data(self, num_items: int) -> list:
+        """
+        Retrieves a specified number of items from the memory, prioritizing recent data.
+        """
+        return list(self.memory)[-num_items:]
+
+    def get_size(self):
+        """
+        Returns the current size of the memory bank.
+        """
+        return len(self.memory)
+
+    def clear(self):
+        """
+        Clears all data from the memory bank.
+        """
+        self.memory.clear()

@@ -1,0 +1,5 @@
+wintypes.HANDLE,
+wintypes.WORD,
+wintypes.DWORD,
+cast(Type[COORD], WindowsCoordinates),
+ctypes.POINTER(wintypes.DWORD),

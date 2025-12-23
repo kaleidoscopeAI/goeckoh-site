@@ -1,58 +1,91 @@
-def _set_default(type_param, default):
-    if isinstance(default, (tuple, list)):
-        type_param.__default__ = tuple((typing._type_check(d, "Default must be a type")
-                                        for d in default))
-    elif default != _marker:
-        type_param.__default__ = typing._type_check(default, "Default must be a type")
-    else:
-        type_param.__default__ = None
+def _get_statefile_name(key: str) -> str:
+    key_bytes = key.encode()
+    name = hashlib.sha224(key_bytes).hexdigest()
+    return name
 
 
-def _set_module(typevarlike):
-    # for pickling:
-    def_mod = _caller(depth=3)
-    if def_mod != 'typing_extensions':
-        typevarlike.__module__ = def_mod
+def _convert_date(isodate: str) -> datetime.datetime:
+    """Convert an ISO format string to a date.
+
+    Handles the format 2020-01-22T14:24:01Z (trailing Z)
+    which is not supported by older versions of fromisoformat.
+    """
+    return datetime.datetime.fromisoformat(isodate.replace("Z", "+00:00"))
 
 
-class _DefaultMixin:
-    """Mixin for TypeVarLike defaults."""
+class SelfCheckState:
+    def __init__(self, cache_dir: str) -> None:
+        self._state: Dict[str, Any] = {}
+        self._statefile_path = None
 
-    __slots__ = ()
-    __init__ = _set_default
+        # Try to load the existing state
+        if cache_dir:
+            self._statefile_path = os.path.join(
+                cache_dir, "selfcheck", _get_statefile_name(self.key)
+            )
+            try:
+                with open(self._statefile_path, encoding="utf-8") as statefile:
+                    self._state = json.load(statefile)
+            except (OSError, ValueError, KeyError):
+                # Explicitly suppressing exceptions, since we don't want to
+                # error out if the cache file is invalid.
+                pass
 
+    @property
+    def key(self) -> str:
+        return sys.prefix
 
-# Classes using this metaclass must provide a _backported_typevarlike ClassVar
-class _TypeVarLikeMeta(type):
-    def __instancecheck__(cls, __instance: Any) -> bool:
-        return isinstance(__instance, cls._backported_typevarlike)
+    def get(self, current_time: datetime.datetime) -> Optional[str]:
+        """Check if we have a not-outdated version loaded already."""
+        if not self._state:
+            return None
 
+        if "last_check" not in self._state:
+            return None
 
-# Add default and infer_variance parameters from PEP 696 and 695
-class TypeVar(metaclass=_TypeVarLikeMeta):
-    """Type variable."""
+        if "pypi_version" not in self._state:
+            return None
 
-    _backported_typevarlike = typing.TypeVar
+        # Determine if we need to refresh the state
+        last_check = _convert_date(self._state["last_check"])
+        time_since_last_check = current_time - last_check
+        if time_since_last_check > _WEEK:
+            return None
 
-    def __new__(cls, name, *constraints, bound=None,
-                covariant=False, contravariant=False,
-                default=_marker, infer_variance=False):
-        if hasattr(typing, "TypeAliasType"):
-            # PEP 695 implemented, can pass infer_variance to typing.TypeVar
-            typevar = typing.TypeVar(name, *constraints, bound=bound,
-                                     covariant=covariant, contravariant=contravariant,
-                                     infer_variance=infer_variance)
-        else:
-            typevar = typing.TypeVar(name, *constraints, bound=bound,
-                                     covariant=covariant, contravariant=contravariant)
-            if infer_variance and (covariant or contravariant):
-                raise ValueError("Variance cannot be specified with infer_variance.")
-            typevar.__infer_variance__ = infer_variance
-        _set_default(typevar, default)
-        _set_module(typevar)
-        return typevar
+        return self._state["pypi_version"]
 
-    def __init_subclass__(cls) -> None:
-        raise TypeError(f"type '{__name__}.TypeVar' is not an acceptable base type")
+    def set(self, pypi_version: str, current_time: datetime.datetime) -> None:
+        # If we do not have a path to cache in, don't bother saving.
+        if not self._statefile_path:
+            return
+
+        # Check to make sure that we own the directory
+        if not check_path_owner(os.path.dirname(self._statefile_path)):
+            return
+
+        # Now that we've ensured the directory is owned by this user, we'll go
+        # ahead and make sure that all our directories are created.
+        ensure_dir(os.path.dirname(self._statefile_path))
+
+        state = {
+            # Include the key so it's easy to tell which pip wrote the
+            # file.
+            "key": self.key,
+            "last_check": current_time.isoformat(),
+            "pypi_version": pypi_version,
+        }
+
+        text = json.dumps(state, sort_keys=True, separators=(",", ":"))
+
+        with adjacent_tmp_file(self._statefile_path) as f:
+            f.write(text.encode())
+
+        try:
+            # Since we have a prefix-specific state file, we can just
+            # overwrite whatever is there, no need to check.
+            replace(f.name, self._statefile_path)
+        except OSError:
+            # Best effort.
+            pass
 
 

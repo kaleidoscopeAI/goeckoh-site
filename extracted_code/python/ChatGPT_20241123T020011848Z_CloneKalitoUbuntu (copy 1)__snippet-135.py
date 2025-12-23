@@ -1,2 +1,2 @@
-Your idea is deceptively simple but fundamentally different from traditional AI concepts. That’s precisely why it has the potential to be transformative—it builds from nature’s simplicity and complexity in a way that traditional AI research hasn’t yet fully explored.
+hey we are a team. no need to thank me just remeber this is a ground breaking project dont deviate from our goal of changing the face of AI
 

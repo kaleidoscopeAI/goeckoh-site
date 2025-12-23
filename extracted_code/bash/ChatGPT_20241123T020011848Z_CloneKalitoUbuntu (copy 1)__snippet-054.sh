@@ -1,8 +1,8 @@
-# Move files into their respective directories
-mv building-block/*.py "core functionality scripts/building-blocks/"
-mv modules/*.py "core functionality scripts/modules/"
-mv main_scripts/*.py "core functionality scripts/main_scripts/"
-mv test/*.py "core functionality scripts/test/"
-mv data/* "core functionality scripts/data/"
-mv visualization/*.py "core functionality scripts/visualization/"
+# Set the Python path
+export PYTHONPATH="${PYTHONPATH}:~/Documents/AI.AI/codebase"
+
+# Run test scripts
+python3 "core functionality scripts/main_scripts/master_ai_systems.py"
+python3 "core functionality scripts/test/functional_ai_demo.py"
+python3 "core functionality scripts/test/organic_ai_demo.py"
 

@@ -1,14 +1,20 @@
-# confidence_calculation_demo.py
-from multi_factor_confidence import MultiFactorConfidence
+# complete_demo.py
 
-# Initialize confidence calculator
-confidence_calculator = MultiFactorConfidence()
+from enhanced_adaptive_node import EnhancedAdaptiveNode
 
-# Sample pattern and context
-pattern_data = {'pattern': 'Sample'}
-context_data = {'environment': 'test_env'}
+# Initialize node
+node = EnhancedAdaptiveNode(id="test_node")
 
-# Calculate confidence
-confidence = confidence_calculator.calculate_confidence(pattern_data, context_data)
-print("Calculated Confidence:", confidence)
+# Mock input data and context
+data = {'pattern': 'Example Data'}
+context = {'threat_level': 0.3, 'uncertainty': 0.2}
+
+# Run integrated tests
+print("Running full node demo...")
+
+for i in range(5):
+    print(f"\n-- Cycle {i+1} --")
+    result = node.process_input(data, context)
+    print("Processing Result:", result)
+    print("Current State:", node.get_state())
 

@@ -1,13 +1,38 @@
-class EmergentPatternDetector:
-    def __init__(self, network: EmergentIntelligenceNetwork):
-        self.network = network
-        self.patterns = []
+class AGIConfig:
+    dna_size: int = 12
+    complexity_threshold: int = 100
+    crawl_interval: float = 90.0
+    energy_decay_rate: float = 0.001
+    recovery_threshold: float = 0.05
+    mutation_std: float = 0.05
+    replay_buffer_size: int = 20000
+    training_batch_size: int = 32
+    learning_rate: float = 1e-3
+    save_interval: int = 100
+    health_check_interval: int = 50
+    costs: Dict[str, float] = field(default_factory=lambda: {
+        "learn": 0.01,
+        "solve": 0.05,
+        "replicate": 0.4,
+        "crawl": 0.2,
+    })
 
-    def detect_patterns(self):
-        cycles = nx.cycle_basis(self.network.graph)  # Fixed: cycle_basis for undirected
-        if cycles:
-            self.patterns.append({"type": "cycle", "length": len(cycles[0])})
+# AGIMathematics (from C++ translation)
+class AGIMathematics:
+    def __init__(self) -> None:
+        self.phi_history: List[float] = []
 
-    def get_emergent_properties(self) -> Dict:
-        return {"emergent_intelligence_score": random.random(), "patterns": self.patterns}
+    def entropy(self, data: List[float]) -> float:
+        tensor = torch.tensor(data, dtype=torch.float32)
+        probs = torch.softmax(tensor, dim=0)
+        return -torch.sum(probs * torch.log(probs + 1e-10)).item()
+
+    def integrated_information(self, vec: List[float]) -> float:
+        n = len(vec)
+        parts = max(1, n // 2)
+        sys_ent = self.entropy(vec)
+        part_ent = sum(self.entropy(vec[i::parts]) for i in range(parts)) / parts
+        phi_val = max(0.0, sys_ent - part_ent)
+        self.phi_history.append(phi_val)
+        return phi_val
 

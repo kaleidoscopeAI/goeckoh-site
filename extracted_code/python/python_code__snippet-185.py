@@ -1,21 +1,14 @@
-from __future__ import absolute_import
+    class TypeVarTuple(metaclass=_TypeVarLikeMeta):
+        """Type variable tuple."""
 
-import errno
-import logging
-import re
-import socket
-import sys
-import warnings
-from socket import error as SocketError
-from socket import timeout as SocketTimeout
+        _backported_typevarlike = typing.TypeVarTuple
 
-from ._collections import HTTPHeaderDict
-from .connection import (
-    BaseSSLError,
-    BrokenPipeError,
-    DummyConnection,
-    HTTPConnection,
-    HTTPException,
-    HTTPSConnection,
-    VerifiedHTTPSConnection,
-    port_by_scheme,
+        def __new__(cls, name, *, default=_marker):
+            tvt = typing.TypeVarTuple(name)
+            _set_default(tvt, default)
+            _set_module(tvt)
+            return tvt
+
+        def __init_subclass__(self, *args, **kwds):
+            raise TypeError("Cannot subclass special typing classes")
+

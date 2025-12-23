@@ -1,0 +1,36 @@
+"""
+Match TTS audio's global pitch, tempo, and loudness to child's utterance.
+"""
+if not tts_wav_path.exists():
+    return
+
+y_tts, sr_tts = librosa.load(str(tts_wav_path), sr=None, mono=True)
+tts_prosody = _extract_from_float(y_tts, sr_tts)
+
+# Pitch
+if target.f0_median > 0 and tts_prosody.f0_median > 0:
+    ratio = _safe_ratio(target.f0_median, tts_prosody.f0_median, default=1.0)
+    n_steps = 12.0 * np.log2(ratio)
+    n_steps = float(np.clip(n_steps, -pitch_limit_semitones, pitch_limit_semitones))
+    if abs(n_steps) > 1e-3:
+        y_tts = librosa.effects.pitch_shift(y_tts, sr_tts, n_steps=n_steps)
+
+# Tempo
+if target.duration_s > 0 and tts_prosody.duration_s > 0:
+    dur_ratio = _safe_ratio(tts_prosody.duration_s, target.duration_s, default=1.0)
+    rate = float(np.clip(dur_ratio, 1.0 - tempo_limit_ratio, 1.0 + tempo_limit_ratio))
+    if abs(rate - 1.0) > 1e-3:
+        y_tts = librosa.effects.time_stretch(y_tts, rate)
+
+# Loudness
+new_prosody = _extract_from_float(y_tts, sr_tts)
+if new_prosody.rms_mean > 0 and target.rms_mean > 0:
+    amp_ratio = _safe_ratio(target.rms_mean, new_prosody.rms_mean, default=1.0)
+    amp_ratio = float(
+        np.clip(amp_ratio, 1.0 / loudness_limit_ratio, loudness_limit_ratio)
+    )
+    y_tts = y_tts * amp_ratio
+
+sf.write(str(tts_wav_path), y_tts, sr_tts)
+
+

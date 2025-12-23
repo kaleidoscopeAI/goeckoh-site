@@ -1,1 +1,1 @@
-def generate(self, insight: Dict, value_alignment: float, risks: Dict[str, float]) -> List[Dict]:
+Please reply with "k" if you’d like me to continue from this point!#!/usr/bin/env python3

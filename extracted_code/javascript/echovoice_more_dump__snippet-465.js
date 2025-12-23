@@ -1,1 +1,1 @@
-const mesh = nodeMeshesRef.current[idx];
+const cur = svc.getCurrent();

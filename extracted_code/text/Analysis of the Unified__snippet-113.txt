@@ -1,0 +1,5 @@
+this.nodeCount = nodeCount;
+this.quantumStates = new Array(nodeCount).fill(0).map(() => ({
+  phase: Math.random() * Math.PI * 2,
+  coherence: 0.5
+}));

@@ -1,0 +1,12 @@
+- $G$ integrates all Thought Engines outputs to generate the next cognitive state.
+- $O_i$ represent Thought Engines, including Hugging Face transformer engines:
+    - \$ O_{LLM} \$: Hugging Face transformer (e.g., LLaMA, Mistral) used for reasoning and generation, invoked by GPT-style APIs, loaded via GGUF and llama.cpp.
+    - \$ O_{embedding} \$: Hugging Face embedding model (e.g., BGE) for converting text or retrieved data to vector embeddings.
+    - \$ O_{crawl} \$: Autonomous web crawler activated on \$ b_k = 1 \$, fetching external data driven by curiosity state.
+- $P_i$ projections select relevant parts of $X_k$ for engine inputs.
+- $R$ is the routing matrix controlling engine interconnectivity and data flow threshold $\theta$.
+- $\eta_k$ accounts for noise or stochastic perturbations.
+- $b_{k+1}$ updates via threshold function activating/deactivating web crawling based on previous state, performance feedback $\mathrm{Perf}_k$, and external drive $u_k$.
+- Parameters $\rho$ (decay), $\lambda$ (bit-to-tension scale), $\sigma$ (performance scaling), $\beta$ (external drive weight), and $\theta$ (activation threshold) modulate curiosity dynamics.
+- $\mathrm{Perf}_k$ signals uncertainty reduction or knowledge improvement feedback.
+

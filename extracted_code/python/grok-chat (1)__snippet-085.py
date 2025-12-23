@@ -1,22 +1,20 @@
-class CrystallineHeart:
-    def __init__(self, n_nodes=1024):
-        self.n_nodes = n_nodes
-        self.states = [random.uniform(-1, 1) for _ in range(n_nodes)]
-        self.dt = 0.05
+class NeuroAcousticExocortex:
+    def __init__(self):
+        self.heart = CrystallineHeart()
+        self.drc = DeepReasoningCore()
 
-    def step(self, arousal, latency):
-        # Stimulus: Arousal from length, latency sim stress
-        stimulus = arousal - latency  # Net affect
+    def run(self):
+        while True:
+            input_text = simulate_audio_input()
+            if not input_text:
+                continue
 
-        # Update: Simplified ODE (no matrix for pure)
-        for i in range(self.n_nodes):
-            drive = stimulus
-            decay = -0.5 * self.states[i]
-            noise = random.uniform(-0.1, 0.1)
-            ds = drive + decay + noise
-            self.states[i] += self.dt * ds
+            echoed, arousal, latency = auditory_motor_core(input_text)
 
-        # GCL: Tanh mean (0-1 normalize)
-        gcl = (sum(math.tanh(s) for s in self.states) / self.n_nodes + 1) / 2
-        return gcl
+            gcl = self.heart.step(arousal, latency)
+
+            response = self.drc.execute(echoed, gcl)
+
+            print(f"[GCL: {gcl:.2f}] [Gated Response]: {response}")
+            time.sleep(1)
 

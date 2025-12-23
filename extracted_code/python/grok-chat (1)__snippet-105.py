@@ -1,20 +1,7 @@
-class FinalMergedSystem:
-    def __init__(self):
-        self.heart = CrystallineHeart()
+def simulate_audio_input():
+    return input("Speak: ").strip()
 
-    def run(self):
-        while True:
-            input_text = input("Speak: ").strip()
-            if not input_text:
-                continue
-
-            echoed, stimulus = auditory_motor_core(input_text)
-
-            gcl, energy = self.heart.step(stimulus)
-
-            core = DeepReasoningCore()
-            response = core.execute(echoed, gcl)
-
-            print(f"[GCL: {gcl:.2f}] [Energy: {energy:.2f}] [Response]: {response}")
-            time.sleep(1)
+def correct_to_first_person(text):
+    text = text.replace("you", "I").replace("your", "my").capitalize()
+    return text
 

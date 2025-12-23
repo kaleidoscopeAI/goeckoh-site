@@ -1,1 +1,1 @@
-This is a self-contained React component that creates Three.js sprites for each cognitive construct, updates their positions from ProjectionService, and
+* (K_i), (D_i), (\Psi_i): initialize from encoder outputs on initial corpus (randomly seeded if none).

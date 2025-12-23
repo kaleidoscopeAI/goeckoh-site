@@ -1,33 +1,9 @@
-import inspect
-import os
-import platform
-import sys
-import threading
-import zlib
-from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from datetime import datetime
-from functools import wraps
-from getpass import getpass
-from html import escape
-from inspect import isclass
-from itertools import islice
-from math import ceil
-from time import monotonic
-from types import FrameType, ModuleType, TracebackType
-from typing import (
-    IO,
-    TYPE_CHECKING,
-    Any,
-    Callable,
-    Dict,
-    Iterable,
-    List,
-    Mapping,
-    NamedTuple,
-    Optional,
-    TextIO,
-    Tuple,
-    Type,
-    Union,
-    cast,
+from pip._internal.utils.compat import WINDOWS
+from pip._internal.utils.filesystem import test_writable_dir
+from pip._internal.utils.logging import getLogger
+from pip._internal.utils.misc import (
+    check_externally_managed,
+    ensure_dir,
+    get_pip_version,
+    protect_pip_from_modification_on_windows,
+    write_output,

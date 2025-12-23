@@ -1,0 +1,3 @@
+HAS_OLLAMA = False
+print("⚠️ Ollama Python client not found. `pip install ollama`. LLM will use fallback.")
+

@@ -1,10 +1,9 @@
-# Navigate to the project directory
-cd ~/Documents/AI.AI/codebase
-
-# Create and activate the virtual environment
-python3 -m venv ai_demo_env
-source ai_demo_env/bin/activate
-
-# Install necessary dependencies
-pip install numpy scipy matplotlib networkx scikit-learn
+# Create final directory structure (use quotes for paths with spaces)
+mkdir -p "core functionality scripts/building-blocks"
+mkdir -p "core functionality scripts/modules"
+mkdir -p "core functionality scripts/main_scripts"
+mkdir -p "core functionality scripts/test"
+mkdir -p "core functionality scripts/docs"
+mkdir -p "core functionality scripts/visualization"
+mkdir -p "core functionality scripts/data"
 

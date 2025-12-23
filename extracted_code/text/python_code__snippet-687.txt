@@ -1,0 +1,3 @@
+"""Alt screen mode was required."""
+
+

@@ -1,80 +1,47 @@
-    from pip._vendor.rich.console import Console
-    from pip._vendor.rich.highlighter import ReprHighlighter
-    from pip._vendor.rich.table import Table as Table
+class HashCommand(Command):
+    """
+    Compute a hash of a local package archive.
 
-    from ._timer import timer
+    These can be used with --hash in a requirements file to do repeatable
+    installs.
+    """
 
-    with timer("Table render"):
-        table = Table(
-            title="Star Wars Movies",
-            caption="Rich example table",
-            caption_justify="right",
+    usage = "%prog [options] <file> ..."
+    ignore_require_venv = True
+
+    def add_options(self) -> None:
+        self.cmd_opts.add_option(
+            "-a",
+            "--algorithm",
+            dest="algorithm",
+            choices=STRONG_HASHES,
+            action="store",
+            default=FAVORITE_HASH,
+            help="The hash algorithm to use: one of {}".format(
+                ", ".join(STRONG_HASHES)
+            ),
         )
+        self.parser.insert_option_group(0, self.cmd_opts)
 
-        table.add_column(
-            "Released", header_style="bright_cyan", style="cyan", no_wrap=True
-        )
-        table.add_column("Title", style="magenta")
-        table.add_column("Box Office", justify="right", style="green")
+    def run(self, options: Values, args: List[str]) -> int:
+        if not args:
+            self.parser.print_usage(sys.stderr)
+            return ERROR
 
-        table.add_row(
-            "Dec 20, 2019",
-            "Star Wars: The Rise of Skywalker",
-            "$952,110,690",
-        )
-        table.add_row("May 25, 2018", "Solo: A Star Wars Story", "$393,151,347")
-        table.add_row(
-            "Dec 15, 2017",
-            "Star Wars Ep. V111: The Last Jedi",
-            "$1,332,539,889",
-            style="on black",
-            end_section=True,
-        )
-        table.add_row(
-            "Dec 16, 2016",
-            "Rogue One: A Star Wars Story",
-            "$1,332,439,889",
-        )
+        algorithm = options.algorithm
+        for path in args:
+            write_output(
+                "%s:\n--hash=%s:%s", path, algorithm, _hash_of_file(path, algorithm)
+            )
+        return SUCCESS
 
-        def header(text: str) -> None:
-            console.print()
-            console.rule(highlight(text))
-            console.print()
 
-        console = Console()
-        highlight = ReprHighlighter()
-        header("Example Table")
-        console.print(table, justify="center")
-
-        table.expand = True
-        header("expand=True")
-        console.print(table)
-
-        table.width = 50
-        header("width=50")
-
-        console.print(table, justify="center")
-
-        table.width = None
-        table.expand = False
-        table.row_styles = ["dim", "none"]
-        header("row_styles=['dim', 'none']")
-
-        console.print(table, justify="center")
-
-        table.width = None
-        table.expand = False
-        table.row_styles = ["dim", "none"]
-        table.leading = 1
-        header("leading=1, row_styles=['dim', 'none']")
-        console.print(table, justify="center")
-
-        table.width = None
-        table.expand = False
-        table.row_styles = ["dim", "none"]
-        table.show_lines = True
-        table.leading = 0
-        header("show_lines=True, row_styles=['dim', 'none']")
-        console.print(table, justify="center")
+def _hash_of_file(path: str, algorithm: str) -> str:
+    """Return the hash digest of a file."""
+    with open(path, "rb") as archive:
+        hash = hashlib.new(algorithm)
+        for chunk in read_chunks(archive):
+            hash.update(chunk)
+    return hash.hexdigest()
 
 

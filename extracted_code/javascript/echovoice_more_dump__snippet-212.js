@@ -1,2 +1,1 @@
-Now, let's adjust the initCrystalVisualization function to include bonds.
-
+# Assembly optimized agent update function (embedded as string)

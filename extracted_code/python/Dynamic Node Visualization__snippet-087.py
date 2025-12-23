@@ -1,1 +1,0 @@
-Engine 1 (Lookup): Extracts context (nouns/verbs from digested text via NLP—using sentence-transformers for embedding, keywords for extraction). Searches for relevant images using search_images tool (integrated via async calls).

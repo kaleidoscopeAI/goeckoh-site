@@ -1,1 +1,1 @@
-const d = snap.data() as any;
+export function useCognitiveProjection(nodesProvider: () => NodeDatum[], cfg?: any) {

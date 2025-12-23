@@ -1,0 +1,4 @@
+BestVersionAlreadyInstalled,
+DistributionNotFound,
+InvalidWheelFilename,
+UnsupportedWheel,

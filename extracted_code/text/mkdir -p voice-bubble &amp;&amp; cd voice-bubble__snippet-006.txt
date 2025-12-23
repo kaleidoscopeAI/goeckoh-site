@@ -1,3 +1,4 @@
-SD_within = √( (SD_cond1² + SD_cond2²) / 2 - r * SD_cond1 * SD_cond2 )
-Var_subject = (Grand_M - Subject_means)^2 average
-Var_total = Var_subject + Var_within
+CPAL (512 frames @ 16kHz) = 32ms I/O
+Whisper tiny (streaming) = 80-120ms 
+Piper TTS = 40-90ms
+Total: 152-242ms → ✅ <300ms corollary discharge window

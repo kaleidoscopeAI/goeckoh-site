@@ -1,4 +1,1 @@
-​) or probability of selecting Intent k is given directly by the RQM derivation of Born's Rule from the product of the bidirectional amplitudes :   
-
-
-
+Complete Framework from "COMPLETE INTEGRATED FRAMEWORK.md": Merged as base, with all placeholders filled (e.g., real transformer embedding, semantic torque calc, control signals).

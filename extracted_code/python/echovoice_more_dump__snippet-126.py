@@ -1,6 +1,21 @@
 package com.kaleidoscope.body
-import kotlin.math.exp
-import kotlin.math.max
-import kotlin.math.min
-data class ControlVector(val cpuFreq: Float, val displayGamma: Float, val networkQos: FloatArray)
-class NeuralHardwareMapper(private val maxFreq: Float = 2000f) {
+import android.app.admin.DevicePolicyManager
+import android.content.ComponentName
+import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
+import android.widget.Button
+import android.widget.CompoundButton
+import android.widget.Switch
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import java.util.concurrent.TimeUnit
+class MainActivity : AppCompatActivity() {
+private val TAG = "MainActivity"
+private lateinit var hal: DeviceHAL

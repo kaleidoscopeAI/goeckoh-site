@@ -1,25 +1,25 @@
-class __config_flags:
-    """Internal class for defining compatibility and debugging flags"""
+import sys
+from itertools import filterfalse
+from typing import List, Tuple, Union
 
-    _all_names: List[str] = []
-    _fixed_names: List[str] = []
-    _type_desc = "configuration"
 
-    @classmethod
-    def _set(cls, dname, value):
-        if dname in cls._fixed_names:
-            warnings.warn(
-                f"{cls.__name__}.{dname} {cls._type_desc} is {str(getattr(cls, dname)).upper()}"
-                f" and cannot be overridden",
-                stacklevel=3,
-            )
-            return
-        if dname in cls._all_names:
-            setattr(cls, dname, value)
-        else:
-            raise ValueError(f"no such {cls._type_desc} {dname!r}")
+class _lazyclassproperty:
+    def __init__(self, fn):
+        self.fn = fn
+        self.__doc__ = fn.__doc__
+        self.__name__ = fn.__name__
 
-    enable = classmethod(lambda cls, name: cls._set(name, True))
-    disable = classmethod(lambda cls, name: cls._set(name, False))
+    def __get__(self, obj, cls):
+        if cls is None:
+            cls = type(obj)
+        if not hasattr(cls, "_intern") or any(
+            cls._intern is getattr(superclass, "_intern", [])
+            for superclass in cls.__mro__[1:]
+        ):
+            cls._intern = {}
+        attrname = self.fn.__name__
+        if attrname not in cls._intern:
+            cls._intern[attrname] = self.fn(cls)
+        return cls._intern[attrname]
 
 

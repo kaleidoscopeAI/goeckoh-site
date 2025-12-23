@@ -1,0 +1,3 @@
+user_id: str
+fingerprint: VoiceFingerprint
+embedding: np.ndarray    # 1D float32 vector

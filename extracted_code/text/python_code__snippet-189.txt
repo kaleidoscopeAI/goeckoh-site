@@ -1,31 +1,26 @@
-    """Build one InstallRequirement using the PEP 660 build process.
-
-    Returns path to wheel if successfully built. Otherwise, returns None.
-    """
-    assert metadata_directory is not None
-    try:
-        logger.debug("Destination directory: %s", tempd)
-
-        runner = runner_with_spinner_message(
-            f"Building editable for {name} (pyproject.toml)"
-        )
-        with backend.subprocess_runner(runner):
-            try:
-                wheel_name = backend.build_editable(
-                    tempd,
-                    metadata_directory=metadata_directory,
-                )
-            except HookMissing as e:
-                logger.error(
-                    "Cannot build editable %s because the build "
-                    "backend does not have the %s hook",
-                    name,
-                    e,
-                )
-                return None
-    except Exception:
-        logger.error("Failed building editable for %s", name)
-        return None
-    return os.path.join(tempd, wheel_name)
+escape_id = src[pos : pos + 2]
+pos += 2
+if multiline and escape_id in {"\\ ", "\\\t", "\\\n"}:
+    # Skip whitespace until next non-whitespace character or end of
+    # the doc. Error if non-whitespace is found before newline.
+    if escape_id != "\\\n":
+        pos = skip_chars(src, pos, TOML_WS)
+        try:
+            char = src[pos]
+        except IndexError:
+            return pos, ""
+        if char != "\n":
+            raise suffixed_err(src, pos, "Unescaped '\\' in a string")
+        pos += 1
+    pos = skip_chars(src, pos, TOML_WS_AND_NEWLINE)
+    return pos, ""
+if escape_id == "\\u":
+    return parse_hex_char(src, pos, 4)
+if escape_id == "\\U":
+    return parse_hex_char(src, pos, 8)
+try:
+    return pos, BASIC_STR_ESCAPE_REPLACEMENTS[escape_id]
+except KeyError:
+    raise suffixed_err(src, pos, "Unescaped '\\' in a string") from None
 
 

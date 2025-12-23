@@ -1,0 +1,17 @@
+"""Check if a file has an allowed extension"""
+# Allow most executable and code file extensions
+allowed_extensions = {
+    'exe', 'dll', 'so', 'dylib',  # Binaries
+    'js', 'mjs',                  # JavaScript
+    'py',                         # Python
+    'c', 'cpp', 'h', 'hpp',       # C/C++
+    'java', 'class', 'jar',       # Java
+    'go',                         # Go
+    'rs',                         # Rust
+    'php',                        # PHP
+    'rb',                         # Ruby
+    'cs',                         # C#
+    'asm', 's'                    # Assembly
+}
+return '.' in filename and filename.rsplit('.', 1)[1].lower() in allowed_extensions
+

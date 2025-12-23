@@ -1,2 +1,6 @@
-The error you're seeing is due to a circular import in `knowledge_pool.py`. This typically happens when two files are trying to import each other, creating a loop. To resolve this, let's modify `knowledge_pool.py` to remove any unnecessary import that could be causing this loop.
-
+    from knowledge_pool import KnowledgePoolManager
+  File "/home/studio/Desktop/node-demo/knowledge_pool.py", line 4, in <module>
+    class KnowledgePoolManager:
+  File "/home/studio/Desktop/node-demo/knowledge_pool.py", line 10, in KnowledgePoolManager
+    def add_to_pool(self, pattern_data: Dict, confidence: float):
+                                        ^^^^

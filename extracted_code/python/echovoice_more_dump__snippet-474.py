@@ -1,1 +1,3 @@
-Long-term memory influence: Gradients emerge from reflection logs, linking past outcomes to future behavior.
+import { mapEToSpecies } from "../services/mapEToSpecies";
+import { useEmotionalActuation } from "../hooks/useEmotionalActuation";
+export class SimulationNode {

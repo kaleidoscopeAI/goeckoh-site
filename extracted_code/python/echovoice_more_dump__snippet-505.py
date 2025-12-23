@@ -1,3 +1,3 @@
-import { mapEToSpecies } from "../services/mapEToSpecies";
-import { useEmotionalActuation } from "../hooks/useEmotionalActuation";
-export class SimulationNode {
+// poll constructs timeseries from service (subscribe)
+const unsub = service.subscribe((constructs) => {
+const now = Date.now();

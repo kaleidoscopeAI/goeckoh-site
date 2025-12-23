@@ -1,1 +1,10 @@
-# Repo root is two levels up from this file
+"""
+Yield non-empty lines from file at path
+"""
+with open(path) as f:
+    for line in f:
+        line = line.strip()
+        if line:
+            yield line
+
+

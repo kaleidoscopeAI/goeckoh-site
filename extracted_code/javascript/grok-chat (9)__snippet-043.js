@@ -1,0 +1,1 @@
+  - Either set GOECKOH_CLONE_WAV=/path/to/your.wav or let auto-capture take the first spoken utterance.

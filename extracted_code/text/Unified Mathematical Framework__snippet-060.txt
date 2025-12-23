@@ -1,0 +1,5 @@
+Total loop latency ≤1.8 s on mid-range phone/Raspberry Pi
+Runs entirely offline
+No cloud ever
+Voice data never leaves device
+

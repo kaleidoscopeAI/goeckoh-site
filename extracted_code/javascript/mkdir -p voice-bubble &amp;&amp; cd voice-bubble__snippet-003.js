@@ -1,1 +1,1 @@
-function pitchToRGB(f0) {
+const x = clamp((f0 - 80) / (400 - 80), 0, 1);

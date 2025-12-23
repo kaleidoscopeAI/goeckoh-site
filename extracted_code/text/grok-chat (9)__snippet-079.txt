@@ -1,0 +1,2 @@
+a downsampled lattice profile (heart_sample), gcl_history, and gcl_ts in /
+status, letting clients visualize the Crystalline Heart.

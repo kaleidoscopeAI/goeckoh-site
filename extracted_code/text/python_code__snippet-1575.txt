@@ -1,0 +1,4 @@
+value = os.path.abspath(value)
+setattr(parser.values, option.dest, value)
+
+

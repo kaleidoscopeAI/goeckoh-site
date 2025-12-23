@@ -1,0 +1,7 @@
+currentSession,
+isActive,
+startSession,
+endSession,
+completeExercise,
+updateMetrics,
+getSessionTime

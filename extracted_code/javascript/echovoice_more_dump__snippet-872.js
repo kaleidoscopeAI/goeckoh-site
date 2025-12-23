@@ -1,2 +1,1 @@
-+export function mimicryDelta(node: NodeState, neighbors: NodeState[], weights: number[], lambdaM = 0.05) {
-+ const out = {
+The selection function Sel_i uses projection operators:

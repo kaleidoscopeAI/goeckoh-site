@@ -1,0 +1,5 @@
+"""
+Special singleton used for indicating the caller class.
+Used by ``using``.
+"""
+

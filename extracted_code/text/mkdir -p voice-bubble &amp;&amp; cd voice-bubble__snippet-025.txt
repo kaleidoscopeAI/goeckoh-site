@@ -1,5 +1,4 @@
-✅ Numbers = credibility (152-242ms PROVEN)
-✅ Whitepaper claims = bulletproof  
-✅ Investor decks = ready (paste screenshots)
-✅ Clinician partners = "serious engineering"
-✅ Precedes APK (validation → demo)
+ctx: WhisperContext,
+state: WhisperState,
+params: FullParams,
+partial_buffer: Vec<f32>,

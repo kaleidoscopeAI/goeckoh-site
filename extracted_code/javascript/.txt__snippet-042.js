@@ -1,1 +1,1 @@
-let defaults = UserDefaults.standard
+function setStateLabel(text) {

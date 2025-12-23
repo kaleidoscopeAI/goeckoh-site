@@ -1,1 +1,1 @@
-def evolve_network(self, steps: int = 1):
+def get_emergent_properties(self) -> Dict:

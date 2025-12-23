@@ -1,2 +1,1 @@
-private let config: ServerConfig
-private var audioPlayer: AVAudioPlayer?
+let config = WKWebViewConfiguration()

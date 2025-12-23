@@ -1,4 +1,1 @@
-class DistlibException(Exception):
-    pass
-
-
+    help="Ignore package index (only looking at --find-links URLs instead).",

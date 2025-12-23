@@ -1,1 +1,1 @@
-Add GUI controls in the Dashboard to run parameter sweeps from the UI and stream progress to the page.
+This arises from combining descent terms (physics/gradient) and bounded additive noise (LLM stochasticity). Under small enough noise and

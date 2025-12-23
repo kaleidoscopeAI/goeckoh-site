@@ -1,0 +1,7 @@
+try:
+    asyncio.run(main())
+except KeyboardInterrupt:
+    print(f"\n{Fore.YELLOW}Task manager interrupted. Shutting down...{Style.RESET_ALL}")
+except Exception as e:
+    print(f"\n{Fore.RED}Unexpected error: {e}{Style.RESET_ALL}")
+    logger.error(f"Unexpected error: {e}", exc_info=True)

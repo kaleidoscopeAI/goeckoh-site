@@ -1,0 +1,17 @@
+"""Main entry point for the chatbot"""
+parser = argparse.ArgumentParser(description="Kaleidoscope AI Chatbot")
+parser.add_argument("--work-dir", "-w", help="Working directory", default=None)
+
+args = parser.parse_args()
+
+try:
+    # Create and start chatbot
+    chatbot = KaleidoscopeChatbot(work_dir=args.work_dir)
+    chatbot.start()
+except Exception as e:
+    logger.error(f"Error in chatbot: {str(e)}")
+    print(f"Error: {str(e)}")
+    return 1
+
+return 0
+

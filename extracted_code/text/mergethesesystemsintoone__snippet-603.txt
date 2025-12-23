@@ -1,0 +1,93 @@
+"""Process a software artifact for decompilation and analysis"""
+# Get the analysis record
+analysis = db.query(Analysis).filter(Analysis.id == analysis_id).first()
+if not analysis:
+    logger.error(f"Analysis {analysis_id} not found")
+    return
+
+# Get the software record
+software = db.query(Software).filter(Software.id == analysis.software_id).first()
+if not software:
+    logger.error(f"Software {analysis.software_id} not found")
+    analysis.status = AnalysisStatusEnum.FAILED
+    analysis.error_message = "Software record not found"
+    db.commit()
+    return
+
+# Update status
+analysis.status = AnalysisStatusEnum.PROCESSING
+db.commit()
+
+try:
+    # Initialize components
+    decompiler = Decompiler()
+    spec_generator = SpecGenerator()
+    file_analyzer = FileAnalyzer()
+
+    # Detect file type
+    file_type = file_analyzer.detect_file_type(software.storage_path)
+
+    # Decompile if binary
+    decompiled_files = []
+    if file_type == FileType.BINARY:
+        decompiled_files = decompiler.decompile_binary(software.storage_path)
+    else:
+        # For source files, include the original
+        decompiled_files = [software.storage_path]
+
+    # Generate specifications
+    spec_files = []
+    if decompiled_files:
+        spec_files = spec_generator.generate_specifications(decompiled_files)
+
+    # Extract functions and classes
+    extracted_functions = []
+    extracted_classes = []
+    for decompiled_file in decompiled_files:
+        analysis_result = file_analyzer.analyze_file(decompiled_file)
+
+        # Store functions
+        for func in analysis_result.get("functions", []):
+            function = Function(
+                analysis_id=analysis_id,
+                name=func.get("name", ""),
+                signature=func.get("params", ""),
+                return_type=func.get("return_type", ""),
+                source_file=decompiled_file
+            )
+            extracted_functions.append(function)
+
+        # Store classes
+        for cls in analysis_result.get("classes", []):
+            class_obj = Class(
+                analysis_id=analysis_id,
+                name=cls.get("name", ""),
+                superclasses=json.dumps(cls.get("inherits", [])),
+                methods=json.dumps([]),  # We'd need to extract these separately
+                properties=json.dumps([]),  # We'd need to extract these separately
+                source_file=decompiled_file
+            )
+            extracted_classes.append(class_obj)
+
+    # Update the analysis record
+    analysis.decompiled_paths = decompiled_files
+    analysis.spec_paths = spec_files
+    analysis.status = AnalysisStatusEnum.COMPLETED
+    analysis.completed_at = datetime.datetime.utcnow()
+
+    # Add functions and classes
+    db.add_all(extracted_functions)
+    db.add_all(extracted_classes)
+
+    db.commit()
+    logger.info(f"Analysis {analysis_id} completed successfully")
+
+except Exception as e:
+    logger.exception(f"Error processing software {software.id}: {str(e)}")
+    analysis.status = AnalysisStatusEnum.FAILED
+    analysis.error_message = str(e)
+    db.commit()
+
+
+
+

@@ -1,21 +1,22 @@
-class ThoughtNode:
-    def __init__(self, data_vector, energy=1.0):
-        self.vector = np.array(data_vector, dtype=float)
-        self.energy = energy
-        self.tension = 0.0
-        self.connections = []
+"""Optimizes the discrete (bit-string) part of the state via simulated annealing."""
+def __init__(self, hamiltonian: SemanticHamiltonian, anneal_fn: Callable[[int], float]) -> None:
+    self.ham = hamiltonian
+    self.anneal_fn = anneal_fn
+    self.t: int = 0
 
-    def connect(self, other):
-        self.connections.append(other)
+def step(self, state: HybridState) -> None:
+    T = float(self.anneal_fn(self.t))
+    node_id = random.choice(list(state.E.keys()))
+    bit_dim = int(np.asarray(state.E[node_id]).size)
+    bit_idx = random.randrange(bit_dim)
 
-    def update(self, env):
-        # Update based on tension and environmental influence
-        influence = np.tanh(env.temperature - self.tension)
-        self.vector += influence * np.random.randn(*self.vector.shape)
-        self.energy *= np.exp(-self.tension / (env.pressure + 1e-5))
+    delta = self.ham.delta_energy_for_bitflip(state, node_id, bit_idx)
 
-    def normalize(self):
-        norm = np.linalg.norm(self.vector)
-        if norm > 0:
-            self.vector /= norm
+    accept_prob = min(1.0, math.exp(-delta / (T + 1e-12)))
+    if random.random() < accept_prob:
+        arr = np.asarray(state.E[node_id]).astype(int).copy()
+        arr[bit_idx] = 1 - int(arr[bit_idx])
+        state.E[node_id] = arr
+
+    self.t += 1
 

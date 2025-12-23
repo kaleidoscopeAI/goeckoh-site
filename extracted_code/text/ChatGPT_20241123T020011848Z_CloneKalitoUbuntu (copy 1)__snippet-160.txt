@@ -1,0 +1,2 @@
+- Flag the conflict.
+- Share the conflict across the network for collective resolution.

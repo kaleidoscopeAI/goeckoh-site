@@ -1,2 +1,10 @@
-class BayesianNetwork:
-def init(self):
+    def can_split(self) -> bool:
+
+
+
+
+
+
+
+
+

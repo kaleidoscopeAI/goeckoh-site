@@ -1,0 +1,44 @@
+if wav.ndim > 1:
+    wav = np.mean(wav, axis=1)
+wav = np.asarray(wav, dtype=np.float32)
+frame_length = max(int(sample_rate * frame_ms / 1000.0), 256)
+hop_length = max(int(sample_rate * hop_ms / 1000.0), 128)
+
+f0 = librosa.yin(
+    wav,
+    fmin=fmin_hz,
+    fmax=fmax_hz,
+    sr=sample_rate,
+    frame_length=frame_length,
+    hop_length=hop_length,
+)
+rms = librosa.feature.rms(
+    y=wav,
+    frame_length=frame_length,
+    hop_length=hop_length,
+    center=True,
+)[0]
+times = librosa.frames_to_time(
+    np.arange(len(f0)),
+    sr=sample_rate,
+    hop_length=hop_length,
+)
+
+voiced = f0 > 0
+if np.any(voiced):
+    median_f0 = float(np.median(f0[voiced]))
+else:
+    median_f0 = 180.0
+f0 = np.where(voiced, f0, median_f0).astype(np.float32)
+rms = np.maximum(rms, 1e-4).astype(np.float32)
+
+return ProsodyProfile(
+    f0_hz=f0,
+    energy=rms,
+    times_s=times.astype(np.float32),
+    frame_length=frame_length,
+    hop_length=hop_length,
+    sample_rate=sample_rate,
+)
+
+

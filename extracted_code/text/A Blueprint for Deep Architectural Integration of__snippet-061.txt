@@ -1,0 +1,4 @@
+- $L_1$ norm: $\| s \|_1 = \sum_{i=1}^n |s_i|$
+- $L_\infty$ norm: $\| s \|_\infty = \max_i |s_i|$
+
+

@@ -1,0 +1,4 @@
+date = date or datetime.now(timezone.utc)
+return date + delta
+
+

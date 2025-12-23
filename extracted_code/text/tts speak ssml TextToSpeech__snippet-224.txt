@@ -1,0 +1,7 @@
+  android:id="@+id/vad_metrics_text"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:text="VAD Metrics"
+  app:layout_constraintTop_toBottomOf="@id/apply_vad_button"
+  app:layout_constraintLeft_toLeftOf="parent"
+  app:layout_constraintRight_toRightOf="parent" />

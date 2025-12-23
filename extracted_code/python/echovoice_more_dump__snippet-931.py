@@ -1,2 +1,1 @@
-The code above is consolidated and intended to be exported from the canvas and run locally with Python 3.10+. If you want, I can export the project as a zip or generate a git patch now.
-
+• Solution 1: Configure Ollama Server: The recommended approach is to configure the Ollama server to trust specific origins. This is done by setting the OLLAMA_ORIGINS environment variable before starting the Ollama server. For example, to allow requests from any Chrome extension and a specific web domain:

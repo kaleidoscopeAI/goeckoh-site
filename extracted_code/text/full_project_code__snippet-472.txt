@@ -1,0 +1,2 @@
+       'guess_lexer', 'load_lexer_from_file'] + list(LEXERS) + list(COMPAT)
+

@@ -1,2 +1,14 @@
-# <REDACTED: potential secret detected>
+class FileType(Enum):
+    BINARY = "binary"
+    JAVASCRIPT = "javascript"
+    TYPESCRIPT = "typescript" 
+    PYTHON = "python"
+    CPP = "cpp"
+    C = "c"
+    CSHARP = "csharp"
+    JAVA = "java"
+    GO = "go"
+    RUST = "rust"
+    ASSEMBLY = "assembly"
+    UNKNOWN = "unknown"
 

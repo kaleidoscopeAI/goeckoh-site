@@ -1,4 +1,9 @@
-class PipDeprecationWarning(Warning):
-    pass
-
+           'Supported-Platform', 'Summary', 'Description',
+           'Keywords', 'Home-page', 'Author', 'Author-email',
+           'Maintainer', 'Maintainer-email', 'License',
+           'Classifier', 'Download-URL', 'Obsoletes-Dist',
+           'Project-URL', 'Provides-Dist', 'Requires-Dist',
+           'Requires-Python', 'Requires-External', 'Private-Version',
+           'Obsoleted-By', 'Setup-Requires-Dist', 'Extension',
+           'Provides-Extra')
 

@@ -1,9 +1,8 @@
-from .__about__ import (
-    __author__,
-    __copyright__,
-    __email__,
-    __license__,
-    __summary__,
-    __title__,
-    __uri__,
-    __version__,
+import os
+
+from pip._vendor.pyproject_hooks import BuildBackendHookCaller
+
+from pip._internal.build_env import BuildEnvironment
+from pip._internal.exceptions import (
+    InstallationSubprocessError,
+    MetadataGenerationFailed,

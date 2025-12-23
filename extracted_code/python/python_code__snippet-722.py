@@ -1,175 +1,123 @@
-class ExtType(namedtuple("ExtType", "code data")):
-    """ExtType represents ext type in msgpack."""
-
-    def __new__(cls, code, data):
-        if not isinstance(code, int):
-            raise TypeError("code must be int")
-        if not isinstance(data, bytes):
-            raise TypeError("data must be bytes")
-        if not 0 <= code <= 127:
-            raise ValueError("code must be 0~127")
-        return super(ExtType, cls).__new__(cls, code, data)
+def rehash(path: str, blocksize: int = 1 << 20) -> Tuple[str, str]:
+    """Return (encoded_digest, length) for path using hashlib.sha256()"""
+    h, length = hash_file(path, blocksize)
+    digest = "sha256=" + urlsafe_b64encode(h.digest()).decode("latin1").rstrip("=")
+    return (digest, str(length))
 
 
-class Timestamp(object):
-    """Timestamp represents the Timestamp extension type in msgpack.
-
-    When built with Cython, msgpack uses C methods to pack and unpack `Timestamp`. When using pure-Python
-    msgpack, :func:`to_bytes` and :func:`from_bytes` are used to pack and unpack `Timestamp`.
-
-    This class is immutable: Do not override seconds and nanoseconds.
+def csv_io_kwargs(mode: str) -> Dict[str, Any]:
+    """Return keyword arguments to properly open a CSV file
+    in the given mode.
     """
+    return {"mode": mode, "newline": "", "encoding": "utf-8"}
 
-    __slots__ = ["seconds", "nanoseconds"]
 
-    def __init__(self, seconds, nanoseconds=0):
-        """Initialize a Timestamp object.
+def fix_script(path: str) -> bool:
+    """Replace #!python with #!/path/to/python
+    Return True if file was changed.
+    """
+    # XXX RECORD hashes will need to be updated
+    assert os.path.isfile(path)
 
-        :param int seconds:
-            Number of seconds since the UNIX epoch (00:00:00 UTC Jan 1 1970, minus leap seconds).
-            May be negative.
+    with open(path, "rb") as script:
+        firstline = script.readline()
+        if not firstline.startswith(b"#!python"):
+            return False
+        exename = sys.executable.encode(sys.getfilesystemencoding())
+        firstline = b"#!" + exename + os.linesep.encode("ascii")
+        rest = script.read()
+    with open(path, "wb") as script:
+        script.write(firstline)
+        script.write(rest)
+    return True
 
-        :param int nanoseconds:
-            Number of nanoseconds to add to `seconds` to get fractional time.
-            Maximum is 999_999_999.  Default is 0.
 
-        Note: Negative times (before the UNIX epoch) are represented as negative seconds + positive ns.
-        """
-        if not isinstance(seconds, int_types):
-            raise TypeError("seconds must be an integer")
-        if not isinstance(nanoseconds, int_types):
-            raise TypeError("nanoseconds must be an integer")
-        if not (0 <= nanoseconds < 10**9):
-            raise ValueError(
-                "nanoseconds must be a non-negative integer less than 999999999."
+def wheel_root_is_purelib(metadata: Message) -> bool:
+    return metadata.get("Root-Is-Purelib", "").lower() == "true"
+
+
+def get_entrypoints(dist: BaseDistribution) -> Tuple[Dict[str, str], Dict[str, str]]:
+    console_scripts = {}
+    gui_scripts = {}
+    for entry_point in dist.iter_entry_points():
+        if entry_point.group == "console_scripts":
+            console_scripts[entry_point.name] = entry_point.value
+        elif entry_point.group == "gui_scripts":
+            gui_scripts[entry_point.name] = entry_point.value
+    return console_scripts, gui_scripts
+
+
+def message_about_scripts_not_on_PATH(scripts: Sequence[str]) -> Optional[str]:
+    """Determine if any scripts are not on PATH and format a warning.
+    Returns a warning message if one or more scripts are not on PATH,
+    otherwise None.
+    """
+    if not scripts:
+        return None
+
+    # Group scripts by the path they were installed in
+    grouped_by_dir: Dict[str, Set[str]] = collections.defaultdict(set)
+    for destfile in scripts:
+        parent_dir = os.path.dirname(destfile)
+        script_name = os.path.basename(destfile)
+        grouped_by_dir[parent_dir].add(script_name)
+
+    # We don't want to warn for directories that are on PATH.
+    not_warn_dirs = [
+        os.path.normcase(os.path.normpath(i)).rstrip(os.sep)
+        for i in os.environ.get("PATH", "").split(os.pathsep)
+    ]
+    # If an executable sits with sys.executable, we don't warn for it.
+    #     This covers the case of venv invocations without activating the venv.
+    not_warn_dirs.append(
+        os.path.normcase(os.path.normpath(os.path.dirname(sys.executable)))
+    )
+    warn_for: Dict[str, Set[str]] = {
+        parent_dir: scripts
+        for parent_dir, scripts in grouped_by_dir.items()
+        if os.path.normcase(os.path.normpath(parent_dir)) not in not_warn_dirs
+    }
+    if not warn_for:
+        return None
+
+    # Format a message
+    msg_lines = []
+    for parent_dir, dir_scripts in warn_for.items():
+        sorted_scripts: List[str] = sorted(dir_scripts)
+        if len(sorted_scripts) == 1:
+            start_text = f"script {sorted_scripts[0]} is"
+        else:
+            start_text = "scripts {} are".format(
+                ", ".join(sorted_scripts[:-1]) + " and " + sorted_scripts[-1]
             )
-        self.seconds = seconds
-        self.nanoseconds = nanoseconds
 
-    def __repr__(self):
-        """String representation of Timestamp."""
-        return "Timestamp(seconds={0}, nanoseconds={1})".format(
-            self.seconds, self.nanoseconds
+        msg_lines.append(
+            f"The {start_text} installed in '{parent_dir}' which is not on PATH."
         )
 
-    def __eq__(self, other):
-        """Check for equality with another Timestamp object"""
-        if type(other) is self.__class__:
-            return (
-                self.seconds == other.seconds and self.nanoseconds == other.nanoseconds
-            )
-        return False
+    last_line_fmt = (
+        "Consider adding {} to PATH or, if you prefer "
+        "to suppress this warning, use --no-warn-script-location."
+    )
+    if len(msg_lines) == 1:
+        msg_lines.append(last_line_fmt.format("this directory"))
+    else:
+        msg_lines.append(last_line_fmt.format("these directories"))
 
-    def __ne__(self, other):
-        """not-equals method (see :func:`__eq__()`)"""
-        return not self.__eq__(other)
-
-    def __hash__(self):
-        return hash((self.seconds, self.nanoseconds))
-
-    @staticmethod
-    def from_bytes(b):
-        """Unpack bytes into a `Timestamp` object.
-
-        Used for pure-Python msgpack unpacking.
-
-        :param b: Payload from msgpack ext message with code -1
-        :type b: bytes
-
-        :returns: Timestamp object unpacked from msgpack ext payload
-        :rtype: Timestamp
-        """
-        if len(b) == 4:
-            seconds = struct.unpack("!L", b)[0]
-            nanoseconds = 0
-        elif len(b) == 8:
-            data64 = struct.unpack("!Q", b)[0]
-            seconds = data64 & 0x00000003FFFFFFFF
-            nanoseconds = data64 >> 34
-        elif len(b) == 12:
-            nanoseconds, seconds = struct.unpack("!Iq", b)
-        else:
-            raise ValueError(
-                "Timestamp type can only be created from 32, 64, or 96-bit byte objects"
-            )
-        return Timestamp(seconds, nanoseconds)
-
-    def to_bytes(self):
-        """Pack this Timestamp object into bytes.
-
-        Used for pure-Python msgpack packing.
-
-        :returns data: Payload for EXT message with code -1 (timestamp type)
-        :rtype: bytes
-        """
-        if (self.seconds >> 34) == 0:  # seconds is non-negative and fits in 34 bits
-            data64 = self.nanoseconds << 34 | self.seconds
-            if data64 & 0xFFFFFFFF00000000 == 0:
-                # nanoseconds is zero and seconds < 2**32, so timestamp 32
-                data = struct.pack("!L", data64)
-            else:
-                # timestamp 64
-                data = struct.pack("!Q", data64)
-        else:
-            # timestamp 96
-            data = struct.pack("!Iq", self.nanoseconds, self.seconds)
-        return data
-
-    @staticmethod
-    def from_unix(unix_sec):
-        """Create a Timestamp from posix timestamp in seconds.
-
-        :param unix_float: Posix timestamp in seconds.
-        :type unix_float: int or float.
-        """
-        seconds = int(unix_sec // 1)
-        nanoseconds = int((unix_sec % 1) * 10**9)
-        return Timestamp(seconds, nanoseconds)
-
-    def to_unix(self):
-        """Get the timestamp as a floating-point value.
-
-        :returns: posix timestamp
-        :rtype: float
-        """
-        return self.seconds + self.nanoseconds / 1e9
-
-    @staticmethod
-    def from_unix_nano(unix_ns):
-        """Create a Timestamp from posix timestamp in nanoseconds.
-
-        :param int unix_ns: Posix timestamp in nanoseconds.
-        :rtype: Timestamp
-        """
-        return Timestamp(*divmod(unix_ns, 10**9))
-
-    def to_unix_nano(self):
-        """Get the timestamp as a unixtime in nanoseconds.
-
-        :returns: posix timestamp in nanoseconds
-        :rtype: int
-        """
-        return self.seconds * 10**9 + self.nanoseconds
-
-    def to_datetime(self):
-        """Get the timestamp as a UTC datetime.
-
-        Python 2 is not supported.
-
-        :rtype: datetime.
-        """
-        return datetime.datetime.fromtimestamp(0, _utc) + datetime.timedelta(
-            seconds=self.to_unix()
+    # Add a note if any directory starts with ~
+    warn_for_tilde = any(
+        i[0] == "~" for i in os.environ.get("PATH", "").split(os.pathsep) if i
+    )
+    if warn_for_tilde:
+        tilde_warning_msg = (
+            "NOTE: The current PATH contains path(s) starting with `~`, "
+            "which may not be expanded by all applications."
         )
+        msg_lines.append(tilde_warning_msg)
 
-    @staticmethod
-    def from_datetime(dt):
-        """Create a Timestamp from datetime with tzinfo.
-
-        Python 2 is not supported.
-
-        :rtype: Timestamp
-        """
-        return Timestamp.from_unix(dt.timestamp())
+    # Returns the formatted multiline message
+    return "\n".join(msg_lines)
 
 
+def _normalized_outrows(
+    outrows: Iterable[InstalledCSVRow],

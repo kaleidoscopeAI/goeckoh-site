@@ -1,7 +1,24 @@
-def _get_format_control(values: Values, option: Option) -> Any:
-    """Get a format_control object."""
-    return getattr(values, option.dest)
+def escape(text: str) -> str:
+    """Escape html."""
+    return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+fragments: List[str] = []
+append_fragment = fragments.append
+theme = DEFAULT_TERMINAL_THEME
+for text, style, control in Segment.simplify(segments):
+    if control:
+        continue
+    text = escape(text)
+    if style:
+        rule = style.get_html_style(theme)
+        text = f'<span style="{rule}">{text}</span>' if rule else text
+        if style.link:
+            text = f'<a href="{style.link}" target="_blank">{text}</a>'
+    append_fragment(text)
+
+code = "".join(fragments)
+html = JUPYTER_HTML_FORMAT.format(code=code)
+
+return html
 
 
-def _handle_no_binary(
-    option: Option, opt_str: str, value: str, parser: OptionParser

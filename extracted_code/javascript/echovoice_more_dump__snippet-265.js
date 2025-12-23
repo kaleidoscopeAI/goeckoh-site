@@ -1,1 +1,1 @@
-const selfRaw = projectVec(s, DEFAULT_P.self); // scalar proxy
+const ratio = (h[i]) / (0.0001 + Math.abs(s[i]) + 1e-6);

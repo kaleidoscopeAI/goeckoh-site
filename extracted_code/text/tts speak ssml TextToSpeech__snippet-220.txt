@@ -1,0 +1,10 @@
+      localBroadcastManager.sendBroadcast(intent)
+  }
+
+  // Other functions unchanged
+  // ...
+
+  override fun finalize() {
+      nsWrapper?.nativeFree()
+      sileroVad.close()
+  }

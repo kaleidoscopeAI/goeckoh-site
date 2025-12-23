@@ -1,2 +1,4 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+|                                            ^^^^^^^^^^^^^ unknown field
+|
+= note: available fields are: `element_symbol`, `electronegativity`, `valence_electrons`, `atomic_radius`, `is_metal` ... and 2 others
 

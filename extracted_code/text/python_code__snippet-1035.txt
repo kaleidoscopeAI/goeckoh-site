@@ -1,0 +1,5 @@
+NAME: 'Literal["importlib", "pkg_resources"]'
+Distribution: Type[BaseDistribution]
+Environment: Type[BaseEnvironment]
+
+

@@ -1,0 +1,3 @@
+yield _normalize_string(sysconfig.get_platform())
+
+

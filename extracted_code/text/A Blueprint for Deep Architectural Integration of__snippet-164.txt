@@ -1,0 +1,2 @@
+- **Mathematical Rigor:** The master equation captures the recursive, self-regulating cognitive state \$ S_k \$ coupled with curiosity tension \$ c_k \$, where the curiosity dynamics are:
+

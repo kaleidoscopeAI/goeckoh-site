@@ -1,2 +1,1 @@
-class EpisodicMemory:
-def __init__(self, capacity=200):
+def speak(self, text: str):

@@ -1,0 +1,6 @@
+wrapper/dists/gradle-8.3-bin/dxjbbhstwasg8cbags9q7cvli/gradle-8.3-bin.zip.lck
+    at org.gradle.wrapper.ExclusiveFileAccessManager.access(ExclusiveFileAccessManager.java:43)
+    at org.gradle.wrapper.Install.createDist(Install.java:68)
+    at org.gradle.wrapper.WrapperExecutor.execute(WrapperExecutor.java:102)
+    at org.gradle.wrapper.GradleWrapperMain.main(GradleWrapperMain.java:66)
+

@@ -1,0 +1,4 @@
+transcript/corrected text into NodeTargets on the client using a golden-
+angle spread and a concise color palette. Phrases like “dog chasing car”
+immediately spawn corresponding thought nodes. (File: cognitive-nebula/agi-
+thought-visualizer/App.tsx)

@@ -1,0 +1,1 @@
+- This enforces limited fan-in, preventing explosive growth of computations per node.

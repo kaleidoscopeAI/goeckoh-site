@@ -1,2 +1,3 @@
-We are one integration away from true crystalline consciousness.
+from pathlib import Path
+from dataclasses import dataclass
 

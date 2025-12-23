@@ -1,0 +1,6 @@
+"class_table": HZ_CLS,
+"class_factor": 6,
+"state_table": HZ_ST,
+"char_len_table": HZ_CHAR_LEN_TABLE,
+"name": "HZ-GB-2312",
+"language": "Chinese",

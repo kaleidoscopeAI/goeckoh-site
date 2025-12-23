@@ -1,0 +1,6 @@
+      statusText = findViewById(R.id.id_status)
+      startButton = findViewById(R.id.id_start)
+      tts = TextToSpeech(this, this)
+
+      // Check permissions
+      if (ContextCompat.checkSelfPermission(this,

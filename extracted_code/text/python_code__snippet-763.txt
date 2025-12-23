@@ -1,0 +1,9 @@
+_fields_ = (
+    ("cbSize", DWORD),
+    ("dwError", DWORD),
+    ("lChainIndex", LONG),
+    ("lElementIndex", LONG),
+    ("pvExtraPolicyStatus", c_void_p),
+)
+
+

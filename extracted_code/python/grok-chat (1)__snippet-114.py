@@ -1,15 +1,5 @@
-class DeepReasoningCore:
-    def __init__(self):
-        self.rules = {"help": "I guide: Breathe calm.", "happy": "Joy flows: Well done."}
-
-    def execute(self, text, gcl):
-        if gcl > 0.7:
-            for key in self.rules:
-                if key in text.lower():
-                    return self.rules[key]
-            return "Reason: Insight unlocked."
-        elif gcl > 0.4:
-            return "Affirm: Steady."
-        else:
-            return "Calm: I am safe."
+class DecisionAllocation:
+    def allocate(self, node_id, cpu=0.5, mem=0.3):
+        score = 0.4 * cpu + 0.3 * mem
+        return score > 0.5  # Allocate if high
 

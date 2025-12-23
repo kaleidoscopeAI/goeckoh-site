@@ -1,0 +1,3 @@
+asr_session: Session<'static>,
+tts_session: Session<'static>,
+vad: Vad,

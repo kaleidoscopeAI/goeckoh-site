@@ -1,0 +1,24 @@
+"""Returns helpful msg in case requirements file does not exist,
+or cannot be parsed.
+
+:params req: Requirements file path
+"""
+if not os.path.exists(req):
+    return f" File '{req}' does not exist."
+msg = " The path does exist. "
+# Try to parse and check if it is a requirements file.
+try:
+    check_first_requirement_in_file(req)
+except InvalidRequirement:
+    logger.debug("Cannot parse '%s' as requirements file", req)
+else:
+    msg += (
+        f"The argument you provided "
+        f"({req}) appears to be a"
+        f" requirements file. If that is the"
+        f" case, use the '-r' flag to install"
+        f" the packages specified within it."
+    )
+return msg
+
+

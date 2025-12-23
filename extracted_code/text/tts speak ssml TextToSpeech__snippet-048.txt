@@ -1,0 +1,12 @@
+      return when {
+          task.contains("research") -> "Research result: Placeholder info."
+          task.contains("plan") -> "Plan: Step 1, Step 2."
+          else -> "Reasoning complete."
+      }
+  }
+
+  fun executeBasedOnGCL(gcl: Double, input: String) {
+      when {
+          gcl < 0.5 -> {
+              // Meltdown: Calming affirmations
+              Log.d("AGI", "GCL low: Deploying calming. I am safe. I can

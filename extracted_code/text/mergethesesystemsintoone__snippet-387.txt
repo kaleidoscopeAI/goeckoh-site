@@ -1,0 +1,11 @@
+"""Updates the field based on present resonances"""
+self.field_state.fill(0) # Reset field before every update
+
+for resonance in self.resonances.values():
+  resonance._update_interference()
+  self.field_state += resonance.interference_pattern  # Add each memory interference pattern into field state
+
+    # Apply energy decay to resonances
+for resonance in self.resonances.values():
+    time_delta = (datetime.now() - resonance.timestamp).total_seconds()
+    resonance.energy_level *=

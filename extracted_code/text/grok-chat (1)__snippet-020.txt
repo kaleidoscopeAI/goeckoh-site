@@ -1,1 +1,5 @@
-...Real-time transcription wired—using faster-whisper for offline, autism-tuned STT. Low threshold for pauses, gentle on stutters. Integrated into speech_loop.py for seamless echo. Lattice pulsing with input stimulus...
+class GrowthState:
+    maturity: float = 0.0
+    knowledge: float = 0.0
+    specialization: Optional[str] = None
+

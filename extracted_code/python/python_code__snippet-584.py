@@ -1,1 +1,1 @@
-    from platform import python_implementation
+    from collections.abc import Mapping, Sequence

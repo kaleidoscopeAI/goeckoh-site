@@ -1,4 +1,5 @@
-import sys
-import time
-from typing import TYPE_CHECKING, Callable, Dict, Iterable, List, Union
-
+def make_setuptools_bdist_wheel_args(
+    setup_py_path: str,
+    global_options: Sequence[str],
+    build_options: Sequence[str],
+    destination_dir: str,

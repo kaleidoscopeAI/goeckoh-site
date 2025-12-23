@@ -1,1 +1,5 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+build: ./frontend
+ports:
+  - "3000:3000"
+depends_on:
+  - server

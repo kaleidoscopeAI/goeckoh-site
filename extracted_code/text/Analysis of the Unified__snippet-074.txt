@@ -1,0 +1,2 @@
+return f"hybrid_{uuid.uuid4().hex[:10]}"
+

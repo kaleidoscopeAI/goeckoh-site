@@ -1,1 +1,2 @@
-# Signal handling from C++
+class ProcessingUnit:
+def init(self, data_type: str):

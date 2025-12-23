@@ -1,0 +1,5 @@
+      w.setnchannels(1)
+      w.setsampwidth(2)
+      w.setframerate(sr)
+      w.writeframes(array.array("h", x).tobytes())
+

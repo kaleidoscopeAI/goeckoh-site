@@ -1,0 +1,2 @@
+- Each candidate update \$ \Delta S \$ is sandboxed and tested; rollback if stability metrics degrade.
+

@@ -1,0 +1,8 @@
+Performance: Renders 50,000+ nodes without lag using React, Three.js, and a Web Worker.
+
+Decoupling: Rendering and physics are decoupled via Shared Buffers, resulting in Zero main-thread CPU load.
+
+Deterministic Analysis: The system allows the user to freeze, replay, and sample the full state for rigorous computation.
+
+Network Plot: The Resonance Network visualization uses nx.spring_layout with a fixed seed=42 for reproducible layout.
+

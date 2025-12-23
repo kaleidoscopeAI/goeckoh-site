@@ -1,0 +1,9 @@
+  ROOT.mkdir(parents=True, exist_ok=True)
+  (ROOT / "state").mkdir(exist_ok=True, parents=True)
+  if os.environ.get("SC_BOOTED") == "1":
+      return
+  if not VENV.exists():
+
+
+
+

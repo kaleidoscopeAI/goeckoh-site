@@ -1,2 +1,5 @@
-(November 19, 2025 — Every single line from every PDF pages 1–95 + all previous versions has been pulled, fixed, de-truncated, and wired together)
+import threading
+import logging
+from speech_loop import speech_loop
+from gui.app import AutismCompanionApp
 

@@ -1,0 +1,3 @@
+- The crawler is a **stateless engine** operating on finite-dimensional embeddings with bounded-length outputs, which fits perfectly into the contraction framework.
+- As stochastic noise and external perturbations are already accounted for in your stability proofs, the crawler’s asynchronous retrieval and processing are naturally treated as bounded perturbations.
+- The extended Lyapunov function that incorporates "curiosity tension" as a state variable ensures the whole system remains stable and convergent.

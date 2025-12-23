@@ -1,51 +1,118 @@
-             "device": "auto" # Example: let processor auto-detect
-         }
-         with open(config_path, 'w') as f:
-             json.dump(default_config, f, indent=4)
-         print(f"Created default config file: {config_path}")
+def __init__(self):
+    super().__init__("image")
 
-    # Initialize processor (will now load config from file)
-    try:
-        # Note: First run might download models, can take time
-        # Set device='cpu' in config if no GPU or CUDA issues
-        processor = LLMProcessor(config_file=config_path)
+def process(self, data_wrapper: DataWrapper) -> Dict:
+  """Processes image data. Returns various visual descriptors"""
+  image = data_wrapper.get_data()
 
-        print("\n--- Testing Text Structure ---")
-        text1 = "This is the first sentence. This is the second, slightly longer sentence."
-        print(processor.analyze_text_structure(text1))
+  if isinstance (image,str):
+       try:
+            image = Image.open(image)
+       except Exception as e:
+           logger.error(f"Failed to open or locate image: {e}")
+           return {}
 
-        print("\n--- Testing NER ---")
-        text2 = "Apple Inc. is looking at buying U.K. startup for $1 billion in London."
-        print(processor.extract_named_entities(text2))
+  if image.mode != 'RGB':
+      image = image.convert('RGB')
 
-        print("\n--- Testing Classification ---")
-        texts_for_classify = ["This is great!", "This is terrible."]
-        print(processor.classify_text(texts_for_classify)) # Expected: Positive, Negative (likely classes 1, 0 for sst-2)
+  # Resize the image to a standard size
+  image = image.resize((100, 100))
 
-        print("\n--- Testing Summarization ---")
-        text_for_summary = ["Paris is the capital and most populous city of France, with an estimated population of 2,165,423 residents as of 1 January 2024 in an area of more than 105 square kilometres (41 square miles). Since the 17th century, Paris has been one of the world's major centres of finance, diplomacy, commerce, culture, fashion, gastronomy and science. For its leading role in the arts and sciences, as well as its early and extensive system of street lighting, in the 19th century, it became known as the City of Light."]
-        print(processor.summarize_text(text_for_summary))
+  img_array = np.array(image)
+  gray = cv2.cvtColor(img_array, cv2.COLOR_RGB2GRAY)
 
-        print("\n--- Testing Conversation ---")
-        print(f"User: Hello there!")
-        print(f"Bot: {processor.conversation('Hello there!')}")
-        print(f"User: What is your privacy policy?") # Should trigger hardcoded response
-        print(f"Bot: {processor.conversation('What is your privacy policy?')}")
-        print(f"User: Tell me about the bible.") # Should trigger hardcoded response
-        print(f"Bot: {processor.conversation('Tell me about the bible.')}")
+  # Use edge detection as a basic feature
+  sobel_x = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])
+  sobel_y = np.array([[-1, -2, -1], [0, 0, 0], [1, 2, 1]])
 
+  edges_x = self._convolve(gray, sobel_x)
+  edges_y = self._convolve(gray, sobel_y)
+  edges = np.sqrt(edges_x**2 + edges_y**2)
 
-        # print("\n--- Testing Web Crawl ---")
-        # Note: Web crawling can be slow and hit external sites. Uncomment carefully.
-        # url = "https://spacy.io/" # Example site
-        # print(f"Crawling {url} (depth 1)...")
-        # print(processor.web_crawl(url, max_depth=1))
+  # Simple Thresholding (replace with a more sophisticated method if needed)
+  threshold = np.mean(edges) + np.std(edges)  # Example threshold
+  binary_edges = (edges > threshold).astype(np.uint8) * 255
 
-    except Exception as main_e:
-         print(f"An error occurred during example usage: {main_e}")
+  # Find Contours (simplified approach)
+  contours = self._find_contours(binary_edges)
 
+  shapes = []
+  for cnt in contours:
+      approx = self._approximate_polygon(cnt, 0.01 * self._calculate_perimeter(cnt))
+      shape_type = {3: "triangle", 4: "rectangle", 5: "pentagon", 6: "hexagon", 10: "star"}.get(len(approx), "circle")
+      if len(approx) == 4:
+         x, y, w, h = cv2.boundingRect(cnt)
+         aspect_ratio = float (w) / h
+         if 0.95 <= aspect_ratio <= 1.05:
+            shape_type = "square"
+      shapes.append({'type': shape_type, 'vertices': len(approx), 'contour': cnt.tolist()})
+  texture = self._analyze_textures(gray)
 
+  return {
+      'type': 'visual_pattern',
+       'edges': edges.tolist(),
+        'shapes': shapes,
+       'texture': texture
+       }
 
+def _convolve(self, image: np.ndarray, kernel: np.ndarray) -> np.ndarray:
+  """Performs a 2D convolution operation."""
+  kernel_size = kernel.shape[0]
+  pad = kernel_size // 2
+  output = np.zeros_like (image, dtype=float)
+  padded_image = np.pad(image, pad, mode='constant')
 
-It looks like you've shared a script for an LLMProcessor class that handles various NLP tasks using transformer models from Hugging Face and spaCy. However, there’s an error in the code you provided: the example usage block references a config_file parameter in the LLMProcessor initialization, but the __init__ method you defined doesn’t accept this parameter. This suggests either a mismatch between the code and the example or an intent to load configurations from a file that hasn’t been implemented yet.
+  for i in range(image.shape[0]):
+     for j in range(image.shape[1]):
+            region = padded_image[i:i+kernel_size, j:j+kernel_size]
+            output [i, j] = np.sum(region * kernel)
+  return output
 
+def _find_contours(self, binary_image: np.ndarray) -> List[List[Tuple[int, int]]]:
+    """
+    Placeholder for a contour finding algorithm,
+    replace this with more advance and sophisticated approach as you build your ai .
+    """
+    # Basic simplified edge linking approach for now.
+    contours = []
+    visited = set()
+
+    def dfs(x, y, contour, depth = 0):
+      if (x, y) in visited or not (0 <= x < binary_image.shape[0] and 0 <= y < binary_image.shape[1]) or binary_image [x, y] == 0:
+        return
+      visited.add ((x,y))
+      contour.append ((x,y))
+      for dx in [-1, 0, 1]:
+          for dy in [-1, 0, 1]:
+             if dx != 0 or dy !=0 :
+              dfs (x + dx, y + dy, contour, depth + 1)
+
+    for i in range (binary_image.shape[0]):
+      for j in range (binary_image.shape[1]):
+            if binary_image [i, j] == 255 and (i,j) not in visited:
+               contour = []
+               dfs(i, j, contour)
+               if len(contour) >= 3: #minimal viable countor for now. can refine.
+                   contours.append(contour)
+  return contours
+
+def _calculate_perimeter(self, contour: List[Tuple[int, int]]) -> float:
+  """Calculates the perimeter of a contour."""
+  perimeter = 0
+  for i in range(len(contour)):
+     p1 = np.array (contour[i])
+     p2 = np.array (contour[(i + 1) % len (contour)]) # next position with modulus operator if list out of bounds
+     perimeter += np.linalg.norm (p1 - p2)
+  return perimeter
+
+def _approximate_polygon(self, contour: List[Tuple[int, int]], epsilon: float) -> List [Tuple [int, int]]:
+    """
+      Approximates a contour using the Douglas-Peucker Algorithm by first finding max perpendicular points and spliting contours
+      recursive function until a tolerance point or short length.
+
+    : param: Contour, List [Tuple [int, int] ]: List of int values describing image boundary
+     : param : epilson value is a small float for error toloerance
+     : retrun: approximated verticies based on curve of data
+    """
+    if len(contour) <= 3:
+        return contour

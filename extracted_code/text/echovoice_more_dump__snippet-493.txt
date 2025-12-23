@@ -1,1 +1,2 @@
-3. The method of claim 1, where novelty is computed using L2 distance in a d-dimensional embedding and arousal ∈[0,1].
+|                                                              ++
+

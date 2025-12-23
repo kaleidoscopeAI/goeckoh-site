@@ -1,0 +1,2 @@
+register_finder(pkgutil.ImpImporter, find_on_path)
+

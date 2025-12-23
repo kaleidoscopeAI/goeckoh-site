@@ -1,0 +1,5 @@
+"""Raised when SSL certificate fails in an HTTPS connection."""
+
+pass
+
+

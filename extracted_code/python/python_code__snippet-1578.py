@@ -1,6 +1,15 @@
-    compatibility checks. Defaults to a version derived from the running
-    interpreter. The version can be specified using up to three dot-separated
-    integers (e.g. "3" for 3.0.0, "3.7" for 3.7.0, or "3.7.3"). A major-minor
-    version can also be given as a string without dots (e.g. "37" for 3.7.0).
-    """
-    ),
+"""Get a global :class:`~rich.console.Console` instance. This function is used when Rich requires a Console,
+and hasn't been explicitly given one.
+
+Returns:
+    Console: A console instance.
+"""
+global _console
+if _console is None:
+    from .console import Console
+
+    _console = Console()
+
+return _console
+
+

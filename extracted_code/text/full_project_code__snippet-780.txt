@@ -1,0 +1,5 @@
+"class_table": JOHAB_CLS,
+"class_factor": 10,
+"state_table": JOHAB_ST,
+"char_len_table": JOHAB_CHAR_LEN_TABLE,
+"name": "Johab",

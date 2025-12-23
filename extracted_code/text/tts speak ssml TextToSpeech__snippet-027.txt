@@ -1,10 +1,3 @@
-class NsWrapper {
-    var nativeHandle: Long = 0
+Burnout Prevention: The Crystalline Heart can monitor a user's GCL during a workday. If it detects a sustained drop (indicating stress or cognitive overload), the Gated AGI could proactively intervene—pausing notifications, suggesting a break, or auto-replying to low-priority messages—before the user reaches burnout.
+State-Aware Productivity: The AGI would only suggest complex, creative tasks when the user is in a "flow state" (GCL > 0.9). It would automate mundane tasks when the user is in a "baseline" state. This aligns digital work with human cognitive rhythms.
 
-    external fun nativeCreate(): Long
-    external fun nativeFree()
-    external fun nativeProcess(inL: ShortArray, inH: ShortArray?, outL: ShortArray, outH: ShortArray?): Int
-
-    init {
-        nativeHandle = nativeCreate()
-    }

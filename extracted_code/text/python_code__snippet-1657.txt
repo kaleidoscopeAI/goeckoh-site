@@ -1,0 +1,8 @@
+if not (PROSODY_AVAILABLE and apply_prosody_to_tts and target_features):
+    return
+try:
+    apply_prosody_to_tts(tts_path, target_features)
+except Exception:
+    return
+
+

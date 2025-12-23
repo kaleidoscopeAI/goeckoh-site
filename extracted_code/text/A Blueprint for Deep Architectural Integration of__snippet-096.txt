@@ -1,0 +1,1 @@
+v.iter().map(|x| x.tanh()).collect()

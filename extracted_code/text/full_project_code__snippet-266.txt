@@ -1,0 +1,3 @@
+return "python-urllib3/%s" % __version__
+
+

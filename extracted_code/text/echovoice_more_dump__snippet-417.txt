@@ -1,1 +1,4 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+|                                            ^^^^^^^^^^^^^^^ unknown field
+|
+= note: available fields are: `energy`, `chemical_validity`, `diversity`, `embedding_snapshot`
+

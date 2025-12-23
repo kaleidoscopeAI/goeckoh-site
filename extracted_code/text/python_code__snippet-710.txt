@@ -1,0 +1,1 @@
+color1: ColorTriplet, color2: ColorTriplet, cross_fade: float = 0.5

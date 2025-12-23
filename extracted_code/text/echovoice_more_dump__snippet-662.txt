@@ -1,0 +1,7 @@
+root = logging.getLogger()
+if root.handlers:
+    return
+h = logging.StreamHandler()
+h.setFormatter(JsonFormatter())
+root.setLevel(level)
+root.addHandler(h)

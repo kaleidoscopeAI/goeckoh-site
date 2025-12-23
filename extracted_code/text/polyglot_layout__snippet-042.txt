@@ -1,0 +1,7 @@
+  C++: g++ (C++17), sqlite3 dev libs (for local build; we don't link sqlite in the worker)
+  PHP: CLI (php)
+
+  Node.js: node >= 16; for TS worker either ts-node or tsc + node
+  Java: JDK 11+
+  Python: 3.9+
+

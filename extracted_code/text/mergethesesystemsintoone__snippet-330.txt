@@ -1,0 +1,2 @@
+return isinstance(data["data"], str) and len(data["data"]) > 0
+

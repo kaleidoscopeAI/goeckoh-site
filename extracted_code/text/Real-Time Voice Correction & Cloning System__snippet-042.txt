@@ -1,0 +1,3 @@
+"Programming Language :: Rust",
+"Programming Language :: Python :: Implementation :: CPython",
+"Programming Language :: Python :: Implementation :: PyPy",

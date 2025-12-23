@@ -1,49 +1,113 @@
-import bisect
-from typing import List, Tuple
+from __future__ import annotations
 
-def intranges_from_list(list_: List[int]) -> Tuple[int, ...]:
-    """Represent a list of integers as a sequence of ranges:
-    ((start_0, end_0), (start_1, end_1), ...), such that the original
-    integers are exactly those x such that start_i <= x < end_i for some i.
+import os
+import sys
+from pathlib import Path
+from typing import Optional
 
-    Ranges are encoded as single integers (start << 32 | end), not as tuples.
+import numpy as np
+
+
+class VoiceEngineRTVC:
+    """
+    Real-Time-Voice-Cloning inference wrapper.
+
+    - Expects the upstream repo under GOECKOH_RTVC_PATH (default:
+      echovoice/project/echo_companion/third_party/Real-Time-Voice-Cloning).
+    - Expects pretrained models under GOECKOH_RTVC_MODELS (default: <repo>/saved_models/default/).
+      Required files: encoder.pt, synthesizer.pt, vocoder.pt.
     """
 
-    sorted_list = sorted(list_)
-    ranges = []
-    last_write = -1
-    for i in range(len(sorted_list)):
-        if i+1 < len(sorted_list):
-            if sorted_list[i] == sorted_list[i+1]-1:
-                continue
-        current_range = sorted_list[last_write+1:i+1]
-        ranges.append(_encode_range(current_range[0], current_range[-1] + 1))
-        last_write = i
+    def __init__(
+        self,
+        repo_path: Optional[str | Path] = None,
+        model_root: Optional[str | Path] = None,
+        device: Optional[str] = None,
+    ):
+        self.repo_path = Path(
+            repo_path
+            or os.getenv(
+                "GOECKOH_RTVC_PATH",
+                "echovoice/project/echo_companion/third_party/Real-Time-Voice-Cloning",
+            )
+        ).expanduser().resolve()
 
-    return tuple(ranges)
+        if not self.repo_path.exists():
+            raise FileNotFoundError(f"RTVC repo not found at {self.repo_path}")
 
-def _encode_range(start: int, end: int) -> int:
-    return (start << 32) | end
+        if str(self.repo_path) not in sys.path:
+            sys.path.insert(0, str(self.repo_path))
 
-def _decode_range(r: int) -> Tuple[int, int]:
-    return (r >> 32), (r & ((1 << 32) - 1))
+        # Lazy imports from the RTVC repo
+        try:
+            import torch  # type: ignore
+            from encoder import inference as encoder  # type: ignore
+            from encoder.params_model import model_embedding_size as speaker_embedding_size  # type: ignore
+            from synthesizer.inference import Synthesizer  # type: ignore
+            from vocoder import inference as vocoder  # type: ignore
+        except Exception as e:  # pragma: no cover - upstream import guard
+            raise ImportError(f"Failed to import RTVC modules: {e}") from e
 
+        self.torch = torch
+        self.encoder = encoder
+        self.Synthesizer = Synthesizer
+        self.vocoder = vocoder
+        self.speaker_embedding_size = speaker_embedding_size
 
-def intranges_contain(int_: int, ranges: Tuple[int, ...]) -> bool:
-    """Determine if `int_` falls into one of the ranges in `ranges`."""
-    tuple_ = _encode_range(int_, 0)
-    pos = bisect.bisect_left(ranges, tuple_)
-    # we could be immediately ahead of a tuple (start, end)
-    # with start < int_ <= end
-    if pos > 0:
-        left, right = _decode_range(ranges[pos-1])
-        if left <= int_ < right:
-            return True
-    # or we could be immediately behind a tuple (int_, end)
-    if pos < len(ranges):
-        left, _ = _decode_range(ranges[pos])
-        if left == int_:
-            return True
-    return False
+        # Resolve model paths
+        model_root_path = Path(
+            model_root
+            or os.getenv("GOECKOH_RTVC_MODELS", self.repo_path / "saved_models" / "default")
+        ).expanduser().resolve()
+        self.encoder_path = Path(
+            os.getenv("GOECKOH_RTVC_ENCODER", model_root_path / "encoder.pt")
+        )
+        self.synthesizer_path = Path(
+            os.getenv("GOECKOH_RTVC_SYNTH", model_root_path / "synthesizer.pt")
+        )
+        self.vocoder_path = Path(
+            os.getenv("GOECKOH_RTVC_VOCODER", model_root_path / "vocoder.pt")
+        )
+
+        for p in [self.encoder_path, self.synthesizer_path, self.vocoder_path]:
+            if not p.exists():
+                raise FileNotFoundError(f"RTVC model missing: {p}")
+
+        # Device selection: explicit > env > GPU if available
+        self.device = device or os.getenv("GOECKOH_RTVC_DEVICE")
+        if self.device is None:
+            self.device = "cuda" if self.torch.cuda.is_available() else "cpu"
+
+        # Load models
+        self._load_models()
+
+    def _load_models(self):
+        self.encoder.load_model(self.encoder_path, device=self.device)
+        self.synthesizer = self.Synthesizer(self.synthesizer_path)
+        self.vocoder.load_model(self.vocoder_path, device=self.device)
+
+    def synthesize(self, text: str, ref_wav_path: str) -> Optional[np.ndarray]:
+        """
+        Generate a waveform that mimics the reference speaker.
+        Returns mono float32 PCM in [-1, 1], or None on failure.
+        """
+        try:
+            # Build speaker embedding
+            preprocessed_wav = self.encoder.preprocess_wav(Path(ref_wav_path))
+            embed = self.encoder.embed_utterance(preprocessed_wav)
+
+            # Text → mel
+            mels = self.synthesizer.synthesize_spectrograms([text], [embed])
+            mel = mels[0]
+
+            # Mel → waveform
+            wav = self.vocoder.infer_waveform(mel)
+            # Pad and trim per upstream guidance
+            wav = np.pad(wav, (0, self.synthesizer.sample_rate), mode="constant")
+            wav = self.encoder.preprocess_wav(wav)
+            return wav.astype(np.float32)
+        except Exception as e:
+            print(f"[RTVC] Synthesis failed: {e}")
+            return None
 
 

@@ -1,24 +1,16 @@
-    import threading
+def _configure_context(ctx: ssl.SSLContext) -> typing.Iterator[None]:
+    check_hostname = ctx.check_hostname
+    verify_mode = ctx.verify_mode
+    ctx.check_hostname = False
+    _set_ssl_context_verify_mode(ctx, ssl.CERT_NONE)
+    try:
+        yield
+    finally:
+        ctx.check_hostname = check_hostname
+        _set_ssl_context_verify_mode(ctx, verify_mode)
 
 
-def sleep(seconds: float) -> None:
-    """
-    Sleep strategy that delays execution for a given number of seconds.
-
-    This is the default strategy, and may be mocked out for unit testing.
-    """
-    time.sleep(seconds)
-
-
-class sleep_using_event:
-    """Sleep strategy that waits on an event to be set."""
-
-    def __init__(self, event: "threading.Event") -> None:
-        self.event = event
-
-    def __call__(self, timeout: typing.Optional[float]) -> None:
-        # NOTE(harlowja): this may *not* actually wait for timeout
-        # seconds if the event is set (ie this may eject out early).
-        self.event.wait(timeout=timeout)
-
-
+def _verify_peercerts_impl(
+    ssl_context: ssl.SSLContext,
+    cert_chain: list[bytes],
+    server_hostname: str | None = None,

@@ -1,0 +1,5 @@
+  <uses-permission android:name="android.permission.RECORD_AUDIO" />
+  <application ...>
+      <activity android:name=".MainActivity" ... />
+      <service android:name=".ExocortexService" />
+  </application>

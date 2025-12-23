@@ -1,2 +1,8 @@
-+const PORT = Number(process.env.EXP_PORT || 4303);
-+app.listen(PORT, () => console.log(`Experiments server listening ${PORT}`));
+let p = Path::new(path);
+if p.exists() {
+    return Ok(());
+}
+if url.is_empty() {
+    return Err(CrystalError::IO(std::io::Error::new(std::io::ErrorKind::NotFound, format!("File {} does not exist and no download URL provided", path)));
+}
+// ... download code

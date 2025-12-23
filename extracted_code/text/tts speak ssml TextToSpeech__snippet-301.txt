@@ -1,0 +1,2 @@
+1 +sdk.dir=/home/jacob/Android/Sdk
+

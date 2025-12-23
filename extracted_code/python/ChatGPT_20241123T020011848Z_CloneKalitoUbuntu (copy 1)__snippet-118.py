@@ -1,3 +1,2 @@
-3. Learning and Adaptation: Nodes learn individually and cross-learn from others.
-
+Yes id like help creating the packet starting from beginning. Use as much time as you need and remember cover all bases 
 

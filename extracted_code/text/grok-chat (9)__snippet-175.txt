@@ -1,0 +1,2 @@
+to /mirror/stream SSE and feeds corrected/transcript text straight into the
+3D scene; shows a “live” badge. Build still succeeds.

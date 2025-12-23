@@ -1,3 +1,1 @@
-const width = mountRef.current?.clientWidth ?? window.innerWidth;
-const height = mountRef.current?.clientHeight ?? window.innerHeight;
-const scene = new THREE.Scene();
+const dist = Math.sqrt(dx*dx + dy*dy);

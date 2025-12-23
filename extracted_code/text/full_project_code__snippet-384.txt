@@ -1,0 +1,4 @@
+with open(where(), "r", encoding="ascii") as data:
+    return data.read()
+
+

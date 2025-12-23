@@ -1,0 +1,2 @@
+valence: Math.tanh(totalValence / sampleSize),
+arousal: Math.tanh(totalArousal / sampleSize / 10)

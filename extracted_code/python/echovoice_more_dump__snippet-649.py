@@ -1,1 +1,2 @@
-def _update_graph_node(self, sid):
+def update(frame):
+Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.

@@ -1,0 +1,16 @@
+      audioBuffer.reset()
+      partialText = ""
+      silenceStart = 0
+      isSpeechDetected = false
+
+      // Set Whisper listener
+      whisper.setAction(Whisper.ACTION_TRANSCRIBE)
+      whisper.setListener(object : IWhisperListener {
+          override fun onUpdateReceived(message: String) {
+              partialText = message.trim()
+              Log.d("Whisper", "Partial: $partialText")
+          }
+
+          override fun onResultReceived(result: String) {
+              val rawText = result.trim()
+              val prosody = extractProsody(audioBuffer.toByteArray(),

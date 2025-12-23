@@ -1,22 +1,17 @@
-def GetConsoleMode(std_handle: wintypes.HANDLE) -> int:
-    """Retrieves the current input mode of a console's input buffer
-    or the current output mode of a console screen buffer.
-
-    Args:
-        std_handle (wintypes.HANDLE): A handle to the console input buffer or the console screen buffer.
-
-    Raises:
-        LegacyWindowsError: If any error occurs while calling the Windows console API.
-
-    Returns:
-        int: Value representing the current console mode as documented at
-            https://docs.microsoft.com/en-us/windows/console/getconsolemode#parameters
+def tempdir_registry() -> Generator[TempDirectoryTypeRegistry, None, None]:
+    """Provides a scoped global tempdir registry that can be used to dictate
+    whether directories should be deleted.
     """
+    global _tempdir_registry
+    old_tempdir_registry = _tempdir_registry
+    _tempdir_registry = TempDirectoryTypeRegistry()
+    try:
+        yield _tempdir_registry
+    finally:
+        _tempdir_registry = old_tempdir_registry
 
-    console_mode = wintypes.DWORD()
-    success = bool(_GetConsoleMode(std_handle, console_mode))
-    if not success:
-        raise LegacyWindowsError("Unable to get legacy Windows Console Mode")
-    return console_mode.value
+
+class _Default:
+    pass
 
 

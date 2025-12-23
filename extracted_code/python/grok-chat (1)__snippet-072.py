@@ -1,16 +1,20 @@
-class DeepReasoningCore:
+class NeuroAcousticExocortex:
     def __init__(self):
-        self.strategies = {
-            "green": ["Excited guidance: Great job, let's build on that!"],
-            "yellow": ["Simple affirm: You're doing well."],
-            "red": ["Calm script: Breathe deep... I am safe."]
-        }
+        self.heart = CrystallineHeart()
+        self.drc = DeepReasoningCore()
 
-    def execute(self, text, gcl):
-        if gcl > 0.7:  # GREEN
-            return random.choice(self.strategies["green"])
-        elif gcl > 0.4:  # YELLOW
-            return random.choice(self.strategies["yellow"])
-        else:  # RED
-            return random.choice(self.strategies["red"])
+    def run(self):
+        while True:
+            input_text = simulate_audio_input()
+            if not input_text:
+                continue
+
+            echoed, arousal, agency_stress = auditory_motor_core(input_text)
+
+            gcl = self.heart.step(arousal, agency_stress)
+
+            response = self.drc.execute(echoed, gcl)
+
+            print(f"[GCL: {gcl:.2f}] [Guidance]: {response}")
+            time.sleep(1)
 

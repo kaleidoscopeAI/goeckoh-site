@@ -1,1 +1,4 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+• It tends to smooth out regions of positive curvature, making the geometry more uniform or "rounder."
+• It tends to concentrate or magnify regions of negative curvature.
+• It often develops singularities (points where curvature blows up) in finite time.
+• In certain cases (e.g., 2D surfaces, specific 3D manifolds), it converges to metrics of constant curvature (e.g., spherical, flat, or hyperbolic).30 This property was famously used by Perelman in proving the Poincaré and Geometrization conjectures.30

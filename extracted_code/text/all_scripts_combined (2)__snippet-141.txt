@@ -1,0 +1,3 @@
+return [s for s in STRATEGIES if s.category == category]
+
+

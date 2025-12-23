@@ -1,0 +1,8 @@
+gcl: float
+stress: float
+mode_label: str
+gui_color: tuple
+coherence: float
+arousal: float
+valence: float
+

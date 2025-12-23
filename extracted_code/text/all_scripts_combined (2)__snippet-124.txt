@@ -1,0 +1,5 @@
+app = create_app(config)
+print(f"Dashboard running at http://{host}:{port}")
+app.run(host=host, port=port, debug=False)
+
+

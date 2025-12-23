@@ -1,0 +1,1 @@
+ open the page; speak “dog chasing car” — the SSE feed will drive the scene.

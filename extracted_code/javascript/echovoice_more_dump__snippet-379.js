@@ -1,1 +1,1 @@
-for (let k = 0; k < r.idx.length; k++) {
+const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);

@@ -1,1 +1,0 @@
-- Reward function based on uncertainty reduction / curiosity tension decrease.

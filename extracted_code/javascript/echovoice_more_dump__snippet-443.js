@@ -1,1 +1,2 @@
-const decay = 0.95;
+const setEmotion = async (emotion: EmotionName, value: number) => {
+const svc = svcRef.current!;

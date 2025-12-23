@@ -1,0 +1,6 @@
+"status": "incomplete",
+     "description":"intended for visual handling using charts, graphs , networks , but not essential for core behaviour",
+    "submodules": [
+         "__init__.py":{  "status": "implemented" ,"description":"Marks a direct as module."}
+         ,   "visualizer.py" :{  "status":"ommitted. Visualization and graphing performed though existing module instead" , "description" :  "  (placeholder for visualization functions.)"}
+            ]

@@ -1,2 +1,36 @@
-It seems like your message got cut off before you could specify a particular question or task related to the provided code. You've shared a substantial amount of code from various modules of what appears to be a sophisticated AI system, including:
+def __init__(self):
+    self.rules = []
 
+def add_rule(self, rule: Dict):
+    """Adds a rule to the rule engine.
+
+    Args:
+        rule (Dict): A dictionary representing the rule.
+                     Example: {'id': 'rule1', 'condition': {'type': 'text_pattern', 'pattern_type': 'named_entity'}, 'action': lambda x: {'result': 'Rule applied', 'value': x}}
+    """
+    self.rules.append(rule)
+
+def apply(self, concept: Dict) -> List[Dict]:
+    """Applies rules to a concept and returns results."""
+    results = []
+    for rule in self.rules:
+        if self._rule_matches(concept, rule['condition']):
+            results.append({'rule_id': rule['id'], 'result': rule['action'](concept)})
+    return results
+
+def _rule_matches(self, concept: Dict, condition: Dict) -> bool:
+    """Checks if a concept matches a rule condition."""
+    for key, value in condition.items():
+        if key == 'pattern_type':
+            if not any(pattern.get('type') == value for pattern in concept.get('patterns', [])):
+                return False
+        elif key == 'entity':
+            if  not isinstance(value,list):
+               if concept.get(key) != value:
+                  return False
+            else: 
+                 if concept.get(key) not in value:
+                   return False    
+        elif concept.get(key) != value:
+             return False
+    return True

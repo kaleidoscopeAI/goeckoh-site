@@ -1,2 +1,5 @@
-# <REDACTED: potential secret detected>
+class PackageDetails(NamedTuple):
+    version: DistributionVersion
+    dependencies: List[Requirement]
+
 

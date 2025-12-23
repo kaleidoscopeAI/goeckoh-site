@@ -1,1 +1,3 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+• Directly update the coordinates representing the system's state within the hypercube.
+• Adjust the parameters of internal models used for interpretation (e.g., the (\theta, \mu, \sigma) parameters of OU processes modeling dimensional dynamics).
+• Tune the weights of neural networks used for feature extraction or state representation.

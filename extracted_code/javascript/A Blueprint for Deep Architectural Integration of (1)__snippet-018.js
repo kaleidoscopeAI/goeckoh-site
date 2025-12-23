@@ -1,2 +1,0 @@
-    - Activation function \$ \sigma \$ is elementwise $\tanh$,
-    - Bias vector \$ b = (0.1, -0.1)^T \$.

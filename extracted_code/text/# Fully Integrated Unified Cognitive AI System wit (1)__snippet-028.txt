@@ -1,2 +1,9 @@
-Replace simple scalar simulations with an actual Transformer model using PyTorch:
+try:
+    temp = subprocess.run(['adb', 'shell', 'dumpsys', 'battery'], capture_output=True, text=True)
+    temp_line = [line for line in temp.stdout.splitlines() if 'temperature' in line.lower()]
+    if temp_line:
+        return float(temp_line[0].split()[-1]) / 10.0
+    return 25.0
+except:
+    return 25.0
 

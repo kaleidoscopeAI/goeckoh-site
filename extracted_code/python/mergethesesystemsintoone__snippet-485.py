@@ -1,2 +1,1 @@
-def _update_interference(self):
-"""Updates interference pattern of resonace using amplitude freq and phases
+def __init__(self, redis: aioredis.Redis):

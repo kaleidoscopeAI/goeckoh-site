@@ -1,0 +1,1 @@
+fn: Callable[["Specifier", ParsedVersion, str], bool]

@@ -1,1 +1,2 @@
-+ private initW(): WeightMatrix {
+|                               ^^^^^^ private field
+|

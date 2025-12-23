@@ -1,0 +1,7 @@
+model = PerspectiveEngine(E8Lattice(), CustomRandom(seed=1))
+vec1 = Vector([0, 0, 0])
+vec2 = Vector([1, 1, 1])
+emo = EmotionalState(valence=0.5, arousal=0.7, coherence=0.8)
+confidence = model.evaluate_hypothesis(vec1, vec2, node_E=0.1, node_K=0.9, emotional_state=emo)
+assert 0.0 <= confidence <= 1.0
+

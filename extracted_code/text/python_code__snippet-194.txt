@@ -1,47 +1,65 @@
-    :param dist_name: the name of the package to retrieve the scheme for, used
-        in the headers scheme path
-    :param user: indicates to use the "user" scheme
-    :param home: indicates to use the "home" scheme and provides the base
-        directory for the same
-    :param root: root under which other directories are re-based
-    :param isolated: equivalent to --no-user-cfg, i.e. do not consider
-        ~/.pydistutils.cfg (posix) or ~/pydistutils.cfg (non-posix) for
-        scheme paths
-    :param prefix: indicates to use the "prefix" scheme and provides the
-        base directory for the same
-    """
-    scheme = distutils_scheme(dist_name, user, home, root, isolated, prefix)
-    return Scheme(
-        platlib=scheme["platlib"],
-        purelib=scheme["purelib"],
-        headers=scheme["headers"],
-        scripts=scheme["scripts"],
-        data=scheme["data"],
-    )
+try:
+    char: str | None = src[pos]
+except IndexError:
+    char = None
 
+# IMPORTANT: order conditions based on speed of checking and likelihood
 
-def get_bin_prefix() -> str:
-    # XXX: In old virtualenv versions, sys.prefix can contain '..' components,
-    # so we need to call normpath to eliminate them.
-    prefix = os.path.normpath(sys.prefix)
-    if WINDOWS:
-        bin_py = os.path.join(prefix, "Scripts")
-        # buildout uses 'bin' on Windows too?
-        if not os.path.exists(bin_py):
-            bin_py = os.path.join(prefix, "bin")
-        return bin_py
-    # Forcing to use /usr/local/bin for standard macOS framework installs
-    # Also log to ~/Library/Logs/ for use with the Console.app log viewer
-    if sys.platform[:6] == "darwin" and prefix[:16] == "/System/Library/":
-        return "/usr/local/bin"
-    return os.path.join(prefix, "bin")
+# Basic strings
+if char == '"':
+    if src.startswith('"""', pos):
+        return parse_multiline_str(src, pos, literal=False)
+    return parse_one_line_basic_str(src, pos)
 
+# Literal strings
+if char == "'":
+    if src.startswith("'''", pos):
+        return parse_multiline_str(src, pos, literal=True)
+    return parse_literal_str(src, pos)
 
-def get_purelib() -> str:
-    return get_python_lib(plat_specific=False)
+# Booleans
+if char == "t":
+    if src.startswith("true", pos):
+        return pos + 4, True
+if char == "f":
+    if src.startswith("false", pos):
+        return pos + 5, False
 
+# Arrays
+if char == "[":
+    return parse_array(src, pos, parse_float)
 
-def get_platlib() -> str:
-    return get_python_lib(plat_specific=True)
+# Inline tables
+if char == "{":
+    return parse_inline_table(src, pos, parse_float)
+
+# Dates and times
+datetime_match = RE_DATETIME.match(src, pos)
+if datetime_match:
+    try:
+        datetime_obj = match_to_datetime(datetime_match)
+    except ValueError as e:
+        raise suffixed_err(src, pos, "Invalid date or datetime") from e
+    return datetime_match.end(), datetime_obj
+localtime_match = RE_LOCALTIME.match(src, pos)
+if localtime_match:
+    return localtime_match.end(), match_to_localtime(localtime_match)
+
+# Integers and "normal" floats.
+# The regex will greedily match any type starting with a decimal
+# char, so needs to be located after handling of dates and times.
+number_match = RE_NUMBER.match(src, pos)
+if number_match:
+    return number_match.end(), match_to_number(number_match, parse_float)
+
+# Special floats
+first_three = src[pos : pos + 3]
+if first_three in {"inf", "nan"}:
+    return pos + 3, parse_float(first_three)
+first_four = src[pos : pos + 4]
+if first_four in {"-inf", "+inf", "-nan", "+nan"}:
+    return pos + 4, parse_float(first_four)
+
+raise suffixed_err(src, pos, "Invalid value")
 
 

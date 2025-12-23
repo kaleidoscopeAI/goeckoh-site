@@ -1,8 +1,3 @@
-def add_rule(self, rule: Dict):
-    """Adds a rule to the rule engine."""
-    self.rules.append(rule)
+    def _update_features(self, new_instance: Dict, similarity: float):
 
-def apply(self, concept: Dict) -> List[Dict]:
-    """Applies rules to a concept and returns results."""
-    results = []
-    for
+

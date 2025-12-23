@@ -1,0 +1,8 @@
+"""Calculates the perimeter of a contour."""
+perimeter = 0
+for i in range(len(contour)):
+    p1 = np.array(contour[i])
+    p2 = np.array(contour[(i + 1) % len(contour)])  # Next point, with wrap-around
+    perimeter += np.linalg.norm(p1 - p2)
+return perimeter
+

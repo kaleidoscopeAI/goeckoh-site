@@ -1,17 +1,12 @@
-      2  import React, { useState, useCallback, Suspense, useEffect } from 'reac
-         t';
-      3 +import * as THREE from 'three';
-      4  import type { NodeTarget, ConversationContext, AGISystemState } from '.
-         /types';
-        ⋮
-    182            if (!text) return;
-    182 -          const newTargets = await enhancedService.processConversationR
-         esponse(text, false);
-    183 +          // Fast client-side mapping from words to 3D nodes for latenc
-         y-free visuals.
-    184 +          const newTargets = makeTargetsFromText(text);
-    185            setTargets(newTargets);
-    184 -          setContext(enhancedService.getCurrentContext());
-    186 +          setContext({ imagePrompt: text });
-    187          } catch (err) {
+  - Downloaded 10 WAV clips (digits 0–9, speaker “jackson”) from the public Free Spoken Digit Dataset into backend/data/free-
+    spoken-digit/.
+  - Included backend/data/free-spoken-digit/README.md with source and transcripts.
+
+  You can use these immediately to sanity-check ASR/TTS/mirror latency without a GPU or large downloads. For example:
+
+  # simple ASR sanity (using Sherpa if running)
+  curl -F "file=@backend/data/free-spoken-digit/3_jackson_0.wav" http://localhost:8080/process
+
+  If you want, I can wire a quick test script to batch-run these through /process or /mirror and report WER/latency.
+
 

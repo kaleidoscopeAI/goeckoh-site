@@ -1,0 +1,37 @@
+"kaleidoscope_ai/": {
+    "description": "Root directory of the project."
+},
+"kaleidoscope_ai/__init__.py": {
+  "status" : "implemented" ,
+    "description": "Makes the 'core' directory a Python package."
+},
+"kaleidoscope_ai/core/": {
+  "status": "implemented",
+     "description": "Subpackage for core logic"
+  ,
+  "submodules" : [
+       " __init__.py": { "status": "implemented","description" :  "makes directory a package."},
+     "base_node.py" :{ "status": "implemented","description" :  "defines the BaseNode class."},
+        "data_processing.py" : { "status":"implemented" ,"description":  "Contains DataWrapper and ProcessingUnit classes for handling different data types."} ,
+     "trait_system.py" :{ "status":"implemented","description":"Contains all attributes methods and management of Trait definitions"} ,
+          "knowledge_graph.py":{  "status" :"implemented", "description":"Implement the KnowledgeGraph class."},
+   "cognitive_engine.py" :{  "status": "implemented", "description": "Handles reasoning, decision, beliefs, strategy generation"
+
+ },
+  "memory.py" :{ "status":"implemented", "description": "Provides  dynamic resonant states for short and long term memory in an information system."},
+"network_manager.py" :{ "status":"omitted, integrated instead", "description": " Implements management of node behaviours across large complex networks as node interactions. The functionaility has been folded in  other areas ."}
+
+      , "dna/" : {  "status": "implemented","description": "folder for defining dynamic structure, traits and all inherited properties.",
+            "submodules":[
+              "__init__.py": { "status": "implemented","description" :  "makes directory a package."},
+               "structure.py" :{ "status": "implemented","description": "Defines core traits and other hereditary systems."},
+               ]}
+
+     ,   "evolution.py":{  "status":"omitted. functions and behaviour defined at Node level",  "description" :"  (placeholder in original documents)"}
+
+     ,    "metrics.py"  :{ "status":"implemented", "description":"Contains NodeMetrics to track node behavior."},
+  "learning.py" : { "status":"omitted . implemented through various component functions",  "description" :"  (placeholder for advance system evolution)"},
+     ]
+
+  }
+

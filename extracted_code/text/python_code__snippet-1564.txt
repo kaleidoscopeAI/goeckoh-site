@@ -1,0 +1,6 @@
+Option,
+"--proxy",
+dest="proxy",
+type="str",
+default="",
+help="Specify a proxy in the form scheme://[user:passwd@]proxy.server:port.",

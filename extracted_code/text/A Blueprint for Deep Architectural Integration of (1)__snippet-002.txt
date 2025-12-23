@@ -1,2 +1,0 @@
-cargo new cognitive_system
-cd cognitive_system

@@ -1,2 +1,3 @@
-+ const block = Object.values(blockSizes).reduce((a, b) => a + b, 0);
-+ const Ddim = m * block;
+const psiNorm = Math.sqrt(n.e.reduce((sum, v) => sum + v**2, 0));
+// Feedback to grads or tether
+this.alphaTether += 0.01 * psiNorm;

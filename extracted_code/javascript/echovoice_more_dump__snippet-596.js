@@ -1,2 +1,1 @@
-const e: Partial<EVector> = req.body.e || {};
-const sanitized: EVector = {} as any;
+const grad = ctx.createLinearGradient(0, 0, w, h);

@@ -1,0 +1,1 @@
+Explains Vertex AI Search Grounding in ADK, a feature enabling AI agents to

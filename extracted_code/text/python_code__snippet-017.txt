@@ -1,4 +1,2 @@
-    class ConnectionError(Exception):
-        pass
-
+# <REDACTED: potential secret detected>
 

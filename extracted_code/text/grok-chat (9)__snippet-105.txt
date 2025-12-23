@@ -1,0 +1,20 @@
+264              latencies = [float(t.get("latency_ms", 0.0)) for t in self.
+     _telemetry_hist]
+265 +            playback_lat = [float(t.get("playback_latency_ms", 0.0)) fo
+     r t in self._telemetry_hist]
+266              gcls = [float(t.get("gcl", 0.0)) for t in self._telemetry_h
+     ist]
+    ⋮
+271                  "latency_p95_ms": self._percentile(latencies, 95.0),
+272 +                "playback_latency_p95_ms": self._percentile(playback_la
+     t, 95.0),
+273                  "gcl_mean": float(sum(gcls) / len(gcls)) if gcls else 0
+     .0,
+    ⋮
+276                  "gate_blocks": int(self._gate_blocked),
+277 +                "latency_target_ms": float(self._latency_target_p95_ms)
+     ,
+278 +                "latency_target_ok": self._percentile(latencies, 95.0)
+     <= self._latency_target_p95_ms if latencies else False,
+279              }
+

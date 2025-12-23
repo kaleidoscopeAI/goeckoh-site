@@ -1,2 +1,1 @@
-# <REDACTED: potential secret detected>
-
+proposal compute (\Delta H) approximately using local neighbor list. Enqueue proposals with their (\Delta H).

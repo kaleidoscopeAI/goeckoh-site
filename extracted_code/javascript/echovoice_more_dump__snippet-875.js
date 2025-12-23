@@ -1,1 +1,1 @@
-const w = weights[n];
+For selection function Sel_i:

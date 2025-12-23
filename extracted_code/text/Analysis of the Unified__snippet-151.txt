@@ -1,0 +1,5 @@
+"dev": "vite",
+"build": "vite build && node scripts/bundle-ollama.js",
+"preview": "vite preview",
+"package": "npm run build && electron-builder",
+"test": "jest"

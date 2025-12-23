@@ -1,0 +1,5 @@
+"node_count": 8,
+"nodes": [{"pos": [np.random.rand() * 10] * 3, "state": np.random.rand()} for _ in range(8)],
+"llm_summary": "System initialized and awaiting input.",
+"emotional_valence": 0.0,
+"system_purity": 1.0, # Target purity value

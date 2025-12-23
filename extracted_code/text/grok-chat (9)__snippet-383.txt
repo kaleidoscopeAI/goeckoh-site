@@ -1,0 +1,4 @@
+python ../scripts/run_digit_asr.py --server http://127.0.0.1:8080 --limit 10
+python ../scripts/run_digit_batch.py --server http://127.0.0.1:8080 --limit 3
+python scripts/validate_mirror_metrics.py (set GOECKOH_MIRROR_METRICS_LOG if using /tmp)
+

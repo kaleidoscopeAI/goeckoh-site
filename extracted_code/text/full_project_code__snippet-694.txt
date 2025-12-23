@@ -1,0 +1,1 @@
+lambda s, l, t: t[0][1]

@@ -1,42 +1,37 @@
-class ThoughtEngines:
-    def __init__(self, n_nodes: int):
-        self.n = n_nodes
-        self.b = np.zeros(n_nodes)
-        self.h = np.zeros(n_nodes)
-        self.kappa = np.zeros(n_nodes)
-        self.mu = np.zeros(n_nodes)
-        # stateful noise seeds for reproducibility
-        self._rng = np.random.RandomState(42)
+class BehaviorMonitor:
+    """Tracks repeated corrections, perseveration, and high-energy speech."""
 
-    def step(self, relational: RelationalMatrix, inputs: np.ndarray, dt: float = 0.1):
-        n = self.n
-        if inputs is None:
-            inputs = np.zeros(n)
-        # coupling matrix from relational matrix (n x n)
-        R = relational.R
-        affin = np.real(R @ R.conj().T)
-        maxval = np.max(np.abs(affin)) if np.max(np.abs(affin)) > 0 else 1.0
-        W = affin / maxval
+    max_phrase_history: int = 5
+    anxious_threshold: int = 3
+    perseveration_threshold: int = 3
+    high_energy_rms: float = 0.08
 
-        # perspective
-        db = 0.12 * (inputs * np.tanh(inputs)) - 0.05 * self.b + 0.03 * (W @ self.b - np.sum(W, axis=1) * self.b)
-        self.b += db * dt
+    def __post_init__(self) -> None:
+        self._phrases: Deque[str] = deque(maxlen=self.max_phrase_history)
+        self._correction_streak = 0
+        self._last_event: str | None = None
 
-        # speculation with structured stochasticity
-        eps = self._rng.randn(n) * 0.02
-        dh = 0.10 * (inputs + eps) - 0.06 * self.h + 0.03 * (W @ self.h - np.sum(W, axis=1) * self.h)
-        self.h += dh * dt
+    def register(self, normalized_text: str, needs_correction: bool, rms: float) -> str | None:
+        event: str | None = None
 
-        # kaleidoscope
-        dk = 0.08 * (self.b + 0.5 * self.h) - 0.04 * self.kappa + 0.02 * (W @ self.kappa - np.sum(W, axis=1) * self.kappa)
-        self.kappa += dk * dt
+        if needs_correction:
+            self._correction_streak += 1
+        else:
+            if self._correction_streak >= self.anxious_threshold:
+                event = "encouragement"
+            self._correction_streak = 0
 
-        # mirror
-        mismatch = np.abs(self.b - np.mean(self.b))
-        dmu = -0.07 * mismatch + 0.05 * np.std(self.h) + 0.03 * (W @ self.mu - np.sum(W, axis=1) * self.mu)
-        self.mu += dmu * dt
+        self._phrases.append(normalized_text)
 
-        # clip numeric stability
-        for arr in (self.b, self.h, self.kappa, self.mu):
-            np.clip(arr, -12.0, 12.0, out=arr)
+        if self._correction_streak >= self.anxious_threshold:
+            event = "anxious"
+        elif normalized_text and list(self._phrases).count(normalized_text) >= self.perseveration_threshold:
+            event = event or "perseveration"
+        elif rms >= self.high_energy_rms:
+            event = event or "high_energy"
 
+        if event == self._last_event and event not in {"perseveration", "encouragement"}:
+            return None
+        if event:
+            self._last_event = event
+        return event

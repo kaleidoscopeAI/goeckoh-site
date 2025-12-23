@@ -1,0 +1,2 @@
+              if (lastEnergy < 0.01) {
+                  if (silenceStart == 0L) silenceStart =

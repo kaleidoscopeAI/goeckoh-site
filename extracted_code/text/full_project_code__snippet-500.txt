@@ -1,0 +1,4 @@
+"""Escape &, <, > as well as single and double quotes for HTML."""
+return text.translate(table)
+
+

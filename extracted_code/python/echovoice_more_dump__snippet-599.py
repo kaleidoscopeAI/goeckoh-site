@@ -1,1 +1,2 @@
-Ei (t) = emotional influence from emotional vector Ei (t)
+class GeneticCode:
+def __init__(self):

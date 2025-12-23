@@ -1,1 +1,1 @@
-const wmDecayMod = clamp( sigmoid(projectVec(s, DEFAULT_P.memory_write) ) , 0, 1);
+for (let i = 0; i < s.length; i++) {

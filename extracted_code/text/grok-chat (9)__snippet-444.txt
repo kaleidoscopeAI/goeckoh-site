@@ -1,0 +1,2 @@
+      tool_context.state["files"] = all_files
+      logger.debug("Files\n:" + "\n".join([str(file) for file in

@@ -1,1 +1,1 @@
-1. WorkManager sync: SyncWorker.kt registered and scheduled from MainActivity.
+Then call from Kotlin before applying any DeviceHAL changes.

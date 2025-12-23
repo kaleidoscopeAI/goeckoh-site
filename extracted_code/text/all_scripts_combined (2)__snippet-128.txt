@@ -1,0 +1,12 @@
+print("Current Voice Profile Facets:")
+total = 0
+for style in ("neutral", "calm", "excited"):
+    samples = loop.voice_profile.samples.get(style, [])
+    print(f"- {style}: {len(samples)} sample(s)")
+    for sample in samples:
+        print(f"    • {sample.path.name} (score={sample.quality_score:.2f})")
+    total += len(samples)
+if total == 0:
+    print("  No facets recorded yet.")
+
+

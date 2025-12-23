@@ -1,0 +1,2 @@
+*   [ ] Implement explicit "Voice Congruence Metrics" tracking (cosine similarity drift for PPP blend) to trigger AIM updates.
+*   [ ] Implement full Hamiltonian (H) modeling for the Crystalline Heart lattice tension and energy balancing.

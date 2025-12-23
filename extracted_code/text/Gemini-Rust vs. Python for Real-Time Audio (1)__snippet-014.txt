@@ -1,0 +1,3 @@
+is_running: bool,
+// Placeholder: This will eventually hold your ODE Solver
+// lattice: CrystallineLattice, 

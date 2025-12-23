@@ -1,0 +1,9 @@
+  * Imports.
+  * Config Classes (`AudioSettings`, etc).
+  * `AudioIO` class.
+  * `VoiceCrystal` & `Prosody` classes (The advanced voice engine).
+  * `CrystallineHeart` class (The emotion engine).
+  * `AbaEngine` class (The behavior engine).
+  * `OrganicSubconscious` class (The background growth engine).
+  * `EchoSystem` class (The main loop weaving them all together).
+  * `main()` execution block.

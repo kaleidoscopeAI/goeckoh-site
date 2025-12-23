@@ -1,0 +1,6 @@
+Search requirements*.txt in .
+Search vosk in requirements.txt
+Search soundfile in requirements.txt
+Search Flask in requirements.txt
+Read requirements.txt
+

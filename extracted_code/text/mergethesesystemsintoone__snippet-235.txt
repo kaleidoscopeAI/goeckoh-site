@@ -1,1 +1,3 @@
-class KnowledgeDNA {
+name: str
+value: float = 0.5
+

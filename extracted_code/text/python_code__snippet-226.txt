@@ -1,3 +1,10 @@
-        "--implementation, --platform, and --python-version when using this "
-        "option."
-    ),
+x = str(x)
+y = str(y)
+if x == y:
+    return True
+if not x.startswith(y):
+    return False
+n = len(y)
+return x[n] == '.'
+
+

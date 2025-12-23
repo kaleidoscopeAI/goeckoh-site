@@ -1,0 +1,4 @@
+uncertainty: f32,
+curiosity_tension: f32,
+routing_weights: HashMap<(usize, usize), f32>,
+learning_rate: f32,

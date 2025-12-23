@@ -1,2 +1,4 @@
-The output from your `organic_ai_demo
+  - A central hub aggregates data from all nodes, acting as a meta-node for higher-level reasoning.
+
+
 

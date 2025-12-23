@@ -1,0 +1,5 @@
+      logger.debug("Exiting discover_files.")
+      return {"status": "success", "files": all_files}
+  except Exception as e:
+      logger.error("Error in discover_files: %s", e)
+      return {"status": "failure", "files": []}

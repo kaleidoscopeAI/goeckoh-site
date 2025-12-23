@@ -1,1 +1,1 @@
-projection from species → construct modulators (self-image, reflection, memory, identity, reason, drive/motive/purpose, trust),
+Long-term memory influence: Gradients emerge from reflection logs, linking past outcomes to future behavior.

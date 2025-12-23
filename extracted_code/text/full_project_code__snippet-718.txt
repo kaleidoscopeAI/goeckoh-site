@@ -1,0 +1,96 @@
+"""
+A set of Unicode characters, for language-specific strings for
+``alphas``, ``nums``, ``alphanums``, and ``printables``.
+A unicode_set is defined by a list of ranges in the Unicode character
+set, in a class attribute ``_ranges``. Ranges can be specified using
+2-tuples or a 1-tuple, such as::
+
+    _ranges = [
+        (0x0020, 0x007e),
+        (0x00a0, 0x00ff),
+        (0x0100,),
+        ]
+
+Ranges are left- and right-inclusive. A 1-tuple of (x,) is treated as (x, x).
+
+A unicode set can also be defined using multiple inheritance of other unicode sets::
+
+    class CJK(Chinese, Japanese, Korean):
+        pass
+"""
+
+_ranges: UnicodeRangeList = []
+
+@_lazyclassproperty
+def _chars_for_ranges(cls):
+    ret = []
+    for cc in cls.__mro__:
+        if cc is unicode_set:
+            break
+        for rr in getattr(cc, "_ranges", ()):
+            ret.extend(range(rr[0], rr[-1] + 1))
+    return [chr(c) for c in sorted(set(ret))]
+
+@_lazyclassproperty
+def printables(cls):
+    """all non-whitespace characters in this range"""
+    return "".join(filterfalse(str.isspace, cls._chars_for_ranges))
+
+@_lazyclassproperty
+def alphas(cls):
+    """all alphabetic characters in this range"""
+    return "".join(filter(str.isalpha, cls._chars_for_ranges))
+
+@_lazyclassproperty
+def nums(cls):
+    """all numeric digit characters in this range"""
+    return "".join(filter(str.isdigit, cls._chars_for_ranges))
+
+@_lazyclassproperty
+def alphanums(cls):
+    """all alphanumeric characters in this range"""
+    return cls.alphas + cls.nums
+
+@_lazyclassproperty
+def identchars(cls):
+    """all characters in this range that are valid identifier characters, plus underscore '_'"""
+    return "".join(
+        sorted(
+            set(
+                "".join(filter(str.isidentifier, cls._chars_for_ranges))
+                + "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzªµº"
+                + "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ"
+                + "_"
+            )
+        )
+    )
+
+@_lazyclassproperty
+def identbodychars(cls):
+    """
+    all characters in this range that are valid identifier body characters,
+    plus the digits 0-9, and · (Unicode MIDDLE DOT)
+    """
+    return "".join(
+        sorted(
+            set(
+                cls.identchars
+                + "0123456789·"
+                + "".join(
+                    [c for c in cls._chars_for_ranges if ("_" + c).isidentifier()]
+                )
+            )
+        )
+    )
+
+@_lazyclassproperty
+def identifier(cls):
+    """
+    a pyparsing Word expression for an identifier using this range's definitions for
+    identchars and identbodychars
+    """
+    from pip._vendor.pyparsing import Word
+
+    return Word(cls.identchars, cls.identbodychars)
+
+

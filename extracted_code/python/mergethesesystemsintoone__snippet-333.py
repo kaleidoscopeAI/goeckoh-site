@@ -1,4 +1,3 @@
-class RealTimeDataFetcher:
+    def _adjust_properties(self, similarity: float):
 
-def fetch(self, symbol="AAPL"):
-   return  []
+

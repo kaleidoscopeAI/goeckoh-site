@@ -1,1 +1,1 @@
-const identityInfluence = sigmoid(projectVec(s, DEFAULT_P.identity));
+export function applyMetaSuccess(node: NodeState, improvementScalar: number) {

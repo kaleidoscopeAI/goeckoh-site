@@ -1,10 +1,7 @@
-from __future__ import annotations
+class _retry_never(retry_base):
+    """Retry strategy that never rejects any result."""
 
-import os
-import sys
-from typing import TYPE_CHECKING
+    def __call__(self, retry_state: "RetryCallState") -> bool:
+        return False
 
-from .api import PlatformDirsABC
-from .version import __version__
-from .version import __version_tuple__ as __version_info__
 

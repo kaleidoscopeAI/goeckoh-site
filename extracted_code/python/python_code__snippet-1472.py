@@ -1,15 +1,17 @@
-import logging
-import os
-import shutil
-from optparse import Values
-from typing import List
+# Python < 3.8
+class cached_property:  # type: ignore
+    """A version of @property which caches the value.  On access, it calls the
+    underlying function and sets the value in `__dict__` so future accesses
+    will not re-call the property.
+    """
 
-from pip._internal.cache import WheelCache
-from pip._internal.cli import cmdoptions
-from pip._internal.cli.req_command import RequirementCommand, with_cleanup
-from pip._internal.cli.status_codes import SUCCESS
-from pip._internal.exceptions import CommandError
-from pip._internal.operations.build.build_tracker import get_build_tracker
-from pip._internal.req.req_install import (
-    InstallRequirement,
-    check_legacy_setup_py_options,
+    def __init__(self, f: Callable[[Any], Any]) -> None:
+        self._fname = f.__name__
+        self._f = f
+
+    def __get__(self, obj: Any, owner: Type[Any]) -> Any:
+        assert obj is not None, f"call {self._fname} on an instance"
+        ret = obj.__dict__[self._fname] = self._f(obj)
+        return ret
+
+

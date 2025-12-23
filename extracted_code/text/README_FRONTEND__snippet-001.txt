@@ -1,0 +1,4 @@
+<>
+  <EnhancedThreeCanvas {...props} />
+  <EnhancedUIOverlay {...props} />
+</>

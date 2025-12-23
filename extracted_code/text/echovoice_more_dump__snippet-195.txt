@@ -1,1 +1,1 @@
-⚠️ Flask + asyncio might conflict; using ThreadPoolExecutor for async calls in routes could solve this.
+- Local embedding using TF-IDF + PCA (no external model calls)

@@ -1,0 +1,11 @@
+"""Structured representation of one speech attempt."""
+
+timestamp: Timestamp
+phrase_text: str
+raw_text: str
+corrected_text: str
+needs_correction: bool
+audio_file: Path
+similarity: float = 0.0
+
+

@@ -1,4 +1,1 @@
-This selection method replaces guesswork with a physics-based, probabilistic decision process derived from the foundational principles of RQM, ensuring internal consistency and reliable predictive behavior for the final HID actuation.   
-
-
-
+# Unified from all documents: Core conductor, memory, annealing, governance, HID, emotional fluidity,

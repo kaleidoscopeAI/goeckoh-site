@@ -1,0 +1,9 @@
+"""
+This enum represents the different states a universal detector can be in.
+"""
+
+PURE_ASCII = 0
+ESC_ASCII = 1
+HIGH_BYTE = 2
+
+

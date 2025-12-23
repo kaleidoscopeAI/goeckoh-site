@@ -1,7 +1,338 @@
-from __future__ import annotations
+                  Automatically refreshes from the latest logged attempt.
+                </p>
+              </div>
+              <span id="live-status-pill"
+                    class="inline-flex items-center gap-1 rounded-full border border-sky-500/40 bg-sky-500/10 px-3 py-1 text-[11px] font-medium text-sky-100">
+                <span class="h-1.5 w-1.5 rounded-full bg-sky-400 animate-ping"></span>
+                <span>Waiting for first attempt…</span>
+              </span>
+            </div>
+            <div class="grid gap-4 px-4 py-4 sm:grid-cols-3">
+              <div class="space-y-1 sm:col-span-1">
+                <p class="text-[11px] uppercase tracking-[0.2em] text-slate-400">Target phrase</p>
+                <p id="live-phrase" class="text-sm font-medium text-slate-50 truncate">—</p>
+                <p class="text-[11px] text-slate-400 mt-1">Pulled from latest row in metrics log.</p>
+              </div>
+              <div class="space-y-1 sm:col-span-1">
+                <p class="text-[11px] uppercase tracking-[0.2em] text-slate-400">Heard</p>
+                <p id="live-raw" class="text-sm font-mono text-slate-100 break-words">—</p>
+              </div>
+              <div class="space-y-1 sm:col-span-1">
+                <p class="text-[11px] uppercase tracking-[0.2em] text-slate-400">Spoken back</p>
+                <p id="live-corrected" class="text-sm font-mono text-emerald-100 break-words">—</p>
+              </div>
+            </div>
+          </div>
 
-from collections import deque
-from dataclasses import dataclass
-from typing import Deque
+          <!-- Charts card -->
+          <div class="rounded-2xl border border-slate-800/80 bg-slate-900/70 shadow-xl shadow-indigo-900/40 backdrop-blur">
+            <div class="px-4 py-3 border-b border-slate-800/80 flex items-center justify-between">
+              <div>
+                <h2 class="text-sm font-semibold tracking-wide text-slate-100">Correction patterns</h2>
+                <p class="text-xs text-slate-400 mt-1">
+                  How often each phrase needs support, and how correction rate is changing over time.
+                </p>
+              </div>
+            </div>
+            <div class="px-4 pt-4 pb-5 space-y-6">
+              <div class="space-y-2">
+                <div class="flex items-center justify-between text-[11px] text-slate-400">
+                  <span>Correction rate by phrase</span>
+                  <span>Higher bars = phrase is harder right now</span>
+                </div>
+                <canvas id="phraseChart" class="w-full h-48"></canvas>
+              </div>
+              <div class="space-y-2 border-t border-slate-800/80 pt-4">
+                <div class="flex items-center justify-between text-[11px] text-slate-400">
+                  <span>Daily correction rate</span>
+                  <span>Are sessions trending smoother over time?</span>
+                </div>
+                <canvas id="timelineChart" class="w-full h-40"></canvas>
+              </div>
+            </div>
+          </div>
 
+          <!-- Phrase table -->
+          <div class="rounded-2xl border border-slate-800/80 bg-slate-950/80 shadow-lg shadow-slate-900/40 backdrop-blur">
+            <div class="px-4 py-3 border-b border-slate-800/80 flex items-center justify-between">
+              <div>
+                <h2 class="text-sm font-semibold tracking-wide text-slate-100">Phrase difficulty map</h2>
+                <p class="text-xs text-slate-400 mt-1">
+                  Each phrase the child has practiced, sorted by how often it needed correction.
+                </p>
+              </div>
+              <div class="relative">
+                <input
+                  id="phrase-filter"
+                  type="search"
+                  placeholder="Filter phrases…"
+                  class="w-40 rounded-lg border border-slate-700 bg-slate-900/80 px-3 py-1.5 text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500/60 focus:border-sky-400/80"
+                />
+              </div>
+            </div>
+            <div class="overflow-x-auto max-h-80">
+              <table class="min-w-full text-xs text-left text-slate-200">
+                <thead class="sticky top-0 bg-slate-950/95 backdrop-blur border-b border-slate-800/80">
+                  <tr>
+                    <th class="px-3 py-2 font-medium text-slate-400">Phrase</th>
+                    <th class="px-3 py-2 font-medium text-slate-400 text-right">Attempts</th>
+                    <th class="px-3 py-2 font-medium text-slate-400 text-right">Corrections</th>
+                    <th class="px-3 py-2 font-medium text-slate-400 text-right">Correction rate</th>
+                  </tr>
+                </thead>
+                <tbody id="phrase-table-body">
+                  {% for row in phrases %}
+                  <tr class="border-b border-slate-800/60 hover:bg-slate-900/80 transition-colors phrase-row">
+                    <td class="px-3 py-2 max-w-xs truncate" data-phrase="{{ row.phrase }}">{{ row.phrase }}</td>
+                    <td class="px-3 py-2 text-right tabular-nums">{{ row.attempts }}</td>
+                    <td class="px-3 py-2 text-right tabular-nums">{{ row.corrections }}</td>
+                    <td class="px-3 py-2 text-right tabular-nums">
+                      {{ '%.0f%%'|format(row.rate * 100) }}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                  {% if not phrases %}
+                  <tr>
+                    <td colspan="4" class="px-3 py-4 text-center text-slate-500 text-xs">
+                      No sessions logged yet. Once you start practicing phrases, this table will light up.
+                    </td>
+                  </tr>
+                  {% endif %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
 
+        <!-- Right column: strategies + guidance -->
+        <section class="space-y-6">
+          <!-- Strategy library -->
+          <div class="rounded-2xl border border-slate-800/80 bg-slate-950/80 shadow-xl shadow-emerald-900/40 backdrop-blur">
+            <div class="px-4 py-3 border-b border-slate-800/80 flex items-center justify-between">
+              <div>
+                <h2 class="text-sm font-semibold tracking-wide text-slate-100">Calming strategy library</h2>
+                <p class="text-xs text-slate-400 mt-1">
+                  Evidence-based ideas surfaced from in-the-moment cues — a quick reference for caregivers.
+                </p>
+              </div>
+            </div>
+            <div class="px-4 pt-3 pb-4 space-y-3 max-h-[18rem] overflow-y-auto">
+              {% for strat in strategies %}
+              <article class="rounded-xl border border-emerald-500/40 bg-emerald-500/5 px-3 py-2">
+                <p class="text-[11px] uppercase tracking-[0.2em] text-emerald-300/90 mb-1">{{ strat.category }}</p>
+                <h3 class="text-xs font-semibold text-emerald-50">{{ strat.title }}</h3>
+                <p class="mt-1 text-[11px] leading-relaxed text-emerald-100/90">{{ strat.description }}</p>
+              </article>
+              {% endfor %}
+              {% if not strategies %}
+              <p class="text-xs text-slate-500">No strategies loaded.</p>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Guidance event timeline -->
+          <div class="rounded-2xl border border-slate-800/80 bg-slate-950/80 shadow-xl shadow-fuchsia-900/40 backdrop-blur">
+            <div class="px-4 py-3 border-b border-slate-800/80 flex items-center justify-between">
+              <div>
+                <h2 class="text-sm font-semibold tracking-wide text-slate-100">Guidance timeline</h2>
+                <p class="text-xs text-slate-400 mt-1">
+                  When the companion stepped in — and what it said — to help regulate energy or anxiety.
+                </p>
+              </div>
+            </div>
+            <div class="px-4 pt-3 pb-4 max-h-72 overflow-y-auto">
+              <ol class="space-y-3">
+                {% for event in guidance_events %}
+                <li class="relative pl-3">
+                  <span class="absolute left-0 top-2 h-1.5 w-1.5 rounded-full bg-fuchsia-400"></span>
+                  <div class="text-[11px] text-slate-400">
+                    <span class="font-medium text-fuchsia-100">{{ event["event"]|replace("_", " ") }}</span>
+                    <span class="mx-1 text-slate-600">•</span>
+                    <span>{{ event["timestamp_iso"][:19].replace("T", " ") if event["timestamp_iso"] else "" }}</span>
+                  </div>
+                  <div class="text-xs font-semibold text-slate-100 mt-0.5">
+                    {{ event["title"] }}
+                  </div>
+                  <p class="mt-0.5 text-[11px] leading-relaxed text-slate-300">
+                    {{ event["message"] }}
+                  </p>
+                </li>
+                {% endfor %}
+                {% if not guidance_events %}
+                <li class="text-xs text-slate-500">
+                  No guidance events logged yet. When the system detects anxiety, perseveration, or high energy,
+                  those calming prompts will appear here.
+                </li>
+                {% endif %}
+              </ol>
+            </div>
+          </div>
+
+          <!-- Data export hint -->
+          <div class="rounded-2xl border border-slate-800/80 bg-slate-900/80 shadow-lg shadow-slate-900/40 px-4 py-3 text-[11px] text-slate-300 space-y-1.5">
+            <div class="font-semibold text-slate-100 flex items-center gap-2">
+              <span class="inline-flex h-5 w-5 items-center justify-center rounded-full border border-slate-700 bg-slate-800 text-[10px]">ⓘ</span>
+              Therapist / research view
+            </div>
+            <p>
+              All metrics and guidance events are mirrored as CSV files on disk
+              (<code class="text-[10px] text-sky-300">metrics.csv</code> and
+              <code class="text-[10px] text-sky-300">guidance.csv</code>),
+              ready for import into spreadsheets or analysis tools.
+            </p>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const phraseLabels = {{ phrase_labels | tojson }};
+        const phraseRates = {{ phrase_rates | tojson }};
+        const timelineLabels = {{ timeline_labels | tojson }};
+        const timelineRates = {{ timeline_rates | tojson }};
+
+        const phraseCtx = document.getElementById("phraseChart");
+        if (phraseCtx && phraseLabels.length) {
+          new Chart(phraseCtx, {
+            type: "bar",
+            data: {
+              labels: phraseLabels,
+              datasets: [{
+                label: "Correction rate (%)",
+                data: phraseRates,
+                borderWidth: 1
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  labels: {
+                    font: { size: 10 }
+                  }
+                }
+              },
+              scales: {
+                x: {
+                  ticks: {
+                    maxRotation: 45,
+                    minRotation: 0,
+                    autoSkip: true,
+                    font: { size: 9 }
+                  },
+                  grid: { display: false }
+                },
+                y: {
+                  min: 0,
+                  max: 100,
+                  ticks: {
+                    stepSize: 20,
+                    font: { size: 9 },
+                    callback: (value) => value + "%"
+                  },
+                  grid: {
+                    borderDash: [4, 4]
+                  }
+                }
+              }
+            }
+          });
+        }
+
+        const timelineCtx = document.getElementById("timelineChart");
+        if (timelineCtx && timelineLabels.length) {
+          new Chart(timelineCtx, {
+            type: "line",
+            data: {
+              labels: timelineLabels,
+              datasets: [{
+                label: "Daily correction rate (%)",
+                data: timelineRates,
+                tension: 0.35,
+                pointRadius: 2.5,
+                borderWidth: 2
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  labels: { font: { size: 10 } }
+                }
+              },
+              scales: {
+                x: {
+                  ticks: { font: { size: 9 } },
+                  grid: { display: false }
+                },
+                y: {
+                  min: 0,
+                  max: 100,
+                  ticks: {
+                    stepSize: 20,
+                    font: { size: 9 },
+                    callback: (value) => value + "%"
+                  },
+                  grid: { borderDash: [4, 4] }
+                }
+              }
+            }
+          });
+        }
+
+        // Phrase filter
+        const filterInput = document.getElementById("phrase-filter");
+        if (filterInput) {
+          filterInput.addEventListener("input", (e) => {
+            const q = e.target.value.toLowerCase();
+            document.querySelectorAll(".phrase-row").forEach((row) => {
+              const cell = row.querySelector("[data-phrase]");
+              const text = (cell?.dataset.phrase || "").toLowerCase();
+              row.style.display = text.includes(q) ? "" : "none";
+            });
+          });
+        }
+
+        // Live session updater: poll metrics API for most recent row
+        async function refreshLive() {
+          try {
+            const res = await fetch("/api/metrics");
+            if (!res.ok) return;
+            const data = await res.json();
+            if (!Array.isArray(data) || data.length === 0) return;
+
+            const last = data[data.length - 1];
+            const phrase = last.phrase_text || last.phrase_id || "—";
+            const raw = last.raw_text || "—";
+            const corrected = last.corrected_text || "—";
+
+            const needsCorrection =
+              last.needs_correction === "1" ||
+              last.needs_correction === 1 ||
+              last.needs_correction === true;
+
+            const phraseEl = document.getElementById("live-phrase");
+            const rawEl = document.getElementById("live-raw");
+            const correctedEl = document.getElementById("live-corrected");
+            const pill = document.getElementById("live-status-pill");
+
+            if (phraseEl) phraseEl.textContent = phrase;
+            if (rawEl) rawEl.textContent = raw;
+            if (correctedEl) correctedEl.textContent = corrected;
+            if (pill) {
+              pill.querySelector("span:nth-child(2)").textContent =
+                needsCorrection ? "Correction suggested" : "Sounded great";
+            }
+          } catch (err) {
+            // fail silently in UI
+          }
+        }
+
+        refreshLive();
+        setInterval(refreshLive, 5000);
+      });
+    </script>
+  </body>

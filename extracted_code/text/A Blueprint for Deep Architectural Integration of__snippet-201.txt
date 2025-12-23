@@ -1,0 +1,2 @@
+- **Depolarizing channel, stabilizers:** Standard operations as in surface code QEC.
+

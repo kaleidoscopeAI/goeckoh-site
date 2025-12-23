@@ -1,0 +1,7 @@
+<!DOCTYPE\s+(
+ [a-zA-Z_][a-zA-Z0-9]*
+ (?: \s+      # optional in HTML5
+ [a-zA-Z_][a-zA-Z0-9]*\s+
+ "[^"]*")?
+ )
+ [^>]*>

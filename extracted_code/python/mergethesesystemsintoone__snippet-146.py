@@ -1,29 +1,13 @@
-class GNNOracle(torch.nn.Module):
-    def __init__(self, input_dim: int) -> None:
-        super().__init__()
-        self.net = torch.nn.Sequential(
-            torch.nn.Linear(input_dim, 128),
-            torch.nn.ReLU(),
-            torch.nn.Linear(128, 128),
-            torch.nn.ReLU(),
-            torch.nn.Linear(128, 1),
-            torch.nn.Tanh(),
-        )
+def process(self, data_wrapper: DataWrapper) -> np.ndarray:
+  """Processes text data using TF-IDF vectorization."""
+  text = data_wrapper.get_data()
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return self.net(x)
+  # Fit and transform the text data using the vectorizer
+  tfidf_matrix = self.vectorizer.fit_transform([text])
 
-class RLPolicy(torch.nn.Module):
-    def __init__(self, input_dim: int, n_actions: int) -> None:
-        super().__init__()
-        self.net = torch.nn.Sequential(
-            torch.nn.Linear(input_dim, 128),
-            torch.nn.ReLU(),
-            torch.nn.Linear(128, 128),
-            torch.nn.ReLU(),
-            torch.nn.Linear(128, n_actions),
-        )
+  # Convert to a dense array
+  return tfidf_matrix.toarray()
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return torch.nn.functional.softmax(self.net(x), dim=-1)
-
+def update_vectorizer(self, new_texts: List[str]):
+  """Updates the TF-IDF vectorizer with new text data."""
+  self.vectorizer.fit(new_texts)

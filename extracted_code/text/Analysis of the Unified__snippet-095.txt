@@ -1,0 +1,6 @@
+R = (np.random.randn(3,3)+1j*np.random.randn(3,3))
+core = RelationalCore(R)
+H = None
+Ls = build_jump_ops_from_stress(core, max_ops=3)
+newcore = core.lindblad_step_joint(H, Ls, dt=1e-3)
+assert newcore.R.shape == core.R.shape

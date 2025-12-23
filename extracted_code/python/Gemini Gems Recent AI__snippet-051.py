@@ -1,2 +1,2 @@
-def quantum_state_evolution(self):
+from sklearn.preprocessing import MinMaxScaler
 

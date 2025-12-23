@@ -1,0 +1,12 @@
+"Monkey-patch urllib3 with PyOpenSSL-backed SSL-support."
+
+_validate_dependencies_met()
+
+util.SSLContext = PyOpenSSLContext
+util.ssl_.SSLContext = PyOpenSSLContext
+util.HAS_SNI = HAS_SNI
+util.ssl_.HAS_SNI = HAS_SNI
+util.IS_PYOPENSSL = True
+util.ssl_.IS_PYOPENSSL = True
+
+

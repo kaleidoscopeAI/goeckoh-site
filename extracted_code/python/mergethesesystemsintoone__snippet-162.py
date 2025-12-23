@@ -1,1 +1,2 @@
-import subprocess
+class ValueSystem:
+def init(self):

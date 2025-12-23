@@ -1,1 +1,2 @@
-class TraitCategory(Enum):
+To tie these components together effectively, here’s a conceptual flow using AdvancedOrchestrator as the hub:
+

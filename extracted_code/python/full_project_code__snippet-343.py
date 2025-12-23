@@ -1,2 +1,1 @@
-# Sampling from about 20M text materials include literature and computer technology
-
+# Hebrew. Disjointed from the model probers, the results of the HebrewProber

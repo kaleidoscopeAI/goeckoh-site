@@ -1,1 +1,8 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+Chemical,
+Molecular,
+Biological,
+SocialNetwork,
+KnowledgeGraph,
+ImageGraph,
+TextGraph,
+Unknown,

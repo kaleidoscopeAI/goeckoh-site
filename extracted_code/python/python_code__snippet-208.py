@@ -1,3 +1,4 @@
-import sys
-from pip._vendor.pygments.cmdline import main
+    def dict_iteritems(d):
+        return d.items()
+
 

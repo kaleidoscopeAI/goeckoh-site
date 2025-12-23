@@ -1,0 +1,3 @@
+* **Prioritized Frontier:** Manages a queue of URLs. Priority is based on source credibility, semantic relevance to the query, and link freshness.
+* **Politeness:** Strict adherence to `robots.txt`, configurable delays between requests to a single domain.
+* **Focused Crawling:** Employs a classifier to stay on-topic, avoiding drift into irrelevant content.

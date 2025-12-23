@@ -1,0 +1,6 @@
+  final_response_content = "Final response not yet received."
+
+  async for event in events:
+      if function_calls := event.get_function_calls():
+          tool_name = function_calls[0].name
+          console.print(f"\n[blue][bold italic]Using tool {tool_name}...[/

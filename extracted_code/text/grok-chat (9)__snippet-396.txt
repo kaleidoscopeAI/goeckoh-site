@@ -1,0 +1,2 @@
+GOECKOH_ASR_BACKEND=sherpa (digits grammar optional via GOECKOH_ASR_GRAMMAR). ASR now 8/10 on FSD with p95 ≈456 ms (first-
+call warmup), median ≈17 ms.

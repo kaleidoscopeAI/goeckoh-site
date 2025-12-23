@@ -1,0 +1,2 @@
+doc: Simple heuristics that monitor behavior cues to trigger guidance.
+classes: BehaviorMonitor

@@ -1,0 +1,3 @@
+TORCH_AVAILABLE = False
+print(f"⚠️  Torch unavailable ({exc}); running without torch/torchaudio")
+

@@ -1,6 +1,4 @@
-    961 +    def list_routes(self):
-    962 +        routes = sorted([r.rule for r in self.app.url_map.iter_rules()])
-    963 +        return jsonify({"routes": routes})
-    964 +
-    965      # ---------------- ASR single-shot endpoint -----------------
+• I discovered that although _to_jsonable handles complex types, the serialization error likely arises from nested complex
+  numbers not fully converted before Flask's jsonify runs. I'll review the _to_jsonable implementation in detail to confirm and
+  identify gaps causing this failure.
 

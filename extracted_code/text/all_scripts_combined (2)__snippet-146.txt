@@ -1,0 +1,10 @@
+if isinstance(val, bool):
+    return val
+if isinstance(val, (int, float)):
+    return bool(val)
+if isinstance(val, str):
+    lowered = val.strip().lower()
+    return lowered in {"1", "true", "yes", "y"}
+return False
+
+

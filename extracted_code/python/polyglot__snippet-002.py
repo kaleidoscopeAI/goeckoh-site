@@ -1,1 +1,4 @@
-ok i need you to reflect on the system we agreed apon . we have ventured from it .. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 99
+})();import java.sql.*;
+import java.util.*;
+class AGIMathematics {
+public double entropy(List<Double> data) {

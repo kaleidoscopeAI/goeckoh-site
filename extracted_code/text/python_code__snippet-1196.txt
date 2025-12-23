@@ -1,0 +1,1 @@
+"BuildSystemDetails", ["requires", "backend", "check", "backend_path"]

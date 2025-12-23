@@ -1,0 +1,1 @@
+functions: _start_speech_loop, create_backend_app, sync_settings_from_store, main

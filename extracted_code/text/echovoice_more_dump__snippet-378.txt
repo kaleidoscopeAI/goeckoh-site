@@ -1,1 +1,117 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+/// Run the main classification experiment
+Run {
+    /// Path to dataset file (any format, will be transformed if not MUTAG parquet)
+    #[arg(long, default_value = "mutag_train.parquet")]
+    dataset: String,
+
+    /// Dataset download URL (if parquet)
+    #[arg(long, default_value = "https://huggingface.co/datasets/graphs-datasets/MUTAG/resolve/main/train.parquet")]
+    url: String,
+
+    /// Test ratio for holdout validation
+    #[arg(long, default_value_t = 0.1)]
+    test_ratio: f64,
+
+    /// Number of folds for k-fold CV (0 disables)
+    #[arg(long, default_value_t = 0)]
+    k_folds: usize,
+
+    /// RNG seed for reproducibility
+    #[arg(long)]
+    seed: Option<u64>,
+
+    /// Export results to JSON
+    #[arg(long)]
+    output: Option<String>,
+
+    /// Enable multi-objective optimization
+    #[arg(long, action = ArgAction::SetTrue)]
+    multi_objective: bool,
+
+    /// Enable adaptive cooling
+    #[arg(long, action = ArgAction::SetTrue)]
+    adaptive_cooling: bool,
+
+    /// Enable chemical validation
+    #[arg(long, action = ArgAction::SetTrue)]
+    chemical_validation: bool,
+
+    /// Evolution generations for embedding optimization
+    #[arg(long, default_value_t = 50)]
+    evolution_generations: usize,
+
+    /// Population size for evolutionary algorithm
+    #[arg(long, default_value_t = 20)]
+    population_size: usize,
+},
+
+/// Optimize embedding parameters using evolutionary algorithm
+Evolve {
+    /// Path to dataset file
+    #[arg(long, default_value = "mutag_train.parquet")]
+    dataset: String,
+
+    /// Number of generations
+    #[arg(long, default_value_t = 100)]
+    generations: usize,
+
+    /// Population size
+    #[arg(long, default_value_t = 50)]
+    population_size: usize,
+
+    /// Export best embedding to file
+    #[arg(long)]
+    output: Option<String>,
+
+    /// RNG seed
+    #[arg(long)]
+    seed: Option<u64>,
+},
+
+/// Validate chemical constraints in embeddings
+Validate {
+    /// Path to dataset file
+    #[arg(long, default_value = "mutag_train.parquet")]
+    dataset: String,
+
+    /// Number of samples to validate
+    #[arg(long, default_value_t = 100)]
+    samples: usize,
+
+    /// Export validation report
+    #[arg(long)]
+    output: Option<String>,
+},
+
+/// Benchmark annealing performance
+Benchmark {
+    /// Path to dataset file
+    #[arg(long, default_value = "mutag_train.parquet")]
+    dataset: String,
+
+    /// Number of benchmark iterations
+    #[arg(long, default_value_t = 10)]
+    iterations: usize,
+
+    /// Export benchmark results
+    #[arg(long)]
+    output: Option<String>,
+},
+
+/// Generate default configuration file
+Config {
+    /// Output path for configuration file
+    #[arg(long, default_value = "crystal_config.toml")]
+    output: String,
+},
+
+/// Inspect a dataset schema and sample row
+InspectDataset {
+    /// Path to dataset file
+    #[arg(long, default_value = "mutag_train.parquet")]
+    dataset: String,
+
+    /// Dataset download URL
+    #[arg(long, default_value = "https://huggingface.co/datasets/graphs-datasets/MUTAG/resolve/main/train.parquet")]
+    url: String,
+},

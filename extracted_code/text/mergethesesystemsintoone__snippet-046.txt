@@ -1,1 +1,2 @@
-class TraitCategory(Enum):
+# <REDACTED: potential secret detected>
+

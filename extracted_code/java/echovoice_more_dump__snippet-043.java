@@ -1,1 +1,1 @@
-private async _safeGetVersion(): Promise<number> {
+private initW(): number[][] {

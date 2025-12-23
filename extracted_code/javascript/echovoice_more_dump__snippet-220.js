@@ -1,2 +1,1 @@
-We'll also add a basic updateCharts function that updates some divs with the metrics.
-
+const n = this.graph.n, m = this.cfg.speciesCount;

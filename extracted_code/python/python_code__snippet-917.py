@@ -1,13 +1,27 @@
-class Stack(List[T]):
-    """A small shim over builtin list."""
-
-    @property
-    def top(self) -> T:
-        """Get top of stack."""
-        return self[-1]
-
-    def push(self, item: T) -> None:
-        """Push an item on to the stack (append in stack nomenclature)."""
-        self.append(item)
-
-
+        "Inspect information available from package indexes.",
+    ),
+    "wheel": CommandInfo(
+        "pip._internal.commands.wheel",
+        "WheelCommand",
+        "Build wheels from your requirements.",
+    ),
+    "hash": CommandInfo(
+        "pip._internal.commands.hash",
+        "HashCommand",
+        "Compute hashes of package archives.",
+    ),
+    "completion": CommandInfo(
+        "pip._internal.commands.completion",
+        "CompletionCommand",
+        "A helper command used for command completion.",
+    ),
+    "debug": CommandInfo(
+        "pip._internal.commands.debug",
+        "DebugCommand",
+        "Show information useful for debugging.",
+    ),
+    "help": CommandInfo(
+        "pip._internal.commands.help",
+        "HelpCommand",
+        "Show help for commands.",
+    ),

@@ -1,0 +1,1 @@
+ stream its state to /status for UI/analysis.

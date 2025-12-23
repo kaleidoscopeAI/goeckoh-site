@@ -1,0 +1,2 @@
+return lambda t: float(T)
+

@@ -1,1 +1,0 @@
-        # Simplified: Band-limited impulse train approximation using tanh for softness

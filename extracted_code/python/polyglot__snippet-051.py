@@ -1,1 +1,2 @@
-async def add_insight_batch(self, insights: List[Dict]):
+def project_batch(self, points: Tuple[np.ndarray]) -> List[np.ndarray]:
+from sklearn.decomposition import PCA

@@ -1,0 +1,4 @@
+- It’s true that classical contraction theory assumes idealized, noise-free, and deterministic conditions. The introduction of feedback loops involving curiosity tension, uncertainty, and autonomous web crawling indeed invites complex nonlinear dynamics which might destabilize the system.
+- **Mitigation:** Stability analysis must be extended to consider bounded stochastic perturbations and delays, employing robust control methods (e.g., input-to-state stability, stochastic Lyapunov functions). Conservative parameter tuning with adaptive thresholds can help avoid runaway curiosity.
+- Realistic modeling of web crawler delays and quality variance can be integrated as bounded, time-varying inputs with guaranteed amplitude constraints to maintain overall system contractivity.
+

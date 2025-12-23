@@ -1,1 +1,2 @@
-const weight = Math.abs(r); // magnitude of correction signal
+let acc = 0;
+for (let j = 0; j < M; j++) {

@@ -1,2 +1,1 @@
-please [rovide me with the emotional math from our past conversation. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1
-please provide me with all the math for perspective and speculation from ouer conversation. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 3
+def deterministic_embedding(values: List[float], dim: int = 128):

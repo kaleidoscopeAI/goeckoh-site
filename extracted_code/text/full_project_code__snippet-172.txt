@@ -1,0 +1,3 @@
+Module_six_moves_urllib_parse(__name__ + ".moves.urllib_parse"),
+"moves.urllib_parse",
+"moves.urllib.parse",

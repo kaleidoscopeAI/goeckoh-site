@@ -1,1 +1,2 @@
-const ctx = document.getElementById("phraseChart").getContext("2d");
+private func save() {
+let defaults = UserDefaults.standard

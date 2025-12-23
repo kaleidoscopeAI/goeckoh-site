@@ -1,3 +1,4 @@
-fn create_sysfs_interface() -> Result<()> {
-    let root = kernel::kobject::KObject::new();
-    // Add tunable parameters for thresholds
+async function crystalIngestSMILES(smiles) {
+    const parser = new SMILESParser();
+    const atoms = parser.parse(smiles);
+    crystal.core.ingest({ atoms });

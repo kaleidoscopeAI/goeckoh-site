@@ -1,7 +1,9 @@
-    from typing import TypedDict
+    import platform
 
-    class ResultDict(TypedDict):
-        encoding: Optional[str]
-        confidence: float
-        language: Optional[str]
+    features = get_windows_console_features()
+    from pip._vendor.rich import print
+
+    print(f'platform="{platform.system()}"')
+    print(repr(features))
+
 

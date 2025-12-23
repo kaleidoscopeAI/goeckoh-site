@@ -1,0 +1,7 @@
+ Autonomous loop: cube physics → metrics → reflection → (Ollama refine or heuristic) → anneal embeddings → generate audio (wav) → STFT →
+ multi-head attention → captions → update 18k-node avatar.
+ Offline-first ingestion (local corpus) with optional safe web crawling when ALLOW_ONLINE=1.
+ SQLite memory for states, reflections, suggestions, energetics, captions, docs, embeddings.
+
+ UI with WebSocket events and a binary WS that streams the 18k points every ~80ms.
+

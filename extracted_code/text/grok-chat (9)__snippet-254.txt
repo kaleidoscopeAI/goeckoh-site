@@ -1,0 +1,5 @@
+792              return obj
+793 +        if isinstance(obj, complex):
+794 +            return {"real": obj.real, "imag": obj.imag}
+795          if isinstance(obj, (np.integer, np.floating)):
+

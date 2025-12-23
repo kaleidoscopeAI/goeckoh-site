@@ -1,0 +1,9 @@
+  if values.size == 0:
+      return np.array([], dtype=int)
+  thr = np.percentile(values, rel_threshold * 100.0)
+  idxs = []
+  for i in range(1, values.size - 1):
+      if values[i] > values[i-1] and values[i] > values[i+1] and values[i] >= thr:
+          idxs.append(i)
+  return np.array(idxs, dtype=int)
+

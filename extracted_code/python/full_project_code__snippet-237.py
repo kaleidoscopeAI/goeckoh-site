@@ -1,5 +1,6 @@
-from pip._vendor.pygments.formatter import Formatter
-from pip._vendor.pygments.console import codes
-from pip._vendor.pygments.style import ansicolors
-
+import re
+from re import escape
+from os.path import commonprefix
+from itertools import groupby
+from operator import itemgetter
 

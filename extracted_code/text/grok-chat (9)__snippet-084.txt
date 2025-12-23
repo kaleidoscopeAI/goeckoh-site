@@ -1,0 +1,8 @@
+ 8  │  │  ├─ speech_mirror.py – mic→ASR→grammar correction→TTS→playback, GCL
+     gate
+ 9 -│  │  ├─ complete_unified_system.py – orchestrates “Crystalline Heart”,
+    ABA, voice, memory
+ 9 +│  │  ├─ complete_unified_system.py – orchestrates “Neurocoherence Latti
+    ce”, ABA, voice, memory
+10  │  │  └─ gcl_gate.py – latency/GCL safety throttle
+

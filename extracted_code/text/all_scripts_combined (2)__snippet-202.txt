@@ -1,0 +1,3 @@
+HAS_WHISPER = False
+print("⚠️  faster-whisper not found, install: pip install faster-whisper")
+

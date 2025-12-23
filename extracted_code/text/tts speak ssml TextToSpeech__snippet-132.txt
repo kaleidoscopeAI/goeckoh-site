@@ -1,0 +1,7 @@
+          }
+          else -> {
+              val result = performDeepReasoning(input, gcl)
+              Log.d("AGI", "Result: $result")
+          }
+      }
+  }

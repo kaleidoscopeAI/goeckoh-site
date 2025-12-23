@@ -1,2 +1,5 @@
-# <REDACTED: potential secret detected>
+class Phase(Enum):
+    RAW = "raw"
+    GEL = "gel"
+    CRYSTAL = "crystal"
 

@@ -1,2 +1,1 @@
-class OmniSynth:
-    def **init**(self, sr=44100):
+    def get_noise_burst(self, length, brightness):

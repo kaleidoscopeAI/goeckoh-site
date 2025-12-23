@@ -1,0 +1,6 @@
+#[error("Failed to initialize audio device")]
+AudioInitFailed,
+#[error("The crystalline lattice has destabilized")]
+LatticeDestabilized,
+#[error("System is already running")]
+AlreadyRunning,

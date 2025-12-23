@@ -1,1 +1,2 @@
-2. **LLM-Powered Query Generation:** Integrate the call to `O_LLM` for generating optimal search queries from abstract concepts.
+1. **Verification \& Fact-Checking:** Information from the web must be treated as potentially unreliable. Implement a separate `O_verification` engine that cross-references new information against the existing crystallized knowledge base before full integration. Inconsistencies should raise a "confidence" flag, not be accepted blindly.
+2. **Bias Mitigation:** The crawler must actively seek out diverse perspectives on contentious topics. This can be encoded in the "credibility bias" vector, requiring it to balance sources from different domains, geographies, and political leanings.

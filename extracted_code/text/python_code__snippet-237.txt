@@ -1,17 +1,2 @@
-class SystemMetrics:
-    """Comprehensive system metrics"""
-    gcl: float = 1.0
-    stress: float = 0.0
-    life_intensity: float = 0.0
-    mode: str = "FLOW"
-    emotional_coherence: float = 1.0
-    quantum_coherence: float = 1.0
-    memory_stability: float = 1.0
-    hardware_coupling: float = 0.0
-    aba_success_rate: float = 0.0
-    skill_mastery_level: int = 1
-    sensory_regulation: float = 1.0
-    processing_pause_respect: float = 1.0
-    timestamp: float = field(default_factory=time.time)
-    gui_color: Tuple[float, float, float, float] = (0.0, 1.0, 1.0, 1.0)
-
+sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
+sys.exit(%(func)s())

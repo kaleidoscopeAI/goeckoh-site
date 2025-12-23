@@ -1,1 +1,1 @@
-private val micPermissionLauncher = registerForActivityResult(
+private fun stopRecordingAndSend() {

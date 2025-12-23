@@ -1,2 +1,1 @@
-const userId = null;
-const res = await svc.resetToNeutral(userId);
+const ptsStr = pts.map(([x,y])=>`${x},${y}`).join(" ");

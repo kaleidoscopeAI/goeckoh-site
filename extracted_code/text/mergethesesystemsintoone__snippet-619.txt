@@ -1,0 +1,12 @@
+"""Results of the upgrade process"""
+success: bool
+output_path: str
+strategy_used: UpgradeStrategy
+upgraded_files: List[str] = field(default_factory.list)
+errors: List[str] = field(default_factory.list)
+backup_path: Optional[str] = None
+time_taken_seconds: float = 0.0
+size_difference: int = 0  # Difference in bytes
+applied_transformations: List[str] = field(default_factory.list)
+license_path: Optional[str] = None
+

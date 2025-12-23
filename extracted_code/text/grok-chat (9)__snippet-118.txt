@@ -1,0 +1,5 @@
+17  mkdir -p "$TTS_HOME" "$HF_HOME"
+18 +# Optional: enable Rust voice path for latency benchmarking
+19 +# export GOECKOH_USE_RUST_VC=1
+20
+

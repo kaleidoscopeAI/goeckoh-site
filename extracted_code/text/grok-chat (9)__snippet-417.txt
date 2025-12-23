@@ -1,0 +1,2 @@
+Dashboard renders peak bars. (backend/goeckoh/systems/complete_unified_system.py, backend/goeckoh/apps/
+real_unified_system.py, frontend/pages/Dashboard.tsx)

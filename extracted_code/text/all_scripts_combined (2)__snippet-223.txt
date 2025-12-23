@@ -1,0 +1,35 @@
+total = summary.total
+if total == 0:
+    return MeltdownRisk(
+        score=0,
+        level="No data yet",
+        message=(
+            "No behaviour events logged yet. As the system runs, this card will "
+            "show early warning signals."
+        ),
+    )
+# Weighted scoring inspired by AGI stress metrics: emphasise serious events
+score_raw = (
+    15 * summary.anxious
+    + 12 * summary.perseveration
+    + 10 * summary.high_energy
+    + 25 * summary.meltdown
+)
+normalized = min(100.0, (score_raw / (max(total, 1) * 25.0)) * 100.0)
+score = int(round(normalized))
+if score < 25:
+    level = "Low"
+    message = "Signals look calm overall. Keep routines steady and keep praising effort."
+elif score < 60:
+    level = "Elevated"
+    message = (
+        "Some stress signals showing up. Consider a short movement or breathing break."
+    )
+else:
+    level = "High"
+    message = (
+        "Frequent stress signals. Stay close, simplify demands, and lean on go-to calming tools."
+    )
+return MeltdownRisk(score=score, level=level, message=message)
+
+

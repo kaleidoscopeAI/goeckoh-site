@@ -1,0 +1,4 @@
+audio: np.ndarray,
+sample_rate: int,
+frame_length: int = 1024,
+hop_length: int = 256,

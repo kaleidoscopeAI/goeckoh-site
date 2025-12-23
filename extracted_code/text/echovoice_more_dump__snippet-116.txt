@@ -1,1 +1,1 @@
-Implementable as discrete estimate using histograms or commitment overlap proxies.
+5. Reflection/Update: occasionally run meta-learning using logged traces to update Wsens , PX , α etc.

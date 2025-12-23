@@ -1,0 +1,2 @@
+- If you assume a conservative d ≈ 0.5 (medium), α = 0.05 (two‑tailed), and desired power 0.8, standard paired‑t power formulas typically yield **about 27–34 participants**.
+- If you expect a larger effect (d ≈ 0.8), the required N drops into the **15–20** range.[^13_3][^13_9][^13_10]

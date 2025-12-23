@@ -1,2 +1,1 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
-
+await this.db.run('INSERT OR REPLACE INTO dna (gen, phi) VALUES (?, ?)', [gen, phi]);

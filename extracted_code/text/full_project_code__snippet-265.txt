@@ -1,0 +1,21 @@
+# Our upstream implementation of ssl.match_hostname()
+# only applies this normalization to IP addresses so it doesn't
+# match DNS SANs so we do the same thing!
+stripped_hostname = asserted_hostname.strip("u[]")
+if is_ipaddress(stripped_hostname):
+    asserted_hostname = stripped_hostname
+
+try:
+    match_hostname(cert, asserted_hostname)
+except CertificateError as e:
+    log.warning(
+        "Certificate did not match expected hostname: %s. Certificate: %s",
+        asserted_hostname,
+        cert,
+    )
+    # Add cert to exception and reraise so client code can inspect
+    # the cert when catching the exception, if they want to
+    e._peer_cert = cert
+    raise
+
+

@@ -1,0 +1,15 @@
+if build_rust_kernel is not None:
+    build_rust_kernel()
+
+app = QApplication(sys.argv)
+apply_palette(app)
+app.setStyleSheet(QSS)
+
+controller = MainController()
+window = GoeckohMainWindow(controller)
+window.resize(1100, 700)
+window.show()
+
+sys.exit(app.exec())
+
+

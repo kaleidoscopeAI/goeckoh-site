@@ -1,0 +1,4 @@
+“Crystalline Heart” card with mode/stress/arousal/valence and a subtle
+lattice bar profile; the chart consumes real GCL history when available;
+added CSV export for telemetry and kept the minimalist, soft visual style.
+Metrics cards remain but avoid blocky styling.

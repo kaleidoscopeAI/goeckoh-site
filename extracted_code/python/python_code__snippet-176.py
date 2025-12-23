@@ -1,11 +1,17 @@
-from __future__ import absolute_import
+    def Self(self, params):
+        """Used to spell the type of "self" in classes.
 
-import io
-import logging
-import sys
-import warnings
-import zlib
-from contextlib import contextmanager
-from socket import error as SocketError
-from socket import timeout as SocketTimeout
+        Example::
+
+          from typing import Self
+
+          class ReturnsSelf:
+              def parse(self, data: bytes) -> Self:
+                  ...
+                  return self
+
+        """
+
+        raise TypeError(f"{self} is not subscriptable")
+
 

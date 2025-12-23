@@ -1,0 +1,2 @@
+  - Drop the disables: remove GOECKOH_DISABLE_TTS=1 and GOECKOH_DISABLE_RTVC=1.
+  - Keep GOECKOH_ASR_BACKEND=sherpa (or vosk) and optionally GOECKOH_PERF_MODE=1 to stay snappy.

@@ -1,0 +1,1 @@
+- Track exploration coverage and assign new nodes to less-covered areas.

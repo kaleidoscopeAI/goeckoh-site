@@ -1,0 +1,15 @@
+"""
+Von Neumann entropy S(rho) = -Tr(rho log rho)
+Accepts numpy ndarray (Hermitian, trace=1)
+"""
+# small Hermitian symmetrize
+rho_h = 0.5 * (rho + rho.conj().T)
+vals = eigvals_hermitian(rho_h)
+# clamp negative tiny eigenvalues
+vals = np.clip(vals, 0.0, None)
+if vals.sum() <= 0:
+    return 0.0
+probs = vals / np.sum(vals)
+s = -np.sum(probs * log_safe(probs))
+return float(np.real(s))
+

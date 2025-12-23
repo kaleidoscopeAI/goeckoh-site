@@ -1,45 +1,37 @@
-def find_ordinal(pos_num: int) -> str:
-    # See: https://en.wikipedia.org/wiki/English_numerals#Ordinal_numbers
-    if pos_num == 0:
-        return "th"
-    elif pos_num == 1:
-        return "st"
-    elif pos_num == 2:
-        return "nd"
-    elif pos_num == 3:
-        return "rd"
-    elif 4 <= pos_num <= 20:
-        return "th"
-    else:
-        return find_ordinal(pos_num % 10)
+    from .console import (
+        Console,
+        ConsoleOptions,
+        HighlighterType,
+        JustifyMethod,
+        OverflowMethod,
+        RenderResult,
+    )
 
 
-def to_ordinal(pos_num: int) -> str:
-    return f"{pos_num}{find_ordinal(pos_num)}"
+def _is_attr_object(obj: Any) -> bool:
+    """Check if an object was created with attrs module."""
+    return _has_attrs and _attr_module.has(type(obj))
 
 
-def get_callback_name(cb: typing.Callable[..., typing.Any]) -> str:
-    """Get a callback fully-qualified name.
+def _get_attr_fields(obj: Any) -> Sequence["_attr_module.Attribute[Any]"]:
+    """Get fields for an attrs object."""
+    return _attr_module.fields(type(obj)) if _has_attrs else []
 
-    If no name can be produced ``repr(cb)`` is called and returned.
+
+def _is_dataclass_repr(obj: object) -> bool:
+    """Check if an instance of a dataclass contains the default repr.
+
+    Args:
+        obj (object): A dataclass instance.
+
+    Returns:
+        bool: True if the default repr is used, False if there is a custom repr.
     """
-    segments = []
+    # Digging in to a lot of internals here
+    # Catching all exceptions in case something is missing on a non CPython implementation
     try:
-        segments.append(cb.__qualname__)
-    except AttributeError:
-        try:
-            segments.append(cb.__name__)
-        except AttributeError:
-            pass
-    if not segments:
-        return repr(cb)
-    else:
-        try:
-            # When running under sphinx it appears this can be none?
-            if cb.__module__:
-                segments.insert(0, cb.__module__)
-        except AttributeError:
-            pass
-        return ".".join(segments)
+        return obj.__repr__.__code__.co_filename == dataclasses.__file__
+    except Exception:  # pragma: no coverage
+        return False
 
 

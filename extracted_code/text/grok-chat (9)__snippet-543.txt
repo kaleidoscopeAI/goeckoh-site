@@ -1,0 +1,1 @@
+Describes Google Search Grounding in ADK, a feature allowing AI agents to

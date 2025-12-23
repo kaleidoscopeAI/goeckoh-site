@@ -1,0 +1,5 @@
+if ":" not in url:
+    return None
+return url.split(":", 1)[0].lower()
+
+

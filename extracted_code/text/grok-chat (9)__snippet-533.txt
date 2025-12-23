@@ -1,0 +1,1 @@
+Describes the `ParallelAgent` in ADK, a workflow agent that executes its

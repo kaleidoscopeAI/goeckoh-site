@@ -1,1 +1,2 @@
-const n = this.graph.n, m = this.cfg.speciesCount;
+for (let i = 0; i < 10; i++) {
+const inj = new Array(12).fill(0);

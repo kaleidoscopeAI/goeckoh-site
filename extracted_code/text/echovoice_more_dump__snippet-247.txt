@@ -1,1 +1,8 @@
-// GPU-backed sparse matmul and Laplacian builder using WebGPU
+• Goal: Establish basic CQICS components and information flow in a simulated environment.
+• Tasks:
+    ◦ Implement SMs using standard AI techniques (e.g., CNNs, RNNs).
+    ◦ Create a basic GW as a shared memory buffer.
+    ◦ Set up a GI with a simple simulated environment.
+    ◦ Use discrete Ricci curvature to analyze the static network topology.
+• Tools: Machine learning, graph libraries (e.g., GraphRicciCurvature).
+• Evaluation: Verify stable information flow and basic agent responsiveness.

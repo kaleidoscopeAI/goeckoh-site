@@ -1,1 +1,1 @@
-for (let i = 0; i < species.length; i++) out += species[i] * proj[i];
+for (let i = 0; i < N; i++) this.S[i] = backup[i] + k2[i] * (dt / 2);

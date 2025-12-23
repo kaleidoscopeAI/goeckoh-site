@@ -1,0 +1,7 @@
+self.dimensions = dimensions
+self.decay_rate = decay_rate
+self.resonances: Dict[str, MemoryResonance] = {} # Dictionary to track pattern specific state information keyed by id of resonance (not the text)
+self.field_state = np.zeros((dimensions, dimensions), dtype=np.complex128) # Overall energy or knowledge state (matrix)
+self.interaction_history: List[Tuple[str, str, float]] = []
+self.energy_threshold = 0.01
+

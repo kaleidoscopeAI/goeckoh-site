@@ -1,0 +1,1 @@
+return `You are a cognitive scientist. SYSTEM: GC=${context.globalCoherence}, V=${context.emotionalField.valence}, A=${context.emotionalField.arousal}, KC=${context.knowledgeCrystals}. HYPOTHESIS: "${hypothesis.text}". Respond with JSON {...}`;

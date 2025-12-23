@@ -1,0 +1,15 @@
+for key, value in data.items():
+    if key == "audio" and isinstance(value, dict):
+        _update_dataclass(settings.audio, value)
+    elif key == "speech" and isinstance(value, dict):
+        _update_dataclass(settings.speech, value)
+    elif key == "llm" and isinstance(value, dict):
+        _update_dataclass(settings.llm, value)
+    elif key == "behavior" and isinstance(value, dict):
+        _update_dataclass(settings.behavior, value)
+    elif key == "heart" and isinstance(value, dict):
+        _update_dataclass(settings.heart, value)
+    elif hasattr(settings, key):
+        setattr(settings, key, value)
+
+

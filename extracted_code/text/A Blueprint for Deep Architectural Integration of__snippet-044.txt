@@ -1,0 +1,5 @@
+- Dynamic adjustment of annealing parameters $T(t), \alpha, k$.
+- Evaluation/interpretation of crystallized patterns.
+- Generating feedback messages that become *Mirror Engine targets*.
+
+

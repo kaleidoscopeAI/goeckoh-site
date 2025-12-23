@@ -1,0 +1,15 @@
+name, url, extras_override = parse_editable(editable_req)
+
+if name is not None:
+    try:
+        req: Optional[Requirement] = Requirement(name)
+    except InvalidRequirement:
+        raise InstallationError(f"Invalid requirement: '{name}'")
+else:
+    req = None
+
+link = Link(url)
+
+return RequirementParts(req, link, None, extras_override)
+
+

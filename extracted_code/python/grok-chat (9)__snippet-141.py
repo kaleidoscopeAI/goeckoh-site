@@ -1,4 +1,6 @@
-  terminfo/74 (268 files), 3 more. These directories are excluded from snapshots
-  and undo cleanup. Adjust `ghost_snapshot.ignore_large_untracked_dirs` to
-  change this behavior.
+1063                  import json
+1064 -                rec = KaldiRecognizer(helper, sr)
+1064 +                grammar = '["zero","one","two","three","four","five","six","seven","eight","nine"]'
+1065 +                rec = KaldiRecognizer(helper, sr, grammar)
+1066                  pcm = (data * 32767.0).clip(-32768, 32767).astype("int16").tobytes()
 

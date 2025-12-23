@@ -1,0 +1,6 @@
+"""
+See captured_stdout().
+"""
+return captured_output("stderr")
+
+

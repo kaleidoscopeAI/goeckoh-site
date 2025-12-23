@@ -1,0 +1,3 @@
+Module_six_moves_urllib_robotparser(__name__ + ".moves.urllib.robotparser"),
+"moves.urllib_robotparser",
+"moves.urllib.robotparser",

@@ -1,0 +1,1 @@
+self._draw_frame(frame_data)

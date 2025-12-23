@@ -1,1 +1,4 @@
-Let (|\psi\rangle) be an eigenvector of a normalized attention Laplacian built from (A_t) \& (w_t). Discrete Berry connection/curvature:
+In main.js, add this import at the top (right after the Three import):
+import initWasm, { lattice_from_features } from "./wasm/pkg/goeckoh_lattice.js";
+
+let wasmReady = false;

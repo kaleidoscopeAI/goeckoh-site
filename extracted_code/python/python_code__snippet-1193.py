@@ -1,57 +1,53 @@
-import importlib.metadata
-from typing import Any, Optional, Protocol, cast
+class AudioSystem:
+    def __init__(self):
+        self.q = queue.Queue(maxsize=10) # Backpressure protection
+        self.running = True
+        self.bio_engine = None
+        self.rust_available = RUST_AVAILABLE
+        
+        if self.rust_available:
+            try:
+                self.bio_engine = bio_audio.BioAcousticEngine()
+            except Exception as exc:
+                print(f"! BioAudio engine unavailable: {exc}")
+                self.bio_engine = None
+                self.rust_available = False
+            
+        self.thread = threading.Thread(target=self._playback_loop, daemon=True)
+        self.thread.start()
 
+    def enqueue_response(self, text: str, arousal: float):
+        """Public API to add audio task."""
+        if not self.rust_available or not self.bio_engine:
+            return
 
-class BadMetadata(ValueError):
-    def __init__(self, dist: importlib.metadata.Distribution, *, reason: str) -> None:
-        self.dist = dist
-        self.reason = reason
+        # Pure Synthesis Path
+        # Generates float32 vector from Rust
+        pcm_data = self.bio_engine.synthesize(len(text), float(arousal))
+        
+        # Convert to Numpy for sounddevice
+        pcm_np = np.array(pcm_data, dtype=np.float32)
+        
+        try:
+            self.q.put(pcm_np, timeout=0.5) # Non-blocking fail
+        except queue.Full:
+            pass # Drop frame if system overloaded (Real-time requirement)
 
-    def __str__(self) -> str:
-        return f"Bad metadata in {self.dist} ({self.reason})"
+    def _playback_loop(self):
+        """Consumer Loop."""
+        while self.running:
+            if not AUDIO_AVAILABLE:
+                time.sleep(1.0)
+                continue
 
-
-class BasePath(Protocol):
-    """A protocol that various path objects conform.
-
-    This exists because importlib.metadata uses both ``pathlib.Path`` and
-    ``zipfile.Path``, and we need a common base for type hints (Union does not
-    work well since ``zipfile.Path`` is too new for our linter setup).
-
-    This does not mean to be exhaustive, but only contains things that present
-    in both classes *that we need*.
-    """
-
-    @property
-    def name(self) -> str:
-        raise NotImplementedError()
-
-    @property
-    def parent(self) -> "BasePath":
-        raise NotImplementedError()
-
-
-def get_info_location(d: importlib.metadata.Distribution) -> Optional[BasePath]:
-    """Find the path to the distribution's metadata directory.
-
-    HACK: This relies on importlib.metadata's private ``_path`` attribute. Not
-    all distributions exist on disk, so importlib.metadata is correct to not
-    expose the attribute as public. But pip's code base is old and not as clean,
-    so we do this to avoid having to rewrite too many things. Hopefully we can
-    eliminate this some day.
-    """
-    return getattr(d, "_path", None)
-
-
-def get_dist_name(dist: importlib.metadata.Distribution) -> str:
-    """Get the distribution's project name.
-
-    The ``name`` attribute is only available in Python 3.10 or later. We are
-    targeting exactly that, but Mypy does not know this.
-    """
-    name = cast(Any, dist).name
-    if not isinstance(name, str):
-        raise BadMetadata(dist, reason="invalid metadata entry 'name'")
-    return name
+            try:
+                # Wait for data
+                data = self.q.get(timeout=1.0)
+                sd.play(data, samplerate=22050, blocking=True)
+                self.q.task_done()
+            except queue.Empty:
+                continue
+            except Exception as e:
+                print(f"[AUDIO ERROR] Playback failed: {e}")
 
 

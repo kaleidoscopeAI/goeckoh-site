@@ -1,20 +1,113 @@
-import importlib.util
-import logging
-import os
-import textwrap
-from functools import partial
-from optparse import SUPPRESS_HELP, Option, OptionGroup, OptionParser, Values
-from textwrap import dedent
-from typing import Any, Callable, Dict, Optional, Tuple
+"""Stores the minimum and maximum widths (in characters) required to render an object."""
 
-from pip._vendor.packaging.utils import canonicalize_name
+minimum: int
+"""Minimum number of cells required to render."""
+maximum: int
+"""Maximum number of cells required to render."""
 
-from pip._internal.cli.parser import ConfigOptionParser
-from pip._internal.exceptions import CommandError
-from pip._internal.locations import USER_CACHE_DIR, get_src_prefix
-from pip._internal.models.format_control import FormatControl
-from pip._internal.models.index import PyPI
-from pip._internal.models.target_python import TargetPython
-from pip._internal.utils.hashes import STRONG_HASHES
-from pip._internal.utils.misc import strtobool
+@property
+def span(self) -> int:
+    """Get difference between maximum and minimum."""
+    return self.maximum - self.minimum
+
+def normalize(self) -> "Measurement":
+    """Get measurement that ensures that minimum <= maximum and minimum >= 0
+
+    Returns:
+        Measurement: A normalized measurement.
+    """
+    minimum, maximum = self
+    minimum = min(max(0, minimum), maximum)
+    return Measurement(max(0, minimum), max(0, max(minimum, maximum)))
+
+def with_maximum(self, width: int) -> "Measurement":
+    """Get a RenderableWith where the widths are <= width.
+
+    Args:
+        width (int): Maximum desired width.
+
+    Returns:
+        Measurement: New Measurement object.
+    """
+    minimum, maximum = self
+    return Measurement(min(minimum, width), min(maximum, width))
+
+def with_minimum(self, width: int) -> "Measurement":
+    """Get a RenderableWith where the widths are >= width.
+
+    Args:
+        width (int): Minimum desired width.
+
+    Returns:
+        Measurement: New Measurement object.
+    """
+    minimum, maximum = self
+    width = max(0, width)
+    return Measurement(max(minimum, width), max(maximum, width))
+
+def clamp(
+    self, min_width: Optional[int] = None, max_width: Optional[int] = None
+) -> "Measurement":
+    """Clamp a measurement within the specified range.
+
+    Args:
+        min_width (int): Minimum desired width, or ``None`` for no minimum. Defaults to None.
+        max_width (int): Maximum desired width, or ``None`` for no maximum. Defaults to None.
+
+    Returns:
+        Measurement: New Measurement object.
+    """
+    measurement = self
+    if min_width is not None:
+        measurement = measurement.with_minimum(min_width)
+    if max_width is not None:
+        measurement = measurement.with_maximum(max_width)
+    return measurement
+
+@classmethod
+def get(
+    cls, console: "Console", options: "ConsoleOptions", renderable: "RenderableType"
+) -> "Measurement":
+    """Get a measurement for a renderable.
+
+    Args:
+        console (~rich.console.Console): Console instance.
+        options (~rich.console.ConsoleOptions): Console options.
+        renderable (RenderableType): An object that may be rendered with Rich.
+
+    Raises:
+        errors.NotRenderableError: If the object is not renderable.
+
+    Returns:
+        Measurement: Measurement object containing range of character widths required to render the object.
+    """
+    _max_width = options.max_width
+    if _max_width < 1:
+        return Measurement(0, 0)
+    if isinstance(renderable, str):
+        renderable = console.render_str(
+            renderable, markup=options.markup, highlight=False
+        )
+    renderable = rich_cast(renderable)
+    if is_renderable(renderable):
+        get_console_width: Optional[
+            Callable[["Console", "ConsoleOptions"], "Measurement"]
+        ] = getattr(renderable, "__rich_measure__", None)
+        if get_console_width is not None:
+            render_width = (
+                get_console_width(console, options)
+                .normalize()
+                .with_maximum(_max_width)
+            )
+            if render_width.maximum < 1:
+                return Measurement(0, 0)
+            return render_width.normalize()
+        else:
+            return Measurement(0, _max_width)
+    else:
+        raise errors.NotRenderableError(
+            f"Unable to get render width for {renderable!r}; "
+            "a str, Segment, or object with __rich_console__ method is required"
+        )
+
 

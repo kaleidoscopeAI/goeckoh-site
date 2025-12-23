@@ -1,0 +1,2 @@
+   ├── emotional_core.py      # Crystalline Heart
+   └── visualization_bridge.py

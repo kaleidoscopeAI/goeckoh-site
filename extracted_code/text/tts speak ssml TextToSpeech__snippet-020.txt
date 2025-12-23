@@ -1,2 +1,28 @@
-data class Prosody(val pitch: Double, val rate: Double, val arousal: Double, val volume: Double, val pitchVariance: Double)
+    build or package it.
+  - Recorder/Whisper wiring: no real silence-based WAV capture or streaming
+    inference; VAD integration relies on stubs.
+  - Asset/model handling: assumes models already in filesDir; no unzip/copy or
+    verification paths for STT/TTS/LLM assets.
+  - Multi-language STT: Vosk multi-model path exists in comments but not in
+    the current code (we reverted to Vosk single model earlier, then stubbed
+    Whisper).
+  - Several imports/usages (e.g., sileroVad.load) depend on artifacts that may
+    not exist in Maven; version coordinates need verification.
+
+  If you want this truly production-ready with no placeholders, I need to
+  implement the missing pieces end-to-end:
+
+  1. Integrate a working Whisper TFLite wrapper (streaming) and real Recorder/
+     VAD loop.
+  2. Add asset copy/unzip for Vosk/Whisper/Piper/Gemma models at first run.
+  3. Build or include RNNoise/WebRTC NS JNI (libwebrtc_ns_jni.so) and wire it.
+  4. Verify Silero VAD dependency source (or bundle its model) and ensure frame
+     handling.
+  5. Replace any stub logic (Whisper, VAD, NS) with concrete implementations and
+     test on-device.
+
+  Tell me if I should proceed to fill these gaps now (and confirm which STT path
+  you prefer: Whisper TFLite streaming vs. Vosk multi-language), and whether you
+  can provide or allow adding the JNI binary for noise suppression.
+
 

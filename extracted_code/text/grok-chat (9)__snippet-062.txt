@@ -1,0 +1,6 @@
+  - Chart card restyled with a minimalist header and “Download CSV” button
+    (exports current telemetry to mirror_telemetry.csv).
+  - Dual-axis chart now shows GCL, drift, and latency; added latency p50/p95
+    + gate-block cards; recent telemetry table remains.
+  - Keeps soft colors and rounded edges for a professional, non-blocky look.
+

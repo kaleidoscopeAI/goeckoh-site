@@ -1,0 +1,4 @@
+Check if crystal_core is a separate crate that should be added to Cargo.toml.
+
+Alternatively, if crystal_core is a module within this project, then we need to adjust the path.
+

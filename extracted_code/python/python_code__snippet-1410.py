@@ -1,52 +1,20 @@
-def _(text):
-    return filter(_nonblank, map(str.strip, text.splitlines()))
+vendored_name = "{0}.{1}".format(__name__, modulename)
 
-
-def drop_comment(line):
-    """
-    Drop comments.
-
-    >>> drop_comment('foo # bar')
-    'foo'
-
-    A hash without a space may be in a URL.
-
-    >>> drop_comment('http://example.com/foo#bar')
-    'http://example.com/foo#bar'
-    """
-    return line.partition(" #")[0]
-
-
-def join_continuation(lines):
-    r"""
-    Join lines continued by a trailing backslash.
-
-    >>> list(join_continuation(['foo \\', 'bar', 'baz']))
-    ['foobar', 'baz']
-    >>> list(join_continuation(['foo \\', 'bar', 'baz']))
-    ['foobar', 'baz']
-    >>> list(join_continuation(['foo \\', 'bar \\', 'baz']))
-    ['foobarbaz']
-
-    Not sure why, but...
-    The character preceeding the backslash is also elided.
-
-    >>> list(join_continuation(['goo\\', 'dly']))
-    ['godly']
-
-    A terrible idea, but...
-    If no line is available to continue, suppress the lines.
-
-    >>> list(join_continuation(['foo', 'bar\\', 'baz\\']))
-    ['foo']
-    """
-    lines = iter(lines)
-    for item in lines:
-        while item.endswith("\\"):
-            try:
-                item = item[:-2].strip() + next(lines)
-            except StopIteration:
-                return
-        yield item
+try:
+    __import__(modulename, globals(), locals(), level=0)
+except ImportError:
+    # We can just silently allow import failures to pass here. If we
+    # got to this point it means that ``import pip._vendor.whatever``
+    # failed and so did ``import whatever``. Since we're importing this
+    # upfront in an attempt to alias imports, not erroring here will
+    # just mean we get a regular import error whenever pip *actually*
+    # tries to import one of these modules to use it, which actually
+    # gives us a better error message than we would have otherwise
+    # gotten.
+    pass
+else:
+    sys.modules[vendored_name] = sys.modules[modulename]
+    base, head = vendored_name.rsplit(".", 1)
+    setattr(sys.modules[base], head, sys.modules[modulename])
 
 

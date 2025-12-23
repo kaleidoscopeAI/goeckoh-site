@@ -1,19 +1,19 @@
-# knowledge_pool_demo.py
-from knowledge_pool import EnhancedSharedKnowledgePool
+# self_reflection_demo.py
+from reflection_analysis import SelfReflection
+from adaptive_ai_node import EnhancedAdaptiveNode
 
-# Initialize the knowledge pool
-pool = EnhancedSharedKnowledgePool()
+# Initialize SelfReflection and a sample node
+self_reflection = SelfReflection()
+node = EnhancedAdaptiveNode(node_id="test_node")
 
-# Sample pattern data for testing
-pattern_data = {
-    'pattern': 'Sample Pattern',
-    'context': 'Example Context'
-}
+# Mock action log to simulate recent actions
+action_log = [
+    {'mode': 'learning', 'success': True, 'energy_used': 5, 'completion_time': 2.0},
+    {'mode': 'growth', 'success': False, 'energy_used': 10, 'completion_time': 4.0},
+    {'mode': 'teaching', 'success': True, 'energy_used': 8, 'completion_time': 3.0},
+]
 
-# Add patterns with confidence levels
-pool.add_pattern(pattern_data, confidence=0.85)
-pool.add_pattern({'pattern': 'Another Pattern'}, confidence=0.7)
-
-# Output the patterns to verify they were added
-print("Patterns in pool:", pool.patterns)
+# Run reflection
+insights = self_reflection.reflect(action_log, node.get_state())
+print("Reflection Insights:", insights)
 

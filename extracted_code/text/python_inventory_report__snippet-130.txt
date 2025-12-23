@@ -1,0 +1,2 @@
+doc: Core speech companion loop with inner-voice echo + passive voice learning.
+classes: SpeechLoop, SimulatedSpeechLoop

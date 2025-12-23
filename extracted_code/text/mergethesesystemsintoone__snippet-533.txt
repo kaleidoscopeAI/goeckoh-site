@@ -1,0 +1,12 @@
+"""Container for molecular features and properties."""
+weight: float
+logp: float
+tpsa: float
+rotatable_bonds: int
+hbd: int  # Hydrogen bond donors
+hba: int  # Hydrogen bond acceptors
+rings: int
+aromatic_rings: int
+fragments: List[str]
+charge: float
+

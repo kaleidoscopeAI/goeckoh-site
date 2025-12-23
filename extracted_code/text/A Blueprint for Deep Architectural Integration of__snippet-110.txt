@@ -1,0 +1,6 @@
+url_frontier: PriortizedUrlFrontier,      // Priority queue of URLs to crawl
+politeness_policy: PolitenessPolicy,      // Respect robots.txt, rate-limiting
+content_filters: Vec<ContentFilter>,      // NSFW, quality, relevance filters
+summarizer: Option<HuggingFaceThoughtEngine>, // Reference to LLM for summarization
+knowledge_base: Arc<KnowledgeGraph>,      // Reference to the system's central graph
+// ... configuration (max depth, timeout, etc.)

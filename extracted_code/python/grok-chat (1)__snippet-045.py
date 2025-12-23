@@ -1,25 +1,66 @@
-class ProcessMetrics:
-    cpu_usage: float
-    memory_usage: float
-    io_ops: int
-    priority: int
+class Traits:
+    learning_rate: float = 0.1
+    adaptation_rate: float = 0.1
+    energy_efficiency: float = 1.0
 
-class DecisionEngine:
-    def __init__(self):
-        self.weights = np.array([0.4, 0.3, 0.2, 0.1])  # cpu, mem, io, prio
+class Node:
+    def __init__(self, node_id: Optional[str] = None):
+        self.id = node_id or str(uuid.uuid4())
+        self.birth_time = time.time()
+        self.energy = 10.0
+        self.growth_state = GrowthState()
+        self.traits = Traits()
+        
+        self.short_term = deque(maxlen=100)
+        self.long_term: Dict[str, Dict] = {}
+        self.max_long_term = 1000
+        
+        self.experiences = deque(maxlen=1000)
+        self.growth_path = deque(maxlen=1000)
+        self.connections = set()
+        
+        self.learning_history = deque(maxlen=100)
+        self.adaptation_threshold = 0.5
 
-    def compute_score(self, metrics: ProcessMetrics) -> float:
-        values = np.array([metrics.cpu_usage, metrics.memory_usage, metrics.io_ops / 1000, metrics.priority / 10])
-        return np.dot(self.weights, values)
+    def process_input(self, data: Dict) -> Dict:
+        initial_knowledge = self.growth_state.knowledge
+        
+        patterns = self._extract_patterns(data)
+        learning_result = self._learn_from_patterns(patterns)
+        
+        self._adapt_traits(initial_knowledge, learning_result['knowledge_gain'])
+        
+        self._update_growth_state(learning_result)
+        self._share_knowledge()
+        
+        self.experiences.append({
+            'input_type': next(iter(data.keys())),
+            'patterns': patterns,
+            'learning': learning_result,
+            'energy_state': self.energy,
+            'timestamp': time.time()
+        })
+        
+        return {'processed': patterns, 'learned': learning_result}
 
-class OmniMindState:
-    def __init__(self):
-        self.decision_engine = DecisionEngine()
-        self.metrics_history: Dict[str, ProcessMetrics] = {}
+    def _extract_patterns(self, data: Dict) -> List[str]:
+        # Simplified pattern extraction
+        return list(data.values())
 
-    def update_metrics(self, node_id: str, metrics: ProcessMetrics):
-        self.metrics_history[node_id] = metrics
-        score = self.decision_engine.compute_score(metrics)
-        # Allocate resources based on score (simulated)
-        print(f"[DA] Node {node_id} score: {score:.2f} - Allocating resources...")
+    def _learn_from_patterns(self, patterns: List[str]) -> Dict:
+        # Simulated learning
+        knowledge_gain = len(patterns) * 0.1
+        return {'knowledge_gain': knowledge_gain}
+
+    def _adapt_traits(self, initial_knowledge: float, knowledge_gain: float) -> None:
+        effectiveness = knowledge_gain / (initial_knowledge + 1e-6)
+        if effectiveness < self.adaptation_threshold:
+            self.traits.learning_rate *= 1.1
+
+    def _update_growth_state(self, learning_result: Dict) -> None:
+        self.growth_state.knowledge += learning_result['knowledge_gain']
+
+    def _share_knowledge(self) -> None:
+        # Simulate sharing with connections
+        pass
 

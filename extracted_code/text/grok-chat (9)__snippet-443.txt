@@ -1,0 +1,12 @@
+                  file_path = os.path.join(root, file)
+                  directory = os.path.dirname(file_path)
+                  if directory not in directory_map:
+                      directory_map[directory] = []
+                  directory_map[directory].append(file_path)
+
+      all_dirs = list(directory_map.keys())
+      tool_context.state["dirs"] = all_dirs # directories only
+      logger.debug("Dirs\n:" + "\n".join([str(dir) for dir in all_dirs]))
+
+      # Create a single list of all the files
+      all_files = [file for files_list in directory_map.values() for file

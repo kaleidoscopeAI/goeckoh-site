@@ -1,1 +1,1 @@
-const PERIOD_MS = 1000 * 60 * 10;
+const docRef = doc(this.firestore, "actuation", `node_${nodeIdx}_meta`);

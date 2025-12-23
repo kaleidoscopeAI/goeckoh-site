@@ -1,7 +1,11 @@
-    from typing import Literal
+class PipImportRedirectingFinder:
+    @classmethod
+    def find_spec(self, fullname, path=None, target=None):  # type: ignore
+        if fullname != "pip":
+            return None
 
-    from pip._vendor.requests import PreparedRequest
-    from pip._vendor.urllib3 import HTTPResponse
+        spec = PathFinder.find_spec(fullname, [PIP_SOURCES_ROOT], target)
+        assert spec, (PIP_SOURCES_ROOT, fullname)
+        return spec
 
-    from pip._vendor.cachecontrol.cache import BaseCache
 

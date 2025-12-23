@@ -1,0 +1,9 @@
+                  out = self._anneal_and_process()
+                  if out:
+                      await self.bus.publish({"type": "energetics", "data": {"tick": self.tick, **out["energetics"], "sigma": self.sigma}})
+                      if out["caption"]:
+                          await self.bus.publish({"type": "caption", "data": {"tick": self.tick, **out["caption"]}})
+          except Exception as e:
+              await self.bus.publish({"type": "error", "data": {"tick": self.tick, "error": str(e), "trace": traceback.format_exc()}})
+          await asyncio.sleep(TICK_SEC)
+

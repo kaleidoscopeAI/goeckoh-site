@@ -1,0 +1,11 @@
+"""
+Deterministic pseudo-random phase Φ_proc(t, k).
+
+Same user_seed + same timeline + same mode index ⇒ identical sequence.
+"""
+t_int = int(t * 1000.0)
+x = (k * 73856093) ^ (t_int * 19349663) ^ (user_seed * 83492791)
+x &= 0xFFFFFFFF
+return (x / 0xFFFFFFFF) * 2.0 * np.pi
+
+

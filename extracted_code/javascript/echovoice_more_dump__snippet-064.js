@@ -1,2 +1,1 @@
-let sum: f32 = buf.iter().copied().sum();
-let mut freq_mhz = 300f32 + (sum.fract() * 1700f32); // 300..2000 MHz
+Ingestion across all components is unified by the selection function in the meta-equation:

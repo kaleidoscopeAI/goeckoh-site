@@ -1,25 +1,35 @@
-class VerboseLogger(logging.Logger):
-    """Custom Logger, defining a verbose log-level
+def format_full_version(info):
+    version = '%s.%s.%s' % (info.major, info.minor, info.micro)
+    kind = info.releaselevel
+    if kind != 'final':
+        version += kind[0] + str(info.serial)
+    return version
 
-    VERBOSE is between INFO and DEBUG.
-    """
+if hasattr(sys, 'implementation'):
+    implementation_version = format_full_version(
+        sys.implementation.version)
+    implementation_name = sys.implementation.name
+else:
+    implementation_version = '0'
+    implementation_name = ''
 
-    def verbose(self, msg: str, *args: Any, **kwargs: Any) -> None:
-        return self.log(VERBOSE, msg, *args, **kwargs)
-
-
-def getLogger(name: str) -> VerboseLogger:
-    """logging.getLogger, but ensures our VerboseLogger class is returned"""
-    return cast(VerboseLogger, logging.getLogger(name))
-
-
-def init_logging() -> None:
-    """Register our VerboseLogger and VERBOSE log level.
-
-    Should be called before any calls to getLogger(),
-    i.e. in pip._internal.__init__
-    """
-    logging.setLoggerClass(VerboseLogger)
-    logging.addLevelName(VERBOSE, "VERBOSE")
+ppv = platform.python_version()
+m = _DIGITS.match(ppv)
+pv = m.group(0)
+result = {
+    'implementation_name': implementation_name,
+    'implementation_version': implementation_version,
+    'os_name': os.name,
+    'platform_machine': platform.machine(),
+    'platform_python_implementation': platform.python_implementation(),
+    'platform_release': platform.release(),
+    'platform_system': platform.system(),
+    'platform_version': platform.version(),
+    'platform_in_venv': str(in_venv()),
+    'python_full_version': ppv,
+    'python_version': pv,
+    'sys_platform': sys.platform,
+}
+return result
 
 

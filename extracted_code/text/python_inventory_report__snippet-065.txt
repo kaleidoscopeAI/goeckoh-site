@@ -1,0 +1,2 @@
+doc: LocalLLMCore: embedded open-source LLM (no external APIs).
+classes: LocalLLMConfig, LocalLLMCore

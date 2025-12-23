@@ -1,0 +1,17 @@
+"""Generates strategies based on insight, value alignment, and risks."""
+selected_strategies = []
+
+# Basic strategy selection based on insight type and risks
+if insight.get("type") == "new_pattern" and risks.get("low_confidence", 0.0) < 0.5:
+    selected_strategies.append(self.strategies["explore"])
+elif insight.get("type") == "logical_result" and value_alignment > 0.7:
+    selected_strategies.append(self.strategies["exploit"])
+elif "high_energy_cost" in risks:
+    selected_strategies.append(self.strategies["diversify"])
+else:
+    selected_strategies.append(self.strategies["consolidate"])
+
+# Record and return selected strategies
+self.strategy_history.append({"insight": insight, "strategies": selected_strategies})
+return selected_strategies
+

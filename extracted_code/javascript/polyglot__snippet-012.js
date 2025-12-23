@@ -1,1 +1,3 @@
-public function integrated_information(array $vec): float {
+class KnowledgeDNA {
+public int $generation = 0;
+public function replicate(): void { $this->generation++; }

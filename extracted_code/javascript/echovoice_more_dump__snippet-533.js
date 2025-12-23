@@ -1,4 +1,2 @@
-private _sanitizeAndClampVector(input: Partial<EVector>): EVector {
-const out: any = makeZeroVector(this.emotions);
-for (const k of this.emotions) {
-const v = (input as any)[k];
+const service = useMemo(() => new ProjectionService(cfg), [] as any);
+const [constructs, setConstructs] = useState<CognitiveConstruct[]>(service.getConstructs());

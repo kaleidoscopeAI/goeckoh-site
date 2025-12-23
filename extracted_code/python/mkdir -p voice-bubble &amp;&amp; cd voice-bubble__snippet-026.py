@@ -1,3 +1,0 @@
-    - Read from a lock-free or SPSC ring buffer of input samples.
-    - Update your lattice and DSP using stack-allocated temporaries and preallocated vectors.
-    - Write into the provided `&mut [T]` output slice.

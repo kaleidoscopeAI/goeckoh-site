@@ -1,1 +1,1 @@
-async def run(self):
+async def introspect(self, insight: Dict):

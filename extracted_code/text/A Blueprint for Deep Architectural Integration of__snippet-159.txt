@@ -1,0 +1,5 @@
+- Engines $O_i$ implemented as lookup tables, binarized neural nets, or logic circuits.
+- Projections $P_i^b$ use bit masks and bit shifts.
+- Routing $R$ represented by bitflags, controlling bitwise gating.
+- Integration $G$ sums routed signals via bitwise adders or majority logic.
+

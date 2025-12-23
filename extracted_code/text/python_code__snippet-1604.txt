@@ -1,0 +1,6 @@
+Option,
+"--build-option",
+dest="build_options",
+metavar="options",
+action="append",
+help="Extra arguments to be supplied to 'setup.py bdist_wheel'.",

@@ -1,1 +1,8 @@
-// proxy entropy using amplitude variance
+class WavefunctionCollapse(Enum):
+    """Possible collapse states for quantum wave functions"""
+    COHERENT = auto()       # Maintains quantum coherence
+    CLASSICAL = auto()      # Collapsed to classical state
+    ENTANGLED = auto()      # Entangled with other nodes
+    SUPERPOSED = auto()     # In superposition of multiple states
+    TELEPORTED = auto()     # State has been teleported
+

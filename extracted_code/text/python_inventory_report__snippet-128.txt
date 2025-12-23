@@ -1,0 +1,2 @@
+doc: speech.py
+classes: SpeechProcessorGear

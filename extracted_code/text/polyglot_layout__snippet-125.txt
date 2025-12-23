@@ -1,0 +1,6 @@
+  s = "".join(ch for ch in s.lower())
+  grams = []
+  for n in range(n_min, n_max+1):
+      for i in range(len(s)-n+1):
+          grams.append(s[i:i+n])
+  return grams

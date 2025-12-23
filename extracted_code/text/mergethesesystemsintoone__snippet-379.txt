@@ -1,0 +1,18 @@
+"""Update the global field state based on all resonances."""
+self.field_state.fill(0)  # Reset the field state
+
+for resonance in self.resonances.values():
+    resonance._update_interference()  # Ensure the interference pattern is up-to-date
+    self.field_state += resonance.interference_pattern
+
+# Apply energy decay to resonances
+for resonance in self.resonances.values():
+    time_delta = (datetime.now() - resonance.timestamp).total_seconds()
+    resonance.energy_level *= np.exp(-self.decay_rate * time_delta)
+
+# Remove weak resonances
+self.resonances = {
+    pid: res for pid, res in self.resonances.items()
+    if res.energy_level > self.energy_threshold
+}
+

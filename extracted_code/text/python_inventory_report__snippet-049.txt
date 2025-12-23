@@ -1,0 +1,2 @@
+doc: gears.py
+classes: Information, AudioData, SpeechData, EmotionData, AgentDecision

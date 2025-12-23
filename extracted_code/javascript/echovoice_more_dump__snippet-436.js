@@ -1,1 +1,2 @@
-const modulators = computeModulators(node);
+let _sharedService: EmotionalActuationService | null = null;
+export function getSharedActuationService(firebaseConfig?: any) {

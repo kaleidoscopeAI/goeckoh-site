@@ -1,1 +1,4 @@
-- **Determination Process**: Data is ingested if it maximizes affinity minus stress cost, routed from Membrane or prior outputs. This replicates
+package com.kaleidoscope.body
+import kotlin.math.sqrt
+import kotlin.random.Random
+data class QuantumState(val amplitudes: FloatArray) {

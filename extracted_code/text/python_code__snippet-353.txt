@@ -1,0 +1,4 @@
+typing._collect_type_vars = _collect_type_vars
+typing._check_generic = _check_generic
+
+

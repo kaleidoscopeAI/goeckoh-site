@@ -1,2 +1,4 @@
-const recent = this.reflectionLogs[nodeIdx].slice(-200);
-const grad = computeMetaGrad(this.nodeStates[nodeIdx], recent);
+private _sanitizeAndClampVector(input: Partial<EVector>): EVector {
+const out: any = makeZeroVector(this.emotions);
+for (const k of this.emotions) {
+const v = (input as any)[k];

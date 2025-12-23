@@ -1,0 +1,3 @@
+GOECKOH_USE_RUST_VC=1; validation now reports processing p95, playback p95,
+and target compliance (GOECKOH_LATENCY_P95_TARGET).
+

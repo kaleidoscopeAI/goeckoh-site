@@ -1,0 +1,5 @@
+  Length      Date    Time    Name
+… +6 lines
+     5982  1980-02-01 00:00   org/gradle/wrapper/GradleWrapperMain.class
+       51  1980-02-01 00:00   gradle-wrapper-classpath.properties
+

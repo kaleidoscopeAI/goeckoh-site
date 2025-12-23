@@ -1,52 +1,31 @@
-def get_major_minor_version() -> str:
-    """
-    Return the major-minor version of the current Python as a string, e.g.
-    "3.7" or "3.10".
-    """
-    return "{}.{}".format(*sys.version_info)
+pos += 1
+nested_dict = NestedDict()
+flags = Flags()
 
-
-def change_root(new_root: str, pathname: str) -> str:
-    """Return 'pathname' with 'new_root' prepended.
-
-    If 'pathname' is relative, this is equivalent to os.path.join(new_root, pathname).
-    Otherwise, it requires making 'pathname' relative and then joining the
-    two, which is tricky on DOS/Windows and Mac OS.
-
-    This is borrowed from Python's standard library's distutils module.
-    """
-    if os.name == "posix":
-        if not os.path.isabs(pathname):
-            return os.path.join(new_root, pathname)
-        else:
-            return os.path.join(new_root, pathname[1:])
-
-    elif os.name == "nt":
-        (drive, path) = os.path.splitdrive(pathname)
-        if path[0] == "\\":
-            path = path[1:]
-        return os.path.join(new_root, path)
-
-    else:
-        raise InstallationError(
-            f"Unknown platform: {os.name}\n"
-            "Can not change root path prefix on unknown platform."
-        )
-
-
-def get_src_prefix() -> str:
-    if running_under_virtualenv():
-        src_prefix = os.path.join(sys.prefix, "src")
-    else:
-        # FIXME: keep src in cwd for now (it is not a temporary folder)
-        try:
-            src_prefix = os.path.join(os.getcwd(), "src")
-        except OSError:
-            # In case the current working directory has been renamed or deleted
-            sys.exit("The folder you are executing pip from can no longer be found.")
-
-    # under macOS + virtualenv sys.prefix is not properly resolved
-    # it is something like /path/to/python/bin/..
-    return os.path.abspath(src_prefix)
+pos = skip_chars(src, pos, TOML_WS)
+if src.startswith("}", pos):
+    return pos + 1, nested_dict.dict
+while True:
+    pos, key, value = parse_key_value_pair(src, pos, parse_float)
+    key_parent, key_stem = key[:-1], key[-1]
+    if flags.is_(key, Flags.FROZEN):
+        raise suffixed_err(src, pos, f"Cannot mutate immutable namespace {key}")
+    try:
+        nest = nested_dict.get_or_create_nest(key_parent, access_lists=False)
+    except KeyError:
+        raise suffixed_err(src, pos, "Cannot overwrite a value") from None
+    if key_stem in nest:
+        raise suffixed_err(src, pos, f"Duplicate inline table key {key_stem!r}")
+    nest[key_stem] = value
+    pos = skip_chars(src, pos, TOML_WS)
+    c = src[pos : pos + 1]
+    if c == "}":
+        return pos + 1, nested_dict.dict
+    if c != ",":
+        raise suffixed_err(src, pos, "Unclosed inline table")
+    if isinstance(value, (dict, list)):
+        flags.set(key, Flags.FROZEN, recursive=True)
+    pos += 1
+    pos = skip_chars(src, pos, TOML_WS)
 
 

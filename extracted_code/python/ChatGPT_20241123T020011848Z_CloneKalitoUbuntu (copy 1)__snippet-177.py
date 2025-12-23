@@ -1,4 +1,2 @@
-The issue with the import in `core_demo.py` is likely due to a mismatch in file names. The file `adaptive_ai_node.py` is not listed in your directory; instead, there is `ve_ai_node.py`.
-
-Here’s what you can do to resolve the import issue:
+The error you're seeing is due to a circular import in `knowledge_pool.py`. This typically happens when two files are trying to import each other, creating a loop. To resolve this, let's modify `knowledge_pool.py` to remove any unnecessary import that could be causing this loop.
 

@@ -1,0 +1,7 @@
+263            </div>
+264 +          <div className="text-xs text-slate-500 mt-1">
+265 +            Playback p95 {val.playback_latency_p95_ms !== undefined ? `
+     ${val.playback_latency_p95_ms.toFixed(1)} ms` : 'N/A'}
+266 +          </div>
+267          </div>
+

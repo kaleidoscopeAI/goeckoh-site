@@ -1,8 +1,10 @@
-class SpeechSettings:
-    whisper_model: str = "base.en"
-    language_tool_server: Optional[str] = None
-    normalization_locale: str = "en_US"
-    tts_model_name: str = "tts_models/multilingual/multi-dataset/xtts_v2"
-    tts_voice_clone_reference: Optional[Path] = None
+class BehaviorSettings:
+    correction_echo_enabled: bool = True
+    caregiver_prompts_enabled: bool = True
+    support_voice_enabled: bool = False
+    max_phrase_history: int = 5
+    anxious_threshold: int = 3
+    perseveration_threshold: int = 3
+    high_energy_rms: float = 0.08
 
 

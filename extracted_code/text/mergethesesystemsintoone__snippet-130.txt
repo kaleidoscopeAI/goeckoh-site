@@ -1,1 +1,1 @@
-visualizer.py: A visualization module using Plotly and NetworkX for node and memory graph visualization.
+LLMService: Could enhance transformations (e.g., generating type hints, rewriting code) using local LLMs.

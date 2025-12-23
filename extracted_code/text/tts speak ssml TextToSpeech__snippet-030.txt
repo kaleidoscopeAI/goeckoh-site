@@ -1,28 +1,13 @@
-    build or package it.
-  - Recorder/Whisper wiring: no real silence-based WAV capture or streaming
-    inference; VAD integration relies on stubs.
-  - Asset/model handling: assumes models already in filesDir; no unzip/copy or
-    verification paths for STT/TTS/LLM assets.
-  - Multi-language STT: Vosk multi-model path exists in comments but not in
-    the current code (we reverted to Vosk single model earlier, then stubbed
-    Whisper).
-  - Several imports/usages (e.g., sileroVad.load) depend on artifacts that may
-    not exist in Maven; version coordinates need verification.
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical">
 
-  If you want this truly production-ready with no placeholders, I need to
-  implement the missing pieces end-to-end:
+<TextView android:id="@+id/id_status"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Status" />
 
-  1. Integrate a working Whisper TFLite wrapper (streaming) and real Recorder/
-     VAD loop.
-  2. Add asset copy/unzip for Vosk/Whisper/Piper/Gemma models at first run.
-  3. Build or include RNNoise/WebRTC NS JNI (libwebrtc_ns_jni.so) and wire it.
-  4. Verify Silero VAD dependency source (or bundle its model) and ensure frame
-     handling.
-  5. Replace any stub logic (Whisper, VAD, NS) with concrete implementations and
-     test on-device.
-
-  Tell me if I should proceed to fill these gaps now (and confirm which STT path
-  you prefer: Whisper TFLite streaming vs. Vosk multi-language), and whether you
-  can provide or allow adding the JNI binary for noise suppression.
-
-
+<Button android:id="@+id/id_start"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Start Listening" />

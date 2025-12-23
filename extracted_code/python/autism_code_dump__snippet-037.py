@@ -1,65 +1,51 @@
-class VoiceCrystal:
+def _ensure_whisper() -> WhisperModel:
     """
-    Coqui XTTS-based voice synthesis + prosody shaping.
+    Lazy-load a small, CPU-friendly model.
     """
+    global _WHISPER_MODEL
+    if _WHISPER_MODEL is None:
+        # tiny.en keeps CPU usage low; adjust if you need higher accuracy
+        _WHISPER_MODEL = WhisperModel("tiny.en", device="cpu", compute_type="int8")
+    return _WHISPER_MODEL
 
-    def __init__(self):
-        self.tts = TTS(
-            model_name="tts_models/multilingual/multi-dataset/xtts_v2",
-            progress_bar=False,
-            gpu=torch.cuda.is_available(),
-        )
-        self.samplerate = 16000
-        self.current_pitch = 180.0
-        self.lock = threading.Lock()
-        self.ref_voices = self._load_reference_voices()
 
-    def _load_reference_voices(self) -> List[Path]:
-        return sorted(VOICES_DIR.glob("*.wav"))
+def transcribe_audio_block(audio: np.ndarray, samplerate: int = 16000) -> str:
+    """
+    Run local ASR on a raw mono float waveform.
+    Returns lowercased transcript.
+    """
+    model = _ensure_whisper()
+    segments, _ = model.transcribe(
+        audio,
+        language="en",
+        beam_size=5,
+        vad_filter=True,
+        vad_parameters=dict(min_silence_duration_ms=600),
+    )
+    text = " ".join(seg.text for seg in segments).strip().lower()
+    return text
 
-    def add_fragment(self, audio: np.ndarray, success_score: float):
-        """
-        Learn prosody from a successful attempt.
-        """
-        with self.lock:
-            y = audio.astype(np.float32).flatten()
-            try:
-                pitches, _ = librosa.piptrack(y=y, sr=self.samplerate)
-                pitch_vals = pitches[pitches > 0]
-                if pitch_vals.size > 0:
-                    pitch = float(np.mean(pitch_vals))
-                    self.current_pitch = 0.95 * self.current_pitch + 0.05 * pitch
-            except Exception:
-                pass
 
-    def synthesize(self, text: str, style: str = "inner") -> np.ndarray:
-        text = enforce_first_person(text)
-        with self.lock:
-            ref_wavs = [str(p) for p in self.ref_voices] if self.ref_voices else None
-            try:
-                wav = self.tts.tts(
-                    text=text,
-                    speaker_wav=ref_wavs[0] if ref_wavs else None,
-                    language="en",
-                )
-            except Exception as e:
-                print(f"[VoiceCrystal] TTS error: {e}")
-                return np.zeros(1, dtype=np.float32)
+def normalize_and_correct(text: str) -> str:
+    s = text.strip()
+    if not s:
+        return ""
+    s = s[0].upper() + s[1:]
+    if not s.endswith((".", "!", "?")):
+        s += "."
+    return s
 
-        y = np.array(wav, dtype=np.float32)
-        if style in ("calm", "inner"):
-            b, a = butter(4, 800 / (self.samplerate / 2), btype="low")
-            y = lfilter(b, a, y) * 0.6
-        elif style == "excited":
-            y = y * 1.1
 
-        try:
-            target_f0 = self.current_pitch or 180.0
-            n_steps = np.log2(target_f0 / 180.0) * 12.0
-            y = librosa.effects.pitch_shift(y, sr=self.samplerate, n_steps=n_steps)
-        except Exception:
-            pass
-
-        return y.astype(np.float32)
+def dtw_similarity(a: str, b: str) -> float:
+    ta = a.split()
+    tb = b.split()
+    if not ta or not tb:
+        return 0.0
+    vocab = {t: i for i, t in enumerate(sorted(set(ta + tb)))}
+    va = np.array([vocab[t] for t in ta], dtype=float)
+    vb = np.array([vocab[t] for t in tb], dtype=float)
+    dist, _ = fastdtw(va, vb)
+    max_len = max(len(ta), len(tb))
+    return float(math.exp(-dist / max_len))
 
 

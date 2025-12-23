@@ -1,1 +1,0 @@
-- *Application:* Create digital twins for devices, fleets, or biological systems using the AGI cube and memory crystal modules—tracking and forecasting performance, health, or risk, then intervening directly (software/hardware triggers) based on unified cognitive-state and environmental feedback.

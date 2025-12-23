@@ -1,0 +1,3 @@
+engine = KaleidoscopeEngine()
+engine.run_simulation()
+drug_discovery()  # Application

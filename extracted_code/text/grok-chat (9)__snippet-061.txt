@@ -1,0 +1,8 @@
+  - Added GOECKOH_MIRROR_LOG_ALL (default on) and default JSONL log at
+    backend/.run/mirror_metrics.jsonl.
+  - Telemetry now records every utterance (even rejected) and captures p50/
+    p95 latency, GCL stats, and drift; centralized _record_telemetry handles
+    deque + JSONL + harvest log.
+  - Avoids double-logging by only writing harvested entries once; keeps
+    percentile helper intact.
+

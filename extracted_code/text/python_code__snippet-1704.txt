@@ -1,0 +1,6 @@
+ph = "".join(c for c in phoneme.upper() if c.isalpha())
+target = 0.1 if ph in _VOWELS else 0.9 if ph in _SHARP_CONSONANTS else 0.5 if ph in _SOFT_CONSONANTS else 0.4
+alpha = 0.6
+return np.clip(alpha * target + (1.0 - alpha) * base_sharpness, 0.0, 1.0)
+
+

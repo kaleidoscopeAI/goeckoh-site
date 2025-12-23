@@ -1,0 +1,7 @@
+Option,
+# Don't ask for input
+"--no-input",
+dest="no_input",
+action="store_true",
+default=False,
+help="Disable prompting for input.",

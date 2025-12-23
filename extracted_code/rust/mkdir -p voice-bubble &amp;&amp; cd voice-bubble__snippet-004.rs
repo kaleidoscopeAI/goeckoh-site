@@ -1,58 +1,46 @@
-use whisper_rs::{WhisperContext, SamplingStrategy};
+use piper_rs::{Piper, Voice, AudioOutput};
 
-struct StreamingSTT {
-    ctx: WhisperContext,
-    state: WhisperState,
-    params: FullParams,
-    partial_buffer: Vec<f32>,
+struct VoiceCloningTTS {
+    piper: Piper,
+    current_voice: Voice,
+    sample_rate: u32,
 }
 
-impl StreamingSTT {
-    fn new(model_path: &str) -> Self {
-        let ctx = WhisperContext::new(model_path).unwrap();
-        let state = ctx.create_state().unwrap();
-        
-        let mut params = FullParams::new(SamplingStrategy::Greedy { best_of: 1 });
-        params.set_translate(false);
-        params.set_language(Some("en"));
-        params.set_print_special(false);
-        params.set_print_progress(false);
-        params.set_print_realtime(true);  // Enable partial results
-        params.set_no_context(true);      // Faster for streaming
+impl VoiceCloningTTS {
+    async fn new(voice_path: &str) -> Self {
+        let piper = Piper::new().expect("Failed to create Piper");
+        let voice = Voice::from_file(voice_path).expect("Failed to load voice");
+        let sample_rate = voice.sample_rate();
         
         Self {
-            ctx,
-            state,
-            params,
-            partial_buffer: Vec::with_capacity(16000 * 30), // 30s buffer
+            piper,
+            current_voice: voice,
+            sample_rate,
         }
     }
     
-    async fn process_chunk(&mut self, audio: &[f32]) -> Option<String> {
-        self.partial_buffer.extend_from_slice(audio);
+    async fn synthesize_streaming(&self, text: &str) -> Vec<f32> {
+        let mut synthesizer = self.piper
+            .synthesize_streaming(&self.current_voice, text)
+            .expect("Failed to synthesize");
         
-        // Process when we have enough audio (e.g., 500ms)
-        if self.partial_buffer.len() >= 8000 {
-            let result = self.state.full(&self.params, &self.partial_buffer).ok()?;
-            
-            // Get partial text
-            let num_segments = self.state.full_n_segments().unwrap_or(0);
-            let mut text = String::new();
-            
-            for i in 0..num_segments {
-                if let Ok(segment) = self.state.full_get_segment_text(i) {
-                    text.push_str(&segment);
-                }
-            }
-            
-            // Clear processed audio (keep last 1s for context)
-            let keep_len = 16000.min(self.partial_buffer.len());
-            self.partial_buffer = self.partial_buffer
-                .split_off(self.partial_buffer.len() - keep_len);
-            
-            Some(text)
-        } else {
-            None
+        let mut audio_buffer = Vec::new();
+        
+        while let Some(audio_chunk) = synthesizer.next().await {
+            let floats: Vec<f32> = audio_chunk
+                .iter()
+                .map(|&sample| sample as f32 / 32768.0)
+                .collect();
+            audio_buffer.extend(floats);
         }
+        
+        audio_buffer
+    }
+    
+    fn clone_voice(&mut self, reference_audio: &[f32]) {
+        // Note: Piper doesn't support voice cloning natively
+        // This would require a custom model like F5-TTS compiled to Rust
+        // For now, we load a pre-trained voice
+        unimplemented!("Real-time voice cloning requires custom Rust bindings for F5-TTS/VITS");
     }
 }

@@ -1,0 +1,2 @@
+- Induce high-arousal conditions in simulation (max lattice kinetic energy, low coherence) and verify the safety throttle clamps gain, applies damping, and cannot produce rising RMS over time.
+- Run adversarial inputs: shouting, microphone feedback proximity, and sudden silence, checking that output amplitude and spectral tilt stay within pre-defined safe bounds.

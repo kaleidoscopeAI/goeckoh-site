@@ -1,24 +1,10 @@
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--host', default='127.0.0.1')
-    parser.add_argument('--port', type=int, default=5001)
-    parser.add_argument('--autonomous', action='store_true')
-    args = parser.parse_args()
-
-    # ensure corpus exists and embedder is fitted
-    ensure_corpus('./corpus')
-    # fit embedder on corpus
-    texts = []
-    for f in os.listdir('./corpus'):
-        if f.endswith('.txt'):
-            with open(os.path.join('./corpus', f), 'r', encoding='utf-8') as fh:
-                texts.append(fh.read())
-    if texts:
-        core.embedder.fit(texts)
-
-    loop = asyncio.get_event_loop()
-    if args.autonomous:
-        loop.create_task(autonomous_loop())
-    # start Quart
-    app.run(host=args.host, port=args.port)
-
+• POST /api/generate: This endpoint is designed for single-turn, stateless text generation.3 It takes a prompt and returns a generated completion. It does not inherently maintain conversational context between calls (though a deprecated context parameter exists).4
+    ◦ Key Parameters: model (required, e.g., "llama3.1"), prompt (required), images (optional, list of base64 strings for multimodal models), format (optional, e.g., "json" to enforce JSON output 4), options (model-specific parameters like temperature, seed 3), system (system prompt override), template (template override), stream (boolean, default true), raw (boolean, bypass template), keep_alive (duration string, e.g., "5m").4
+    ◦ Use Case: Suitable for tasks like interpreting a specific state of the Cube, generating parameter suggestions based only on the current context, or one-off analysis requests.
+• POST /api/chat: This endpoint facilitates multi-turn, conversational interactions.3 It maintains context through a messages array containing the history of the conversation.
+    ◦ Key Parameters: model (required), messages (required, array of objects with role ["user", "assistant", "system"] and content, optionally images), tools (optional, list of tools the model can call 4), format (optional, "json"), options, stream (boolean, default true), keep_alive.4
+    ◦ Use Case: Ideal for iterative refinement processes, such as adjusting parameters based on previous results, engaging in a dialogue about the system's state, or tasks requiring memory of past interactions.
+• POST /api/embeddings: Generates numerical vector representations (embeddings) for given text inputs.4
+    ◦ Key Parameters: model (required), input (string or list of strings), truncate (boolean, default true), options, keep_alive.4
+    ◦ Use Case: Can be used to represent textual data associated with Cube states, measure semantic similarity between interpretations, or potentially map states into a vector space suitable for certain ML algorithms.
+• Model Management Endpoints: (GET /api/tags, POST /api/show, POST /api/pull, POST /api/copy, DELETE /api/delete, POST /api/create, POST /api/push) Allow listing, inspecting, downloading, copying, deleting, creating (from Modelfile), and pushing local models.3

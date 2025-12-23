@@ -1,0 +1,22 @@
+2541              hamiltonian = 0.0
+2542 +
+2543 +        # Heart lattice snapshot (downsampled) for UI/telemetry
+2544 +        try:
+2545 +            nodes = np.asarray(self.crystalline_heart.nodes, dtype=flo
+      at)
+2546 +            if nodes.size >= 32:
+2547 +                bins = nodes.reshape(32, -1).mean(axis=1)
+2548 +                heart_sample = bins.tolist()
+2549 +            else:
+2550 +                heart_sample = nodes.tolist()
+2551 +        except Exception:
+2552 +            heart_sample = []
+2553
+     ⋮
+2567              'hamiltonian': hamiltonian,
+2568 +            'heart_sample': heart_sample,
+2569 +            'gcl_history': getattr(self.crystalline_heart, "gcl_histor
+      y", []),
+2570 +            'gcl_ts': getattr(self.crystalline_heart, "gcl_ts", []),
+2571              'aba_metrics': {
+

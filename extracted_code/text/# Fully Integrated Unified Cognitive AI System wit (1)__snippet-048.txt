@@ -1,0 +1,1 @@
+print("Ethical gate blocked action")

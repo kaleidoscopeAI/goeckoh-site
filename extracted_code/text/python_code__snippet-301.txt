@@ -1,0 +1,5 @@
+"""Normalize a python package name a la PEP 503"""
+# https://www.python.org/dev/peps/pep-0503/#normalized-names
+return re.sub('[-_.]+', '-', name).lower()
+
+

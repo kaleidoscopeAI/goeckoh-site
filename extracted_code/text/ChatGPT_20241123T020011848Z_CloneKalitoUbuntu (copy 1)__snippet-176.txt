@@ -1,0 +1,4 @@
+- Implements wiki crawling.
+- Processes nouns and associated annotations.
+- Stores images and metadata for learning.
+

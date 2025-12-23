@@ -1,0 +1,6 @@
+"""Mixin for TypeVarLike defaults."""
+
+__slots__ = ()
+__init__ = _set_default
+
+

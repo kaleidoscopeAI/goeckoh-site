@@ -1,0 +1,3 @@
+"""Retrieves a dictionary of memory points data."""
+return {id: asdict(mpoint) for id, mpoint in self.resonances.items()}
+

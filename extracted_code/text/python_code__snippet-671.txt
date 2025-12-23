@@ -1,0 +1,7 @@
+"""Thread local values for Console context."""
+
+theme_stack: ThemeStack
+buffer: List[Segment] = field(default_factory=list)
+buffer_index: int = 0
+
+

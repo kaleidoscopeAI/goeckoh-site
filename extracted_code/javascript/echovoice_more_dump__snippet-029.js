@@ -1,1 +1,1 @@
-let mut val: u64 = 0;
+if let Some(ref path) = self.msr_mapping {

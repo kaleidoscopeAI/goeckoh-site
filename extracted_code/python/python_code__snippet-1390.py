@@ -1,19 +1,14 @@
-class BrokenStdoutLoggingError(Exception):
-    """
-    Raised if BrokenPipeError occurs for the stdout stream while logging.
-    """
+def __init__(self, func):
+    self.func = func
+    # for attr in ('__name__', '__module__', '__doc__'):
+    #     setattr(self, attr, getattr(func, attr, None))
 
-
-def _is_broken_pipe_error(exc_class: Type[BaseException], exc: BaseException) -> bool:
-    if exc_class is BrokenPipeError:
-        return True
-
-    # On Windows, a broken pipe can show up as EINVAL rather than EPIPE:
-    # https://bugs.python.org/issue19612
-    # https://bugs.python.org/issue30418
-    if not WINDOWS:
-        return False
-
-    return isinstance(exc, OSError) and exc.errno in (errno.EINVAL, errno.EPIPE)
+def __get__(self, obj, cls=None):
+    if obj is None:
+        return self
+    value = self.func(obj)
+    object.__setattr__(obj, self.func.__name__, value)
+    # obj.__dict__[self.func.__name__] = value = self.func(obj)
+    return value
 
 

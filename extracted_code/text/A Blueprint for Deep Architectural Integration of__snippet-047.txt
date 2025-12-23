@@ -1,0 +1,2 @@
+- Bitwise Hamming distance weighted by connection strengths to penalize semantic mismatches.
+- Continuous Euclidean distances between node embeddings to enforce spatial coherence.

@@ -1,35 +1,75 @@
-class SystemInfo:
-    """Information about the system to upgrade"""
-    root_path: str
-    system_type: SystemType
-    primary_language: LanguageType
-    other_languages: List[LanguageType] = field(default_factory.list)
-    files: Dict[str, CodeFile] = field(default_factory.dict)
-    dependencies: Dict[str, DependencyInfo] = field(default_factory.dict)
-    entry_points: List[str] = field(default_factory.list)
-    config_files: List[str] = field(default_factory.list)
-    database_info: Dict[str, Any] = field(default_factory.dict)
-    api_endpoints: List[str] = field(default_factory.list)
-    vulnerabilities: List[str] = field.default_factory.list)
-    dependencies_graph: Optional[nx.DiGraph] = None
-    file_count: int = 0
-    code_size: int = 0  # In bytes
-    
-    def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary"""
-        result = {
-            "root_path": self.root_path,
-            "system_type": self.system_type.name,
-            "primary_language": self.primary_language.name,
-            "other_languages": [lang.name for lang in self.other_languages],
-            "entry_points": self.entry_points,
-            "config_files": self.config_files,
-            "database_info": self.database_info,
-            "api_endpoints": self.api_endpoints,
-            "vulnerabilities": self.vulnerabilities,
-            "file_count": self.file_count,
-            "code_size": self.code_size,
-            "dependencies": {k: {"name": v.name, "version": v.version} for k, v in self.dependencies.items()},
-        }
-        return result
+"""
+Represents a single gear in the Kaleidoscope Engine, capable of
+transforming data in unique ways.
+"""
+def __init__(self):
+    self.rotation = 0
+    self.transformation_matrix = self._initialize_transformation_matrix()
+
+def _initialize_transformation_matrix(self) -> np.ndarray:
+    """
+    Initializes a transformation matrix with random values.
+
+    Returns:
+        np.ndarray: A 2x2 transformation matrix.
+    """
+    return np.random.rand(2, 2)
+
+def process(self, data: Any) -> Any:
+    """
+    Transforms the input data based on the gear's current state.
+
+    Args:
+        data: The input data to be transformed.
+
+    Returns:
+        The transformed data.
+    """
+    self.rotate()
+
+    if isinstance(data, list):
+        transformed_data = [self._transform_value(item) for item in data]
+    elif isinstance(data, dict):
+        transformed_data = {k: self._transform_value(v) for k, v in data.items()}
+    else:
+        transformed_data = self._transform_value(data)
+
+    return transformed_data
+
+def _transform_value(self, value: Any) -> Any:
+    """
+    Applies a transformation to a single data value.
+
+    Args:
+        value: The value to be transformed.
+
+    Returns:
+        The transformed value.
+    """
+    if isinstance(value, (int, float)):
+        # Apply a simple transformation for numerical values
+        return value * np.random.uniform(0.8, 1.2)
+    elif isinstance(value, str):
+        # Reverse the string as a basic transformation for text
+        return value[::-1]
+    else:
+        return value  # Return unchanged if not a supported type
+
+def rotate(self):
+    """
+    Rotates the gear, changing its transformation behavior.
+    """
+    self.rotation = (self.rotation + np.random.randint(1, 46)) % 360
+
+def get_state(self) -> Dict[str, Any]:
+    """
+    Returns the current state of the gear.
+
+    Returns:
+        dict: A dictionary containing the gear's rotation and transformation matrix.
+    """
+    return {
+        'rotation': self.rotation,
+        'transformation_matrix': self.transformation_matrix.tolist()
+    }
 

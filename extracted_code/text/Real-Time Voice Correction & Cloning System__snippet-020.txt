@@ -1,0 +1,4 @@
+system = GoeckohSystem("assets/my_voice.wav")
+# Integration with pyaudio/cpal stream here
+
+

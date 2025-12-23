@@ -1,0 +1,4 @@
+      audioRecord?.startRecording()
+      audioBuffer.reset()
+
+      val recognizer = Vosk.createRecognizer(voskModel,

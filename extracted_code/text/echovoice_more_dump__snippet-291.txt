@@ -1,1 +1,6 @@
-export class Simulation {
+   * In umaa/kaleidoscope_engine.py, the _apply_cognitive_actuation method currently updates the node's epsilon
+     vector based on the magnitude of F_kaleidoscope in a somewhat generic way.
+   * Improvement: Make this influence more specific, linking the direction or components of F_kaleidoscope to
+     particular dimensions of the epsilon vector (e.g., a strong F_kaleidoscope in a certain direction might
+     specifically increase "curiosity" or "stress" components of epsilon).
+

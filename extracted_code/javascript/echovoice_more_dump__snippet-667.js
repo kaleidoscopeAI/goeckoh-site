@@ -1,2 +1,2 @@
-for (let i = 0; i < N; i++) {
-for (let j = 0; j < M; j++) {
+const id = req.params.id;
+const filePath = path.join(EXP_DIR, `${id}.json`);

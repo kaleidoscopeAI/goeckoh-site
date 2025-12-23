@@ -1,0 +1,16 @@
+253          </div>
+254 +        <div className="bg-white border border-slate-200 rounded-xl p-6
+      shadow-sm">
+255 +          <div className="text-xs text-slate-400 uppercase tracking-wid
+     e mb-2">Validation (p95 latency)</div>
+256 +          <div className="text-3xl font-bold text-brand-black mb-1">
+257 +            {val.latency_p95_ms !== undefined ? `${val.latency_p95_ms.t
+     oFixed(1)} ms` : 'N/A'}
+258 +          </div>
+259 +          <div className="text-xs text-slate-500">
+260 +            GCL mean {val.gcl_mean !== undefined ? val.gcl_mean.toFixed
+     (2) : '—'} · samples {val.count ?? 0}
+261 +          </div>
+262 +        </div>
+263        </div>
+

@@ -1,2 +1,3 @@
-    from tornado.concurrent import Future
+    from pip._vendor.tenacity.tornadoweb import TornadoRetrying
+
 

@@ -1,1 +1,2 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+return np.gradient(adc_raw) * kappa  # Real ∂I/∂t = ∇ · (κ ADC)
+

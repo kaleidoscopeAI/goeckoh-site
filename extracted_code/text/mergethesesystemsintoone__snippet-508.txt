@@ -1,0 +1,8 @@
+    """
+    for node in nodes:
+        # Basic distribution logic (can be made more sophisticated)
+        if node.state.status == "Active":
+            node.process_data(data)
+            logging.info(f"Data distributed to node {node.node_id}")
+
+

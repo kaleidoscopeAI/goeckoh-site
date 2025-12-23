@@ -1,0 +1,8 @@
+23
+24 -DEFAULT_PATH = Path(__file__).resolve().parents[1] / "backend" / ".run" / "mirror_metrics.jsonl"
+24 +# Default mirrors the runtime fallback we use in real_unified_system.py
+25 +DEFAULT_PATH = Path(os.environ.get("GOECKOH_MIRROR_METRICS_LOG", "")) or (
+26 +    Path(__file__).resolve().parents[1] / "backend" / ".run" / "mirror_metrics.jsonl"
+27 +)
+28
+

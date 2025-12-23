@@ -1,0 +1,2 @@
+  raise ValueError("No .env file found. Exiting.")
+

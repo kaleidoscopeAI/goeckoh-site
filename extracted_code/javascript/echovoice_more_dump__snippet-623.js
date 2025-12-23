@@ -1,3 +1,3 @@
-private notify() {
-const snapshot = this.getConstructs();
-for (const cb of this.subscribers) {
+const ts = Date.now();
+const id = `w_${ts}`;
+const payload = { id, ts, W, meta };

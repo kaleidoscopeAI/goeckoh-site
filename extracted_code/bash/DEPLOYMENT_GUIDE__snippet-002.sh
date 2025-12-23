@@ -1,3 +1,2 @@
-tar -xzf goeckoh-system-1.0.0.tar.gz
-cd goeckoh-system-1.0.0
-./install.sh
+sudo dpkg -i goeckoh-system_1.0.0_all.deb
+sudo apt-get install -f  # Fix dependencies if needed

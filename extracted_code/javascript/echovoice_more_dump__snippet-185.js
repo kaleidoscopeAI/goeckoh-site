@@ -1,8 +1,5 @@
-fn bit_entropy(state: u64) -> u64 {
-    let mut count = 0;
-    let mut val = state;
-    while val != 0 {
-        count += val & 1;
-        val >>= 1;
-    }
-    (count * 100 / 64) as u64  // Normalized 0-100
+633 |             if let Some(atomic_num) = features.atomic_number {
+    |                                                ^^^^^^^^^^^^^ unknown field
+    |
+    = note: available fields are: `element_symbol`, `electronegativity`, `valence_electrons`, `atomic_radius`, `is_metal` ... and 2 others
+

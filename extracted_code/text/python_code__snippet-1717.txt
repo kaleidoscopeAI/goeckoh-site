@@ -1,0 +1,33 @@
+"""
+Unified deterministic analysis.
+All feature arrays share the same length T.
+"""
+if y.size == 0:
+    raise ValueError("Empty audio input.")
+
+frames = _frame_signal(y, frame_length, hop_length)
+dt = hop_length / float(sr)
+
+energy = _rms(frames)
+energy = energy / (np.max(energy) + 1e-6)
+
+f0 = _simple_f0(frames, sr)
+valid = (f0 > 0) & np.isfinite(f0)
+if valid.any():
+    median_f0 = float(np.median(f0[valid]))
+    f0[~valid] = median_f0
+else:
+    f0[:] = 150.0
+
+pa = _compute_psychoacoustic_features(frames, sr)
+
+return AttemptFeatures(
+    energy_attempt=energy,
+    f0_attempt=f0,
+    zcr_attempt=pa["zcr"],
+    spectral_tilt=pa["spectral_tilt"],
+    hnr_attempt=pa["hnr"],
+    dt=dt,
+)
+
+

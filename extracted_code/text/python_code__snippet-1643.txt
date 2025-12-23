@@ -1,0 +1,6 @@
+raise SystemExit(
+    "This version of pip does not support python {} (requires >={}).".format(
+        version_str(sys.version_info[:2]), version_str(PYTHON_REQUIRES)
+    )
+)
+

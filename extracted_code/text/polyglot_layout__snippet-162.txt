@@ -1,0 +1,4 @@
+          steps += ["Clarify requirements","Sketch architecture","List modules","Draft algorithm","Test cases","Refine edges","Document"]
+      if not steps: steps=["Clarify intent","Retrieve facts","Draft","Critique","Finalize"]
+      return steps
+

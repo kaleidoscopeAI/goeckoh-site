@@ -1,1 +1,1 @@
-def play_wav_bytes(data: bytes) -> None:
+1. Install the Python package (from repo root):

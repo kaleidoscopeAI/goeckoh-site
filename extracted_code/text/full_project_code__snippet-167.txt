@@ -1,0 +1,4 @@
+_moved_attributes += [
+    MovedModule("winreg", "_winreg"),
+]
+

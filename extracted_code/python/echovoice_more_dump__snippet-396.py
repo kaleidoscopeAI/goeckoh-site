@@ -1,1 +1,1 @@
-async def handle_query():
+async def initialize_lattice(self):

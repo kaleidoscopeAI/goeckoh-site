@@ -1,2 +1,2 @@
-class UnifiedOrganicAI:
-def __init__(self, config: Optional[Dict] = None):
+async def main():
+"""Enhanced main function with user interaction"""

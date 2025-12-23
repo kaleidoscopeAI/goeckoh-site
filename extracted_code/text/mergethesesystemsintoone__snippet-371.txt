@@ -1,0 +1,3 @@
+                                                 for other_id, other_resonance in global_stats.get("resonances", {}).items()
+                                                 if other_id != self.pattern_id)]
+

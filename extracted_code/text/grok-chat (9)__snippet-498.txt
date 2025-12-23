@@ -1,0 +1,5 @@
+  model=Gemini(
+      model=config.model,
+      retry_options=retry_options
+  ),
+  # remaining agent definition

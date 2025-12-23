@@ -1,0 +1,3 @@
+return _sysconfig.get_scheme("", user=True).scripts
+
+

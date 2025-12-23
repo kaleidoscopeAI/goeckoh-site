@@ -1,0 +1,1 @@
+      Log.d("VAD Metrics", "Total frames: $totalFrames, Speech frames:

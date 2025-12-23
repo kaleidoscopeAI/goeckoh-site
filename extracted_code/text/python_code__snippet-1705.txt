@@ -1,0 +1,4 @@
+text: str,
+profile: SpeakerProfile,
+vocoder_backend=MockVocoder(),
+dt: float = 0.01,

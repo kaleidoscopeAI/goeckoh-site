@@ -1,0 +1,4 @@
+SelFn = Callable[["HybridState", int], Sequence[int]]
+OperatorCallable = Callable[[Any, dict], Any]
+GateFn = Callable[[float], float]
+

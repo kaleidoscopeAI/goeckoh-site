@@ -1,0 +1,2 @@
+'Python3Lexer': 'PythonLexer',
+'Python3TracebackLexer': 'PythonTracebackLexer',

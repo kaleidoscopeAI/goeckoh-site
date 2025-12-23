@@ -1,0 +1,10 @@
+"""All per-frame features needed by the Psychoacoustic Engine."""
+
+energy_attempt: np.ndarray  # [T] RMS energy
+f0_attempt: np.ndarray  # [T] F0 (Hz), NaNs handled
+zcr_attempt: np.ndarray  # [T] 0..1, Bouba/Kiki texture
+spectral_tilt: np.ndarray  # [T] 0..1, Metalness proxy
+hnr_attempt: np.ndarray  # [T] 0..1, Roughness proxy
+dt: float  # seconds per frame
+
+

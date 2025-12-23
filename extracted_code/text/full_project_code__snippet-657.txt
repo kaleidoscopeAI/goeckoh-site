@@ -1,0 +1,4 @@
+cache_hit_str = "*" if cache_hit else ""
+print(f"{cache_hit_str}Match {expr} failed, {type(exc).__name__} raised: {exc}")
+
+

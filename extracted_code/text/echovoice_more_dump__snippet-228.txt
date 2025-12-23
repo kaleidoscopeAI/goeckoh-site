@@ -1,1 +1,4 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+model: modelName,
+messages: messages,
+stream: false // Request a single JSON response object
+// Add other options like 'format', 'options', 'keep_alive', 'tools' as needed

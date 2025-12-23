@@ -1,0 +1,2 @@
+estimates hardware round-trip latency via cross-correlation; saves recording
+to backend/.run/loopback_recording.npy.

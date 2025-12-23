@@ -1,1 +1,10 @@
-evaluates whether a correction is needed using the agent's string
+class HeartConfig:
+    n_nodes: int = 1024
+    n_channels: int = 5  # e.g., arousal, valence, stress, harmony, energy
+    dt: float = 0.03  # Timestep for ODE integration
+    alpha: float = 0.1  # Stimulus drive strength
+    beta: float = 0.05  # State decay rate
+    gamma: float = 0.02  # Diffusion/coupling strength
+    noise_level: float = 0.005 # Base noise level
+    max_emotion_value: float = 2.0
+

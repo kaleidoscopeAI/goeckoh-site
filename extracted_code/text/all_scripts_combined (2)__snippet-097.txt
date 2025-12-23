@@ -1,0 +1,5 @@
+if wav.ndim == 1:
+    return wav
+return np.mean(wav, axis=1)
+
+

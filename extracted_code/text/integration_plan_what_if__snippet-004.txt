@@ -1,0 +1,7 @@
+*   **Speech Generation:**
+    *   **Corrected Text (EchoVoice):** Therapeutic response text is generated.
+    *   **Voice Crystal Prosody Transfer:** The system's "Voice Crystal" applies appropriate prosody (calm, encouraging, firm) based on the AGI's emotional state and therapeutic intent, then synthesizes the speech.
+*   **HID Emulation:** `cognitive_crystal_ai`'s HID emulation activates:
+    *   **Environmental Adjustments:** Controls smart devices (e.g., dimming lights, playing soothing sounds, adjusting screen content) to support the therapeutic intervention.
+    *   **Physical Interaction:** Guides a connected robotic companion or interactive toy for engaging the child.
+

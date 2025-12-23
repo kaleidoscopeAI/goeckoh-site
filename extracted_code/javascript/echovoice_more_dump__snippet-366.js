@@ -1,1 +1,1 @@
-for (const key in this.emotion) {
+for (const k in P) {

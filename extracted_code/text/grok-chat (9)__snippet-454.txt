@@ -1,0 +1,5 @@
+{{"summaries": {{"/path/to/file1.md":"Summary of file 1.",
+                 "/path/to/file2.md":"Summary of file 2.",
+                 "/path/to/file3.py":"Summary of python file."
+                 "project":"Summary of the project."}} }}
+

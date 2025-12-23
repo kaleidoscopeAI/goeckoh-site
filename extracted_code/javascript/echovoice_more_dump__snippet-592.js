@@ -1,1 +1,3 @@
-for (let i = 0; i < Math.min(numSpecies, numEmotions); i++) W_actuation[i][i] = 1;
+const clock = new THREE.Clock();
+let mounted = true;
+const animate = () => {

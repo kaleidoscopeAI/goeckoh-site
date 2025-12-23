@@ -1,1 +1,1 @@
-4. **Execution:** The crawler executes, fetching data from the web.
+1. **Basic Crawler:** Implement a simple, polite crawler that fetches data from a predefined whitelist of high-quality sources (e.g., Wikipedia, ArXiv, reputable news APIs).

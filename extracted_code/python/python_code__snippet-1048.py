@@ -1,22 +1,31 @@
-    Verifies the peer certificates from an SSLSocket or SSLObject
-    against the certificates in the OS trust store.
-    """
-    sslobj: ssl.SSLObject = sock_or_sslobj  # type: ignore[assignment]
-    try:
-        while not hasattr(sslobj, "get_unverified_chain"):
-            sslobj = sslobj._sslobj  # type: ignore[attr-defined]
-    except AttributeError:
-        pass
+def add_target_python_options(cmd_opts: OptionGroup) -> None:
+    cmd_opts.add_option(platforms())
+    cmd_opts.add_option(python_version())
+    cmd_opts.add_option(implementation())
+    cmd_opts.add_option(abis())
 
-    # SSLObject.get_unverified_chain() returns 'None'
-    # if the peer sends no certificates. This is common
-    # for the server-side scenario.
-    unverified_chain: typing.Sequence[_ssl.Certificate] = (
-        sslobj.get_unverified_chain() or ()  # type: ignore[attr-defined]
+
+def make_target_python(options: Values) -> TargetPython:
+    target_python = TargetPython(
+        platforms=options.platforms,
+        py_version_info=options.python_version,
+        abis=options.abis,
+        implementation=options.implementation,
     )
-    cert_bytes = [cert.public_bytes(_ssl.ENCODING_DER) for cert in unverified_chain]
-    _verify_peercerts_impl(
-        sock_or_sslobj.context, cert_bytes, server_hostname=server_hostname
+
+    return target_python
+
+
+def prefer_binary() -> Option:
+    return Option(
+        "--prefer-binary",
+        dest="prefer_binary",
+        action="store_true",
+        default=False,
+        help=(
+            "Prefer binary packages over source packages, even if the "
+            "source packages are newer."
+        ),
     )
 
 

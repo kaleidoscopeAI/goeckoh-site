@@ -1,0 +1,3 @@
+patterns = pattern_recognizer.recognize_patterns({"cycle": 1, "data": result.data})
+print("Patterns:", patterns)
+

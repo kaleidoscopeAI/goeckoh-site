@@ -1,0 +1,7 @@
+Option,
+"--global-option",
+dest="global_options",
+action="append",
+metavar="options",
+help="Extra global options to be supplied to the setup.py "
+"call before the install or bdist_wheel command.",

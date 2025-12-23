@@ -1,4 +1,23 @@
-• I'm working through why tasks.register isn't found in the Groovy build.gradle despite using Gradle 8.3, considering plugin
-  conflicts, script context, and older Gradle versions lurking. I decide to switch to the older task clean(type: Delete) style
-  to resolve the issue safely.
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:layout_width="match_parent"
+android:layout_height="match_parent">
 
+<TextView
+    android:id="@+id/id_status"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Status"
+    app:layout_constraintBottom_toTopOf="@id/id_start"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+<Button
+    android:id="@+id/id_start"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Start Listening"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/id_status" />

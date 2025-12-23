@@ -1,1 +1,4 @@
-- Local embedding using TF-IDF + PCA (no external model calls)
+priority_adjustment: i32,
+memory_action: MemoryAction,
+io_class: IoClass,
+scheduling_hint: SchedulingHint,

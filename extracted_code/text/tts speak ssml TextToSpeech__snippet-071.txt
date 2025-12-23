@@ -1,0 +1,1 @@
+      // Calculate speaking rate: syllables per second approx (words *

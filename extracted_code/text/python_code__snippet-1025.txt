@@ -1,0 +1,10 @@
+"""A hash was provided for a version-control-system-based requirement, but
+we don't have a method for hashing those."""
+
+order = 0
+head = (
+    "Can't verify hashes for these requirements because we don't "
+    "have a way to hash version control repositories:"
+)
+
+

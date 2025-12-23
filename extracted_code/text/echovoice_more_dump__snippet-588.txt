@@ -1,0 +1,11 @@
+global _lib
+lib_path = lib_path or os.environ.get("RUST_KERNEL_PATH", "rust_kernel/target/release/librust_kernel.so")
+if not os.path.exists(lib_path):
+    raise FileNotFoundError(lib_path)
+_lib = ctypes.CDLL(lib_path)
+_lib.eval_energy.restype = ctypes.c_double
+_lib.eval_energy.argtypes = [ctypes.POINTER(ctypes.c_double), ctypes.c_int]
+_lib.parallel_tempering.restype = ctypes.c_int
+_lib.parallel_tempering.argtypes = [ctypes.POINTER(ctypes.c_double), ctypes.c_int, ctypes.c_int]
+return _lib
+

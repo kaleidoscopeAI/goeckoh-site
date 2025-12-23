@@ -1,0 +1,6 @@
+Option,
+"--pre",
+action="store_true",
+default=False,
+help="Include pre-release and development versions. By default, "
+"pip only finds stable versions.",

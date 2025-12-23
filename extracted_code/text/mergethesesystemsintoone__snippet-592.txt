@@ -1,0 +1,60 @@
+"""Task definition and metadata"""
+task_id: str
+name: str
+func: Callable
+args: List = field(default_factory=list)
+kwargs: Dict[str, Any] = field(default_factory=dict)
+status: TaskStatus = TaskStatus.PENDING
+priority: TaskPriority = TaskPriority.NORMAL
+result: Optional[TaskResult] = None
+created_at: datetime = field(default_factory=datetime.now)
+started_at: Optional[datetime] = None
+completed_at: Optional[datetime] = None
+timeout_seconds: int = 3600  # 1 hour default
+retry_count: int = 0
+max_retries: int = 3
+retry_delay: int = 60  # seconds
+dependencies: List[str] = field(default_factory=list)  # task_ids
+owner: Optional[str] = None  # user_id or system
+metadata: Dict[str, Any] = field(default_factory=dict)
+estimated_resources: Dict[str, float] = field(default_factory=dict)  # cpu, memory, etc.
+
+def to_dict(self) -> Dict[str, Any]:
+    """Convert to dictionary for serialization"""
+    data = {
+        "task_id": self.task_id,
+        "name": self.name,
+        "status": self.status.name,
+        "priority": self.priority.name,
+        "created_at": self.created_at.isoformat(),
+        "timeout_seconds": self.timeout_seconds,
+        "retry_count": self.retry_count,
+        "max_retries": self.max_retries,
+        "retry_delay": self.retry_delay,
+        "dependencies": self.dependencies,
+        "owner": self.owner,
+        "metadata": self.metadata,
+        "estimated_resources": self.estimated_resources
+    }
+
+    if self.started_at:
+        data["started_at"] = self.started_at.isoformat()
+
+    if self.completed_at:
+        data["completed_at"] = self.completed_at.isoformat()
+
+    if self.result:
+        data["result"] = {
+            "success": self.result.success,
+            "error": self.result.error,
+            "duration": self.result.duration,
+            "resource_usage": self.result.resource_usage
+        }
+
+    return data
+
+@property
+def is_ready(self) -> bool:
+    """Check if task is ready to run (dependencies complete)"""
+    return self.status == TaskStatus.PENDING
+

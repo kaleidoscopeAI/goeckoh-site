@@ -1,0 +1,9 @@
+"""
+This class represents a scraped HTML page.
+"""
+# The following slightly hairy-looking regex just looks for the contents of
+# an anchor link, which has an attribute "href" either immediately preceded
+# or immediately followed by a "rel" attribute. The attribute values can be
+# declared with double quotes, single quotes or no quotes - which leads to
+# the length of the expression.
+_href = re.compile("""

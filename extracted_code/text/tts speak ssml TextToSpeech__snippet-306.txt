@@ -1,0 +1,10 @@
+52      // Audio / DSP
+53 -    implementation("be.tarsos:dsp:2.4")
+53 +    implementation("com.github.JorenSix:TarsosDSP:2.5")
+54
+   ⋮
+64      // Language detection
+65 -    implementation("com.github.pemistahl:lingua:1.3.0")
+65 +    implementation("com.github.pemistahl:lingua:1.1.0")
+66
+

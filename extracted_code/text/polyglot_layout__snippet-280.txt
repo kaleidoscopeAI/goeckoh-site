@@ -1,0 +1,8 @@
+  rng = np.random.RandomState(11)
+  sims = []
+  for _ in range(M):
+      ei_n = ei + sigma * rng.normal(0.0, 1.0, size=ei.shape); ei_n /= (np.linalg.norm(ei_n)+1e-9)
+      ej_n = ej + sigma * rng.normal(0.0, 1.0, size=ej.shape); ej_n /= (np.linalg.norm(ej_n)+1e-9)
+      sims.append(float(np.dot(ei_n, ej_n)))
+  return float(np.mean(sims))
+

@@ -1,0 +1,23 @@
+# Step 1: Initialize the quantum cube
+cube = QuantumCube(cube_size=3)
+cube.propagate_energy()
+
+# Step 2: Generate insights and speculative data
+insights = cube.get_insights()
+speculative = cube.get_speculative()
+
+print("\n=== Insights ===")
+for insight in insights:
+    print(insight)
+
+print("\n=== Speculative ===")
+for spec in speculative:
+    print(spec)
+
+# Step 3: Visualize a high-energy node as a molecule
+if len(insights) > 0:
+    output_pdb = "insight_node.pdb"
+    high_tension_node = insights[0]
+    molecule = generate_molecule(high_tension_node, output_pdb)
+    launch_avogadro(output_pdb)
+

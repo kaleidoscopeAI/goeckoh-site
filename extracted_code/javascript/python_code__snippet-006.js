@@ -1,1 +1,5 @@
-# Define a small helper function to alias our vendored modules to the real ones
+          bool: True if the function succeeds, otherwise False.
+    """
+    return bool(_GetConsoleCursorInfo(std_handle, byref(cursor_info)))
+
+

@@ -1,7 +1,9 @@
-# Create and activate a virtual environment
-python3 -m venv /path/to/project/env
-source /path/to/project/env/bin/activate
+# Run the core demo
+python3 /path/to/project/demos/core_demo.py
 
-# Install dependencies
-pip install numpy networkx matplotlib scikit-learn
+# Run a specific module demo
+python3 /path/to/project/demos/functional_ai_demo.py
+
+# Test resource management
+python3 /path/to/project/demos/resource_management_demo.py
 

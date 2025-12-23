@@ -1,0 +1,4 @@
+text="Hello world",
+profile=profile,
+vocoder_backend=my_vocoder,  # Real TTS backend
+dt=0.01  # 10ms frames

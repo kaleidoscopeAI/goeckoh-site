@@ -1,4 +1,8 @@
-    from pip._vendor.typing_extensions import Final  # pragma: no cover
-
-from .segment import ControlCode, ControlType, Segment
-
+def make_setuptools_develop_args(
+    setup_py_path: str,
+    *,
+    global_options: Sequence[str],
+    no_user_config: bool,
+    prefix: Optional[str],
+    home: Optional[str],
+    use_user_site: bool,

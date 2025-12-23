@@ -1,1 +1,1 @@
-async def continuous_crawling(self, focus_topics=None):
+def __init__(self, organic_ai, host='localhost', port=5000):

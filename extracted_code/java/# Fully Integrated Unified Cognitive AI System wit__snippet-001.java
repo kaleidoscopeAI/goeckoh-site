@@ -1,1 +1,0 @@
-- Deploy the backend on a scalable cloud service (AWS, Google Cloud, Azure) with a public URL.

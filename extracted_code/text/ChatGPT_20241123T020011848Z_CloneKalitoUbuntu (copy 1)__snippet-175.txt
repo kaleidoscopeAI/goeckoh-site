@@ -1,0 +1,4 @@
+- Defines the
+- Includes logic for node-to-node communication.
+- Handles DNA-based replication.
+

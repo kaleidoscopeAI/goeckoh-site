@@ -1,2 +1,2 @@
-let deg = 0;
-for (let w of r.vals) deg += w;
+const decayRate = 0.1;
+for (let k = 0; k < m; k++) {

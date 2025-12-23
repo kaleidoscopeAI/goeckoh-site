@@ -1,29 +1,36 @@
-class KnowledgeGraph:
-    def __init__(self):
-        self.graph = nx.DiGraph()
+def add_theorem(self, theorem: Dict):
+    """Adds a theorem to the theorem prover."""
+    self.theorems.append(theorem)
 
-    def add_insight_batch(self, insights: List[Dict]):
-        for ins in insights:
-            node_id = ins.get('id', str(uuid.uuid4()))
-            self.graph.add_node(node_id, **ins)
-        embs = np.array([embed_text(ins.get('content', '')) for ins in insights])
-        for i in range(len(insights)):
-            for j in range(i+1, len(insights)):
-                sim = 1 - math.cos(embs[i], embs[j])
-                if sim > 0.5:
-                    self.graph.add_edge(insights[i]['id'], insights[j]['id'], weight=sim)
+def prove(self, concept: Dict, rule_results: List[Dict]) -> List[Dict]:
+    """Attempts to prove theorems based on a concept and rule results."""
+    proofs = []
+    for theorem in self.theorems:
+        if self._theorem_applicable(concept, rule_results, theorem['premises']):
+            proofs.append({'theorem_id': theorem['id'], 'conclusion': theorem['conclusion'](concept, rule_results)})
+    return proofs
 
-    def propagate(self):
-        order = list(nx.topological_sort(self.graph))
-        for node in order:
-            preds = list(self.graph.predecessors(node))
-            if preds and 'content' in self.graph.nodes[node]:
-                merged = " | ".join(self.graph.nodes[p].get('content', '')[:50] for p in preds)
-                self.graph.nodes[node]['content'] += merged
+def _theorem_applicable(self, concept: Dict, rule_results: List[Dict], premises: List[Dict]) -> bool:
+    """Checks if a theorem is applicable based on premises."""
+    for premise in premises:
+        if premise['type'] == 'concept':
+            if not self._concept_matches(concept, premise['condition']):
+                return False
+        elif premise['type'] == 'rule':
+            if not any(self._rule_result_matches(result, premise['condition']) for result in rule_results):
+                return False
+    return True
 
-    def find_interventions(self):
-        sample = random.sample(list(self.graph.nodes), min(1000, len(self.graph.nodes)))
-        subgraph = self.graph.subgraph(sample)
-        betweenness = nx.betweenness_centrality(subgraph, k=100)
-        return sorted(betweenness.items(), key=lambda x: x[1], reverse=True)[:10]
+def _concept_matches(self, concept: Dict, condition: Dict) -> bool:
+    """Checks if a concept matches a condition."""
+    for key, value in condition.items():
+        if concept.get(key) != value:
+            return False
+    return True
 
+def _rule_result_matches(self, rule_result: Dict, condition: Dict) -> bool:
+    """Checks if a rule result matches a condition."""
+    for key, value in condition.items():
+        if rule_result.get(key) != value:
+            return False
+    return True

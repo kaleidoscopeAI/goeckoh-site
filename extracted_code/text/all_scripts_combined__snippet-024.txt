@@ -1,5 +1,0 @@
-class AudioData:
-    """Payload for raw audio information."""
-    waveform: np.ndarray
-    sample_rate: int
-

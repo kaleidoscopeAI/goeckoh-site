@@ -1,0 +1,4 @@
+"pkg_resources is deprecated as an API. "
+"See https://setuptools.pypa.io/en/latest/pkg_resources.html",
+DeprecationWarning,
+stacklevel=2

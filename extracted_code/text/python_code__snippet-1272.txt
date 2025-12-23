@@ -1,0 +1,10 @@
+"""
+Return paired elements.
+
+For example:
+    s -> (s0, s1), (s2, s3), (s4, s5), ...
+"""
+iterable = iter(iterable)
+return zip_longest(iterable, iterable)
+
+

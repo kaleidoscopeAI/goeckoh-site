@@ -1,1 +1,1 @@
-For selection function Sel_i:
+|     ----------------------------------------- this function should return `Result` or `Option` to accept `?`

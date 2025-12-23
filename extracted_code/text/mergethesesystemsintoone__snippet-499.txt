@@ -1,0 +1,26 @@
+  """Identifies topics using a simplified co-occurrence based method."""
+  co_occurrence = defaultdict(lambda: defaultdict(int))
+  for sentence in sentences:
+      for i in range(len(sentence)):
+          for j in range(i + 1, len(sentence)):
+              w1, w2 = sorted([sentence[i], sentence[j]])
+              co_occurrence[w1][w2] += 1
+
+  words = list(co_occurrence.keys())
+  matrix = np.array([[co_occurrence[w1][w2] for w2 in words] for w1 in words])
+
+  # Perform dimensionality reduction using SVD
+  try:
+      U, _, _ = np.linalg.svd(matrix)
+  except Exception as e:
+      print(f"Error during SVD calculation: {e}")
+      return []
+
+  # Assign words to topics based on their projection on the first 'num_topics' singular vectors
+  topics = [[] for _ in range(num_topics)]
+  for i, word in enumerate(words):
+      topic_idx = np.argmax(np.abs(U[i, :num_topics]))
+      topics[topic_idx].append(word)
+
+  return topics
+

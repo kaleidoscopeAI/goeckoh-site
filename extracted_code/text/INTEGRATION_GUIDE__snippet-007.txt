@@ -1,0 +1,43 @@
+<div className="relative w-full h-screen bg-black overflow-hidden">
+  {/* 3D Visualization */}
+  <EnhancedThreeCanvas
+    metrics={metrics}
+    aiThought={aiThought}
+    imageData={imageData}
+    settings={settings}
+    voiceData={{
+      bubbleState,
+      waveform: voiceData?.waveform,
+      spectrum: voiceData?.spectrum
+    }}
+  />
+
+  {/* UI Overlay */}
+  <EnhancedUIOverlay
+    metrics={metrics}
+    aiThought={aiThought}
+    isLoading={isLoading}
+    isDreaming={isDreaming}
+    onPromptSubmit={handlePromptSubmit}
+    chatHistory={chatHistory}
+    settings={settings}
+    onSettingsChange={handleSettingsChange}
+    voiceData={voiceData ? {
+      energy: voiceData.metrics.energy,
+      f0: voiceData.metrics.f0,
+      clarity: voiceData.metrics.clarity,
+      fluency: voiceData.metrics.fluency,
+      volume: voiceData.metrics.volume,
+      waveform: voiceData.waveform,
+      spectrum: voiceData.spectrum
+    } : undefined}
+    showVoicePanel={true}
+    showProgress={true}
+    showVoiceFeedback={true}
+  />
+
+  {/* Performance Monitor (dev only) */}
+  {process.env.NODE_ENV === 'development' && (
+    <PerformanceMonitor enabled={true} />
+  )}
+</div>

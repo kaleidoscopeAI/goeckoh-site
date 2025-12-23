@@ -1,14 +1,6 @@
-class FileType(Enum):
-    BINARY = "binary"
-    JAVASCRIPT = "javascript"
-    TYPESCRIPT = "typescript" 
-    PYTHON = "python"
-    CPP = "cpp"
-    C = "c"
-    CSHARP = "csharp"
-    JAVA = "java"
-    GO = "go"
-    RUST = "rust"
-    ASSEMBLY = "assembly"
-    UNKNOWN = "unknown"
+w = np.zeros(len(edges), dtype=np.float64)
+for k, (i, j) in enumerate(edges):
+    w[k] = expected_cos_with_noise(E[i], E[j], sigma=sigma, M=M)
+tau = 1.0 - w
+return w, tau
 

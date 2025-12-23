@@ -1,1 +1,2 @@
-async def add_dna_batch(self, dnas: List[Tuple[int, KnowledgeDNA]]):
+def create_unravel_tasks(self, input_directory: str, target_language: Optional[str] = None, 
+                          extra_tasks: List[str] = None) -> List[str]:

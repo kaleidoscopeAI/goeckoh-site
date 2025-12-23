@@ -1,17 +1,18 @@
-import os
-from contextlib import contextmanager
-from datetime import datetime
-from typing import BinaryIO, Generator, Optional, Union
+def runtime_checkable(cls):
+    """Mark a protocol class as a runtime protocol, so that it
+    can be used with isinstance() and issubclass(). Raise TypeError
+    if applied to a non-protocol class.
 
-from pip._vendor.cachecontrol.cache import SeparateBodyBaseCache
-from pip._vendor.cachecontrol.caches import SeparateBodyFileCache
-from pip._vendor.requests.models import Response
-
-from pip._internal.utils.filesystem import adjacent_tmp_file, replace
-from pip._internal.utils.misc import ensure_dir
-
-
-def is_from_cache(response: Response) -> bool:
-    return getattr(response, "from_cache", False)
+    This allows a simple-minded structural check very similar to the
+    one-offs in collections.abc such as Hashable.
+    """
+    if not (
+        (isinstance(cls, _ProtocolMeta) or issubclass(cls, typing.Generic))
+        and getattr(cls, "_is_protocol", False)
+    ):
+        raise TypeError('@runtime_checkable can be only applied to protocol classes,'
+                        f' got {cls!r}')
+    cls._is_runtime_protocol = True
+    return cls
 
 

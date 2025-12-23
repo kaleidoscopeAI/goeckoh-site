@@ -1,12 +1,19 @@
-def generate_molecule(node, output_file):
-    """Generate a 3D molecule from cube node data and save it as PDB."""
-    smiles = "C" * int(node["energy"] * 2)  # Simplified molecular representation
-    molecule = Chem.MolFromSmiles(smiles)
-    molecule = AllChem.AddHs(molecule)
-    AllChem.EmbedMolecule(molecule)
-    AllChem.UFFOptimizeMolecule(molecule)
-    with open(output_file, "w") as f:
-        f.write(Chem.MolToPDBBlock(molecule))
-    print(f"Molecule saved to {output_file}")
-    return molecule
+def __init__(self):
+    super().__init__("text")
+    self.vectorizer = TfidfVectorizer()  # Initialize TF-IDF vectorizer
+
+def process(self, data_wrapper: DataWrapper) -> Dict:
+  """Processes text data using TF-IDF vectorization."""
+  text = data_wrapper.get_data()
+
+  # Fit and transform the text data using the vectorizer
+  tfidf_matrix = self.vectorizer.fit_transform([text])
+
+  # Convert to a dense array
+  return {"tfidf_vector": tfidf_matrix.toarray()}
+
+def update_vectorizer(self, new_texts: List[str]):
+  """Updates the TF-IDF vectorizer with new text data."""
+  self.vectorizer.fit(new_texts)
+
 

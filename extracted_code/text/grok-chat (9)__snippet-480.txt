@@ -1,0 +1,1 @@
+  and organizes files into sections based on their directory structure,

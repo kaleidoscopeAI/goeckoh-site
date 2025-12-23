@@ -1,1 +1,3 @@
-TEBD: if χmax small, implement SVD using CPU optimized LAPACK (via ndarray-linalg in Node, or numpy.linalg.svd in Python) and schedule TEBD at
+build: ./frontend
+ports: ["3000:3000"]
+depends_on: [server]

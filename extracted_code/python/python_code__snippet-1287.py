@@ -1,8 +1,13 @@
-import logging
-import os
-from typing import Optional
+"""Retries if an exception has been raised of one or more types."""
 
-from pip._vendor.pyproject_hooks import BuildBackendHookCaller
+def __init__(
+    self,
+    exception_types: typing.Union[
+        typing.Type[BaseException],
+        typing.Tuple[typing.Type[BaseException], ...],
+    ] = Exception,
+) -> None:
+    self.exception_types = exception_types
+    super().__init__(lambda e: isinstance(e, exception_types))
 
-from pip._internal.utils.subprocess import runner_with_spinner_message
 

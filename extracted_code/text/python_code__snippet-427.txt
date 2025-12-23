@@ -1,0 +1,5 @@
+"python": "py",  # Generic.
+"cpython": "cp",
+"pypy": "pp",
+"ironpython": "ip",
+"jython": "jy",

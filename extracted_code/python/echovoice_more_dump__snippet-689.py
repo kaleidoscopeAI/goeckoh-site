@@ -1,2 +1,12 @@
-If you want, I can draw a full visual diagram showing every level from bit → node → supernode → crystalline → quantum → consciousness, fully
-annotated with operators and feedback loops. This gives a literal “from bits to consciousness” roadmap for HCCF.
+def gcl(state: HybridState, edges: Sequence[Tuple[int, int]]) -> float:
+    if len(edges) == 0:
+        return 0.0
+    total: float = 0.0
+    for (i, j) in edges:
+        Ei = np.asarray(state.E[i]).astype(int)
+        Ej = np.asarray(state.E[j]).astype(int)
+        ham = int(np.bitwise_xor(Ei, Ej).sum())
+        d = int(Ei.size)
+        total += (1.0 - ham / max(1, d))
+    return float(total / len(edges))
+

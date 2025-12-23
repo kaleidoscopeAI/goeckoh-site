@@ -1,145 +1,252 @@
-class InsightSynthesisTool:
+class SuperNode:
     """
-    Facilitates multi-domain AI collaboration, generating novel breakthroughs by fusing insights.
-    Acts as the 'Breakthrough Discovery Engine' with a 'Semantic Bridging Architecture'.
+    Represents an autonomous, learning AI agent designed to mimic and master a specific real-world domain.
     """
-    def __init__(self, n_clusters=3, max_features=1000):
-        if not isinstance(n_clusters, int) or n_clusters <= 0:
-            raise ValueError("InsightSynthesisTool: n_clusters must be a positive integer.")
-        if not isinstance(max_features, int) or max_features <= 0:
-            raise ValueError("InsightSynthesisTool: max_features must be a positive integer.")
+    def __init__(self, node_id, domain_description):
+        if not isinstance(node_id, str) or not node_id:
+            raise ValueError("SuperNode: node_id must be a non-empty string.")
+        if not isinstance(domain_description, str) or not domain_description:
+            raise ValueError("SuperNode: domain_description must be a non-empty string.")
 
-        self.vectorizer = TfidfVectorizer(stop_words='english', max_features=max_features)
-        self.kmeans_model = None
-        self.n_clusters = n_clusters
-        self.insights_df = pd.DataFrame(columns=['source_sn', 'insight_summary', 'keywords', 'embedding'])
-        print("--- Insight Synthesis Tool Initialized: Ready to forge new wisdom. ---")
+        self.node_id = node_id
+        self.domain_description = domain_description
+        self.historical_data = {} # Stores time series data for different aspects of the domain
+        self.generative_models = {} # Models to 'mimic' or generate domain behavior
+        self.prophet_models = {}  # Prophet models
+        print(f"--- Super Node '{self.node_id}' Initialized: Forging reality's mimicry for {domain_description}. ---")
 
-    def ingest_super_node_insights(self, sn_id, insight_text, keywords=None):
+    def ingest_historical_data(self, data_series_name, data_points):
         """
-        Ingests a new insight from a Super Node.
-        'insight_text' is the primary data for semantic analysis.
-        'keywords' can be predefined tags for explicit bridging.
-        Robustness: Validate inputs.
+        Ingest initial historical data for mimicry and causal analysis.
+        Robustness: Validate input types and data points.
         """
-        if not isinstance(sn_id, str) or not sn_id:
-            print("  [ERROR] Synthesis Directive: sn_id must be a non-empty string.")
+        if not isinstance(data_series_name, str) or not data_series_name:
+            print(f"  [ERROR] Super Node '{self.node_id}': data_series_name must be a non-empty string.")
             return
-        if not isinstance(insight_text, str) or not insight_text:
-            print("  [ERROR] Synthesis Directive: insight_text must be a non-empty string.")
+        if not isinstance(data_points, (list, np.ndarray)) or not data_points:
+            print(f"  [ERROR] Super Node '{self.node_id}': data_points must be a non-empty list or numpy array.")
             return
-        if keywords is not None and not (isinstance(keywords, list) and all(isinstance(k, str) for k in keywords)):
-            print("  [ERROR] Synthesis Directive: keywords must be a list of strings or None.")
-            return
-
-        new_insight = {'source_sn': sn_id, 'insight_summary': insight_text, 'keywords': keywords or []}
         try:
-            self.insights_df = pd.concat([self.insights_df, pd.DataFrame([new_insight])], ignore_index=True)
-            print(f"  Synthesis Directive: Ingested insight from '{sn_id}': '{insight_text[:50]}...'")
+            dates = pd.date_range(start='2020-01-01', periods=len(data_points), freq='D')
+            self.historical_data[data_series_name] = pd.DataFrame({'ds': dates, 'y': data_points})
+            print(f"  Super Node '{self.node_id}': Ingested historical data for '{data_series_name}'.")
         except Exception as e:
-            print(f"  [ERROR] Synthesis Directive: Failed to ingest insight from '{sn_id}': {e}")
+            print(f"  [ERROR] Super Node '{self.node_id}': Failed to ingest data for '{data_series_name}': {e}")
 
-
-    def _generate_embeddings(self):
+    def crawl_and_ingest_data(self, url, data_series_name, selector):
         """
-        Generates conceptual embeddings for insights (simplified via TF-IDF for CPU).
-        Robustness: Handle empty dataframes and vectorization errors.
+        Crawls a web page and ingests data using BeautifulSoup.
+        Selector is the CSS selector for the data elements.
         """
-        if self.insights_df.empty:
-            print("  [WARNING] Synthesis Directive: No insights to generate embeddings for.")
+        if not isinstance(url, str) or not url:
+            print(f"  [ERROR] Super Node '{self.node_id}': url must be a non-empty string.")
+            return
+        if not isinstance(selector, str) or not selector:
+            print(f"  [ERROR] Super Node '{self.node_id}': selector must be a non-empty string.")
             return
         try:
-            # Ensure 'insight_summary' column exists and is string type
-            self.insights_df['insight_summary'] = self.insights_df['insight_summary'].astype(str)
-            # Handle potential empty strings or NaNs in insight_summary
-            corpus = self.insights_df['insight_summary'].fillna('').tolist()
-            if not any(corpus): # If all summaries are empty
-                print("  [WARNING] Synthesis Directive: All insight summaries are empty. Cannot generate embeddings.")
-                self.insights_df['embedding'] = [np.array([])] * len(self.insights_df) # Assign empty array
+            response = requests.get(url)
+            response.raise_for_status()
+            soup = BeautifulSoup(response.text, 'html.parser')
+            elements = soup.select(selector)
+            data_points = [float(el.text.strip()) for el in elements if el.text.strip().replace('.', '', 1).isdigit()]
+            if not data_points:
+                print(f"  [WARNING] Super Node '{self.node_id}': No data found using selector '{selector}'.")
                 return
+            self.ingest_historical_data(data_series_name, data_points)
+        except requests.RequestException as e:
+            print(f"  [ERROR] Super Node '{self.node_id}': Failed to crawl '{url}': {e}")
+        except ValueError as e:
+            print(f"  [ERROR] Super Node '{self.node_id}': Data parsing error: {e}")
 
-            self.insights_df['embedding'] = list(self.vectorizer.fit_transform(corpus).toarray())
-            print("  Synthesis Directive: Generated insight embeddings.")
-        except Exception as e:
-            print(f"  [ERROR] Synthesis Directive: Error generating embeddings: {e}")
-            self.insights_df['embedding'] = [np.array([])] * len(self.insights_df) # Assign empty array on error
+    def optimize_arima_parameters(self, data, p_range=range(0, 6), d_range=range(0, 3), q_range=range(0, 6), P_range=range(0, 3), D_range=range(0, 3), Q_range=range(0, 3), s=12):
+        """
+        Advanced optimization of SARIMA parameters using parallel grid search based on AIC.
+        """
+        def fit_sarima(order):
+            p, d, q, P, D, Q = order
+            try:
+                model = SARIMAX(data, order=(p, d, q), seasonal_order=(P, D, Q, s))
+                results = model.fit(disp=False)
+                return (p, d, q, P, D, Q), results.aic
+            except Exception:
+                return order, np.inf
 
-    def identify_semantic_clusters(self):
+        orders = list(itertools.product(p_range, d_range, q_range, P_range, D_range, Q_range))
+        with Pool(processes=mp.cpu_count()) as pool:
+            results = pool.map(fit_sarima, orders)
+
+        best_order, best_aic = min(results, key=lambda x: x[1])
+        if best_aic == np.inf:
+            return None, np.inf
+        return best_order, best_aic
+
+    def train_generative_models(self, series_names):
         """
-        Identifies semantic clusters among insights using clustering (simplified 'Semantic Bridging').
-        These clusters represent areas of conceptual convergence.
-        Robustness: Handle insufficient data for clustering and clustering errors.
+        Trains simple AutoRegressive models to 'generatively mimic' domain behavior.
+        This is a highly simplified generative simulation.
+        Robustness: Validate series_names and handle training errors.
         """
-        self._generate_embeddings()
-        if self.insights_df.empty or 'embedding' not in self.insights_df or self.insights_df['embedding'].apply(lambda x: x.size == 0).all():
-            print("  [WARNING] Synthesis Directive: No valid embeddings to cluster.")
+        if not isinstance(series_names, list) or not series_names:
+            print(f"  [ERROR] Super Node '{self.node_id}': series_names must be a non-empty list of strings.")
             return
-        
-        # Filter out insights with empty embeddings if any were created due to errors
-        valid_embeddings_df = self.insights_df[self.insights_df['embedding'].apply(lambda x: x.size > 0)]
-        if len(valid_embeddings_df) < self.n_clusters:
-            print(f"  [WARNING] Synthesis Directive: Not enough valid insights ({len(valid_embeddings_df)}) for clustering (need at least {self.n_clusters}).")
-            self.kmeans_model = None # Reset model if not enough data
-            return
 
-        embeddings = np.array(valid_embeddings_df['embedding'].tolist())
-        try:
-            # MiniBatchKMeans is good for larger datasets on CPU as it processes in batches
-            self.kmeans_model = MiniBatchKMeans(n_clusters=self.n_clusters, random_state=42, n_init=10)
-            valid_embeddings_df['cluster'] = self.kmeans_model.fit_predict(embeddings)
-            # Merge clusters back to original DataFrame
-            self.insights_df = self.insights_df.drop(columns=['cluster'], errors='ignore').merge(
-                valid_embeddings_df[['cluster']], left_index=True, right_index=True, how='left'
-            )
-            self.insights_df['cluster'] = self.insights_df['cluster'].fillna(-1).astype(int) # Assign -1 for unclustered
-            print(f"  Synthesis Directive: Identified {self.n_clusters} semantic clusters.")
-        except Exception as e:
-            print(f"  [ERROR] Synthesis Directive: Error during clustering: {e}")
-            self.kmeans_model = None # Reset model on error
-            self.insights_df['cluster'] = -1 # Assign -1 to all on error
-
-
-    def articulate_breakthroughs(self):
-        """
-        Conceptualizes the LLM's role in articulating breakthroughs
-        by finding connections between clusters or keywords (simplified 'Breakthrough Discovery Engine').
-        Robustness: Handle cases where no clusters or insights are available.
-        """
-        if self.kmeans_model is None or self.insights_df.empty or 'cluster' not in self.insights_df:
-            print("  [WARNING] Synthesis Directive: No clusters or insights to analyze for breakthroughs.")
-            return []
-
-        breakthroughs = []
-        print("\n--- Synthesis Directive: Articulating Potential Breakthroughs ---")
-
-        for cluster_id in range(self.n_clusters):
-            cluster_insights = self.insights_df[self.insights_df['cluster'] == cluster_id]
-            if len(cluster_insights) < 2: # Need at least two insights to synthesize a breakthrough
+        print(f"  Super Node '{self.node_id}': Training generative models for {', '.join(series_names)}...")
+        for name in series_names:
+            if name not in self.historical_data or self.historical_data[name].empty:
+                print(f"    [WARNING] No historical data for '{name}'. Skipping model training.")
+                self.generative_models[name] = None
                 continue
+            if len(self.historical_data[name]) < 10:
+                print(f"    [WARNING] Not enough historical data for '{name}' to train generative model (min 10 points needed). Skipping.")
+                self.generative_models[name] = None
+                continue
+            try:
+                data = self.historical_data[name]['y']
+                best_order, best_aic = self.optimize_arima_parameters(data)
+                if best_order is None:
+                    print(f"    [WARNING] Could not find optimal parameters for '{name}'. Skipping.")
+                    continue
+                p, d, q, P, D, Q = best_order
+                print(f"    Optimal SARIMA order for '{name}': (({p},{d},{q}), ({P},{D},{Q},12)) with AIC {best_aic:.2f}")
+                self.generative_models[name] = SARIMAX(data, order=(p, d, q), seasonal_order=(P, D, Q, 12)).fit(disp=False)
+                print(f"    Model for '{name}' trained successfully.")
+            except Exception as e:
+                print(f"    [ERROR] Super Node '{self.node_id}': Error training model for '{name}': {e}")
+                self.generative_models[name] = None
 
-            # Simulate LLM identifying common themes and novel connections
-            all_keywords = [kw for kws in cluster_insights['keywords'] for kw in kws]
-            common_keywords = pd.Series(all_keywords).value_counts().index.tolist()
-            main_theme = common_keywords[0] if common_keywords else "unspecified theme"
+    def train_prophet_model(self, series_name):
+        """
+        Trains a Prophet model for forecasting.
+        """
+        if series_name not in self.historical_data or self.historical_data[series_name].empty:
+            print(f"    [WARNING] No historical data for '{series_name}'. Skipping Prophet training.")
+            return
+        try:
+            df = self.historical_data[series_name]
+            model = Prophet()
+            model.fit(df)
+            self.prophet_models[series_name] = model
+            print(f"    Prophet model for '{series_name}' trained successfully.")
+        except Exception as e:
+            print(f"    [ERROR] Super Node '{self.node_id}': Error training Prophet model for '{series_name}': {e}")
 
-            # "New Math" - Simplified Semantic Bridging: Look for connections across different Super Nodes within a cluster
-            source_sns = cluster_insights['source_sn'].unique()
-            if len(source_sns) > 1: # Breakthroughs often occur at inter-domain intersections
-                breakthrough_text = (
-                    f"**BREAKTHROUGH ALERT (Cluster {cluster_id}, Theme: '{main_theme}')**: "
-                    f"A novel intersection has been identified, semantically bridging insights from **{', '.join(source_sns)}**.\n"
-                    f"  Key insights leading to this: " + " | ".join(cluster_insights['insight_summary'].apply(lambda x: x[:40] + "..."))
-                )
-                # Simulate a causal connection or novel hypothesis based on keywords and source SNs
-                if 'risk' in all_keywords and 'supply chain' in all_keywords and 'Finance_SN' in source_sns:
-                    breakthrough_text += "\n  **Hypothesis**: Unforeseen supply chain vulnerabilities are directly impacting global financial stability, demanding a new integrated risk assessment model."
-                elif 'patient outcome' in all_keywords and 'logistics' in all_keywords and 'Healthcare_SN' in source_sns:
-                    breakthrough_text += "\n  **Hypothesis**: Optimized real-time medical logistics significantly improves patient recovery rates, suggesting a paradigm shift in healthcare delivery efficiency."
+    def perform_prophet_forecast(self, series_name, steps=1):
+        """
+        Performs forecasting using the Prophet model.
+        """
+        if series_name not in self.prophet_models:
+            print(f"  [WARNING] Super Node '{self.node_id}': Prophet model for '{series_name}' not trained.")
+            return None
+        model = self.prophet_models[series_name]
+        future = model.make_future_dataframe(periods=steps)
+        forecast = model.predict(future)
+        return forecast['yhat'][-steps:].values
 
-                breakthroughs.append(breakthrough_text)
+    def perform_sarimax_forecast(self, series_name, steps=1):
+        """
+        Performs forecasting using the SARIMAX model.
+        """
+        if series_name not in self.generative_models or self.generative_models[series_name] is None:
+            print(f"  [WARNING] Super Node '{self.node_id}': SARIMAX model for '{series_name}' not trained.")
+            return None
+        model = self.generative_models[series_name]
+        forecast = model.forecast(steps=steps)
+        return forecast.values
 
-        if not breakthroughs:
-            print("  Synthesis Directive: No significant breakthroughs articulated at this moment.")
-        return breakthroughs
+    def perform_generative_simulation(self, series_name, steps=1, use_hybrid=False):
+        """
+        Simulates future 'behavior' using the generative models or Prophet or hybrid.
+        This represents a basic 'multi-fidelity, generative simulation'.
+        Robustness: Validate series_name, steps, and handle prediction errors.
+        """
+        if not isinstance(series_name, str) or not series_name:
+            print(f"  [ERROR] Super Node '{self.node_id}': series_name must be a non-empty string.")
+            return
+        if not isinstance(steps, int) or steps <= 0:
+            print(f"  [ERROR] Super Node '{self.node_id}': steps must be a positive integer.")
+            return
+
+        if use_hybrid:
+            prophet_forecast = self.perform_prophet_forecast(series_name, steps)
+            sarimax_forecast = self.perform_sarimax_forecast(series_name, steps)
+            if prophet_forecast is not None and sarimax_forecast is not None:
+                hybrid_forecast = (prophet_forecast + sarimax_forecast) / 2
+                print(f"    Hybrid Simulated '{series_name}': {np.round(hybrid_forecast, 2)}")
+                return hybrid_forecast
+            else:
+                print(f"  [WARNING] Super Node '{self.node_id}': Hybrid forecast failed due to missing models.")
+                return None
+
+        prophet_forecast = self.perform_prophet_forecast(series_name, steps)
+        if prophet_forecast is not None:
+            return prophet_forecast
+
+        sarimax_forecast = self.perform_sarimax_forecast(series_name, steps)
+        if sarimax_forecast is not None:
+            return sarimax_forecast
+
+        print(f"  [WARNING] Super Node '{self.node_id}': No model available for '{series_name}'.")
+        return None
+
+    def infer_causal_links(self, series_x, series_y, max_lags=3):
+        """
+        Attempts to infer causal links between two time series using Granger Causality.
+        This represents a basic form of 'causal inference network'.
+        Robustness: Validate inputs, data availability, and handle statistical test errors.
+        """
+        if not isinstance(series_x, str) or not series_x or not isinstance(series_y, str) or not series_y:
+            print(f"  [ERROR] Super Node '{self.node_id}': series_x and series_y must be non-empty strings.")
+            return None, None
+        if not isinstance(max_lags, int) or max_lags <= 0:
+            print(f"  [ERROR] Super Node '{self.node_id}': max_lags must be a positive integer.")
+            return None, None
+
+        if (series_x not in self.historical_data or self.historical_data[series_x].empty or
+            series_y not in self.historical_data or self.historical_data[series_y].empty):
+            print(f"  [WARNING] Super Node '{self.node_id}': Missing historical data for '{series_x}' or '{series_y}'.")
+            return None, None
+        if len(self.historical_data[series_x]) <= max_lags or len(self.historical_data[series_y]) <= max_lags:
+            print(f"  [WARNING] Super Node '{self.node_id}': Not enough data for causal inference (min {max_lags+1} points needed).")
+            return None, None
+        if len(self.historical_data[series_x]) != len(self.historical_data[series_y]):
+            print(f"  [WARNING] Super Node '{self.node_id}': Time series '{series_x}' and '{series_y}' have different lengths. Granger causality may be unreliable.")
+
+        data = pd.DataFrame({series_x: self.historical_data[series_x]['y'], series_y: self.historical_data[series_y]['y']})
+        print(f"  Super Node '{self.node_id}': Inferring causal links: '{series_x}' vs '{series_y}' (max_lags={max_lags})...")
+        try:
+            # Does X Granger-cause Y?
+            test_result = grangercausality(data[[series_y, series_x]], max_lags, verbose=False)
+            p_value = test_result[max_lags][0]['ssr_ftest'][1]
+            causal_direction = f"'{series_x}' Granger-causes '{series_y}'" if p_value < 0.05 else f"'{series_x}' does NOT Granger-cause '{series_y}'"
+            print(f"    Result: {causal_direction} (p-value: {p_value:.4f})")
+            return causal_direction, p_value
+        except Exception as e:
+            print(f"  [ERROR] Super Node '{self.node_id}': Error during Granger Causality for {series_x} vs {series_y}: {e}")
+            return None, None
+
+    def provide_proactive_insight(self):
+        """
+        Conceptual function to generate a proactive insight and an activity score
+        for the Conscious Cube based on its domain's state.
+        Robustness: Handle cases where models are not trained.
+        """
+        print(f"  Super Node '{self.node_id}': Generating proactive insight for Conscious Cube...")
+        if 'inventory' in self.generative_models and self.generative_models['inventory']:
+            predicted_inventory = self.perform_generative_simulation('inventory', steps=1)
+            if predicted_inventory is not None:
+                if predicted_inventory[0] < 95: # Hypothetical critical threshold
+                    insight_text = f"Predicted critical low inventory ({predicted_inventory[0]:.2f}) for {self.domain_description}. Potential supply chain disruption imminent."
+                    keywords = ['inventory', 'supply chain', 'risk', 'disruption']
+                    activity_score = 0.9 # High activity for critical insight
+                else:
+                    insight_text = f"Inventory levels for {self.domain_description} are stable and within expected range ({predicted_inventory[0]:.2f})."
+                    keywords = ['inventory', 'stable']
+                    activity_score = 0.4 # Normal activity
+                print(f"    Insight: {insight_text[:70]}...")
+                return insight_text, keywords, activity_score
+            else:
+                print(f"  [WARNING] Super Node '{self.node_id}': Could not perform inventory simulation for insight. Defaulting.")
+        return "No specific insight generated due to missing model or data.", [], 0.1 # Default low activity
 
 

@@ -1,2 +1,1 @@
-    import subprocess
-    subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"])
+Fix: Add support or remove from DecompStrategy enum.

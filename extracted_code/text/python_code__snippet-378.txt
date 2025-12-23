@@ -1,0 +1,16 @@
+"""
+Return a space-separated list of distro IDs of distributions that are
+closely related to the current OS distribution in regards to packaging
+and programming interfaces, for example distributions the current
+distribution is a derivative from.
+
+**Lookup hierarchy:**
+
+This information item is only provided by the os-release file.
+For details, see the description of the "ID_LIKE" attribute in the
+`os-release man page
+<http://www.freedesktop.org/software/systemd/man/os-release.html>`_.
+"""
+return _distro.like()
+
+

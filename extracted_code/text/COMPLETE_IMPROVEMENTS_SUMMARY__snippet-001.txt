@@ -1,0 +1,3 @@
+<MobileOptimized>
+  <YourApp />
+</MobileOptimized>

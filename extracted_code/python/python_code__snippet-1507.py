@@ -1,17 +1,31 @@
-import functools
-import os
-import sys
-import sysconfig
-from importlib.util import cache_from_source
-from typing import Any, Callable, Dict, Generator, Iterable, List, Optional, Set, Tuple
+def __init__(self, marker: str) -> None:
+    try:
+        self._markers = _coerce_parse_result(MARKER.parseString(marker))
+    except ParseException as e:
+        raise InvalidMarker(
+            f"Invalid marker: {marker!r}, parse error at "
+            f"{marker[e.loc : e.loc + 8]!r}"
+        )
 
-from pip._internal.exceptions import UninstallationError
-from pip._internal.locations import get_bin_prefix, get_bin_user
-from pip._internal.metadata import BaseDistribution
-from pip._internal.utils.compat import WINDOWS
-from pip._internal.utils.egg_link import egg_link_path_from_location
-from pip._internal.utils.logging import getLogger, indent_log
-from pip._internal.utils.misc import ask, normalize_path, renames, rmtree
-from pip._internal.utils.temp_dir import AdjacentTempDirectory, TempDirectory
-from pip._internal.utils.virtualenv import running_under_virtualenv
+def __str__(self) -> str:
+    return _format_marker(self._markers)
+
+def __repr__(self) -> str:
+    return f"<Marker('{self}')>"
+
+def evaluate(self, environment: Optional[Dict[str, str]] = None) -> bool:
+    """Evaluate a marker.
+
+    Return the boolean from evaluating the given marker against the
+    environment. environment is an optional argument to override all or
+    part of the determined environment.
+
+    The environment is determined from the current Python process.
+    """
+    current_environment = default_environment()
+    if environment is not None:
+        current_environment.update(environment)
+
+    return _evaluate_markers(self._markers, current_environment)
+
 

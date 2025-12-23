@@ -1,1 +1,1 @@
-for (let k = 0; k < block; k++) y2[i][k] += specScale * v2[i][k];
+“torque” as a function of embedding changes. This is highly domain-specific; one can simply define a heuristic. (No established library is known

@@ -1,0 +1,3 @@
+- Avoid circular evaluation by integrating external, trusted knowledge bases and cross-referencing multiple sources.
+- Implement multi-criteria scoring combining linguistic, factual, and credibility heuristics for quality assessment to drive curiosity suppression/enhancement.
+

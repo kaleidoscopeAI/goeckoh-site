@@ -1,1 +1,4 @@
-Voice Crystal + Prosody Transfer + Lifelong Drift Adaptation	Final perfected version with slow-drift, style switching (calm/neutral/excited coach), F0/energy contour transfer	advanced_voice_mimic.py (the one from Nov 17 with zero truncation)
+from speech_loop import loop
+from gui import MainApp
+import threading
+

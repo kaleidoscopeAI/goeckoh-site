@@ -1,18 +1,17 @@
-class EnergyManager:
-    @staticmethod
-    def redistribute_energy(nodes: List[PythonNode]):
-        """Redistribute energy using a cubic spline."""
-        energies = [node.energy for node in nodes]
-        spline = CubicSpline(range(len(energies)), energies)
-        redistributed = spline(np.linspace(0, len(energies) - 1, len(energies)))
+def __init__(self):
+    super().__init__("text")
+    self.vectorizer = TfidfVectorizer()
 
-        # Normalize the redistributed energy to avoid spikes or dips
-        min_energy = min(redistributed)
-        max_energy = max(redistributed)
-        if max_energy - min_energy > 0:
-            redistributed = (redistributed - min_energy) / (max_energy - min_energy) * (15 - 5) + 5
+def process(self, data_wrapper: DataWrapper) -> Dict:
+  """Processes text data using TF-IDF vectorization."""
+  text = data_wrapper.get_data()
+  # Fit and transform the text data using the vectorizer
+  tfidf_matrix = self.vectorizer.fit_transform([text])
+  # Convert to a dense array
+  return {"tfidf_vector": tfidf_matrix.toarray()}
 
-        for i, node in enumerate(nodes):
-            node.energy = max(redistributed[i], 0)
-        logging.info("Energy redistributed among nodes.")
+def update_vectorizer(self, new_texts: List[str]):
+  """Updates the TF-IDF vectorizer with new text data."""
+  self.vectorizer.fit(new_texts)
+
 

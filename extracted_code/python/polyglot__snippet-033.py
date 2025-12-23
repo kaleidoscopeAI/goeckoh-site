@@ -1,2 +1,1 @@
-class DataProcessor:
-def __init__(self):
+def _text_worker(self, doc) -> Dict:

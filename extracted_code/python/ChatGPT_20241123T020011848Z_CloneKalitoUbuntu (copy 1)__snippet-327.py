@@ -1,0 +1,2 @@
+- The foundational building block code.
+- A subset of knowledge from the parent node (e.g., recent learnings or specific focus areas).

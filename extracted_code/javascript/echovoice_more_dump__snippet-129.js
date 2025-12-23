@@ -1,42 +1,18 @@
-    pub fn new() -> Self { Self }
+fn run_evolution(config: EvolutionConfig, output_path: Option<String>) -> Result<(), CrystalError> {
+    println!("=== EMBEDDING PARAMETER EVOLUTION ===");
+    
+    let seed = config.seed.unwrap_or_else(generate_seed);
+    let graphs = load_or_process_dataset(&config.dataset_path, "https://huggingface.co/datasets/graphs-datasets/MUTAG/resolve/main/train.parquet")?;
 
-    fn build_graph_from_image(&self, path: &Path) -> MutagEntry {
-        // Use pygame to load image and create grid graph
-        pygame::init();
-        let img = pygame::image::load(path.to_str().unwrap()).expect("Failed to load image");
-        let width = img.get_width() as usize;
-        let height = img.get_height() as usize;
-        let mut x = Vec::with_capacity(width * height);
-        let mut edge_index = Vec::new();
-        let mut edge_attr = Vec::new();
-
-        for y in 0..height {
-            for x_pos in 0..width {
-                let idx = y * width + x_pos;
-                let pixel = img.get_at((x_pos as i32, y as i32));
-                let features = vec![
-                    pixel.r as f64 / 255.0,
-                    pixel.g as f64 / 255.0,
-                    pixel.b as f64 / 255.0,
-                    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-                ];
-                x.push(features);
-
-                // Connect to right and below
-                if x_pos + 1 < width {
-                    edge_index.push(vec![idx, idx + 1]);
-                    edge_index.push(vec![idx + 1, idx]);
-                    edge_attr.push(vec![1.0, 0.0, 0.0, 0.0]);
-                    edge_attr.push(vec![1.0, 0.0, 0.0, 0.0]);
-                }
-                if y + 1 < height {
-                    edge_index.push(vec![idx, idx + width]);
-                    edge_index.push(vec![idx + width, idx]);
-                    edge_attr.push(vec![1.0, 0.0, 0.0, 0.0]);
-                    edge_attr.push(vec![1.0, 0.0, 0.0, 0.0]);
-                }
-            }
-        }
-
-        MutagEntry { x, edge_index, edge_attr, y: 0 }
+    let best_params = evolve_embedding_parameters(&config, &graphs)?;
+    
+    println!("\nBest embedding parameters found:");
+    println!("{:#?}", best_params);
+    
+    if let Some(output_path) = &output_path {
+        let json = serde_json::to_string_pretty(&best_params)?;
+        std::fs::write(output_path, json)?;
+        info!("Best parameters exported to {}", output_path);
     }
+    
+    Ok(())

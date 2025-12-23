@@ -1,5 +1,4 @@
-import abc
-import typing
+from .before_sleep import before_sleep_log  # noqa
+from .before_sleep import before_sleep_nothing  # noqa
 
-from pip._vendor.tenacity import _utils
-
+# Replace a conditional import with a hard-coded None so that pip does

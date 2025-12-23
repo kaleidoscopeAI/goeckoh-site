@@ -1,5 +1,4 @@
-To use this module, simply import and inject it::
-
-    import pip._vendor.urllib3.contrib.securetransport as securetransport
-    securetransport.inject_into_urllib3()
-
+    def _should_collect_from_parameters(t):
+        return isinstance(
+            t, (typing._GenericAlias, _types.GenericAlias, _types.UnionType)
+        )

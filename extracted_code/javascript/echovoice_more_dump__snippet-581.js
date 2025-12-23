@@ -1,1 +1,2 @@
-app.listen(4000, () => console.log("Actuation server listening on port 4000"));
+for (const k of Object.keys(ribbonsRef.current)) {
+const ln = ribbonsRef.current[k];

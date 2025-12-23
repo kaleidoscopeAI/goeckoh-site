@@ -1,0 +1,15 @@
+57              gcl=0.8,
+58 +            heart_valence=0.0,
+59 +            heart_arousal=0.0,
+60 +            heart_coherence=0.8,
+61              output_mode="normal",
+   ⋮
+63              last_latency_ms=0.0,
+64 +            phenotype_counts={"clear": 0, "empty": 0, "uncertain": 0},
+65 +            last_drift=0.0,
+66 +            best_ref_wav="",
+67 +            first_play_latency_ms=-1.0,
+68 +            metrics={},
+69 +            fragments=[],
+70          )
+

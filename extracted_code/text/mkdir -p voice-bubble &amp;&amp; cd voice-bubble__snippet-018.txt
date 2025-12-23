@@ -1,4 +1,53 @@
-CPAL (512 frames @ 16kHz) = 32ms I/O
-Whisper tiny (streaming) = 80-120ms 
-Piper TTS = 40-90ms
-Total: 152-242ms → ✅ <300ms corollary discharge window
+<header>
+  ```
+  <div class="title">Real-Time Voice Bubble</div>
+  ```
+  <div class="controls">
+    <button id="btnStart">Start</button>
+    <button id="btnStop" disabled>Stop</button>
+  </div>
+</header>
+
+<main>
+  <section class="panel">
+    <div class="row">
+      <div class="label">Status</div>
+      <div id="status" class="value">Idle</div>
+    </div>
+    <div class="row">
+      <div class="label">dt</div>
+      <div id="dt" class="value">—</div>
+    </div>
+    <div class="row">
+      <div class="label">Energy (RMS)</div>
+      <div id="energy" class="value">—</div>
+    </div>
+    <div class="row">
+      <div class="label">f0 (Hz)</div>
+      <div id="f0" class="value">—</div>
+    </div>
+    <div class="row">
+      <div class="label">ZCR</div>
+      <div id="zcr" class="value">—</div>
+    </div>
+    <div class="row">
+      <div class="label">HNR (dB)</div>
+      <div id="hnr" class="value">—</div>
+    </div>
+    <div class="row">
+      <div class="label">Spectral tilt</div>
+      <div id="tilt" class="value">—</div>
+    </div>
+
+    <div class="hint">
+      Tip: For best low-latency feel, use Chrome/Edge and allow microphone.
+      On iOS Safari, it still works but latency varies by device.
+    </div>
+  </section>
+
+  <section class="stage">
+    <canvas id="c"></canvas>
+  </section>
+</main>
+
+<script type="module" src="./main.js"></script>

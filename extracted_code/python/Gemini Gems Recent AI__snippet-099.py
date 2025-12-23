@@ -1,12 +1,54 @@
-    3D Visualization (Three.js): I can provide a more complete example of integrating Three.js to render molecules in 3D. This would include loading molecular structures (e.g., from PDB files or generated from SMILES), basic 3D manipulation (rotation, zoom), and potentially some simple interactions.
+import React, { useState, useEffect, useRef } from 'react';
+import * as THREE from 'three';
+import axios from 'axios';
 
-    More Advanced Similarity Calculation: If you want to stick with similarity calculation for now, I can refine the quantum-inspired similarity example with a slightly more sophisticated "quantum-like" approach (though still simulated on a classical computer). Or we can explore other classical similarity measures.
+const App = () => {
+    const mountRef = useRef(null);
+    const [smiles1, setSmiles1] = useState('');
+    const [smiles2, setSmiles2] = useState('');
+    const [similarity, setSimilarity] = useState(null);
+    const [features1, setFeatures1] = useState(null); // Store features for molecule 1
+    const [features2, setFeatures2] = useState(null); // Store features for molecule 2
 
-    Asynchronous Tasks (Celery - Simplified): I can provide a simplified example of using Celery to handle a time-consuming task (like similarity calculation) asynchronously. This would involve setting up Celery and a worker process.
+    useEffect(() => {
+        //... (Three.js scene setup - same as previous example)
 
-    Database Interaction (SQLAlchemy - Basic): I can give you a basic example of using SQLAlchemy to interact with a database (e.g., SQLite) to store and retrieve molecular data.
+        const animate = function () {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        };
 
-    Combining Components: Once you have some individual components working, we can start to combine them. For example, we could combine the 3D visualization with the similarity calculation to display similar molecules in the 3D cube.
+        animate();
 
-Which of these would be most helpful to you right now? Or, if you have another specific part of the application you'd like to work on, let me know, and I'll do my best to provide a working example.
+        return () => {
+            mountRef.current.removeChild(renderer.domElement);
+        };
+    },);
 
+    const calculateSimilarity = async () => {
+        try {
+            const response = await axios.post('/api/similarity', { smiles1, smiles2 });
+            const data = response.data;
+            setSimilarity(data.similarity);
+
+            // Fetch and store features for visualization
+            const featuresResponse1 = await axios.post('/api/features', { smiles: smiles1 });
+            const featuresResponse2 = await axios.post('/api/features', { smiles: smiles2 });
+            setFeatures1(featuresResponse1.data.features);
+            setFeatures2(featuresResponse2.data.features);
+
+            // Now you have features1 and features2 to position objects in 3D
+            console.log("Features 1:", features1);
+            console.log("Features 2:", features2);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    return (
+        <div>
+            {/*... input fields and buttons... */}
+            <div ref={mountRef} style={{ height: '600px' }} /> {/* 3D visualization */}
+            {/*... similarity results... */}
+        </div>
+    );

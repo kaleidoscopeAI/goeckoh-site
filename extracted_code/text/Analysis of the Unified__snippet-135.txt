@@ -1,0 +1,3 @@
+request: OllamaRequest;
+resolve: (response: OllamaResponse) => void;
+reject: (error: Error) => void;

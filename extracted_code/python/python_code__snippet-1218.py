@@ -1,10 +1,13 @@
-from typing import FrozenSet, Iterable, Optional, Tuple, Union
+class StrategyAdvisor:
+    """Returns a small list of strategy hints for a given event."""
 
-from pip._vendor.packaging.specifiers import SpecifierSet
-from pip._vendor.packaging.utils import NormalizedName
-from pip._vendor.packaging.version import LegacyVersion, Version
+    def suggest(self, event: str) -> List[Strategy]:
+        cats = EVENT_TO_STRATEGIES.get(event)
+        if not cats:
+            return STRATEGIES[:1]
+        ordered: List[Strategy] = []
+        for cat in cats:
+            ordered.extend([s for s in STRATEGIES if s.category == cat])
+        return ordered or STRATEGIES[:1]
 
-from pip._internal.models.link import Link, links_equivalent
-from pip._internal.req.req_install import InstallRequirement
-from pip._internal.utils.hashes import Hashes
 

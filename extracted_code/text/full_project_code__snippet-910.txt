@@ -1,0 +1,3 @@
+"""Requests encountered an error when trying to rewind a body."""
+
+

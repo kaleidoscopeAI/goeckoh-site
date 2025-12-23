@@ -1,14 +1,21 @@
-class VoiceProfile:
-    base_dir: Path
-    samples: Dict[Style, List[VoiceSample]] = field(default_factory=lambda: {"neutral": [], "calm": [], "excited": []})
-    max_samples_per_style: int = 32
+from .grammar_correction import GrammarCorrector
 
-    # ... (previous load/add methods, using wave for RMS instead of librosa)
+class SpeechLoop:
+    # ...
 
-    def _compute_rms(self, wav_path: Path) -> float:
-        with wave.open(str(wav_path), 'rb') as wf:
-            signal = np.frombuffer(wf.readframes(wf.getnframes()), dtype=np.int16)
-            if signal.size == 0:
-                return 0.0
-            return float(np.sqrt(np.mean(signal.astype(np.float32)**2)))
+    def __post_init__(self) -> None:
+        # ...
+        self.corrector = GrammarCorrector()
 
+        self.voice_crystal = VoiceCrystal(
+            engine=pyttsx3.init(),
+            profile=self.voice_profile,
+            config=VoiceCrystalConfig(sample_rate=self.config.audio.sample_rate),
+        )
+
+    async def handle_chunk(self, chunk: np.ndarray) -> None:
+        # ... (STT for raw)
+
+        corrected = self.corrector.correct(raw)
+
+        # ... (echo with corrected)

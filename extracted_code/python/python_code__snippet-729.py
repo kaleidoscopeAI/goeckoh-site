@@ -1,22 +1,7 @@
-def parse_sdist_filename(filename: str) -> Tuple[NormalizedName, Version]:
-    if filename.endswith(".tar.gz"):
-        file_stem = filename[: -len(".tar.gz")]
-    elif filename.endswith(".zip"):
-        file_stem = filename[: -len(".zip")]
-    else:
-        raise InvalidSdistFilename(
-            f"Invalid sdist filename (extension must be '.tar.gz' or '.zip'):"
-            f" {filename}"
-        )
-
-    # We are requiring a PEP 440 version, which cannot contain dashes,
-    # so we split on the last dash.
-    name_part, sep, version_part = file_stem.rpartition("-")
-    if not sep:
-        raise InvalidSdistFilename(f"Invalid sdist filename: {filename}")
-
-    name = canonicalize_name(name_part)
-    version = Version(version_part)
-    return (name, version)
-
-
+from pip._internal.network.session import PipSession
+from pip._internal.operations.build.build_tracker import BuildTracker
+from pip._internal.req.req_install import InstallRequirement
+from pip._internal.utils._log import getLogger
+from pip._internal.utils.direct_url_helpers import (
+    direct_url_for_editable,
+    direct_url_from_link,

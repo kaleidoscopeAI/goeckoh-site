@@ -1,0 +1,3 @@
+  - Keep “Neurocoherence Lattice” naming consistent.
+  - Add a licensing/attribution note for all models/assets.
+

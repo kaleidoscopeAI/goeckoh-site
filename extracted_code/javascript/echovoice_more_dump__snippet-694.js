@@ -1,2 +1,1 @@
-for (const k of Object.keys(ribbonsRef.current)) {
-const ln = ribbonsRef.current[k];
+function spec_Jv(v):

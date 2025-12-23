@@ -1,0 +1,4 @@
+InsecurePlatformWarning,
+ProxySchemeUnsupported,
+SNIMissingWarning,
+SSLError,

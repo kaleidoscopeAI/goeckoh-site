@@ -1,0 +1,3 @@
+doc: unified_embedded_system.py
+functions: ensure_corpus, hashlib_sha256
+classes: LocalEmbedder, MiniTransformer, EmbeddedLLM, CrystallineMemory, Document, LocalCrawler, OrganicCore

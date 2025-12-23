@@ -1,0 +1,2 @@
+console.warn(`Unsupported architecture: ${arch} for platform ${platform}`);
+return;

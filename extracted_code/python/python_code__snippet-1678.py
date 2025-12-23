@@ -1,20 +1,35 @@
-class QuantumState:
-    """Pure NumPy quantum state with Hamiltonian dynamics"""
-    hamiltonian: np.ndarray = field(default_factory=lambda: np.eye(3))
-    wavefunction: np.ndarray = field(default_factory=lambda: np.ones(3)/np.sqrt(3))
-    energy: float = 0.0
-    correlation_length: float = 5.0
-    criticality_index: float = 1.0
-    
-    def evolve_pure_numpy(self, dt: float = 0.01):
-        """Pure NumPy quantum evolution"""
-        Hdt = -1j * self.hamiltonian * dt
-        evolution_matrix = np.eye(self.hamiltonian.shape[0], dtype=complex)
-        evolution_matrix += Hdt
-        evolution_matrix += Hdt @ Hdt / 2
-        evolution_matrix += Hdt @ Hdt @ Hdt / 6
-        
-        self.wavefunction = evolution_matrix @ self.wavefunction
-        self.wavefunction /= np.linalg.norm(self.wavefunction)
-        self.energy = np.real(self.wavefunction.conj().T @ self.hamiltonian @ self.wavefunction)
+from .console import Console
+
+console = Console()
+import sys
+
+def bar(a: Any) -> None:  # 这是对亚洲语言支持的测试。面对模棱两可的想法，拒绝猜测的诱惑
+    one = 1
+    print(one / a)
+
+def foo(a: Any) -> None:
+    _rich_traceback_guard = True
+    zed = {
+        "characters": {
+            "Paul Atreides",
+            "Vladimir Harkonnen",
+            "Thufir Hawat",
+            "Duncan Idaho",
+        },
+        "atomic_types": (None, False, True),
+    }
+    bar(a)
+
+def error() -> None:
+
+    try:
+        try:
+            foo(0)
+        except:
+            slfkjsldkfj  # type: ignore[name-defined]
+    except:
+        console.print_exception(show_locals=True)
+
+error()
+
 

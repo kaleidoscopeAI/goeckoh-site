@@ -1,1 +1,1 @@
-const actuationInjection = mapEToSpecies(E, W_actuation); // returns species-dimension array
+for (const lg of opts.logs) {

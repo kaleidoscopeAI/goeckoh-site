@@ -1,3 +1,3 @@
-    def where():
-        return os.environ["_PIP_STANDALONE_CERT"]
+from .after import after_log  # noqa
+from .after import after_nothing  # noqa
 

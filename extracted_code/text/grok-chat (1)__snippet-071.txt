@@ -1,0 +1,2 @@
+return hashlib.sha256(agent_id.encode()).hexdigest()[:8]  # Sim cryptographic ID
+

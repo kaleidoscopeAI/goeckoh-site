@@ -1,1 +1,1 @@
-def __post_init__(self) -> None:
+def reset(self) -> None:

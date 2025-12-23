@@ -1,0 +1,6 @@
+"""Used as a container for an error reason supplied in a MaxRetryError."""
+
+GENERIC_ERROR = "too many error responses"
+SPECIFIC_ERROR = "too many {status_code} error responses"
+
+

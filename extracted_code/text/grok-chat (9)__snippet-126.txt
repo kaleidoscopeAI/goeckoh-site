@@ -1,0 +1,1 @@
+run the mirror once to generate data, then rerun the validation script.

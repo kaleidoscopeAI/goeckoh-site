@@ -1,0 +1,2 @@
+Concatenate = typing.Concatenate
+_ConcatenateGenericAlias = typing._ConcatenateGenericAlias  # noqa: F811

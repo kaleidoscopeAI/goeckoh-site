@@ -1,9 +1,11 @@
-def install(
-    console: Optional["Console"] = None,
-    overflow: "OverflowMethod" = "ignore",
-    crop: bool = False,
-    indent_guides: bool = False,
-    max_length: Optional[int] = None,
-    max_string: Optional[int] = None,
-    max_depth: Optional[int] = None,
-    expand_all: bool = False,
+def _contains_egg_info(s: str) -> bool:
+    """Determine whether the string looks like an egg_info.
+
+    :param s: The string to parse. E.g. foo-2.1
+    """
+    return bool(_egg_info_re.search(s))
+
+
+def _should_build(
+    req: InstallRequirement,
+    need_wheel: bool,

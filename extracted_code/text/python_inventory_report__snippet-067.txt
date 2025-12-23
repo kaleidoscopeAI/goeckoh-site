@@ -1,0 +1,1 @@
+functions: information_energy, field_stability, lyapunov_loss, integrated_information, coherence_metric

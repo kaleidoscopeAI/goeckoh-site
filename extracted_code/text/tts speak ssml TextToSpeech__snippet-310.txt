@@ -1,0 +1,3 @@
+Resolving jitpack.io (jitpack.io)... failed: Temporary failure in name resolution.
+wget: unable to resolve host address ‘jitpack.io’
+

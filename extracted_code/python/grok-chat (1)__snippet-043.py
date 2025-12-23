@@ -1,39 +1,25 @@
-Added from HID_AI_part_ab.txt and ac.txt: Emulates mouse/keyboard for companion interactions.
-Pythonfrom __future__ import annotations
+class ProcessMetrics:
+    cpu_usage: float
+    memory_usage: float
+    io_ops: int
+    priority: int
 
-import time
-import random
-from typing import Optional
+class DecisionEngine:
+    def __init__(self):
+        self.weights = np.array([0.4, 0.3, 0.2, 0.1])  # cpu, mem, io, prio
 
-class HIDController:
-    def __init__(self, device_path: str = '/dev/hidg0'):
-        self.device_path = device_path
-        # In real system, open HID gadget
-        print(f"HID Controller initialized at {device_path}")
+    def compute_score(self, metrics: ProcessMetrics) -> float:
+        values = np.array([metrics.cpu_usage, metrics.memory_usage, metrics.io_ops / 1000, metrics.priority / 10])
+        return np.dot(self.weights, values)
 
-    def send_hid_report(self, report: bytearray):
-        # Simulate sending; in real, write to device
-        print(f"[HID] Sending report: {list(report)}")
+class OmniMindState:
+    def __init__(self):
+        self.decision_engine = DecisionEngine()
+        self.metrics_history: Dict[str, ProcessMetrics] = {}
 
-    def move_mouse(self, dx: int, dy: int):
-        report = bytearray([0x00, dx & 0xFF, dy & 0xFF, 0x00])
-        self.send_hid_report(report)
-
-    def mouse_click(self, button: int = 1):
-        report = bytearray([button, 0x00, 0x00, 0x00])
-        self.send_hid_report(report)
-        time.sleep(0.05)
-        report[0] = 0x00
-        self.send_hid_report(report)
-
-    def type_text(self, text: str):
-        for char in text:
-            # Simulate key press (simplified, real would use keycodes)
-            key_code = ord(char) - 32  # Dummy
-            report = bytearray([0x00, 0x00, key_code, 0x00, 0x00, 0x00, 0x00, 0x00])
-            self.send_hid_report(report)
-            time.sleep(0.02)
-            report[2] = 0x00
-            self.send_hid_report(report)
-            time.sleep(random.uniform(0.05, 0.15))  # Mimic human typing
+    def update_metrics(self, node_id: str, metrics: ProcessMetrics):
+        self.metrics_history[node_id] = metrics
+        score = self.decision_engine.compute_score(metrics)
+        # Allocate resources based on score (simulated)
+        print(f"[DA] Node {node_id} score: {score:.2f} - Allocating resources...")
 

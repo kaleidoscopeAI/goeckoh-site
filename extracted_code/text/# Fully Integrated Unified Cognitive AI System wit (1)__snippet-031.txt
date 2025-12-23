@@ -1,0 +1,2 @@
+return jsonify(organic_ai.visualizer.viz_data)
+

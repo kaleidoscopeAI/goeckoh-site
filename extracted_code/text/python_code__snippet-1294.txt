@@ -1,0 +1,7 @@
+"""
+Make file present at path have execute for user/group/world
+(chmod +x) is no-op on windows per python docs
+"""
+os.chmod(path, (0o777 & ~current_umask() | 0o111))
+
+

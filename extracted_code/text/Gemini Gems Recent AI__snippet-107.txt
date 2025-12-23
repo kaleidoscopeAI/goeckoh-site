@@ -1,0 +1,6 @@
+Feature Calculation (Backend): The backend now calculates and scales more relevant molecular features (including hydrogen bond donors/acceptors).
+
+Feature Endpoint (Backend): A new /api/features endpoint returns the scaled features for a given SMILES string.
+
+Feature Fetching (Frontend): The frontend now fetches the features for both molecules and stores them in the component's state. You can use these features to position the 3D objects in your Three.js scene.
+

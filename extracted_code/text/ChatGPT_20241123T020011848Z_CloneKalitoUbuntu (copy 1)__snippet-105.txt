@@ -1,0 +1,4 @@
+- Introduce a
+  - Each node passes its unique strengths and learned patterns to its offspring.
+  - Introduce
+- Allow nodes to be

@@ -1,1 +1,1 @@
-export function maybeScheduleReflection(node: NodeState, mods: Modulators) {
+const recent = logs.slice(-200);

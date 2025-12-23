@@ -1,4 +1,6 @@
-from goeckoh.systems.complete_unified_system import (
-    CompleteUnifiedSystem,
-    EmotionalState,
-    SystemMetrics,
+"""Abstract base for dependency resolution errors"""
+
+def __repr__(self):
+    return self.__class__.__name__ + repr(self.args)
+
+

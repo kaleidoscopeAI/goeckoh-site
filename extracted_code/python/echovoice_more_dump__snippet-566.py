@@ -1,1 +1,1 @@
-import { Node, EmotionalVector } from "../types";
+* **Mimicry** – learning from peers and sources

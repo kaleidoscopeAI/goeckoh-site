@@ -1,0 +1,1 @@
+p95, gate blocks; SSE stream for real‑time consumers.

@@ -1,3 +1,1 @@
-async def _get_cache(self, key: str):
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
-
+async def get_dna(self, gen: int) -> KnowledgeDNA:

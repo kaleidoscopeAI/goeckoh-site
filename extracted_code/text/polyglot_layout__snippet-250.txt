@@ -1,0 +1,6 @@
+       /ingest?url=... – manual ingest endpoint (optional; autonomous ingest still runs)
+
+       /ws – live metrics/reflections/suggestions/captions
+
+       Home (/) – shows latest avatar frame name (rendered files are on disk)
+

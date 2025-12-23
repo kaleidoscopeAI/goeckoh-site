@@ -1,0 +1,1 @@
+self.figure.draw(self.renderer)

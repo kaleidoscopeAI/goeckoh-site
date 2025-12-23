@@ -1,0 +1,5 @@
+# Simple heuristic correction (expand rules)
+text = text.lower().capitalize()
+text = text.replace("i is", "I am")
+return text
+

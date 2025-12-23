@@ -1,0 +1,5 @@
+807              return {"real": obj.real, "imag": obj.imag}
+808 +        if isinstance(obj, (np.bool_,)):
+809 +            return bool(obj)
+810          if isinstance(obj, (np.integer, np.floating)):
+

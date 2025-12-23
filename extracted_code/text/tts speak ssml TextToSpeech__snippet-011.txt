@@ -1,2 +1,1 @@
-# <REDACTED: potential secret detected>
-
+// - Added support for English, Spanish, and French TTS using Sherpa-onnx models.

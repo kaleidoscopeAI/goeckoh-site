@@ -1,0 +1,2 @@
+  display_dataframe_to_user("README snippets (where present)", readme_df)
+

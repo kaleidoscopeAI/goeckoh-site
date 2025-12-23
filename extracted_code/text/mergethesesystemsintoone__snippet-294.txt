@@ -1,0 +1,8 @@
+"""Adds an edge between two nodes in the knowledge graph."""
+if node1 in self.graph and node2 in self.graph:
+    if not self.graph.has_edge(node1, node2):
+        self.graph.add_edge(node1, node2, **relationship if relationship else {})
+    else:
+        # Update the existing edge data
+        self.graph[node1][node2].update(relationship if relationship else {})
+

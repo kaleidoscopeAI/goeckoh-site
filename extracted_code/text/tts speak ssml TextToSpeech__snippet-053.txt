@@ -1,0 +1,16 @@
+      } else {
+          initSystem()
+      }
+
+      startButton.setOnClickListener {
+          startListening()
+      }
+  }
+
+  override fun onInit(status: Int) {
+      if (status == TextToSpeech.SUCCESS) {
+          tts.language = Locale.US
+      }
+  }
+
+  override fun onRequestPermissionsResult(requestCode: Int, permissions:

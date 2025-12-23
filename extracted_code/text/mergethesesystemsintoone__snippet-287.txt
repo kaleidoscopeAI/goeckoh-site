@@ -1,0 +1,5 @@
+"""Updates the model with new sentences, adding to the vocabulary and retraining."""
+self.corpus.extend(sentences)
+self._build_vocabulary()
+self._train_model()
+

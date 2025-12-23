@@ -1,13 +1,16 @@
-class GrowthState(Enum):
-    DORMANT = auto()
-    GROWING = auto()
-    MATURE = auto()
-    DECLINING = auto()
+class TaskStatus(Enum):
+    """Status of a task"""
+    PENDING = auto()
+    RUNNING = auto()
+    COMPLETED = auto()
+    FAILED = auto()
+    CANCELLED = auto()
+    TIMEOUT = auto()
 
-class TraitCategory(Enum):
-    COGNITIVE = auto()
-    PHYSICAL = auto()
-    ADAPTIVE = auto()
-    SOCIAL = auto()
-    SPECIALIZED = auto()
+class TaskPriority(Enum):
+    """Priority levels for tasks"""
+    LOW = 0
+    NORMAL = 1
+    HIGH = 2
+    CRITICAL = 3
 

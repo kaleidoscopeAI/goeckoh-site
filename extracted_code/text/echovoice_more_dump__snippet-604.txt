@@ -1,0 +1,4 @@
+async for message in websocket:
+    snapshot = json.loads(message)
+    await websocket.send(json.dumps({"nodes": snapshot}))
+

@@ -1,0 +1,4 @@
+Master State Vector (Ψ): A single vector that combines the energy, awareness, knowledge, and position of all nodes, governing the entire system's evolution.
+
+Cognitive Actuation (C∧): A critical process where a node's state is projected onto an 8-dimensional E8 lattice. This creates a "Kaleidoscope force" that influences the node's position and its emotional state (valence and arousal).
+

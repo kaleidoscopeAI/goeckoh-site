@@ -1,0 +1,7 @@
+          final_response_content = event.content.parts[0].text
+
+      # For debugging, print the raw type and content to the console
+      print(f"DEBUG: Full Event: {event}")
+
+  display(Markdown("## Final Message"))
+  display(Markdown(final_response_content))

@@ -1,9 +1,11 @@
-import numpy as np
-import time
-import asyncio
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple
-from collections import deque
-from enum import Enum
+"""A SimpleWheelCache that creates it's own temporary cache directory"""
+
+def __init__(self) -> None:
+    self._temp_dir = TempDirectory(
+        kind=tempdir_kinds.EPHEM_WHEEL_CACHE,
+        globally_managed=True,
+    )
+
+    super().__init__(self._temp_dir.path)
 
 

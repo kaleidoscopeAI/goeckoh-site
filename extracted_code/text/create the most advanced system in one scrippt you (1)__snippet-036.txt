@@ -1,0 +1,3 @@
+- Provide a clear stop mechanism (hand signal, button, or keyword) that immediately mutes feedback and pauses the protocol.
+- Monitor behavior and physiology (e.g., HR, visible distress); define criteria for terminating a session.
+- Begin with “sham” or very gentle feedback blocks to assess tolerance before full closed-loop conditions.[^11_1][^11_3]

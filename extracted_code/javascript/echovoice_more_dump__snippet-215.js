@@ -1,2 +1,4 @@
-We have a function appendMessage to display messages. We'll assume it exists.
-
+const m = this.cfg.speciesCount;
+const base = nodeIdx * m;
+const alpha = this.cfg.reactParams.alpha;
+const beta = this.cfg.reactParams.beta;

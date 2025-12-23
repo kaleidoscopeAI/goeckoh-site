@@ -1,0 +1,6 @@
+1064                  rec = KaldiRecognizer(helper, sr)
+1065 -                rec.AcceptWaveform(data.tobytes())
+1065 +                pcm = (data * 32767.0).clip(-32768, 32767).astype("int16").tobytes()
+1066 +                rec.AcceptWaveform(pcm)
+1067                  res = json.loads(rec.FinalResult())
+

@@ -1,1 +1,11 @@
-2. In each cognitive loop iteration, generate hypotheses for each node using PerspectiveEngine, evaluate, and update if confidence passes a threshold.
+health: float = 1.0
+coherence: float = 1.0
+complexity: float = 1.0
+emergence_level: float = 0.0
+energy_efficiency: float = 1.0
+valence: float = 1.0
+arousal: float = 1.0
+dominance: float = 1.0
+confidence: float = 1.0
+regulation: float = 1.0
+

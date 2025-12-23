@@ -1,2 +1,0 @@
-These packed bit vectors allow efficient bulk operations using native CPU instructions (XOR, AND, OR, NOT) that simultaneously process entire blocks of bits, vastly accelerating similarity computations and bit manipulations essential for the system's energy evaluations and state updates.
-

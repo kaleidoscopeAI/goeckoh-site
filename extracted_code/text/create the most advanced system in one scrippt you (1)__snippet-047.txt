@@ -1,0 +1,2 @@
+- If you include multiple conditions (self vs external; multiple delays), trial‑level predictors (latency bin, loudness, etc.), or random slopes by subject, a linear mixed‑effects model (LME) is more flexible and often **more efficient** because it uses the full trial distribution.
+- In practice, you can still plan using **paired‑t power** as a baseline (for the simplest contrast), then fit LMEs in analysis; this makes your a priori N **conservative**.[^13_3]

@@ -1,2 +1,2 @@
-Yes, to ensure these demo scripts run smoothly, you’ll need to have the following key classes and their supporting components from your project directory or file system:
+This sequence sets up everything from scratch, installs dependencies in an isolated environment, and runs the demo. Let me know if you need further customization!
 

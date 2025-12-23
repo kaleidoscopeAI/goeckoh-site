@@ -1,0 +1,5 @@
+"class_table": CP949_CLS,
+"class_factor": 10,
+"state_table": CP949_ST,
+"char_len_table": CP949_CHAR_LEN_TABLE,
+"name": "CP949",

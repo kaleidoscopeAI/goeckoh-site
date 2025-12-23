@@ -1,0 +1,3 @@
+Read MainActivity.kt
+Search tensorflow in build.gradle
+

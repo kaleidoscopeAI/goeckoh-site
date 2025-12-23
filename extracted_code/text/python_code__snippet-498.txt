@@ -1,0 +1,17 @@
+"""
+Accept either an encoding object or label.
+
+:param encoding: An :class:`Encoding` object or a label string.
+:returns: An :class:`Encoding` object.
+:raises: :exc:`~exceptions.LookupError` for an unknown label.
+
+"""
+if hasattr(encoding_or_label, 'codec_info'):
+    return encoding_or_label
+
+encoding = lookup(encoding_or_label)
+if encoding is None:
+    raise LookupError('Unknown encoding label: %r' % encoding_or_label)
+return encoding
+
+

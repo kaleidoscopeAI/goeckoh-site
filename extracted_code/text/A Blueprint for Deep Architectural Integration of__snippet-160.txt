@@ -1,0 +1,8 @@
+state_bits: Vec<u64>,      // bit-packed state
+curiosity_bit: bool,       // 1-bit curiosity flag
+routing_matrix: Vec<Vec<bool>>,
+rho: f32,
+lambda: f32,
+sigma: f32,
+beta: f32,
+theta: f32,

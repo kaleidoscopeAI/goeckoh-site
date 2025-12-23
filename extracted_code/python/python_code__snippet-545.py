@@ -1,15 +1,21 @@
-from __future__ import unicode_literals
+    def b(s):
+        return s
+    # Workaround for standalone backslash
 
-import codecs
-from email import message_from_file
-import json
-import logging
-import re
+    def u(s):
+        return unicode(s.replace(r'\\', r'\\\\'), "unicode_escape")
+    unichr = unichr
+    int2byte = chr
 
+    def byte2int(bs):
+        return ord(bs[0])
 
-from . import DistlibException, __version__
-from .compat import StringIO, string_types, text_type
-from .markers import interpret
-from .util import extract_by_key, get_extras
-from .version import get_scheme, PEP440_VERSION_RE
-
+    def indexbytes(buf, i):
+        return ord(buf[i])
+    iterbytes = functools.partial(itertools.imap, ord)
+    import StringIO
+    StringIO = BytesIO = StringIO.StringIO
+    _assertCountEqual = "assertItemsEqual"
+    _assertRaisesRegex = "assertRaisesRegexp"
+    _assertRegex = "assertRegexpMatches"
+    _assertNotRegex = "assertNotRegexpMatches"

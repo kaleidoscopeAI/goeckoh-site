@@ -1,25 +1,23 @@
-    def b(s):
-        return s.encode("latin-1")
-
-    def u(s):
-        return s
-    unichr = chr
-    import struct
-    int2byte = struct.Struct(">B").pack
-    del struct
-    byte2int = operator.itemgetter(0)
-    indexbytes = operator.getitem
-    iterbytes = iter
-    import io
-    StringIO = io.StringIO
-    BytesIO = io.BytesIO
-    del io
-    _assertCountEqual = "assertCountEqual"
-    if sys.version_info[1] <= 1:
-        _assertRaisesRegex = "assertRaisesRegexp"
-        _assertRegex = "assertRegexpMatches"
-        _assertNotRegex = "assertNotRegexpMatches"
+def open_spinner(message: str) -> Generator[SpinnerInterface, None, None]:
+    # Interactive spinner goes directly to sys.stdout rather than being routed
+    # through the logging system, but it acts like it has level INFO,
+    # i.e. it's only displayed if we're at level INFO or better.
+    # Non-interactive spinner goes through the logging system, so it is always
+    # in sync with logging configuration.
+    if sys.stdout.isatty() and logger.getEffectiveLevel() <= logging.INFO:
+        spinner: SpinnerInterface = InteractiveSpinner(message)
     else:
-        _assertRaisesRegex = "assertRaisesRegex"
-        _assertRegex = "assertRegex"
-        _assertNotRegex = "assertNotRegex"
+        spinner = NonInteractiveSpinner(message)
+    try:
+        with hidden_cursor(sys.stdout):
+            yield spinner
+    except KeyboardInterrupt:
+        spinner.finish("canceled")
+        raise
+    except Exception:
+        spinner.finish("error")
+        raise
+    else:
+        spinner.finish("done")
+
+

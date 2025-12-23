@@ -1,0 +1,4 @@
+self.history = []
+self.adaptation_score = 1.0
+self.last_update = 0
+self.interaction_strength = {}

@@ -1,0 +1,5 @@
+parser = ArgumentParser()
+parser.add_argument("url", help="The URL to try and cache")
+return parser.parse_args()
+
+

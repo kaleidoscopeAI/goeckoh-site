@@ -1,3 +1,1 @@
-import fs from "fs";
-import path from "path";
-export class ProjectionService {
+If speculative deltas are sampled from bounded distribution with finite variance (\sigma^2) and coefficient (\gamma) small, the stochastic

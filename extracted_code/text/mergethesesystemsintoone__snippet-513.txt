@@ -1,0 +1,133 @@
+logging.info("Starting the Kaleidoscope AI System")
+
+# Initialize Memory Graph
+memory_graph = MemoryGraph()
+
+# Initialize core components
+energy_manager = EnergyManager(total_energy=5000.0)
+node_manager = NodeLifecycleManager()
+cluster_manager = ClusterManager()
+supernode_manager = SupernodeManager()
+
+# Initialize data pipeline
+data_pipeline = DataPipeline()
+
+# Initialize engines
+kaleidoscope_engine = KaleidoscopeEngine(memory_graph=memory_graph)
+mirrored_engine = MirroredEngine(memory_graph=memory_graph)
+quantum_engine = QuantumEngine()
+
+# Initialize Network Visualizer
+network_visualizer = NetworkVisualizer()
+
+# Create some initial nodes
+initial_nodes = 5
+for i in range(initial_nodes):
+    node_id = f"node_{i}"
+    node_manager.create_node(
+        node_id,
+        dna=GeneticCode(),  # Assuming default values
+        memory_graph=memory_graph
+    )
+    energy_manager.allocate_node_energy(node_id, 100.0)  # Allocate energy to each node
+
+# Simulate data ingestion
+try:
+    # Replace with your actual data file or data source
+    data_pipeline.ingest_data("your_data_file.csv") 
+    data_pipeline.preprocess()
+    data_for_processing = data_pipeline.get_data_for_quantum_engine()
+except Exception as e:
+    logging.error(f"Error during data ingestion and preprocessing: {e}")
+    return
+
+# Main simulation loop
+for cycle in range(10):  # Example: 10 cycles
+    logging.info(f"Starting cycle {cycle + 1}")
+
+    # Example task generation (replace with actual task generation logic)
+    tasks = [
+        {"id": f"task_{cycle}_{i}", "type": random.choice(["TypeA", "TypeB", "TypeC"]), "data": data_for_processing}
+        for i in range(3)
+    ]
+
+    # Allocate tasks to nodes
+    for task in tasks:
+        node_manager.allocate_task_to_node(task)
+
+    # Allocate tasks to clusters
+    for task in tasks:
+        cluster_manager.allocate_task_to_cluster(task)
+
+    # Allocate tasks to supernodes
+    for task in tasks:
+        supernode_manager.allocate_task_to_supernode(task)
+
+    # Process tasks in nodes
+    for node_id, node in node_manager.nodes.items():
+        while node.task_queue:
+            task = node.task_queue.popleft()
+            node.process_task(task)
+
+    # Replicate nodes if conditions are met
+    for node_id in list(node_manager.nodes.keys()):
+        if node_manager.nodes[node_id].should_replicate():
+            new_node_id = node_manager.replicate_node(node_id)
+
+    # Form clusters
+    clusters = cluster_manager.form_clusters(list(node_manager.nodes.values()))
+    logging.info(f"Clusters formed: {len(clusters)}")
+
+    # Create supernodes (if conditions are met)
+    if cycle % 2 == 0:
+        supernode_manager.create_supernodes(node_manager)
+        logging.info(f"Supernodes created: {len(supernode_manager.supernodes)}")
+
+    # Pass data through the Kaleidoscope Engine
+    processed_data = kaleidoscope_engine.process_data(data_for_processing)
+    logging.info("Data processed through Kaleidoscope Engine.")
+
+    # Pass data through the Mirrored Engine
+    mirrored_insights = mirrored_engine.process_data(data_for_processing)
+    logging.info("Data processed through Mirrored Engine.")
+
+    # Pass data through the Quantum Engine
+    quantum_results = quantum_engine.process_data(data_for_processing)
+    logging.info("Data processed through Quantum Engine.")
+
+    # Update the network visualization
+    network_visualizer.update_network(
+        node_manager.get_all_nodes_status(),
+        cluster_manager.get_cluster_info(),
+        {k: v.get_status() for k, v in supernode_manager.supernodes.items()}
+    )
+
+    # Redraw the network visualization
+    network_visualizer.visualize()
+
+    logging.info(f"Completed cycle {cycle + 1}")
+
+    time.sleep(2)  # Simulate time between cycles
+
+# Cleanup and shutdown
+logging.info("Shutting down the system...")
+
+# Launch the GUI after the simulation
+root = tk.Tk()
+gui = KaleidoscopeGUI(root, network_visualizer)
+root.mainloop()
+
+main()
+
+
+
+
+
+
+
+
+
+
+
+
+

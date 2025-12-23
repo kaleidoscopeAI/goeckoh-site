@@ -1,19 +1,16 @@
-class SummaryRow:
-    attempts: int = 0
-    corrections: int = 0
+def _interp_to_num_frames(src: np.ndarray, num_frames: int) -> np.ndarray:
+    if src.size == 0:
+        return np.zeros(num_frames, dtype=np.float32)
+    if src.size == num_frames:
+        return src.astype(np.float32)
+    x_old = np.linspace(0.0, 1.0, num=src.size, dtype=np.float32)
+    x_new = np.linspace(0.0, 1.0, num=num_frames, dtype=np.float32)
+    return np.interp(x_new, x_old, src).astype(np.float32)
 
 
-def summarize(config: CompanionConfig) -> Dict[str, SummaryRow]:
-    results: Dict[str, SummaryRow] = defaultdict(SummaryRow)
-    path = config.paths.metrics_csv
-    if not path.exists():
-        return {}
-    with path.open() as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            key = row.get("phrase_id") or "<unknown>"
-            stats = results[key]
-            stats.attempts += 1
-            if row.get("needs_correction") == "1":
-                stats.corrections += 1
-    return results
+def apply_prosody_to_tts(
+    tts_wav: np.ndarray,
+    tts_sample_rate: int,
+    prosody: ProsodyProfile,
+    strength_pitch: float = 1.0,
+    strength_energy: float = 1.0,

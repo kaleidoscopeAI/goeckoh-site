@@ -1,2 +1,5 @@
-The unified bit-level domain injection using XOR with molecular fingerprints and Metropolis scoring for chemical property optimization offers a seamless pipeline for domain adaptation inside the core framework. This is directly relevant to landmark quantum-biomedical collaborations announced in 2025.[^6_2][^6_1]
-
+type: "lattice",
+energy: latticeEnergy,
+coherence: latticeCoherence,
+valence: latticeValence,
+arousal: latticeArousal

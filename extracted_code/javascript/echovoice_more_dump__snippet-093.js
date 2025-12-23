@@ -1,3 +1,5 @@
   for (const n of this.nodes.values()) {
-    n.vel = n.vel.map(v => v * (1 - this.gammaDecoh * this.dt) + gaussian() * 0.001); // Dephase
+    const psiNorm = Math.sqrt(n.e.reduce((sum, v) => sum + v**2, 0));
+    // Feedback to grads or tether
+    this.alphaTether += 0.01 * psiNorm;
   }

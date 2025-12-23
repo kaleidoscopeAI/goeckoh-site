@@ -1,25 +1,29 @@
-    def _should_collect_from_parameters(t):
-        return isinstance(t, typing._GenericAlias) and not t._special
+def _should_use_importlib_metadata() -> bool:
+    """Whether to use the ``importlib.metadata`` or ``pkg_resources`` backend.
 
+    By default, pip uses ``importlib.metadata`` on Python 3.11+, and
+    ``pkg_resourcess`` otherwise. This can be overridden by a couple of ways:
 
-def _collect_type_vars(types, typevar_types=None):
-    """Collect all type variable contained in types in order of
-    first appearance (lexicographic order). For example::
-
-        _collect_type_vars((T, List[S, T])) == (T, S)
+    * If environment variable ``_PIP_USE_IMPORTLIB_METADATA`` is set, it
+      dictates whether ``importlib.metadata`` is used, regardless of Python
+      version.
+    * On Python 3.11+, Python distributors can patch ``importlib.metadata``
+      to add a global constant ``_PIP_USE_IMPORTLIB_METADATA = False``. This
+      makes pip use ``pkg_resources`` (unless the user set the aforementioned
+      environment variable to *True*).
     """
-    if typevar_types is None:
-        typevar_types = typing.TypeVar
-    tvars = []
-    for t in types:
-        if (
-            isinstance(t, typevar_types) and
-            t not in tvars and
-            not _is_unpack(t)
-        ):
-            tvars.append(t)
-        if _should_collect_from_parameters(t):
-            tvars.extend([t for t in t.__parameters__ if t not in tvars])
-    return tuple(tvars)
+    with contextlib.suppress(KeyError, ValueError):
+        return bool(strtobool(os.environ["_PIP_USE_IMPORTLIB_METADATA"]))
+    if sys.version_info < (3, 11):
+        return False
+    import importlib.metadata
+
+    return bool(getattr(importlib.metadata, "_PIP_USE_IMPORTLIB_METADATA", True))
+
+
+class Backend(Protocol):
+    NAME: 'Literal["importlib", "pkg_resources"]'
+    Distribution: Type[BaseDistribution]
+    Environment: Type[BaseEnvironment]
 
 

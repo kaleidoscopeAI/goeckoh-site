@@ -1,1 +1,1 @@
-def __init__(self, cfg: EchoConfig):
+def audio_callback(self, indata, frames, time, status):

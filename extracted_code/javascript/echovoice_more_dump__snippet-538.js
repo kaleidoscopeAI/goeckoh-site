@@ -1,3 +1,2 @@
-export function useEmotionalActuation(firebaseConfig?: any): HookReturn {
-const svcRef = useRef<EmotionalActuationService | null>(null);
-const [eVec, setEVec] = useState<EVector>(() => ({} as any));
+export default function CognitiveProjection({ nodesProvider, width = 640, height = 480, cfg, onInspect, showGrid = true }: Props) {
+const { constructs, update, service } = useCognitiveProjection(nodesProvider, cfg);

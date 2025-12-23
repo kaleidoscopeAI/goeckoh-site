@@ -1,54 +1,44 @@
-def select_backend() -> Backend:
-    if _should_use_importlib_metadata():
-        from . import importlib
+class AudioBridge:
+    def __init__(self):
+        self.q = queue.Queue(maxsize=5)
+        self.running = True
+        
+        # Spin up Rust Engine if possible
+        if RUST_AVAILABLE:
+            self.engine = bio_audio.BioAcousticEngine()
+        
+        # Start Consumer Thread
+        t = threading.Thread(target=self._worker, daemon=True)
+        t.start()
 
-        return cast(Backend, importlib)
-    from . import pkg_resources
+    def trigger(self, text: str, arousal: float):
+        """Non-blocking call to queue sound"""
+        if RUST_AVAILABLE:
+            try:
+                # Calls C-Level Rust Function
+                pcm_data = self.engine.synthesize_wav(len(text), arousal)
+                # Drop frame if queue full (Better to skip audio than freeze UI)
+                if not self.q.full():
+                    self.q.put(pcm_data)
+            except Exception as e:
+                print(f"Synthesis Error: {e}")
 
-    return cast(Backend, pkg_resources)
+    def _worker(self):
+        """Threaded playback loop"""
+        if not AUDIO_AVAILABLE:
+            return
 
+        while self.running:
+            try:
+                pcm_data = self.q.get(timeout=1)
+                # Convert standard Vec<f32> to Numpy
+                arr = np.array(pcm_data, dtype=np.float32)
+                # Hardware write
+                sd.play(arr, samplerate=22050, blocking=True)
+            except queue.Empty:
+                continue
+            except Exception as e:
+                print(f"Playback Hardware Failure: {e}")
+                # Don't crash loop, just sleep and retry
+                time.sleep(1)
 
-def get_default_environment() -> BaseEnvironment:
-    """Get the default representation for the current environment.
-
-    This returns an Environment instance from the chosen backend. The default
-    Environment instance should be built from ``sys.path`` and may use caching
-    to share instance state accorss calls.
-    """
-    return select_backend().Environment.default()
-
-
-def get_environment(paths: Optional[List[str]]) -> BaseEnvironment:
-    """Get a representation of the environment specified by ``paths``.
-
-    This returns an Environment instance from the chosen backend based on the
-    given import paths. The backend must build a fresh instance representing
-    the state of installed distributions when this function is called.
-    """
-    return select_backend().Environment.from_paths(paths)
-
-
-def get_directory_distribution(directory: str) -> BaseDistribution:
-    """Get the distribution metadata representation in the specified directory.
-
-    This returns a Distribution instance from the chosen backend based on
-    the given on-disk ``.dist-info`` directory.
-    """
-    return select_backend().Distribution.from_directory(directory)
-
-
-def get_wheel_distribution(wheel: Wheel, canonical_name: str) -> BaseDistribution:
-    """Get the representation of the specified wheel's distribution metadata.
-
-    This returns a Distribution instance from the chosen backend based on
-    the given wheel's ``.dist-info`` directory.
-
-    :param canonical_name: Normalized project name of the given wheel.
-    """
-    return select_backend().Distribution.from_wheel(wheel, canonical_name)
-
-
-def get_metadata_distribution(
-    metadata_contents: bytes,
-    filename: str,
-    canonical_name: str,

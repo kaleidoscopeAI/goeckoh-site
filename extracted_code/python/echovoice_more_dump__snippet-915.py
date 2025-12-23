@@ -1,8 +1,4 @@
-import numpy as np
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.decomposition import PCA
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-from quart import Quart, websocket, request, jsonify
-
+import random
+from textwrap import dedent
+class MockLLMClient:
+async def query(self, prompt: str) -> str:

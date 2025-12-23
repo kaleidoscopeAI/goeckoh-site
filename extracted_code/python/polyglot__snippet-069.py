@@ -1,1 +1,1 @@
-async def startup():
+import os, textwrap, zipfile, json, sqlite3, pathlib

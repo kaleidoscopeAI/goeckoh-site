@@ -1,9 +1,9 @@
-def mutate(self):
-    """Evolve pattern recognition capability"""
-    if np.random.random() < self.adaptation_rate:
-        if len(self.sequence) > 3:
-            # Combine existing patterns
-            idx1, idx2 = np.random.choice(len(self.sequence), 2, replace=False)
-            new_pattern = self.sequence[idx1][:2] + self.sequence[idx2][2:]
-            self.sequence.append(new_pattern)
-            self.mutations += 1
+def analyze(self, insight: Dict) -> Dict[str, float]:
+    """Analyzes potential risks associated with an insight."""
+    risks = {}
+    if insight.get("confidence", 1.0) < 0.5:
+        risks["low_confidence"] = self.risk_factors["low_confidence"]
+    if insight.get("energy_cost", 0.0) > 10:
+        risks["high_energy_cost"] = self.risk_factors["high_energy_cost"]
+    # Add more risk analysis based on insight type and content
+    return risks

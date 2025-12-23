@@ -1,0 +1,6 @@
+  query = f"Generate the llms.txt file for the repository at {repo_path}"
+  if output_path:
+      query += f" and save it to {output_path}"
+
+  # Show a spinner
+  with console.status("[bold green]Generating file content... [/bold

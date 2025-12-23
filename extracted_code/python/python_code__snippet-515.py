@@ -1,213 +1,56 @@
-class retry_if_exception(retry_base):
-    """Retry strategy that retries if an exception verifies a predicate."""
-
-    def __init__(self, predicate: typing.Callable[[BaseException], bool]) -> None:
-        self.predicate = predicate
-
-    def __call__(self, retry_state: "RetryCallState") -> bool:
-        if retry_state.outcome is None:
-            raise RuntimeError("__call__() called before outcome was set")
-
-        if retry_state.outcome.failed:
-            exception = retry_state.outcome.exception()
-            if exception is None:
-                raise RuntimeError("outcome failed but the exception is None")
-            return self.predicate(exception)
-        else:
-            return False
+    raise ImportError("Error initializing ctypes") from None
 
 
-class retry_if_exception_type(retry_if_exception):
-    """Retries if an exception has been raised of one or more types."""
-
-    def __init__(
-        self,
-        exception_types: typing.Union[
-            typing.Type[BaseException],
-            typing.Tuple[typing.Type[BaseException], ...],
-        ] = Exception,
-    ) -> None:
-        self.exception_types = exception_types
-        super().__init__(lambda e: isinstance(e, exception_types))
-
-
-class retry_if_not_exception_type(retry_if_exception):
-    """Retries except an exception has been raised of one or more types."""
-
-    def __init__(
-        self,
-        exception_types: typing.Union[
-            typing.Type[BaseException],
-            typing.Tuple[typing.Type[BaseException], ...],
-        ] = Exception,
-    ) -> None:
-        self.exception_types = exception_types
-        super().__init__(lambda e: not isinstance(e, exception_types))
-
-
-class retry_unless_exception_type(retry_if_exception):
-    """Retries until an exception is raised of one or more types."""
-
-    def __init__(
-        self,
-        exception_types: typing.Union[
-            typing.Type[BaseException],
-            typing.Tuple[typing.Type[BaseException], ...],
-        ] = Exception,
-    ) -> None:
-        self.exception_types = exception_types
-        super().__init__(lambda e: not isinstance(e, exception_types))
-
-    def __call__(self, retry_state: "RetryCallState") -> bool:
-        if retry_state.outcome is None:
-            raise RuntimeError("__call__() called before outcome was set")
-
-        # always retry if no exception was raised
-        if not retry_state.outcome.failed:
-            return True
-
-        exception = retry_state.outcome.exception()
-        if exception is None:
-            raise RuntimeError("outcome failed but the exception is None")
-        return self.predicate(exception)
-
-
-class retry_if_exception_cause_type(retry_base):
-    """Retries if any of the causes of the raised exception is of one or more types.
-
-    The check on the type of the cause of the exception is done recursively (until finding
-    an exception in the chain that has no `__cause__`)
+def _handle_osstatus(result: OSStatus, _: typing.Any, args: typing.Any) -> typing.Any:
     """
+    Raises an error if the OSStatus value is non-zero.
+    """
+    if int(result) == 0:
+        return args
 
-    def __init__(
-        self,
-        exception_types: typing.Union[
-            typing.Type[BaseException],
-            typing.Tuple[typing.Type[BaseException], ...],
-        ] = Exception,
-    ) -> None:
-        self.exception_cause_types = exception_types
+    # Returns a CFString which we need to transform
+    # into a UTF-8 Python string.
+    error_message_cfstring = None
+    try:
+        error_message_cfstring = Security.SecCopyErrorMessageString(result, None)
 
-    def __call__(self, retry_state: "RetryCallState") -> bool:
-        if retry_state.outcome is None:
-            raise RuntimeError("__call__ called before outcome was set")
+        # First step is convert the CFString into a C string pointer.
+        # We try the fast no-copy way first.
+        error_message_cfstring_c_void_p = ctypes.cast(
+            error_message_cfstring, ctypes.POINTER(ctypes.c_void_p)
+        )
+        message = CoreFoundation.CFStringGetCStringPtr(
+            error_message_cfstring_c_void_p, CFConst.kCFStringEncodingUTF8
+        )
 
-        if retry_state.outcome.failed:
-            exc = retry_state.outcome.exception()
-            while exc is not None:
-                if isinstance(exc.__cause__, self.exception_cause_types):
-                    return True
-                exc = exc.__cause__
+        # Quoting the Apple dev docs:
+        #
+        # "A pointer to a C string or NULL if the internal
+        # storage of theString does not allow this to be
+        # returned efficiently."
+        #
+        # So we need to get our hands dirty.
+        if message is None:
+            buffer = ctypes.create_string_buffer(1024)
+            result = CoreFoundation.CFStringGetCString(
+                error_message_cfstring_c_void_p,
+                buffer,
+                1024,
+                CFConst.kCFStringEncodingUTF8,
+            )
+            if not result:
+                raise OSError("Error copying C string from CFStringRef")
+            message = buffer.value
 
-        return False
+    finally:
+        if error_message_cfstring is not None:
+            CoreFoundation.CFRelease(error_message_cfstring)
 
+    # If no message can be found for this status we come
+    # up with a generic one that forwards the status code.
+    if message is None or message == "":
+        message = f"SecureTransport operation returned a non-zero OSStatus: {result}"
 
-class retry_if_result(retry_base):
-    """Retries if the result verifies a predicate."""
-
-    def __init__(self, predicate: typing.Callable[[typing.Any], bool]) -> None:
-        self.predicate = predicate
-
-    def __call__(self, retry_state: "RetryCallState") -> bool:
-        if retry_state.outcome is None:
-            raise RuntimeError("__call__() called before outcome was set")
-
-        if not retry_state.outcome.failed:
-            return self.predicate(retry_state.outcome.result())
-        else:
-            return False
-
-
-class retry_if_not_result(retry_base):
-    """Retries if the result refutes a predicate."""
-
-    def __init__(self, predicate: typing.Callable[[typing.Any], bool]) -> None:
-        self.predicate = predicate
-
-    def __call__(self, retry_state: "RetryCallState") -> bool:
-        if retry_state.outcome is None:
-            raise RuntimeError("__call__() called before outcome was set")
-
-        if not retry_state.outcome.failed:
-            return not self.predicate(retry_state.outcome.result())
-        else:
-            return False
-
-
-class retry_if_exception_message(retry_if_exception):
-    """Retries if an exception message equals or matches."""
-
-    def __init__(
-        self,
-        message: typing.Optional[str] = None,
-        match: typing.Optional[str] = None,
-    ) -> None:
-        if message and match:
-            raise TypeError(f"{self.__class__.__name__}() takes either 'message' or 'match', not both")
-
-        # set predicate
-        if message:
-
-            def message_fnc(exception: BaseException) -> bool:
-                return message == str(exception)
-
-            predicate = message_fnc
-        elif match:
-            prog = re.compile(match)
-
-            def match_fnc(exception: BaseException) -> bool:
-                return bool(prog.match(str(exception)))
-
-            predicate = match_fnc
-        else:
-            raise TypeError(f"{self.__class__.__name__}() missing 1 required argument 'message' or 'match'")
-
-        super().__init__(predicate)
-
-
-class retry_if_not_exception_message(retry_if_exception_message):
-    """Retries until an exception message equals or matches."""
-
-    def __init__(
-        self,
-        message: typing.Optional[str] = None,
-        match: typing.Optional[str] = None,
-    ) -> None:
-        super().__init__(message, match)
-        # invert predicate
-        if_predicate = self.predicate
-        self.predicate = lambda *args_, **kwargs_: not if_predicate(*args_, **kwargs_)
-
-    def __call__(self, retry_state: "RetryCallState") -> bool:
-        if retry_state.outcome is None:
-            raise RuntimeError("__call__() called before outcome was set")
-
-        if not retry_state.outcome.failed:
-            return True
-
-        exception = retry_state.outcome.exception()
-        if exception is None:
-            raise RuntimeError("outcome failed but the exception is None")
-        return self.predicate(exception)
-
-
-class retry_any(retry_base):
-    """Retries if any of the retries condition is valid."""
-
-    def __init__(self, *retries: retry_base) -> None:
-        self.retries = retries
-
-    def __call__(self, retry_state: "RetryCallState") -> bool:
-        return any(r(retry_state) for r in self.retries)
-
-
-class retry_all(retry_base):
-    """Retries if all the retries condition are valid."""
-
-    def __init__(self, *retries: retry_base) -> None:
-        self.retries = retries
-
-    def __call__(self, retry_state: "RetryCallState") -> bool:
-        return all(r(retry_state) for r in self.retries)
+    raise ssl.SSLError(message)
 
 

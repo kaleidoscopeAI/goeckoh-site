@@ -1,0 +1,38 @@
+"anxious": GuidanceScript(
+    event="anxious",
+    title="Calm Breathing Buddy",
+    message="Let's pause together. We will take three slow breaths.",
+    style="calm",
+    breathing_steps=[
+        "Breath one: in through your nose for four, out for six.",
+        "Breath two: shoulders down, think of your favorite safe place.",
+        "Breath three: whisper your favorite color as you exhale.",
+    ],
+),
+"perseveration": GuidanceScript(
+    event="perseveration",
+    title="New Adventure Prompt",
+    message="I hear that phrase a lot. Want to try a silly switch up together?",
+    style="neutral",
+    breathing_steps=[
+        "Let's count five dinosaurs or cars before we try again.",
+    ],
+),
+"high_energy": GuidanceScript(
+    event="high_energy",
+    title="Movement Reset",
+    message="Sounds like lots of energy! Let's stretch arms up high, shake them out, and wiggle toes.",
+    style="calm",
+),
+"encouragement": GuidanceScript(
+    event="encouragement",
+    title="Cheer Squad",
+    message="Nice work! I love how you said that. Ready for the next word when you are.",
+    style="excited",
+),
+"caregiver_reset": GuidanceScript(
+    event="caregiver_reset",
+    title="Caregiver Breath",
+    message="This is your reminder to take a sip of water, drop your shoulders, and breathe. You’re doing great.",
+    style="calm",
+),

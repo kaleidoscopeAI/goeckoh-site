@@ -1,24 +1,20 @@
-from .chardistribution import EUCKRDistributionAnalysis
-from .codingstatemachine import CodingStateMachine
-from .mbcharsetprober import MultiByteCharSetProber
-from .mbcssm import CP949_SM_MODEL
-
-
-class CP949Prober(MultiByteCharSetProber):
-    def __init__(self) -> None:
-        super().__init__()
-        self.coding_sm = CodingStateMachine(CP949_SM_MODEL)
-        # NOTE: CP949 is a superset of EUC-KR, so the distribution should be
-        #       not different.
-        self.distribution_analyzer = EUCKRDistributionAnalysis()
-        self.reset()
-
-    @property
-    def charset_name(self) -> str:
-        return "CP949"
-
-    @property
-    def language(self) -> str:
-        return "Korean"
-
-
+def open(
+    file: Union[str, "PathLike[str]", bytes],
+    mode: Union[Literal["rt"], Literal["r"]],
+    buffering: int = -1,
+    encoding: Optional[str] = None,
+    errors: Optional[str] = None,
+    newline: Optional[str] = None,
+    *,
+    total: Optional[int] = None,
+    description: str = "Reading...",
+    auto_refresh: bool = True,
+    console: Optional[Console] = None,
+    transient: bool = False,
+    get_time: Optional[Callable[[], float]] = None,
+    refresh_per_second: float = 10,
+    style: StyleType = "bar.back",
+    complete_style: StyleType = "bar.complete",
+    finished_style: StyleType = "bar.finished",
+    pulse_style: StyleType = "bar.pulse",
+    disable: bool = False,

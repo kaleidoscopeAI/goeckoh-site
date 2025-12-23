@@ -1,2 +1,1 @@
-+ const m = nodes.length;
-+ const block = blockSizes.K + blockSizes.D + blockSizes.Psi + blockSizes.U + blockSizes.M + blockSizes.L + blockSizes.E;
+Energy Function (_eval_energy): A Hamiltonian function H( 

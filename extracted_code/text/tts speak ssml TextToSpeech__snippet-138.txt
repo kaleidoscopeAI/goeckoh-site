@@ -1,0 +1,10 @@
+      val langCode = when (detectedLanguage) {
+          Language.SPANISH -> "es"
+          Language.FRENCH -> "fr"
+          else -> "en"
+      }
+
+      val offlineTts = ttsMap[langCode] ?: ttsMap["en"] ?: return
+
+      // Synthesize with speed (rate)
+      val generatedAudio = offlineTts.generate(text, speed =

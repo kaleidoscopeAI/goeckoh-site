@@ -1,0 +1,8 @@
+cto = socket.getdefaulttimeout()
+try:
+    socket.setdefaulttimeout(seconds)
+    yield
+finally:
+    socket.setdefaulttimeout(cto)
+
+

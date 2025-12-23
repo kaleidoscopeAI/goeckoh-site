@@ -1,0 +1,1 @@
+self.canvas.callbacks.process(self.name, self)

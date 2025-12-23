@@ -1,0 +1,2 @@
+doc: Shared text normalization helpers.
+functions: normalize_simple, similarity

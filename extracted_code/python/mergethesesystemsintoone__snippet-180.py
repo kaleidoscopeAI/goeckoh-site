@@ -1,9 +1,6 @@
-import networkx as nx
-from typing import Dict, List, Any
-from collections import defaultdict
-import random
-import numpy as np
-from datetime import datetime
+import json
+from dataclasses import dataclass, field
+from typing import Dict, List, Optional, Any, Set, Tuple
+from enum import Enum, auto
 
-class RuleEngine:
-def init(self):
+class GrowthState(Enum):

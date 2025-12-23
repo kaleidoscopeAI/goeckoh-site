@@ -1,0 +1,6 @@
+COGNITIVE = auto()
+PHYSICAL = auto()
+ADAPTIVE = auto()
+SOCIAL = auto()
+SPECIALIZED = auto()
+

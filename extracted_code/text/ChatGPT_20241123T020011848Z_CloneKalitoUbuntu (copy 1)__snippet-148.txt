@@ -1,0 +1,1 @@
+self._drawn_artists = self._func(framedata, *self._args)

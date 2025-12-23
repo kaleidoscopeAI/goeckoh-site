@@ -1,1 +1,5 @@
-  - VMs share the physical resources of the host efficiently, often using only the resources they actively need.
+'learning_capacity': 1.0,
+'adaptation_rate': 1.0,
+'resilience': 1.0,
+'efficiency': 1.0,
+'specialization': 1.0

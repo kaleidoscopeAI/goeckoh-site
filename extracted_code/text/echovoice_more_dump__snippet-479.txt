@@ -1,1 +1,4 @@
-For “quantum_write” registers, treat them as a memory-mapped interface: your backend can expose a Python class QuantumRegister with .write() and
+priority_adjustments: u64,
+memory_reclaims: u64,
+io_class_changes: u64,
+success_rate: u64,

@@ -1,76 +1,94 @@
-class DataProcessor:
-    def __init__(self):
-        self.pool = Pool(processes=os.cpu_count() // 2)  # Parallel for heavy ops
-        self.word2vec = None  # Lazy init
+class MemoryStore:
+    def __init__(self, path: str, redis: Optional[aioredis.Redis]):
+        self.con = sqlite3.connect(path, check_same_thread=False)
+        self.cur = self.con.cursor()
+        self.cur.execute("CREATE TABLE IF NOT EXISTS dna (gen INTEGER PRIMARY KEY, dna TEXT)")
+        self.cur.execute("CREATE INDEX IF NOT EXISTS idx_gen ON dna(gen)")
+        self.cur.execute("CREATE TABLE IF NOT EXISTS insights (id TEXT PRIMARY KEY, data TEXT)")
+        self.cur.execute("CREATE INDEX IF NOT EXISTS idx_id ON insights(id)")
+        self.cur.execute("CREATE TABLE IF NOT EXISTS graph (source TEXT, target TEXT, weight REAL)")
+        self.cur.execute("CREATE INDEX IF NOT EXISTS idx_source ON graph(source)")
+        self.con.commit()
+        self.redis = redis
+        self.fallback_cache = {}  # Dict fallback
 
-    def process_text(self, text: str) -> Dict:
-        doc = nlp(text)
-        entities = [(ent.text, ent.label_) for ent in doc.ents]
-        topics = self._identify_topics([[t.text for t in doc]])
-        return {"entities": entities, "topics": topics}
+    async def _get_cache(self, key: str):
+        if self.redis:
+            try:
+                return await self.redis.get(key)
+            except:
+                pass
+        return self.fallback_cache.get(key)
 
-    def process_image(self, img_url: str) -> Dict:
-        response = requests.get(img_url)
-        img = Image.open(BytesIO(response.content)).convert('L')
-        array = np.array(img)
-        sobel_x = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])
-        edges = self._convolve(array, sobel_x)
-        shapes = self._detect_shapes(edges)
-        return {"shapes": shapes}
+    async def _set_cache(self, key: str, value: str, ex: int):
+        if self.redis:
+            try:
+                await self.redis.set(key, value, ex=ex)
+                return
+            except:
+                pass
+        self.fallback_cache[key] = value
 
-    def process_numerical(self, data: List[float]) -> Dict:
-        fft = np.fft.fft(data)
-        peaks = np.argwhere(np.abs(fft) > np.mean(np.abs(fft)) + np.std(np.abs(fft))).flatten().tolist()
-        return {"peaks": peaks}
+    async def add_dna_batch(self, dnas: List[Tuple[int, KnowledgeDNA]]):
+        data = [(gen, json.dumps(dna.__dict__, default=lambda o: str(o))) for gen, dna in dnas]
+        if self.redis:
+            async with self.redis.pipeline() as pipe:
+                for gen, js in data:
+                    await pipe.set(f"agi:dna:{gen}", js, ex=CACHE_TTL)
+                await pipe.execute()
+        else:
+            for gen, js in data:
+                self.fallback_cache[f"agi:dna:{gen}"] = js
+        self.cur.executemany("INSERT OR REPLACE INTO dna VALUES (?, ?)", data)
+        self.con.commit()
 
-    def _convolve(self, img: np.ndarray, kernel: np.ndarray) -> np.ndarray:
-        from scipy.signal import convolve2d  # Use scipy for speed
-        return convolve2d(img, kernel, mode='same')
+    async def get_dna(self, gen: int) -> KnowledgeDNA:
+        cached = await self._get_cache(f"agi:dna:{gen}")
+        if cached:
+            data = json.loads(cached)
+            return KnowledgeDNA(
+                text_patterns=[PatternStrand(**p) for p in data['text_patterns']],
+                visual_patterns=[VisualStrand(**v) for v in data['visual_patterns']],
+                mutation_rate=data['mutation_rate'],
+                generation=data['generation']
+            )
+        self.cur.execute("SELECT dna FROM dna WHERE gen=?", (gen,))
+        row = self.cur.fetchone()
+        if row:
+            data = json.loads(row[0])
+            await self._set_cache(f"agi:dna:{gen}", row[0], CACHE_TTL)
+            return KnowledgeDNA(
+                text_patterns=[PatternStrand(**p) for p in data['text_patterns']],
+                visual_patterns=[VisualStrand(**v) for v in data['visual_patterns']],
+                mutation_rate=data['mutation_rate'],
+                generation=data['generation']
+            )
+        return KnowledgeDNA()
 
-    def _detect_shapes(self, edges: np.ndarray) -> List:
-        visited = np.zeros_like(edges, dtype=bool)
-        shapes = []
-        for i in range(0, edges.shape[0], 2):  # Stride for speed
-            for j in range(0, edges.shape[1], 2):
-                if edges[i,j] > 0 and not visited[i,j]:
-                    contour = self._dfs_contour(edges, visited, i, j)
-                    if len(contour) > 5:  # Min size
-                        shapes.append({"vertices": len(contour)})
-        return shapes
+    async def add_insight_batch(self, insights: List[Dict]):
+        data = [(str(uuid.uuid4()), json.dumps(ins)) for ins in insights]
+        if self.redis:
+            async with self.redis.pipeline() as pipe:
+                for id_, js in data:
+                    await pipe.set(f"agi:insight:{id_}", js, ex=CACHE_TTL)
+                await pipe.execute()
+        else:
+            for id_, js in data:
+                self.fallback_cache[f"agi:insight:{id_}"] = js
+        self.cur.executemany("INSERT INTO insights VALUES (?, ?)", data)
+        self.con.commit()
 
-    def _dfs_contour(self, edges: np.ndarray, visited: np.ndarray, x: int, y: int) -> List[Tuple[int,int]]:
-        stack = deque([(x, y)])
-        contour = []
-        while stack:
-            cx, cy = stack.pop()
-            if visited[cx, cy]: continue
-            visited[cx, cy] = True
-            contour.append((cx, cy))
-            for dx, dy in [(-1,-1), (-1,0), (-1,1), (0,-1), (0,1), (1,-1), (1,0), (1,1)]:
-                nx, ny = cx + dx, cy + dy
-                if 0 <= nx < edges.shape[0] and 0 <= ny < edges.shape[1] and edges[nx,ny] > 0 and not visited[nx,ny]:
-                    stack.append((nx, ny))
-            if len(contour) > MAX_HISTORY // 10: break  # Per contour limit
-        return contour
-
-    def _identify_topics(self, sentences: List[List[str]], num_topics: int = 3) -> List[List[str]]:
-        from scipy.sparse import lil_matrix
-        words = list(set(w for sent in sentences for w in sent))
-        if not words: return []
-        w2idx = {w: i for i, w in enumerate(words)}
-        matrix = lil_matrix((len(words), len(words)))
-        for sent in sentences:
-            for i in range(len(sent)):
-                for j in range(i+1, len(sent)):
-                    w1, w2 = sorted([sent[i], sent[j]])
-                    matrix[w2idx[w1], w2idx[w2]] += 1
-        matrix = matrix.tocsr()
-        from sklearn.decomposition import TruncatedSVD
-        svd = TruncatedSVD(n_components=num_topics)
-        U = svd.fit_transform(matrix)
-        topics = [[] for _ in range(num_topics)]
-        for i in range(len(words)):
-            topic_idx = np.argmax(np.abs(U[i]))
-            topics[topic_idx].append(words[i])
-        return topics
+    async def add_edge_batch(self, edges: List[Tuple[str, str, float]]):
+        if self.redis:
+            async with self.redis.pipeline() as pipe:
+                for s, t, w in edges:
+                    await pipe.sadd(f"agi:graph:{s}", f"{t}:{w}")
+                await pipe.execute()
+        else:
+            for s, t, w in edges:
+                if f"agi:graph:{s}" not in self.fallback_cache:
+                    self.fallback_cache[f"agi:graph:{s}"] = set()
+                self.fallback_cache[f"agi:graph:{s}"].add(f"{t}:{w}")
+        self.cur.executemany("INSERT INTO graph VALUES (?, ?, ?)", edges)
+        self.con.commit()
 

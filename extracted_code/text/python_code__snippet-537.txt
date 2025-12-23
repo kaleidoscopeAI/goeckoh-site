@@ -1,0 +1,12 @@
+"""
+Returns the MRO of an object's class as full qualified names, or of the object itself if it's a class.
+
+Examples:
+    `object_types_mro_as_strings(JSONDecoder)` will return `['json.decoder.JSONDecoder', 'builtins.object']`
+"""
+return [
+    f'{getattr(type_, "__module__", "")}.{getattr(type_, "__qualname__", "")}'
+    for type_ in get_object_types_mro(obj)
+]
+
+

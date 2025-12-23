@@ -1,0 +1,3 @@
+doc: Kaleidoscope AI Chatbot
+functions: main
+classes: KaleidoscopeChatbot

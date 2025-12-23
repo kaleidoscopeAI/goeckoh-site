@@ -1,1 +1,1 @@
-const numEmotions = DEFAULT_EMOTIONS.length;
+const scene = new THREE.Scene();

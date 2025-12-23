@@ -1,0 +1,6 @@
+Crystallization: When a node's knowledge surpasses a threshold, its information is "crystallized" into a KnowledgeGraph. This process explicitly includes a step for PII (Personally Identifiable Information) redaction.
+
+Hypothesis Generation: The engine periodically uses the PerspectiveEngine to generate and evaluate hypotheses for each node as a form of speculative reasoning.
+
+Pattern Alignment: The system calculates a pattern_alignment_score between nodes to determine how well their patterns align.
+

@@ -1,6 +1,2 @@
-from dataclasses import dataclass, field
-from typing import Dict, List, Set, Optional
-import numpy as np
-from collections import deque
-import time
+This script simulates adding patterns from different nodes to the shared pool and visualizes relationships.
 

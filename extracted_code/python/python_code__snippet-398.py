@@ -1,10 +1,20 @@
-    from typing import TypedDict
-
-    class CodingStateMachineDict(TypedDict, total=False):
-        class_table: Tuple[int, ...]
-        class_factor: int
-        state_table: Tuple[int, ...]
-        char_len_table: Tuple[int, ...]
-        name: str
-        language: str  # Optional key
-
+def open(
+    file: Union[str, "PathLike[str]", bytes],
+    mode: Union[Literal["rb"], Literal["rt"], Literal["r"]] = "r",
+    buffering: int = -1,
+    encoding: Optional[str] = None,
+    errors: Optional[str] = None,
+    newline: Optional[str] = None,
+    *,
+    total: Optional[int] = None,
+    description: str = "Reading...",
+    auto_refresh: bool = True,
+    console: Optional[Console] = None,
+    transient: bool = False,
+    get_time: Optional[Callable[[], float]] = None,
+    refresh_per_second: float = 10,
+    style: StyleType = "bar.back",
+    complete_style: StyleType = "bar.complete",
+    finished_style: StyleType = "bar.finished",
+    pulse_style: StyleType = "bar.pulse",
+    disable: bool = False,

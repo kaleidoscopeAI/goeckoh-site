@@ -1,0 +1,5 @@
+s = float(np.sum(v))
+if s == 0:
+    return np.ones_like(v) / float(v.size)
+return v / s
+

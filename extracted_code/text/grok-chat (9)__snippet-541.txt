@@ -1,0 +1,1 @@
+Provides a quickstart guide for ADK Streaming in Python, demonstrating how

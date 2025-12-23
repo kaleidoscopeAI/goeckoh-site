@@ -1,0 +1,5 @@
+"""Raised when passing an invalid state to a timeout"""
+
+pass
+
+

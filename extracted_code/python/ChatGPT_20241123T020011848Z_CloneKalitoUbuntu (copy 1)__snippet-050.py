@@ -1,22 +1,15 @@
-import json
-import os
+from cryptography.fernet import Fernet
 
-class NodeBackupRecovery:
-    def __init__(self, backup_dir="backups"):
-        self.backup_dir = backup_dir
-        os.makedirs(self.backup_dir, exist_ok=True)
+class DataSecurity:
+    def __init__(self):
+        self.key = Fernet.generate_key()
+        self.cipher = Fernet(self.key)
 
-    def backup_node(self, node):
-        """Backup node state to a file."""
-        backup_file = os.path.join(self.backup_dir, f"{node.id}.json")
-        with open(backup_file, "w") as f:
-            json.dump(node.status(), f)
+    def encrypt_message(self, message):
+        """Encrypt a message."""
+        return self.cipher.encrypt(message.encode())
 
-    def restore_node(self, node_id):
-        """Restore node state from a file."""
-        backup_file = os.path.join(self.backup_dir, f"{node_id}.json")
-        if os.path.exists(backup_file):
-            with open(backup_file, "r") as f:
-                return json.load(f)
-        return None
+    def decrypt_message(self, encrypted_message):
+        """Decrypt a message."""
+        return self.cipher.decrypt(encrypted_message).decode()
 

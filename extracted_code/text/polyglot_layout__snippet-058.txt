@@ -1,0 +1,6 @@
+  frames, _ = frame_signal(x, frame_length, hop_length)
+  signs = np.sign(frames)
+  signs[signs == 0] = 1.0
+  zc = np.sum(signs[:, 1:] * signs[:, :-1] < 0, axis=1)
+  return zc
+

@@ -1,0 +1,8 @@
+_object: Any,
+*,
+max_width: int = 80,
+indent_size: int = 4,
+max_length: Optional[int] = None,
+max_string: Optional[int] = None,
+max_depth: Optional[int] = None,
+expand_all: bool = False,

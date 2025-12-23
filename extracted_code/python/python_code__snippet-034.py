@@ -1,31 +1,22 @@
-def user_documents_path() -> Path:
-    """:returns: documents path tied to the user"""
-    return PlatformDirs().user_documents_path
+def cached_tz(hour_str: str, minute_str: str, sign_str: str) -> timezone:
+    sign = 1 if sign_str == "+" else -1
+    return timezone(
+        timedelta(
+            hours=sign * int(hour_str),
+            minutes=sign * int(minute_str),
+        )
+    )
 
 
-def user_downloads_path() -> Path:
-    """:returns: downloads path tied to the user"""
-    return PlatformDirs().user_downloads_path
+def match_to_localtime(match: re.Match) -> time:
+    hour_str, minute_str, sec_str, micros_str = match.groups()
+    micros = int(micros_str.ljust(6, "0")) if micros_str else 0
+    return time(int(hour_str), int(minute_str), int(sec_str), micros)
 
 
-def user_pictures_path() -> Path:
-    """:returns: pictures path tied to the user"""
-    return PlatformDirs().user_pictures_path
+def match_to_number(match: re.Match, parse_float: ParseFloat) -> Any:
+    if match.group("floatpart"):
+        return parse_float(match.group())
+    return int(match.group(), 0)
 
 
-def user_videos_path() -> Path:
-    """:returns: videos path tied to the user"""
-    return PlatformDirs().user_videos_path
-
-
-def user_music_path() -> Path:
-    """:returns: music path tied to the user"""
-    return PlatformDirs().user_music_path
-
-
-def user_runtime_path(
-    appname: str | None = None,
-    appauthor: str | None | Literal[False] = None,
-    version: str | None = None,
-    opinion: bool = True,  # noqa: FBT001, FBT002
-    ensure_exists: bool = False,  # noqa: FBT001, FBT002

@@ -1,0 +1,50 @@
+name='kaleidoscope_ai',
+version='0.1.0',
+packages=find_packages(),
+install_requires=[
+    'numpy>=1.20',
+    'scipy>=1.7',
+    'networkx>=2.6',
+    'matplotlib>=3.4',
+    'streamlit>=1.10',
+    'plotly>=5.0'
+],
+python_requires='>=3.8',
+author='Your Name',
+author_email='your.email@example.com',
+description='A system for simulating and analyzing complex patterns using quantum computing principles and graph theory.',
+long_description=open('../README.md').read(),
+long_description_content_type='text/markdown',
+url='https://github.com/yourusername/kaleidoscope_ai',
+classifiers=[
+    'Development Status :: 3 - Alpha',
+    'Intended Audience :: Developers',
+    'Intended Audience :: Science/Research',
+    'Topic :: Scientific/Engineering',
+    'Topic :: Software Development :: Libraries :: Python Modules',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+],
+keywords='quantum-computing graph-theory pattern-recognition simulation',
+project_urls={
+    'Bug Reports': 'https://github.com/yourusername/kaleidoscope_ai/issues',
+    'Source': 'https://github.com/yourusername/kaleidoscope_ai',
+},
+license='Custom License',  # Indicate a custom license
+license_files=['../LICENSE.txt'],  # Include the license file in the distribution
+
+
+
+pip install -r ../setup/requirements.txt
+
+python setup.py sdist bdist_wheel
+
+python -m unittest discover -s ../tests -p "test_*.py"
+
+rm -rf build dist __pycache__ *.egg-info
+find . -name "*.pyc" -delete
+find . -name "__pycache__" -delete
+
+

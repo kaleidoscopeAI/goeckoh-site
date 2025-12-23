@@ -1,1 +1,1 @@
-./package_windows.sh
+./package_macos.sh

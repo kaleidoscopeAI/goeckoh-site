@@ -1,0 +1,3 @@
+ 5, MachineState.ERROR,      6, MachineState.ERROR,      5,      5,      4, MachineState.ERROR, # 18-1f
+ 4, MachineState.ERROR,      4,      4,      4, MachineState.ERROR,      4, MachineState.ERROR, # 20-27
+ 4, MachineState.ITS_ME, MachineState.START, MachineState.START, MachineState.START, MachineState.START, MachineState.START, MachineState.START, # 28-2f

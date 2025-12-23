@@ -1,0 +1,7 @@
+- $S_k$ is a real-valued continuous state vector,
+- $b_k \in \{0,1\}$ is the curiosity bit,
+- $O_i, P_i$ manage engine outputs and projections,
+- $G$ integrates all information,
+- $\eta_k$ is noise,
+- $\mathrm{Perf}_k$ and $u_k$ are performance and curiosity signals.
+

@@ -1,0 +1,5 @@
+return CoreFoundation.CFDataCreate(  # type: ignore[no-any-return]
+    CoreFoundation.kCFAllocatorDefault, value, len(value)
+)
+
+

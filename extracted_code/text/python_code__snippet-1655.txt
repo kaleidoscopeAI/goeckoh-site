@@ -1,0 +1,6 @@
+apply_prosody_to_tts = None  # type: ignore
+extract_prosody_from_int16 = None  # type: ignore
+ProsodyFeatures = None  # type: ignore
+PROSODY_AVAILABLE = False
+
+

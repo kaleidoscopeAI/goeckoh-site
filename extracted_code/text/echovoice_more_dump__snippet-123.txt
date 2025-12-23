@@ -1,1 +1,1 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+You’re right — you asked for the full thing. Below is a complete, CPU-only, self-contained integration package you can drop into a TypeScript project. It

@@ -1,0 +1,2 @@
+- Keep sound levels in the safe range (e.g., below typical clinical headphone limits and well below occupational noise limits); avoid sudden level jumps.
+- Limit maximum session duration and provide breaks; keep continuous exposure within standard occupational/clinical guidance.

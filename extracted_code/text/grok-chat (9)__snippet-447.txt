@@ -1,0 +1,5 @@
+  collected file content and performs two key tasks:
+  - It generates a concise summary for each individual file.
+  - It generates a higher-level summary for the entire project based on the
+    content of all files.
+

@@ -1,6 +1,1 @@
-note: if you're trying to build a new `CrystalError`, consider using `CrystalError::msg` which returns `CrystalError`
-   --> src/error.rs:70:5
-    |
-70  |     pub fn msg<T: Into<String>>(msg: T) -> Self {
-    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
++ * TEBD stub using cluster-level finite difference directional derivative.

@@ -1,3 +1,2 @@
-import sys
-from unittest import TestCase, main, skipUnless
-
+def GetConsoleScreenBufferInfo(
+    std_handle: wintypes.HANDLE,

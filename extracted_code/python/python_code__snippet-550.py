@@ -1,259 +1,120 @@
-class ResourceCache(Cache):
-    def __init__(self, base=None):
-        if base is None:
-            # Use native string to avoid issues on 2.x: see Python #20140.
-            base = os.path.join(get_cache_base(), str('resource-cache'))
-        super(ResourceCache, self).__init__(base)
+def with_metaclass(meta, *bases):
+    """Create a base class with a metaclass."""
+    # This requires a bit of explanation: the basic idea is to make a dummy
+    # metaclass for one level of class instantiation that replaces itself with
+    # the actual metaclass.
+    class metaclass(type):
 
-    def is_stale(self, resource, path):
-        """
-        Is the cache stale for the given resource?
-
-        :param resource: The :class:`Resource` being cached.
-        :param path: The path of the resource in the cache.
-        :return: True if the cache is stale.
-        """
-        # Cache invalidation is a hard problem :-)
-        return True
-
-    def get(self, resource):
-        """
-        Get a resource into the cache,
-
-        :param resource: A :class:`Resource` instance.
-        :return: The pathname of the resource in the cache.
-        """
-        prefix, path = resource.finder.get_cache_info(resource)
-        if prefix is None:
-            result = path
-        else:
-            result = os.path.join(self.base, self.prefix_to_dir(prefix), path)
-            dirname = os.path.dirname(result)
-            if not os.path.isdir(dirname):
-                os.makedirs(dirname)
-            if not os.path.exists(result):
-                stale = True
+        def __new__(cls, name, this_bases, d):
+            if sys.version_info[:2] >= (3, 7):
+                # This version introduced PEP 560 that requires a bit
+                # of extra care (we mimic what is done by __build_class__).
+                resolved_bases = types.resolve_bases(bases)
+                if resolved_bases is not bases:
+                    d['__orig_bases__'] = bases
             else:
-                stale = self.is_stale(resource, path)
-            if stale:
-                # write the bytes of the resource to the cache location
-                with open(result, 'wb') as f:
-                    f.write(resource.bytes)
-        return result
+                resolved_bases = bases
+            return meta(name, resolved_bases, d)
+
+        @classmethod
+        def __prepare__(cls, name, this_bases):
+            return meta.__prepare__(name, bases)
+    return type.__new__(metaclass, 'temporary_class', (), {})
 
 
-class ResourceBase(object):
-    def __init__(self, finder, name):
-        self.finder = finder
-        self.name = name
+def add_metaclass(metaclass):
+    """Class decorator for creating a class with a metaclass."""
+    def wrapper(cls):
+        orig_vars = cls.__dict__.copy()
+        slots = orig_vars.get('__slots__')
+        if slots is not None:
+            if isinstance(slots, str):
+                slots = [slots]
+            for slots_var in slots:
+                orig_vars.pop(slots_var)
+        orig_vars.pop('__dict__', None)
+        orig_vars.pop('__weakref__', None)
+        if hasattr(cls, '__qualname__'):
+            orig_vars['__qualname__'] = cls.__qualname__
+        return metaclass(cls.__name__, cls.__bases__, orig_vars)
+    return wrapper
 
 
-class Resource(ResourceBase):
+def ensure_binary(s, encoding='utf-8', errors='strict'):
+    """Coerce **s** to six.binary_type.
+
+    For Python 2:
+      - `unicode` -> encoded to `str`
+      - `str` -> `str`
+
+    For Python 3:
+      - `str` -> encoded to `bytes`
+      - `bytes` -> `bytes`
     """
-    A class representing an in-package resource, such as a data file. This is
-    not normally instantiated by user code, but rather by a
-    :class:`ResourceFinder` which manages the resource.
+    if isinstance(s, binary_type):
+        return s
+    if isinstance(s, text_type):
+        return s.encode(encoding, errors)
+    raise TypeError("not expecting type '%s'" % type(s))
+
+
+def ensure_str(s, encoding='utf-8', errors='strict'):
+    """Coerce *s* to `str`.
+
+    For Python 2:
+      - `unicode` -> encoded to `str`
+      - `str` -> `str`
+
+    For Python 3:
+      - `str` -> `str`
+      - `bytes` -> decoded to `str`
     """
-    is_container = False        # Backwards compatibility
-
-    def as_stream(self):
-        """
-        Get the resource as a stream.
-
-        This is not a property to make it obvious that it returns a new stream
-        each time.
-        """
-        return self.finder.get_stream(self)
-
-    @cached_property
-    def file_path(self):
-        global cache
-        if cache is None:
-            cache = ResourceCache()
-        return cache.get(self)
-
-    @cached_property
-    def bytes(self):
-        return self.finder.get_bytes(self)
-
-    @cached_property
-    def size(self):
-        return self.finder.get_size(self)
+    # Optimization: Fast return for the common case.
+    if type(s) is str:
+        return s
+    if PY2 and isinstance(s, text_type):
+        return s.encode(encoding, errors)
+    elif PY3 and isinstance(s, binary_type):
+        return s.decode(encoding, errors)
+    elif not isinstance(s, (text_type, binary_type)):
+        raise TypeError("not expecting type '%s'" % type(s))
+    return s
 
 
-class ResourceContainer(ResourceBase):
-    is_container = True     # Backwards compatibility
+def ensure_text(s, encoding='utf-8', errors='strict'):
+    """Coerce *s* to six.text_type.
 
-    @cached_property
-    def resources(self):
-        return self.finder.get_resources(self)
+    For Python 2:
+      - `unicode` -> `unicode`
+      - `str` -> `unicode`
 
-
-class ResourceFinder(object):
+    For Python 3:
+      - `str` -> `str`
+      - `bytes` -> decoded to `str`
     """
-    Resource finder for file system resources.
-    """
-
-    if sys.platform.startswith('java'):
-        skipped_extensions = ('.pyc', '.pyo', '.class')
+    if isinstance(s, binary_type):
+        return s.decode(encoding, errors)
+    elif isinstance(s, text_type):
+        return s
     else:
-        skipped_extensions = ('.pyc', '.pyo')
-
-    def __init__(self, module):
-        self.module = module
-        self.loader = getattr(module, '__loader__', None)
-        self.base = os.path.dirname(getattr(module, '__file__', ''))
-
-    def _adjust_path(self, path):
-        return os.path.realpath(path)
-
-    def _make_path(self, resource_name):
-        # Issue #50: need to preserve type of path on Python 2.x
-        # like os.path._get_sep
-        if isinstance(resource_name, bytes):    # should only happen on 2.x
-            sep = b'/'
-        else:
-            sep = '/'
-        parts = resource_name.split(sep)
-        parts.insert(0, self.base)
-        result = os.path.join(*parts)
-        return self._adjust_path(result)
-
-    def _find(self, path):
-        return os.path.exists(path)
-
-    def get_cache_info(self, resource):
-        return None, resource.path
-
-    def find(self, resource_name):
-        path = self._make_path(resource_name)
-        if not self._find(path):
-            result = None
-        else:
-            if self._is_directory(path):
-                result = ResourceContainer(self, resource_name)
-            else:
-                result = Resource(self, resource_name)
-            result.path = path
-        return result
-
-    def get_stream(self, resource):
-        return open(resource.path, 'rb')
-
-    def get_bytes(self, resource):
-        with open(resource.path, 'rb') as f:
-            return f.read()
-
-    def get_size(self, resource):
-        return os.path.getsize(resource.path)
-
-    def get_resources(self, resource):
-        def allowed(f):
-            return (f != '__pycache__' and not
-                    f.endswith(self.skipped_extensions))
-        return set([f for f in os.listdir(resource.path) if allowed(f)])
-
-    def is_container(self, resource):
-        return self._is_directory(resource.path)
-
-    _is_directory = staticmethod(os.path.isdir)
-
-    def iterator(self, resource_name):
-        resource = self.find(resource_name)
-        if resource is not None:
-            todo = [resource]
-            while todo:
-                resource = todo.pop(0)
-                yield resource
-                if resource.is_container:
-                    rname = resource.name
-                    for name in resource.resources:
-                        if not rname:
-                            new_name = name
-                        else:
-                            new_name = '/'.join([rname, name])
-                        child = self.find(new_name)
-                        if child.is_container:
-                            todo.append(child)
-                        else:
-                            yield child
+        raise TypeError("not expecting type '%s'" % type(s))
 
 
-class ZipResourceFinder(ResourceFinder):
+def python_2_unicode_compatible(klass):
     """
-    Resource finder for resources in .zip files.
+    A class decorator that defines __unicode__ and __str__ methods under Python 2.
+    Under Python 3 it does nothing.
+
+    To support Python 2 and 3 with a single code base, define a __str__ method
+    returning text and apply this decorator to the class.
     """
-    def __init__(self, module):
-        super(ZipResourceFinder, self).__init__(module)
-        archive = self.loader.archive
-        self.prefix_len = 1 + len(archive)
-        # PyPy doesn't have a _files attr on zipimporter, and you can't set one
-        if hasattr(self.loader, '_files'):
-            self._files = self.loader._files
-        else:
-            self._files = zipimport._zip_directory_cache[archive]
-        self.index = sorted(self._files)
-
-    def _adjust_path(self, path):
-        return path
-
-    def _find(self, path):
-        path = path[self.prefix_len:]
-        if path in self._files:
-            result = True
-        else:
-            if path and path[-1] != os.sep:
-                path = path + os.sep
-            i = bisect.bisect(self.index, path)
-            try:
-                result = self.index[i].startswith(path)
-            except IndexError:
-                result = False
-        if not result:
-            logger.debug('_find failed: %r %r', path, self.loader.prefix)
-        else:
-            logger.debug('_find worked: %r %r', path, self.loader.prefix)
-        return result
-
-    def get_cache_info(self, resource):
-        prefix = self.loader.archive
-        path = resource.path[1 + len(prefix):]
-        return prefix, path
-
-    def get_bytes(self, resource):
-        return self.loader.get_data(resource.path)
-
-    def get_stream(self, resource):
-        return io.BytesIO(self.get_bytes(resource))
-
-    def get_size(self, resource):
-        path = resource.path[self.prefix_len:]
-        return self._files[path][3]
-
-    def get_resources(self, resource):
-        path = resource.path[self.prefix_len:]
-        if path and path[-1] != os.sep:
-            path += os.sep
-        plen = len(path)
-        result = set()
-        i = bisect.bisect(self.index, path)
-        while i < len(self.index):
-            if not self.index[i].startswith(path):
-                break
-            s = self.index[i][plen:]
-            result.add(s.split(os.sep, 1)[0])   # only immediate children
-            i += 1
-        return result
-
-    def _is_directory(self, path):
-        path = path[self.prefix_len:]
-        if path and path[-1] != os.sep:
-            path += os.sep
-        i = bisect.bisect(self.index, path)
-        try:
-            result = self.index[i].startswith(path)
-        except IndexError:
-            result = False
-        return result
+    if PY2:
+        if '__str__' not in klass.__dict__:
+            raise ValueError("@python_2_unicode_compatible cannot be applied "
+                             "to %s because it doesn't define __str__()." %
+                             klass.__name__)
+        klass.__unicode__ = klass.__str__
+        klass.__str__ = lambda self: self.__unicode__().encode('utf-8')
+    return klass
 
 

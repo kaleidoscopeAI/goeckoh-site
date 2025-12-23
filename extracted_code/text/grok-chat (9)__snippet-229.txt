@@ -1,0 +1,1 @@
+only sampled once per /status, not a persistent, driving model.

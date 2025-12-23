@@ -1,0 +1,16 @@
+times = [h["t"] for h in history]
+mixes = [h["diag"].get("mix", 0.0) for h in history]
+purities = [h["diag"].get("purity", 0.0) for h in history]
+entropies = [h["diag"].get("entropy", 0.0) for h in history]
+probs = np.vstack([h["p"] for h in history])
+
+fig, axs = plt.subplots(3,1, figsize=(8,10), sharex=True)
+axs[0].plot(times, mixes, label="mix (sum→product)"); axs[0].legend(); axs[0].set_ylabel("mix")
+axs[1].plot(times, purities, label="purity"); axs[1].plot(times, entropies, label="entropy"); axs[1].legend(); axs[1].set_ylabel("value")
+axs[2].stackplot(times, probs.T, labels=[f"p{i}" for i in range(probs.shape[1])]); axs[2].legend(); axs[2].set_ylabel("prob")
+axs[2].set_xlabel("time")
+plt.tight_layout()
+plt.savefig(f"{save_prefix}_timeseries.png", dpi=200)
+plt.close(fig)
+print("Wrote", f"{save_prefix}_timeseries.png")
+

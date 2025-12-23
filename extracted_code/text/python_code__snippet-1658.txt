@@ -1,0 +1,4 @@
+print("[WARN] Coqui TTS not found. Neural voice cloning is disabled.")
+NEURAL_TTS_AVAILABLE = False
+TTS = None
+

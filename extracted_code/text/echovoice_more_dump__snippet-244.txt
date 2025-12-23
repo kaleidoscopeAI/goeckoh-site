@@ -1,1 +1,4 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+• Iterative Development: Begin with simplified versions of components and interactions, gradually increasing complexity and scale in subsequent phases.
+• Theoretical Grounding: Ensure that design choices and implementation details at each phase remain aligned with the core principles of the CQICS framework (the IIT/GWT synthesis).
+• Measurability: Define and track quantitative metrics throughout development, focusing not only on task performance but also on measures relevant to the underlying theories (e.g., integration proxies, workspace dynamics).
+• Modularity: Design the core components (SMs, GW, CSA, GI, MC) with well-defined interfaces to facilitate independent development, testing, and replacement or upgrading of modules.

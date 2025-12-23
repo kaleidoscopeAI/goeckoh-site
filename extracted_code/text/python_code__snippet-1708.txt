@@ -1,0 +1,4 @@
+vertices: np.ndarray,
+t: float,
+user_seed: int,
+K: int = 10,

@@ -1,0 +1,3 @@
+agi = UnifiedAGISeed()
+await agi.run_autonomous_cycle()
+

@@ -1,9 +1,3 @@
-from .providers import AbstractProvider, AbstractResolver
-from .reporters import BaseReporter
-from .resolvers import (
-    InconsistentCandidate,
-    RequirementsConflicted,
-    ResolutionError,
-    ResolutionImpossible,
-    ResolutionTooDeep,
-    Resolver,
+    from echovoice.project.voice_mimic import VoiceMimic  # type: ignore
+    from echovoice.project.config import SpeechSettings  # type: ignore
+    VOICE_MIMIC_AVAILABLE = True

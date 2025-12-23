@@ -1,2 +1,2 @@
-const svc = new ActuationService(graph as any, cfg as any);
-export default function App() {
+const merged = { ...this.localE, ...newE } as EVector;
+const sanitized = this._sanitizeAndClampVector(merged);

@@ -1,0 +1,25 @@
+"""
+Return framed signal [T, frame_length] with padding as needed.
+This is the single source of truth for time axis T.
+"""
+if y.ndim > 1:
+    y = np.mean(y, axis=-1)
+y = y.astype(np.float32)
+
+if len(y) < frame_length:
+    y = np.pad(y, (0, frame_length - len(y)))
+
+n_frames = 1 + max(0, (len(y) - frame_length) // hop_length)
+frames = np.zeros((n_frames, frame_length), dtype=np.float32)
+
+for i in range(n_frames):
+    start = i * hop_length
+    end = start + frame_length
+    frame = y[start:end]
+    if len(frame) < frame_length:
+        frame = np.pad(frame, (0, frame_length - len(frame)))
+    frames[i] = frame
+
+return frames
+
+

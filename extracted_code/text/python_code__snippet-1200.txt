@@ -1,0 +1,7 @@
+location: str,
+*,
+candidates_from_page: CandidatesFromPage,
+page_validator: PageValidator,
+expand_dir: bool,
+cache_link_parsing: bool,
+project_name: str,

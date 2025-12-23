@@ -1,49 +1,20 @@
-from core_node import Node
-from mirrored_network import MirroredNetwork
-from resource_manager import ResourceManager
-from data_crawler import WikiCrawler
-from dynamic_visualization import DynamicVisualization
-import time
+class NodeCommunication:
+    def __init__(self, nodes):
+        self.nodes = nodes
 
-def main():
-    # Initialize components
-    nodes = [Node()]
-    mirrored_network = MirroredNetwork()
-    resource_manager = ResourceManager()
-    visualization = DynamicVisualization()
+    def broadcast(self, message, sender):
+        """Broadcast a message to all nodes."""
+        for node in self.nodes:
+            if node != sender:
+                node.learn(message)
 
-    # Initialize crawler for testing
-    crawler = WikiCrawler("Artificial Intelligence")
-    data = crawler.fetch_data()
+    def unicast(self, message, sender, receiver):
+        """Send a message to a specific node."""
+        receiver.learn(message)
 
-    # Simulation parameters
-    epochs = 100
-    population = []
-    avg_maturity = []
-    avg_energy = []
-
-    # Run simulation
-    for epoch in range(epochs):
-        # Node learning and sharing
-        for node in nodes:
-            node.learn(data)
-            node.adapt()
-
-        if epoch % 10 == 0:
-            mirrored_network.simulate(10)
-
-        # Resource management
-        resource_manager.allocate(nodes)
-
-        # Metrics tracking
-        population.append(len(nodes))
-        avg_maturity.append(sum(node.maturity for node in nodes) / len(nodes))
-        avg_energy.append(sum(node.energy for node in nodes) / len(nodes))
-
-        # Visualization
-        visualization.update(list(range(epoch + 1)), population, avg_maturity, avg_energy)
-        time.sleep(0.1)
-
-if __name__ == "__main__":
-    main()
+    def sync_knowledge(self, node_a, node_b):
+        """Synchronize knowledge between two nodes."""
+        combined_knowledge = {**node_a.knowledge, **node_b.knowledge}
+        node_a.knowledge = combined_knowledge
+        node_b.knowledge = combined_knowledge
 

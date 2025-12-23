@@ -1,0 +1,3 @@
+  - Run mirror with full stack (no echo mode), collect backend/.run/mirror_metrics.jsonl, run the validation scripts to
+    report p50/p95 latency and drift.
+  - Publish these numbers in a short “known-good” report.

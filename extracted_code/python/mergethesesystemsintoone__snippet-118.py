@@ -1,12 +1,18 @@
-class VisualStrand:
-    feature_patterns: Dict[str, np.ndarray] = field(default_factory=dict)
-    mutation_rate: float = 0.1
+class AuralCommandInterface:
+    def __init__(self, node_name: str, sample_rate: int = 44100):
+        self.node_name = node_name
+        self.sample_rate = sample_rate
+        self.audio_buffer: Optional[np.ndarray] = None
 
-    def evolve(self, new_features: np.ndarray):
-        key = list(self.feature_patterns.keys())[0] if self.feature_patterns else "default"
-        if key not in self.feature_patterns:
-            self.feature_patterns[key] = new_features
-        else:
-            noise = np.random.normal(0, self.mutation_rate, new_features.shape)
-            self.feature_patterns[key] = 0.8 * self.feature_patterns[key] + 0.2 * new_features + noise
+    def update_buffer_from_environment(self, sound_level: str):
+        amplitude = 0.05 if sound_level.lower() != "speaking" else 0.6
+        duration_sec = 0.5
+        num_samples = int(self.sample_rate * duration_sec)
+        self.audio_buffer = np.random.normal(0, 0.01, num_samples) * amplitude
+
+    def dispatch_latest_chunk(self, orches: 'AGIOrchestrator'):
+        if self.audio_buffer is None: return
+        raw_data = self.audio_buffer
+        insight = {"content": "Aural input simulated", "modality": "sound"}
+        orches.graph.add_insight(insight)
 

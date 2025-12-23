@@ -1,0 +1,3 @@
+highlights = [r"(?P<dim>.*/)(?P<bold>.+)"]
+
+

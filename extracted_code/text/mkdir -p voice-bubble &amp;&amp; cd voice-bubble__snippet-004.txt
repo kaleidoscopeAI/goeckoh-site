@@ -1,1 +1,2 @@
-f = d_paired / √(2 * (1 - r))
+"Real-time psychoacoustic feedback visualized as responsive 3D bubble.
+Features drive physical simulation matching Crystalline Heart states."

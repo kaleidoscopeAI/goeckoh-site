@@ -1,0 +1,4 @@
+- Detailed design of individual bitwise Thought Engines $O_i$, including logic tables and encoding schemes.
+- Bitwise implementation of $G$ via digital circuits or efficient software bit operators (AND, OR, XOR, shifts).
+- Encoding curiosity bit update as combinational logic with threshold gates.
+

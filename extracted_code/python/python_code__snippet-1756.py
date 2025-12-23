@@ -1,19 +1,32 @@
-class SpeakerProfile:
-    """
-    Full speaker description:
-    - fingerprint: psychoacoustic bubble parameters
-    - embedding: neural timbre embedding for the TTS backbone
-    """
+"""Wrap an iterator factory returned by `find_matches()`.
 
-    user_id: str
-    fingerprint: VoiceFingerprint
-    embedding: np.ndarray  # 1D float32 array (e.g., 256–1024 dims)
+Calling `iter()` on this class would invoke the underlying iterator
+factory, making it a "collection with ordering" that can be iterated
+through multiple times, but lacks random access methods presented in
+built-in Python sequence types.
+"""
 
-    def to_dict(self) -> Dict[str, Any]:
-        return {
-            "user_id": self.user_id,
-            "fingerprint": self.fingerprint.to_dict(),
-            "embedding": self.embedding.tolist(),
-        }
+def __init__(self, factory):
+    self._factory = factory
+    self._iterable = None
+
+def __repr__(self):
+    return "{}({})".format(type(self).__name__, list(self))
+
+def __bool__(self):
+    try:
+        next(iter(self))
+    except StopIteration:
+        return False
+    return True
+
+__nonzero__ = __bool__  # XXX: Python 2.
+
+def __iter__(self):
+    iterable = (
+        self._factory() if self._iterable is None else self._iterable
+    )
+    self._iterable, current = itertools.tee(iterable)
+    return current
 
 

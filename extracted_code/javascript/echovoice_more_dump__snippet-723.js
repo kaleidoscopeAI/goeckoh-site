@@ -1,2 +1,3 @@
-const W: number[][] = [
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+let lambda_old = 0;
+for (let it=0; it<maxIter; it++) {
+const w = Jv(v);

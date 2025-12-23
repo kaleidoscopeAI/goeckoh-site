@@ -1,2 +1,10 @@
-Data Ingestion: The PoliteCrawler is a responsible, ethically-aware module for acquiring new knowledge from the web. It respects robots.txt, implements rate-limiting, and importantly, can be checked by the EthicalConstraintFilter (ECF) before it even makes a request.
+async def viz_websocket_handler(websocket, path):
+    async for message in websocket:
+        snapshot = json.loads(message)
+        await websocket.send(json.dumps({"nodes": snapshot}))
+
+def start_viz_server():
+    start_server = websockets.serve(viz_websocket_handler, "localhost", 8765)
+    asyncio.get_event_loop().run_until_complete(start_server)
+    asyncio.get_event_loop().run_forever()
 

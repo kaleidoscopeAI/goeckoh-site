@@ -1,168 +1,45 @@
-from pip._vendor.packaging.specifiers import SpecifierSet
-from pip._vendor.packaging.utils import NormalizedName, canonicalize_name
-
-from pip._internal.req.constructors import install_req_drop_extras
-from pip._internal.req.req_install import InstallRequirement
-
-from .base import Candidate, CandidateLookup, Requirement, format_name
+import numpy as np
+from scipy.special import sph_harm
 
 
-class ExplicitRequirement(Requirement):
-    def __init__(self, candidate: Candidate) -> None:
-        self.candidate = candidate
-
-    def __str__(self) -> str:
-        return str(self.candidate)
-
-    def __repr__(self) -> str:
-        return f"{self.__class__.__name__}({self.candidate!r})"
-
-    @property
-    def project_name(self) -> NormalizedName:
-        # No need to canonicalize - the candidate did this
-        return self.candidate.project_name
-
-    @property
-    def name(self) -> str:
-        # No need to canonicalize - the candidate did this
-        return self.candidate.name
-
-    def format_for_error(self) -> str:
-        return self.candidate.format_for_error()
-
-    def get_candidate_lookup(self) -> CandidateLookup:
-        return self.candidate, None
-
-    def is_satisfied_by(self, candidate: Candidate) -> bool:
-        return candidate == self.candidate
-
-
-class SpecifierRequirement(Requirement):
-    def __init__(self, ireq: InstallRequirement) -> None:
-        assert ireq.link is None, "This is a link, not a specifier"
-        self._ireq = ireq
-        self._extras = frozenset(canonicalize_name(e) for e in self._ireq.extras)
-
-    def __str__(self) -> str:
-        return str(self._ireq.req)
-
-    def __repr__(self) -> str:
-        return f"{self.__class__.__name__}({str(self._ireq.req)!r})"
-
-    @property
-    def project_name(self) -> NormalizedName:
-        assert self._ireq.req, "Specifier-backed ireq is always PEP 508"
-        return canonicalize_name(self._ireq.req.name)
-
-    @property
-    def name(self) -> str:
-        return format_name(self.project_name, self._extras)
-
-    def format_for_error(self) -> str:
-        # Convert comma-separated specifiers into "A, B, ..., F and G"
-        # This makes the specifier a bit more "human readable", without
-        # risking a change in meaning. (Hopefully! Not all edge cases have
-        # been checked)
-        parts = [s.strip() for s in str(self).split(",")]
-        if len(parts) == 0:
-            return ""
-        elif len(parts) == 1:
-            return parts[0]
-
-        return ", ".join(parts[:-1]) + " and " + parts[-1]
-
-    def get_candidate_lookup(self) -> CandidateLookup:
-        return None, self._ireq
-
-    def is_satisfied_by(self, candidate: Candidate) -> bool:
-        assert candidate.name == self.name, (
-            f"Internal issue: Candidate is not for this requirement "
-            f"{candidate.name} vs {self.name}"
-        )
-        # We can safely always allow prereleases here since PackageFinder
-        # already implements the prerelease logic, and would have filtered out
-        # prerelease candidates if the user does not expect them.
-        assert self._ireq.req, "Specifier-backed ireq is always PEP 508"
-        spec = self._ireq.req.specifier
-        return spec.contains(candidate.version, prereleases=True)
-
-
-class SpecifierWithoutExtrasRequirement(SpecifierRequirement):
+def procedural_phase(t: float, k: int, user_seed: int) -> float:
     """
-    Requirement backed by an install requirement on a base package.
-    Trims extras from its install requirement if there are any.
+    Deterministic pseudo-random phase Φ_proc(t, k).
+
+    Same user_seed + same timeline + same mode index ⇒ identical sequence.
     """
-
-    def __init__(self, ireq: InstallRequirement) -> None:
-        assert ireq.link is None, "This is a link, not a specifier"
-        self._ireq = install_req_drop_extras(ireq)
-        self._extras = frozenset(canonicalize_name(e) for e in self._ireq.extras)
-
-
-class RequiresPythonRequirement(Requirement):
-    """A requirement representing Requires-Python metadata."""
-
-    def __init__(self, specifier: SpecifierSet, match: Candidate) -> None:
-        self.specifier = specifier
-        self._candidate = match
-
-    def __str__(self) -> str:
-        return f"Python {self.specifier}"
-
-    def __repr__(self) -> str:
-        return f"{self.__class__.__name__}({str(self.specifier)!r})"
-
-    @property
-    def project_name(self) -> NormalizedName:
-        return self._candidate.project_name
-
-    @property
-    def name(self) -> str:
-        return self._candidate.name
-
-    def format_for_error(self) -> str:
-        return str(self)
-
-    def get_candidate_lookup(self) -> CandidateLookup:
-        if self.specifier.contains(self._candidate.version, prereleases=True):
-            return self._candidate, None
-        return None, None
-
-    def is_satisfied_by(self, candidate: Candidate) -> bool:
-        assert candidate.name == self._candidate.name, "Not Python candidate"
-        # We can safely always allow prereleases here since PackageFinder
-        # already implements the prerelease logic, and would have filtered out
-        # prerelease candidates if the user does not expect them.
-        return self.specifier.contains(candidate.version, prereleases=True)
+    t_int = int(t * 1000.0)
+    x = (k * 73856093) ^ (t_int * 19349663) ^ (user_seed * 83492791)
+    x &= 0xFFFFFFFF
+    return (x / 0xFFFFFFFF) * 2.0 * np.pi
 
 
-class UnsatisfiableRequirement(Requirement):
-    """A requirement that cannot be satisfied."""
+def generate_sh_modes(vertices: np.ndarray, k_count: int) -> np.ndarray:
+    """Generate deterministic spherical harmonics basis [K, N]."""
+    vertices = np.asarray(vertices, dtype=np.float32)
+    N = vertices.shape[0]
+    modes = np.zeros((k_count, N), dtype=np.float32)
+    theta = np.arccos(np.clip(vertices[:, 2], -1.0, 1.0))  # polar angle
+    phi = np.arctan2(vertices[:, 1], vertices[:, 0])  # azimuth
 
-    def __init__(self, name: NormalizedName) -> None:
-        self._name = name
+    idx = 0
+    l = 0
+    while idx < k_count:
+        for m in range(-l, l + 1):
+            if idx >= k_count:
+                break
+            modes[idx] = np.real(sph_harm(m, l, phi, theta)).astype(np.float32)
+            idx += 1
+        l += 1
 
-    def __str__(self) -> str:
-        return f"{self._name} (unavailable)"
-
-    def __repr__(self) -> str:
-        return f"{self.__class__.__name__}({str(self._name)!r})"
-
-    @property
-    def project_name(self) -> NormalizedName:
-        return self._name
-
-    @property
-    def name(self) -> str:
-        return self._name
-
-    def format_for_error(self) -> str:
-        return str(self)
-
-    def get_candidate_lookup(self) -> CandidateLookup:
-        return None, None
-
-    def is_satisfied_by(self, candidate: Candidate) -> bool:
-        return False
+    # Normalize per-mode to keep amplitudes bounded
+    max_per_mode = np.max(np.abs(modes), axis=1, keepdims=True) + 1e-6
+    modes = modes / max_per_mode
+    return modes
 
 
+def generate_voice_field(
+    vertices: np.ndarray,
+    t: float,
+    user_seed: int,
+    K: int = 10,

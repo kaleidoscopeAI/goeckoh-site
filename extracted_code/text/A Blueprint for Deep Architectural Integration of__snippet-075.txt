@@ -1,0 +1,2 @@
+- For parameters \$ p_i \$, suggest adaptive optimizers like Adam with learning rate \$ \eta \in [10^{-4}, 10^{-2}] \$.
+- For routing weights \$ w_{ij} \$, use slower updates \$ \alpha \in [10^{-5}, 10^{-3}] \$ to maintain stability.

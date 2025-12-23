@@ -1,1 +1,2 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+Emotions are not just labels but are core computational elements. The system models emotional states using variables like valence (positive/negative) and arousal (calm/excited).
+

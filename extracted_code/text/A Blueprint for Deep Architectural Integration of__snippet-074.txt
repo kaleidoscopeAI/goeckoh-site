@@ -1,0 +1,2 @@
+- Where \$ W_t \$ is a Wiener process modeling noise,
+- \$ \sigma(S_t) \$ describes state-dependent noise magnitudes.

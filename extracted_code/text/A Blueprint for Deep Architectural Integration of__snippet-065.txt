@@ -1,0 +1,3 @@
+- Represents weighted directed connections among the \$ N_{eq} \$ thought engines.
+- Each row sums to at most one, enforcing sparse and constrained connectivity:
+

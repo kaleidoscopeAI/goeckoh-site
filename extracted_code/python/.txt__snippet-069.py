@@ -1,1 +1,1 @@
-def index():
+Evolve from push-to-talk to continuous streaming.

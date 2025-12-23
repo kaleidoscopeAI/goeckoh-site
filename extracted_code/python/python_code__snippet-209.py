@@ -1,4 +1,7 @@
-    Inspired by chartypes_create.py from the MoinMoin project.
+    def _is_recursionerror(e):
+        return (
+            len(e.args) == 1
+            and isinstance(e.args[0], str)
+            and e.args[0].startswith("maximum recursion depth exceeded")
+        )
 
-    :copyright: Copyright 2006-2023 by the Pygments team, see AUTHORS.
-    :license: BSD, see LICENSE for details.

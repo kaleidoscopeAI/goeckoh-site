@@ -1,2 +1,5 @@
-Copy-paste this updated class into aba_engine.py.
+Bit flips respect Metropolis consent (equation 32) → no forced fluency
+Awareness AiAi​ is explicitly modulated by emotional stress and divergence (24, 50) → meltdown = high D_i = lowered awareness gate = system backs off
+Correction echo is mathematically identical to toggling the strength of the “rest length” term α∥xi−xi,0∥2α∥xi​−xi,0​∥2 in Hamiltonian 33 → you can literally dial whether the system pulls nodes back to their traumatized initial positions or lets them drift into new attractor basins
+Every single ξtξt​ noise term is temperature-controlled by global coherence (31, 45) → when the system is calm and synchronized, noise drops → gentle listening. When criticality spikes, noise rises → creative, stutter-allowing, autistic hyperfocus exploration mode
 

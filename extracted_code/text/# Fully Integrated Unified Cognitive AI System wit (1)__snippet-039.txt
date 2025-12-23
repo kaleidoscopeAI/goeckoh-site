@@ -1,0 +1,8 @@
+influence = np.tanh(env_temperature - tension)
+noise = np.random.randn(vector.shape[0]) * noise_std
+vector = vector + influence * noise
+norm = np.linalg.norm(vector)
+if norm > 0:
+    vector = vector / norm
+return vector
+

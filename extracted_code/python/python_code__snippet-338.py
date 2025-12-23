@@ -1,4 +1,19 @@
-from .jisfreq import (
-    JIS_CHAR_TO_FREQ_ORDER,
-    JIS_TABLE_SIZE,
-    JIS_TYPICAL_DISTRIBUTION_RATIO,
+    from .console import Console
+
+    c = Console()
+
+    from .box import DOUBLE, ROUNDED
+    from .padding import Padding
+
+    p = Panel(
+        "Hello, World!",
+        title="rich.Panel",
+        style="white on blue",
+        box=DOUBLE,
+        padding=1,
+    )
+
+    c.print()
+    c.print(p)
+
+

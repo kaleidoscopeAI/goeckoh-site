@@ -1,1 +1,1 @@
-Added LLMProcessor as a class attribute in UnravelAITaskManager.
+Identifies programming languages (Python, JavaScript, Java, etc.) using file extensions, shebangs, and content patterns.

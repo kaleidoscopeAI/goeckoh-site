@@ -1,2 +1,4 @@
-from pip._vendor.chardet.sbcharsetprober import SingleByteCharSetModel
+    def get_windows_console_features() -> WindowsConsoleFeatures:
+        features = WindowsConsoleFeatures()
+        return features
 

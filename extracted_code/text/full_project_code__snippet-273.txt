@@ -1,0 +1,5 @@
+"""Raised when something unexpected happens mid-request/response."""
+
+pass
+
+

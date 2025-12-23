@@ -1,0 +1,8 @@
+base = config.paths.voices_dir / "voice_profile"
+counts: Dict[str, int] = {}
+for style in ("neutral", "calm", "excited"):
+    style_dir = base / style
+    counts[style] = len(list(style_dir.glob("*.wav"))) if style_dir.exists() else 0
+return counts
+
+

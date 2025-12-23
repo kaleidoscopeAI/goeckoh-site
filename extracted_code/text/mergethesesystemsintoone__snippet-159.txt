@@ -1,2 +1,3 @@
-# <REDACTED: potential secret detected>
+text = payload.get("text")
+return await brain.think(text)
 

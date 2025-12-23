@@ -1,0 +1,2 @@
+doc: KivyMD GUI for the Echo Crystalline Heart companion.
+classes: ChildScreen, ParentScreen, VoiceSetupScreen, EchoGuiApp

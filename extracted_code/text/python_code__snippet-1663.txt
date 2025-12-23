@@ -1,0 +1,3 @@
+logging.warning("sounddevice unavailable: %s", e)
+AUDIO_AVAILABLE = False
+

@@ -1,0 +1,5 @@
+instring: str,
+loc: int,
+expr: "ParserElement",
+exc: Exception,
+cache_hit: bool = False,

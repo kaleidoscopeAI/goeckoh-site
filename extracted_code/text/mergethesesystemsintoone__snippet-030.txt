@@ -1,1 +1,1 @@
-class SimulationConfig:
+class NodeMetrics:

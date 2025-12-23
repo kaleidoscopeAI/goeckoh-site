@@ -1,0 +1,2 @@
+print("Warning: No Audio Device found. Running in Silent Mode.")
+

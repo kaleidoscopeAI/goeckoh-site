@@ -1,0 +1,2 @@
+      return when {
+          task.contains("research", ignoreCase = true) -> "Researched:

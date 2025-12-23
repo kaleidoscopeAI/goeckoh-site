@@ -1,0 +1,5 @@
+                # JSONLocator(), # don't use as PEP 426 is withdrawn
+                SimpleScrapingLocator('https://pypi.org/simple/',
+                                      timeout=3.0),
+                scheme='legacy')
+

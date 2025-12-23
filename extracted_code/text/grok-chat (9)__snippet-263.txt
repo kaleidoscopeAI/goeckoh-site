@@ -1,0 +1,14 @@
+707                  return jsonify({'error': 'Missing text input'}), 400
+708 -
+708 +            # Fast path for testing serialization/latency without full stack.
+709 +            if os.environ.get("GOECKOH_TEST_ECHO", "").lower() in ("1", "true", "yes"):
+710 +                txt = data['text']
+711 +                start_time = time.time()
+712 +                return jsonify({
+713 +                    'success': True,
+714 +                    'result': {'text': txt},
+715 +                    'processing_time': time.time() - start_time
+716 +                })
+717 +
+718              text = data['text']
+

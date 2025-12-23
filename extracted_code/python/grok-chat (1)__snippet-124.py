@@ -1,12 +1,9 @@
-class EnergyLandscape:
-    def __init__(self, bonds, temp=1.0):
-        self.bonds = bonds
-        self.temp = temp
+class AtomicBit:
+    def __init__(self, x=random.choice([0, 1]), s=random.uniform(0, 1), p=None):
+        self.x = x
+        self.s = s
+        self.p = p or [random.uniform(-1, 1) for _ in range(3)]
 
-    def hamiltonian(self):
-        return sum(b.energy() for b in self.bonds)
-
-    def local_energy(self, node):
-        node_bonds = [b for b in self.bonds if b.node1 is node or b.node2 is node]
-        return sum(b.energy() for b in node_bonds) / max(1, len(node_bonds))
+    def binarize(self):
+        return 1 if self.s > 0.5 else 0
 

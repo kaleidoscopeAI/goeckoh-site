@@ -1,3 +1,6 @@
-• I'm setting KIVY_NO_ARGS=1 plus various environment flags to prevent Kivy from intercepting arguments and disable audio/
-  playback components, then rerunning with the --api flag passed cleanly to the script.
+  │ import requests, io
+  │ wav = open('data/free-spoken-digit/0_jackson_0.wav','rb').read()
+  │ … +3 lines
+  └ 503 {"error":"asr_unavailable"}
+
 

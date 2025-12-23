@@ -1,2 +1,1 @@
-Observe that the distance between trajectories from different initializations shrinks exponentially, confirming contraction.
-
+- Starting from different initial points, the trajectories $x_k$ converge towards the same fixed point $x^*$.

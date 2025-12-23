@@ -1,7 +1,10 @@
-    from hashlib import _Hash
-
-    # NoReturn introduced in 3.6.2; imported only for type checking to maintain
-    # pip compatibility with older patch versions of Python 3.6
-    from typing import NoReturn
+import platform
+ver = platform.libc_ver()
+result = []
+if ver[0] == 'glibc':
+    for s in ver[1].split('.'):
+        result.append(int(s) if s.isdigit() else 0)
+    result = tuple(result)
+return result
 
 

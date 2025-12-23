@@ -1,0 +1,2 @@
+- Skip updates for low variance nodes or those below knowledge/energy thresholds to focus compute on significant parts.
+

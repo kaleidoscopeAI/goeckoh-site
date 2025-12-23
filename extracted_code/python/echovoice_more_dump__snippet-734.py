@@ -1,8 +1,2 @@
-def hajek_schedule(c: float = 1.0) -> Callable[[int], float]:
-    def schedule(t: int) -> float:
-        return float(c) / max(1e-12, math.log(max(2.0, float(t) + 1.0)))
-    return schedule
-
-def constant_schedule(T: float = 1.0) -> Callable[[int], float]:
-    return lambda t: float(T)
+The kNN Sparsity Problem: The k-Nearest Neighbor constraint (the key to O(Nkd)) forces a sparse bond set B. This fundamentally violates the requirement for global optimization, as critical long-range interactions (semantically similar but spatially distant nodes) are truncated from the gradient calculation. This dramatically increases the risk of the system settling into a local minimum—a state of high internal coherence based only on local relationships, but fundamentally incoherent on a global scale.
 

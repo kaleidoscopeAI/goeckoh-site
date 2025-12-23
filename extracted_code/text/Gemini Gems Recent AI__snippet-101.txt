@@ -1,0 +1,14 @@
+Molecular Data Handling: RDKit (for reading SMILES, calculating descriptors, generating 3D conformations).
+
+3D Visualization: Three.js (a powerful and widely used JavaScript 3D library).
+
+Frontend Framework: React (for building a user-friendly and interactive web interface).
+
+Backend (API): Flask (a lightweight Python web framework).
+
+Molecular Similarity: RDKit (for fingerprint-based similarity) and potentially other open-source cheminformatics libraries.
+
+Bio-Mimicry Inspiration: We'll incorporate some biomimetic concepts (like evolutionary algorithms) at a later stage, but for now, let's focus on the core functionality.
+
+Drug Discovery Focus: We'll use relevant molecular descriptors and properties related to drug-likeness (logP, molecular weight, hydrogen bond donors/acceptors, etc.).
+

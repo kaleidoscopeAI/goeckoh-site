@@ -1,0 +1,4 @@
+name: str,
+backend: BuildBackendHookCaller,
+metadata_directory: str,
+tempd: str,

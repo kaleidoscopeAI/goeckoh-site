@@ -1,0 +1,7 @@
+_allowed_extensions = {"", ".exe"}
+_EXECUTABLE_NAMES = [
+    "".join(parts)
+    for parts in itertools.product(_EXECUTABLE_NAMES, _allowed_extensions)
+]
+
+

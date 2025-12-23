@@ -1,50 +1,39 @@
-class MaxRetryError(RequestError):
-    """Raised when the maximum number of retries is exceeded.
-
-    :param pool: The connection pool
-    :type pool: :class:`~urllib3.connectionpool.HTTPConnectionPool`
-    :param string url: The requested Url
-    :param exceptions.Exception reason: The underlying error
-
-    """
-
-    def __init__(self, pool, url, reason=None):
-        self.reason = reason
-
-        message = "Max retries exceeded with url: %s (Caused by %r)" % (url, reason)
-
-        RequestError.__init__(self, pool, url, message)
+def iglob(path_glob):
+    """Extended globbing function that supports ** and {opt1,opt2,opt3}."""
+    if _CHECK_RECURSIVE_GLOB.search(path_glob):
+        msg = """invalid glob %r: recursive glob "**" must be used alone"""
+        raise ValueError(msg % path_glob)
+    if _CHECK_MISMATCH_SET.search(path_glob):
+        msg = """invalid glob %r: mismatching set marker '{' or '}'"""
+        raise ValueError(msg % path_glob)
+    return _iglob(path_glob)
 
 
-class HostChangedError(RequestError):
-    """Raised when an existing pool gets a request for a foreign host."""
-
-    def __init__(self, pool, url, retries=3):
-        message = "Tried to open a foreign host with url: %s" % url
-        RequestError.__init__(self, pool, url, message)
-        self.retries = retries
-
-
-class TimeoutStateError(HTTPError):
-    """Raised when passing an invalid state to a timeout"""
-
-    pass
-
-
-class TimeoutError(HTTPError):
-    """Raised when a socket timeout error occurs.
-
-    Catching this error will catch both :exc:`ReadTimeoutErrors
-    <ReadTimeoutError>` and :exc:`ConnectTimeoutErrors <ConnectTimeoutError>`.
-    """
-
-    pass
-
-
-class ReadTimeoutError(TimeoutError, RequestError):
-    """Raised when a socket timeout occurs while receiving data from a server"""
-
-    pass
+def _iglob(path_glob):
+    rich_path_glob = RICH_GLOB.split(path_glob, 1)
+    if len(rich_path_glob) > 1:
+        assert len(rich_path_glob) == 3, rich_path_glob
+        prefix, set, suffix = rich_path_glob
+        for item in set.split(','):
+            for path in _iglob(''.join((prefix, item, suffix))):
+                yield path
+    else:
+        if '**' not in path_glob:
+            for item in std_iglob(path_glob):
+                yield item
+        else:
+            prefix, radical = path_glob.split('**', 1)
+            if prefix == '':
+                prefix = '.'
+            if radical == '':
+                radical = '*'
+            else:
+                # we support both
+                radical = radical.lstrip('/')
+                radical = radical.lstrip('\\')
+            for path, dir, files in os.walk(prefix):
+                path = os.path.normpath(path)
+                for fn in _iglob(os.path.join(path, radical)):
+                    yield fn
 
 
-# This timeout error does not have a URL attached and needs to inherit from the

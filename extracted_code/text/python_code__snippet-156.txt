@@ -1,8 +1,9 @@
-class Frame:
-    filename: str
-    lineno: int
-    name: str
-    line: str = ""
-    locals: Optional[Dict[str, pretty.Node]] = None
-
-
+'get_requires_for_build_wheel',
+'prepare_metadata_for_build_wheel',
+'build_wheel',
+'get_requires_for_build_editable',
+'prepare_metadata_for_build_editable',
+'build_editable',
+'get_requires_for_build_sdist',
+'build_sdist',
+'_supported_features',

@@ -1,2 +1,1 @@
-# <REDACTED: potential secret detected>
-
+- **Vector Class:** Integrate with existing `Vector` class in your codebase for consistency.

@@ -1,0 +1,7 @@
+try:
+    return _cache[filename]
+except KeyError:
+    _cache[filename] = result = normalize_path(filename)
+    return result
+
+

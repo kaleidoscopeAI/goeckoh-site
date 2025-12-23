@@ -1,30 +1,62 @@
-# Generated from unidata 11.0.0
+def apply_filters(stream, filters, lexer=None):
+    """
+    Use this method to apply an iterable of filters to
+    a stream. If lexer is given it's forwarded to the
+    filter, otherwise the filter receives `None`.
+    """
+    def _apply(filter_, stream):
+        yield from filter_.filter(lexer, stream)
+    for filter_ in filters:
+        stream = _apply(filter_, stream)
+    return stream
 
-def combine(*args):
-    return ''.join(globals()[cat] for cat in args)
+
+def simplefilter(f):
+    """
+    Decorator that converts a function into a filter::
+
+        @simplefilter
+        def lowercase(self, lexer, stream, options):
+            for ttype, value in stream:
+                yield ttype, value.lower()
+    """
+    return type(f.__name__, (FunctionFilter,), {
+        '__module__': getattr(f, '__module__'),
+        '__doc__': f.__doc__,
+        'function': f,
+    })
 
 
-def allexcept(*args):
-    newcats = cats[:]
-    for arg in args:
-        newcats.remove(arg)
-    return ''.join(globals()[cat] for cat in newcats)
+class Filter:
+    """
+    Default filter. Subclass this class or use the `simplefilter`
+    decorator to create own filters.
+    """
+
+    def __init__(self, **options):
+        self.options = options
+
+    def filter(self, lexer, stream):
+        raise NotImplementedError()
 
 
-def _handle_runs(char_list):  # pragma: no cover
-    buf = []
-    for c in char_list:
-        if len(c) == 1:
-            if buf and buf[-1][1] == chr(ord(c)-1):
-                buf[-1] = (buf[-1][0], c)
-            else:
-                buf.append((c, c))
-        else:
-            buf.append((c, c))
-    for a, b in buf:
-        if a == b:
-            yield a
-        else:
-            yield '%s-%s' % (a, b)
+class FunctionFilter(Filter):
+    """
+    Abstract class used by `simplefilter` to create simple
+    function filters on the fly. The `simplefilter` decorator
+    automatically creates subclasses of this class for
+    functions passed to it.
+    """
+    function = None
+
+    def __init__(self, **options):
+        if not hasattr(self, 'function'):
+            raise TypeError('%r used without bound function' %
+                            self.__class__.__name__)
+        Filter.__init__(self, **options)
+
+    def filter(self, lexer, stream):
+        # pylint: disable=not-callable
+        yield from self.function(lexer, stream, self.options)
 
 

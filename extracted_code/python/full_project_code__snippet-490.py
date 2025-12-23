@@ -1,7 +1,14 @@
-    import types
+""":return: music folder for the Android OS"""
+# Get directories with pyjnius
+try:
+    from jnius import autoclass
 
-    from .retry import RetryBaseT
-    from .stop import StopBaseT
-    from .wait import WaitBaseT
+    context = autoclass("android.content.Context")
+    environment = autoclass("android.os.Environment")
+    music_dir: str = context.getExternalFilesDir(environment.DIRECTORY_MUSIC).getAbsolutePath()
+except Exception:  # noqa: BLE001
+    music_dir = "/storage/emulated/0/Music"
+
+return music_dir
 
 

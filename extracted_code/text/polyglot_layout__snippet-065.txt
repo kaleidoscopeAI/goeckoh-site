@@ -1,0 +1,4 @@
+  fb, _ = mel_filterbank(sr, n_fft=n_fft, n_mels=n_mels)
+  mel = fb @ S
+  return mel
+

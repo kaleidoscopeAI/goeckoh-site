@@ -1,1 +1,1 @@
-const prev = copyVector(this.localE);
+const update = (nodes: NodeDatum[]) => service.update(nodes);

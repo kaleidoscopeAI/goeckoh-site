@@ -1,0 +1,43 @@
+19
+20 -  Future<Map<String, dynamic>> processAudio(List<int> wavData) async {
+20 +  Future<Map<String, dynamic>> asrRecognize(List<int> wavData) async {
+21 +    final request = http.MultipartRequest('POST', Uri.parse('$_baseUrl/asr'));
+22 +    request.files.add(http.MultipartFile.fromBytes('file', wavData, filename: 'input.wav', contentType: MediaType('audio
+    ', 'wav')));
+23 +    final streamed = await request.send();
+24 +    final response = await http.Response.fromStream(streamed);
+25 +    if (response.statusCode == 200) {
+26 +      return json.decode(response.body);
+27 +    }
+28 +    throw Exception('ASR failed: ${response.statusCode}');
+29 +  }
+30 +
+31 +  Future<Map<String, dynamic>> processText(String text) async {
+32      final response = await http.post(
+22 -      Uri.parse('$_baseUrl/process_audio'), // Assuming an endpoint for audio processing
+23 -      headers: {'Content-Type': 'application/octet-stream'},
+24 -      body: wavData,
+33 +      Uri.parse('$_baseUrl/process'),
+34 +      headers: {'Content-Type': 'application/json'},
+35 +      body: json.encode({'text': text}),
+36      );
+   ⋮
+38        return json.decode(response.body);
+28 -    } else {
+29 -      throw Exception('Failed to process audio');
+39      }
+40 +    throw Exception('Process failed: ${response.statusCode}');
+41 +  }
+42 +
+43 +  Future<Map<String, dynamic>> pollMirror() async {
+44 +    final response = await http.get(Uri.parse('$_baseUrl/mirror/status'));
+45 +    if (response.statusCode == 200) {
+46 +      return json.decode(response.body);
+47 +    }
+48 +    throw Exception('Mirror status failed: ${response.statusCode}');
+49    }
+   ⋮
+51    // Add more API methods as needed
+34 -}
+52 +}
+

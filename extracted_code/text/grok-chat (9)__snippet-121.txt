@@ -1,0 +1,3 @@
+LPC/PSOLA voice path (GOECKOH_USE_RUST_VC=1) and tracks both processing
+latency and playback latency. p95 targets are configurable via
+GOECKOH_LATENCY_P95_TARGET.

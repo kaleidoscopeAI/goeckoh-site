@@ -1,9 +1,4 @@
-import encodings.idna  # noqa: F401
-from io import UnsupportedOperation
+def auto(cls: Optional[Type[T]]) -> Type[T]:
+    ...
 
-from pip._vendor.urllib3.exceptions import (
-    DecodeError,
-    LocationParseError,
-    ProtocolError,
-    ReadTimeoutError,
-    SSLError,
+

@@ -1,0 +1,4 @@
+for key, value in values.items():
+    if hasattr(obj, key):
+        setattr(obj, key, value)
+

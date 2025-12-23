@@ -1,0 +1,3 @@
+  # Placeholder — wire to a real search tool/API in production.
+  return [f"https://example.com/post/{i}" for i in range(limit)]
+

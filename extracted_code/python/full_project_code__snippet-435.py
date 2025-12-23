@@ -1,2 +1,1 @@
-from .hooks import default_hooks, dispatch_hook
-
+This module previously handled import compatibility issues

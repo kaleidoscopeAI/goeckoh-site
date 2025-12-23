@@ -1,0 +1,8 @@
+"""Supported file types"""
+BINARY = "binary"
+JAVASCRIPT = "javascript"
+PYTHON = "python"
+CPP = "cpp"
+C = "c"
+UNKNOWN = "unknown"
+

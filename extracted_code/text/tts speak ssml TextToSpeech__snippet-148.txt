@@ -1,0 +1,5 @@
+      audioRecord?.startRecording()
+      audioBuffer.reset()
+
+      // Create recognizers for each language
+      val recognizers = models.mapValues { (_, model) ->

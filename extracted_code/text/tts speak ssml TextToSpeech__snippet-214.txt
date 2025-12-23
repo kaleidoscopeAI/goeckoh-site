@@ -1,0 +1,22 @@
+      audioBuffer.reset()
+      partialText = ""
+      silenceStart = 0
+      isSpeechDetected = false
+      totalFrames = 0
+      speechFrames = 0
+      vadLatencySum = 0L
+
+      // Set Whisper listener (unchanged)
+      // ...
+
+      // Set Recorder listener
+      recorder.setListener(object : IRecorderListener {
+          override fun onUpdateReceived(message: String) {
+              Log.d("Recorder", message)
+          }
+
+          override fun onDataReceived(samples: FloatArray) {
+              totalFrames++
+
+              // Optimize buffer: Use direct ByteBuffer
+              val shortBuffer = ByteBuffer.allocateDirect(samples.size *

@@ -1,2 +1,3 @@
-# <REDACTED: potential secret detected>
-
+logger: "logging.Logger",
+log_level: int,
+exc_info: bool = False,

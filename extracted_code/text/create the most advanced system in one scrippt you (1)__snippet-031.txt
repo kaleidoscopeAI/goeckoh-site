@@ -1,0 +1,3 @@
+- Arousal: $A_t = \sigma_A\big((K_t - K_{\min})/(K_{\max} - K_{\min})\big)$, with $\sigma_A$ a squashing nonlinearity calibrated on baseline recordings.
+- Valence: higher coherence and lower $U_t$ → higher valence, e.g. $V_t = \sigma_V\big(w_1 \cdot \text{coherence}_t - w_2 \cdot U_t\big)$, where weights are fitted against subjective or physiological labels.[^10_14][^10_15][^10_16][^10_17]
+

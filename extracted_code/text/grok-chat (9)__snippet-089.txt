@@ -1,0 +1,4 @@
+  - /status now returns heart_name, downsampled lattice profile, and GCL
+    history (heart_sample, gcl_history, gcl_ts).
+  - Dashboard shows the lattice card with mode/stress/arousal/valence and a
+    smooth gradient bar profile.

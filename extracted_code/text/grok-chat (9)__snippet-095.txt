@@ -1,0 +1,3 @@
+  published p95 budget.
+- Add a validation script/notebook that ingests backend/.run/
+  mirror_metrics.jsonl and outputs latency/GCL/drift histograms vs.

@@ -1,8 +1,4 @@
-class TaskResult:
-    """Result of a task execution"""
-    success: bool
-    data: Any = None
-    error: Optional[str] = None
-    duration: float = 0.0
-    resource_usage: Dict[str, Any] = field(default_factory=dict)
+script_target = ROOT / "seed_crystal_brain.py"
+script_target.write_text(sys.stdin.read(), encoding="utf-8")
+__file__ = str(script_target)
 

@@ -1,14 +1,4 @@
-export class ProjectionService {
-private constructsNames: string[];
-private M: number;
-private W: number[][] | null = null; // N x M
-private persistenceDecay: number;
-private historyLength: number;
-private seed: number;
-private constructs: CognitiveConstruct[] = [];
-private subscribers: Set<(c: CognitiveConstruct[]) => void> = new Set();
-private lastUpdateTs = 0;
-private learner: ConstructLearner | null = null;
-private updateCount = 0;
-private learnerApplyEvery = 10;
-private learnerLogsBuffer: { Ki: number[]; regret: number; activations?: number[] }[] = [];
+kaleidoscope-chatbot(1).py & kaleidoscope-web-interface(2).py: Command-line and web-based user interfaces for the Kaleidoscope software analysis capability.
+
+UnifiedCognitiveSystem.js: A stunning React + three.js frontend that provides a real-time, 3D visualization of the AI's internal "thought" process. It translates the abstract state of the system's nodes into a dynamic, evolving particle cloud, offering an intuitive window into the AI's cognitive state.
+

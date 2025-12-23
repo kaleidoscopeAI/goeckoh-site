@@ -1,0 +1,3 @@
+return metadata.get("Root-Is-Purelib", "").lower() == "true"
+
+

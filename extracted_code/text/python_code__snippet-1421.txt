@@ -1,0 +1,14 @@
+module = get_module_from_module_name(module_name)
+version = getattr(module, "__version__", None)
+
+if module and not version:
+    # Try to find version in debundled module info.
+    assert module.__file__ is not None
+    env = get_environment([os.path.dirname(module.__file__)])
+    dist = env.get_distribution(module_name)
+    if dist:
+        version = str(dist.version)
+
+return version
+
+

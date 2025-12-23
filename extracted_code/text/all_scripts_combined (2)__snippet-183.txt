@@ -1,0 +1,10 @@
+coll,
+name='Echo.app',
+icon='assets/echo_icon.icns',
+bundle_identifier='com.echo.companion',
+info_plist={
+    'NSPrincipalClass': 'NSApplication',
+    'NSHighResolutionCapable': 'True',
+    'CFBundleShortVersionString': '4.0.0',
+    'NSMicrophoneUsageDescription': 'Echo needs microphone access to listen to speech.',
+},

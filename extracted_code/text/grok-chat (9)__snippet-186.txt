@@ -1,0 +1,4 @@
+ material map so “car” spawns a chassis shape, “dog” a warm particle
+ cluster, etc.
+
+

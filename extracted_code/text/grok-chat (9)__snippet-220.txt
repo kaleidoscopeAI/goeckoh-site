@@ -1,0 +1,5 @@
+> goeckoh@0.0.0 build
+… +27 lines
+    at Readable.push (node:internal/streams/readable:392:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+

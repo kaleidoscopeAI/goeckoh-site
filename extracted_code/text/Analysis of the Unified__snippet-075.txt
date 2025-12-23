@@ -1,0 +1,10 @@
+rec = _JOBS[job_id]
+core: HybridRelationalCore = rec["core"]
+Hs, Ha, Hint = rec["Hs"], rec["Ha"], rec["Hint"]
+for _ in range(steps):
+    core.evolve_step(Hs, Ha, Hint, dt)
+    core.adapt_bonds_hebb(eta=rec["policy"].get("bond_eta", 1e-4), decay=rec["policy"].get("bond_decay", 1e-5))
+    # snapshot & persist minimally in memory
+    rec["history"].append({"t": time.time(), "diag": core.diagnostics(), "p": core.measure_probs().tolist()})
+return rec["history"][-1]
+

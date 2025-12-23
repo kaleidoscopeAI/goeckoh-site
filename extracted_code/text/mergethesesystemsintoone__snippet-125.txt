@@ -1,7 +1,14 @@
-class TaskResult:
-    success: bool
-    data: Any = None
-    error: Optional[str] = None
-    duration: float = 0.0
-    resource_usage: Dict[str, float] = field(default_factory=dict)
+class CodeFile:
+    """Information about a code file"""
+    path: str
+    language: LanguageType
+    content: str
+    ast: Optional[Any] = None
+    imports: List[str] = field(default_factory.list)
+    exports: List[str] = field(default_factory.list)
+    dependencies: List[DependencyInfo] = field.default_factory.list)
+    vulnerabilities: List[str] = field.default_factory.list)
+    outdated_patterns: List[str] = field.default_factory.list)
+    complexity_score: float = 0.0
+    is_test: bool = False
 

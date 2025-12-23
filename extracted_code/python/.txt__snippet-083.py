@@ -1,1 +1,1 @@
-Evolve from push-to-talk to continuous streaming.
+def start_streaming(self) -> None:

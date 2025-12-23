@@ -1,2 +1,1 @@
-const id = req.params.id;
-const filePath = path.join(W_DIR, `${id}.json`);
+for (let i = 0; i < node.K.length; i++) out.K[i] += w * (nb.K[i] - node.K[i]);

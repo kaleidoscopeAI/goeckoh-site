@@ -1,0 +1,5 @@
+DistributionNotFound,
+InstallationError,
+MetadataInconsistent,
+UnsupportedPythonVersion,
+UnsupportedWheel,

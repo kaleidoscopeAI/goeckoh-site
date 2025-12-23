@@ -1,27 +1,35 @@
-    import logging
+    from .console import Console
 
-    from pip._vendor.tenacity import RetryCallState
+    console = Console()
+    import sys
 
+    def bar(a: Any) -> None:  # 这是对亚洲语言支持的测试。面对模棱两可的想法，拒绝猜测的诱惑
+        one = 1
+        print(one / a)
 
-def before_nothing(retry_state: "RetryCallState") -> None:
-    """Before call strategy that does nothing."""
+    def foo(a: Any) -> None:
+        _rich_traceback_guard = True
+        zed = {
+            "characters": {
+                "Paul Atreides",
+                "Vladimir Harkonnen",
+                "Thufir Hawat",
+                "Duncan Idaho",
+            },
+            "atomic_types": (None, False, True),
+        }
+        bar(a)
 
+    def error() -> None:
 
-def before_log(logger: "logging.Logger", log_level: int) -> typing.Callable[["RetryCallState"], None]:
-    """Before call strategy that logs to some logger the attempt."""
+        try:
+            try:
+                foo(0)
+            except:
+                slfkjsldkfj  # type: ignore[name-defined]
+        except:
+            console.print_exception(show_locals=True)
 
-    def log_it(retry_state: "RetryCallState") -> None:
-        if retry_state.fn is None:
-            # NOTE(sileht): can't really happen, but we must please mypy
-            fn_name = "<unknown>"
-        else:
-            fn_name = _utils.get_callback_name(retry_state.fn)
-        logger.log(
-            log_level,
-            f"Starting call to '{fn_name}', "
-            f"this is the {_utils.to_ordinal(retry_state.attempt_number)} time calling it.",
-        )
-
-    return log_it
+    error()
 
 

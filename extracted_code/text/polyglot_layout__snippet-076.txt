@@ -1,0 +1,4 @@
+  RAW = "raw"
+  GEL = "gel"
+  CRYSTAL = "crystal"
+

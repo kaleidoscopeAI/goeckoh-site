@@ -1,1 +1,1 @@
-Then call from Kotlin before applying any DeviceHAL changes.
+Ethics, security, and HAL modules are implemented and callable from Kotlin; they perform checks and return actionable outcomes.

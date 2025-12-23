@@ -1,0 +1,5 @@
+- Under conditions:
+    - $G$ is contractive with factor $\alpha < 1$ on $S_k$,
+    - Curiosity bit update is contractive with $\rho<1$ and bounded inputs,
+    - Hugging Face outputs are Lipschitz bounded via clipping,
+

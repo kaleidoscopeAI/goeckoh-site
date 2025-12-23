@@ -1,5 +1,4 @@
-from .exceptions import (
-    ChunkedEncodingError,
-    ContentDecodingError,
-    InvalidSchema,
-    TooManyRedirects,
+    def SOCKSProxyManager(*args, **kwargs):
+        raise InvalidSchema("Missing dependencies for SOCKS support.")
+
+

@@ -1,0 +1,6 @@
+  edges=set()
+  for i in range(N):
+      edges.add(tuple(sorted((i,(i+1)%N))))
+      for d in range(1,k//2+1): edges.add(tuple(sorted((i,(i+d)%N))))
+  if not edges: return np.zeros((0,2),dtype=np.int32)
+  return np.array(sorted(list(edges)),dtype=np.int32)

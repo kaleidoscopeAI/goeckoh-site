@@ -1,0 +1,6 @@
+for node in nodes:
+    node.process()
+    new_node = node.grow()
+    if new_node:
+        nodes.append(new_node)
+

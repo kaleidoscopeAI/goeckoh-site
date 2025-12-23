@@ -1,0 +1,2 @@
+- **Distributivity of Scalar Addition over Vector:**
+

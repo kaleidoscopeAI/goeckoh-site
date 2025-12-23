@@ -1,1 +1,1 @@
-def speak(self, text: str, arousal: float, valence: float, T_val: float) -> None:
+I’ll assume you’re starting from the echo_companion_gui.py I gave you last time.

@@ -1,1 +1,1 @@
-- Rel_i(R): Relevant connections from routing matrix R (edges where \( R_{ij} > 0.5 \)).
+- **Determination Process**: Ingestion aggregates from high-affinity supernodes (via Laplacian), prioritizing low-stress data for stable clusters.

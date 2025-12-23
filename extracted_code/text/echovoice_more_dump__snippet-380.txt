@@ -1,1 +1,6 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+It takes a path and a URL.
+
+If the path exists and is parquet, we load it with load_mutag_dataset (which we assume exists).
+
+Otherwise, we use the UniversalMutagEngine to process the file (which may be any supported format).
+

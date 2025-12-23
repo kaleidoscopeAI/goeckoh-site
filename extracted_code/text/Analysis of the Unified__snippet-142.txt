@@ -1,0 +1,4 @@
+emotionalValenceBoost: 0,
+quantumEntanglementStrength: 1.0,
+mimicryForceModifier: 1.0,
+coherenceDecayRate: 0.99

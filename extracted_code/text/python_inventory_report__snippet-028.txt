@@ -1,0 +1,3 @@
+doc: Unified configuration for Organic Seed + Echo speech companion.
+functions: _load_companion_config
+classes: OrganicConfig, DBConfig, CompanionConfig

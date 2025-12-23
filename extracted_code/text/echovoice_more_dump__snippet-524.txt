@@ -1,0 +1,4 @@
+A material for the bonds: THREE.LineBasicMaterial
+
+A geometry for the bonds: THREE.BufferGeometry
+

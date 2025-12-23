@@ -1,0 +1,4 @@
+The system bundles the Ollama LLM binary directly within the application package.
+
+Advantages: This creates a single cohesive intelligence with Zero Network Overhead, resulting in sub-millisecond Ollama responses and eliminating network reliability/security concerns (Complete Data Isolation).
+

@@ -1,3 +1,3 @@
-  corresponding timestamps from gcl_ts when available, ensuring entries include
-  readable times or indices as fallback.
+  setting heart state directly from the single getSystemStatus response, plus
+  cleaning up the unused import in the Dashboard.
 

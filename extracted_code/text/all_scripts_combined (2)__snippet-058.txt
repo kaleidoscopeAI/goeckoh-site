@@ -1,1 +1,2 @@
-- Local LLM "sentience port" using Ollama + DeepSeek.
+# <REDACTED: potential secret detected>
+

@@ -1,0 +1,6 @@
+              val correctedText = correctToFirstPerson(rawText)
+              speakCorrectedText(correctedText, prosody)
+              callback(correctedText, prosody)
+          }
+          override fun onFinalResult(hypothesis: String?) {}
+          override fun onError(e: Exception?) { Log.e("Mirror",

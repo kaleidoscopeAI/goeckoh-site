@@ -1,2 +1,5 @@
-+const PORT = Number(process.env.PERSISTENCE_PORT || 4302);
-+app.listen(PORT, () => console.log(`Persistence server listening ${PORT}`));
+let config = CrystalConfig::default();
+save_config(&config, output_path)?;
+println!("Default configuration written to {}", output_path);
+
+Ok(())

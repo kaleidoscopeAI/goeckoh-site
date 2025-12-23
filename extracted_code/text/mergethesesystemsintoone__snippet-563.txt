@@ -1,0 +1,23 @@
+task_id: str
+name: str
+func: Callable
+args: List = field(default_factory=list)
+kwargs: Dict[str, Any] = field(default_factory=dict)
+priority: TaskPriority = TaskPriority.NORMAL
+timeout_seconds: int = 3600
+dependencies: List[str] = field(default_factory=list)
+owner: Optional[str] = None
+metadata: Dict[str, Any] = field(default_factory=dict)
+status: TaskStatus = TaskStatus.PENDING
+created_at: datetime = field(default_factory=datetime.now)
+started_at: Optional[datetime] = None
+completed_at: Optional[datetime] = None
+result: Optional[TaskResult] = None
+retry_count: int = 0
+max_retries: int = 3
+retry_delay: int = 5
+estimated_resources: Dict[str, float] = field(default_factory=lambda: {"cpu_percent": 25.0, "memory_percent": 10.0})
+
+def to_dict(self) -> Dict[str, Any]:
+    return asdict(self)
+

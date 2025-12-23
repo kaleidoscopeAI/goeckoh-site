@@ -1,1 +1,1 @@
-I’ll assume you’re starting from the echo_companion_gui.py I gave you last time.
+def hash_embedding(text: str, dim: int) -> np.ndarray:

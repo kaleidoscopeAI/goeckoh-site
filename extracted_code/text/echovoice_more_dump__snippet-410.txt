@@ -1,1 +1,1 @@
-class CoreLaws:
+|               ----------------------------------------------------- any code following this expression is unreachable

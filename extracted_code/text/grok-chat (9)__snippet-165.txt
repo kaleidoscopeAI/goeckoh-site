@@ -1,0 +1,2 @@
+now auto-subscribes and pushes live corrected/transcript text into its 3D
+scene (see cognitive-nebula/agi-thought-visualizer/App.tsx).

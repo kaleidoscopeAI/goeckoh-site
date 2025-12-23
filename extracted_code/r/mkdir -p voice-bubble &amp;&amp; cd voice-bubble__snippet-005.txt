@@ -1,6 +1,0 @@
-rm_f <- function(d_paired, r=0.6) {
-  d_paired / sqrt(2 * (1 - r))
-}
-
-# d=0.7, r=0.6 → f=0.64
-rm_f(0.7, 0.6)

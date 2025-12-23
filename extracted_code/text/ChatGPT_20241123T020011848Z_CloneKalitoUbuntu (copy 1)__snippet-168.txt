@@ -1,0 +1,4 @@
+network.add_node(f"Node_{i}")
+if i > 0:
+    network.add_edge(f"Node_{i-1}", f"Node_{i}")
+

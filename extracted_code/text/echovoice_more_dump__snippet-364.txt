@@ -1,1 +1,11 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+"""Saves the HybridState to a compressed .npz file."""
+# We can't save the raw dictionaries, so we convert them to savable arrays
+E_keys = np.array(list(state.E.keys()))
+E_values = np.array([state.E[k] for k in E_keys])
+
+x_keys = np.array(list(state.x.keys()))
+x_values = np.array([state.x[k] for k in x_keys])
+
+np.savez(filename, E_keys=E_keys, E_values=E_values, x_keys=x_keys, x_values=x_values)
+print(f"\n[Memory Engine] System state saved to {filename}")
+

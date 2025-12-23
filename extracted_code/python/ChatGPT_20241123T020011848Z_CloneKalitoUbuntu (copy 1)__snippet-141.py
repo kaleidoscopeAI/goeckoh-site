@@ -1,1 +1,1 @@
-2. Computational Power or Processing Cycles: In an AI network, resources might also represent processing power or bandwidth. Each node could be limited by the computational resources it receives from the environment, so nodes that consume more resources may have more advanced processing abilities or evolve more rapidly.
+1. Adaptive Nodes: Nodes learn from both text and numerical data, extracting patterns and adjusting their growth state accordingly.

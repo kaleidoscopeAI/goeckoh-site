@@ -1,0 +1,2 @@
+to_posix = lambda o: o.replace(os.sep, '/')
+

@@ -1,1 +1,1 @@
-normalize: 'none' by default — let the user pick normalization mode in UI if useful.
+const buf = this.learnerLogsBuffer.splice(0, this.learnerLogsBuffer.length);

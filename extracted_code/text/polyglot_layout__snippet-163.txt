@@ -1,0 +1,6 @@
+      label = label_for(lang)
+      ans = f"{label}: {best['res']}"
+      self.mem.log(self.state.tick, "think", {"lang":lang,"query":text,"selected":best["tag"]})
+      await self.bus.pub({"type":"think","data":{"tick":self.state.tick,"lang":lang,"selected":best["tag"]}})
+      return {"ok":True,"lang":lang,"selected":best["tag"],"answer":ans,"context_ids":top_ids,"context_sims":top_sims}
+

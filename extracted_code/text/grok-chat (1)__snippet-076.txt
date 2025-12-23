@@ -1,0 +1,2 @@
+return sum(p * f for p, f in zip(past or [0], future or [0])) / max(len(past), 1)
+

@@ -1,0 +1,4 @@
+rec_results1 = self._approximate_polygon(contour[:index+1], epsilon)
+rec_results2 = self._approximate_polygon(contour[index:], epsilon)
+# Build the result list
+result = rec_results1[:-1] + rec_results2[:-1]

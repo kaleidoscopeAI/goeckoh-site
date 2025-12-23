@@ -1,0 +1,5 @@
+- The curiosity bit update as a boolean threshold gate,
+- Bitwise routing flags,
+- Bit-encoded state vectors with bitwise logic for ThoughtEngine input/output projection,
+- Integration via bitwise operators (AND, OR, XOR, shifts),
+

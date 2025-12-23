@@ -1,0 +1,3 @@
+# no write support, probably under GAE
+WRITE_SUPPORT = False
+

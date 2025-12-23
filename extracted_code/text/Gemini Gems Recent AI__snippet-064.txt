@@ -1,0 +1,12 @@
+Plotly for Interactive 3D: Replaced matplotlib with plotly.graph_objects for interactive 3D visualization. Users can now rotate, zoom, and pan the cube.
+
+SMILES-Based Initialization: The _initialize_from_smiles method now takes a list of SMILES strings as input. It uses RDKit to parse the SMILES and calculate (simplified for now) molecular features. It also handles potential invalid SMILES strings.
+
+Simplified Feature Calculation: For this example, molecular weight and the number of rotatable bonds are used as features. You should replace these with more relevant features for your specific use case (e.g., calculated binding energies, logP, etc.). A "binding affinity proxy" is introduced as a placeholder for real binding calculations.
+
+Tooltips: Added tooltips to the Plotly visualization. Hovering over a point now displays the SMILES string and energy level.
+
+Visualization Scaling: Molecular weight is scaled down for better visualization. The center for energy calculation is also adjusted.
+
+Error Handling: Added basic error handling
+

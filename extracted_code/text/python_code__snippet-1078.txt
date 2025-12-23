@@ -1,0 +1,1 @@
+installed: Candidate, infos: Iterator[IndexCandidateInfo]

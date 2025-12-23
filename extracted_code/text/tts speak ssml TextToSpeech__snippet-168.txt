@@ -1,0 +1,11 @@
+      whisperAssets.forEach { fileName ->
+          val file = File(filesDir, fileName)
+          if (!file.exists()) {
+              try {
+                  assets.open(fileName).use { input ->
+                      FileOutputStream(file).use { output ->
+                          input.copyTo(output)
+                      }
+                  }
+              } catch (e: Exception) {
+                  statusText.text = "Whisper asset copy failed:

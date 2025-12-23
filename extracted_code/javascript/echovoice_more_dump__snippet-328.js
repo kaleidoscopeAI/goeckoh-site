@@ -1,1 +1,1 @@
-const n = this.graph.n, m = this.cfg.speciesCount;
+const bufVec = this.device.createBuffer({

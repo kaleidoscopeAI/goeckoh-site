@@ -1,0 +1,4 @@
+  sub_agents=[
+      file_reader_agent,
+      content_summariser_agent
+  ]

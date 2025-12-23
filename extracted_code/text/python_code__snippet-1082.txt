@@ -1,0 +1,3 @@
+a. only one spec allowed per project, regardless of conflicts or not.
+   otherwise a "double requirement" exception is raised
+b. they override sub-dependency requirements.

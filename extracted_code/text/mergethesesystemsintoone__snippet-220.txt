@@ -1,1 +1,4 @@
-await this.db.run('INSERT OR REPLACE INTO dna (gen, phi) VALUES (?, ?)', [gen, phi]);
+print(f"Open: http://{HOST}:{PORT}/")
+uvicorn.run(app, host=HOST, port=PORT)
+
+#!/usr/bin/env python3

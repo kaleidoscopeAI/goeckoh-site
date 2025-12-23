@@ -1,1 +1,6 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+   * The Certainty Factor (CF) is now dynamically calculated based on the node's Knowledge (K) and Attention (A)
+     states.
+   * The internal state (E, A, K) and physical position (r, v) updates now use the more accurate Runge-Kutta 4 
+     (RK4) numerical integration method.
+   * The update_position method now includes a simple repulsive F_physical force between nodes and a more
+     specific F_emotional force influenced by the node's epsilon vector.

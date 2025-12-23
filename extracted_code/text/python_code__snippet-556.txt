@@ -1,0 +1,9 @@
+_fields_ = [
+    ("dwSize", COORD),
+    ("dwCursorPosition", COORD),
+    ("wAttributes", wintypes.WORD),
+    ("srWindow", wintypes.SMALL_RECT),
+    ("dwMaximumWindowSize", COORD),
+]
+
+

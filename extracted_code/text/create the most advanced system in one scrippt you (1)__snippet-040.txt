@@ -1,0 +1,2 @@
+- Run stress tests: background CPU load, network activity, and concurrent apps; track the 50th/95th/99th percentile latency and xrun/dropout counts.
+- Define acceptable thresholds (e.g., 95% of trials <250 ms and 99% <300 ms) and adjust buffer sizes and scheduling priority until met.

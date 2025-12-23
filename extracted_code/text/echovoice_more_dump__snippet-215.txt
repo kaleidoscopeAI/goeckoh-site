@@ -1,1 +1,3 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+• Vertices: An n-cube has (2^n) vertices.9 These can be labeled using n-bit binary strings (e.g., 000 to 111 for n=3), representing discrete states or combinations of feature presence/absence.12
+• Edges: Edges connect vertices whose binary labels differ by exactly one bit (Hamming distance of 1).12 In the Cube X System, edges could represent possible transitions between states or relationships between interpretations differing along a single dimension. The number of edges is (n 2^{n-1}).10
+• Faces: Higher-dimensional elements (k-faces) exist within the hypercube, representing subspaces defined by fixing certain coordinates.9 These could symbolize interactions or relationships involving multiple features or dimensions of the data.

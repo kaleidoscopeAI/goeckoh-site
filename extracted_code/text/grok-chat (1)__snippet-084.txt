@@ -1,0 +1,4 @@
+for i, n in enumerate(nodes[:5]):  # Sim 5
+    color = "green" if sum(n.emotion) > 0 else "red"
+    print(f"[Visual Sim Node {i}]: Pos {n.position}, Color {color}")
+

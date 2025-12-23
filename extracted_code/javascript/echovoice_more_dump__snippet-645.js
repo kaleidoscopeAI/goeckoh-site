@@ -1,2 +1,2 @@
-export default function CognitiveProjection({ nodesProvider, width = 640, height = 480, cfg, onInspect, showGrid = true }: Props) {
-const { constructs, update, service } = useCognitiveProjection(nodesProvider, cfg);
+const N = 200;
+const nodes = Array.from({ length: N }).map((_,i) => ({ id: i, Ki: (Math.random() - 0.5) * 0.2 }));

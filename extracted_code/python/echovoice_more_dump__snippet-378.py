@@ -1,1 +1,1 @@
-def __init__(self, organic_ai):
+async def process_user_interaction(self, user_input, interaction_type="query"):

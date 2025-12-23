@@ -1,0 +1,24 @@
+"""Check download_dir for previously downloaded file with correct hash
+If a correct file is found return its path else None
+"""
+download_path = os.path.join(download_dir, link.filename)
+
+if not os.path.exists(download_path):
+    return None
+
+# If already downloaded, does its hash match?
+logger.info("File was already downloaded %s", download_path)
+if hashes:
+    try:
+        hashes.check_against_path(download_path)
+    except HashMismatch:
+        if warn_on_hash_mismatch:
+            logger.warning(
+                "Previously-downloaded file %s has bad hash. Re-downloading.",
+                download_path,
+            )
+        os.unlink(download_path)
+        return None
+return download_path
+
+

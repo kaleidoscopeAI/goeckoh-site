@@ -1,50 +1,39 @@
-class SpeechLoop:
-    config: CompanionConfig = CONFIG
+Added from HID_AI_part_ab.txt and ac.txt: Emulates mouse/keyboard for companion interactions.
+Pythonfrom __future__ import annotations
 
-    def __post_init__(self) -> None:
-        self.processor = SpeechProcessor(self.config.speech)
-        self.data = DataStore(self.config.paths)
-        self.monitor = BehaviorMonitor()
-        self.advisor = StrategyAdvisor()
+import time
+import random
+from typing import Optional
 
-        profile_dir = self.config.paths.voices_dir / "profile"
-        self.voice_profile = VoiceProfile(base_dir=profile_dir)
-        self.voice_profile.load_existing()
+class HIDController:
+    def __init__(self, device_path: str = '/dev/hidg0'):
+        self.device_path = device_path
+        # In real system, open HID gadget
+        print(f"HID Controller initialized at {device_path}")
 
-        self.voice_crystal = VoiceCrystal(
-            tts=VoiceMimic(self.config.speech),
-            profile=self.voice_profile,
-            config=VoiceCrystalConfig(sample_rate=self.config.audio.sample_rate),
-        )
+    def send_hid_report(self, report: bytearray):
+        # Simulate sending; in real, write to device
+        print(f"[HID] Sending report: {list(report)}")
 
-        self.inner_voice = InnerVoiceEngine(
-            voice=self.voice_crystal,
-            data_store=self.data,
-        )
+    def move_mouse(self, dx: int, dy: int):
+        report = bytearray([0x00, dx & 0xFF, dy & 0xFF, 0x00])
+        self.send_hid_report(report)
 
-        self.recognizer = SpeechRecognizer(model_size=self.config.speech.whisper_model)  # New STT
-        self.recognizer.start()
+    def mouse_click(self, button: int = 1):
+        report = bytearray([button, 0x00, 0x00, 0x00])
+        self.send_hid_report(report)
+        time.sleep(0.05)
+        report[0] = 0x00
+        self.send_hid_report(report)
 
-    async def run(self) -> None:
-        print("Starting real-time voice mimicry loop with STT...")
-        while True:
-            result = self.recognizer.transcribe_chunk()
-            if result is None:
-                await asyncio.sleep(0.1)
-                continue
-
-            raw, audio_chunk = result
-
-            # Process as before
-            tmpdir = tempfile.mkdtemp()
-            tmp_path = Path(tmpdir) / "attempt.wav"
-            sf.write(tmp_path, audio_chunk, self.config.audio.sample_rate)
-
-            corrected = await self.processor.process(audio_chunk, tmp_path, self.config.audio.sample_rate)  # Assuming process returns corrected
-
-            normalized_attempt = raw.strip().lower()
-
-            # ... (phrase matching, scoring, echo logic as before)
-
-            await asyncio.sleep(0.1)  # Throttle
+    def type_text(self, text: str):
+        for char in text:
+            # Simulate key press (simplified, real would use keycodes)
+            key_code = ord(char) - 32  # Dummy
+            report = bytearray([0x00, 0x00, key_code, 0x00, 0x00, 0x00, 0x00, 0x00])
+            self.send_hid_report(report)
+            time.sleep(0.02)
+            report[2] = 0x00
+            self.send_hid_report(report)
+            time.sleep(random.uniform(0.05, 0.15))  # Mimic human typing
 

@@ -1,9 +1,8 @@
-from scipy.integrate import odeint  # Real orbits
+def speculate(snapshot: dict):
+    if 'sensors' in snapshot:
+        adc = np.array(snapshot['adc_raw'])  # Mock sensor data
+        grad = sensor_grad(1.0, adc)
+        return {"sensor_update": grad.tolist()}
+    # ... Previous
 
-def compute_orbit(states, t):
-    # Simple 2-body ode from tools
-    r = np.linalg.norm(states[:3] - states[3:6])
-    acc1 = - (states[3:6] - states[:3]) / r**3
-    acc2 = - acc1
-    return np.concatenate([states[3:6], acc1, states[9:12], acc2])  # dpos/dt = vel, dvel/dt = acc
-
+frontend/src/App.tsx (Viz hardware state: overlay CPU/brightness from WS snapshot)

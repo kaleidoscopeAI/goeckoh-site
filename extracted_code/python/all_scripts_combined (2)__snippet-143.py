@@ -1,79 +1,26 @@
-def _timestamp(ts: datetime) -> str:
-    if ts.tzinfo is None:
-        ts = ts.replace(tzinfo=timezone.utc)
-    return ts.astimezone(timezone.utc).strftime(ISO_FORMAT)
+from __future__ import annotations
+
+import numpy as np
+import torch
+from faster_whisper import WhisperModel
+
+from core.settings import SpeechSettings
 
 
-class MetricsLogger:
-    """Append-only CSV writer for attempt records."""
+class STT:
+    """
+    Speech-to-Text using faster-whisper.
+    """
 
-    header = ("timestamp", "phrase_text", "raw_text", "corrected_text", "needs_correction", "similarity", "audio_file")
-
-    def __init__(self, csv_path: Path):
-        self.csv_path = csv_path
-        if not csv_path.exists():
-            csv_path.parent.mkdir(parents=True, exist_ok=True)
-            with csv_path.open("w", newline="", encoding="utf-8") as f:
-                writer = csv.writer(f)
-                writer.writerow(self.header)
-
-    def append(self, record: AttemptRecord) -> None:
-        with self.csv_path.open("a", newline="", encoding="utf-8") as f:
-            writer = csv.writer(f)
-            writer.writerow(
-                (
-                    _timestamp(record.timestamp),
-                    record.phrase_text,
-                    record.raw_text,
-                    record.corrected_text,
-                    "1" if record.needs_correction else "0",
-                    f"{record.similarity:.4f}",
-                    str(record.audio_file),
-                )
-            )
-
-
-class GuidanceLogger:
-    """Structured log for behavior / guidance events."""
-
-    header = ("timestamp", "level", "category", "title", "message", "metadata_json")
-
-    def __init__(self, csv_path: Path):
-        self.csv_path = csv_path
-        if not csv_path.exists():
-            csv_path.parent.mkdir(parents=True, exist_ok=True)
-            with csv_path.open("w", newline="", encoding="utf-8") as f:
-                writer = csv.writer(f)
-                writer.writerow(self.header)
-
-    def append(self, event: BehaviorEvent) -> None:
-        payload = (
-            _timestamp(event.timestamp),
-            event.level,
-            event.category,
-            event.title,
-            event.message,
-            json.dumps(event.metadata, ensure_ascii=False),
+    def __init__(self, settings: SpeechSettings):
+        self.settings = settings
+        self.model = WhisperModel(
+            self.settings.whisper_model, device="cpu", compute_type="int8"
         )
-        with self.csv_path.open("a", newline="", encoding="utf-8") as f:
-            csv.writer(f).writerow(payload)
 
-    def tail(self, limit: int = 50) -> list[BehaviorEvent]:
-        if not self.csv_path.exists():
-            return []
-        rows: list[BehaviorEvent] = []
-        with self.csv_path.open("r", newline="", encoding="utf-8") as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                rows.append(
-                    BehaviorEvent(
-                        timestamp=datetime.fromisoformat(row["timestamp"].replace("Z", "+00:00")),
-                        level=row["level"],
-                        category=row["category"],  # type: ignore[arg-type]
-                        title=row["title"],
-                        message=row["message"],
-                        metadata=json.loads(row.get("metadata_json") or "{}"),
-                    )
-                )
-        return rows[-limit:]
-
+    def transcribe(self, audio_chunk: np.ndarray) -> str:
+        """
+        Transcribes an audio chunk and returns the text.
+        """
+        segments, _ = self.model.transcribe(audio_chunk, vad_filter=False)
+        return "".join(s.text for s in segments).strip()

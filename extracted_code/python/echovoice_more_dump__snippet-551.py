@@ -1,1 +1,1 @@
-else, load from JSON at startup
+// read a scalar from K as average

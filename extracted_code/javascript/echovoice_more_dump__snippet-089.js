@@ -1,2 +1,2 @@
-function matrixScale(m: number[][], s: number): number[][] {
-  return m.map(row => row.map(v => v * s));
+  const avgC = // as before
+  this.engineAlpha = this.engineAlpha.map((a, i) => a * (1 + this.emotionalGamma * Math.tanh(avgC[i % this.emotionalSpecies])));

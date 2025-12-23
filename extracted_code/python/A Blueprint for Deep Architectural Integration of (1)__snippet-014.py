@@ -1,1 +1,0 @@
-- **Bootstrap protocol**: Start from minimal "drive" engines (curiosity, energy optimization, pain/pleasure signals) and allow learning to self-organize connections.

@@ -1,0 +1,6 @@
+- $c_k$ is the curiosity tension at step $k$,
+- $\rho \in (0,1)$ is the decay factor,
+- $\alpha > 0$ scales the uncertainty signal $U(S_k)$,
+- $U(S_k)$ quantifies cognitive uncertainty or prediction error at state $S_k$,
+- $\sigma > 0$ scales the reduction in curiosity tension proportional to the performance feedback $\text{Perf}_k$.
+

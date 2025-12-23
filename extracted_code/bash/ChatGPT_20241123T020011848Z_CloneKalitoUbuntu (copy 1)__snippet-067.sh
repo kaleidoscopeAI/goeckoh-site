@@ -1,2 +1,2 @@
-python mirrored_network_demo.py
+pip install wikipedia-api
 

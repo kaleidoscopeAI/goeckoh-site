@@ -1,4 +1,5 @@
-  represent full end-to-end time from ASR to playback end. Playback latency
-  stats will be added to telemetry, validation summary, and frontend display
-  with p95 checks, plus a validation script for mirror metrics.
+  separately from playback duration by having _speak return both, then storing
+  processing latency and playback latency distinctly; this will improve accuracy
+  of latency metrics without a large refactor. Also preparing to update
+  reference audio loading to float32 with resampling.
 

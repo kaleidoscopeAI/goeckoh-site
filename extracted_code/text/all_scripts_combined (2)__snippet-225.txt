@@ -1,0 +1,46 @@
+<style>
+body { margin:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif; background:#020617; color:#e2e8f0; }
+.shell { max-width:1100px; margin:0 auto; padding:24px; }
+.card { border-radius:18px; border:1px solid rgba(148,163,184,0.35); background:rgba(15,23,42,0.9); padding:18px 20px; box-shadow:0 24px 60px rgba(15,23,42,0.9); }
+.grid { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); gap:18px; }
+.metric-label { font-size:11px; color:#94a3b8; }
+.metric-value { font-size:18px; font-variant-numeric:tabular-nums; }
+table { width:100%; font-size:12px; margin-top:6px; border-collapse:collapse; }
+th,td { padding:4px 6px; text-align:left; }
+th { color:#94a3b8; font-weight:500; }
+tr:nth-child(even) td { background:rgba(15,23,42,0.55); }
+</style>
+</head>
+<body>
+<div class=\"shell\">
+<div class=\"grid\">
+<div class=\"card\">
+<h2>Live utterance snapshot</h2>
+<div id=\"live-ts\" class=\"metric-label\">No data yet.</div>
+<div class=\"metric-label\">What I said (raw)</div>
+<div id=\"live-raw\" class=\"metric-value\">—</div>
+<div class=\"metric-label\">Echoed back (corrected)</div>
+<div id=\"live-corrected\" class=\"metric-value\">—</div>
+<div class=\"grid\" style=\"grid-template-columns:repeat(4, minmax(0,1fr)); gap:12px; margin-top:12px;\">
+<div><div class=\"metric-label\">Arousal</div><div id=\"m-arousal\" class=\"metric-value\">0</div></div>
+<div><div class=\"metric-label\">Valence</div><div id=\"m-valence\" class=\"metric-value\">0</div></div>
+<div><div class=\"metric-label\">Temp</div><div id=\"m-temp\" class=\"metric-value\">0</div></div>
+<div><div class=\"metric-label\">Coherence</div><div id=\"m-coh\" class=\"metric-value\">0</div></div>
+</div>
+</div>
+<div class=\"card\">
+<h2>Phrase difficulty</h2>
+<canvas id=\"phraseChart\" style=\"height:220px;\"></canvas>
+</div>
+</div>
+<div class=\"card\" style=\"margin-top:18px;\">
+<h2>Raw attempt log (recent)</h2>
+<table id=\"phraseTable\"><thead><tr><th>Phrase</th><th>Attempts</th><th>Corrections</th><th>Rate</th></tr></thead><tbody></tbody></table>
+</div>
+</div>
+<script>
+let chart=null;
+async function fetchJSON(url){const res=await fetch(url); if(!res.ok) return null; return await res.json();}
+function updateLive(data){document.getElementById("live-ts").textContent=data.timestamp_iso?`Last utterance at ${data.timestamp_iso}`:"No data yet."; document.getElementById("live-raw").textContent=data.raw_text||"—"; document.getElementById("live-corrected").textContent=data.corrected_text||"—"; document.getElementById("m-arousal").textContent=((data.arousal??0)).toFixed(2); document.getElementById("m-valence").textContent=((data.valence??0)).toFixed(2); document.getElementById("m-temp").textContent=((data.temperature??0)).toFixed(3); document.getElementById("m-coh").textContent=((data.coherence??0)).toFixed(3);}
+function updateStats(stats){const labels=[]; const values=[]; const rows=[]; Object.entries(stats).forEach(([phrase,s])=>{labels.push(phrase||"<empty>"); values.push(s.correction_rate||0); rows.push({phrase:phrase||"<empty>", attempts:s.attempts||0, corrections:s.corrections||0, rate:s.correction_rate||0});}); const ctx=document.getElementById("phraseChart").getContext("2d"); if(chart){chart.data.labels=labels; chart.data.datasets[0].data=values; chart.update();} else {chart=new Chart(ctx,{type:"bar",data:{labels:labels,datasets:[{label:"Correction rate",data:values}]},options:{scales:{y:{min:0,max:1}}}});} const tbody=document.querySelector("#phraseTable tbody"); tbody.innerHTML=""; rows.sort((a,b)=>b.rate-a.rate).slice(0,15).forEach(r=>{const tr=document.createElement("tr"); tr.innerHTML=`<td>${r.phrase}</td><td>${r.attempts}</td><td>${r.corrections}</td><td>${(r.rate*100).toFixed(1)}%</td>`; tbody.appendChild(tr);});}
+async function tick(){const live=await fetchJSON("/api/latest"); if(live) updateLive(live); const stats=await fetchJSON("/api/stats"); if(stats) updateStats(stats);} setInterval(tick,2000); tick();

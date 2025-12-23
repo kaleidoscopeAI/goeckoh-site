@@ -1,5 +1,2 @@
-const logs = [];
-const T = replayLogs ? replayLogs.length : 300;
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
-90/141for (let t = 0; t < T; t++) {
-const KiSnapshot = nodes.map(n => {
++ const m = nodes.length;
++ const block = blockSizes.K + blockSizes.D + blockSizes.Psi + blockSizes.U + blockSizes.M + blockSizes.L + blockSizes.E;

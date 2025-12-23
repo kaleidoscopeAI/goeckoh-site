@@ -1,0 +1,1 @@
+ (persistent instance) so UI reflects the same engine used in the loop.

@@ -1,0 +1,42 @@
+"""
+Convert the package data into something usable
+by output_package_listing_columns.
+"""
+header = ["Package", "Version"]
+
+running_outdated = options.outdated
+if running_outdated:
+    header.extend(["Latest", "Type"])
+
+has_editables = any(x.editable for x in pkgs)
+if has_editables:
+    header.append("Editable project location")
+
+if options.verbose >= 1:
+    header.append("Location")
+if options.verbose >= 1:
+    header.append("Installer")
+
+data = []
+for proj in pkgs:
+    # if we're working on the 'outdated' list, separate out the
+    # latest_version and type
+    row = [proj.raw_name, str(proj.version)]
+
+    if running_outdated:
+        row.append(str(proj.latest_version))
+        row.append(proj.latest_filetype)
+
+    if has_editables:
+        row.append(proj.editable_project_location or "")
+
+    if options.verbose >= 1:
+        row.append(proj.location or "")
+    if options.verbose >= 1:
+        row.append(proj.installer)
+
+    data.append(row)
+
+return data, header
+
+

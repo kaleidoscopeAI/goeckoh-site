@@ -1,9 +1,0 @@
-class VoiceSample:
-    """A single recorded sample of the user's voice."""
-
-    path: Path
-    duration_s: float
-    rms: float
-    quality_score: float = 1.0
-
-

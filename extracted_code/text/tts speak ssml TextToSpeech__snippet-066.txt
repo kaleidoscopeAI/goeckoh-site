@@ -1,0 +1,3 @@
+      // Ensure first-person perspective
+      if (!corrected.startsWith("I ", ignoreCase = true)) {
+          corrected = "I " + corrected.lowercase().replaceFirstChar

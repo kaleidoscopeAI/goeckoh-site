@@ -1,0 +1,1 @@
+nx.draw(self.graph, ax=ax, with_labels=True, node_size=500, font_size=10, node_color="lightgreen")

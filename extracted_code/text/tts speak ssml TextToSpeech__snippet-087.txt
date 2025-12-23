@@ -1,0 +1,28 @@
+          else -> "Processed: $task"
+      }
+  }
+
+  fun executeBasedOnGCL(gcl: Double, input: String) {
+      Log.d("AGI", "GCL: $gcl, Input: $input")
+      when {
+          gcl < 0.5 -> {
+              // Calming
+              Log.d("AGI", "Meltdown: I am safe. Breathe deeply.")
+              // Could trigger TTS here
+          }
+          gcl < 0.7 -> {
+              // Internal
+              Log.d("AGI", "Overload: Reflecting on state.")
+          }
+          gcl < 0.9 -> {
+              // Baseline
+              val result = performDeepReasoning(input, gcl)
+              Log.d("AGI", "Baseline: $result")
+          }
+          else -> {
+              // Flow
+              val result = performDeepReasoning("Advanced: $input", gcl)
+              Log.d("AGI", "Flow: Executing $result")
+          }
+      }
+  }

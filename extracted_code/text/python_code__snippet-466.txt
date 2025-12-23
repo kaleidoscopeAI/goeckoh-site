@@ -1,0 +1,3 @@
+return struct.unpack(fmt, f.read(struct.calcsize(fmt)))
+
+

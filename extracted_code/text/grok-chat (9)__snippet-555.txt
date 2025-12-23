@@ -1,0 +1,84 @@
+123          self._refractory_until = 0.0
+124 +        # Adaptive VAD + noise reduction controls
+125 +        self._vad_enabled = os.environ.get("GOECKOH_MIRROR_VAD", "1").l
+     ower() not in ("0", "false", "no", "off")
+126 +        self._vad_margin = float(os.environ.get("GOECKOH_MIRROR_VAD_MAR
+     GIN", "1.5"))
+127 +        self._vad_snr_db = float(os.environ.get("GOECKOH_MIRROR_VAD_SNR
+     _DB", "6.0"))
+128 +        self._vad_hangover_ms = float(os.environ.get("GOECKOH_MIRROR_VA
+     D_HANGOVER_MS", "200"))
+129 +        self._vad_preroll_ms = float(os.environ.get("GOECKOH_MIRROR_VAD
+     _PREROLL_MS", "100"))
+130 +        self._vad_min_floor = float(os.environ.get("GOECKOH_MIRROR_VAD_
+     MIN", "0.003"))
+131 +        self._vad_max_floor = float(os.environ.get("GOECKOH_MIRROR_VAD_
+     MAX", "0.2"))
+132 +        self._noise_adapt = float(os.environ.get("GOECKOH_MIRROR_NOISE_
+     ADAPT", "0.05"))
+133 +        self._vad_active = False
+134 +        self._vad_hangover_frames = 0
+135 +        self._vad_hangover = 0
+136 +        self._last_vad_threshold = self._noise_floor * self._vad_margin
+137 +        self._preroll: deque[np.ndarray] = deque()
+138 +
+139 +        self._nr_enabled = os.environ.get("GOECKOH_MIRROR_NOISE_REDUCTI
+     ON", "1").lower() not in (
+140 +            "0",
+141 +            "false",
+142 +            "no",
+143 +            "off",
+144 +        )
+145 +        self._nr_mode = os.environ.get("GOECKOH_MIRROR_NR_MODE", "wiene
+     r").lower()
+146 +        self._nr_fft_size = int(os.environ.get("GOECKOH_MIRROR_NR_FFT",
+      "512"))
+147 +        self._nr_alpha = float(os.environ.get("GOECKOH_MIRROR_NR_ALPHA"
+     , "0.08"))
+148 +        self._nr_gate_factor = float(os.environ.get("GOECKOH_MIRROR_NR_
+     GATE", "1.5"))
+149 +        self._nr_min_gain = float(os.environ.get("GOECKOH_MIRROR_NR_MIN
+     _GAIN", "0.05"))
+150 +        self._nr_window: Optional[np.ndarray] = None
+151 +        self._nr_window_gain: float = 1.0
+152 +        self._noise_psd: Optional[np.ndarray] = None
+153 +        self._last_snr_db: float = 0.0
+154 +        self._snr_hist = deque(maxlen=int(os.environ.get("GOECKOH_MIRRO
+     R_SNR_WINDOW", "200")))
+155
+    ⋮
+159          self._last_latency_ms = 0.0
+160 +        self._last_snr_db = 0.0
+161
+    ⋮
+235          self._metrics_hist = deque(maxlen=int(os.environ.get("GOECKOH_M
+     IRROR_METRICS_WINDOW", "200")))
+236 +        self._snr_hist = deque(maxlen=int(os.environ.get("GOECKOH_MIRRO
+     R_SNR_WINDOW", "200")))
+237          # Time-stamped telemetry for UI/analysis (latency, GCL, drift)
+    ⋮
+292                      "playback_latency_ms": float(self._last_playback_la
+     tency_ms),
+293 +                    "snr_db": float(self._last_snr_db),
+294 +                    "snr_p50_db": self._percentile([float(t.get("snr_db
+     ", 0.0)) for t in self._telemetry_hist], 50.0),
+295 +                    "snr_p95_db": self._percentile([float(t.get("snr_db
+     ", 0.0)) for t in self._telemetry_hist], 95.0),
+296 +                    "vad_active": bool(self._vad_active),
+297 +                    "vad_threshold": float(self._last_vad_threshold),
+298                      "gcl_mean": float(sum(gcls) / len(gcls)) if gcls el
+     se 0.0,
+    ⋮
+336              self._gate_blocked = 0
+337 +            self._snr_hist.clear()
+338 +            self._last_snr_db = 0.0
+339
+    ⋮
+399              self._last_latency_ms = 0.0
+400 +            self._last_snr_db = 0.0
+401              self._last_gcl = 0.8
+    ⋮
+416              )
+417 +            self._reset_denoise_state()
+418
+

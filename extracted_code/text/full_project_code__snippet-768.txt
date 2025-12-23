@@ -1,0 +1,5 @@
+"class_table": BIG5_CLS,
+"class_factor": 5,
+"state_table": BIG5_ST,
+"char_len_table": BIG5_CHAR_LEN_TABLE,
+"name": "Big5",

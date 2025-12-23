@@ -1,19 +1,17 @@
-import os.path
-import platform
-import re
-import sys
-import textwrap
-from abc import ABC, abstractmethod
-from pathlib import Path
-from typing import (
-    Any,
-    Dict,
-    Iterable,
-    List,
-    NamedTuple,
-    Optional,
-    Sequence,
-    Set,
-    Tuple,
-    Type,
-    Union,
+    from pip._internal.metadata.base import DistributionVersion
+
+    class _DistWithLatestInfo(BaseDistribution):
+        """Give the distribution object a couple of extra fields.
+
+        These will be populated during ``get_outdated()``. This is dirty but
+        makes the rest of the code much cleaner.
+        """
+
+        latest_version: DistributionVersion
+        latest_filetype: str
+
+    _ProcessedDists = Sequence[_DistWithLatestInfo]
+
+
+from pip._vendor.packaging.version import parse
+

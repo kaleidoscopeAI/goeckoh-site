@@ -1,45 +1,31 @@
-class BehaviorMonitor:
-    """
-    Tracks repeated corrections, perseveration, and high-energy speech.
-    Pure Python: safe to ship in a minimal build.
-    """
+"""Re-map the characters in the string according to UTS46 processing."""
+from .uts46data import uts46data
+output = ''
 
-    max_phrase_history: int = 5
-    anxious_threshold: int = 3
-    perseveration_threshold: int = 3
-    high_energy_rms: float = 0.08
+for pos, char in enumerate(domain):
+    code_point = ord(char)
+    try:
+        uts46row = uts46data[code_point if code_point < 256 else
+            bisect.bisect_left(uts46data, (code_point, 'Z')) - 1]
+        status = uts46row[1]
+        replacement = None  # type: Optional[str]
+        if len(uts46row) == 3:
+            replacement = uts46row[2]  # type: ignore
+        if (status == 'V' or
+                (status == 'D' and not transitional) or
+                (status == '3' and not std3_rules and replacement is None)):
+            output += char
+        elif replacement is not None and (status == 'M' or
+                (status == '3' and not std3_rules) or
+                (status == 'D' and transitional)):
+            output += replacement
+        elif status != 'I':
+            raise IndexError()
+    except IndexError:
+        raise InvalidCodepoint(
+            'Codepoint {} not allowed at position {} in {}'.format(
+            _unot(code_point), pos + 1, repr(domain)))
 
-    def __post_init__(self) -> None:
-        self._phrases: Deque[str] = deque(maxlen=self.max_phrase_history)
-        self._correction_streak = 0
-        self._last_event: str | None = None
-
-    def register(self, normalized_text: str, needs_correction: bool, rms: float) -> str | None:
-        """
-        Update state and return an event string like "anxious", "perseveration", or "high_energy".
-        """
-        event: str | None = None
-
-        if needs_correction:
-            self._correction_streak += 1
-        else:
-            if self._correction_streak >= self.anxious_threshold:
-                event = "encouragement"
-            self._correction_streak = 0
-
-        self._phrases.append(normalized_text)
-
-        if self._correction_streak >= self.anxious_threshold:
-            event = "anxious"
-        elif normalized_text and list(self._phrases).count(normalized_text) >= self.perseveration_threshold:
-            event = event or "perseveration"
-        elif rms >= self.high_energy_rms:
-            event = event or "high_energy"
-
-        if event == self._last_event and event not in {"perseveration", "encouragement"}:
-            return None
-        if event:
-            self._last_event = event
-        return event
+return unicodedata.normalize('NFC', output)
 
 

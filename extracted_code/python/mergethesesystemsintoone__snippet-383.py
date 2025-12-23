@@ -1,22 +1,33 @@
-async def think(self, input_data: Dict) -> Dict:
-    # Extract concepts and relationships
-    concepts = self.knowledge_graph.extract_concepts(input_data)
+class Dashboard:
+    @staticmethod
+    def create_dashboard(insights, nodes):
+        app = Dash(__name__)
 
-    # Add extracted concepts to the knowledge graph
-    for concept in concepts:
-        self.knowledge_graph.add_node(concept['id'], concept)
+        app.layout = html.Div([
+            html.H1("Unified Node System Dashboard"),
+            dcc.Graph(
+                id="data-vs-insights",
+                figure={
+                    "data": [
+                        go.Pie(labels=["Raw Data", "Insights"], values=[len(nodes), len(insights)], hole=0.4)
+                    ],
+                    "layout": {"title": "Data vs Insights"}
+                }
+            ),
+            dcc.Graph(
+                id="node-energy",
+                figure={
+                    "data": [
+                        go.Bar(
+                            x=[node.node_id for node in nodes],
+                            y=[node.energy for node in nodes]
+                        )
+                    ],
+                    "layout": {"title": "Node Energy Levels"}
+                }
+            )
+        ])
 
-    # Apply reasoning
-    insights = self.reasoning_engine.apply(concepts)
+        # Disable debug mode in production
+        app.run_server(debug=False)
 
-    # Make decisions
-    decisions = self.decision_maker.evaluate(insights)
-
-    # Update beliefs
-    self.belief_system.observe(insights)
-
-    return {
-        'insights': insights,
-        'decisions': decisions,
-        'updated_beliefs': self.belief_system.get_probabilities()
-    }

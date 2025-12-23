@@ -1,1 +1,1 @@
-def get_latest_metrics(self) -> Dict[str, Any]:
+def ensure_ollama_hint():

@@ -1,1 +1,2 @@
-const loop = new EmotionLoop({ nodes: NODE_COUNT, timestepMs: TIMESTEP_MS, maxReflections: 200 });
+const svc = new EmotionalActuationService({ firebaseConfig: undefined });
+const v = await svc.init();

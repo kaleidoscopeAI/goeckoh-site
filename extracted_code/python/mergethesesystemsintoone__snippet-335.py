@@ -1,1 +1,10 @@
-def extract_node_names(nodes):
+class ConceptHierarchy:
+
+
+    def __init__(self):
+
+
+
+
+        
+

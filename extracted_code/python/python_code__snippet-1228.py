@@ -1,1 +1,2 @@
-fetching, extracting, potentially building modules from source, and verifying
+    import websockets
+    WEBSOCKETS_AVAILABLE = True

@@ -1,7 +1,4 @@
-    def _is_recursionerror(e):
-        return (
-            len(e.args) == 1
-            and isinstance(e.args[0], str)
-            and e.args[0].startswith("maximum recursion depth exceeded")
-        )
-
+def _check_dist_requires_python(
+    dist: BaseDistribution,
+    version_info: Tuple[int, int, int],
+    ignore_requires_python: bool = False,

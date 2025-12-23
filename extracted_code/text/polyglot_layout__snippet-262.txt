@@ -1,0 +1,5 @@
+ Verify the server exposed /avatar (no 404s in server logs).
+
+ If your page is HTTPS, ensure it connects with wss:// (the client auto-detects).
+ If you’re behind a proxy (NGINX/Caddy), make sure it forwards WS upgrades to /avatar.
+

@@ -1,0 +1,7 @@
+ if __name__ == "__main__":
+
+    agi = AGIOrchestrator(redis)
+
+    asyncio.run(agi.run())   weave and wire it together and what do you get
+
+

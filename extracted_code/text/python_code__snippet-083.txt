@@ -1,306 +1,169 @@
-    issues when using infix_notation. See
-    :class:`ParserElement.enable_packrat` for a mechanism to potentially
-    improve your parser performance.
-
-    Parameters:
-
-    - ``base_expr`` - expression representing the most basic operand to
-      be used in the expression
-    - ``op_list`` - list of tuples, one for each operator precedence level
-      in the expression grammar; each tuple is of the form ``(op_expr,
-      num_operands, right_left_assoc, (optional)parse_action)``, where:
-
-      - ``op_expr`` is the pyparsing expression for the operator; may also
-        be a string, which will be converted to a Literal; if ``num_operands``
-        is 3, ``op_expr`` is a tuple of two expressions, for the two
-        operators separating the 3 terms
-      - ``num_operands`` is the number of terms for this operator (must be 1,
-        2, or 3)
-      - ``right_left_assoc`` is the indicator whether the operator is right
-        or left associative, using the pyparsing-defined constants
-        ``OpAssoc.RIGHT`` and ``OpAssoc.LEFT``.
-      - ``parse_action`` is the parse action to be associated with
-        expressions matching this operator expression (the parse action
-        tuple member may be omitted); if the parse action is passed
-        a tuple or list of functions, this is equivalent to calling
-        ``set_parse_action(*fn)``
-        (:class:`ParserElement.set_parse_action`)
-    - ``lpar`` - expression for matching left-parentheses; if passed as a
-      str, then will be parsed as ``Suppress(lpar)``. If lpar is passed as
-      an expression (such as ``Literal('(')``), then it will be kept in
-      the parsed results, and grouped with them. (default= ``Suppress('(')``)
-    - ``rpar`` - expression for matching right-parentheses; if passed as a
-      str, then will be parsed as ``Suppress(rpar)``. If rpar is passed as
-      an expression (such as ``Literal(')')``), then it will be kept in
-      the parsed results, and grouped with them. (default= ``Suppress(')')``)
-
-    Example::
-
-        # simple example of four-function arithmetic with ints and
-        # variable names
-        integer = pyparsing_common.signed_integer
-        varname = pyparsing_common.identifier
-
-        arith_expr = infix_notation(integer | varname,
-            [
-            ('-', 1, OpAssoc.RIGHT),
-            (one_of('* /'), 2, OpAssoc.LEFT),
-            (one_of('+ -'), 2, OpAssoc.LEFT),
-            ])
-
-        arith_expr.run_tests('''
-            5+3*6
-            (5+3)*6
-            -2--11
-            ''', full_dump=False)
-
-    prints::
-
-        5+3*6
-        [[5, '+', [3, '*', 6]]]
-
-        (5+3)*6
-        [[[5, '+', 3], '*', 6]]
-
-        (5+x)*y
-        [[[5, '+', 'x'], '*', 'y']]
-
-        -2--11
-        [[['-', 2], '-', ['-', 11]]]
-    """
-
-    # captive version of FollowedBy that does not do parse actions or capture results names
-    class _FB(FollowedBy):
-        def parseImpl(self, instring, loc, doActions=True):
-            self.expr.try_parse(instring, loc)
-            return loc, []
-
-    _FB.__name__ = "FollowedBy>"
-
-    ret = Forward()
-    if isinstance(lpar, str):
-        lpar = Suppress(lpar)
-    if isinstance(rpar, str):
-        rpar = Suppress(rpar)
-
-    # if lpar and rpar are not suppressed, wrap in group
-    if not (isinstance(rpar, Suppress) and isinstance(rpar, Suppress)):
-        lastExpr = base_expr | Group(lpar + ret + rpar)
-    else:
-        lastExpr = base_expr | (lpar + ret + rpar)
-
-    arity: int
-    rightLeftAssoc: opAssoc
-    pa: typing.Optional[ParseAction]
-    opExpr1: ParserElement
-    opExpr2: ParserElement
-    for i, operDef in enumerate(op_list):
-        opExpr, arity, rightLeftAssoc, pa = (operDef + (None,))[:4]  # type: ignore[assignment]
-        if isinstance(opExpr, str_type):
-            opExpr = ParserElement._literalStringClass(opExpr)
-        opExpr = typing.cast(ParserElement, opExpr)
-        if arity == 3:
-            if not isinstance(opExpr, (tuple, list)) or len(opExpr) != 2:
-                raise ValueError(
-                    "if numterms=3, opExpr must be a tuple or list of two expressions"
-                )
-            opExpr1, opExpr2 = opExpr
-            term_name = f"{opExpr1}{opExpr2} term"
-        else:
-            term_name = f"{opExpr} term"
-
-        if not 1 <= arity <= 3:
-            raise ValueError("operator must be unary (1), binary (2), or ternary (3)")
-
-        if rightLeftAssoc not in (OpAssoc.LEFT, OpAssoc.RIGHT):
-            raise ValueError("operator must indicate right or left associativity")
-
-        thisExpr: ParserElement = Forward().set_name(term_name)
-        thisExpr = typing.cast(Forward, thisExpr)
-        if rightLeftAssoc is OpAssoc.LEFT:
-            if arity == 1:
-                matchExpr = _FB(lastExpr + opExpr) + Group(lastExpr + opExpr[1, ...])
-            elif arity == 2:
-                if opExpr is not None:
-                    matchExpr = _FB(lastExpr + opExpr + lastExpr) + Group(
-                        lastExpr + (opExpr + lastExpr)[1, ...]
-                    )
-                else:
-                    matchExpr = _FB(lastExpr + lastExpr) + Group(lastExpr[2, ...])
-            elif arity == 3:
-                matchExpr = _FB(
-                    lastExpr + opExpr1 + lastExpr + opExpr2 + lastExpr
-                ) + Group(lastExpr + OneOrMore(opExpr1 + lastExpr + opExpr2 + lastExpr))
-        elif rightLeftAssoc is OpAssoc.RIGHT:
-            if arity == 1:
-                # try to avoid LR with this extra test
-                if not isinstance(opExpr, Opt):
-                    opExpr = Opt(opExpr)
-                matchExpr = _FB(opExpr.expr + thisExpr) + Group(opExpr + thisExpr)
-            elif arity == 2:
-                if opExpr is not None:
-                    matchExpr = _FB(lastExpr + opExpr + thisExpr) + Group(
-                        lastExpr + (opExpr + thisExpr)[1, ...]
-                    )
-                else:
-                    matchExpr = _FB(lastExpr + thisExpr) + Group(
-                        lastExpr + thisExpr[1, ...]
-                    )
-            elif arity == 3:
-                matchExpr = _FB(
-                    lastExpr + opExpr1 + thisExpr + opExpr2 + thisExpr
-                ) + Group(lastExpr + opExpr1 + thisExpr + opExpr2 + thisExpr)
-        if pa:
-            if isinstance(pa, (tuple, list)):
-                matchExpr.set_parse_action(*pa)
-            else:
-                matchExpr.set_parse_action(pa)
-        thisExpr <<= (matchExpr | lastExpr).setName(term_name)
-        lastExpr = thisExpr
-    ret <<= lastExpr
-    return ret
-
-
-def indentedBlock(blockStatementExpr, indentStack, indent=True, backup_stacks=[]):
-    """
-    (DEPRECATED - use :class:`IndentedBlock` class instead)
-    Helper method for defining space-delimited indentation blocks,
-    such as those used to define block statements in Python source code.
-
-    Parameters:
-
-    - ``blockStatementExpr`` - expression defining syntax of statement that
-      is repeated within the indented block
-    - ``indentStack`` - list created by caller to manage indentation stack
-      (multiple ``statementWithIndentedBlock`` expressions within a single
-      grammar should share a common ``indentStack``)
-    - ``indent`` - boolean indicating whether block must be indented beyond
-      the current level; set to ``False`` for block of left-most statements
-      (default= ``True``)
-
-    A valid block must contain at least one ``blockStatement``.
-
-    (Note that indentedBlock uses internal parse actions which make it
-    incompatible with packrat parsing.)
-
-    Example::
-
-        data = '''
-        def A(z):
-          A1
-          B = 100
-          G = A2
-          A2
-          A3
-        B
-        def BB(a,b,c):
-          BB1
-          def BBA():
-            bba1
-            bba2
-            bba3
-        C
-        D
-        def spam(x,y):
-             def eggs(z):
-                 pass
-        '''
-
-
-        indentStack = [1]
-        stmt = Forward()
-
-        identifier = Word(alphas, alphanums)
-        funcDecl = ("def" + identifier + Group("(" + Opt(delimitedList(identifier)) + ")") + ":")
-        func_body = indentedBlock(stmt, indentStack)
-        funcDef = Group(funcDecl + func_body)
-
-        rvalue = Forward()
-        funcCall = Group(identifier + "(" + Opt(delimitedList(rvalue)) + ")")
-        rvalue << (funcCall | identifier | Word(nums))
-        assignment = Group(identifier + "=" + rvalue)
-        stmt << (funcDef | assignment | identifier)
-
-        module_body = stmt[1, ...]
-
-        parseTree = module_body.parseString(data)
-        parseTree.pprint()
-
-    prints::
-
-        [['def',
-          'A',
-          ['(', 'z', ')'],
-          ':',
-          [['A1'], [['B', '=', '100']], [['G', '=', 'A2']], ['A2'], ['A3']]],
-         'B',
-         ['def',
-          'BB',
-          ['(', 'a', 'b', 'c', ')'],
-          ':',
-          [['BB1'], [['def', 'BBA', ['(', ')'], ':', [['bba1'], ['bba2'], ['bba3']]]]]],
-         'C',
-         'D',
-         ['def',
-          'spam',
-          ['(', 'x', 'y', ')'],
-          ':',
-          [[['def', 'eggs', ['(', 'z', ')'], ':', [['pass']]]]]]]
-    """
-    backup_stacks.append(indentStack[:])
-
-    def reset_stack():
-        indentStack[:] = backup_stacks[-1]
-
-    def checkPeerIndent(s, l, t):
-        if l >= len(s):
-            return
-        curCol = col(l, s)
-        if curCol != indentStack[-1]:
-            if curCol > indentStack[-1]:
-                raise ParseException(s, l, "illegal nesting")
-            raise ParseException(s, l, "not a peer entry")
-
-    def checkSubIndent(s, l, t):
-        curCol = col(l, s)
-        if curCol > indentStack[-1]:
-            indentStack.append(curCol)
-        else:
-            raise ParseException(s, l, "not a subentry")
-
-    def checkUnindent(s, l, t):
-        if l >= len(s):
-            return
-        curCol = col(l, s)
-        if not (indentStack and curCol in indentStack):
-            raise ParseException(s, l, "not an unindent")
-        if curCol < indentStack[-1]:
-            indentStack.pop()
-
-    NL = OneOrMore(LineEnd().set_whitespace_chars("\t ").suppress())
-    INDENT = (Empty() + Empty().set_parse_action(checkSubIndent)).set_name("INDENT")
-    PEER = Empty().set_parse_action(checkPeerIndent).set_name("")
-    UNDENT = Empty().set_parse_action(checkUnindent).set_name("UNINDENT")
-    if indent:
-        smExpr = Group(
-            Opt(NL)
-            + INDENT
-            + OneOrMore(PEER + Group(blockStatementExpr) + Opt(NL))
-            + UNDENT
+        # using the same $usersite for both platlib and purelib. This creates a
+        # mismatch when sys.platlibdir is not "lib".
+        skip_bpo_44860 = (
+            user
+            and k == "platlib"
+            and not WINDOWS
+            and sys.version_info >= (3, 9)
+            and _PLATLIBDIR != "lib"
+            and _looks_like_bpo_44860()
         )
-    else:
-        smExpr = Group(
-            Opt(NL)
-            + OneOrMore(PEER + Group(blockStatementExpr) + Opt(NL))
-            + Opt(UNDENT)
-        )
+        if skip_bpo_44860:
+            continue
 
-    # add a parse action to remove backup_stack from list of backups
-    smExpr.add_parse_action(
-        lambda: backup_stacks.pop(-1) and None if backup_stacks else None
+        # Slackware incorrectly patches posix_user to use lib64 instead of lib,
+        # but not usersite to match the location.
+        skip_slackware_user_scheme = (
+            user
+            and k in ("platlib", "purelib")
+            and not WINDOWS
+            and _looks_like_slackware_scheme()
+        )
+        if skip_slackware_user_scheme:
+            continue
+
+        # Both Debian and Red Hat patch Python to place the system site under
+        # /usr/local instead of /usr. Debian also places lib in dist-packages
+        # instead of site-packages, but the /usr/local check should cover it.
+        skip_linux_system_special_case = (
+            not (user or home or prefix or running_under_virtualenv())
+            and old_v.parts[1:3] == ("usr", "local")
+            and len(new_v.parts) > 1
+            and new_v.parts[1] == "usr"
+            and (len(new_v.parts) < 3 or new_v.parts[2] != "local")
+            and (_looks_like_red_hat_scheme() or _looks_like_debian_scheme())
+        )
+        if skip_linux_system_special_case:
+            continue
+
+        # On Python 3.7 and earlier, sysconfig does not include sys.abiflags in
+        # the "pythonX.Y" part of the path, but distutils does.
+        skip_sysconfig_abiflag_bug = (
+            sys.version_info < (3, 8)
+            and not WINDOWS
+            and k in ("headers", "platlib", "purelib")
+            and tuple(_fix_abiflags(old_v.parts)) == new_v.parts
+        )
+        if skip_sysconfig_abiflag_bug:
+            continue
+
+        # MSYS2 MINGW's sysconfig patch does not include the "site-packages"
+        # part of the path. This is incorrect and will be fixed in MSYS.
+        skip_msys2_mingw_bug = (
+            WINDOWS and k in ("platlib", "purelib") and _looks_like_msys2_mingw_scheme()
+        )
+        if skip_msys2_mingw_bug:
+            continue
+
+        # CPython's POSIX install script invokes pip (via ensurepip) against the
+        # interpreter located in the source tree, not the install site. This
+        # triggers special logic in sysconfig that's not present in distutils.
+        # https://github.com/python/cpython/blob/8c21941ddaf/Lib/sysconfig.py#L178-L194
+        skip_cpython_build = (
+            sysconfig.is_python_build(check_home=True)
+            and not WINDOWS
+            and k in ("headers", "include", "platinclude")
+        )
+        if skip_cpython_build:
+            continue
+
+        warning_contexts.append((old_v, new_v, f"scheme.{k}"))
+
+    if not warning_contexts:
+        return old
+
+    # Check if this path mismatch is caused by distutils config files. Those
+    # files will no longer work once we switch to sysconfig, so this raises a
+    # deprecation message for them.
+    default_old = _distutils.distutils_scheme(
+        dist_name,
+        user,
+        home,
+        root,
+        isolated,
+        prefix,
+        ignore_config_files=True,
     )
-    smExpr.set_fail_action(lambda a, b, c, d: reset_stack())
-    blockStatementExpr.ignore(_bslash + LineEnd())
-    return smExpr.set_name("indented block")
+    if any(default_old[k] != getattr(old, k) for k in SCHEME_KEYS):
+        deprecated(
+            reason=(
+                "Configuring installation scheme with distutils config files "
+                "is deprecated and will no longer work in the near future. If you "
+                "are using a Homebrew or Linuxbrew Python, please see discussion "
+                "at https://github.com/Homebrew/homebrew-core/issues/76621"
+            ),
+            replacement=None,
+            gone_in=None,
+        )
+        return old
+
+    # Post warnings about this mismatch so user can report them back.
+    for old_v, new_v, key in warning_contexts:
+        _warn_mismatched(old_v, new_v, key=key)
+    _log_context(user=user, home=home, root=root, prefix=prefix)
+
+    return old
+
+
+def get_bin_prefix() -> str:
+    new = _sysconfig.get_bin_prefix()
+    if _USE_SYSCONFIG:
+        return new
+
+    old = _distutils.get_bin_prefix()
+    if _warn_if_mismatch(pathlib.Path(old), pathlib.Path(new), key="bin_prefix"):
+        _log_context()
+    return old
+
+
+def get_bin_user() -> str:
+    return _sysconfig.get_scheme("", user=True).scripts
+
+
+def _looks_like_deb_system_dist_packages(value: str) -> bool:
+    """Check if the value is Debian's APT-controlled dist-packages.
+
+    Debian's ``distutils.sysconfig.get_python_lib()`` implementation returns the
+    default package path controlled by APT, but does not patch ``sysconfig`` to
+    do the same. This is similar to the bug worked around in ``get_scheme()``,
+    but here the default is ``deb_system`` instead of ``unix_local``. Ultimately
+    we can't do anything about this Debian bug, and this detection allows us to
+    skip the warning when needed.
+    """
+    if not _looks_like_debian_scheme():
+        return False
+    if value == "/usr/lib/python3/dist-packages":
+        return True
+    return False
+
+
+def get_purelib() -> str:
+    """Return the default pure-Python lib location."""
+    new = _sysconfig.get_purelib()
+    if _USE_SYSCONFIG:
+        return new
+
+    old = _distutils.get_purelib()
+    if _looks_like_deb_system_dist_packages(old):
+        return old
+    if _warn_if_mismatch(pathlib.Path(old), pathlib.Path(new), key="purelib"):
+        _log_context()
+    return old
+
+
+def get_platlib() -> str:
+    """Return the default platform-shared lib location."""
+    new = _sysconfig.get_platlib()
+    if _USE_SYSCONFIG:
+        return new
+
+    from . import _distutils
+
+    old = _distutils.get_platlib()
+    if _looks_like_deb_system_dist_packages(old):
+        return old
+    if _warn_if_mismatch(pathlib.Path(old), pathlib.Path(new), key="platlib"):
+        _log_context()
+    return old
 
 

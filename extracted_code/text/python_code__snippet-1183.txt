@@ -1,0 +1,11 @@
+parts = [
+    "Additional context:",
+    "user = %r",
+    "home = %r",
+    "root = %r",
+    "prefix = %r",
+]
+
+logger.log(_MISMATCH_LEVEL, "\n".join(parts), user, home, root, prefix)
+
+

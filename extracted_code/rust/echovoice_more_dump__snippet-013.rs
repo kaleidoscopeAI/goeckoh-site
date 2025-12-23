@@ -1,1 +1,1 @@
-pub extern "system" fn Java_com_kaleidoscope_body_DeviceHAL_nativeComputeQuantumKernel(
+pub extern "system" fn Java_com_kaleidoscope_body_DeviceHAL_nativeComputeCommitment(

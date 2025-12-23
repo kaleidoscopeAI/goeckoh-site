@@ -1,5 +1,5 @@
-let sumSq = 0;
-let zc = 0;
-let prev = frame[0];
-for (let i = 0; i < frame.length; i++) {
-const x = frame[i];
+const f0 = yinPitch(frame, sr, 80, 400);
+
+// HNR (dB) using autocorrelation peak ratio at pitch lag
+const hnr = estimateHNR(frame, sr, f0);
+

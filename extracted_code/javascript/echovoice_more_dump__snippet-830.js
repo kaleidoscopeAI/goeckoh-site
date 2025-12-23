@@ -1,2 +1,2 @@
-function TEBD_apply_cluster(clusterNodes: NodeState[]): ΔclusterNodes — returns ΔN_TEBD for nodes in cluster.
-function TEBD_Jv_cluster(clusterNodes, vCluster, ε): Δ≈(TEBD(N+εv)-TEBD(N))/ε — compute directional derivative.
++ const adjList: { j: number; w: number }[][] = new Array(m);
++ for (let i = 0; i < m; i++) {

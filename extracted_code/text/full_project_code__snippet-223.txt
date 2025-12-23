@@ -1,0 +1,7 @@
+if options is None:
+    return
+
+for opt in options:
+    sock.setsockopt(*opt)
+
+

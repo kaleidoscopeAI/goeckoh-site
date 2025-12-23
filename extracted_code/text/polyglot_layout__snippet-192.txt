@@ -1,0 +1,16 @@
+  rows = []
+  i = 0
+  for p in root.rglob("*"):
+      if i >= cap:
+          break
+      if p.is_file():
+          rows.append({
+               "root": root.name,
+               "relpath": p.relative_to(root).as_posix(),
+               "name": p.name,
+               "ext": p.suffix.lower(),
+               "size_bytes": p.stat().st_size
+          })
+          i += 1
+  return rows
+

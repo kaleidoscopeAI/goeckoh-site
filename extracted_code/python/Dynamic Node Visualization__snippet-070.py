@@ -1,1 +1,0 @@
-Integration with AGI visualization: Incorporated the dynamic node visualization from previous context (18,000 nodes, real-time morphing) by adding a bridge to the JS frontend via WebSockets. Nodes now represent UIN states, with shapes based on topics from LLM/crawler ingestion.

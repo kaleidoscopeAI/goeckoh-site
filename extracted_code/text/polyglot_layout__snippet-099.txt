@@ -1,0 +1,5 @@
+  t = m.get("tension", 0.0)
+  e = m.get("energy", 0.0)
+  n = m.get("size", 0)
+  mood = "calm" if t < 0.01 else "strained" if t < 0.04 else "overstretched"
+  return f"[tick={tick}] Tension={t:.5f} Energy={e:.5f} Size={n}. State feels {mood}. Strategy: {'tighten springs' if t < 0.02 else 'loosen a

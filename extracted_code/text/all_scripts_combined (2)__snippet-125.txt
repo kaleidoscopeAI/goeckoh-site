@@ -1,0 +1,12 @@
+if event:
+    strategies = suggest_for_event(event)
+elif category:
+    strategies = by_category(category)
+else:
+    strategies = suggest_for_event("anxious_speech")
+print("Recommended calming strategies:")
+for strategy in strategies:
+    cues = f" (cues: {', '.join(strategy.cues)})" if strategy.cues else ""
+    print(f"- [{strategy.category}] {strategy.title}{cues}\n  {strategy.description}\n")
+
+

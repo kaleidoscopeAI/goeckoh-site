@@ -1,2 +1,22 @@
-# <REDACTED: potential secret detected>
+    Deterministic modal superposition u_voice(n, t) using local RNG only.
+    """
+    vertices = np.asarray(vertices, dtype=np.float32)
+    modes = generate_sh_modes(vertices, K)
+    rng = np.random.default_rng(user_seed)
+
+    decay = rng.uniform(0.1, 0.5, K).astype(np.float32)
+    omega = rng.uniform(1.0, 10.0, K).astype(np.float32)
+    q = rng.uniform(0.5, 2.0, K).astype(np.float32)
+    mode_weights = rng.uniform(0.1, 1.0, K).astype(np.float32)
+
+    cos_theta = np.clip(vertices[:, 2], -1.0, 1.0)
+    ks = np.arange(K, dtype=int)
+    phis = np.array([procedural_phase(t, int(k), user_seed) for k in ks], dtype=np.float32)
+    envs = mode_weights * np.exp(-decay * t)
+
+    args = omega * t - q * cos_theta[:, np.newaxis] + phis[np.newaxis, :]
+    waves = np.cos(args) * modes.T  # [N, K]
+    u_total = np.sum(envs[np.newaxis, :] * waves, axis=1)
+    return u_total.astype(np.float32)
+
 

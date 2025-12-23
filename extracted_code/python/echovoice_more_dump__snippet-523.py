@@ -1,3 +1,1 @@
-import { NodeDatum, CognitiveConstruct, ConstructHistoryPoint } from "../types";
-import { ConstructLearner } from "./constructLearner";
-/* (All helper functions from the previous ProjectionService remain: mulberry32, makeDeterministicW,
+Given local two-site gates (G_{i,i+1} = \exp(-\mathrm{i},\delta t,h_{i,i+1})) (where (h_{i,i+1}) encodes pairwise interactions derived from (B_{ij})),

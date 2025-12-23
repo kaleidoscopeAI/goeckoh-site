@@ -1,0 +1,4 @@
+""" Exception when a disallowed or unallocated codepoint is used """
+pass
+
+

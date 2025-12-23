@@ -1,4 +1,2 @@
-Update the script to include resource-sharing logic, such as transferring energy from high-energy nodes to low-energy nodes.
-
-
+- Enable querying from the thought hub to find specific knowledge across nodes.
 

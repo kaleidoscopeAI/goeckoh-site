@@ -1,1 +1,0 @@
-    - The extended Lyapunov function that incorporates "curiosity tension" as a state variable ensures the whole system remains stable and convergent.

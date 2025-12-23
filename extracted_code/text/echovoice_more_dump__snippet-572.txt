@@ -1,0 +1,9 @@
+current_metrics = cognitive_system.cube.calculate_metrics()
+
+return jsonify({
+    "system_id": cognitive_system.system_id,
+    "metrics": current_metrics.__dict__,
+    "node_count": len(cognitive_system.cube.nodes),
+    "quantum_field_strength": float(np.mean(cognitive_system.quantum_field.field_strength))
+})
+

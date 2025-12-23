@@ -1,0 +1,6 @@
+The AI simulates user actions (typing, mouse clicks) to interact with the OS, bypassing low-level drivers.
+
+Simulated Actions: Mapped to ControlMapper intents, these include: set_cpu_frequency, set_display_gamma, and control_network_qos.
+
+quantum_write acts as a placeholder for low-level, bit-level hardware register manipulation.
+

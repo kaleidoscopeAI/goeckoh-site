@@ -1,4 +1,4 @@
-  terminfo/74 (268 files), 3 more. These directories are excluded from snapshots
-  and undo cleanup. Adjust `ghost_snapshot.ignore_large_untracked_dirs` to
-  change this behavior.
+    18      def __init__(self):
+    19 +        """Neurocoherence Lattice (formerly 'Crystalline Heart')."""
+    20          # 1024-node emotional regulation lattice
 

@@ -1,11 +1,12 @@
-class ResourceLibrary:
-    def __init__(self):
-        self.resources = {
-            "object_detection": "pretrained_yolo_model",
-            "text_generation": "pretrained_gpt_model",
-            "image_annotation": "annotation_api",
-        }
+class Community:
+    def __init__(self, focus_area):
+        self.focus_area = focus_area
+        self.members = []
 
-    def get_resource(self, resource_name):
-        return self.resources.get(resource_name, "Resource not available.")
+    def add_member(self, node):
+        self.members.append(node)
+
+    def share_knowledge(self, topic, data):
+        for member in self.members:
+            member.receive_data("community", topic, data)
 

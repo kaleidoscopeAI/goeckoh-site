@@ -1,0 +1,5 @@
+entry = get_export_entry(specification)
+if entry is not None and entry.suffix is None:
+    raise MissingCallableSuffix(str(entry))
+
+

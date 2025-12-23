@@ -1,0 +1,4 @@
+'energy_ratio': 0.7,
+'threat_level': 0.2,
+'uncertainty': 0.3,
+'mode': 'learning'

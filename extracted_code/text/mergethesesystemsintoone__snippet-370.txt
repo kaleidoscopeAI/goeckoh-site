@@ -1,0 +1,4 @@
+  new_harmonic = np.mean(self.frequency) * (1.5 + np.random.random())
+  if new_harmonic not in self.harmonics:
+      self.harmonics.append(new_harmonic)
+

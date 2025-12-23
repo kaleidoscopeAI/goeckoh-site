@@ -1,2 +1,0 @@
-- Lyapunov function extended:
-

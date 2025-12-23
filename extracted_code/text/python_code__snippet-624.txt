@@ -1,0 +1,9 @@
+"""Information regarding a row."""
+
+style: Optional[StyleType] = None
+"""Style to apply to row."""
+
+end_section: bool = False
+"""Indicated end of section, which will force a line beneath the row."""
+
+

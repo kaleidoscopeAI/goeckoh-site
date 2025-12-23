@@ -1,15 +1,19 @@
-def exists_action() -> Option:
-    return Option(
-        # Option when path already exist
-        "--exists-action",
-        dest="exists_action",
-        type="choice",
-        choices=["s", "i", "w", "b", "a"],
-        default=[],
-        action="append",
-        metavar="action",
-        help="Default action when a path already exists: "
-        "(s)witch, (i)gnore, (w)ipe, (b)ackup, (a)bort.",
-    )
+from .console import Console
+
+c = Console()
+
+from .box import DOUBLE, ROUNDED
+from .padding import Padding
+
+p = Panel(
+    "Hello, World!",
+    title="rich.Panel",
+    style="white on blue",
+    box=DOUBLE,
+    padding=1,
+)
+
+c.print()
+c.print(p)
 
 

@@ -1,0 +1,3 @@
+doc: agi_core.py
+functions: now_seconds, stable_hash_bytes
+classes: BitRegister, SimulatedHardware, RelationalMatrix, ThoughtEngines, EmotionalChemistry, MemorySystem, Planner, AGISystem

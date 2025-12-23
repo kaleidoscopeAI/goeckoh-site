@@ -1,2 +1,1 @@
-    Many more from PDF: e.g., Φ IIT = 0.5 log(det(cov)/(detA detB)) (bits: info integration).
-
+Updated App.tsx (Real aurora from V-A-S coh, symbols as glyphs with stance dir)

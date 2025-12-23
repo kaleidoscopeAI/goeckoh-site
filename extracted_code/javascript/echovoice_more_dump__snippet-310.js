@@ -1,5 +1,1 @@
-export async function runReflectionAndMetaUpdate(node: NodeState, logs: any[]) {
-let totalRegret = 0;
-let emoRegretCorrelation = 0;
-for (const t of logs) {
-const regret = Math.max(0, t.optimalValue - t.actualValue);
+for (let i = 0; i < this.externalInputs.length; i++) this.externalInputs[i] *= 0.9;

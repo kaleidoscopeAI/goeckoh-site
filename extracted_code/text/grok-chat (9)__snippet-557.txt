@@ -1,0 +1,25 @@
+1091              if not (self._reference_wav and self._reference_wav.exists
+      ()):
+1092 -                return
+1092 +                return 0.0, 0.0
+1093              # Coqui XTTS returns a waveform at the model's sample rate
+      .
+     ⋮
+1105              if not (self._reference_wav and self._reference_wav.exists
+      ()):
+1106 -                return
+1106 +                return 0.0, 0.0
+1107              try:
+     ⋮
+1115                  self._rust_vc = None
+1116 -                return
+1116 +                return 0.0, 0.0
+1117          elif self._tts_mode in ("piper", "piper_vc") and self._sherpa_
+      tts is not None:
+     ⋮
+1134                  if self._target_lpc_a is None:
+1135 -                    return
+1135 +                    return 0.0, 0.0
+1136                  audio = self._apply_voice_conversion(audio, sr=input_s
+      r)
+

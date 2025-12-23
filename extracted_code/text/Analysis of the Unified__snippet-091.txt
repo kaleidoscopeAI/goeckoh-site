@@ -1,0 +1,21 @@
+# random R
+R = (np.random.randn(dS,dA) + 1j*np.random.randn(dS,dA)) * 0.5
+core = RelationalCore(R)
+print("dims:", core.dims)
+print("entanglement entropy S =", core.entanglement_entropy())
+print("bridge strengths:\n", core.bridge_strength_map(gamma=1.0))
+print("born probs:", core.probs_born())
+print("softprod probs:", core.probs_softlogprod(alpha=1.0,beta=2.0))
+print("hybrid probs:", core.measure_probs(mode='hybrid', mix=0.4, product_params={'alpha':1.0,'beta':2.0}))
+# apply entanglement correction
+Rcorr = core.entanglement_corrected_R(kappa=0.3)
+core2 = RelationalCore(Rcorr)
+print("S after correction:", core2.entanglement_entropy())
+# lindblad step example
+d = dS*dA
+H = np.eye(d, dtype=np.complex128) * 0.01
+Ls = build_jump_ops_from_stress(core, max_ops=6)
+core_after = core.lindblad_step_joint(H, Ls, dt=0.01)
+print("entropy after small lindblad step:", core_after.entanglement_entropy())
+return core, core2, core_after
+

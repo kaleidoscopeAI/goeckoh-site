@@ -1,0 +1,28 @@
+1914          start_time = time.time()
+1915 +
+1916 +        # Lightweight path for latency-constrained demos; skips heavy physics/quantum.
+1917 +        if os.environ.get("GOECKOH_LIGHT_MODE", "").lower() in ("1", "true", "yes"):
+1918 +            gcl = 0.93
+1919 +            stress = 1.0 - gcl
+1920 +            heart_sample = []
+1921 +            heart_topk: List[Dict[str, Any]] = []
+1922 +            return {
+1923 +                "response_text": text_input,
+1924 +                "gcl": gcl,
+1925 +                "stress": stress,
+1926 +                "system_mode": "FLOW",
+1927 +                "heart_name": "Neurocoherence Lattice",
+1928 +                "heart_sample": heart_sample,
+1929 +                "heart_topk": heart_topk,
+1930 +                "heart_rust": {},
+1931 +                "emotional_state": self.emotional_state,
+1932 +                "metrics": {"gcl": gcl, "mode": "FLOW", "stress": stress, "timestamp": time.time()},
+1933 +                "processing_time": time.time() - start_time,
+1934 +                "psi_state": {
+1935 +                    "t": self.psi_state.t + 1,
+1936 +                    "world": {"current_input": text_input, "audio_available": audio_input is not None},
+1937 +                    "self_model": {"emotional_coherence": gcl, "system_load": 0.0},
+1938 +                },
+1939 +            }
+1940          prosody_features = None
+

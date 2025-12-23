@@ -1,0 +1,6 @@
+ChunkedEncodingError,
+ConnectionError,
+ContentDecodingError,
+HTTPError,
+InvalidJSONError,
+InvalidURL,

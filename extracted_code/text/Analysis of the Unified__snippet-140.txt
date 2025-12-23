@@ -1,0 +1,3 @@
+"emotional_valence_boost": 0.0,
+"quantum_entanglement_strength": 0.0,
+"mimicry_force_modifier": 0.0

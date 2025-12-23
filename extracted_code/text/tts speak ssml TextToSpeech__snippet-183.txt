@@ -1,0 +1,1 @@
+      val arousal = ((avgPitch / 150.0) + (pitchVariance / 50.0) + (volume

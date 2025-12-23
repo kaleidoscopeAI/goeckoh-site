@@ -1,5 +1,14 @@
-def create_new_node(existing_nodes, dna_base):
-    node_id_counter = len(existing_nodes)
-    new_node = Node(node_id_counter, f"{dna_base}_child{node_id_counter}", resources={})
-    existing_nodes.append(new_node)
+import networkx as nx
+import matplotlib.pyplot as plt
+
+class MirroredNetwork:
+    def __init__(self):
+        self.graph = nx.Graph()
+
+    def add_node(self, node_id):
+        self.graph.add_node(node_id)
+
+    def visualize(self):
+        nx.draw(self.graph, with_labels=True, node_color="lightblue")
+        plt.show()
 

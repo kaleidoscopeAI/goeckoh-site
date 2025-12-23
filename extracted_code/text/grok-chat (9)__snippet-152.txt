@@ -1,0 +1,3 @@
+<host>:8080/mirror/stream, parses corrected/transcript text, and feeds it
+directly into the visualization targets in real time; shows a tiny “live”
+badge when connected.

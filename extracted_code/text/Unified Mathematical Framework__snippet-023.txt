@@ -1,0 +1,6 @@
+<1 ms per 30–512 ms chunk on CPU
+Trained on 13k+ hours, 100+ languages, all accents, dysfluencies, stutters
+Ignores pure vocal stims, breathing, crying, background noise
+ONNX/JIT version is ~1 MB
+MIT license, fully offline, no internet ever
+

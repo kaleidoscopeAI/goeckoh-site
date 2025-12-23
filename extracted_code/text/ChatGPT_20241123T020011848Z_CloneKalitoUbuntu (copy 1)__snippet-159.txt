@@ -1,0 +1,2 @@
+- Use cosine similarity for textual descriptions.
+- Use perceptual hashing (e.g.,

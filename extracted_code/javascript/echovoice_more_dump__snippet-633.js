@@ -1,2 +1,2 @@
-let maxAbs = 0;
-for (const p of coords) {
+const filePath = path.join(W_DIR, `${id}.json`);
+let payload: any = null;

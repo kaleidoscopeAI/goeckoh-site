@@ -1,2 +1,4 @@
-# <REDACTED: potential secret detected>
+"""This is an unsupported version."""
+pass
+
 

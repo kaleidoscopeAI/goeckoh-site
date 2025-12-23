@@ -1,0 +1,5 @@
+  text = payload.get("text","").strip()
+  if not text: return JSONResponse({"ok":False,"error":"empty"}, status_code=400)
+  out = await brain.think(text)
+  return out
+

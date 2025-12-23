@@ -1,6 +1,40 @@
-import re
-from typing import Iterable, List, Tuple
+class CheckCommand(Command):
+    """Verify installed packages have compatible dependencies."""
 
-from ._loop import loop_last
-from .cells import cell_len, chop_cells
+    usage = """
+      %prog [options]"""
+
+    def run(self, options: Values, args: List[str]) -> int:
+        package_set, parsing_probs = create_package_set_from_installed()
+        warn_legacy_versions_and_specifiers(package_set)
+        missing, conflicting = check_package_set(package_set)
+
+        for project_name in missing:
+            version = package_set[project_name].version
+            for dependency in missing[project_name]:
+                write_output(
+                    "%s %s requires %s, which is not installed.",
+                    project_name,
+                    version,
+                    dependency[0],
+                )
+
+        for project_name in conflicting:
+            version = package_set[project_name].version
+            for dep_name, dep_version, req in conflicting[project_name]:
+                write_output(
+                    "%s %s has requirement %s, but you have %s %s.",
+                    project_name,
+                    version,
+                    req,
+                    dep_name,
+                    dep_version,
+                )
+
+        if missing or conflicting or parsing_probs:
+            return ERROR
+        else:
+            write_output("No broken requirements found.")
+            return SUCCESS
+
 

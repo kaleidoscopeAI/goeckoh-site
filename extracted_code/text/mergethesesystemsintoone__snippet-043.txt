@@ -1,1 +1,1 @@
-class DataWrapper:
+• Task Prioritization: Tasks are prioritized using a weighted score of urgency, complexity, and available resources, ensuring that important tasks are addressed efficiently.

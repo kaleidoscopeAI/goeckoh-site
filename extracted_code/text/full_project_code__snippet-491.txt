@@ -1,0 +1,2 @@
+\let\%(cp)s@ul=\relax \let\%(cp)s@tc=\relax%%
+\let\%(cp)s@bc=\relax \let\%(cp)s@ff=\relax}

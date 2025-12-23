@@ -1,2 +1,1 @@
-Integrating an autonomous web crawler into your cognitive architecture transforms it from a passive processor into a truly active and adaptive agent capable of seeking out new information to resolve its uncertainties. The comprehensive addendum you’ve outlined carefully respects the foundational principles of your cognitive system — stability, modularity, and integrated feedback.
-
+The crawler leverages signals from speculative and kaleidoscopic processing (`O_speculation`, `O_kaleidoscope`), closing the loop by reducing curiosity tension, which mathematically can be integrated into the Lyapunov stability proof as a controlled feedback perturbation.

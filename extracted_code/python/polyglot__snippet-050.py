@@ -1,1 +1,1 @@
-async def get_dna(self, gen: int) -> KnowledgeDNA:
+def __init__(self, dim: int = 16):

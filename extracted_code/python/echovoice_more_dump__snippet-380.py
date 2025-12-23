@@ -1,1 +1,4 @@
-async def _discover_urls(self, query, max_results):
+# Web-based interface using Flask (optional addition)
+from flask import Flask, render_template, request, jsonify
+import threading
+class WebInterface:

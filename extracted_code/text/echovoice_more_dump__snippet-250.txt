@@ -1,1 +1,7 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+• Goal: Evaluate against consciousness metrics and refine iteratively.
+• Tasks:
+    ◦ Measure Φ proxies and GWT dynamics (e.g., information integration).
+    ◦ Analyze emergent behaviors and conduct lesion studies.
+    ◦ Refine architecture and algorithms based on results.
+• Tools: All prior tools, advanced analytics.
+• Evaluation: Assess theoretical alignment, robustness, and emergent properties.

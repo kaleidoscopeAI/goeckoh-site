@@ -1,25 +1,18 @@
-from __future__ import annotations
+def self_correcting(max_retries: int = 3, delay: float = 1.0):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            last_exc: Optional[Exception] = None
+            for attempt in range(max_retries):
+                try:
+                    return func(*args, **kwargs)
+                except Exception as e:  # pragma: no cover - defensive retry
+                    last_exc = e
+                    print(f"[SELF-CORRECT] {func.__name__} failed: {e} (attempt {attempt+1}/{max_retries})")
+                    time.sleep(delay)
+            raise RuntimeError(f"{func.__name__} failed after {max_retries} retries") from last_exc
 
-import json
-import math
-import os
-import queue
-import random
-import re
-import subprocess
-import sys
-import threading
-import time
-from dataclasses import dataclass, field
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+        return wrapper
 
-import librosa
-import networkx as nx
-import numpy as np
-import pyttsx3
-import sounddevice as sd
-import torch
-import whisper
-from scipy.signal import butter, lfilter
+    return decorator
+
 

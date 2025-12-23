@@ -1,1 +1,10 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+Kaleidoscope (Software Analysis):
+
+    kaleidoscope-merged.py: The core engine for ingesting, analyzing, and "mimicking" (re-writing) software.
+
+    code-reusability-module(2).py: The key innovation for Kaleidoscope, defining a Unified Abstract Syntax Tree (AST) that allows the system to represent any programming language in a single, common format for analysis.
+
+Autonomous Processor (Data Analysis):
+
+    autonomous-processor.py: This module acts as the system's perceptual and analytical arm for unstructured data. It autonomously scans a data environment, identifies patterns, detects anomalies, and discovers connections in various file types (CSV, JSON, text).
+

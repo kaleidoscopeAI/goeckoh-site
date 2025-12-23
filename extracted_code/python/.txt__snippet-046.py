@@ -1,1 +1,1 @@
-def _fallback_response(self, prompt: str) -> str:
+def audio_callback(self, indata, frames, time_info, status) -> None:

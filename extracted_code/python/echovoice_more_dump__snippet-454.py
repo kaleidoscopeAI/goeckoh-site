@@ -1,1 +1,1 @@
-import { DEFAULT_P, DEFAULT_PARAMS } from "../config/emotionDefaults";
+6. Interactive orbit camera to explore the 3D network from any angle.

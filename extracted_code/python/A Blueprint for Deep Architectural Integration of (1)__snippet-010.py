@@ -1,1 +1,0 @@
-This document outlines the precise, step-by-step process for this deep integration, transforming a publicly available model from the Hugging Face Hub into a core, efficient, and stateless Thought Engine (O_i).

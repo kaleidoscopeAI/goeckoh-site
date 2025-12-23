@@ -1,1 +1,1 @@
-score_d := compute score for each candidate using Affinity/Cost/Uncertainty
+I can also package this into a ready-to-run ZIP with npm install scripts, Firestore setup instructions, and start scripts for server + React frontend,

@@ -1,1 +1,4 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+Equation: ṡ_i = η Σ w_ij (s_j - s_i) + u_LLM + ξ (ξ ~ N(0, σ^2)).
+Transformation: Embeddings → evolved semantics with diffusion/mutation.
+Coding: Vector ops; gate u_LLM with clip(||Δ||_∞ ≤ 0.5).
+

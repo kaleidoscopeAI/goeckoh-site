@@ -1,0 +1,6 @@
+agi = AGIOrchestrator(redis)
+asyncio.run(agi.run())
+
+
+
+

@@ -1,0 +1,6 @@
+g = globals()
+for k, v in state.items():
+    g['_sset_' + _state_vars[k]](k, g[k], v)
+return state
+
+

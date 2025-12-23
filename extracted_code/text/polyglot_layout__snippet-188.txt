@@ -1,0 +1,1 @@
+  display_dataframe_to_user("Signal hits (subset)", signals_df.head(200))

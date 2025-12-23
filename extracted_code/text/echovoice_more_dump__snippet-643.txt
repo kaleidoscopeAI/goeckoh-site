@@ -1,0 +1,8 @@
+# cooperative if same role and blue/blue bias, adversarial if red vs blue
+if a == b:
+    return 1.0
+if (a == 'red' and b == 'blue') or (a == 'blue' and b == 'red'):
+    return -1.0
+return 0.0
+
+

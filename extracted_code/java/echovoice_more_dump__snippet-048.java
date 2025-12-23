@@ -1,7 +1,4 @@
-private W: number[][] | null = null; // [N x M]
-private persistenceDecay: number;
-private historyLength: number;
-private seed: number;
-private subscribers: Set<Subscriber> = new Set();
-private constructs: CognitiveConstruct[] = [];
-private lastUpdateTs = 0;
+private matchToImagePoints(targets: NodeTarget[], points: number[][]): void {
+    points.forEach((p, i) => {
+        targets[i % targets.length].position.set(...p);
+    });

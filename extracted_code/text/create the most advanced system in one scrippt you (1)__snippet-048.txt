@@ -1,0 +1,3 @@
+- Larger (more negative) N1 in delayed/external conditions.
+- Suppressed (less negative) N1 in real‑time self‑voice condition, corresponding to a **medium‑to‑large within‑subject effect** on the order you power for.
+

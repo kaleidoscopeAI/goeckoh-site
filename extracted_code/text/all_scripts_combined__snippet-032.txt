@@ -1,7 +1,0 @@
-class AudioData:
-    """Raw audio data."""
-
-    waveform: np.ndarray
-    sample_rate: int
-
-

@@ -1,19 +1,23 @@
-def now_seconds() -> float:
-    return time.time()
+def enforce_first_person(text: str) -> str:
+    if not text: return ""
+    t = text.strip().strip('"').strip("'")
+    patterns = [
+        (r"\byou are\b", "I am"), (r"\byou're\b", "I'm"), (r"\byou were\b", "I was"),
+        (r"\byou'll\b", "I'll"), (r"\byou've\b", "I've"), (r"\byour\b", "my"),
+        (r"\byours\b", "mine"), (r"\byourself\b", "myself"), (r"\byou\b", "I"),
+    ]
+    for pattern, repl in patterns:
+        t = re.sub(pattern, repl, t, flags=re.IGNORECASE)
+    return t
 
-def stable_hash_bytes(s: str, length: int = 256) -> bytes:
-    # deterministic hashing into bytes array using SHAKE-like approach without external libs
-    import hashlib
-    h = hashlib.blake2b(digest_size=32)
-    h.update(s.encode("utf8"))
-    base = h.digest()
-    out = bytearray()
-    i = 0
-    while len(out) < length:
-        h2 = hashlib.blake2b(digest_size=32)
-        h2.update(base)
-        h2.update(bytes([i]))
-        out.extend(h2.digest())
-        i += 1
-    return bytes(out[:length])
+def hash_embedding(text: str, dim: int) -> np.ndarray:
+    vec = np.zeros(dim, dtype=np.float32)
+    if not text: return vec
+    for tok in text.lower().split():
+        h = hashlib.sha256(tok.encode("utf-8")).digest()
+        idx = struct.unpack("Q", h[:8])[0] % dim
+        sign = 1.0 if (struct.unpack("I", h[8:12])[0] % 2 == 0) else -1.0
+        vec[idx] += sign
+    norm = np.linalg.norm(vec) + 1e-8
+    return vec / norm
 

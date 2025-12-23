@@ -1,0 +1,2 @@
+"MirrorEngine": "explores the network and the knowledge data without standard constrains. Prioritizes different values such as novelty, randomness.",
+      "TraitManager": "Governs trait inheritence, interactions between attributes.",

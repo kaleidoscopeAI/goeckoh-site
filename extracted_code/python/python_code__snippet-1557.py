@@ -1,2 +1,18 @@
-# the vcs package don't need to import deeper than `pip._internal.vcs`.
-# (The test directory may still need to import from a vcs sub-package.)
+"""Applies highlighting from a list of regular expressions."""
+
+highlights: List[str] = []
+base_style: str = ""
+
+def highlight(self, text: Text) -> None:
+    """Highlight :class:`rich.text.Text` using regular expressions.
+
+    Args:
+        text (~Text): Text to highlighted.
+
+    """
+
+    highlight_regex = text.highlight_regex
+    for re_highlight in self.highlights:
+        highlight_regex(re_highlight, style_prefix=self.base_style)
+
+

@@ -1,7 +1,1 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
-import numpy as np
-import ctypes
-import time
-import os
-
+(operationalized as a symmetric matrix derived from normalized similarity and coherence metrics Sij ∈ [0, 1]). The geometric flow receives Teff as a

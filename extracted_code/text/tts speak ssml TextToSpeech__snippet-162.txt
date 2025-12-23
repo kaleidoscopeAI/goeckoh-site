@@ -1,0 +1,19 @@
+                  recorder.stop()
+                  break
+              }
+          } else {
+              silenceStart = 0L
+          }
+      }
+
+      // Transcribe the WAV
+      whisper.setFilePath(waveFile.absolutePath)
+      whisper.setAction(Whisper.ACTION_TRANSCRIBE)
+      whisper.setListener(object : IWhisperListener {
+          override fun onUpdateReceived(message: String) {
+              Log.d("Whisper", message)
+          }
+
+          override fun onResultReceived(result: String) {
+              val rawText = result.trim()
+              val prosody = extractProsody(audioBuffer.toByteArray(),

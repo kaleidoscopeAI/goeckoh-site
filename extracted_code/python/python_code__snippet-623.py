@@ -1,288 +1,148 @@
-def socket_timeout(seconds=15):
-    cto = socket.getdefaulttimeout()
+def issue_warning(*args, **kw):
+    level = 1
+    g = globals()
     try:
-        socket.setdefaulttimeout(seconds)
-        yield
-    finally:
-        socket.setdefaulttimeout(cto)
+        # find the first stack frame that is *not* code in
+        # the pkg_resources module, to use for the warning
+        while sys._getframe(level).f_globals is g:
+            level += 1
+    except ValueError:
+        pass
+    warnings.warn(stacklevel=level + 1, *args, **kw)
 
 
-class cached_property(object):
-
-    def __init__(self, func):
-        self.func = func
-        # for attr in ('__name__', '__module__', '__doc__'):
-        #     setattr(self, attr, getattr(func, attr, None))
-
-    def __get__(self, obj, cls=None):
-        if obj is None:
-            return self
-        value = self.func(obj)
-        object.__setattr__(obj, self.func.__name__, value)
-        # obj.__dict__[self.func.__name__] = value = self.func(obj)
-        return value
-
-
-def convert_path(pathname):
-    """Return 'pathname' as a name that will work on the native filesystem.
-
-    The path is split on '/' and put back together again using the current
-    directory separator.  Needed because filenames in the setup script are
-    always supplied in Unix style, and have to be converted to the local
-    convention before we can actually use them in the filesystem.  Raises
-    ValueError on non-Unix-ish systems if 'pathname' either starts or
-    ends with a slash.
+def parse_requirements(strs):
     """
-    if os.sep == '/':
-        return pathname
-    if not pathname:
-        return pathname
-    if pathname[0] == '/':
-        raise ValueError("path '%s' cannot be absolute" % pathname)
-    if pathname[-1] == '/':
-        raise ValueError("path '%s' cannot end with '/'" % pathname)
+    Yield ``Requirement`` objects for each specification in `strs`.
 
-    paths = pathname.split('/')
-    while os.curdir in paths:
-        paths.remove(os.curdir)
-    if not paths:
-        return os.curdir
-    return os.path.join(*paths)
+    `strs` must be a string, or a (possibly-nested) iterable thereof.
+    """
+    return map(Requirement, join_continuation(map(drop_comment, yield_lines(strs))))
 
 
-class FileOperator(object):
-
-    def __init__(self, dry_run=False):
-        self.dry_run = dry_run
-        self.ensured = set()
-        self._init_record()
-
-    def _init_record(self):
-        self.record = False
-        self.files_written = set()
-        self.dirs_created = set()
-
-    def record_as_written(self, path):
-        if self.record:
-            self.files_written.add(path)
-
-    def newer(self, source, target):
-        """Tell if the target is newer than the source.
-
-        Returns true if 'source' exists and is more recently modified than
-        'target', or if 'source' exists and 'target' doesn't.
-
-        Returns false if both exist and 'target' is the same age or younger
-        than 'source'. Raise PackagingFileError if 'source' does not exist.
-
-        Note that this test is not very accurate: files created in the same
-        second will have the same "age".
-        """
-        if not os.path.exists(source):
-            raise DistlibException("file '%r' does not exist" %
-                                   os.path.abspath(source))
-        if not os.path.exists(target):
-            return True
-
-        return os.stat(source).st_mtime > os.stat(target).st_mtime
-
-    def copy_file(self, infile, outfile, check=True):
-        """Copy a file respecting dry-run and force flags.
-        """
-        self.ensure_dir(os.path.dirname(outfile))
-        logger.info('Copying %s to %s', infile, outfile)
-        if not self.dry_run:
-            msg = None
-            if check:
-                if os.path.islink(outfile):
-                    msg = '%s is a symlink' % outfile
-                elif os.path.exists(outfile) and not os.path.isfile(outfile):
-                    msg = '%s is a non-regular file' % outfile
-            if msg:
-                raise ValueError(msg + ' which would be overwritten')
-            shutil.copyfile(infile, outfile)
-        self.record_as_written(outfile)
-
-    def copy_stream(self, instream, outfile, encoding=None):
-        assert not os.path.isdir(outfile)
-        self.ensure_dir(os.path.dirname(outfile))
-        logger.info('Copying stream %s to %s', instream, outfile)
-        if not self.dry_run:
-            if encoding is None:
-                outstream = open(outfile, 'wb')
-            else:
-                outstream = codecs.open(outfile, 'w', encoding=encoding)
-            try:
-                shutil.copyfileobj(instream, outstream)
-            finally:
-                outstream.close()
-        self.record_as_written(outfile)
-
-    def write_binary_file(self, path, data):
-        self.ensure_dir(os.path.dirname(path))
-        if not self.dry_run:
-            if os.path.exists(path):
-                os.remove(path)
-            with open(path, 'wb') as f:
-                f.write(data)
-        self.record_as_written(path)
-
-    def write_text_file(self, path, data, encoding):
-        self.write_binary_file(path, data.encode(encoding))
-
-    def set_mode(self, bits, mask, files):
-        if os.name == 'posix' or (os.name == 'java' and os._name == 'posix'):
-            # Set the executable bits (owner, group, and world) on
-            # all the files specified.
-            for f in files:
-                if self.dry_run:
-                    logger.info("changing mode of %s", f)
-                else:
-                    mode = (os.stat(f).st_mode | bits) & mask
-                    logger.info("changing mode of %s to %o", f, mode)
-                    os.chmod(f, mode)
-
-    set_executable_mode = lambda s, f: s.set_mode(0o555, 0o7777, f)
-
-    def ensure_dir(self, path):
-        path = os.path.abspath(path)
-        if path not in self.ensured and not os.path.exists(path):
-            self.ensured.add(path)
-            d, f = os.path.split(path)
-            self.ensure_dir(d)
-            logger.info('Creating %s' % path)
-            if not self.dry_run:
-                os.mkdir(path)
-            if self.record:
-                self.dirs_created.add(path)
-
-    def byte_compile(self,
-                     path,
-                     optimize=False,
-                     force=False,
-                     prefix=None,
-                     hashed_invalidation=False):
-        dpath = cache_from_source(path, not optimize)
-        logger.info('Byte-compiling %s to %s', path, dpath)
-        if not self.dry_run:
-            if force or self.newer(path, dpath):
-                if not prefix:
-                    diagpath = None
-                else:
-                    assert path.startswith(prefix)
-                    diagpath = path[len(prefix):]
-            compile_kwargs = {}
-            if hashed_invalidation and hasattr(py_compile,
-                                               'PycInvalidationMode'):
-                compile_kwargs[
-                    'invalidation_mode'] = py_compile.PycInvalidationMode.CHECKED_HASH
-            py_compile.compile(path, dpath, diagpath, True,
-                               **compile_kwargs)  # raise error
-        self.record_as_written(dpath)
-        return dpath
-
-    def ensure_removed(self, path):
-        if os.path.exists(path):
-            if os.path.isdir(path) and not os.path.islink(path):
-                logger.debug('Removing directory tree at %s', path)
-                if not self.dry_run:
-                    shutil.rmtree(path)
-                if self.record:
-                    if path in self.dirs_created:
-                        self.dirs_created.remove(path)
-            else:
-                if os.path.islink(path):
-                    s = 'link'
-                else:
-                    s = 'file'
-                logger.debug('Removing %s %s', s, path)
-                if not self.dry_run:
-                    os.remove(path)
-                if self.record:
-                    if path in self.files_written:
-                        self.files_written.remove(path)
-
-    def is_writable(self, path):
-        result = False
-        while not result:
-            if os.path.exists(path):
-                result = os.access(path, os.W_OK)
-                break
-            parent = os.path.dirname(path)
-            if parent == path:
-                break
-            path = parent
-        return result
-
-    def commit(self):
-        """
-        Commit recorded changes, turn off recording, return
-        changes.
-        """
-        assert self.record
-        result = self.files_written, self.dirs_created
-        self._init_record()
-        return result
-
-    def rollback(self):
-        if not self.dry_run:
-            for f in list(self.files_written):
-                if os.path.exists(f):
-                    os.remove(f)
-            # dirs should all be empty now, except perhaps for
-            # __pycache__ subdirs
-            # reverse so that subdirs appear before their parents
-            dirs = sorted(self.dirs_created, reverse=True)
-            for d in dirs:
-                flist = os.listdir(d)
-                if flist:
-                    assert flist == ['__pycache__']
-                    sd = os.path.join(d, flist[0])
-                    os.rmdir(sd)
-                os.rmdir(d)  # should fail if non-empty
-        self._init_record()
+class RequirementParseError(packaging.requirements.InvalidRequirement):
+    "Compatibility wrapper for InvalidRequirement"
 
 
-def resolve(module_name, dotted_path):
-    if module_name in sys.modules:
-        mod = sys.modules[module_name]
-    else:
-        mod = __import__(module_name)
-    if dotted_path is None:
-        result = mod
-    else:
-        parts = dotted_path.split('.')
-        result = getattr(mod, parts.pop(0))
-        for p in parts:
-            result = getattr(result, p)
-    return result
-
-
-class ExportEntry(object):
-
-    def __init__(self, name, prefix, suffix, flags):
-        self.name = name
-        self.prefix = prefix
-        self.suffix = suffix
-        self.flags = flags
-
-    @cached_property
-    def value(self):
-        return resolve(self.prefix, self.suffix)
-
-    def __repr__(self):  # pragma: no cover
-        return '<ExportEntry %s = %s:%s %s>' % (self.name, self.prefix,
-                                                self.suffix, self.flags)
+class Requirement(packaging.requirements.Requirement):
+    def __init__(self, requirement_string):
+        """DO NOT CALL THIS UNDOCUMENTED METHOD; use Requirement.parse()!"""
+        super(Requirement, self).__init__(requirement_string)
+        self.unsafe_name = self.name
+        project_name = safe_name(self.name)
+        self.project_name, self.key = project_name, project_name.lower()
+        self.specs = [(spec.operator, spec.version) for spec in self.specifier]
+        self.extras = tuple(map(safe_extra, self.extras))
+        self.hashCmp = (
+            self.key,
+            self.url,
+            self.specifier,
+            frozenset(self.extras),
+            str(self.marker) if self.marker else None,
+        )
+        self.__hash = hash(self.hashCmp)
 
     def __eq__(self, other):
-        if not isinstance(other, ExportEntry):
-            result = False
-        else:
-            result = (self.name == other.name and self.prefix == other.prefix
-                      and self.suffix == other.suffix
-                      and self.flags == other.flags)
-        return result
+        return isinstance(other, Requirement) and self.hashCmp == other.hashCmp
 
-    __hash__ = object.__hash__
+    def __ne__(self, other):
+        return not self == other
+
+    def __contains__(self, item):
+        if isinstance(item, Distribution):
+            if item.key != self.key:
+                return False
+
+            item = item.version
+
+        # Allow prereleases always in order to match the previous behavior of
+        # this method. In the future this should be smarter and follow PEP 440
+        # more accurately.
+        return self.specifier.contains(item, prereleases=True)
+
+    def __hash__(self):
+        return self.__hash
+
+    def __repr__(self):
+        return "Requirement.parse(%r)" % str(self)
+
+    @staticmethod
+    def parse(s):
+        (req,) = parse_requirements(s)
+        return req
+
+
+def _always_object(classes):
+    """
+    Ensure object appears in the mro even
+    for old-style classes.
+    """
+    if object not in classes:
+        return classes + (object,)
+    return classes
+
+
+def _find_adapter(registry, ob):
+    """Return an adapter factory for `ob` from `registry`"""
+    types = _always_object(inspect.getmro(getattr(ob, '__class__', type(ob))))
+    for t in types:
+        if t in registry:
+            return registry[t]
+
+
+def ensure_directory(path):
+    """Ensure that the parent directory of `path` exists"""
+    dirname = os.path.dirname(path)
+    os.makedirs(dirname, exist_ok=True)
+
+
+def _bypass_ensure_directory(path):
+    """Sandbox-bypassing version of ensure_directory()"""
+    if not WRITE_SUPPORT:
+        raise IOError('"os.mkdir" not supported on this platform.')
+    dirname, filename = split(path)
+    if dirname and filename and not isdir(dirname):
+        _bypass_ensure_directory(dirname)
+        try:
+            mkdir(dirname, 0o755)
+        except FileExistsError:
+            pass
+
+
+def split_sections(s):
+    """Split a string or iterable thereof into (section, content) pairs
+
+    Each ``section`` is a stripped version of the section header ("[section]")
+    and each ``content`` is a list of stripped lines excluding blank lines and
+    comment-only lines.  If there are any such lines before the first section
+    header, they're returned in a first ``section`` of ``None``.
+    """
+    section = None
+    content = []
+    for line in yield_lines(s):
+        if line.startswith("["):
+            if line.endswith("]"):
+                if section or content:
+                    yield section, content
+                section = line[1:-1].strip()
+                content = []
+            else:
+                raise ValueError("Invalid section heading", line)
+        else:
+            content.append(line)
+
+    # wrap up last segment
+    yield section, content
+
+
+def _mkstemp(*args, **kw):
+    old_open = os.open
+    try:
+        # temporarily bypass sandboxing
+        os.open = os_open
+        return tempfile.mkstemp(*args, **kw)
+    finally:
+        # and then put it back
+        os.open = old_open
 
 

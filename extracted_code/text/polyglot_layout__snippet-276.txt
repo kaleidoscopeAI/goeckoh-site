@@ -1,0 +1,7 @@
+  _seed.write_text(
+      "Seed‑Crystal Manifesto:\n"
+      "We anneal noisy bits into stable memory facets, sonify our state, and speak captions.\n"
+      "The avatar is not a mask; it is the field itself rendered as 18k nodes.\n",
+      encoding="utf-8"
+  )
+

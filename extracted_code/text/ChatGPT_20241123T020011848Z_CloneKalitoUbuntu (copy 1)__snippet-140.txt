@@ -1,0 +1,1 @@
+- Nodes sharing resources and knowledge dynamically.

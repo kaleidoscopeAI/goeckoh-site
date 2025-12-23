@@ -1,0 +1,3 @@
+filename: str,
+location: str,
+content_type: Optional[str] = None,

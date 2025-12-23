@@ -1,1 +1,1 @@
-Selection: evaluate Seli using batched affinity computations (vectorized dot products).
+// GPU-backed sparse matmul and Laplacian builder using WebGPU

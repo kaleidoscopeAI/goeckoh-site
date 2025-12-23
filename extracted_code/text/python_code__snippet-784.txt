@@ -1,0 +1,3 @@
+_original_super_SSLContext.verify_mode.__set__(ssl_context, verify_mode)  # type: ignore[attr-defined]
+
+

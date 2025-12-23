@@ -1,1 +1,1 @@
-class NodeMetrics:
+This class acts as the main application logic layer.

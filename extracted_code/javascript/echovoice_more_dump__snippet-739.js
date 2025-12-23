@@ -1,1 +1,1 @@
-let docRef: any = null;
++ const out = {

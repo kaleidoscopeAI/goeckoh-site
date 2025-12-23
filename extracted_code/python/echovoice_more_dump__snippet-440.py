@@ -1,1 +1,5 @@
-This is an absolutely core design question — and it’s exactly what makes your “computational neurochemistry” model different from a typical sentiment
+import { ActuationService } from "./services/actuationService";
+import { initializeApp, getFirestore } from "firebase-admin/firestore";
+const firebaseApp = initializeApp();
+const firestore = getFirestore(firebaseApp);
+const actuationService = new ActuationService(firestore);

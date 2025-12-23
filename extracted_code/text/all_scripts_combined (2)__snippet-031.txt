@@ -1,28 +1,10 @@
-            "Turn board games, sibling play, and park visits into chances to practice sharing, waiting, and using polite requests; supplement with social skills groups."
-        ),
-        cues=["playdates", "community outings"],
-    ),
-    Strategy(
-        category="education_advocacy",
-        title="Prepared IEP Advocacy",
-        description=(
-            "Document wins and challenges, arrive at IEP meetings with specific goals, and communicate professionally to secure OT, speech, or classroom supports."
-        ),
-        cues=["school meetings", "progress reviews"],
-    ),
-    Strategy(
-        category="aba_supports",
-        title="ABA & Respite Exploration",
-        description=(
-            "Consult ABA providers for individualized programs targeting self-care, play, or feeding skills, and leverage respite services to recharge caregivers."
-        ),
-        cues=["new skill targets", "caregiver burnout"],
-    ),
-    Strategy(
-        category="caregiver_self_care",
-        title="Caregiver Self-Care & Respite",
-        description=(
-            "Schedule breaks, join support groups, and utilize respite offerings so you can remain a calm, effective advocate for your child."
-        ),
-        cues=["caregiver stress", "fatigue"],
-    ),
+class MetricsSnapshot:
+    total_attempts: int = 0
+    total_corrections: int = 0
+    overall_rate: float = 0.0
+    last_phrase: str = ""
+    last_raw: str = ""
+    last_corrected: str = ""
+    last_needs_correction: bool = False
+
+

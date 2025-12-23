@@ -1,0 +1,3 @@
+doc: Broken Speech Interpreter
+functions: collapse_repeated_letters, normalize_text, detect_intent, detect_sentiment, interpret, run_cli, build_parser, main
+classes: NormalizationResult

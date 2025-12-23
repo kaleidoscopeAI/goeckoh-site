@@ -1,33 +1,20 @@
-def captured_output(stream_name: str) -> Generator[StreamWrapper, None, None]:
-    """Return a context manager used by captured_stdout/stdin/stderr
-    that temporarily replaces the sys stream *stream_name* with a StringIO.
+def make_tuple(s, absent):
+    if s is None:
+        result = (absent,)
+    else:
+        parts = s[1:].split('.')
+        # We can't compare ints and strings on Python 3, so fudge it
+        # by zero-filling numeric values so simulate a numeric comparison
+        result = tuple([p.zfill(8) if p.isdigit() else p for p in parts])
+    return result
 
-    Taken from Lib/support/__init__.py in the CPython repo.
-    """
-    orig_stdout = getattr(sys, stream_name)
-    setattr(sys, stream_name, StreamWrapper.from_stream(orig_stdout))
-    try:
-        yield getattr(sys, stream_name)
-    finally:
-        setattr(sys, stream_name, orig_stdout)
-
-
-def captured_stdout() -> ContextManager[StreamWrapper]:
-    """Capture the output of sys.stdout:
-
-       with captured_stdout() as stdout:
-           print('hello')
-       self.assertEqual(stdout.getvalue(), 'hello\n')
-
-    Taken from Lib/support/__init__.py in the CPython repo.
-    """
-    return captured_output("stdout")
-
-
-def captured_stderr() -> ContextManager[StreamWrapper]:
-    """
-    See captured_stdout().
-    """
-    return captured_output("stderr")
+m = is_semver(s)
+if not m:
+    raise UnsupportedVersionError(s)
+groups = m.groups()
+major, minor, patch = [int(i) for i in groups[:3]]
+# choose the '|' and '*' so that versions sort correctly
+pre, build = make_tuple(groups[3], '|'), make_tuple(groups[5], '*')
+return (major, minor, patch), pre, build
 
 

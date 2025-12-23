@@ -1,0 +1,6 @@
+if color.startswith('calc') or color.startswith('var'):
+    return color
+else:
+    return '#' + color
+
+

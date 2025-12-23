@@ -1,0 +1,59 @@
+ 1 +#!/usr/bin/env sh
+ 2 +
+ 3 +# Gradle start up script for UN*X
+ 4 +#
+ 5 +# Based on Gradle 8.3 distribution
+ 6 +
+ 7 +APP_NAME="Gradle"
+ 8 +APP_BASE_NAME=${0##*/}
+ 9 +
+10 +# Resolve links: $0 may be a link
+11 +PRG="$0"
+12 +while [ -h "$PRG" ] ; do
+13 +    ls=`ls -ld "$PRG"`
+14 +    link=`expr "$ls" : '.*-> \(.*\)$'`
+15 +    if expr "$link" : '/.*' > /dev/null; then
+16 +        PRG="$link"
+17 +    else
+18 +        PRG=`dirname "$PRG"`"/$link"
+19 +    fi
+20 +done
+21 +SAVED="`pwd`"
+22 +cd "`dirname \"$PRG\"`/" >/dev/null
+23 +APP_HOME="`pwd -P`"
+24 +cd "$SAVED" >/dev/null
+25 +
+26 +CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
+27 +
+28 +# Determine the Java command to use to start the JVM.
+29 +if [ -n "$JAVA_HOME" ] ; then
+30 +    if [ -x "$JAVA_HOME/jre/sh/java" ] ; then
+31 +        JAVA_CMD="$JAVA_HOME/jre/sh/java"
+32 +    else
+33 +        JAVA_CMD="$JAVA_HOME/bin/java"
+34 +    fi
+35 +    if [ ! -x "$JAVA_CMD" ] ; then
+36 +        echo "ERROR: JAVA_HOME is set to an invalid directory: $JAVA_HOME" >&2
+37 +        exit 1
+38 +    fi
+39 +else
+40 +    JAVA_CMD="java"
+41 +    which java >/dev/null 2>&1 || { echo "ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH.
+    " >&2; exit 1; }
+42 +fi
+43 +
+44 +# Increase max file descriptors if possible
+45 +MAX_FD="maximum"
+46 +case "`uname`" in
+47 +  Darwin* ) ulimit -H -n >/dev/null 2>&1 && MAX_FD=`ulimit -H -n`
+48 +            ulimit -S -n "$MAX_FD" >/dev/null 2>&1 ;;
+49 +  Linux* ) ulimit -n "$MAX_FD" >/dev/null 2>&1 ;;
+50 +esac
+51 +
+52 +JAVA_OPTS="${JAVA_OPTS:-}"
+53 +GRADLE_OPTS="${GRADLE_OPTS:-}"
+54 +
+55 +exec "$JAVA_CMD" $JAVA_OPTS $GRADLE_OPTS \
+56 +  -classpath "$CLASSPATH" \
+57 +  org.gradle.wrapper.GradleWrapperMain "$@"
+

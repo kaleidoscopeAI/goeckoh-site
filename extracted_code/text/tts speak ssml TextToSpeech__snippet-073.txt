@@ -1,0 +1,2 @@
+      val wordCount = text.split(" ").size.toDouble()
+      val rate = if (durationSec > 0) (wordCount / durationSec) / 2.5 else

@@ -1,5 +1,4 @@
-class Module_six_moves_urllib_error(_LazyModule):
-
-    """Lazy loading of moved objects in six.moves.urllib_error"""
+data: NestedDict
+flags: Flags
 
 

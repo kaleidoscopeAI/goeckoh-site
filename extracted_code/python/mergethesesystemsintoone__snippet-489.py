@@ -1,13 +1,13 @@
-import time
-import logging
-from core.node import Node
-from core.genetic_code import GeneticCode
-from core.energy_manager import EnergyManager
-from node_management.node_lifecycle_manager import NodeLifecycleManager
-from node_management.cluster_manager import ClusterManager
-from node_management.supernode_manager import SupernodeManager
-from engines.kaleidoscope_engine import KaleidoscopeEngine
-from engines.mirrored_engine import MirroredEngine
-# from data.data_pipeline import DataPipeline
-# from visualization.visualizer import NetworkVisualizer
+def __init__(self):
+    self.perspective_engine = PerspectiveEngine()
+    self.node_manager = NodeManager()
+    self.neural_renderer = NeuralRenderer()
+
+def run(self, input_view, node_id, node_data, render_input):
+    self.perspective_engine.add_perspective(input_view)
+    self.node_manager.add_node(node_id, node_data)
+    processed = self.perspective_engine.process()
+    node = self.node_manager.get_element_by_id(node_id)
+    rendered = self.neural_renderer.render(render_input)
+    return f"{processed}\nNode: {node}\nRendered: {rendered}"
 

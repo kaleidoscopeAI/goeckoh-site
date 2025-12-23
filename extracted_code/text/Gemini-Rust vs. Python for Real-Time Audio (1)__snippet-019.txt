@@ -1,0 +1,4 @@
+is_running: bool,
+// We use Option because the stream doesn't exist when the app launches.
+// Setting this to None automatically runs the 'Drop' trait, killing the audio.
+audio_stream: Option<AudioStreamManager>,

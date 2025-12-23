@@ -1,1 +1,1 @@
-const module = this.device.createShaderModule({ code: shaderCode });
+for (const k in DEFAULT_P) {

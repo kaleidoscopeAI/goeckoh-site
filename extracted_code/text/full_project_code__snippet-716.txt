@@ -1,0 +1,9 @@
+ret = []
+for i in ll:
+    if isinstance(i, list):
+        ret.extend(_flatten(i))
+    else:
+        ret.append(i)
+return ret
+
+

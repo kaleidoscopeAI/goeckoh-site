@@ -1,3 +1,2 @@
-from os import open as os_open
-from os.path import isdir, split
-
+    from vosk import Model, KaldiRecognizer
+    VOSK_AVAILABLE = True

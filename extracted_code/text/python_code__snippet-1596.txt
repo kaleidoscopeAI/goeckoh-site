@@ -1,0 +1,5 @@
+Option,
+"--ignore-requires-python",
+dest="ignore_requires_python",
+action="store_true",
+help="Ignore the Requires-Python information.",

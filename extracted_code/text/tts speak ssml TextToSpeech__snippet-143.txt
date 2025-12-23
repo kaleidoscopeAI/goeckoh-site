@@ -1,0 +1,33 @@
+                  return
+              }
+          }
+      }
+
+      val sttModels = listOf(
+          "vosk-model-small-en-us-0.15.zip" to "en",
+          "vosk-model-small-es-0.42.zip" to "es",
+          "vosk-model-small-fr-0.22.zip" to "fr"
+      )
+      sttModels.forEach { (zipName, lang) ->
+          val modelDir = File(filesDir, "vosk-model-small-$lang")
+          if (!modelDir.exists()) {
+              try {
+                  assets.open(zipName).use { input ->
+                      ZipInputStream(input).use { zip ->
+                          var entry = zip.nextEntry
+                          while (entry != null) {
+                              val file = File(modelDir, entry.name)
+                              if (entry.isDirectory) {
+                                  file.mkdirs()
+                              } else {
+                                  file.parentFile?.mkdirs()
+                                  FileOutputStream(file).use { output ->
+                                      zip.copyTo(output)
+                                  }
+                              }
+                              entry = zip.nextEntry
+                          }
+                      }
+                  }
+              } catch (e: Exception) {
+                  statusText.text = "STT model unzip failed for $lang:

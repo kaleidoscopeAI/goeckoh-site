@@ -1,1 +1,4 @@
-Pattern: Modular class structure (e.g. a GraphManager for Forman flow, a NodeDynamics for stochastic updates, an AffectModel for valence/arousal).
+Endianness Handling:
+The packet serialization assumes native endianness, which is incorrect for cross-platform compatibility:
+rust
+

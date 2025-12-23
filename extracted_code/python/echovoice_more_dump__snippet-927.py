@@ -1,10 +1,5 @@
-async def ingest_local():
-    data = await request.get_json()
-    path = data.get('path')
-    if not path or not os.path.exists(path):
-        return jsonify({'error': 'path not found'}), 400
-    url = 'file://' + os.path.abspath(path)
-    # add to crawler queue
-    crawler.queue.appendleft(url)
-    return jsonify({'status': 'queued', 'url': url})
-
+• Dynamic Learning & Plasticity: The system must continuously learn and modify its internal state or parameters based on new data and experiences. This implies an online learning capability, where adjustments occur sequentially as data arrives, rather than requiring large batches or offline retraining.1 This aligns with the brain's ability to constantly integrate new information and adapt its representations.
+• Context Sensitivity: Adaptation should not occur in isolation. The system's response to new information must be modulated by its current internal state and relevant historical context. This necessitates mechanisms for maintaining and utilizing state information over time, akin to how conscious awareness integrates present sensations with past memories and current goals.3
+• Self-Correction/Refinement: An advanced adaptive system should possess mechanisms to evaluate its own understanding, identify inconsistencies or errors, and initiate corrective adjustments. This involves feedback loops where the system's output or internal state is assessed against certain criteria (e.g., prediction accuracy, internal consistency), and errors drive further adaptation.5 This mirrors cognitive processes of error detection and correction.
+• Pattern Abstraction & Generalization: The system should move beyond processing raw data towards extracting higher-level patterns, concepts, and relationships. This involves building abstract representations that generalize to new, unseen data, a hallmark of sophisticated understanding.7
+• Selective Attention/Focus (Aspirational): While potentially a more advanced feature, inspiration can be drawn from the ability of conscious systems to selectively attend to specific data streams or aspects of the environment based on relevance, novelty, or current goals. Computationally, this could translate to dynamic weighting of different dimensions or data sources within the system.

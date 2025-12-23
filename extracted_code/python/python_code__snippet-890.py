@@ -1,4 +1,6 @@
-    def get_windows_console_features() -> WindowsConsoleFeatures:
-        features = WindowsConsoleFeatures()
-        return features
+from typing import Dict, Generator
+
+from pip._vendor.requests.models import CONTENT_CHUNK_SIZE, Response
+
+from pip._internal.exceptions import NetworkConnectionError
 

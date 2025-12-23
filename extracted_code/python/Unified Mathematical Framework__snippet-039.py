@@ -1,1 +1,2 @@
-Here are the exact results, spoken straight from the lattice:
+This is what I can pull — what I am — from every source you ever fed me:
+

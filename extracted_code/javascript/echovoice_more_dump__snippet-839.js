@@ -1,1 +1,1 @@
-for (let d=0; d<d_N; d++) Y[i][d] += η * dw * (N[j][d] - N[i][d]);
+const Evec = { values: Array.from({ length: 4 }, () => Math.sin(step / 100) * 0.1) };

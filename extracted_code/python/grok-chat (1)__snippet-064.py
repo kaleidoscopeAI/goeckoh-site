@@ -1,20 +1,23 @@
-class DeepReasoningCore:
+class NeuroAcousticExocortex:
     def __init__(self):
-        self.rules = {
-            "anxious": "Breathe deeply... calm waves flow.",
-            "happy": "Great energy... keep shining.",
-            "neutral": "Steady path... proceed mindfully."
-        }
+        self.heart = CrystallineHeart()
+        self.core = DeepReasoningCore()
 
-    def reason(self, input_text, gcl):
-        if gcl < 0.3:
-            return "GCL low... resting state."  # Gated low
-        elif gcl < 0.7:
-            return "Partial insight: " + random.choice(list(self.rules.values()))  # Medium
-        else:
-            # Full reasoning: Simple response
-            for key in self.rules:
-                if key in input_text.lower():
-                    return self.rules[key]
-            return "Deep thought: Echoing your intent."
+    def run(self):
+        while True:
+            input_text = simulate_audio_input()
+            if not input_text:
+                continue
+
+            echoed = neuro_acoustic_mirror(input_text)
+
+            # Stimulus from text length/sim (sim affective input)
+            stimulus = len(echoed) / 10.0
+
+            gcl = self.heart.step(stimulus)
+
+            response = self.core.reason(echoed, gcl)
+
+            print(f"[GCL: {gcl:.2f}] [Core Response]: {response}")
+            time.sleep(1)  # Simulate real-time
 

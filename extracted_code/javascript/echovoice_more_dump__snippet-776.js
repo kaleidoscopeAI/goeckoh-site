@@ -1,2 +1,1 @@
-let acc = 0;
-for (let j = 0; j < M; j++) {
+for (let k = 0; k < block; k++) y2[i][k] += mirrorScale * v2[i][k];

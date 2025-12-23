@@ -1,56 +1,94 @@
-    raise ImportError("Error initializing ctypes") from None
+class Bazaar(VersionControl):
+    name = "bzr"
+    dirname = ".bzr"
+    repo_name = "branch"
+    schemes = (
+        "bzr+http",
+        "bzr+https",
+        "bzr+ssh",
+        "bzr+sftp",
+        "bzr+ftp",
+        "bzr+lp",
+        "bzr+file",
+    )
 
+    @staticmethod
+    def get_base_rev_args(rev: str) -> List[str]:
+        return ["-r", rev]
 
-def _handle_osstatus(result: OSStatus, _: typing.Any, args: typing.Any) -> typing.Any:
-    """
-    Raises an error if the OSStatus value is non-zero.
-    """
-    if int(result) == 0:
-        return args
-
-    # Returns a CFString which we need to transform
-    # into a UTF-8 Python string.
-    error_message_cfstring = None
-    try:
-        error_message_cfstring = Security.SecCopyErrorMessageString(result, None)
-
-        # First step is convert the CFString into a C string pointer.
-        # We try the fast no-copy way first.
-        error_message_cfstring_c_void_p = ctypes.cast(
-            error_message_cfstring, ctypes.POINTER(ctypes.c_void_p)
+    def fetch_new(
+        self, dest: str, url: HiddenText, rev_options: RevOptions, verbosity: int
+    ) -> None:
+        rev_display = rev_options.to_display()
+        logger.info(
+            "Checking out %s%s to %s",
+            url,
+            rev_display,
+            display_path(dest),
         )
-        message = CoreFoundation.CFStringGetCStringPtr(
-            error_message_cfstring_c_void_p, CFConst.kCFStringEncodingUTF8
+        if verbosity <= 0:
+            flag = "--quiet"
+        elif verbosity == 1:
+            flag = ""
+        else:
+            flag = f"-{'v'*verbosity}"
+        cmd_args = make_command(
+            "checkout", "--lightweight", flag, rev_options.to_args(), url, dest
         )
+        self.run_command(cmd_args)
 
-        # Quoting the Apple dev docs:
-        #
-        # "A pointer to a C string or NULL if the internal
-        # storage of theString does not allow this to be
-        # returned efficiently."
-        #
-        # So we need to get our hands dirty.
-        if message is None:
-            buffer = ctypes.create_string_buffer(1024)
-            result = CoreFoundation.CFStringGetCString(
-                error_message_cfstring_c_void_p,
-                buffer,
-                1024,
-                CFConst.kCFStringEncodingUTF8,
-            )
-            if not result:
-                raise OSError("Error copying C string from CFStringRef")
-            message = buffer.value
+    def switch(self, dest: str, url: HiddenText, rev_options: RevOptions) -> None:
+        self.run_command(make_command("switch", url), cwd=dest)
 
-    finally:
-        if error_message_cfstring is not None:
-            CoreFoundation.CFRelease(error_message_cfstring)
+    def update(self, dest: str, url: HiddenText, rev_options: RevOptions) -> None:
+        output = self.run_command(
+            make_command("info"), show_stdout=False, stdout_only=True, cwd=dest
+        )
+        if output.startswith("Standalone "):
+            # Older versions of pip used to create standalone branches.
+            # Convert the standalone branch to a checkout by calling "bzr bind".
+            cmd_args = make_command("bind", "-q", url)
+            self.run_command(cmd_args, cwd=dest)
 
-    # If no message can be found for this status we come
-    # up with a generic one that forwards the status code.
-    if message is None or message == "":
-        message = f"SecureTransport operation returned a non-zero OSStatus: {result}"
+        cmd_args = make_command("update", "-q", rev_options.to_args())
+        self.run_command(cmd_args, cwd=dest)
 
-    raise ssl.SSLError(message)
+    @classmethod
+    def get_url_rev_and_auth(cls, url: str) -> Tuple[str, Optional[str], AuthInfo]:
+        # hotfix the URL scheme after removing bzr+ from bzr+ssh:// re-add it
+        url, rev, user_pass = super().get_url_rev_and_auth(url)
+        if url.startswith("ssh://"):
+            url = "bzr+" + url
+        return url, rev, user_pass
+
+    @classmethod
+    def get_remote_url(cls, location: str) -> str:
+        urls = cls.run_command(
+            ["info"], show_stdout=False, stdout_only=True, cwd=location
+        )
+        for line in urls.splitlines():
+            line = line.strip()
+            for x in ("checkout of branch: ", "parent branch: "):
+                if line.startswith(x):
+                    repo = line.split(x)[1]
+                    if cls._is_local_repository(repo):
+                        return path_to_url(repo)
+                    return repo
+        raise RemoteNotFoundError
+
+    @classmethod
+    def get_revision(cls, location: str) -> str:
+        revision = cls.run_command(
+            ["revno"],
+            show_stdout=False,
+            stdout_only=True,
+            cwd=location,
+        )
+        return revision.splitlines()[-1]
+
+    @classmethod
+    def is_commit_id_equal(cls, dest: str, name: Optional[str]) -> bool:
+        """Always assume the versions don't match"""
+        return False
 
 

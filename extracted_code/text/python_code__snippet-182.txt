@@ -1,7 +1,1 @@
-class PEP440Warning(RuntimeWarning):
-    """
-    Used when there is an issue with a version or specifier not complying with
-    PEP 440.
-    """
-
-
+src: str, pos: Pos, parse_float: ParseFloat

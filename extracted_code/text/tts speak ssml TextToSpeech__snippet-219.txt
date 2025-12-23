@@ -1,0 +1,2 @@
+      val intent = Intent("VAD_METRICS_UPDATE")
+      intent.putExtra("metrics", "Frames: $totalFrames/$speechFrames\nRate:

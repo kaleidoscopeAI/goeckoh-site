@@ -1,11 +1,3 @@
-const mwRaw = projectVec(s, DEFAULT_P.memory_write);
-const memoryWrite = clamp(1 + mwRaw, 0, DEFAULT_PARAMS.W_MAX);
-const memoryTagLifetimeMult = clamp(1 + 0.5 * mwRaw, 0.1, 10);
-const wmDecayMod = clamp(sigmoid(mwRaw), 0, 1);
-const identityInfluence = sigmoid(projectVec(s, DEFAULT_P.identity));
-const reasonRaw = projectVec(s, DEFAULT_P.reason);
-const attentionGain = clamp(1 + 0.5 * reasonRaw, 0.5, 3.0);
-const plannerDepthFactor = clamp(Math.floor(1 + 2 * sigmoid(reasonRaw)), 1, 3);
-const plannerTempFactor = clamp(Math.exp(0.3 * reasonRaw), 0.5, 3.0);
-const driveScalar = clamp(softplus(projectVec(s, DEFAULT_P.drive)), 0, 10);
-const trustScalar = clamp(projectVec(s, DEFAULT_P.trust), -2, 2);
+const out = new Float32Array(n * m);
+for (let i = 0; i < n; i++) {
+for (let j = 0; j < m; j++) out[i * m + j] = this.S[i * m + j];

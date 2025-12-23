@@ -1,1 +1,1 @@
-import SwiftUI
+[str(py), "-c", f"import {mod}"],

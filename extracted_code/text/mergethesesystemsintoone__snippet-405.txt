@@ -1,0 +1,3 @@
+    self.burn_in = burn_in
+    self.sample_interval = sample_interval
+

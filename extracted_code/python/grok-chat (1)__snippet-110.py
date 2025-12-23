@@ -1,7 +1,8 @@
-class Node:
-    def __init__(self):
-        self.bits = [random.choice([0, 1]) for _ in range(128)]
-        self.position = [random.uniform(-1, 1) for _ in range(3)]
-        self.spin = random.choice([-1, 1])
-        self.emotion = [0.0] * 5
+def auditory_motor_core(input_text, metrics):
+    corrected = input_text.replace("you", "I").replace("your", "my").capitalize()
+    print(f"[Cloned Echo]: {corrected}")
+    stimulus = len(input_text) / 10.0
+    success = len(corrected) > len(input_text) / 2  # Sim success
+    metrics.register_attempt(success)
+    return corrected, stimulus
 

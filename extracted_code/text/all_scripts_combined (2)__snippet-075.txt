@@ -1,0 +1,2 @@
+python broken_speech_tool.py --text "u help me job money pls"
+

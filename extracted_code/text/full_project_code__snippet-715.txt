@@ -1,0 +1,1 @@
+s: Union[str, Iterable[str]], re_escape: bool = True

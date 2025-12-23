@@ -1,0 +1,3 @@
+doc: Crystal AI OS - Integrated Reference System Script
+functions: pack_bits, popcount_u64, popcount_xor, hajek_schedule, constant_schedule, gcl, build_minimal_system
+classes: Spec, HybridState, SemanticHamiltonian, GradientFlow, MetropolisEngine, PhiCalculator, FreeEnergyEngine, ConfidenceSynthesizer, SyndromeDetector, NeuralDecoder, HarmonicMemory, CategoryKernel, AxiomVerifier, Runtime

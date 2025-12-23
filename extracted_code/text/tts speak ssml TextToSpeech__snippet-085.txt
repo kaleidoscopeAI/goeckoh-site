@@ -1,0 +1,1 @@
+          task.contains("automate", ignoreCase = true) && gcl > 0.9 ->

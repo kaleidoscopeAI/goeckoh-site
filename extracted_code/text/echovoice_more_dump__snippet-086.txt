@@ -1,1 +1,7 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+    Create charts for metrics history using Chart.js.
+
+    Implement the simulation controls and parameter sliders.
+
+    Add console functionality for user interaction.
+
+We'll assume the CognitiveCrystal class is available (mocked for now).

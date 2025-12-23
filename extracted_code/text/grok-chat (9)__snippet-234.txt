@@ -1,0 +1,2 @@
+the Rust LPC model using harvested PPP fragments; would need at least ~5–20
+minutes of clean speech per voice and a GPU (even a modest one).

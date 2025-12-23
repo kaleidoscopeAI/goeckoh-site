@@ -1,0 +1,2 @@
+return np.dot(W, activation(x)) + b
+

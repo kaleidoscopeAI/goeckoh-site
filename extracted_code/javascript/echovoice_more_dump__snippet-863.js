@@ -1,1 +1,1 @@
-for (let i = 0; i < node.K.length; i++) out.K[i] += w * (nb.K[i] - node.K[i]);
++ const activeFile = path.join(W_DIR, `w_active.json`);

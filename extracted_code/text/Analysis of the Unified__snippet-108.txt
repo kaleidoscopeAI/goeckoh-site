@@ -1,0 +1,1 @@
+setSystemState((prev: any) => ({ ...prev, ...data }));

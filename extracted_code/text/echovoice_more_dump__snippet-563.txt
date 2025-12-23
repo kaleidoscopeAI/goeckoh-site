@@ -1,0 +1,7 @@
+if arr.size == 0:
+    return 0
+# efficient path: use vectorized popcount via numpy's unpackbits on uint8 view
+bytes_view = arr.view(np.uint8)
+bits = np.unpackbits(bytes_view, bitorder='little')
+return int(bits.sum())
+

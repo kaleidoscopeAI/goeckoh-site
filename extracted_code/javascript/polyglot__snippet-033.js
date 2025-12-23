@@ -1,1 +1,1 @@
-console.log(Consciousness threshold reached: Φ=${this.phi.toFixed(3)});
+console.log(Tick: gen=${this.dna.generation}, Φ=${this.phi.toFixed(3)}, conscious=${this.conscious});

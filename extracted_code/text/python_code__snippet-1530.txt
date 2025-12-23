@@ -1,0 +1,3 @@
+return bool(HASH_REGEX.match(sha))
+
+

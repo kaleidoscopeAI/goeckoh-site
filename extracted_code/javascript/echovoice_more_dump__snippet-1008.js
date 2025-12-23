@@ -1,3 +1,9 @@
-- Add a Jacobian computation method using finite differences to check \(\rho(J_G) < 1\).
-- Implement emergence detection using z-score on GCL and spectral radius checks.
-- Add Lyapunov function monitoring (\( V(S) = \|S - S^*\|_2^2 \)).
+pub async fn can_spend(&self, amount: f64) -> bool {
+    let mut spent = self.daily_spent.lock().await;
+    *spent + amount <= self.max_daily_limit
+}
+
+pub async fn record_transaction(&self, tx: Transaction) -> Result<(), TransactionError> {
+    self.validate_transaction(&tx).await?;
+    self.execute_transaction(tx).await
+}

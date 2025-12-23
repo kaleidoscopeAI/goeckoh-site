@@ -1,1 +1,2 @@
-- Use modern NLP libraries (e.g., Hugging Face Transformers or spaCy) to extract contextual embeddings from crawled web pages.
+You can use a lightweight CNN or pre-trained model (e.g., CLIP, ResNet) to generate embeddings from the images.
+

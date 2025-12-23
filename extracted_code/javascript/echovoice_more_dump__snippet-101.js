@@ -1,5 +1,8 @@
-  for (const n of this.nodes.values()) {
-    const psiNorm = Math.sqrt(n.e.reduce((sum, v) => sum + v**2, 0));
-    // Feedback to grads or tether
-    this.alphaTether += 0.01 * psiNorm;
+export function applyFRF(engine: Engine) {
+  for (const edge of engine.edges) {
+    const na = engine.nodes.get(edge.a)!, nb = engine.nodes.get(edge.b)!;
+    const overlap = na.neighbors.filter(id => nb.neighbors.includes(id)).length; // Common neighbors
+    const rij = na.neighbors.length + nb.neighbors.length - 2 - overlap; // Discrete Ricci
+    edge.w -= 2 * rij * engine.dt; // Evolve metric g ~ w
+    edge.w = Math.max(0.1, edge.w); // Clamp for stability
   }

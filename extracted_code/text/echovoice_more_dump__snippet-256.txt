@@ -1,1 +1,1 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+  Find Max Speed (λmax​): Calculation of the maximum effective propagation speed, which includes both kinematic 

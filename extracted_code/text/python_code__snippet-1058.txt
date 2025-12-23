@@ -1,0 +1,3 @@
+"AlreadyInstalledCandidate",
+"EditableCandidate",
+"LinkCandidate",

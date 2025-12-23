@@ -1,0 +1,16 @@
+"""
+Performs a 2D convolution operation.
+"""
+kernel_size = kernel.shape[0]
+pad = kernel_size // 2
+output = np.zeros_like(image, dtype=float)
+
+# Pad the image
+padded_image = np.pad(image, pad, mode='constant')
+
+for i in range(image.shape[0]):
+  for j in range(image.shape[1]):
+    region = padded_image[i:i+kernel_size, j:j+kernel_size]
+    output[i, j] = np.sum(region * kernel)
+return output
+

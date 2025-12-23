@@ -1,2 +1,0 @@
-The LLM is encapsulated as a `HuggingFaceThoughtEngine` C++ class implementing the abstract `ThoughtEngine` interface.
-

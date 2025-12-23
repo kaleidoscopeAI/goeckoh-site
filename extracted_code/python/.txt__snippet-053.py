@@ -1,2 +1,1 @@
-class SpeechProcessor:
-def __init__(self, config: CompanionConfig) -> None:
+def api_latest():

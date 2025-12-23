@@ -1,1 +1,2 @@
-./create_deb_package.sh
+sudo dpkg -i goeckoh-system_1.0.0_all.deb
+sudo apt-get install -f

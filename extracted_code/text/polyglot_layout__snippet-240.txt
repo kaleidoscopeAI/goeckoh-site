@@ -1,0 +1,3 @@
+  # Placeholder; user can wire real X API. This returns stable demo links.
+  return [f"https://example.com/post/{i}" for i in range(limit)]
+

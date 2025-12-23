@@ -1,2 +1,1 @@
-     |                                             ^^^^^ private field, not a method
-
+private async _safeGetVersion(): Promise<number> {

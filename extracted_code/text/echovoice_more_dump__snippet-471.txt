@@ -1,2 +1,3 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
-
+pub pid: i32,
+pub bit_state: u64,
+pub timestamp: u64,

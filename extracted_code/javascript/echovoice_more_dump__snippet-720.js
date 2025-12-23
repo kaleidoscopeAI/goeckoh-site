@@ -1,1 +1,1 @@
-const nodes = [
+let dw = 0.0;

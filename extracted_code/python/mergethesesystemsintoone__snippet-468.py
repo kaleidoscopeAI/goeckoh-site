@@ -1,2 +1,1 @@
-class MCMCSampler:
-def init(self, burn_in: int = 100, sample_interval: int = 10):
+from llm_service import get_llm_service, LLMMessage

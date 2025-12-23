@@ -1,1 +1,1 @@
-QR provisioning generator script (tools/generate_provision_qr.py) — run locally to produce provisioning QR PNGs from the sample provisioning
+- **Determination Process**: Data is ingested if it maximizes affinity minus stress cost, routed from Membrane or prior outputs. This replicates

@@ -1,2 +1,0 @@
-The kNN Sparsity Problem: The k-Nearest Neighbor constraint (the key to O(Nkd)) forces a sparse bond set B. This fundamentally violates the requirement for global optimization, as critical long-range interactions (semantically similar but spatially distant nodes) are truncated from the gradient calculation. This dramatically increases the risk of the system settling into a local minimum—a state of high internal coherence based only on local relationships, but fundamentally incoherent on a global scale.
-

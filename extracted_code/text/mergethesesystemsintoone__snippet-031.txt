@@ -1,1 +1,1 @@
-class PatternStrand:
+• Basic Graph Visualization: The system visualizes the network using networkx and matplotlib.

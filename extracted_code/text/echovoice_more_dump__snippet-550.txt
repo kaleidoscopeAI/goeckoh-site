@@ -1,0 +1,58 @@
+; Update velocity
+; v = w*v + c1*r1*(pbest-p) + c2*r2*(gbest-p)
+
+; Load current velocity: v
+movsd   xmm8, [r13 + rcx*8]
+
+; w*v
+mulsd   xmm8, xmm3
+
+; Load current position: p
+movsd   xmm9, [r12 + rcx*8]
+
+; Load personal best: pbest
+movsd   xmm10, [r14 + rcx*8]
+
+; (pbest-p)
+movsd   xmm11, xmm10
+subsd   xmm11, xmm9
+
+; c1*r1*(pbest-p)
+mulsd   xmm11, xmm6
+mulsd   xmm11, xmm4
+
+; Add to velocity
+addsd   xmm8, xmm11
+
+; For simplicity, we're assuming gbest is passed at r14+dimensions*8
+; Load global best: gbest
+movsd   xmm10, [r14 + r10*8 + rcx*8]
+
+; (gbest-p)
+subsd   xmm10, xmm9
+
+; c2*r2*(gbest-p)
+mulsd   xmm10, xmm7
+mulsd   xmm10, xmm5
+
+; Add to velocity
+addsd   xmm8, xmm10
+
+; Store updated velocity
+movsd   [r13 + rcx*8], xmm8
+
+; Update position: p = p + v
+addsd   xmm9, xmm8
+movsd   [r12 + rcx*8], xmm9
+
+; Move to next dimension
+inc     rcx
+cmp     rcx, r10
+jl      .update_loop
+
+; Cleanup and return
+pop     r14
+pop     r13
+pop     r12
+pop     rbp
+ret

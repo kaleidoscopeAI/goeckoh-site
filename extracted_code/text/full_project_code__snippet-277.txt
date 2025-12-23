@@ -1,0 +1,5 @@
+"""Raised when we fail to establish a new connection. Usually ECONNREFUSED."""
+
+pass
+
+

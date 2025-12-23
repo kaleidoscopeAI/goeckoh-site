@@ -1,4 +1,3 @@
-for (const X of constructs) {
-const raw = modulators[X];
-const maturityFactor = sigmoid(maturityScalar); // [0,1]
-const scaled = raw * clamp(1 - homeostasisPenalty[X], 0, 1) * (0.2 + 0.8*maturityFactor);
+const mwRaw = projectVec(s, DEFAULT_P.memory_write);
+const memoryWrite = clamp(1 + mwRaw, 0, DEFAULT_PARAMS.W_MAX);
+const memoryTagLifetimeMult = clamp(1 + 0.5 * mwRaw, 0.1, 10);

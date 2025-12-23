@@ -1,0 +1,3 @@
+reset_metrics endpoints return p50/p95 latency, playback p95, GCL mean/min,
+drift p95, gate blocks, and target compliance. Dashboard shows these plus
+playback p95; CSV export remains.

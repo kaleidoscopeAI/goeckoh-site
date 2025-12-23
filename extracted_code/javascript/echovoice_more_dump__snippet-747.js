@@ -1,2 +1,2 @@
-const filePath = path.join(W_DIR, `${id}.json`);
-let payload: any = null;
++export function mirrorDelta(node: NodeState, mirrorTarget: NodeState | null, lambdaPhi = 0.2) {
++ const out = {

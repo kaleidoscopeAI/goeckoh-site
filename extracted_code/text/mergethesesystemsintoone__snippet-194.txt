@@ -1,1 +1,3 @@
-Abstract base class (CodeTransformer) for language-specific transformers.
+frames, _ = frame_signal(x, frame_length, hop_length)
+return np.sqrt(np.mean(frames**2, axis=1))
+

@@ -1,0 +1,7 @@
+ssl_context: ssl.SSLContext,
+hChainEngine: HCERTCHAINENGINE | None,
+hIntermediateCertStore: HCERTSTORE,
+pPeerCertContext: c_void_p,
+pChainPara: PCERT_CHAIN_PARA,  # type: ignore[valid-type]
+server_hostname: str | None,
+chain_flags: int,

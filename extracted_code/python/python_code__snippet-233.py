@@ -1,3 +1,10 @@
-from pip._vendor.pygments.formatter import Formatter
-from pip._vendor.pygments.util import get_bool_opt
+from .markers import MARKER_EXPR, Marker
+from .specifiers import LegacySpecifier, Specifier, SpecifierSet
+
+
+class InvalidRequirement(ValueError):
+    """
+    An invalid requirement was found, users should refer to PEP 508.
+    """
+
 

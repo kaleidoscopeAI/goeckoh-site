@@ -1,10 +1,5 @@
-class CERT_CHAIN_POLICY_STATUS(Structure):
-    _fields_ = (
-        ("cbSize", DWORD),
-        ("dwError", DWORD),
-        ("lChainIndex", LONG),
-        ("lElementIndex", LONG),
-        ("pvExtraPolicyStatus", c_void_p),
-    )
+hour_str, minute_str, sec_str, micros_str = match.groups()
+micros = int(micros_str.ljust(6, "0")) if micros_str else 0
+return time(int(hour_str), int(minute_str), int(sec_str), micros)
 
 

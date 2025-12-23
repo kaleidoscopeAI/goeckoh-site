@@ -1,0 +1,1 @@
+model; wiring in MainActivity to run this on launch. (Place zips/onnx/task files in app/src/main/assets.)

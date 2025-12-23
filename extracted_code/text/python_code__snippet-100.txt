@@ -1,2 +1,1 @@
-# <REDACTED: potential secret detected>
-
+# Ignore warning raised when using --trusted-host.

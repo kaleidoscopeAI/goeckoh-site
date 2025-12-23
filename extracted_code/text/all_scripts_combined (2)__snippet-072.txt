@@ -1,0 +1,11 @@
+"""Top-level configuration shared across CLI, GUI, and agent layers."""
+
+child_id: str = "child_001"
+child_name: str = "Companion User"
+caregiver_name: str = "Caregiver"
+paths: Paths = field(default_factory=Paths)
+audio: AudioSettings = field(default_factory=AudioSettings)
+speech: SpeechModelSettings = field(default_factory=SpeechModelSettings)
+behavior: BehaviorSettings = field(default_factory=BehaviorSettings)
+
+

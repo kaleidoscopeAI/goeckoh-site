@@ -1,1 +1,1 @@
-    from time import monotonic
+    from cgi import escape

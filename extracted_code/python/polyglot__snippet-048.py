@@ -1,1 +1,1 @@
-async def _set_cache(self, key: str, value: str, ex: int):
+async def add_insight_batch(self, insights: List[Dict]):

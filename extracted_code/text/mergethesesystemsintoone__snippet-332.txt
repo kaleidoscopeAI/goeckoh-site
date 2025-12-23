@@ -1,0 +1,2 @@
+return isinstance(data["data"], (list, np.ndarray))
+

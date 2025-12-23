@@ -1,0 +1,18 @@
+fig, ax = plt.subplots(figsize=(12, 8))
+node_labels = {
+    node_id: f"ID: {node_id}\nEnergy: {self.nodes[node_id].resources.get('energy', 0):.2f}"
+    for node_id in self.nodes
+}
+nx.draw(
+    self.graph, 
+    pos=nx.spring_layout(self.graph), 
+    with_labels=True, 
+    labels=node_labels, 
+    node_size=700, 
+    font_size=10, 
+    node_color="skyblue", 
+    font_color="darkblue"
+)
+plt.title("Mirrored Network Visualization")
+plt.show()
+

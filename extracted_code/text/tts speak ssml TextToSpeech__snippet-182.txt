@@ -1,0 +1,5 @@
+      val shortArray = ShortArray(audioBytes.size / 2)
+      ByteBuffer.wrap(audioBytes).asShortBuffer().get(shortArray)
+      var sum = 0.0
+      shortArray.forEach { sum += (it / 32768.0).pow(2) }
+      val volume = if (shortArray.isNotEmpty()) sqrt(sum / shortArray.size)

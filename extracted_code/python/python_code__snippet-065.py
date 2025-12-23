@@ -1,11 +1,12 @@
-    def reraise(tp, value, tb=None):
-        try:
-            if value is None:
-                value = tp()
-            if value.__traceback__ is not tb:
-                raise value.with_traceback(tb)
-            raise value
-        finally:
-            value = None
-            tb = None
+    class NullHandler(logging.Handler):
+
+        def handle(self, record):
+            pass
+
+        def emit(self, record):
+            pass
+
+        def createLock(self):
+            self.lock = None
+
 

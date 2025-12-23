@@ -1,1 +1,1 @@
-for (let v of svc.S) expect(Number.isFinite(v)).toBeTruthy();
+const initial: ActuationDoc = { e: this._sanitizedZero(), normalized: this.normalized, ts: serverTimestamp(), version: 1 };

@@ -1,0 +1,8 @@
+# --- PRE-FLIGHT CHECKS ---
+# 1. Ensure you have a voice sample named "my_voice.wav" (6-30s)
+# 2. Install Ollama: https://ollama.ai/
+# 3. Run `ollama pull llama3.2:1b` in your terminal
+# 4. Make sure the Ollama application is running in the background. 
+
+echo = Echo(voice_sample="my_voice.wav", llm_model="llama3.2:1b")
+echo.start()

@@ -1,1 +1,3 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+b_i (perspective P_i), h_i (speculation), kappa_i (kaleidoscope), mu_i (mirror).
+Awareness A_i = softmax over nodes based on engines + Φ.
+

@@ -1,0 +1,30 @@
+"""
+Organizes files in a directory by their file extension.
+
+Args:
+    directory: The path to the directory to organize.
+"""
+extensions = {}  # Dictionary to store file extensions and corresponding folders
+
+for filename in os.listdir(directory):
+    if os.path.isfile(os.path.join(directory, filename)):
+        base, ext = os.path.splitext(filename)
+        ext = ext[1:].lower()  # Remove the leading dot and make lowercase
+
+        if ext not in extensions:
+            extensions[ext] = ext + "_files"  # Create a folder name (e.g., "jpg_files")
+            os.makedirs(os.path.join(directory, extensions[ext]), exist_ok=True)
+
+        source_path = os.path.join(directory, filename)
+        destination_path = os.path.join(directory, extensions[ext], filename)
+        shutil.move(source_path, destination_path)
+
+target_directory = input("Enter the directory to organize: ") # Example: "/Users/yourname/Downloads"
+
+if os.path.isdir(target_directory):
+    organize_files(target_directory)
+    print("Files organized successfully!")
+else:
+    print("Invalid directory path.")
+
+

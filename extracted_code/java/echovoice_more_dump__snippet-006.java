@@ -1,1 +1,1 @@
-private fun oscillatorState(): ConsciousState {
+private fun aggregator(latent: FloatArray): FloatArray {

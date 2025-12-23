@@ -1,1 +1,1 @@
-def embed(self, text: str, dim: int) -> np.ndarray:
+def _consume_stream(self) -> None:

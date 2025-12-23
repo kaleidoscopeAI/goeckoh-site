@@ -1,17 +1,6 @@
-    def Self(self, params):
-        """Used to spell the type of "self" in classes.
+from pip._internal.req.req_install import InstallRequirement
+from pip._internal.utils.direct_url_helpers import direct_url_from_link
+from pip._internal.utils.misc import normalize_version_info
 
-        Example::
-
-          from typing import Self
-
-          class ReturnsSelf:
-              def parse(self, data: bytes) -> Self:
-                  ...
-                  return self
-
-        """
-
-        raise TypeError(f"{self} is not subscriptable")
-
+from .base import Candidate, CandidateVersion, Requirement, format_name
 

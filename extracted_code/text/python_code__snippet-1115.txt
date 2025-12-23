@@ -1,0 +1,4 @@
+link: Link,
+download: Downloader,
+download_dir: Optional[str] = None,
+hashes: Optional[Hashes] = None,

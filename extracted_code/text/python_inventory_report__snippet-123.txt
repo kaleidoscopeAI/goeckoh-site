@@ -1,0 +1,2 @@
+doc: sensory_gears.py
+classes: AudioInputGear

@@ -1,0 +1,3 @@
+doc: Voice synthesis backend that works on Python 3.12 without Coqui TTS.
+functions: _ensure_mono
+classes: VoiceMimic

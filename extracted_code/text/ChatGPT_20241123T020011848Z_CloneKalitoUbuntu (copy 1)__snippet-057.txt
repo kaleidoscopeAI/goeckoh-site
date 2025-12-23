@@ -1,5 +1,16 @@
-    - Data classification using AI (e.g., categorizing articles or images).
-  - Interactive Visualization
-    - Real-time decision-making nodes with a mirrored system setup.
-  - Improved Communication
-    - Nodes sharing resources and knowledge dynamically.
+"""Visualize the node network"""
+G = nx.Graph()
+for node in nodes:
+    G.add_node(node.id, energy=node.energy)
+    for connected_node in node.connections:
+        G.add_edge(node.id, connected_node.id)
+
+pos = nx.spring_layout(G)
+energies = [G.nodes[n]['energy'] for n in G.nodes()]
+max_energy = max(energies) if energies else 1
+node_sizes = [max(100, e / max_energy * 300) for e in energies]
+
+nx.draw(G, pos, with_labels=True, node_size=node_sizes, node_color=energies, cmap=plt.cm.viridis)
+plt.title('AI Node Network Visualization')
+plt.show()
+

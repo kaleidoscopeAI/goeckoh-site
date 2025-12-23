@@ -1,17 +1,16 @@
-import numpy as np
+from vector import Vector
 
-class Vector:
-    def __init__(self, components):
-        self.components = np.array(components, dtype=np.float64)
+class EmotionalState:
+    def __init__(self, valence=0.0, arousal=0.0, coherence=0.0):
+        self.valence = valence
+        self.arousal = arousal
+        self.coherence = coherence
 
-    def __sub__(self, other):
-        return Vector(self.components - other.components)
-
-    def __mul__(self, scalar):
-        return Vector(self.components * scalar)
-
-    def dot(self, other):
-        return np.dot(self.components, other.components)
-
-    def norm(self):
-        return np.linalg.norm(self.components)
+class CompleteNode:
+    def __init__(self, id, position: Vector, energy=0.0, awareness=0.0, knowledge=0.0, emotional_state=None):
+        self.id = id
+        self.position = position
+        self.energy = energy
+        self.awareness = awareness
+        self.knowledge = knowledge
+        self.emotional_state = emotional_state or EmotionalState()

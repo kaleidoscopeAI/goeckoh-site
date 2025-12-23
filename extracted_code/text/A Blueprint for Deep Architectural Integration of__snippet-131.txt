@@ -1,0 +1,4 @@
+- $S_k \in \mathbb{R}^n$ is the cognitive state vector at step $k$,
+- $c_k \geq 0$ is the curiosity tension level at step $k$.
+
+

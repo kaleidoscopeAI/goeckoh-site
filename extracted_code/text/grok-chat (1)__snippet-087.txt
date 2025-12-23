@@ -1,0 +1,5 @@
+system = EndToEndSystem()
+system.init_bits_nodes()
+system.loop()
+system.drug.evol_loop()
+

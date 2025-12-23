@@ -1,53 +1,25 @@
-import abc
-from typing import Optional
+"""Retries until an exception message equals or matches."""
 
-from pip._internal.index.package_finder import PackageFinder
-from pip._internal.metadata.base import BaseDistribution
-from pip._internal.req import InstallRequirement
+def __init__(
+    self,
+    message: typing.Optional[str] = None,
+    match: typing.Optional[str] = None,
+) -> None:
+    super().__init__(message, match)
+    # invert predicate
+    if_predicate = self.predicate
+    self.predicate = lambda *args_, **kwargs_: not if_predicate(*args_, **kwargs_)
 
+def __call__(self, retry_state: "RetryCallState") -> bool:
+    if retry_state.outcome is None:
+        raise RuntimeError("__call__() called before outcome was set")
 
-class AbstractDistribution(metaclass=abc.ABCMeta):
-    """A base class for handling installable artifacts.
+    if not retry_state.outcome.failed:
+        return True
 
-    The requirements for anything installable are as follows:
-
-     - we must be able to determine the requirement name
-       (or we can't correctly handle the non-upgrade case).
-
-     - for packages with setup requirements, we must also be able
-       to determine their requirements without installing additional
-       packages (for the same reason as run-time dependencies)
-
-     - we must be able to create a Distribution object exposing the
-       above metadata.
-
-     - if we need to do work in the build tracker, we must be able to generate a unique
-       string to identify the requirement in the build tracker.
-    """
-
-    def __init__(self, req: InstallRequirement) -> None:
-        super().__init__()
-        self.req = req
-
-    @abc.abstractproperty
-    def build_tracker_id(self) -> Optional[str]:
-        """A string that uniquely identifies this requirement to the build tracker.
-
-        If None, then this dist has no work to do in the build tracker, and
-        ``.prepare_distribution_metadata()`` will not be called."""
-        raise NotImplementedError()
-
-    @abc.abstractmethod
-    def get_metadata_distribution(self) -> BaseDistribution:
-        raise NotImplementedError()
-
-    @abc.abstractmethod
-    def prepare_distribution_metadata(
-        self,
-        finder: PackageFinder,
-        build_isolation: bool,
-        check_build_deps: bool,
-    ) -> None:
-        raise NotImplementedError()
+    exception = retry_state.outcome.exception()
+    if exception is None:
+        raise RuntimeError("outcome failed but the exception is None")
+    return self.predicate(exception)
 
 

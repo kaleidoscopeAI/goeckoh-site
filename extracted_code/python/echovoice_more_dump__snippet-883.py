@@ -1,5 +1,1 @@
-    print("Error: Could not import KaleidoscopeCore from kaleidoscope_merged.py.\n" 
-          "Make sure the file exists and contains a KaleidoscopeCore class.\n" 
-          f"Details: {e}")
-    KaleidoscopeCore = None
-
+valence, total curvature, etc. These charts update over time; use websockets or periodic fetch from FastAPI to push new data points to the

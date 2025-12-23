@@ -1,0 +1,2 @@
+state = compute_bubble_state(profile, attempt, t_time=t*0.01)
+render_bubble(state['radius'], state['spike'])

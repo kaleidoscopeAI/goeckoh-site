@@ -1,0 +1,2 @@
+- Implement a built-in latency test mode: play a known impulse or click through the same path (mic → processing → speaker) while capturing input and output with the same audio device; cross-correlate to measure round-trip delay.
+- Repeat across buffer sizes, CPU loads, and platforms to derive per-device latency distributions.

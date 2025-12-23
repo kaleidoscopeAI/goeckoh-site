@@ -1,0 +1,4 @@
+                ↑  
+                | (periodic control prompts)
+                ↓
+       [HF LLM Meta-Controller]

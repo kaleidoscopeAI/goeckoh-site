@@ -1,6 +1,3 @@
-from operator import itemgetter
-from typing import TYPE_CHECKING, Callable, NamedTuple, Optional, Sequence
+    import bz2  # noqa
 
-from . import errors
-from .protocol import is_renderable, rich_cast
-
+    SUPPORTED_EXTENSIONS += BZ2_EXTENSIONS

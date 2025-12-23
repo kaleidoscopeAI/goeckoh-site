@@ -1,0 +1,3 @@
+cd backend && KIVY_NO_ARGS=1 USE_HEADLESS=1 GOECKOH_DISABLE_TTS=1 GOECKOH_DISABLE_RTVC=1 GOECKOH_DISABLE_TORCH=1
+GOECKOH_USE_RUST_VC=0 GOECKOH_ASR_BACKEND=vosk GOECKOH_ASR_GRAMMAR=digits GOECKOH_FAST_MODE=1 LOG_DIR=/tmp/goeckoh_run
+python -m goeckoh.apps.real_unified_system --api --config real_system_config.ini

@@ -1,6 +1,8 @@
-from math import sqrt
-from functools import lru_cache
-from typing import Sequence, Tuple, TYPE_CHECKING
+    from typing import TypedDict
 
-from .color_triplet import ColorTriplet
+    class TransformedHit(TypedDict):
+        name: str
+        summary: str
+        versions: List[str]
+
 

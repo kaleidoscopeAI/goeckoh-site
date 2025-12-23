@@ -1,1 +1,2 @@
-for (let k = 0; k < m; k++) {
+const docRef = doc(this.firestore, "actuation", "latestProjection");
+const payload = {

@@ -1,0 +1,4 @@
+_object: Any,
+max_length: Optional[int] = None,
+max_string: Optional[int] = None,
+max_depth: Optional[int] = None,

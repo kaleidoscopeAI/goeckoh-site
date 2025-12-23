@@ -1,0 +1,7 @@
+
+-   Low GCL: Only calming affirmations ("I am safe")
+
+-   Medium GCL: Basic analysis and reflection
+
+-   High GCL: Full reasoning, planning, automation
+

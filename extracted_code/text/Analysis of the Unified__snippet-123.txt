@@ -1,0 +1,1 @@
+engine.update(positions, { valence: 0, arousal: 0.5 });

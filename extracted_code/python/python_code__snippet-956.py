@@ -1,40 +1,15 @@
-def loop_first(values: Iterable[T]) -> Iterable[Tuple[bool, T]]:
-    """Iterate and generate a tuple with a flag for first value."""
-    iter_values = iter(values)
-    try:
-        value = next(iter_values)
-    except StopIteration:
-        return
-    yield True, value
-    for value in iter_values:
-        yield False, value
+import logging
+from optparse import Values
+from typing import Any, Dict, List
 
+from pip._vendor.packaging.markers import default_environment
+from pip._vendor.rich import print_json
 
-def loop_last(values: Iterable[T]) -> Iterable[Tuple[bool, T]]:
-    """Iterate and generate a tuple with a flag for last value."""
-    iter_values = iter(values)
-    try:
-        previous_value = next(iter_values)
-    except StopIteration:
-        return
-    for value in iter_values:
-        yield False, previous_value
-        previous_value = value
-    yield True, previous_value
-
-
-def loop_first_last(values: Iterable[T]) -> Iterable[Tuple[bool, bool, T]]:
-    """Iterate and generate a tuple with a flag for first and last value."""
-    iter_values = iter(values)
-    try:
-        previous_value = next(iter_values)
-    except StopIteration:
-        return
-    first = True
-    for value in iter_values:
-        yield first, False, previous_value
-        first = False
-        previous_value = value
-    yield first, True, previous_value
-
+from pip import __version__
+from pip._internal.cli import cmdoptions
+from pip._internal.cli.req_command import Command
+from pip._internal.cli.status_codes import SUCCESS
+from pip._internal.metadata import BaseDistribution, get_environment
+from pip._internal.utils.compat import stdlib_pkgs
+from pip._internal.utils.urls import path_to_url
 

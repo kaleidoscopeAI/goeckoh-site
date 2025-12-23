@@ -1,4 +1,2 @@
-const t = nowMs();
-for (let j = 0; j < this.M; j++) {
-const c = this.constructs[j];
-const newActivation = C[j];
+const PORT = process.env.PERSISTENCE_PORT ? Number(process.env.PERSISTENCE_PORT) : 4201;
+app.listen(PORT, () => console.log(`Persistence server listening on ${PORT}`));

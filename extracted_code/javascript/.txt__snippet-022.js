@@ -1,2 +1,2 @@
-function updateLive(data) {
-const ts = data.timestamp_iso || null;
+private let hostKey = "EchoServerHost"
+private let portKey = "EchoServerPort"

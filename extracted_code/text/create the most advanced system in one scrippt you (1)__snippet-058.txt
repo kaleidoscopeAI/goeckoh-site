@@ -1,0 +1,5 @@
+tbl <- tables[[i]]
+if(any(grepl("ICC|N1", tbl, ignore.case=TRUE))) {
+  n1_table <- tbl
+  break
+}

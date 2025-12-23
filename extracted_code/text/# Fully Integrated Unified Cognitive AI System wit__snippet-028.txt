@@ -1,2 +1,0 @@
-Replace simple scalar simulations with an actual Transformer model using PyTorch:
-

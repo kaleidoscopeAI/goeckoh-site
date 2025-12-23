@@ -1,36 +1,5 @@
-class LanguageType(Enum):
-    """Supported programming languages"""
-    PYTHON = auto()
-    JAVASCRIPT = auto()
-    TYPESCRIPT = auto()
-    JAVA = auto()
-    CSHARP = auto()
-    CPP = auto()
-    RUBY = auto()
-    PHP = auto()
-    GO = auto()
-    RUST = auto()
-    SWIFT = auto()
-    KOTLIN = auto()
-    UNKNOWN = auto()
-
-class SystemType(Enum):
-    """Types of systems to upgrade"""
-    WEB_APP = auto()
-    DESKTOP_APP = auto()
-    MOBILE_APP = auto()
-    API = auto()
-    CLI = auto()
-    LIBRARY = auto()
-    FRAMEWORK = auto()
-    DATABASE = auto()
-    UNKNOWN = auto()
-
-class UpgradeStrategy(Enum):
-    """Strategies for system upgrades"""
-    IN_PLACE = auto()  # Modify existing codebase
-    INCREMENTAL = auto()  # Upgrade component by component
-    FULL_REWRITE = auto()  # Complete rewrite with same language
-    LANGUAGE_MIGRATION = auto()  # Rewrite in different language
-    WRAPPER = auto()  # Create wrapper around existing system
+a: int
+b: int
+k: float = 0.15
+rest: float = 1.0
 

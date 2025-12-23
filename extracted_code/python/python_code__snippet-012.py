@@ -1,15 +1,16 @@
-def _android_videos_folder() -> str:
-    """:return: videos folder for the Android OS"""
-    # Get directories with pyjnius
-    try:
-        from jnius import autoclass
+    def log_it(retry_state: "RetryCallState") -> None:
+        if retry_state.fn is None:
+            # NOTE(sileht): can't really happen, but we must please mypy
+            fn_name = "<unknown>"
+        else:
+            fn_name = _utils.get_callback_name(retry_state.fn)
+        logger.log(
+            log_level,
+            f"Finished call to '{fn_name}' "
+            f"after {sec_format % retry_state.seconds_since_start}(s), "
+            f"this was the {_utils.to_ordinal(retry_state.attempt_number)} time calling it.",
+        )
 
-        context = autoclass("android.content.Context")
-        environment = autoclass("android.os.Environment")
-        videos_dir: str = context.getExternalFilesDir(environment.DIRECTORY_DCIM).getAbsolutePath()
-    except Exception:  # noqa: BLE001
-        videos_dir = "/storage/emulated/0/DCIM/Camera"
-
-    return videos_dir
+    return log_it
 
 

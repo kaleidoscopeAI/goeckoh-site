@@ -1,1 +1,1 @@
-console.log("ProjectionService: loaded active W from", activePath);
+const data = JSON.parse(raw);

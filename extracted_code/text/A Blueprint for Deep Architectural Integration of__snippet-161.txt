@@ -1,0 +1,5 @@
+- Transformers wrapped via `llama.cpp` in Rust.
+- Input encoded/decoded as bit vectors or embeddings quantized to binary approximations.
+- Web crawler triggered when $b_k = 1$, asynchronously fetching, summarizing, and embedding new info as bit vectors.
+- Outputs clipped and quantized to preserve system Lipschitz contractions.
+

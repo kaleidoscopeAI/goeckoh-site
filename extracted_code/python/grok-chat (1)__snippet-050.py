@@ -1,23 +1,36 @@
-from .semantic_engine import SemanticEngine
+class PragmaticAnalysis:
+    type: PragmaticType
+    confidence: float
+    adjusted_text: str  # Rephrased for clarity if needed
+    social_intent: str  # e.g., "request help", "express frustration"
 
-class SpeechLoop:
-    # ...
+class PragmaticEngine:
+    def __init__(self):
+        # Patterns for pragmatics (expand with ML later)
+        self.idiom_patterns = [r"kick the bucket", r"piece of cake", r"break a leg"]
+        self.sarcasm_markers = ["yeah right", "oh sure", "as if"]
+        self.social_cues = {
+            "help": ["can you", "please", "need"],
+            "frustration": ["ugh", "why", "can't"],
+        }
 
-    def __post_init__(self) -> None:
-        # ...
-        self.semantic = SemanticEngine()
+    def analyze(self, text: str, semantic_embed: np.ndarray) -> PragmaticAnalysis:
+        text_lower = text.lower()
 
-    async def handle_chunk(self, chunk: np.ndarray) -> None:
-        # ... (transcription)
+        # Detect idioms
+        for pattern in self.idiom_patterns:
+            if re.search(pattern, text_lower):
+                return PragmaticAnalysis("idiom", 0.9, text, "figurative expression")
 
-        semantic_intent = self.semantic.analyze(raw)
+        # Detect sarcasm (simple heuristic)
+        if any(marker in text_lower for marker in self.sarcasm_markers):
+            return PragmaticAnalysis("sarcasm", 0.8, text, "opposite intent")
 
-        # Feed to lattice as stimulus (e.g., vector from intent/emotion)
-        stimulus = np.random.rand(self.heart.n_nodes, 5)  # Placeholder; map semantic to vector
-        if semantic_intent.emotion == "anxious":
-            stimulus[:, 0] += 0.5  # Boost arousal
-        self.heart.step(stimulus)
+        # Social cues
+        for intent, cues in self.social_cues.items():
+            if any(cue in text_lower for cue in cues):
+                return PragmaticAnalysis("social_cue", 0.85, text, intent)
 
-        style = semantic_intent.emotion  # Adjust mimicry style
+        # Default literal
+        return PragmaticAnalysis("literal", 1.0, text, "direct statement")
 
-        # ... (echo with adjusted style)

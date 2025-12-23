@@ -1,0 +1,9 @@
+platlib = scheme["platlib"]
+if "/$platlibdir/" in platlib:
+    platlib = platlib.replace("/$platlibdir/", f"/{_PLATLIBDIR}/")
+if "/lib64/" not in platlib:
+    return False
+unpatched = platlib.replace("/lib64/", "/lib/")
+return unpatched.replace("$platbase/", "$base/") == scheme["purelib"]
+
+

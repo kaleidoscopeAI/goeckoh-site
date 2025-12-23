@@ -1,1 +1,4 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+Equation: E_ij = ½ k_ij (||x_i - x_j|| - L_ij)^2; F_ij = -k_ij (d - L_ij) u; ẍ_i = (Σ F_ij - γ v_i + η)/m_i.
+Transformation: Vectors → node states (pos, vel, energy).
+Coding: Velocity-Verlet integrator; adaptive dt if max_k/min_m > threshold.
+

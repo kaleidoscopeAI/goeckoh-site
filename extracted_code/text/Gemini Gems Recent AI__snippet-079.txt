@@ -1,0 +1,3 @@
+Output('molecule-details', 'children'),
+Input('get-details-button', 'n_clicks'),
+State('smiles-input', 'value')

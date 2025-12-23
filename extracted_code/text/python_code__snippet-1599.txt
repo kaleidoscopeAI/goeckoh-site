@@ -1,0 +1,32 @@
+"""
+Process a value provided for the --no-use-pep517 option.
+
+This is an optparse.Option callback for the no_use_pep517 option.
+"""
+# Since --no-use-pep517 doesn't accept arguments, the value argument
+# will be None if --no-use-pep517 is passed via the command-line.
+# However, the value can be non-None if the option is triggered e.g.
+# by an environment variable, for example "PIP_NO_USE_PEP517=true".
+if value is not None:
+    msg = """A value was passed for --no-use-pep517,
+    probably using either the PIP_NO_USE_PEP517 environment variable
+    or the "no-use-pep517" config file option. Use an appropriate value
+    of the PIP_USE_PEP517 environment variable or the "use-pep517"
+    config file option instead.
+    """
+    raise_option_error(parser, option=option, msg=msg)
+
+# If user doesn't wish to use pep517, we check if setuptools and wheel are installed
+# and raise error if it is not.
+packages = ("setuptools", "wheel")
+if not all(importlib.util.find_spec(package) for package in packages):
+    msg = (
+        f"It is not possible to use --no-use-pep517 "
+        f"without {' and '.join(packages)} installed."
+    )
+    raise_option_error(parser, option=option, msg=msg)
+
+# Otherwise, --no-use-pep517 was passed via the command-line.
+parser.values.use_pep517 = False
+
+

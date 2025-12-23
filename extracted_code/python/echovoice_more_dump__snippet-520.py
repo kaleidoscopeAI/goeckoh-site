@@ -1,1 +1,1 @@
-Everything is CPU-only, deterministic by seed, and designed to plug into the codebase you already have (types and ProjectionService from earlier). Below
+Define network adjacency implicitly via weighted bonds (B_{ij}) (not necessarily symmetric) determined from the nodes. Let (\mathcal{N}(i)) denote

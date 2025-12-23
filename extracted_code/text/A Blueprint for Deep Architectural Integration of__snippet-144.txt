@@ -1,0 +1,4 @@
+- This approach is similar to digital hardware design of neural networks, quantized LLM approximations, and finite-state cognitive machines.
+- Complexity grows with bit depths $m$ for numerical precision; however, coarse quantization and lookup tables can simplify logic drastically.
+- The curiosity bit update is inherently a digital threshold function; it fits neatly into control logic and state machines.
+

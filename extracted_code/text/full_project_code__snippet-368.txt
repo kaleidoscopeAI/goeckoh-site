@@ -1,0 +1,5 @@
+{
+    six.unichr(cc): u"%{:02X}".format(cc)
+    for cc in range(0x00, 0x1F + 1)
+    if cc not in (0x1B,)
+}

@@ -1,0 +1,3 @@
+# Remove or mask personally identifiable information
+return text
+

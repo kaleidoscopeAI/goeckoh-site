@@ -1,17 +1,52 @@
-def enquote_executable(executable):
-    if ' ' in executable:
-        # make sure we quote only the executable in case of env
-        # for example /usr/bin/env "/dir with spaces/bin/jython"
-        # instead of "/usr/bin/env /dir with spaces/bin/jython"
-        # otherwise whole
-        if executable.startswith('/usr/bin/env '):
-            env, _executable = executable.split(' ', 1)
-            if ' ' in _executable and not _executable.startswith('"'):
-                executable = '%s "%s"' % (env, _executable)
-        else:
-            if not executable.startswith('"'):
-                executable = '"%s"' % executable
-    return executable
+    from argparse import Namespace
+
+    from pip._vendor.cachecontrol.controller import CacheController
 
 
-# Keep the old name around (for now), as there is at least one project using it!
+def setup_logging() -> None:
+    logger.setLevel(logging.DEBUG)
+    handler = logging.StreamHandler()
+    logger.addHandler(handler)
+
+
+def get_session() -> requests.Session:
+    adapter = CacheControlAdapter(
+        DictCache(), cache_etags=True, serializer=None, heuristic=None
+    )
+    sess = requests.Session()
+    sess.mount("http://", adapter)
+    sess.mount("https://", adapter)
+
+    sess.cache_controller = adapter.controller  # type: ignore[attr-defined]
+    return sess
+
+
+def get_args() -> Namespace:
+    parser = ArgumentParser()
+    parser.add_argument("url", help="The URL to try and cache")
+    return parser.parse_args()
+
+
+def main() -> None:
+    args = get_args()
+    sess = get_session()
+
+    # Make a request to get a response
+    resp = sess.get(args.url)
+
+    # Turn on logging
+    setup_logging()
+
+    # try setting the cache
+    cache_controller: CacheController = (
+        sess.cache_controller  # type: ignore[attr-defined]
+    )
+    cache_controller.cache_response(resp.request, resp.raw)
+
+    # Now try to get it
+    if cache_controller.cached_request(resp.request):
+        print("Cached!")
+    else:
+        print("Not cached :(")
+
+

@@ -1,1 +1,1 @@
-Value function (V_i):
++ const { W, meta } = req.body;

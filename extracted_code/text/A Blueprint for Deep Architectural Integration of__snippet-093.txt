@@ -1,0 +1,2 @@
+- Use arrays/vectors (`Vec<f64>`) instead of linked structures
+- Organize parameters and states in contiguous memory blocks

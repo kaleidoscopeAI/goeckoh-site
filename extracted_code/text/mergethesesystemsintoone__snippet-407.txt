@@ -1,0 +1,6 @@
+"""Initializes a random state for the Markov Chain."""
+initial_state = {}
+for node_id, data in network.nodes.items():
+      initial_state [node_id] = random.random()
+return initial_state
+

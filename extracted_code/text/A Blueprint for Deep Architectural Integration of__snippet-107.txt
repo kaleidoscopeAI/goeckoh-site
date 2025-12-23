@@ -1,0 +1,4 @@
+- 2023 Peking University webinar on contraction for control and computation [YouTube](https://www.youtube.com/watch?v=Ki73SHVCWdg)
+- 2024 CDC Workshops on contraction theory and systems [Conference Site](http://motion.me.ucsb.edu/contraction-workshop-2024/)
+- Detailed lecture notes with mathematical depth and examples [Lecture Notes PDF](https://fbullo.github.io/ctds/)
+

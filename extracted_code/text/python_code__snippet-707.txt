@@ -1,0 +1,3 @@
+"""The color could not be parsed."""
+
+

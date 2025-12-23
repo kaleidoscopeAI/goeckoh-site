@@ -1,0 +1,3 @@
+"meltdown_risk", "high_energy", "anxious", "success_streak", "new_phrase", "request", "waiting", "transition",
+"loud_noise", "new_food", "doctor", "grocery_store", "car_ride", "birthday_party", "school_bus", "clean_up",
+"mistake", "asking_help"

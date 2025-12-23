@@ -1,21 +1,20 @@
-import logging
-import shutil
-import sys
-import textwrap
-import xmlrpc.client
-from collections import OrderedDict
-from optparse import Values
-from typing import TYPE_CHECKING, Dict, List, Optional
+def reveal_type(__obj: T) -> T:
+    """Reveal the inferred type of a variable.
 
-from pip._vendor.packaging.version import parse as parse_version
+    When a static type checker encounters a call to ``reveal_type()``,
+    it will emit the inferred type of the argument::
 
-from pip._internal.cli.base_command import Command
-from pip._internal.cli.req_command import SessionCommandMixin
-from pip._internal.cli.status_codes import NO_MATCHES_FOUND, SUCCESS
-from pip._internal.exceptions import CommandError
-from pip._internal.metadata import get_default_environment
-from pip._internal.models.index import PyPI
-from pip._internal.network.xmlrpc import PipXmlrpcTransport
-from pip._internal.utils.logging import indent_log
-from pip._internal.utils.misc import write_output
+        x: int = 1
+        reveal_type(x)
+
+    Running a static type checker (e.g., ``mypy``) on this example
+    will produce output similar to 'Revealed type is "builtins.int"'.
+
+    At runtime, the function prints the runtime type of the
+    argument and returns it unchanged.
+
+    """
+    print(f"Runtime type is {type(__obj).__name__!r}", file=sys.stderr)
+    return __obj
+
 

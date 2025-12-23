@@ -1,0 +1,5 @@
+"""Warned when connecting to a host with a certificate missing a SAN."""
+
+pass
+
+

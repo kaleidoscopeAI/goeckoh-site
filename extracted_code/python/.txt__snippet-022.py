@@ -1,1 +1,2 @@
-Loading voice clone from {cfg.voice_sample_path}...")
+def estimate_voice_emotion(self, audio_np: np.ndarray) -> float:
+"""Simple arousal estimate from RMS energy"""

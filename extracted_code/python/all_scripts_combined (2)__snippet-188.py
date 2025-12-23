@@ -1,53 +1,115 @@
-def create_app(companion: EchoCompanion) -> Flask:
-    app = Flask(__name__)
+tts: VoiceMimic
+audio: AudioSettings
+profile: VoiceProfile
+config: VoiceCrystalConfig = field(default_factory=VoiceCrystalConfig)
 
-    @app.route("/api/latest")
-    def api_latest() -> Any:
-        return jsonify(companion.get_latest_metrics())
+def _smooth(self, wav: np.ndarray, window_ms: float) -> np.ndarray:
+    if wav.size == 0:
+        return wav
+    window = max(int(window_ms * self.audio.sample_rate / 1000.0), 1)
+    if window <= 1:
+        return wav
+    kernel = np.ones(window, dtype=np.float32) / float(window)
+    return np.convolve(wav, kernel, mode="same").astype(np.float32)
 
-    @app.route("/api/stats")
-    def api_stats() -> Any:
-        return jsonify(companion.get_phrase_stats())
+def _apply_mode(self, wav: np.ndarray, mode: Mode) -> np.ndarray:
+    if wav.size == 0:
+        return wav
+    if mode == "inner":
+        smoothed = self._smooth(wav, self.config.inner_lowpass_window_ms * 2.0)
+        rms = float(np.sqrt(np.mean(smoothed**2) + 1e-6))
+        target_rms = rms * 0.8
+        if rms > 0:
+            smoothed = np.tanh(smoothed / rms) * target_rms
+        return (smoothed * self.config.inner_volume_scale).astype(np.float32)
+    if mode == "coach":
+        return (wav * self.config.coach_volume_scale).astype(np.float32)
+    return wav
 
-    @app.route("/api/utterance", methods=["POST"])
-    async def api_utterance() -> Any:
-        try:
-            wav_bytes = await request.get_data()
-            if not wav_bytes:
-                return jsonify({"error": "no data"}), 400
-            audio_np = _decode_wav(wav_bytes)
-            res = await companion.process_utterance_for_mobile(audio_np)
-            return jsonify(res)
-        except Exception as exc:
-            print(f"⚠️ /api/utterance error: {exc}")
-            return jsonify({"error": "internal error"}), 500
+def _synthesize_raw(self, text: str, style: Style) -> np.ndarray:
+    if not text:
+        return np.zeros(0, dtype=np.float32)
+    sample = self.profile.pick_reference(style)
+    if sample:
+        self.tts.update_voiceprint(sample.path)
+    return self.tts.synthesize(text)
 
-    @app.route("/")
-    def index() -> Any:
-        return render_template_string(DASHBOARD_HTML)
+def _apply_prosody(
+    self,
+    wav: np.ndarray,
+    prosody_source_wav: Optional[np.ndarray],
+    prosody_source_sr: Optional[int],
+) -> np.ndarray:
+    if prosody_source_wav is None or prosody_source_sr is None:
+        return wav
+    try:
+        prosody = extract_prosody(prosody_source_wav, prosody_source_sr)
+        return apply_prosody_to_tts(
+            wav,
+            self.audio.sample_rate,
+            prosody,
+            strength_pitch=self.config.prosody_strength_pitch,
+            strength_energy=self.config.prosody_strength_energy,
+        )
+    except Exception:
+        return wav
 
-    return app
+def speak(
+    self,
+    text: str,
+    style: Style = "neutral",
+    mode: Mode = "outer",
+    prosody_source_wav: Optional[np.ndarray] = None,
+    prosody_source_sr: Optional[int] = None,
+) -> np.ndarray:
+    base = self._synthesize_raw(text, style)
+    if base.size == 0:
+        return base
+    prosody_applied = self._apply_prosody(base, prosody_source_wav, prosody_source_sr)
+    processed = self._apply_mode(prosody_applied, mode)
+    return processed
 
+def say_inner(
+    self,
+    text: str,
+    style: Style = "calm",
+    prosody_source_wav: Optional[np.ndarray] = None,
+    prosody_source_sr: Optional[int] = None,
+) -> np.ndarray:
+    return self.speak(
+        text=text,
+        style=style,
+        mode="inner",
+        prosody_source_wav=prosody_source_wav,
+        prosody_source_sr=prosody_source_sr,
+    )
 
-def _decode_wav(data: bytes) -> np.ndarray:
-    buf = io.BytesIO(data)
-    import wave
+def say_outer(
+    self,
+    text: str,
+    style: Style = "neutral",
+    prosody_source_wav: Optional[np.ndarray] = None,
+    prosody_source_sr: Optional[int] = None,
+) -> np.ndarray:
+    return self.speak(
+        text=text,
+        style=style,
+        mode="outer",
+        prosody_source_wav=prosody_source_wav,
+        prosody_source_sr=prosody_source_sr,
+    )
 
-    wf = wave.open(buf, "rb")
-    n_channels = wf.getnchannels()
-    sampwidth = wf.getsampwidth()
-    framerate = wf.getframerate()
-    frames = wf.readframes(wf.getnframes())
-    wf.close()
-    if sampwidth != 2:
-        raise ValueError("expected 16-bit PCM")
-    audio = np.frombuffer(frames, dtype=np.int16).astype(np.float32) / 32768.0
-    if n_channels > 1:
-        audio = audio.reshape(-1, n_channels).mean(axis=1)
-    if framerate != 16_000:
-        duration = len(audio) / framerate
-        target_len = int(duration * 16_000)
-        x_old = np.linspace(0.0, 1.0, num=len(audio), endpoint=False)
-        x_new = np.linspace(0.0, 1.0, num=target_len, endpoint=False)
-        audio = np.interp(x_new, x_old, audio)
-    return audio
+def say_coach(
+    self,
+    text: str,
+    style: Style = "excited",
+    prosody_source_wav: Optional[np.ndarray] = None,
+    prosody_source_sr: Optional[int] = None,
+) -> np.ndarray:
+    return self.speak(
+        text=text,
+        style=style,
+        mode="coach",
+        prosody_source_wav=prosody_source_wav,
+        prosody_source_sr=prosody_source_sr,
+    )

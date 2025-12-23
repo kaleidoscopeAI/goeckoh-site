@@ -1,125 +1,169 @@
-class NormalizedVersion(Version):
-    """A rational version.
+    from datetime import datetime
 
-    Good:
-        1.2         # equivalent to "1.2.0"
-        1.2.0
-        1.2a1
-        1.2.3a2
-        1.2.3b1
-        1.2.3c1
-        1.2.3.4
-        TODO: fill this out
+    from filelock import BaseFileLock
 
-    Bad:
-        1           # minimum two numbers
-        1.2a        # release level must have a release serial
-        1.2.3b
+
+def _secure_open_write(filename: str, fmode: int) -> IO[bytes]:
+    # We only want to write to this file, so open it in write only mode
+    flags = os.O_WRONLY
+
+    # os.O_CREAT | os.O_EXCL will fail if the file already exists, so we only
+    #  will open *new* files.
+    # We specify this because we want to ensure that the mode we pass is the
+    # mode of the file.
+    flags |= os.O_CREAT | os.O_EXCL
+
+    # Do not follow symlinks to prevent someone from making a symlink that
+    # we follow and insecurely open a cache file.
+    if hasattr(os, "O_NOFOLLOW"):
+        flags |= os.O_NOFOLLOW
+
+    # On Windows we'll mark this file as binary
+    if hasattr(os, "O_BINARY"):
+        flags |= os.O_BINARY
+
+    # Before we open our file, we want to delete any existing file that is
+    # there
+    try:
+        os.remove(filename)
+    except OSError:
+        # The file must not exist already, so we can just skip ahead to opening
+        pass
+
+    # Open our file, the use of os.O_CREAT | os.O_EXCL will ensure that if a
+    # race condition happens between the os.remove and this line, that an
+    # error will be raised. Because we utilize a lockfile this should only
+    # happen if someone is attempting to attack us.
+    fd = os.open(filename, flags, fmode)
+    try:
+        return os.fdopen(fd, "wb")
+
+    except:
+        # An error occurred wrapping our FD in a file object
+        os.close(fd)
+        raise
+
+
+class _FileCacheMixin:
+    """Shared implementation for both FileCache variants."""
+
+    def __init__(
+        self,
+        directory: str,
+        forever: bool = False,
+        filemode: int = 0o0600,
+        dirmode: int = 0o0700,
+        lock_class: type[BaseFileLock] | None = None,
+    ) -> None:
+        try:
+            if lock_class is None:
+                from filelock import FileLock
+
+                lock_class = FileLock
+        except ImportError:
+            notice = dedent(
+                """
+            NOTE: In order to use the FileCache you must have
+            filelock installed. You can install it via pip:
+              pip install filelock
+            """
+            )
+            raise ImportError(notice)
+
+        self.directory = directory
+        self.forever = forever
+        self.filemode = filemode
+        self.dirmode = dirmode
+        self.lock_class = lock_class
+
+    @staticmethod
+    def encode(x: str) -> str:
+        return hashlib.sha224(x.encode()).hexdigest()
+
+    def _fn(self, name: str) -> str:
+        # NOTE: This method should not change as some may depend on it.
+        #       See: https://github.com/ionrock/cachecontrol/issues/63
+        hashed = self.encode(name)
+        parts = list(hashed[:5]) + [hashed]
+        return os.path.join(self.directory, *parts)
+
+    def get(self, key: str) -> bytes | None:
+        name = self._fn(key)
+        try:
+            with open(name, "rb") as fh:
+                return fh.read()
+
+        except FileNotFoundError:
+            return None
+
+    def set(
+        self, key: str, value: bytes, expires: int | datetime | None = None
+    ) -> None:
+        name = self._fn(key)
+        self._write(name, value)
+
+    def _write(self, path: str, data: bytes) -> None:
+        """
+        Safely write the data to the given path.
+        """
+        # Make sure the directory exists
+        try:
+            os.makedirs(os.path.dirname(path), self.dirmode)
+        except OSError:
+            pass
+
+        with self.lock_class(path + ".lock"):
+            # Write our actual file
+            with _secure_open_write(path, self.filemode) as fh:
+                fh.write(data)
+
+    def _delete(self, key: str, suffix: str) -> None:
+        name = self._fn(key) + suffix
+        if not self.forever:
+            try:
+                os.remove(name)
+            except FileNotFoundError:
+                pass
+
+
+class FileCache(_FileCacheMixin, BaseCache):
     """
-    def parse(self, s):
-        result = _normalized_key(s)
-        # _normalized_key loses trailing zeroes in the release
-        # clause, since that's needed to ensure that X.Y == X.Y.0 == X.Y.0.0
-        # However, PEP 440 prefix matching needs it: for example,
-        # (~= 1.4.5.0) matches differently to (~= 1.4.5.0.0).
-        m = PEP440_VERSION_RE.match(s)      # must succeed
-        groups = m.groups()
-        self._release_clause = tuple(int(v) for v in groups[1].split('.'))
-        return result
+    Traditional FileCache: body is stored in memory, so not suitable for large
+    downloads.
+    """
 
-    PREREL_TAGS = set(['a', 'b', 'c', 'rc', 'dev'])
-
-    @property
-    def is_prerelease(self):
-        return any(t[0] in self.PREREL_TAGS for t in self._parts if t)
+    def delete(self, key: str) -> None:
+        self._delete(key, "")
 
 
-def _match_prefix(x, y):
-    x = str(x)
-    y = str(y)
-    if x == y:
-        return True
-    if not x.startswith(y):
-        return False
-    n = len(y)
-    return x[n] == '.'
+class SeparateBodyFileCache(_FileCacheMixin, SeparateBodyBaseCache):
+    """
+    Memory-efficient FileCache: body is stored in a separate file, reducing
+    peak memory usage.
+    """
+
+    def get_body(self, key: str) -> IO[bytes] | None:
+        name = self._fn(key) + ".body"
+        try:
+            return open(name, "rb")
+        except FileNotFoundError:
+            return None
+
+    def set_body(self, key: str, body: bytes) -> None:
+        name = self._fn(key) + ".body"
+        self._write(name, body)
+
+    def delete(self, key: str) -> None:
+        self._delete(key, "")
+        self._delete(key, ".body")
 
 
-class NormalizedMatcher(Matcher):
-    version_class = NormalizedVersion
+def url_to_file_path(url: str, filecache: FileCache) -> str:
+    """Return the file cache path based on the URL.
 
-    # value is either a callable or the name of a method
-    _operators = {
-        '~=': '_match_compatible',
-        '<': '_match_lt',
-        '>': '_match_gt',
-        '<=': '_match_le',
-        '>=': '_match_ge',
-        '==': '_match_eq',
-        '===': '_match_arbitrary',
-        '!=': '_match_ne',
-    }
+    This does not ensure the file exists!
+    """
+    key = CacheController.cache_url(url)
+    return filecache._fn(key)
 
-    def _adjust_local(self, version, constraint, prefix):
-        if prefix:
-            strip_local = '+' not in constraint and version._parts[-1]
-        else:
-            # both constraint and version are
-            # NormalizedVersion instances.
-            # If constraint does not have a local component,
-            # ensure the version doesn't, either.
-            strip_local = not constraint._parts[-1] and version._parts[-1]
-        if strip_local:
-            s = version._string.split('+', 1)[0]
-            version = self.version_class(s)
-        return version, constraint
 
-    def _match_lt(self, version, constraint, prefix):
-        version, constraint = self._adjust_local(version, constraint, prefix)
-        if version >= constraint:
-            return False
-        release_clause = constraint._release_clause
-        pfx = '.'.join([str(i) for i in release_clause])
-        return not _match_prefix(version, pfx)
-
-    def _match_gt(self, version, constraint, prefix):
-        version, constraint = self._adjust_local(version, constraint, prefix)
-        if version <= constraint:
-            return False
-        release_clause = constraint._release_clause
-        pfx = '.'.join([str(i) for i in release_clause])
-        return not _match_prefix(version, pfx)
-
-    def _match_le(self, version, constraint, prefix):
-        version, constraint = self._adjust_local(version, constraint, prefix)
-        return version <= constraint
-
-    def _match_ge(self, version, constraint, prefix):
-        version, constraint = self._adjust_local(version, constraint, prefix)
-        return version >= constraint
-
-    def _match_eq(self, version, constraint, prefix):
-        version, constraint = self._adjust_local(version, constraint, prefix)
-        if not prefix:
-            result = (version == constraint)
-        else:
-            result = _match_prefix(version, constraint)
-        return result
-
-    def _match_arbitrary(self, version, constraint, prefix):
-        return str(version) == str(constraint)
-
-    def _match_ne(self, version, constraint, prefix):
-        version, constraint = self._adjust_local(version, constraint, prefix)
-        if not prefix:
-            result = (version != constraint)
-        else:
-            result = not _match_prefix(version, constraint)
-        return result
-
-    def _match_compatible(self, version, constraint, prefix):
-        version, constraint = self._adjust_local(version, constraint, prefix)
-        if version == constraint:
-            return True
-        if version < constraint:
-            return False

@@ -1,0 +1,4 @@
+- 3D node and edge positions,
+- Emotional and attention metrics,
+- Plotly chart traces/layouts for radar, heatmap, timelines, etc.
+

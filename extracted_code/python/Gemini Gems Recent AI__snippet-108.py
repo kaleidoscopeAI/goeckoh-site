@@ -1,54 +1,73 @@
-import React, { useState, useEffect, useRef } from 'react';
-import * as THREE from 'three';
-import axios from 'axios';
+def __init__(self, input_dim: int = 7, hidden_dim: int = 16, latent_dim: int = 4):
 
-const App = () => {
-    const mountRef = useRef(null);
-    const [smiles1, setSmiles1] = useState('');
-    const [smiles2, setSmiles2] = useState('');
-    const [similarity, setSimilarity] = useState(null);
-    const [features1, setFeatures1] = useState(null); // Store features for molecule 1
-    const [features2, setFeatures2] = useState(null); // Store features for molecule 2
+    super().__init__()
 
-    useEffect(() => {
-        //... (Three.js scene setup - same as previous example)
+    if not torch:
 
-        const animate = function () {
-            requestAnimationFrame(animate);
-            renderer.render(scene, camera);
-        };
+        logging.error("PyTorch missing, VAE disabled")
 
-        animate();
+        self.is_enabled = False
 
-        return () => {
-            mountRef.current.removeChild(renderer.domElement);
-        };
-    },);
+        return
 
-    const calculateSimilarity = async () => {
-        try {
-            const response = await axios.post('/api/similarity', { smiles1, smiles2 });
-            const data = response.data;
-            setSimilarity(data.similarity);
+    self.is_enabled = True
 
-            // Fetch and store features for visualization
-            const featuresResponse1 = await axios.post('/api/features', { smiles: smiles1 });
-            const featuresResponse2 = await axios.post('/api/features', { smiles: smiles2 });
-            setFeatures1(featuresResponse1.data.features);
-            setFeatures2(featuresResponse2.data.features);
+    self.encoder = nn.Sequential(
 
-            // Now you have features1 and features2 to position objects in 3D
-            console.log("Features 1:", features1);
-            console.log("Features 2:", features2);
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    };
+        nn.Linear(input_dim, hidden_dim),
 
-    return (
-        <div>
-            {/*... input fields and buttons... */}
-            <div ref={mountRef} style={{ height: '600px' }} /> {/* 3D visualization */}
-            {/*... similarity results... */}
-        </div>
-    );
+        nn.ReLU(),
+
+        nn.Linear(hidden_dim, latent_dim * 2)
+
+    )
+
+    self.decoder = nn.Sequential(
+
+        nn.Linear(latent_dim, hidden_dim),
+
+        nn.ReLU(),
+
+        nn.Linear(hidden_dim, input_dim),
+
+        nn.Sigmoid()
+
+    )
+
+
+def reparameterize(self, mu, log_var):
+
+    if not self.is_enabled:
+
+        return None
+
+    std = torch.exp(0.5 * log_var)
+
+    eps = torch.randn_like(std)
+
+    return mu + eps * std
+
+
+def forward(self, x):
+
+    if not self.is_enabled:
+
+        return None, None, None
+
+    try:
+
+        h = self.encoder(x)
+
+        mu, log_var = h.chunk(2, dim=-1)
+
+        z = self.reparameterize(mu, log_var)
+
+        return self.decoder(z), mu, log_var
+
+    except Exception as e:
+
+        logging.error(f"VAE forward failed: {e}")
+
+        return None, None, None
+
+

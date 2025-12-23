@@ -1,0 +1,1 @@
+Introduces the Model Context Protocol (MCP) as an open standard for LLMs to

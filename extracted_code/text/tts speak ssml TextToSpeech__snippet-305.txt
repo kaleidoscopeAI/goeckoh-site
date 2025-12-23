@@ -1,0 +1,4 @@
+17          maven { url "https://jitpack.io" }
+18 +        maven { url "https://k2-fsa.github.io/sherpa-onnx/repo" }
+19      }
+

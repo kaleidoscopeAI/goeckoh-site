@@ -1,0 +1,5 @@
+try:
+    echo = EchoSystem()
+    echo.listen_loop()
+except KeyboardInterrupt:
+    print("\n[System] Shutdown.")

@@ -1,0 +1,25 @@
+"""
+Ask LLM for a suggestion for the job's diagnostics and try to apply it safely.
+The LLM output is parsed; if it's invalid JSON or fails validation nothing is applied.
+"""
+rec = _JOBS[job_id]
+diag = rec["core"].diagnostics()
+prompt = f"Diagnostics:\n{diag}\n\nReturn a JSON action with keys: mix_delta, gamma_delta, bond_scale, product_params.\n{prompt_extra}"
+suggestion_text = llm.generate_prompt(prompt)
+action = llm.parse_action_json(suggestion_text)
+if action is None:
+    return {"approved": False, "reason": "LLM produced no valid action", "raw": suggestion_text}
+# sanitize action to simple numeric fields
+safe_action = {}
+for k in ["mix_delta", "gamma_delta", "bond_scale"]:
+    if k in action:
+        try:
+            safe_action[k] = float(action[k])
+        except Exception:
+            pass
+if "product_params" in action and isinstance(action["product_params"], dict):
+    safe_action["product_params"] = {"alpha": float(action["product_params"].get("alpha",1.0)),
+                                    "beta": float(action["product_params"].get("beta",1.0))}
+# apply safe
+return apply_action_safe(job_id, safe_action, sandbox_steps=sandbox_steps, dt=dt)
+

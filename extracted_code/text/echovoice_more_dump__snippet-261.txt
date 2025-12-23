@@ -1,1 +1,1 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+  Mapping to State Vectors: The filtered QSIN metrics are directly mapped to the local node's internal state 

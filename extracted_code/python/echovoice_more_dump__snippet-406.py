@@ -1,1 +1,3 @@
-def __init__(self):
+from typing import List, Tuple
+from ..bits.bitops import xor, popcount
+

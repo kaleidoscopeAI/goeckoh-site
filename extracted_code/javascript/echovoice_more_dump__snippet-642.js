@@ -1,1 +1,1 @@
-const update = (nodes: NodeDatum[]) => service.update(nodes);
+const raw = fs.readFileSync(path.resolve(argv.replay as string), "utf8");

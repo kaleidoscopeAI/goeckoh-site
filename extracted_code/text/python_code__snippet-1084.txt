@@ -1,0 +1,7 @@
+BestVersionAlreadyInstalled,
+DistributionNotFound,
+HashError,
+HashErrors,
+InstallationError,
+NoneMetadataError,
+UnsupportedPythonVersion,

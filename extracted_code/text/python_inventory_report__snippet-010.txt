@@ -1,0 +1,2 @@
+doc: KQBC Agent that bridges speech practice with an AGI substrate.
+classes: AGIStatus, KQBCAgent

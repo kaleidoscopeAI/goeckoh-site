@@ -1,0 +1,3 @@
+- Project parameters \$ p_i \$ to feasible sets
+- Apply clipping or regularization on \$ R \$ to preserve structure and prevent overfitting
+

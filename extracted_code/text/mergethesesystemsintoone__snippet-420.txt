@@ -1,0 +1,7 @@
+node_id = concept["id"]
+if node_id in self.nodes:
+  self.nodes[node_id]["strength"] = self.nodes[node_id].get('strength', 0) + 0.1
+
+  for neighbor, weight in self.edges.get(node_id, []):
+       self.nodes[neighbor]['strength'] = self.nodes [neighbor].get ('strength', 0) + weight * 0.05
+

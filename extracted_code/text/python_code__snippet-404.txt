@@ -1,0 +1,5 @@
+return not any(
+    segment.startswith(prefix) for prefix in ("dev", "a", "b", "rc", "post")
+)
+
+

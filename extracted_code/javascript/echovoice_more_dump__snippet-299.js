@@ -1,3 +1,1 @@
-function projectVec(species: FloatArr, proj: number[]): number {
-let out = 0;
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+for (let i = 0; i < N; i++) this.S[i] = backup[i] + k1[i] * (dt / 2);

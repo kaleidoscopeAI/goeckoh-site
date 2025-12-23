@@ -1,2 +1,6 @@
-This code implements an Objective-Driven Node class that includes adaptive modes based on a dynamically calculated objective score. Here’s a breakdown of its major functionalities:
+    - Attempts to categorize them using known characteristics (e.g., "bun," "tail," "mustard").
+  - Shared Hub:
+    - Combines results: "Hot dog" is stored as "food item" based on textual and visual alignment.
+
+
 

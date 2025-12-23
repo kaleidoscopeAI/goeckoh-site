@@ -1,1 +1,4 @@
-interactions approximate quantum amplitude behaviors using classical computation, enabling superposed hypothesis generation and probabilistic
+|             ^^^^^^^^^^^ `ChemicalFeatures` does not have this field
+|
+= note: available fields are: `element_symbol`, `electronegativity`, `valence_electrons`, `atomic_radius`, `is_metal` ... and 2 others
+

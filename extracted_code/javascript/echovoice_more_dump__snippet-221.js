@@ -1,1 +1,1 @@
-function updateCharts(metrics) {
+for (let k = 0; k < m; k++) {

@@ -1,0 +1,5 @@
+LocationValueError,
+MaxRetryError,
+ProxySchemeUnknown,
+ProxySchemeUnsupported,
+URLSchemeUnknown,

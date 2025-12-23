@@ -1,2 +1,3 @@
-Attach to: class Swarm: and use within the main update loop.
+Type alias issues:
+Fix the Result type usage throughout the codebase to match the definition:
 

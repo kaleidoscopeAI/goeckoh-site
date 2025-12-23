@@ -1,0 +1,2 @@
+EmotionalState.ALERT, EmotionalState.CURIOUS, EmotionalState.FOCUSED,
+EmotionalState.SOCIAL, EmotionalState.CONSERVATIVE

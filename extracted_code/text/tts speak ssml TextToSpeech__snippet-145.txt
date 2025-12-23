@@ -1,0 +1,7 @@
+  init {
+      Vosk.init(context)
+
+      // Load STT models
+      val sttLangs = listOf("en", "es", "fr")
+      sttLangs.forEach { lang ->
+          val modelPath = File(context.filesDir, "vosk-model-

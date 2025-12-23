@@ -1,0 +1,4 @@
+cache_hit_str = "*" if cache_hit else ""
+print(f"{cache_hit_str}Matched {expr} -> {toks.as_list()}")
+
+

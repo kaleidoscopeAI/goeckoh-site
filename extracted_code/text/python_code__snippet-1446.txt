@@ -1,0 +1,5 @@
+req_string: str,
+comes_from: Optional[InstallRequirement] = None,
+isolated: bool = False,
+use_pep517: Optional[bool] = None,
+user_supplied: bool = False,

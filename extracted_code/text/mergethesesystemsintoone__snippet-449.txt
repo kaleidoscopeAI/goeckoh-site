@@ -1,0 +1,11 @@
+"functions": {
+"RuleEngine": "The module used to manage and apply all rules given through conditions. that effect node behavior",
+"TheoremProver": "This section deals with validation by logical theorems which have to hold certain peremisis to work.",
+    "BayesianNetwork": "This implemnts the basis of probability updates for dynamic network systems and influence between related concepts",
+ "MCMCSampler":"Sample a bayesian netwrok graph at different cycles to measure the relationships dynamically using mackove chain simulations",
+    "ValueSystem": "this module defines values for insights",
+    "RiskAnalyzer": "Module for analying inherent risks in extracted knowledge data based on value thresholds of input.",
+  "StrategyGenerator": "Modle that generates or advises the node in what it should pursue or continue to create new actions and behaviours",
+  "InterventionSimulator": "Simulates node action outcome."
+
+    }

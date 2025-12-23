@@ -1,0 +1,10 @@
+
+-   < 0.5: Meltdown risk (stress/overload)
+
+-   0.5-0.7: Cognitive overload
+
+-   0.7-0.9: Baseline functioning
+
+-   > 0.9: Flow state (optimal performance)
+
+

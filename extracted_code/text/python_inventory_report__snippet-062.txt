@@ -1,0 +1,2 @@
+doc: Local LLM wrapper used by the Crystalline Heart.
+classes: LocalLLM

@@ -1,0 +1,1 @@
+  """Discovers all relevant files in the repository and returns a list of

@@ -1,3 +1,3 @@
-const m = this.cfg.speciesCount;
-const base = nodeIdx * m;
-for (let k = 0; k < m; k++) this.externalInputs[base + k] = injections[k];
+function projectVec(species: FloatArr, proj: number[]): number {
+let out = 0;
+for (let i = 0; i < species.length; i++) out += species[i] * proj[i];

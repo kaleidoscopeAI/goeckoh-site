@@ -1,1 +1,13 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+sys_p = "You optimize a spring-mesh cube. Reply STRICT JSON only: {\"k_scale\":float, \"rest_scale\":float}."
+user_p = f"Metrics: {metrics}\nReflection: {reflection}\nReturn only JSON."
+try:
+    r = requests.post(f"{OLLAMA_URL}/api/chat", json={"model": OLLAMA_MODEL, "messages": [{"role": "system", "content": sys_p}, {"role": "user", "content": user_p}], "stream": False}, timeout=15)
+    r.raise_for_status()
+    content = r.json().get("message", {}).get("content", "").strip()
+    data = json.loads(content)
+    if not all(k in data for k in ("k_scale", "rest_scale")):
+        raise ValueError("Missing keys")
+    return {"ok": True, "adjust": data, "raw": content}
+except Exception as e:
+    return {"ok": False, "adjust": heuristic_adjust(metrics), "error": str(e)}
+

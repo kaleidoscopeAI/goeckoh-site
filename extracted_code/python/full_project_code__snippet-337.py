@@ -1,4 +1,2 @@
-from .gb2312freq import (
-    GB2312_CHAR_TO_FREQ_ORDER,
-    GB2312_TABLE_SIZE,
-    GB2312_TYPICAL_DISTRIBUTION_RATIO,
+# Sampling from about 20M text materials include literature and computer technology
+

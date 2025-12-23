@@ -1,13 +1,23 @@
-from __future__ import annotations
+class CommandContextMixIn:
+    def __init__(self) -> None:
+        super().__init__()
+        self._in_main_context = False
+        self._main_context = ExitStack()
 
-import functools
-import types
-import zlib
-from typing import TYPE_CHECKING, Any, Collection, Mapping
+    @contextmanager
+    def main_context(self) -> Generator[None, None, None]:
+        assert not self._in_main_context
 
-from pip._vendor.requests.adapters import HTTPAdapter
+        self._in_main_context = True
+        try:
+            with self._main_context:
+                yield
+        finally:
+            self._in_main_context = False
 
-from pip._vendor.cachecontrol.cache import DictCache
-from pip._vendor.cachecontrol.controller import PERMANENT_REDIRECT_STATUSES, CacheController
-from pip._vendor.cachecontrol.filewrapper import CallbackFileWrapper
+    def enter_context(self, context_provider: ContextManager[_T]) -> _T:
+        assert self._in_main_context
+
+        return self._main_context.enter_context(context_provider)
+
 

@@ -1,0 +1,2 @@
+          for (i in 0 until nNodes) {
+              yDot[i] = -decayRate * y[i] + diffusion.getEntry(i, 0) +

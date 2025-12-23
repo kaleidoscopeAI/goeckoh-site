@@ -1,0 +1,3 @@
+Module_six_moves_urllib_request(__name__ + ".moves.urllib.request"),
+"moves.urllib_request",
+"moves.urllib.request",

@@ -1,0 +1,5 @@
+output_buffer: &mut [f32],
+consumer: &mut Consumer<f32, Arc<HeapRb<f32>>>,
+lattice_handle: &Arc<Mutex<CrystallineLattice>>,
+dsp: &mut PsychoacousticProcessor,
+channels: usize

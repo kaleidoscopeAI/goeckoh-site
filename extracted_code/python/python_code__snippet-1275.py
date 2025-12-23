@@ -1,8 +1,9 @@
-import os
+"""Combine several waiting strategies."""
 
-from pip._vendor.pyproject_hooks import BuildBackendHookCaller
+def __init__(self, *strategies: wait_base) -> None:
+    self.wait_funcs = strategies
 
-from pip._internal.build_env import BuildEnvironment
-from pip._internal.exceptions import (
-    InstallationSubprocessError,
-    MetadataGenerationFailed,
+def __call__(self, retry_state: "RetryCallState") -> float:
+    return sum(x(retry_state=retry_state) for x in self.wait_funcs)
+
+

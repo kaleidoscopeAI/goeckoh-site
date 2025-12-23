@@ -1,5 +1,15 @@
-def bond_energy(node1, node2):
-    hamming = sum(b1 != b2 for b1, b2 in zip(node1.bits, node2.bits)) / 128
-    dist = sum((p1 - p2)**2 for p1, p2 in zip(node1.position, node2.position))
-    return 0.5 * hamming + 0.5 * dist
+class DeepReasoningCore:
+    def __init__(self):
+        self.rules = {"help": "I guide: Breathe calm.", "happy": "Joy flows: Well done."}
+
+    def execute(self, text, gcl):
+        if gcl > 0.7:
+            for key in self.rules:
+                if key in text.lower():
+                    return self.rules[key]
+            return "Reason: Insight unlocked."
+        elif gcl > 0.4:
+            return "Affirm: Steady."
+        else:
+            return "Calm: I am safe."
 

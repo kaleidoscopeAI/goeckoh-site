@@ -1,1 +1,2 @@
-const tbody = document.querySelector("#phraseTable tbody");
+private let config: ServerConfig
+private var audioPlayer: AVAudioPlayer?

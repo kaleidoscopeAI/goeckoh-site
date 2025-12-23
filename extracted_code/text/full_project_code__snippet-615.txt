@@ -1,0 +1,6 @@
+opener: Union[str, ParserElement] = "(",
+closer: Union[str, ParserElement] = ")",
+content: typing.Optional[ParserElement] = None,
+ignore_expr: ParserElement = quoted_string(),
+*,
+ignoreExpr: ParserElement = quoted_string(),

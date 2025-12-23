@@ -1,1 +1,0 @@
-- Each engine input is formed by concatenating the projected global state and outputs from other relevant engines above the threshold \$ \theta \$.

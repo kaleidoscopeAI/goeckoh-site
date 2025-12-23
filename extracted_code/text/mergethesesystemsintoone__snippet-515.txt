@@ -1,0 +1,123 @@
+logging.info("Starting the Kaleidoscope AI System")
+
+# Initialize core components
+energy_manager = EnergyManager(total_energy=5000.0)
+node_manager = NodeLifecycleManager()
+cluster_manager = ClusterManager()
+supernode_manager = SupernodeManager()
+
+# Initialize data pipeline (replace with your actual data source)
+# data_pipeline = DataPipeline()
+# data_pipeline.ingest_data("your_data_file.csv")
+# data_pipeline.preprocess()
+# data_for_processing = data_pipeline.get_data_for_quantum_engine()
+
+# Initialize engines
+kaleidoscope_engine = KaleidoscopeEngine()
+mirrored_engine = MirroredEngine()
+
+# Create some initial nodes
+initial_nodes = 5
+for i in range(initial_nodes):
+    node_id = f"node_{i}"
+    node_manager.create_node(
+        node_id,
+        dna=GeneticCode(),  # Assuming default values
+    )
+    energy_manager.allocate_node_energy(node_id, 100.0)  # Allocate initial energy
+
+# Example data stream (replace with your actual data source)
+data_stream = [
+    {"data_id": 1, "task": "task_type_1"},
+    {"data_id": 2, "task": "task_type_2"},
+    # Add more data as needed
+]
+
+# Main simulation loop
+for cycle in range(10):  # Example: 10 cycles
+    logging.info(f"Starting cycle {cycle + 1}")
+
+    # Assign data to nodes for processing
+    for data_chunk in data_stream:
+        for node_id, node in node_manager.nodes.items():
+            # Basic task distribution based on round-robin
+            if node_id == f"node_{data_chunk['data_id'] % initial_nodes}":
+                node.process_data(data_chunk)
+                logging.info(f"Data chunk {data_chunk['data_id']} assigned to node {node_id}")
+
+    # Replicate nodes if conditions are met
+    for node_id in list(node_manager.nodes.keys()):  # List to avoid issues with changing dict size
+        if node_manager.nodes[node_id].should_replicate():
+            new_node_id = node_manager.replicate_node(node_id)
+
+    # Form clusters
+    cluster_manager.form_clusters(list(node_manager.nodes.values()))
+    logging.info(f"Clusters formed: {len(cluster_manager.clusters)}")
+
+    # Create supernodes (if conditions are met)
+    if cycle % 2 == 0:  # Example condition for supernode creation
+        for cluster_id, cluster_nodes in cluster_manager.clusters.items():
+            supernode_id = supernode_manager.create_supernode(cluster_nodes)
+            if supernode_id:
+                # Allocate energy to the new supernode
+                energy_manager.allocate_supernode_energy(supernode_id, 50.0)  # Example energy allocation
+                logging.info(f"Supernode {supernode_id} created and allocated energy.")
+
+    # Pass data through the Kaleidoscope Engine
+    # processed_data = kaleidoscope_engine.process_data(data_for_processing)
+    # logging.info("Data processed through Kaleidoscope Engine.")
+
+    # Pass data through the Mirrored Engine
+    # mirrored_insights = mirrored_engine.process_data(data_for_processing)
+    # logging.info("Data processed through Mirrored Engine.")
+
+    # Further processing or utilization of processed_data and mirrored_insights
+    # ...
+
+    # Log system status
+    logging.info(f"Completed cycle {cycle + 1}")
+    logging.info(f"Node statuses: {node_manager.get_all_nodes_status()}")
+
+    time.sleep(2)  # Simulate time between cycles
+
+# Cleanup and shutdown
+logging.info("Shutting down the system...")
+# Implement any necessary shutdown procedures for your components
+
+main()
+
+
+*   Added basic logging using `self.log_event()`.
+*   Implemented `process_data()` to simulate data processing, energy consumption, and insight generation.
+*   Added a simple task queue (`self.task_queue`) to `Node`.
+*   Added `receive_task()` to add tasks to the queue.
+*   Added logic to distribute data to nodes in a round-robin fashion (you'll need to replace this with more sophisticated logic later).
+*   Added data ingestion using `DataPipeline`.
+*   Integrated the `KaleidoscopeEngine` and `MirroredEngine` (though they are still placeholders).
+*   Added a loop to simulate multiple cycles.
+*   Included basic logging of node statuses.
+*   **`cluster_manager.py`:**
+    *   Added method to assign tasks to clusters `assign_cluster_task()`.
+    *   Added logic for calculating a match score for task relevence to a cluster `_calculate_cluster_match_score()`.
+*  **`supernode_manager.py`:**
+    *   Simplified supernode creation and handling by using the existing `Node` class.
+    *   Added methods to aggregate knowledge and average DNA from cluster nodes, and to assign tasks to supernodes.
+    *   Added a method to remove a supernode `remove_supernode()`.
+    *   Included basic logging of events related to supernode creation, task assignment, and status retrieval.
+*   Included logic to form clusters and create supernodes at specific cycles.
+*   Adjusted the simulation loop to handle task assignment and data processing through nodes and supernodes.
+*   Added logging for cluster formation and supernode creation.
+
+
+*   Network visualization (using `matplotlib`, `networkx`, or a dedicated network visualization library).
+*   Data input and management.
+*   Display of insights.
+*   Control panel for the simulation.
+
+
+
+
+
+
+
+

@@ -1,0 +1,1 @@
+repo_url: str, rev: str, project_name: str, subdir: Optional[str] = None

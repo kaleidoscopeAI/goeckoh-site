@@ -1,0 +1,8 @@
+"""Pick a suffix and base for the given size."""
+for i, suffix in enumerate(suffixes):
+    unit = base**i
+    if size < unit * base:
+        break
+return unit, suffix
+
+

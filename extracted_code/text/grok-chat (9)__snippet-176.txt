@@ -1,0 +1,1 @@
+validation card now shows playback p95 and target compliance.

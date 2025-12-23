@@ -1,1 +1,1 @@
-def _consume_stream(self) -> None:
+from flask import Flask, jsonify, render_template_string

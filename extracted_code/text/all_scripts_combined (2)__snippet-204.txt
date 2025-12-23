@@ -1,0 +1,3 @@
+HAS_OLLAMA = False
+print("⚠️  Ollama not found, install: pip install ollama")
+

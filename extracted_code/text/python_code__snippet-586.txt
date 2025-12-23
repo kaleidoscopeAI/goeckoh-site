@@ -1,0 +1,5 @@
+"""Proxy for Console print."""
+console = get_console()
+return console.print(*args, **kwargs)
+
+

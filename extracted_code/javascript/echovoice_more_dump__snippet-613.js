@@ -1,1 +1,1 @@
-for (let i = 0; i < nodeCount; i++) W[i][j] /= s;
+const svc = new ProjectionService({ constructs: ["X","Y"], seed: 7, persistenceDecay: 0.9, historyLength: 50, learner: { enabled: true,

@@ -1,2 +1,1 @@
-const denom = (count * sxx - sx * sx) + 1e-12;
-const slope = (count * sxy - sx * sy) / denom;
+const dtMs = Math.min(50, Math.max(0, now - lastT));

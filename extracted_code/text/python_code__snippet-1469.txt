@@ -1,0 +1,1 @@
+fn: Callable[..., Generator[Any, None, None]]

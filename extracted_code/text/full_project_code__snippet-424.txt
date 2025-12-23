@@ -1,0 +1,3 @@
+app.add_directive('pygmentsdoc', PygmentsDoc)
+
+

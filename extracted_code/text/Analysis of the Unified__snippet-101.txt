@@ -1,0 +1,5 @@
+"dev": "vite",
+"build": "vite build",
+"preview": "vite preview",
+"proxy": "node dev/proxy-ollama.js",
+"test": "jest"

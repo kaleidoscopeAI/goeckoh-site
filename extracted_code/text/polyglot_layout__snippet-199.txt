@@ -1,0 +1,17 @@
+  f.write("# Zip Review Summary\n\n")
+  f.write(status_df.to_markdown(index=False) + "\n\n")
+  f.write("## Top-level Items\n")
+  f.write(top_df.to_markdown(index=False) + "\n\n")
+  f.write("## File Types by Root\n")
+  f.write(type_counts.to_markdown(index=False) + "\n\n")
+  f.write("## Key Config Files\n")
+  try:
+       f.write(key_files.to_markdown(index=False) + "\n\n")
+  except:
+       pass
+  f.write("## Signal Hits (subset)\n")
+  try:
+       f.write(signals_df.head(100).to_markdown(index=False) + "\n\n")
+  except:
+       pass
+

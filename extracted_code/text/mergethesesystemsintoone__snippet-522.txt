@@ -1,0 +1,6 @@
+id: int
+position: np.array
+energy: float = 0.0
+tension: float = 0.0
+memory_state: MemoryState = field(default_factory=MemoryState)
+

@@ -1,0 +1,4 @@
+KaleidoscopeEngine: Central manager, processes validated, structured insights, contains MemoryGear and LogicPath objects, and manages the CrystallizationChamber for aggregating insights into a perfect_node.
+
+PerspectiveEngine: Focuses on generating speculative insights and counterfactual hypotheses.
+

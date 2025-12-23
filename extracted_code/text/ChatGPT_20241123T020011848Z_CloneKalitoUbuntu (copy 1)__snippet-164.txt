@@ -1,0 +1,2 @@
+- One side performs external acquisition (e.g., crawling Wikipedia).
+- The other side performs internal refinement (e.g., annotating nouns, creating images, and logging results).

@@ -1,22 +1,27 @@
-async def think(self, input_data: Dict) -> Dict:
-    # Extract concepts and relationships
-    concepts = self.knowledge_graph.extract_concepts(input_data)
+class Trait:
+    name: str
+    value: float
+    category: TraitCategory
+    min_value: float = 0.0
+    max_value: float = 1.0
+    mutation_probability: float = 0.2
+    dependencies: Set[str] = field(default_factory=set)
+    antagonists: Set[str] = field(default_factory=set)
+    plasticity: float = 0.6
 
-    # Add extracted concepts to the knowledge graph
-    for concept in concepts:
-        self.knowledge_graph.add_node(concept['id'], concept)
+    def __post_init__(self):
+        self._validate()
+        self._initialize_metadata()
 
-    # Apply reasoning
-    insights = self.reasoning_engine.apply(concepts)
+    def _validate(self):
+        if not 0 <= self.value <= 1:
+            raise ValueError(f"Trait value must be between 0 and 1, got {self.value}")
+        if not 0 <= self.plasticity <= 1:
+            raise ValueError(f"Plasticity must be between 0 and 1, got {self.plasticity}")
 
-    # Make decisions
-    decisions = self.decision_maker.evaluate(insights)
+    def _initialize_metadata(self):
+        self.history = []
+        self.adaptation_score = 1.0
+        self.last_update = 0
+        self.interaction_strength = {}
 
-    # Update beliefs
-    self.belief_system.observe(insights)
-
-    return {
-        'insights': insights,
-        'decisions': decisions,
-        'updated_beliefs': self.belief_system.get_probabilities()
-    }

@@ -1,1 +1,1 @@
-const node = svc.nodeStates[0];
+const now = Date.now();

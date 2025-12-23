@@ -1,0 +1,2 @@
+  - /status returns heart_name and downsampled lattice profile; Dashboard
+    shows it with a subtle gradient bar.

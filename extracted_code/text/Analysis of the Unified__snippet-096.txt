@@ -1,0 +1,2 @@
+return alpha * value + (1 - alpha) * prev
+

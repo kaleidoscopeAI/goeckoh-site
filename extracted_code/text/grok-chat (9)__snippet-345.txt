@@ -1,0 +1,16 @@
+ 40              </div>
+ 41 -            <h3 className="text-xl font-bold text-brand-black mb-3">Crystalline Heart</h3>
+ 41 +            <h3 className="text-xl font-bold text-brand-black mb-3">Neurocoherence Lattice</h3>
+ 42              <p className="text-slate-500 text-sm leading-relaxed">
+    ⋮
+ 99        title: "Heart Update",
+100 -      desc: "Event is logged to the Crystalline Heart model. GCL (Global Coherence Level) is recalculated based on inte
+     raction success.",
+100 +      desc: "Event is logged to the Neurocoherence Lattice model. GCL (Global Coherence Level) is recalculated based on
+      interaction success.",
+101        icon: Database
+    ⋮
+156
+157 -export default System;
+157 +export default System;
+

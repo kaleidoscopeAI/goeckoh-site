@@ -1,0 +1,12 @@
+"""Detects whether the hostname given is an IPv4 or IPv6 address.
+Also detects IPv6 addresses with Zone IDs.
+
+:param str hostname: Hostname to examine.
+:return: True if the hostname is an IP address, False otherwise.
+"""
+if not six.PY2 and isinstance(hostname, bytes):
+    # IDN A-label bytes are ASCII compatible.
+    hostname = hostname.decode("ascii")
+return bool(IPV4_RE.match(hostname) or BRACELESS_IPV6_ADDRZ_RE.match(hostname))
+
+

@@ -1,0 +1,9 @@
+cfg = LatticeConfig()
+lat = UnifiedLatticeSystem(cfg)
+external_I = np.random.normal(0, 0.1, (cfg.n_nodes, 5))
+for _ in range(5):
+    w = lat.bond_weights()
+    lat.emotional_ode_step(w, external_I, dt=0.05)
+    lat.metropolis_bit_flip(w)
+    H = lat.global_hamiltonian(w)
+    print(H)

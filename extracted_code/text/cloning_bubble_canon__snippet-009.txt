@@ -1,0 +1,6 @@
+energy_attempt: np.ndarray       # [T] - RMS energy
+f0_attempt: np.ndarray           # [T] - fundamental frequency
+zcr_attempt: np.ndarray          # [T] - zero-crossing rate
+spectral_tilt: np.ndarray        # [T] - spectral slope
+hnr_attempt: np.ndarray          # [T] - harmonics-to-noise ratio
+dt: float                        # seconds per frame

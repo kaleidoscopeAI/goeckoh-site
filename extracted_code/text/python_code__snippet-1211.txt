@@ -1,0 +1,17 @@
+"""
+Send a HEAD request to the URL, and ensure the response contains a simple
+API Response.
+
+Raises `_NotHTTP` if the URL is not available for a HEAD request, or
+`_NotAPIContent` if the content type is not a valid content type.
+"""
+scheme, netloc, path, query, fragment = urllib.parse.urlsplit(url)
+if scheme not in {"http", "https"}:
+    raise _NotHTTP()
+
+resp = session.head(url, allow_redirects=True)
+raise_for_status(resp)
+
+_ensure_api_header(resp)
+
+

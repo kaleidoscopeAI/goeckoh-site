@@ -1,0 +1,3 @@
+          if match:
+              cleaned_text = match.group(1).strip()
+              logger.debug(f"--- Callback: Stripped markdown. Cleaned text

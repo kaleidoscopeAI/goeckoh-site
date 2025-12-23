@@ -1,1 +1,1 @@
-def process_image_batch(self, img_urls: List[str]) -> List[Dict]:
+def _process_numerical_sync(self, data: List[float]) -> Dict:

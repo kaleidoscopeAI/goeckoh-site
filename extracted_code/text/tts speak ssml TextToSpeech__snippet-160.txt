@@ -1,0 +1,15 @@
+      recorder.setListener(object : IRecorderListener {
+          override fun onUpdateReceived(message: String) {
+              Log.d("Recorder", message)
+          }
+
+          override fun onDataReceived(samples: FloatArray) {
+              // For live, but we use batch
+          }
+      })
+
+      val waveFile = File(context.cacheDir, "temp_audio.wav")
+      recorder.setFilePath(waveFile.absolutePath)
+      recorder.start()
+
+      // Custom VAD loop (since Recorder may not have built-in patient VAD,

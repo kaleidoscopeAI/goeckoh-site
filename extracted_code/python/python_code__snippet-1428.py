@@ -1,44 +1,68 @@
-class PipXmlrpcTransport(xmlrpc.client.Transport):
-    """Provide a `xmlrpclib.Transport` implementation via a `PipSession`
-    object.
+# replaces _strip_annotations()
+def _strip_extras(t):
+    """Strips Annotated, Required and NotRequired from a given type."""
+    if isinstance(t, _AnnotatedAlias):
+        return _strip_extras(t.__origin__)
+    if hasattr(t, "__origin__") and t.__origin__ in (Required, NotRequired):
+        return _strip_extras(t.__args__[0])
+    if isinstance(t, typing._GenericAlias):
+        stripped_args = tuple(_strip_extras(a) for a in t.__args__)
+        if stripped_args == t.__args__:
+            return t
+        return t.copy_with(stripped_args)
+    if hasattr(_types, "GenericAlias") and isinstance(t, _types.GenericAlias):
+        stripped_args = tuple(_strip_extras(a) for a in t.__args__)
+        if stripped_args == t.__args__:
+            return t
+        return _types.GenericAlias(t.__origin__, stripped_args)
+    if hasattr(_types, "UnionType") and isinstance(t, _types.UnionType):
+        stripped_args = tuple(_strip_extras(a) for a in t.__args__)
+        if stripped_args == t.__args__:
+            return t
+        return functools.reduce(operator.or_, stripped_args)
+
+    return t
+
+def get_type_hints(obj, globalns=None, localns=None, include_extras=False):
+    """Return type hints for an object.
+
+    This is often the same as obj.__annotations__, but it handles
+    forward references encoded as string literals, adds Optional[t] if a
+    default value equal to None is set and recursively replaces all
+    'Annotated[T, ...]', 'Required[T]' or 'NotRequired[T]' with 'T'
+    (unless 'include_extras=True').
+
+    The argument may be a module, class, method, or function. The annotations
+    are returned as a dictionary. For classes, annotations include also
+    inherited members.
+
+    TypeError is raised if the argument is not of a type that can contain
+    annotations, and an empty dictionary is returned if no annotations are
+    present.
+
+    BEWARE -- the behavior of globalns and localns is counterintuitive
+    (unless you are familiar with how eval() and exec() work).  The
+    search order is locals first, then globals.
+
+    - If no dict arguments are passed, an attempt is made to use the
+      globals from obj (or the respective module's globals for classes),
+      and these are also used as the locals.  If the object does not appear
+      to have globals, an empty dictionary is used.
+
+    - If one dict argument is passed, it is used for both globals and
+      locals.
+
+    - If two dict arguments are passed, they specify globals and
+      locals, respectively.
     """
-
-    def __init__(
-        self, index_url: str, session: PipSession, use_datetime: bool = False
-    ) -> None:
-        super().__init__(use_datetime)
-        index_parts = urllib.parse.urlparse(index_url)
-        self._scheme = index_parts.scheme
-        self._session = session
-
-    def request(
-        self,
-        host: "_HostType",
-        handler: str,
-        request_body: "SizedBuffer",
-        verbose: bool = False,
-    ) -> Tuple["_Marshallable", ...]:
-        assert isinstance(host, str)
-        parts = (self._scheme, host, handler, None, None, None)
-        url = urllib.parse.urlunparse(parts)
-        try:
-            headers = {"Content-Type": "text/xml"}
-            response = self._session.post(
-                url,
-                data=request_body,
-                headers=headers,
-                stream=True,
-            )
-            raise_for_status(response)
-            self.verbose = verbose
-            return self.parse_response(response.raw)
-        except NetworkConnectionError as exc:
-            assert exc.response
-            logger.critical(
-                "HTTP error %s while getting %s",
-                exc.response.status_code,
-                url,
-            )
-            raise
+    if hasattr(typing, "Annotated"):
+        hint = typing.get_type_hints(
+            obj, globalns=globalns, localns=localns, include_extras=True
+        )
+    else:
+        hint = typing.get_type_hints(obj, globalns=globalns, localns=localns)
+    if include_extras:
+        return hint
+    return {k: _strip_extras(t) for k, t in hint.items()}
 
 

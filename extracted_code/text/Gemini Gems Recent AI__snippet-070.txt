@@ -1,0 +1,4 @@
+Problem: The current system doesn't explicitly model molecular dynamics.
+
+Novel Approach: Integrate real-time molecular dynamics (MD) simulations. As users interact with the cube, the system could launch short MD simulations to explore the dynamics of specific molecules or interactions. This could provide valuable insights into binding mechanisms, conformational changes, and other dynamic processes. Visualizing MD trajectories directly within the cube would be a powerful tool.
+

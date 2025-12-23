@@ -1,0 +1,3 @@
+return getattr(_log_state, "indentation", 0)
+
+

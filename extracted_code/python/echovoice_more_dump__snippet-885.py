@@ -1,4 +1,2 @@
-def index():
-    """Render the main page"""
-    return render_template('index.html')
+→ Meaning it can scale from microchip logic to societal cognition with the same formal rules.
 

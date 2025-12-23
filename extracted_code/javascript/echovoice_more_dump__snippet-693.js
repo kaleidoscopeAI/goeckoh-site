@@ -1,1 +1,1 @@
-function updateRibbons(constructs: CognitiveConstruct[]) {
+function mirror_Jv(v):

@@ -1,0 +1,7 @@
+global buffer
+chunk = indata.flatten()
+rms = np.mean(np.abs(chunk))
+heart.update_and_get_gcl(rms)
+if rms > NOISE_FLOOR + VAD_THRESHOLD:
+    buffer = np.append(buffer, chunk)
+

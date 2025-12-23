@@ -1,0 +1,36 @@
+"""Run the complete Quantum Consciousness AGI System"""
+print("🚀 INITIALIZING QUANTUM CONSCIOUSNESS UNIFIED AGI SYSTEM")
+print("=" * 70)
+
+# Initialize the complete AGI system
+agi_system = UnifiedQuantumConsciousnessAGI(num_nodes=8)
+
+# Initialize PharmaAI for drug discovery
+pharmai = PharmaAIDrugDiscovery(agi_system)
+
+# Run the main simulation
+agi_system.run_simulation(iterations=30, visualization=True)
+
+# Run drug discovery cycles
+print("\n" + "=" * 70)
+print("🧪 INTEGRATED DRUG DISCOVERY DEMONSTRATION")
+print("=" * 70)
+
+for cycle in range(5):
+    print(f"\n--- Drug Discovery Cycle {cycle + 1} ---")
+    pharmai.run_drug_discovery_cycle()
+
+# Final summary
+print("\n" + "=" * 70)
+print("🎯 SYSTEM SUMMARY")
+print("=" * 70)
+print(f"Total Knowledge Crystals: {len(agi_system.knowledge_graph)}")
+print(f"Drug Candidates Identified: {len(pharmai.drug_candidates)}")
+print(f"Final Global Coherence: {agi_system.global_coherence:.3f}")
+
+# Display top drug candidates
+if pharmai.drug_candidates:
+    print("\n🏆 TOP DRUG CANDIDATES:")
+    for i, candidate in enumerate(pharmai.drug_candidates[:3]):
+        print(f"{i+1}. {candidate['hypothesis']} (Score: {candidate['score']:.3f})")
+

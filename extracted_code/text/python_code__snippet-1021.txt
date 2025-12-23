@@ -1,0 +1,3 @@
+"""Raised when there's a previous conflicting build directory"""
+
+

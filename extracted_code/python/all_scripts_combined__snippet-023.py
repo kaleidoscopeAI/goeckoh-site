@@ -1,81 +1,56 @@
-def _timestamp(ts: datetime) -> str:
-    if ts.tzinfo is None:
-        ts = ts.replace(tzinfo=timezone.utc)
-    return ts.astimezone(timezone.utc).strftime(ISO_FORMAT)
+"""
+A gear that processes audio data into raw and corrected text.
+"""
+def __init__(self, speech_cfg: SpeechSettings, device: str = "cpu"):
+    self.config = speech_cfg
+    self.device = device
 
+    # Load Whisper model (using int8 for CPU performance)
+    print(f"Loading Whisper model: {self.config.whisper_model}...")
+    self.model = WhisperModel(self.config.whisper_model, device=self.device, compute_type="int8")
 
-class MetricsLogger:
-    """Append-only CSV writer for attempt records."""
+    # Initialize LanguageTool
+    print("Loading LanguageTool...")
+    try:
+        if self.config.language_tool_server:
+            self.lt = language_tool_python.LanguageTool('en-US', remote_server=self.config.language_tool_server)
+        else:
+            self.lt = language_tool_python.LanguageTool('en-US')
+    except Exception as e:
+        print(f"Warning: Could not initialize LanguageTool. Grammar correction will be disabled. Error: {e}")
+        self.lt = None
 
-    header = ("timestamp", "phrase_text", "raw_text", "corrected_text", "needs_correction", "similarity", "audio_file")
+def process(self, audio_info: Information) -> Information:
+    """
+    Transcribes and corrects speech from an audio Information object.
+    """
+    if not isinstance(audio_info.payload, AudioData):
+        raise TypeError("SpeechProcessorGear expects an Information object with an AudioData payload.")
 
-    def __init__(self, csv_path: Path):
-        self.csv_path = csv_path
-        if not csv_path.exists():
-            csv_path.parent.mkdir(parents=True, exist_ok=True)
-            with csv_path.open("w", newline="", encoding="utf-8") as f:
-                writer = csv.writer(f)
-                writer.writerow(self.header)
+    audio_waveform = audio_info.payload.waveform
 
-    def append(self, record: AttemptRecord) -> None:
-        with self.csv_path.open("a", newline="", encoding="utf-8") as f:
-            writer = csv.writer(f)
-            writer.writerow(
-                (
-                    _timestamp(record.timestamp),
-                    record.phrase_text,
-                    record.raw_text,
-                    record.corrected_text,
-                    "1" if record.needs_correction else "0",
-                    f"{record.similarity:.4f}",
-                    str(record.audio_file),
-                )
-            )
+    # 1. Transcribe audio using faster-whisper
+    # The model expects a float32 numpy array.
+    segments, info = self.model.transcribe(audio_waveform, beam_size=5)
+    raw_text = " ".join([s.text for s in segments]).strip()
 
-
-class GuidanceLogger:
-    """Structured log for behavior / guidance events."""
-
-    header = ("timestamp", "level", "category", "title", "message", "metadata_json")
-
-    def __init__(self, csv_path: Path):
-        self.csv_path = csv_path
-        if not csv_path.exists():
-            csv_path.parent.mkdir(parents=True, exist_ok=True)
-            with csv_path.open("w", newline="", encoding="utf-8") as f:
-                writer = csv.writer(f)
-                writer.writerow(self.header)
-
-    def append(self, event: BehaviorEvent) -> None:
-        payload = (
-            _timestamp(event.timestamp),
-            event.level,
-            event.category,
-            event.title,
-            event.message,
-            json.dumps(event.metadata, ensure_ascii=False),
+    if not raw_text:
+        return audio_info.new(
+            payload=SpeechData(raw_text="", corrected_text="", is_final=True),
+            source_gear="SpeechProcessorGear"
         )
-        with self.csv_path.open("a", newline="", encoding="utf-8") as f:
-            csv.writer(f).writerow(payload)
 
-    def tail(self, limit: int = 50) -> list[BehaviorEvent]:
-        if not self.csv_path.exists():
-            return []
-        rows: list[BehaviorEvent] = []
-        with self.csv_path.open("r", newline="", encoding="utf-8") as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                rows.append(
-                    BehaviorEvent(
-                        timestamp=datetime.fromisoformat(row["timestamp"].replace("Z", "+00:00")),
-                        level=row["level"],
-                        category=row["category"],  # type: ignore[arg-type]
-                        title=row["title"],
-                        message=row["message"],
-                        metadata=json.loads(row.get("metadata_json") or "{}"),
-                    )
-                )
-        return rows[-limit:]
+    # 2. Correct grammar using LanguageTool
+    corrected_text = raw_text
+    if self.lt:
+        try:
+            matches = self.lt.check(raw_text)
+            corrected_text = language_tool_python.utils.correct(raw_text, matches)
+        except Exception as e:
+            print(f"Warning: LanguageTool correction failed. Using raw text. Error: {e}")
 
-
+    return audio_info.new(
+        payload=SpeechData(raw_text=raw_text, corrected_text=corrected_text, is_final=True),
+        source_gear="SpeechProcessorGear"
+    )
 

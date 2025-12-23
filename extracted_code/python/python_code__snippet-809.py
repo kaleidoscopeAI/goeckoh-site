@@ -1,116 +1,174 @@
-from typing import Union
+def _get_index_content(link: Link, *, session: PipSession) -> Optional["IndexContent"]:
+    url = link.url.split("#", 1)[0]
 
-from .align import AlignMethod
-from .cells import cell_len, set_cell_size
-from .console import Console, ConsoleOptions, RenderResult
-from .jupyter import JupyterMixin
-from .measure import Measurement
-from .style import Style
-from .text import Text
+    # Check for VCS schemes that do not support lookup as web pages.
+    vcs_scheme = _match_vcs_scheme(url)
+    if vcs_scheme:
+        logger.warning(
+            "Cannot look at %s URL %s because it does not support lookup as web pages.",
+            vcs_scheme,
+            link,
+        )
+        return None
+
+    # Tack index.html onto file:// URLs that point to directories
+    scheme, _, path, _, _, _ = urllib.parse.urlparse(url)
+    if scheme == "file" and os.path.isdir(urllib.request.url2pathname(path)):
+        # add trailing slash if not present so urljoin doesn't trim
+        # final segment
+        if not url.endswith("/"):
+            url += "/"
+        # TODO: In the future, it would be nice if pip supported PEP 691
+        #       style responses in the file:// URLs, however there's no
+        #       standard file extension for application/vnd.pypi.simple.v1+json
+        #       so we'll need to come up with something on our own.
+        url = urllib.parse.urljoin(url, "index.html")
+        logger.debug(" file: URL is directory, getting %s", url)
+
+    try:
+        resp = _get_simple_response(url, session=session)
+    except _NotHTTP:
+        logger.warning(
+            "Skipping page %s because it looks like an archive, and cannot "
+            "be checked by a HTTP HEAD request.",
+            link,
+        )
+    except _NotAPIContent as exc:
+        logger.warning(
+            "Skipping page %s because the %s request got Content-Type: %s. "
+            "The only supported Content-Types are application/vnd.pypi.simple.v1+json, "
+            "application/vnd.pypi.simple.v1+html, and text/html",
+            link,
+            exc.request_desc,
+            exc.content_type,
+        )
+    except NetworkConnectionError as exc:
+        _handle_get_simple_fail(link, exc)
+    except RetryError as exc:
+        _handle_get_simple_fail(link, exc)
+    except SSLError as exc:
+        reason = "There was a problem confirming the ssl certificate: "
+        reason += str(exc)
+        _handle_get_simple_fail(link, reason, meth=logger.info)
+    except requests.ConnectionError as exc:
+        _handle_get_simple_fail(link, f"connection error: {exc}")
+    except requests.Timeout:
+        _handle_get_simple_fail(link, "timed out")
+    else:
+        return _make_index_content(resp, cache_link_parsing=link.cache_link_parsing)
+    return None
 
 
-class Rule(JupyterMixin):
-    """A console renderable to draw a horizontal rule (line).
+class CollectedSources(NamedTuple):
+    find_links: Sequence[Optional[LinkSource]]
+    index_urls: Sequence[Optional[LinkSource]]
 
-    Args:
-        title (Union[str, Text], optional): Text to render in the rule. Defaults to "".
-        characters (str, optional): Character(s) used to draw the line. Defaults to "─".
-        style (StyleType, optional): Style of Rule. Defaults to "rule.line".
-        end (str, optional): Character at end of Rule. defaults to "\\\\n"
-        align (str, optional): How to align the title, one of "left", "center", or "right". Defaults to "center".
+
+class LinkCollector:
+
+    """
+    Responsible for collecting Link objects from all configured locations,
+    making network requests as needed.
+
+    The class's main method is its collect_sources() method.
     """
 
     def __init__(
         self,
-        title: Union[str, Text] = "",
-        *,
-        characters: str = "─",
-        style: Union[str, Style] = "rule.line",
-        end: str = "\n",
-        align: AlignMethod = "center",
+        session: PipSession,
+        search_scope: SearchScope,
     ) -> None:
-        if cell_len(characters) < 1:
-            raise ValueError(
-                "'characters' argument must have a cell width of at least 1"
+        self.search_scope = search_scope
+        self.session = session
+
+    @classmethod
+    def create(
+        cls,
+        session: PipSession,
+        options: Values,
+        suppress_no_index: bool = False,
+    ) -> "LinkCollector":
+        """
+        :param session: The Session to use to make requests.
+        :param suppress_no_index: Whether to ignore the --no-index option
+            when constructing the SearchScope object.
+        """
+        index_urls = [options.index_url] + options.extra_index_urls
+        if options.no_index and not suppress_no_index:
+            logger.debug(
+                "Ignoring indexes: %s",
+                ",".join(redact_auth_from_url(url) for url in index_urls),
             )
-        if align not in ("left", "center", "right"):
-            raise ValueError(
-                f'invalid value for align, expected "left", "center", "right" (not {align!r})'
-            )
-        self.title = title
-        self.characters = characters
-        self.style = style
-        self.end = end
-        self.align = align
+            index_urls = []
 
-    def __repr__(self) -> str:
-        return f"Rule({self.title!r}, {self.characters!r})"
+        # Make sure find_links is a list before passing to create().
+        find_links = options.find_links or []
 
-    def __rich_console__(
-        self, console: Console, options: ConsoleOptions
-    ) -> RenderResult:
-        width = options.max_width
-
-        characters = (
-            "-"
-            if (options.ascii_only and not self.characters.isascii())
-            else self.characters
+        search_scope = SearchScope.create(
+            find_links=find_links,
+            index_urls=index_urls,
+            no_index=options.no_index,
         )
+        link_collector = LinkCollector(
+            session=session,
+            search_scope=search_scope,
+        )
+        return link_collector
 
-        chars_len = cell_len(characters)
-        if not self.title:
-            yield self._rule_line(chars_len, width)
-            return
+    @property
+    def find_links(self) -> List[str]:
+        return self.search_scope.find_links
 
-        if isinstance(self.title, Text):
-            title_text = self.title
-        else:
-            title_text = console.render_str(self.title, style="rule.text")
+    def fetch_response(self, location: Link) -> Optional[IndexContent]:
+        """
+        Fetch an HTML page containing package links.
+        """
+        return _get_index_content(location, session=self.session)
 
-        title_text.plain = title_text.plain.replace("\n", " ")
-        title_text.expand_tabs()
+    def collect_sources(
+        self,
+        project_name: str,
+        candidates_from_page: CandidatesFromPage,
+    ) -> CollectedSources:
+        # The OrderedDict calls deduplicate sources by URL.
+        index_url_sources = collections.OrderedDict(
+            build_source(
+                loc,
+                candidates_from_page=candidates_from_page,
+                page_validator=self.session.is_secure_origin,
+                expand_dir=False,
+                cache_link_parsing=False,
+                project_name=project_name,
+            )
+            for loc in self.search_scope.get_index_urls_locations(project_name)
+        ).values()
+        find_links_sources = collections.OrderedDict(
+            build_source(
+                loc,
+                candidates_from_page=candidates_from_page,
+                page_validator=self.session.is_secure_origin,
+                expand_dir=True,
+                cache_link_parsing=True,
+                project_name=project_name,
+            )
+            for loc in self.find_links
+        ).values()
 
-        required_space = 4 if self.align == "center" else 2
-        truncate_width = max(0, width - required_space)
-        if not truncate_width:
-            yield self._rule_line(chars_len, width)
-            return
+        if logger.isEnabledFor(logging.DEBUG):
+            lines = [
+                f"* {s.link}"
+                for s in itertools.chain(find_links_sources, index_url_sources)
+                if s is not None and s.link is not None
+            ]
+            lines = [
+                f"{len(lines)} location(s) to search "
+                f"for versions of {project_name}:"
+            ] + lines
+            logger.debug("\n".join(lines))
 
-        rule_text = Text(end=self.end)
-        if self.align == "center":
-            title_text.truncate(truncate_width, overflow="ellipsis")
-            side_width = (width - cell_len(title_text.plain)) // 2
-            left = Text(characters * (side_width // chars_len + 1))
-            left.truncate(side_width - 1)
-            right_length = width - cell_len(left.plain) - cell_len(title_text.plain)
-            right = Text(characters * (side_width // chars_len + 1))
-            right.truncate(right_length)
-            rule_text.append(left.plain + " ", self.style)
-            rule_text.append(title_text)
-            rule_text.append(" " + right.plain, self.style)
-        elif self.align == "left":
-            title_text.truncate(truncate_width, overflow="ellipsis")
-            rule_text.append(title_text)
-            rule_text.append(" ")
-            rule_text.append(characters * (width - rule_text.cell_len), self.style)
-        elif self.align == "right":
-            title_text.truncate(truncate_width, overflow="ellipsis")
-            rule_text.append(characters * (width - title_text.cell_len - 1), self.style)
-            rule_text.append(" ")
-            rule_text.append(title_text)
-
-        rule_text.plain = set_cell_size(rule_text.plain, width)
-        yield rule_text
-
-    def _rule_line(self, chars_len: int, width: int) -> Text:
-        rule_text = Text(self.characters * ((width // chars_len) + 1), self.style)
-        rule_text.truncate(width)
-        rule_text.plain = set_cell_size(rule_text.plain, width)
-        return rule_text
-
-    def __rich_measure__(
-        self, console: Console, options: ConsoleOptions
-    ) -> Measurement:
-        return Measurement(1, 1)
+        return CollectedSources(
+            find_links=list(find_links_sources),
+            index_urls=list(index_url_sources),
+        )
 
 

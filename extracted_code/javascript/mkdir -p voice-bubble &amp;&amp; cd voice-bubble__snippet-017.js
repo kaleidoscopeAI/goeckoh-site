@@ -1,1 +1,1 @@
-const feat = {
+function applyFeatures(newFeat) {

@@ -1,10 +1,1 @@
-    A 3D visualization of the crystal lattice using Three.js
-
-    Real-time metrics display with numerical values and history charts
-
-    Controls for adjusting simulation parameters
-
-    Data ingestion options (SMILES, web content)
-
-    A console for interaction with the crystal's "consciousness"
-
+# Graphviz layout (using spring layout for simplicity)

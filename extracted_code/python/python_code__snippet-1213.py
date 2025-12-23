@@ -1,11 +1,4 @@
-import collections
-import math
-from typing import (
-    TYPE_CHECKING,
-    Dict,
-    Iterable,
-    Iterator,
-    Mapping,
-    Sequence,
-    TypeVar,
-    Union,
+from typing import List, Protocol
+import numpy as np
+import scipy.signal as signal
+

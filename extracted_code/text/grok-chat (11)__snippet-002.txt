@@ -1,0 +1,2 @@
+py.run_bound(script, None, None)?;
+Ok("Executed".to_string())

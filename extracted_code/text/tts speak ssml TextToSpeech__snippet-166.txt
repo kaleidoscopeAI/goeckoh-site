@@ -1,0 +1,26 @@
+      dispatcher.addAudioProcessor(pitchShift)
+
+      val gain = prosody.volume * 2.0
+      val gainProcessor = GainProcessor(gain)
+      dispatcher.addAudioProcessor(gainProcessor)
+
+      val processedBuffer = FloatArray(samples.size * 2)
+      var index = 0
+      dispatcher.addAudioProcessor(object : AudioProcessor {
+          override fun process(audioEvent: AudioEvent): Boolean {
+              val buffer = audioEvent.floatBuffer
+              buffer.copyInto(processedBuffer, index)
+              index += buffer.size
+              return true
+          }
+          override fun processingFinished() {}
+      })
+      dispatcher.run()
+
+      val processedSamples = processedBuffer.copyOf(index)
+
+      playAudio(processedSamples, ttsSampleRate)
+  }
+
+  private fun playAudio(samples: FloatArray, sampleRate: Int) {
+      val bufferSize = AudioTrack.getMinBufferSize(sampleRate,

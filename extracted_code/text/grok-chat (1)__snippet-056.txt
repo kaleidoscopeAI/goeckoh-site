@@ -1,0 +1,4 @@
+emotion: str  # e.g., "happy", "anxious"
+intent: str   # e.g., "question", "statement"
+key_concepts: List[str]
+

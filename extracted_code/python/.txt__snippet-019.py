@@ -1,1 +1,1 @@
-def step(self, full_audio: np.ndarray, transcript: str) -> Dict[str, Any]:
+def _build_prompt(self, transcript: str, arousal: float, valence: float,

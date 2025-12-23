@@ -1,1 +1,1 @@
-def run(self):
+def transformer_embed(self, data):

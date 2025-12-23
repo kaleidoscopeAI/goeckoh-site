@@ -1,0 +1,1 @@
+ true end-to-end latency into the validation summary.

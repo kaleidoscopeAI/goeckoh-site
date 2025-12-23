@@ -1,6 +1,5 @@
-for (let k = 0; k < m; k++) {
-const v = new Float32Array(n);
-const Dk = this.cfg.diffusion[k];
-for (let i = 0; i < n; i++) v[i] = this.S[i * m + k] * Dk;
-const Lv = sparseMul(this.graph.L!, v);
-for (let i = 0; i < n; i++) out[i * m + k] += -Lv[i];
+const nodeConstructs: THREE.Line[] = [];
+for (let k = 0; k < 9; k++) {
+const points = [mesh.position.clone(), mesh.position.clone()];
+const geometry = new THREE.BufferGeometry().setFromPoints(points);
+const line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: 0xffff00, transparent: true, opacity: 0.5 }));

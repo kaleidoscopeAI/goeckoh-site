@@ -1,0 +1,3 @@
+// We use Arc<Mutex<T>> because this state is shared between
+// the UI thread (calling this object) and the background Audio thread.
+inner_state: Arc<Mutex<InnerState>>,

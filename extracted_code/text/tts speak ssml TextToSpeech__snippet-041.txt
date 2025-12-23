@@ -1,0 +1,13 @@
+Log.d("AGI", "GCL: $gcl, Input: $input")
+// Adaptive VAD
+if (gcl < 0.5) {
+    mirror.tuneVAD(0, 2000, 0.3f) // Patient
+} else if (gcl > 0.9) {
+    mirror.tuneVAD(2, 800, 0.7f) // Aggressive
+} else {
+    mirror.tuneVAD(1, 1200, 0.5f)
+}
+
+when {
+    // (unchanged)
+}

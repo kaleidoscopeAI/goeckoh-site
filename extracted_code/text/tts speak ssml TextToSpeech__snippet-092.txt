@@ -1,0 +1,4 @@
+      executor.execute {
+          while (true) {
+              try {
+                  neuroAcousticMirror.listenAndProcess { correctedText,

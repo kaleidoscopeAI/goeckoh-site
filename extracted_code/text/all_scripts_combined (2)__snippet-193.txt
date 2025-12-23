@@ -1,0 +1,7 @@
+"""Generic wrapper for information passing between gears."""
+
+payload: AudioData
+source_gear: str
+metadata: dict = field(default_factory=dict)
+
+

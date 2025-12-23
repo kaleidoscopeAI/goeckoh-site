@@ -1,0 +1,25 @@
+Banach Fixed-Point Theorem (Contraction Mapping)
+Part VII: Fixed Point Existence – guarantees unique convergence of the lattice update rule
+‖G(x₁, ⋅) − G(x₂, ⋅)‖ ≤ ρ ‖x₁ − x₂‖  with  ρ < 1
+
+Spectral Stability Condition (Discrete-time Dynamics)
+Part VII: Spectral Stability – ensures local stability around equilibrium S*
+ρ( ∂S/∂G |_{S=S*} ) < 1
+
+Lyapunov Stability (Continuous Emotional State Dynamics)
+Part VII: Lyapunov Stability – proves global asymptotic stability under bounded input I (e.g., sensory overload)
+\dot{V}(S) = ∇V · G(S, ⋅) ≤ −α ‖S − S*‖² + β ‖I‖²  (α > 0)
+
+Confidence Metric (BehaviorMonitor / Style Selection)
+Used in real-time to choose calm/neutral/excited voice style
+Confidence(t) = σ( w₁·GCL(t) + w₂·Emergence(t) − w₃·Stress(t) + w₄·Harmony(t) + w₅·ΔC )
+
+where σ = sigmoid, GCL = Global Coherence Level, ΔC = change in coherence
+
+Energy Function for Metropolis Engine (Semantic Hamiltonian)
+(used in delta_energy_for_bitflip)
+E = − ∑{i,j} W{ij} s_i s_j  − ∑_i h_i s_i  (Ising-like spin glass form)
+
+Analytic Gradient for GradientFlow Optimization
+∇E_i = ∑j W{ij} s_j  + h_i  (per-node continuous gradient)
+

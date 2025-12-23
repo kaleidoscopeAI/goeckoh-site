@@ -1,0 +1,16 @@
+"""
+Run local ASR on a raw mono float waveform.
+Returns lowercased transcript.
+"""
+model = _ensure_whisper()
+segments, _ = model.transcribe(
+    audio,
+    language="en",
+    beam_size=5,
+    vad_filter=True,
+    vad_parameters=dict(min_silence_duration_ms=600),
+)
+text = " ".join(seg.text for seg in segments).strip().lower()
+return text
+
+

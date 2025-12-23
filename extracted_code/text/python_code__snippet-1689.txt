@@ -1,0 +1,3 @@
+print("[WARN] SoundDevice not found. Audio playback disabled.")
+AUDIO_AVAILABLE = False
+

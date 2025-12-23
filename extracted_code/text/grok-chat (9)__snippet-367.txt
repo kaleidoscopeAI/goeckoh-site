@@ -1,0 +1,19 @@
+722                  })
+723 +            # Optional lightweight processing path for demos/latency budgets.
+724 +            if os.environ.get("GOECKOH_FAST_MODE", "").lower() in ("1", "true", "yes"):
+725 +                start_time = time.time()
+726 +                txt = data['text']
+727 +                fake_gcl = 0.95
+728 +                result = {
+729 +                    "text": txt,
+730 +                    "gcl": fake_gcl,
+731 +                    "heart_name": "Neurocoherence Lattice",
+732 +                    "heart_sample": [],
+733 +                    "voice_style": "neutral",
+734 +                    "psi_state": {"world": {"current_input": txt}, "t": 1},
+735 +                    "metrics": {"gcl": fake_gcl, "mode": "FLOW", "stress": 1.0 - fake_gcl},
+736 +                }
+737 +                processing_time = time.time() - start_time
+738 +                return jsonify({'success': True, 'result': result, 'processing_time': processing_time})
+739
+

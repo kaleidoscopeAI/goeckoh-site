@@ -1,0 +1,3 @@
+  # Simple STFT mag using NumPy
+  if len(x) < win:
+

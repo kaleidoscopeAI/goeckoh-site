@@ -1,20 +1,22 @@
-use bumpalo::Bump;
+use bytes::Bytes;
 
-struct AudioPool {
-    arena: Bump,
-    frames: Vec<AudioFrame>,
+struct AudioFrame {
+    data: Bytes,  // Zero-copy buffer
+    timestamp: u64,
 }
 
-impl AudioPool {
-    fn new() -> Self {
+impl AudioFrame {
+    fn from_slice(slice: &[f32]) -> Self {
+        let bytes: Vec<u8> = unsafe {
+            std::slice::from_raw_parts(
+                slice.as_ptr() as *const u8,
+                slice.len() * std::mem::size_of::<f32>(),
+            )
+        }.to_vec();
+        
         Self {
-            arena: Bump::new(),
-            frames: Vec::with_capacity(100),
+            data: Bytes::from(bytes),
+            timestamp: std::time::Instant::now().elapsed().as_micros() as u64,
         }
-    }
-    
-    fn allocate_frame(&self, samples: usize) -> AudioFrame {
-        let ptr = self.arena.alloc_slice_fill_default(samples);
-        AudioFrame::from_raw(ptr)
     }
 }

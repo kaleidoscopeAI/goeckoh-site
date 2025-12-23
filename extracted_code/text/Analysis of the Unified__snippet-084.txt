@@ -1,0 +1,22 @@
+"""
+Euler step for Lindblad master equation.
+"""
+# unitary
+drho = -1j * (H @ rho - rho @ H)
+# dissipators
+for L in Ls:
+    LrhoL = L @ rho @ L.conj().T
+    LdagL = L.conj().T @ L
+    drho += LrhoL - 0.5 * (LdagL @ rho + rho @ LdagL)
+rho_new = rho + dt * drho
+# ensure hermiticity and positivity small fixes
+rho_new = 0.5 * (rho_new + rho_new.conj().T)
+# renormalize trace
+tr = np.trace(rho_new)
+if tr == 0:
+    # fallback small identity
+    n = rho_new.shape[0]
+    rho_new = np.eye(n, dtype=complex) / float(n)
+else:
+    rho_new /= tr
+return rho_new

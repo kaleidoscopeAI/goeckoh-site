@@ -1,0 +1,3 @@
+ssl_context: ssl.SSLContext,
+cert_chain: list[bytes],
+server_hostname: str | None = None,

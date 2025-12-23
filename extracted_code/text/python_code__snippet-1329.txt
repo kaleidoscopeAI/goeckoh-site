@@ -1,0 +1,5 @@
+"""
+Raised if BrokenPipeError occurs for the stdout stream while logging.
+"""
+
+

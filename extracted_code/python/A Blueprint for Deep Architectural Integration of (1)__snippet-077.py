@@ -1,1 +1,0 @@
-Designing the crawler in phases — from simple whitelist-based crawlers to full autonomy with reinforcement learning — allows gradual verification of stability and empirical validation of effectiveness, reducing risk and ensuring stable deployment.

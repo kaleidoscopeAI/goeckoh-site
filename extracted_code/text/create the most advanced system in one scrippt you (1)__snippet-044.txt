@@ -1,0 +1,3 @@
+- Exclude or run modified protocols for participants reporting distress, pain, or strong sensory aversion to the test sounds or headphones.
+- Document any adjustments (reduced volume, fewer trials, more breaks) so they can be accounted for in analysis and safety reporting.[^12_9][^12_8]
+

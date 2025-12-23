@@ -1,0 +1,7 @@
+   txt = safe_read_text(r["root"], r["relpath"])
+   if not txt:
+       continue
+   # look for telltale lines
+   m = re.search(r"(18 ?000|node[s ]*count|avatar|GLSL|shader|Three\.js|WebGL|positions|indices|springs)", txt, flags=re.IGNORECASE)
+   if m:
+       snips.append({"root": r["root"], "relpath": r["relpath"], "snippet": textwrap.shorten(txt.replace("\n"," "), width=300, placeholder=" …

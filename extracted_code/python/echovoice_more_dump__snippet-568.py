@@ -1,2 +1,1 @@
-import { Node, EmotionalVector } from "../types";
-import { spectralRadius } from "../math/spectralRadius";
+│ (M_i: learns from peers/sources)

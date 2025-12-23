@@ -1,0 +1,5 @@
+"anxious": ["mindfulness", "sensory_tools"],
+"perseveration": ["personalization", "communication"],
+"high_energy": ["movement_breaks", "sensory_tools"],
+"meltdown": ["meltdown_first_aid", "sensory_tools", "mindfulness"],
+"encouragement": ["personalization", "communication"],

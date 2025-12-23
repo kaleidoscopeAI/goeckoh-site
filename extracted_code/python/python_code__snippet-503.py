@@ -1,11 +1,36 @@
-import functools
-import sys
-import typing as t
-from asyncio import sleep
+    from .console import ConsoleRenderable
 
-from pip._vendor.tenacity import AttemptManager
-from pip._vendor.tenacity import BaseRetrying
-from pip._vendor.tenacity import DoAttempt
-from pip._vendor.tenacity import DoSleep
-from pip._vendor.tenacity import RetryCallState
+    # always skip rich generated jupyter renderables or None values
+    if _safe_isinstance(value, JupyterRenderable) or value is None:
+        return None
 
+    console = console or get_console()
+
+    with console.capture() as capture:
+        # certain renderables should start on a new line
+        if _safe_isinstance(value, ConsoleRenderable):
+            console.line()
+        console.print(
+            value
+            if _safe_isinstance(value, RichRenderable)
+            else Pretty(
+                value,
+                overflow=overflow,
+                indent_guides=indent_guides,
+                max_length=max_length,
+                max_string=max_string,
+                max_depth=max_depth,
+                expand_all=expand_all,
+                margin=12,
+            ),
+            crop=crop,
+            new_line_start=True,
+            end="",
+        )
+    # strip trailing newline, not usually part of a text repr
+    # I'm not sure if this should be prevented at a lower level
+    return capture.get().rstrip("\n")
+
+
+def _safe_isinstance(
+    obj: object, class_or_tuple: Union[type, Tuple[type, ...]]

@@ -1,33 +1,23 @@
-class EchoCrystallineHeart(nn.Module):
-    def __init__(self, n_nodes=1024, dim=128):
-        super().__init__()
-        self.n = n_nodes
-        self.bits = nn.Parameter(torch.randint(0, 2, (n_nodes, dim)).float())
-        self.positions = nn.Parameter(torch.randn(n_nodes, 3))
-        self.emotions = nn.Parameter(torch.zeros(n_nodes, 5))  # [arousal, valence, dominance, coherence, resonance]
-        self.t = torch.tensor(0.0)
-        self.T0 = 1.0
-        self.alpha_t = 0.01
+from faster_whisper import WhisperModel
+import language_tool_python
 
-    def temperature(self):
-        return self.T0 / torch.log1p(self.alpha_t * self.t)
+class SpeechProcessor:
+    def __init__(self):
+        self.whisper = WhisperModel("tiny", device="cpu", compute_type="int8")
+        self.tool = language_tool_python.LanguageTool('en-US')
 
-    def forward(self, external_stimulus=None):
-        self.t += 1.0
-        T = self.temperature()
-        if external_stimulus is None:
-            external_stimulus = torch.zeros_like(self.emotions)
+    def transcribe(self, audio_path: str) -> str:
+        segments, _ = self.whisper.transcribe(audio_path, beam_size=5, language="en", vad_filter=True)
+        return " ".join(seg.text for seg in segments).strip()
 
-        decay = -0.5 * self.emotions
-        noise = torch.randn_like(self.emotions) * T * 0.1
-        diffusion = 0.3 * (self.emotions.mean(0) - self.emotions)
-        dE = external_stimulus.mean(0) + decay + diffusion + noise
-        self.emotions.data = self.emotions + 0.03 * dE
-        self.emotions.data.clamp_(-10, 10)
-
-        return {
-            "arousal": self.emotions[:,0].mean().item(),
-            "valence": self.emotions[:,1].mean().item(),
-            "temperature": T.item(),
-        }
+    def correct(self, text: str) -> str:
+        matches = self.tool.check(text)
+        corrected = language_tool_python.utils.correct(text, matches)
+        # Hard first-person lock
+        replacements = [
+            ("you are", "I am"), ("your", "my"), ("you ", "I "), ("You are", "I am"), ("Your", "My")
+        ]
+        for a, b in replacements:
+            corrected = corrected.replace(a, b)
+        return corrected
 

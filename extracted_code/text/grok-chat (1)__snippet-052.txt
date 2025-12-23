@@ -1,0 +1,5 @@
+cpu_usage: float
+memory_usage: float
+io_ops: int
+priority: int
+

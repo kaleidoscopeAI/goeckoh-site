@@ -1,0 +1,31 @@
+              val correctedText = correctToFirstPerson(rawText)
+              speakCorrectedText(correctedText, prosody)
+              callback(correctedText, prosody)
+          }
+      })
+
+      // Set Recorder listener
+      recorder.setListener(object : IRecorderListener {
+          override fun onUpdateReceived(message: String) {
+              Log.d("Recorder", message)
+          }
+
+          override fun onDataReceived(samples: FloatArray) {
+              // Forward to Whisper
+              whisper.writeBuffer(samples)
+
+              // Convert float[] to short[] for Silero (16-bit signed PCM)
+              val shortArray = ShortArray(samples.size)
+              for (i in samples.indices) {
+                  shortArray[i] = (samples[i] * Short.MAX_VALUE).toShort()
+              }
+
+              // Feed to Silero VAD
+              val speechProb = sileroVad.process(shortArray)
+
+              val isSpeech = speechProb > vadThreshold
+              if (isSpeech) {
+                  isSpeechDetected = true
+                  silenceStart = 0
+              } else if (isSpeechDetected) {
+                  if (silenceStart == 0L) silenceStart =

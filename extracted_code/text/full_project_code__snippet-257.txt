@@ -1,0 +1,2 @@
+# Python 3: not a no-op, we're adding this to the namespace so it can be imported.
+ConnectionError = ConnectionError

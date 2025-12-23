@@ -1,2 +1,4 @@
-# <REDACTED: potential secret detected>
+class NoChange:
+    pass
+
 

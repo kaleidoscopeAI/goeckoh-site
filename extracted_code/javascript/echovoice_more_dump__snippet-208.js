@@ -1,2 +1,2 @@
-We will create a function to update the bonds.
-
+const prompt = document.getElementById("user-prompt").value;
+const response = await queryCrystalConsciousness(prompt);

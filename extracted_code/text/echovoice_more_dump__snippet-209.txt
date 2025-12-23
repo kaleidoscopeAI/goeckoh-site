@@ -1,1 +1,1 @@
-Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.
+search, r3f-forcegraph for 3D graphs, etc.), and data flows via JSON/WebSockets. Performance tuning (like using Annoy on low-end deviceszilliz.com

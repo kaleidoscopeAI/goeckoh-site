@@ -1,0 +1,3 @@
+- Any modern x86-64 with WASAPI/Core Audio/ALSA, 128–256 sample buffers, and a dedicated high-priority callback thread can comfortably stay under 50–100 ms one way, leaving ample room for your physics and DSP.[^10_10]
+
+

@@ -1,1 +1,2 @@
-def _process_image_sync(self, img_url: str) -> Dict:
+def _convolve(self, img: np.ndarray, kernel: np.ndarray) -> np.ndarray:
+from scipy.signal import convolve2d

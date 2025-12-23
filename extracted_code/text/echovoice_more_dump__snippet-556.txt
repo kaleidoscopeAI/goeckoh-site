@@ -1,0 +1,23 @@
+"""
+Clone a node and its children
+
+Args:
+    node: Node to clone
+
+Returns:
+    Cloned node
+"""
+clone = UnifiedNode(
+    type=node.type,
+    name=node.name,
+    value=node.value,
+    source_range=node.source_range,
+    attributes=node.attributes.copy(),
+    language=node.language
+)
+
+for child in node.children:
+    clone.add_child(_clone_node(child))
+
+return clone
+

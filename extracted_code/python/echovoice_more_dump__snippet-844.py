@@ -1,2 +1,6 @@
-For narrative visualization: When digesting text (e.g., from web crawl or LLM), the system extracts nouns (as topics for shapes) and verbs (for animations/motions). Nodes move like a "story":
+def cos_sim(a: np.ndarray, b: np.ndarray) -> float:
+    na = np.linalg.norm(a) + 1e-12
+    nb = np.linalg.norm(b) + 1e-12
+    return float(np.dot(a, b) / (na * nb))
+
 

@@ -1,4 +1,7 @@
-  terminfo/74 (268 files), 3 more. These directories are excluded from snapshots
-  and undo cleanup. Adjust `ghost_snapshot.ignore_large_untracked_dirs` to
-  change this behavior.
+    10 -from .crystalline_heart_core import CrystallineHeart, Metrics
+    10 +from .crystalline_heart_core import CrystallineHeart, NeurocoherenceLatt
+        ice, Metrics
+    11
+    12 -__all__ = ["CrystallineHeart", "Metrics"]
+    12 +__all__ = ["CrystallineHeart", "NeurocoherenceLattice", "Metrics"]
 

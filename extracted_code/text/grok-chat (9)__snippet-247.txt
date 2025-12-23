@@ -1,0 +1,3 @@
+ cd /home/jacob/Desktop/unified_goeckoh_system
+ python scripts/run_digit_batch.py
+

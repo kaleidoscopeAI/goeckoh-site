@@ -1,1 +1,13 @@
-You've defined clear structures for tasks using dataclasses and enums. This includes priority levels, status tracking, dependencies between tasks, results (success, data, error, duration), retry parameters, and estimated resource requirements. Task persistence (to_dict) is included.
+w = get_window("hann", win)
+if len(x) < win: x = np.pad(x, (0, win - len(x)))
+T = 1 + (len(x) - win)//hop
+F = win//2 + 1
+X = np.zeros((F, T), dtype=np.float64)
+for t in range(T):
+    s = t*hop
+    seg = x[s:s+win]
+    if len(seg) < win: seg = np.pad(seg, (0, win-len(seg)))
+    spec = np.fft.rfft(seg * w)
+    X[:, t] = np.abs(spec)
+return X
+

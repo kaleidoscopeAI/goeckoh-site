@@ -1,40 +1,102 @@
-class NonInteractiveSpinner(SpinnerInterface):
-    def __init__(self, message: str, min_update_interval_seconds: float = 60.0) -> None:
-        self._message = message
-        self._finished = False
-        self._rate_limiter = RateLimiter(min_update_interval_seconds)
-        self._update("started")
+"""A spinner animation.
 
-    def _update(self, status: str) -> None:
-        assert not self._finished
-        self._rate_limiter.reset()
-        logger.info("%s: %s", self._message, status)
+Args:
+    name (str): Name of spinner (run python -m rich.spinner).
+    text (RenderableType, optional): A renderable to display at the right of the spinner (str or Text typically). Defaults to "".
+    style (StyleType, optional): Style for spinner animation. Defaults to None.
+    speed (float, optional): Speed factor for animation. Defaults to 1.0.
 
-    def spin(self) -> None:
-        if self._finished:
-            return
-        if not self._rate_limiter.ready():
-            return
-        self._update("still running...")
+Raises:
+    KeyError: If name isn't one of the supported spinner animations.
+"""
 
-    def finish(self, final_status: str) -> None:
-        if self._finished:
-            return
-        self._update(f"finished with status '{final_status}'")
-        self._finished = True
+def __init__(
+    self,
+    name: str,
+    text: "RenderableType" = "",
+    *,
+    style: Optional["StyleType"] = None,
+    speed: float = 1.0,
+) -> None:
+    try:
+        spinner = SPINNERS[name]
+    except KeyError:
+        raise KeyError(f"no spinner called {name!r}")
+    self.text: "Union[RenderableType, Text]" = (
+        Text.from_markup(text) if isinstance(text, str) else text
+    )
+    self.frames = cast(List[str], spinner["frames"])[:]
+    self.interval = cast(float, spinner["interval"])
+    self.start_time: Optional[float] = None
+    self.style = style
+    self.speed = speed
+    self.frame_no_offset: float = 0.0
+    self._update_speed = 0.0
 
+def __rich_console__(
+    self, console: "Console", options: "ConsoleOptions"
+) -> "RenderResult":
+    yield self.render(console.get_time())
 
-class RateLimiter:
-    def __init__(self, min_update_interval_seconds: float) -> None:
-        self._min_update_interval_seconds = min_update_interval_seconds
-        self._last_update: float = 0
+def __rich_measure__(
+    self, console: "Console", options: "ConsoleOptions"
+) -> Measurement:
+    text = self.render(0)
+    return Measurement.get(console, options, text)
 
-    def ready(self) -> bool:
-        now = time.time()
-        delta = now - self._last_update
-        return delta >= self._min_update_interval_seconds
+def render(self, time: float) -> "RenderableType":
+    """Render the spinner for a given time.
 
-    def reset(self) -> None:
-        self._last_update = time.time()
+    Args:
+        time (float): Time in seconds.
+
+    Returns:
+        RenderableType: A renderable containing animation frame.
+    """
+    if self.start_time is None:
+        self.start_time = time
+
+    frame_no = ((time - self.start_time) * self.speed) / (
+        self.interval / 1000.0
+    ) + self.frame_no_offset
+    frame = Text(
+        self.frames[int(frame_no) % len(self.frames)], style=self.style or ""
+    )
+
+    if self._update_speed:
+        self.frame_no_offset = frame_no
+        self.start_time = time
+        self.speed = self._update_speed
+        self._update_speed = 0.0
+
+    if not self.text:
+        return frame
+    elif isinstance(self.text, (str, Text)):
+        return Text.assemble(frame, " ", self.text)
+    else:
+        table = Table.grid(padding=1)
+        table.add_row(frame, self.text)
+        return table
+
+def update(
+    self,
+    *,
+    text: "RenderableType" = "",
+    style: Optional["StyleType"] = None,
+    speed: Optional[float] = None,
+) -> None:
+    """Updates attributes of a spinner after it has been started.
+
+    Args:
+        text (RenderableType, optional): A renderable to display at the right of the spinner (str or Text typically). Defaults to "".
+        style (StyleType, optional): Style for spinner animation. Defaults to None.
+        speed (float, optional): Speed factor for animation. Defaults to None.
+    """
+    if text:
+        self.text = Text.from_markup(text) if isinstance(text, str) else text
+    if style:
+        self.style = style
+    if speed:
+        self._update_speed = speed
 
 

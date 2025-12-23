@@ -1,12 +1,1 @@
-def gcl(state: HybridState, edges: Sequence[Tuple[int, int]]) -> float:
-    if len(edges) == 0:
-        return 0.0
-    total: float = 0.0
-    for (i, j) in edges:
-        Ei = np.asarray(state.E[i]).astype(int)
-        Ej = np.asarray(state.E[j]).astype(int)
-        ham = int(np.bitwise_xor(Ei, Ej).sum())
-        d = int(Ei.size)
-        total += (1.0 - ham / max(1, d))
-    return float(total / len(edges))
-
+  is locally minimized far from x 

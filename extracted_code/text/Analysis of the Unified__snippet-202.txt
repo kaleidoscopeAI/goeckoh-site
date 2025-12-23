@@ -1,0 +1,3 @@
+pub id: usize,
+pub embed: u128, // 128-bit cognitive embedding
+pub neighbors: Vec<(usize, i64)>,

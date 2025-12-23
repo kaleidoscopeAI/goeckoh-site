@@ -1,1 +1,1 @@
-def detect_patterns(self):
+def analyze_file(self, file_path: str) -> str:

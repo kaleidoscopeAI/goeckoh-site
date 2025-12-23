@@ -1,0 +1,6 @@
+      at org.gradle.internal.progress.DefaultBuildOperationExecutor.execute(DefaultBuildOperationExecutor.java:199)
+      at org.gradle.internal.progress.DefaultBuildOperationExecutor.run(DefaultBuildOperationExecutor.java:110)
+      at org.gradle.configuration.BuildOperationScriptPlugin.apply(BuildOperationScriptPlugin.java:58)
+      at org.gradle.configuration.project.BuildScriptProcessor.execute(BuildScriptProcessor.java:41)
+      at org.gradle.configuration.project.BuildScriptProcessor.execute(BuildScriptProcessor.java:26)
+      at

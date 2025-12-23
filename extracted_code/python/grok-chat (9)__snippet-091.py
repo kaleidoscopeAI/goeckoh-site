@@ -1,3 +1,3 @@
-  directories are excluded from snapshots and undo cleanup. Adjust `ghost_snapshot.ignore_large_untracked_dirs` to change this
-  behavior.
+• I'm verifying if the dashboard component has a defined 'heart' variable or state, since it likely relies on data from the /
+  status endpoint; this ensures type-safe referencing.
 

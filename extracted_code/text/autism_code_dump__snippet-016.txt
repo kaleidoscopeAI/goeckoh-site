@@ -1,0 +1,13 @@
+"""Locations of the agent's CSV logs.
+
+``metrics_csv`` records every speech attempt by the child, along
+with whether it needed correction and the corrected form.
+``guidance_csv`` records behavioural events (e.g. anxiety,
+encouragement) and which strategy was used.  Both files are always
+appended to, never overwritten.
+"""
+
+metrics_csv: Path = field(default_factory=lambda: Path(os.getenv("KQBC_METRICS_CSV", "kqbc_metrics.csv")))
+guidance_csv: Path = field(default_factory=lambda: Path(os.getenv("KQBC_GUIDANCE_CSV", "kqbc_guidance.csv")))
+
+

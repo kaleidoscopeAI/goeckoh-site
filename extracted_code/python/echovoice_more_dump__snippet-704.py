@@ -1,6 +1,10 @@
-import numpy as np
-import matplotlib.pyplot as plt
-import networkx as nx
-from matplotlib.animation import FuncAnimation
-from matplotlib.collections import LineCollection
-import math, random
+async def autonomous_operation():
+    """Run autonomous cognitive cycles"""
+    while True:
+        try:
+            await cognitive_system.cognitive_cycle()
+            await asyncio.sleep(2.0)  # 2-second cycles
+        except Exception as e:
+            logging.error(f"Autonomous cycle failed: {e}")
+            await asyncio.sleep(5.0)
+

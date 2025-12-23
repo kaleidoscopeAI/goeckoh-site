@@ -1,3 +1,4 @@
-from .after import after_log  # noqa
-from .after import after_nothing  # noqa
+    from .terminal_theme import TerminalTheme
+    from .text import Text
+
 

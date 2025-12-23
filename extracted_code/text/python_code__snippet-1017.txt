@@ -1,0 +1,3 @@
+"""Raised when a general error occurs parsing a requirements file line."""
+
+

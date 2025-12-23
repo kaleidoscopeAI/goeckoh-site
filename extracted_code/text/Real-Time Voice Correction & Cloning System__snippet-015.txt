@@ -1,0 +1,2 @@
+asr_session: Session<'static>,
+vad: Arc<Mutex<Vec<f32>>>,

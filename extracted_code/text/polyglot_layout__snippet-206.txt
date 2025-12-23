@@ -1,0 +1,5 @@
+  root = EXTRACTED / ( "organic_ai_full_infra_bundle" if root_name.startswith("organic") else "cognitive-nebula_1")
+  p = root / rel
+  if not p.exists() or not p.is_file():
+       return ""
+  if p.suffix.lower() in

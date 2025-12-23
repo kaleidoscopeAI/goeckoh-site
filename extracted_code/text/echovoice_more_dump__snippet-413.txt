@@ -1,1 +1,2 @@
-class AdaptiveBehavior:
+|                                  ^^^^ variant or associated item not found in `CrystalError`
+|

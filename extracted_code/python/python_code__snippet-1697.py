@@ -1,198 +1,290 @@
-class EnhancedCrystallineHeart:
-    """
-    Crystalline Heart enhanced with 128+ equations from documents
-    Includes Hamiltonian dynamics, annealing, and stability metrics
-    """
-    
-    def __init__(self, num_nodes: int = 1024):
-        self.num_nodes = num_nodes
-        self.nodes = []
-        
-        # Initialize nodes with enhanced attributes from documents
-        for i in range(num_nodes):
-            node = {
-                'id': i,
-                'emotion': np.zeros(8, dtype=np.float32),  # Enhanced 8D emotion
-                'energy': 0.0,
-                'awareness': 0.5,
-                'knowledge': np.random.rand(128),
-                'position': np.random.rand(3),
-                'neighbors': [],
-                'weights': []
-            }
-            self.nodes.append(node)
-        
-        # Mathematical framework parameters from documents
-        self.alpha = 1.0   # Input sensitivity
-        self.beta = 0.7    # Decay rate  
-        self.gamma = 0.4    # Diffusion coupling
-        self.delta = 0.2    # Quantum coupling
-        self.dt = 0.1       # Integration step
-        
-        # Annealing schedule from documents: T(t) = T0 / ln(1 + α*t)
-        self.T0 = 1.0
-        self.annealing_alpha = 0.01
-        self.temperature = self.T0
-        self.time_step = 0
-        
-        # Hamiltonian parameters
-        self.lambda_bit = 1.0
-        self.lambda_pos = 0.5
-        self.alpha_spatial = 0.1
-        
-        self._initialize_topology()
-    
-    def _initialize_topology(self, k_neighbors: int = 8):
-        """Initialize sparse random topology"""
-        for node in self.nodes:
-            neighbor_ids = np.random.choice(
-                [i for i in range(self.num_nodes) if i != node['id']],
-                size=min(k_neighbors, self.num_nodes - 1),
-                replace=False
-            )
-            node['neighbors'] = neighbor_ids
-            node['weights'] = np.random.rand(len(neighbor_ids)) * 0.5
-    
-    def update_temperature(self):
-        """Update annealing temperature: T(t) = T0 / ln(1 + α*t)"""
-        self.time_step += 1
-        self.temperature = self.T0 / np.log(1 + self.annealing_alpha * self.time_step)
-    
-    def compute_hamiltonian(self) -> float:
-        """Compute global Hamiltonian from documents"""
-        H = 0.0
-        
-        # Bit similarity term
-        for i, node_i in enumerate(self.nodes):
-            for j_id in node_i['neighbors']:
-                node_j = self.nodes[j_id]
-                # Simplified Hamming distance
-                emotion_diff = np.linalg.norm(node_i['emotion'] - node_j['emotion'])
-                H += self.lambda_bit * emotion_diff
-        
-        # Position term
-        for node in self.nodes:
-            H += self.alpha_spatial * np.linalg.norm(node['position'] - node.get('initial_position', node['position']))**2
-        
-        return H
-    
-    def update(self, external_input: np.ndarray, quantum_state: QuantumState) -> None:
-        """Enhanced update with mathematical framework"""
-        self.update_temperature()
-        
-        derivatives = []
-        for node in self.nodes:
-            # Input term
-            dE_input = self.alpha * external_input
-            
-            # Decay term
-            dE_decay = -self.beta * node['emotion']
-            
-            # Diffusion term
-            dE_diffusion = np.zeros(8, dtype=np.float32)
-            for j_id, weight in zip(node['neighbors'], node['weights']):
-                neighbor = self.nodes[j_id]
-                dE_diffusion += self.gamma * weight * (neighbor['emotion'] - node['emotion'])
-            
-            # Quantum coupling term
-            quantum_influence = np.real(quantum_state.wavefunction[:8]) if len(quantum_state.wavefunction) >= 8 else np.pad(
-                np.real(quantum_state.wavefunction), (0, 8 - len(quantum_state.wavefunction)), 'constant'
-            )
-            dE_quantum = self.delta * quantum_influence
-            
-            # Temperature noise
-            noise = np.random.randn(8) * (self.temperature * 0.01)
-            
-            # Total derivative
-            dE = dE_input + dE_decay + dE_diffusion + dE_quantum + noise
-            derivatives.append(dE * self.dt)
-        
-        # Apply updates
-        for node, dE in zip(self.nodes, derivatives):
-            node['emotion'] += dE
-            node['emotion'] = np.clip(node['emotion'], -2.0, 2.0)
-            
-            # Update awareness (from documents)
-            node['awareness'] = 0.9 * node['awareness'] + 0.5 * np.linalg.norm(dE) - 0.2 * self.compute_local_stress(node)
-            node['awareness'] = np.clip(node['awareness'], 0.0, 1.0)
-    
-    def compute_local_stress(self, node: Dict) -> float:
-        """Compute local stress from documents"""
-        neighbors = node['neighbors']
-        if len(neighbors) == 0:
-            return 0.0
-        
-        tension = 0.0
-        for j_id, weight in zip(node['neighbors'], node['weights']):
-            neighbor = self.nodes[j_id]
-            tension += weight * np.linalg.norm(node['emotion'] - neighbor['emotion'])
-        
-        return tension / len(node['neighbors'])
-    
-    def get_global_coherence_level(self) -> float:
-        """Enhanced GCL calculation from documents"""
-        emotions = np.array([node['emotion'] for node in self.nodes])
-        
-        # Base coherence from variance
-        variance = np.var(emotions, axis=0).mean()
-        base_coherence = 1.0 / (1.0 + variance)
-        
-        # Modularity-based coherence (from documents)
-        # Simplified modularity calculation
-        modularity = self.compute_modularity()
-        modularity_coherence = 1.0 / (1.0 + np.exp(-5 * (modularity - 0.5)))
-        
-        # Combined GCL with sigmoid
-        combined = 0.7 * base_coherence + 0.3 * modularity_coherence
-        return float(1.0 / (1.0 + np.exp(-10 * (combined - 0.5))))
-    
-    def compute_modularity(self) -> float:
-        """Simplified modularity calculation"""
-        # This would be a full community detection algorithm in production
-        # Simplified version based on emotional clustering
-        emotions = np.array([node['emotion'][:2] for node in self.nodes])  # Use first 2 dimensions
-        
-        # Simple k-means-like clustering
-        k = 3
-        centers = emotions[np.random.choice(len(emotions), k, replace=False)]
-        
-        for _ in range(10):  # Simple iterations
-            # Assign to nearest center
-            distances = np.array([[np.linalg.norm(e - c) for c in centers] for e in emotions])
-            assignments = np.argmin(distances, axis=1)
-            
-            # Update centers
-            for i in range(k):
-                mask = assignments == i
-                if np.any(mask):
-                    centers[i] = emotions[mask].mean(axis=0)
-        
-        # Calculate modularity (simplified)
-        intra_cluster_edges = 0
-        total_edges = 0
-        
-        for i, node in enumerate(self.nodes):
-            for j_id in node['neighbors']:
-                if assignments[i] == assignments[j_id]:
-                    intra_cluster_edges += 1
-                total_edges += 1
-        
-        return intra_cluster_edges / max(1, total_edges)
-    
-    def get_enhanced_emotional_state(self) -> EmotionalState:
-        """Extract enhanced emotional state"""
-        emotions = np.array([node['emotion'] for node in self.nodes])
-        avg_emotion = emotions.mean(axis=0)
-        
-        # Map to enhanced emotional state
-        return EmotionalState(
-            joy=max(0, avg_emotion[1]),
-            fear=max(0, -avg_emotion[1]),
-            trust=max(0, 1.0 - avg_emotion[0]),
-            anger=max(0, avg_emotion[0] * 0.5),
-            anticipation=max(0, avg_emotion[4] if len(avg_emotion) > 4 else 0.0),
-            anxiety=max(0, avg_emotion[5] if len(avg_emotion) > 5 else 0.0),
-            focus=max(0, avg_emotion[6] if len(avg_emotion) > 6 else 0.0),
-            overwhelm=max(0, avg_emotion[7] if len(avg_emotion) > 7 else 0.0)
+"""Traverse object and generate a tree.
+
+Args:
+    _object (Any): Object to be traversed.
+    max_length (int, optional): Maximum length of containers before abbreviating, or None for no abbreviation.
+        Defaults to None.
+    max_string (int, optional): Maximum length of string before truncating, or None to disable truncating.
+        Defaults to None.
+    max_depth (int, optional): Maximum depth of data structures, or None for no maximum.
+        Defaults to None.
+
+Returns:
+    Node: The root of a tree structure which can be used to render a pretty repr.
+"""
+
+def to_repr(obj: Any) -> str:
+    """Get repr string for an object, but catch errors."""
+    if (
+        max_string is not None
+        and _safe_isinstance(obj, (bytes, str))
+        and len(obj) > max_string
+    ):
+        truncated = len(obj) - max_string
+        obj_repr = f"{obj[:max_string]!r}+{truncated}"
+    else:
+        try:
+            obj_repr = repr(obj)
+        except Exception as error:
+            obj_repr = f"<repr-error {str(error)!r}>"
+    return obj_repr
+
+visited_ids: Set[int] = set()
+push_visited = visited_ids.add
+pop_visited = visited_ids.remove
+
+def _traverse(obj: Any, root: bool = False, depth: int = 0) -> Node:
+    """Walk the object depth first."""
+
+    obj_id = id(obj)
+    if obj_id in visited_ids:
+        # Recursion detected
+        return Node(value_repr="...")
+
+    obj_type = type(obj)
+    children: List[Node]
+    reached_max_depth = max_depth is not None and depth >= max_depth
+
+    def iter_rich_args(rich_args: Any) -> Iterable[Union[Any, Tuple[str, Any]]]:
+        for arg in rich_args:
+            if _safe_isinstance(arg, tuple):
+                if len(arg) == 3:
+                    key, child, default = arg
+                    if default == child:
+                        continue
+                    yield key, child
+                elif len(arg) == 2:
+                    key, child = arg
+                    yield key, child
+                elif len(arg) == 1:
+                    yield arg[0]
+            else:
+                yield arg
+
+    try:
+        fake_attributes = hasattr(
+            obj, "awehoi234_wdfjwljet234_234wdfoijsdfmmnxpi492"
         )
+    except Exception:
+        fake_attributes = False
+
+    rich_repr_result: Optional[RichReprResult] = None
+    if not fake_attributes:
+        try:
+            if hasattr(obj, "__rich_repr__") and not isclass(obj):
+                rich_repr_result = obj.__rich_repr__()
+        except Exception:
+            pass
+
+    if rich_repr_result is not None:
+        push_visited(obj_id)
+        angular = getattr(obj.__rich_repr__, "angular", False)
+        args = list(iter_rich_args(rich_repr_result))
+        class_name = obj.__class__.__name__
+
+        if args:
+            children = []
+            append = children.append
+
+            if reached_max_depth:
+                if angular:
+                    node = Node(value_repr=f"<{class_name}...>")
+                else:
+                    node = Node(value_repr=f"{class_name}(...)")
+            else:
+                if angular:
+                    node = Node(
+                        open_brace=f"<{class_name} ",
+                        close_brace=">",
+                        children=children,
+                        last=root,
+                        separator=" ",
+                    )
+                else:
+                    node = Node(
+                        open_brace=f"{class_name}(",
+                        close_brace=")",
+                        children=children,
+                        last=root,
+                    )
+                for last, arg in loop_last(args):
+                    if _safe_isinstance(arg, tuple):
+                        key, child = arg
+                        child_node = _traverse(child, depth=depth + 1)
+                        child_node.last = last
+                        child_node.key_repr = key
+                        child_node.key_separator = "="
+                        append(child_node)
+                    else:
+                        child_node = _traverse(arg, depth=depth + 1)
+                        child_node.last = last
+                        append(child_node)
+        else:
+            node = Node(
+                value_repr=f"<{class_name}>" if angular else f"{class_name}()",
+                children=[],
+                last=root,
+            )
+        pop_visited(obj_id)
+    elif _is_attr_object(obj) and not fake_attributes:
+        push_visited(obj_id)
+        children = []
+        append = children.append
+
+        attr_fields = _get_attr_fields(obj)
+        if attr_fields:
+            if reached_max_depth:
+                node = Node(value_repr=f"{obj.__class__.__name__}(...)")
+            else:
+                node = Node(
+                    open_brace=f"{obj.__class__.__name__}(",
+                    close_brace=")",
+                    children=children,
+                    last=root,
+                )
+
+                def iter_attrs() -> Iterable[
+                    Tuple[str, Any, Optional[Callable[[Any], str]]]
+                ]:
+                    """Iterate over attr fields and values."""
+                    for attr in attr_fields:
+                        if attr.repr:
+                            try:
+                                value = getattr(obj, attr.name)
+                            except Exception as error:
+                                # Can happen, albeit rarely
+                                yield (attr.name, error, None)
+                            else:
+                                yield (
+                                    attr.name,
+                                    value,
+                                    attr.repr if callable(attr.repr) else None,
+                                )
+
+                for last, (name, value, repr_callable) in loop_last(iter_attrs()):
+                    if repr_callable:
+                        child_node = Node(value_repr=str(repr_callable(value)))
+                    else:
+                        child_node = _traverse(value, depth=depth + 1)
+                    child_node.last = last
+                    child_node.key_repr = name
+                    child_node.key_separator = "="
+                    append(child_node)
+        else:
+            node = Node(
+                value_repr=f"{obj.__class__.__name__}()", children=[], last=root
+            )
+        pop_visited(obj_id)
+    elif (
+        is_dataclass(obj)
+        and not _safe_isinstance(obj, type)
+        and not fake_attributes
+        and _is_dataclass_repr(obj)
+    ):
+        push_visited(obj_id)
+        children = []
+        append = children.append
+        if reached_max_depth:
+            node = Node(value_repr=f"{obj.__class__.__name__}(...)")
+        else:
+            node = Node(
+                open_brace=f"{obj.__class__.__name__}(",
+                close_brace=")",
+                children=children,
+                last=root,
+                empty=f"{obj.__class__.__name__}()",
+            )
+
+            for last, field in loop_last(
+                field for field in fields(obj) if field.repr
+            ):
+                child_node = _traverse(getattr(obj, field.name), depth=depth + 1)
+                child_node.key_repr = field.name
+                child_node.last = last
+                child_node.key_separator = "="
+                append(child_node)
+
+        pop_visited(obj_id)
+    elif _is_namedtuple(obj) and _has_default_namedtuple_repr(obj):
+        push_visited(obj_id)
+        class_name = obj.__class__.__name__
+        if reached_max_depth:
+            # If we've reached the max depth, we still show the class name, but not its contents
+            node = Node(
+                value_repr=f"{class_name}(...)",
+            )
+        else:
+            children = []
+            append = children.append
+            node = Node(
+                open_brace=f"{class_name}(",
+                close_brace=")",
+                children=children,
+                empty=f"{class_name}()",
+            )
+            for last, (key, value) in loop_last(obj._asdict().items()):
+                child_node = _traverse(value, depth=depth + 1)
+                child_node.key_repr = key
+                child_node.last = last
+                child_node.key_separator = "="
+                append(child_node)
+        pop_visited(obj_id)
+    elif _safe_isinstance(obj, _CONTAINERS):
+        for container_type in _CONTAINERS:
+            if _safe_isinstance(obj, container_type):
+                obj_type = container_type
+                break
+
+        push_visited(obj_id)
+
+        open_brace, close_brace, empty = _BRACES[obj_type](obj)
+
+        if reached_max_depth:
+            node = Node(value_repr=f"{open_brace}...{close_brace}")
+        elif obj_type.__repr__ != type(obj).__repr__:
+            node = Node(value_repr=to_repr(obj), last=root)
+        elif obj:
+            children = []
+            node = Node(
+                open_brace=open_brace,
+                close_brace=close_brace,
+                children=children,
+                last=root,
+            )
+            append = children.append
+            num_items = len(obj)
+            last_item_index = num_items - 1
+
+            if _safe_isinstance(obj, _MAPPING_CONTAINERS):
+                iter_items = iter(obj.items())
+                if max_length is not None:
+                    iter_items = islice(iter_items, max_length)
+                for index, (key, child) in enumerate(iter_items):
+                    child_node = _traverse(child, depth=depth + 1)
+                    child_node.key_repr = to_repr(key)
+                    child_node.last = index == last_item_index
+                    append(child_node)
+            else:
+                iter_values = iter(obj)
+                if max_length is not None:
+                    iter_values = islice(iter_values, max_length)
+                for index, child in enumerate(iter_values):
+                    child_node = _traverse(child, depth=depth + 1)
+                    child_node.last = index == last_item_index
+                    append(child_node)
+            if max_length is not None and num_items > max_length:
+                append(Node(value_repr=f"... +{num_items - max_length}", last=True))
+        else:
+            node = Node(empty=empty, children=[], last=root)
+
+        pop_visited(obj_id)
+    else:
+        node = Node(value_repr=to_repr(obj), last=root)
+    node.is_tuple = _safe_isinstance(obj, tuple)
+    node.is_namedtuple = _is_namedtuple(obj)
+    return node
+
+node = _traverse(_object, root=True)
+return node
+
 

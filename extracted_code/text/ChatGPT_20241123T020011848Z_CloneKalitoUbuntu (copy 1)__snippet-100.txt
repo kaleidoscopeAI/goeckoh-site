@@ -1,0 +1,2 @@
+- Consistent growth and learning across nodes while preserving autonomy.
+- Collaboration between nodes with asynchronous or synchronous updates.

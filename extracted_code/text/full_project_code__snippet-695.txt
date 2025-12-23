@@ -1,0 +1,1 @@
+lambda s, l, t: chr(int(t[0].lstrip(r"\0x"), 16))

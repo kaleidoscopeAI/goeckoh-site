@@ -1,0 +1,4 @@
+"""logging.getLogger, but ensures our VerboseLogger class is returned"""
+return cast(VerboseLogger, logging.getLogger(name))
+
+

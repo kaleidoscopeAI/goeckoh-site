@@ -1,0 +1,3 @@
+(sphere, cube, cone, torus, pyramid) based on keywords like “dog”, “car”,
+“tree”, etc. Metadata is attached per node so you can branch on shape in
+your Three.js rendering.

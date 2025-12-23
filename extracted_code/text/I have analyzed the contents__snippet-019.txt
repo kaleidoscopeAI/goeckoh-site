@@ -1,0 +1,4 @@
+```bash
+python echo_prime.py
+```
+

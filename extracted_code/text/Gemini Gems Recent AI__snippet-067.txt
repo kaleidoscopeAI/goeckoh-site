@@ -1,0 +1,22 @@
+More Features: Added more relevant molecular properties (logP, TPSA, HBD, HBA) to the feature vector. You can add more as needed.
+
+ECFP4 Fingerprints: Calculated ECFP4 fingerprints for similarity searching. This is a standard method in cheminformatics.
+
+Target Protein Handling: Added target_protein_pdbqt to the constructor. You can now pass the path to your target protein's PDBQT file. The binding affinity calculation is still a placeholder, but it's now set up to use a real docking program when you integrate it.
+
+PCA for Dimensionality Reduction: Used PCA to reduce the high-dimensional feature vector to 3D for visualization. This is a more robust and statistically sound method than simply using a few features directly.
+
+Energy Calculation: The energy calculation is now based on the distance to the mean of the data points, which is more appropriate, and in the reduced 3D space.
+
+Relative Energy for Mutation: The node_adaptation method now uses the 75th percentile of energy levels to determine "high energy." This makes the system more adaptive to different datasets.
+
+Similarity Search: Implemented find_similar_molecules to search for molecules similar to a given SMILES string using Tanimoto similarity on ECFP4 fingerprints.
+
+Molecule Details Retrieval: Added get_molecule_details to retrieve the SMILES string and feature vector for a molecule by its index. This is useful for interactive exploration.
+
+Stored Molecule Objects: The RDKit molecule objects themselves are now stored in the graph, so you can access them for further calculations or visualization.
+
+Click Event Handling (Plotly): Included an example of a click event handler in the visualize_cube function. You'll need to expand this to perform actions based on clicks (e.g., display details, highlight similar molecules). This will require a callback function.
+
+**Custom Data in
+

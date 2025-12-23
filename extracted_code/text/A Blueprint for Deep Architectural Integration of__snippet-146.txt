@@ -1,0 +1,2 @@
+    - Connections implemented as sets of bit masks controlling which bit patterns activate which engines.
+    - Integration functions replaced with majority or parity bit gates approximating sums and nonlinearities.

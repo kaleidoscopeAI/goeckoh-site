@@ -1,14 +1,18 @@
-class _Bit:
-    """A descriptor to get/set a style attribute bit."""
+import errno
+import json
+import operator
+import os
+import shutil
+import site
+from optparse import SUPPRESS_HELP, Values
+from typing import List, Optional
 
-    __slots__ = ["bit"]
+from pip._vendor.rich import print_json
 
-    def __init__(self, bit_no: int) -> None:
-        self.bit = 1 << bit_no
-
-    def __get__(self, obj: "Style", objtype: Type["Style"]) -> Optional[bool]:
-        if obj._set_attributes & self.bit:
-            return obj._attributes & self.bit != 0
-        return None
-
-
+from pip._internal.cache import WheelCache
+from pip._internal.cli import cmdoptions
+from pip._internal.cli.cmdoptions import make_target_python
+from pip._internal.cli.req_command import (
+    RequirementCommand,
+    warn_if_run_as_root,
+    with_cleanup,

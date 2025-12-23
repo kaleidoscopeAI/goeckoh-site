@@ -1,2 +1,1 @@
-package com.kaleidoscope.body
-import kotlin.math.exp
+where L is a Laplacian-like operator computed from normalized affinities:

@@ -1,71 +1,66 @@
-class VoiceCrystal:
-    """
-    Advanced voice mimicry system from documents
-    Style-based prosody transfer with emotional adaptation
-    """
-    
-    def __init__(self):
-        self.voice_samples = {
-            "neutral": [],
-            "calm": [],
-            "excited": []
-        }
-        self.prosody_profiles = {
-            "neutral": {"pitch_mean": 120.0, "pitch_std": 20.0, "energy": 0.5},
-            "calm": {"pitch_mean": 100.0, "pitch_std": 10.0, "energy": 0.3},
-            "excited": {"pitch_mean": 180.0, "pitch_std": 40.0, "energy": 0.8}
-        }
-        self.adaptation_rate = 0.01  # Lifelong slow-drift adaptation
-        
-    def select_style(self, emotional_state: EmotionalState) -> str:
-        """Select voice style based on emotional state"""
-        if emotional_state.anxiety > 0.6 or emotional_state.fear > 0.5:
-            return "calm"
-        elif emotional_state.joy > 0.7 and emotional_state.trust > 0.6:
-            return "excited"
-        else:
-            return "neutral"
-    
-    def adapt_voice(self, audio_sample: np.ndarray, style: str):
-        """Lifelong voice adaptation from documents"""
-        # Simulate voice adaptation (would use real ML in production)
-        if len(self.voice_samples[style]) < 32:  # Max samples per style
-            self.voice_samples[style].append(audio_sample)
-            
-            # Adapt prosody profiles slowly over time
-            current_profile = self.prosody_profiles[style]
-            # Simulated adaptation based on new sample
-            adaptation_factor = self.adaptation_rate
-            current_profile["pitch_mean"] += adaptation_factor * np.random.randn()
-            current_profile["energy"] += adaptation_factor * np.random.randn()
-    
-    def synthesize_with_prosody(self, text: str, style: str, emotional_state: EmotionalState) -> np.ndarray:
-        """Synthesize speech with prosody transfer"""
-        profile = self.prosody_profiles[style]
-        
-        # Adjust prosody based on emotional state
-        pitch_mod = 1.0 + 0.2 * (emotional_state.joy - emotional_state.fear)
-        energy_mod = 1.0 + 0.3 * emotional_state.trust
-        
-        adjusted_pitch = profile["pitch_mean"] * pitch_mod
-        adjusted_energy = profile["energy"] * energy_mod
-        
-        # Generate audio (simplified - would use real TTS in production)
-        duration = len(text) * 0.1  # Rough estimate
-        sample_rate = 22050
-        num_samples = int(duration * sample_rate)
-        
-        # Generate sine wave with prosody
-        t = np.linspace(0, duration, num_samples)
-        audio = np.sin(2 * np.pi * adjusted_pitch * t) * adjusted_energy
-        
-        # Add natural variation
-        noise = np.random.randn(num_samples) * 0.01
-        audio += noise
-        
-        # Apply envelope
-        envelope = np.exp(-t * 3)  # Quick decay
-        audio *= envelope
-        
-        return audio.astype(np.float32)
+"""A line in repr output."""
+
+parent: Optional["_Line"] = None
+is_root: bool = False
+node: Optional[Node] = None
+text: str = ""
+suffix: str = ""
+whitespace: str = ""
+expanded: bool = False
+last: bool = False
+
+@property
+def expandable(self) -> bool:
+    """Check if the line may be expanded."""
+    return bool(self.node is not None and self.node.children)
+
+def check_length(self, max_length: int) -> bool:
+    """Check this line fits within a given number of cells."""
+    start_length = (
+        len(self.whitespace) + cell_len(self.text) + cell_len(self.suffix)
+    )
+    assert self.node is not None
+    return self.node.check_length(start_length, max_length)
+
+def expand(self, indent_size: int) -> Iterable["_Line"]:
+    """Expand this line by adding children on their own line."""
+    node = self.node
+    assert node is not None
+    whitespace = self.whitespace
+    assert node.children
+    if node.key_repr:
+        new_line = yield _Line(
+            text=f"{node.key_repr}{node.key_separator}{node.open_brace}",
+            whitespace=whitespace,
+        )
+    else:
+        new_line = yield _Line(text=node.open_brace, whitespace=whitespace)
+    child_whitespace = self.whitespace + " " * indent_size
+    tuple_of_one = node.is_tuple and len(node.children) == 1
+    for last, child in loop_last(node.children):
+        separator = "," if tuple_of_one else node.separator
+        line = _Line(
+            parent=new_line,
+            node=child,
+            whitespace=child_whitespace,
+            suffix=separator,
+            last=last and not tuple_of_one,
+        )
+        yield line
+
+    yield _Line(
+        text=node.close_brace,
+        whitespace=whitespace,
+        suffix=self.suffix,
+        last=self.last,
+    )
+
+def __str__(self) -> str:
+    if self.last:
+        return f"{self.whitespace}{self.text}{self.node or ''}"
+    else:
+        return (
+            f"{self.whitespace}{self.text}{self.node or ''}{self.suffix.rstrip()}"
+        )
+
 

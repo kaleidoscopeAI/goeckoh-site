@@ -1,0 +1,2 @@
+return np.log(np.clip(x, eps, None))
+

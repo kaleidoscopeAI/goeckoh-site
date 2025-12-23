@@ -1,1 +1,1 @@
-for (let j = 0; j < block; j++) out[i * block + j] = mat[i][j];
+  is an indicator function (1 if ∇H≈0) and J 

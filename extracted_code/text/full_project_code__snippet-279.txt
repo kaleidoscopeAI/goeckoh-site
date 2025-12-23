@@ -1,0 +1,5 @@
+"""Raised when a request enters a pool after the pool has been closed."""
+
+pass
+
+

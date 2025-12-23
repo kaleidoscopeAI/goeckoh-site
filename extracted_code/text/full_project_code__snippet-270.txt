@@ -1,0 +1,5 @@
+"""Base warning used by this module."""
+
+pass
+
+

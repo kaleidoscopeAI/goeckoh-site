@@ -1,2 +1,6 @@
-from pip._internal.wheel_builder import build, should_build_for_install_command
+USING_STRINGBUILDER = False
+from io import BytesIO as StringIO
+
+newlist_hint = lambda size: []
+
 

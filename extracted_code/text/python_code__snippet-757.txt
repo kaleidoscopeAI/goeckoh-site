@@ -1,0 +1,6 @@
+_fields_ = (
+    ("dwErrorStatus", DWORD),
+    ("dwInfoStatus", DWORD),
+)
+
+

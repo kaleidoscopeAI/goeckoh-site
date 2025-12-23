@@ -1,0 +1,7 @@
+149          }
+150 +        if (models.isEmpty()) {
+151 +            Log.w("Mirror", "No Vosk models loaded.")
+152 +            return
+153 +        }
+154          resetState()
+

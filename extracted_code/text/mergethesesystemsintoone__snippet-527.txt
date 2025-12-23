@@ -1,0 +1,21 @@
+engine = PerspectiveEngine()
+
+try:
+    engine.initialize()
+
+    # Simulated validated insights
+    validated_insights = [
+        "Compound 1 predicted as active (accuracy: 0.9)",
+        "Compound 2 predicted as active (accuracy: 0.87)",
+        "Compound 3 predicted as inactive (accuracy: 0.93)"
+    ]
+    speculative_perspectives = engine.process_insights(validated_insights)
+    print("Generated Speculative Perspectives:")
+    for perspective in speculative_perspectives:
+        print(perspective)
+
+    # Display state
+    print("Engine State:", engine.get_state())
+finally:
+    engine.shutdown()
+

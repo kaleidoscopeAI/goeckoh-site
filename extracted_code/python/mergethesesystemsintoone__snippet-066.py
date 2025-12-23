@@ -1,16 +1,13 @@
-def ensure_venv_and_reexec():
-    ROOT.mkdir(parents=True, exist_ok=True)
-    if os.environ.get("KA_BOOTED") == "1":
-        return
-    if not VENV.exists():
-        print("Creating venv at", VENV)
-        venv.create(VENV, with_pip=True)
-    pip = VENV / ("Scripts/pip.exe" if os.name == "nt" else "bin/pip")
-    py = VENV / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
-    print("Upgrading pip and installing deps")
-    subprocess.check_call([str(pip), "install", "--upgrade", "pip"])
-    subprocess.check_call([str(pip), "install"] + REQ)
-    env = os.environ.copy(); env["KA_BOOTED"] = "1"
-    print("Relaunching inside venv")
-    os.execvpe(str(py), [str(py), __file__], env)
+def calculate_phi(emb: np.ndarray) -> float:
+    if emb.size == 0:
+        return 0.0
+    entropy = lambda data: -np.sum(data * np.log(data + 1e-12)) if np.sum(data) > 0 else 0
+    data = np.abs(emb) / (np.sum(np.abs(emb)) + 1e-12)
+    sys_entropy = entropy(data)
+    parts = 2
+    part_entropy = 0
+    for i in range(parts):
+        partition = data[i::parts]
+        part_entropy += entropy(partition) / parts
+    return max(0, sys_entropy - part_entropy)
 

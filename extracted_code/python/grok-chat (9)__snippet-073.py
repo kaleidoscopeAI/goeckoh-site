@@ -1,3 +1,4 @@
-• The log write failure likely stems from attempting to write to a root-owned .run directory at the project root from the
-  backend directory, indicating a permission conflict to resolve.
+• The Sherpa error indicates missing assets causing early failure that prevents Vosk fallback from initializing properly, likely
+  due to silent or suppressed Vosk import/load errors. To fix this, I'll bypass Sherpa and prioritize Vosk when an environment
+  flag is set, avoiding helper caching and ensuring Vosk loads directly.
 

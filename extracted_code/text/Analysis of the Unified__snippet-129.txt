@@ -1,0 +1,3 @@
+th = threading.Thread(target=physics_loop, daemon=True)
+th.start()
+

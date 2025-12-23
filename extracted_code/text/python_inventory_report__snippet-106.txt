@@ -1,0 +1,3 @@
+doc: Orchestrator for existing EchoVoice bytecode modules.
+functions: default_descriptors
+classes: ComponentDescriptor, ComponentRegistry
