@@ -1,0 +1,19 @@
+assistant: i have more.. rememebr these and just say ok when you have read them
+
+assistant: ok
+
+assistant: Refer to the following content:
+
+user: Switch to InstancedMesh for nodes: Render all spheres with a single draw call using THREE.InstancedMesh. Supports per-instance position, scale, and color.
+
+assistant: tell me how this could be merged or integrated into the system from this doc
+
+user: Voice production relies on vocal fold vibration and resonance, modulated by aerodynamic forces (Voice Foundation). Phonetics distinguishes sounds (e.g., consonants/vowels) as building blocks of language, with neural processing in auditory cortex (superior temporal gyrus) for pitch/formant analysis.
+
+assistant: how does it wwork
+
+user: Cognitive Nebula Core: A desktop/web app that processes user prompts with a local AI (Ollama/llama3), generates "thoughts," calculates emotional/cognitive metrics (e.g., curiosity, valence), and renders them as a dynamic 3D particle nebula. Idle mode auto-generates "dreams." Images from thoughts enhance visuals.
+
+assistant: take out the poetic persona and instead lets have the person be fun and playful but also i want it to use the words the poerson is trying to say to create the images with the nodes or particles.
+
+user: Persona Change: Updated SYSTEM_PROMPT to fun/playful. Responses now include emojis, jokes, and games (e.g., "Haha, let's turn that into a wild adventure! 🎉").

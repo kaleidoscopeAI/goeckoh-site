@@ -1,0 +1,421 @@
+Python inventory (excluding .venv and __pycache__), total files: 164
+
+- THE UNIFIED ECHO ORGANIC.py
+    doc: THE UNIFIED ECHO-ORGANIC SYSTEM LAUNCHER
+    classes: UnifiedSystem
+- __init__ (2).py
+    doc: Speech processing modules.
+- __init__ (3).py
+    doc: Voice synthesis and management modules.
+- __init__ (4).py
+    doc: Main application loop and decision-making modules.
+- __init__ (5).py
+- __init__ (6).py
+    doc: core package
+- __init__.py
+- aba_policy.py
+    doc: Placeholder for ABAPolicyEngine.
+    classes: ABAPolicyEngine
+- advanced_voice_mimic.py
+    classes: VoiceSample, VoiceProfile, VoiceCrystalConfig, VoiceCrystal
+- agent.py
+    doc: KQBC Agent that bridges speech practice with an AGI substrate.
+    classes: AGIStatus, KQBCAgent
+- agi_seed.py
+    doc: agi_seed.py
+    classes: AGISeed
+- api.py
+    doc: This module defines the concrete API boundary between the Echo core
+    functions: log_echo_utterance, get_brain_caption, get_brain_metrics, get_avatar_frame
+    classes: EchoMeta, BrainMetrics, AvatarFrame
+- app.py
+    doc: KivyMD GUI for the Echo Crystalline Heart companion.
+    classes: ChildScreen, ParentScreen, VoiceSetupScreen, EchoGuiApp
+- app_backend.py
+    functions: _start_speech_loop, create_backend_app, sync_settings_from_store, main
+- attention.py
+    classes: AttentionModule
+- audio_features.py
+    functions: compute_audio_embedding
+- audio_io.py
+    doc: Low-level audio capture and playback utilities.
+    functions: chunked_audio
+    classes: AudioIO
+- automatic_speech_recognition.py
+    classes: AutomaticSpeechRecognitionGenerationParameters, AutomaticSpeechRecognitionParameters, AutomaticSpeechRecognitionInput, AutomaticSpeechRecognitionOutputChunk, AutomaticSpeechRecognitionOutput
+- avatar_widget.py
+    classes: AvatarWidget
+- behavior_monitor.py
+    doc: Simple heuristics that monitor behavior cues to trigger guidance.
+    classes: BehaviorMonitor
+- broken_speech_tool.py
+    doc: Broken Speech Interpreter
+    functions: collapse_repeated_letters, normalize_text, detect_intent, detect_sentiment, interpret, run_cli, build_parser, main
+    classes: NormalizationResult
+- calming_strategies.py
+    doc: Evidence-based calming strategy catalog inspired by ABA best practices.
+    functions: list_categories, by_category, suggest_for_event
+    classes: Strategy, StrategyAdvisor
+- cca_bridge.py
+    classes: CCABridgeClient
+- cli.py
+    doc: Command-line entry point for the Echo speech companion + AGI stack.
+    functions: build_parser, cmd_record, cmd_list, cmd_summary, cmd_run, cmd_simulate, cmd_dashboard, cmd_gui, cmd_strategies, cmd_comfort, cmd_record_voice_facet, cmd_show_voice_profile, main
+- companion.py
+    classes: EchoCompanion
+- config (2).py
+    doc: Central configuration for the autism speech companion.
+    classes: Paths, AudioSettings, SpeechModelSettings, BehaviorSettings, CompanionConfig
+- config (3).py
+    doc: Backward compatibility config shim.
+    functions: _load_config
+    classes: CompanionConfig
+- config.py
+    doc: Unified configuration for Organic Seed + Echo speech companion.
+    functions: _load_companion_config
+    classes: OrganicConfig, DBConfig, CompanionConfig
+- consent_manager.py
+    classes: ConsentManager
+- controller.py
+    classes: AvatarController
+- core.py
+    classes: CrystalBrain
+- core_logging.py
+    functions: _timestamp
+    classes: MetricsLogger, GuidanceLogger
+- crystal_memory.py
+    classes: CrystalMemory
+- crystalline_memory.py
+    doc: Simplified Crystalline Memory for Echo integration.
+    classes: CrystallineMemory
+- dashboard.py
+    doc: Rich, responsive caregiver dashboard for the autism speech companion.
+    functions: _load_rows, _load_guidance, _voice_profile_counts, _recent_behavior_events, _cca_summary, _summarize_metrics, create_app, main
+- data_store.py
+    doc: Persistence helpers for phrases, attempts, and caregiver metrics.
+    classes: Phrase, DataStore
+- decision.py
+    classes: AgentDecision
+- echo_gui.py
+    doc: ECHO AGI: TACTICAL CONTROL INTERFACE (GUI)
+    classes: EchoGUI
+- echo_installer_package.py
+    doc: Echo v4.0 Crystalline Heart - Complete Build & Package System
+    functions: main
+    classes: EchoBuilder
+- echo_prime.py
+    error: parse error: unterminated string literal (detected at line 1) (<unknown>, line 1)
+- echo_v4.py
+    functions: enforce_first_person, hash_embedding
+    classes: LocalLLM, EchoCrystallineHeart, Echo
+- echo_v4_complete.py
+    doc: Echo v4.0 - Crystalline Heart Speech Companion
+    functions: enforce_first_person, hash_embedding
+    classes: EchoConfig, LocalLLM, CrystallineHeart, Echo
+- engine.py
+    classes: AbaProgress, AbaEngine
+- ethics.py
+    classes: EthicalGovernor
+- events.py
+    functions: now_ts
+    classes: EchoEvent, HeartMetrics, BrainMetrics, AvatarFrame, CombinedSnapshot
+- expression_gears.py
+    doc: expression_gears.py
+    functions: _interp_to_num_frames, apply_prosody_to_tts
+    classes: VoiceSample, VoiceProfile, ExpressionGear
+- expressions.py
+    functions: _interp_to_num_frames, apply_prosody_to_tts
+    classes: AudioData, Information, ExpressionGear
+- gate.py
+    functions: action_allowed, queue_for_guardian_review
+- gears (2).py
+    doc: gears.py
+    classes: Information, AudioData, SpeechData, EmotionData, AgentDecision
+- gears.py
+    classes: Message, GearNode, GearFabric
+- graph.py
+    classes: MemoryGraph
+- guidance.py
+    doc: Voice guidance that turns the companion into a calming friend.
+    classes: GuidanceScript, GuidanceCoach
+- hamiltonian.py
+    classes: HamiltonianController
+- heart (2).py
+    classes: EchoCrystallineHeart
+- heart.py
+    classes: HeartConfig, CrystallineHeart
+- heart_core.py
+    doc: Echo Crystalline Heart v4.0 — Ollama + DeepSeek Integration
+    functions: enforce_first_person, hash_embedding
+    classes: LocalLLM, EchoCrystallineHeart
+- hid_controller.py
+    classes: HIDController
+- inner_voice.py
+    classes: InnerVoiceConfig, InnerVoiceEngine
+- io.py
+    classes: AudioIO
+- kaleidoscope_engine.py
+    classes: KaleidoscopeEngine
+- kaleidoscope_gui.py
+    classes: SimulationThread, KaleidoscopeGUI
+- llm (2).py
+    doc: Local LLM wrapper used by the Crystalline Heart.
+    classes: LocalLLM
+- llm.py
+    classes: LocalLLM
+- llm_reasoning.py
+    doc: LLMReasoner: high-level therapeutic planning around Echo.
+    classes: LLMReasoner
+- local_llm_core.py
+    doc: LocalLLMCore: embedded open-source LLM (no external APIs).
+    classes: LocalLLMConfig, LocalLLMCore
+- main (2).py
+    functions: main
+- main (3).py
+- main.py
+- math.py
+    functions: information_energy, field_stability, lyapunov_loss, integrated_information, coherence_metric
+- membrane.py
+    functions: allocate_nodes
+- mimic.py
+    classes: VoiceMimic
+- models.py
+    classes: AttemptRecord, BehaviorEvent, CaregiverPrompt, VoiceFacet
+- more/AI_EGG_TEMP/backend/app.py
+    classes: UnifiedAISystem
+- more/AI_EGG_TEMP/backend/components/offline/crawler.py
+    functions: ensure_corpus
+    classes: Document, OfflineCrawler
+- more/AI_EGG_TEMP/backend/components/offline/embedder.py
+    classes: OfflineEmbedder
+- more/AI_EGG_TEMP/backend/components/offline/llm.py
+    classes: MiniTransformer, OfflineLLM
+- more/AI_EGG_TEMP/backend/components/offline/memory.py
+    classes: OfflineMemory
+- more/AI_EGG_TEMP/backend/components/online/crawler.py
+    classes: OnlineCrawler
+- more/AI_EGG_TEMP/backend/components/online/embedder.py
+    classes: OnlineEmbedder
+- more/AI_EGG_TEMP/backend/components/online/llm.py
+    classes: OnlineLLM
+- more/AI_EGG_TEMP/backend/components/online/memory.py
+    classes: OnlineMemory
+- more/AI_EGG_TEMP/backend/cube_simulator.py
+    classes: Node, Bond, CubeSimulator
+- more/AI_EGG_TEMP/backend/factory.py
+    functions: create_components
+- more/AI_EGG_TEMP/backend/interfaces.py
+    classes: BaseLLM, BaseEmbedder, BaseMemory, BaseCrawler
+- more/AI_EGG_TEMP/backend/transformation_engine.py
+    classes: TransformationEngine
+- more/AI_EGG_TEMP/backend/visualization.py
+    functions: format_state
+- more/aaaaaaa.py
+    error: parse error: unterminated string literal (detected at line 3) (<unknown>, line 3)
+- more/aaaaaaa.txt.py
+    error: parse error: unterminated string literal (detected at line 3) (<unknown>, line 3)
+- more/autonomous-processor.py
+    classes: AutonomousProcessor
+- more/code-reusability-module(2).py
+    error: parse error: '(' was never closed (<unknown>, line 432)
+- more/cognitive_crystal_system.py
+    classes: SystemState, OrganicMetrics, EmotionalField, UnifiedCrystallineMemory, OrganicNode, CognitiveCrystalMachine, UnifiedOrganicAI
+- more/crystal_ai_os_full_system.py
+    doc: Crystal AI OS - Integrated Reference System Script
+    functions: pack_bits, popcount_u64, popcount_xor, hajek_schedule, constant_schedule, gcl, build_minimal_system
+    classes: Spec, HybridState, SemanticHamiltonian, GradientFlow, MetropolisEngine, PhiCalculator, FreeEnergyEngine, ConfidenceSynthesizer, SyndromeDetector, NeuralDecoder, HarmonicMemory, CategoryKernel, AxiomVerifier, Runtime
+- more/deepseek_python_20251007_065b67.py
+    classes: QuantumCognitiveField, OrganicMetrics, QuantumBit, HardwareController, OrganicNode, CognitiveCube, QuantumAwareTransformer, UnifiedCognitiveSystem
+- more/deepseek_python_20251010_cf5a3b(1).py
+    doc: 🎯 RELATIONAL QUANTUM UNI FRAMEWORK - MATHEMATICAL PROOF & IMMEDIATE 3.5X PERFORMANCE
+    functions: demonstrate_immediate_boost, run_complete_system
+    classes: RelationalQuantumProof, InstantHardwareOptimizer, RelationalQuantumProcessor
+- more/deepseek_python_20251010_cf5a3b(2).py
+    doc: 🎯 RELATIONAL QUANTUM UNI FRAMEWORK - MATHEMATICAL PROOF & IMMEDIATE 3.5X PERFORMANCE
+    functions: demonstrate_immediate_boost, run_complete_system
+    classes: RelationalQuantumProof, InstantHardwareOptimizer, RelationalQuantumProcessor
+- more/kaleidoscope-chatbot(1).py
+    doc: Kaleidoscope AI Chatbot
+    functions: main
+    classes: KaleidoscopeChatbot
+- more/kaleidoscope-merged(1).py
+    error: parse error: unterminated string literal (detected at line 91) (<unknown>, line 91)
+- more/kaleidoscope-merged.py
+    doc: Kaleidoscope AI - Unified Core System
+    functions: main
+    classes: FileType, QuantumSimulator, KaleidoscopeCore
+- more/kaleidoscope-web-interface(2).py
+    doc: Kaleidoscope AI Web Interface
+    functions: allowed_file, worker_loop, worker_ingest, worker_mimic, index, upload_file, mimic_software, get_status, get_task_details
+- more/scepter.py
+    functions: read_genesis_key, send_master_command
+- more/uni/backend/uni_core.py
+    functions: load_genesis_key, get_status, read_root
+    classes: HardwareManager, OrganicNexusNode, UNISystem, MasterControl
+- more/unified_autonomous_ai_simulation_script_sandboxed.py
+    doc: Unified Autonomous AI — Sandboxed Simulation
+    functions: cos_sim, mock_encode_text_to_vec, mock_crawl_source, role_rho, compute_B_matrix, compute_W_matrix, decoherence, speculation_operator, step_update, create_nodes, run_simulation, main
+    classes: Config, Node
+- more/unified_embedded_system.py
+    doc: unified_embedded_system.py
+    functions: ensure_corpus, hashlib_sha256
+    classes: LocalEmbedder, MiniTransformer, EmbeddedLLM, CrystallineMemory, Document, LocalCrawler, OrganicCore
+- more/unified_organic_ai_skeleton_v_1.py
+    error: parse error: invalid character '—' (U+2014) (<unknown>, line 691)
+- more/universal_agi_system.py
+    functions: llm_reflect, run_agi_system
+    classes: QuantumBit, ThoughtNode, CognitiveEnvironment, CognitiveCube, SuperNode, ReflectionTransformer
+- node.py
+    classes: EmotionalState, Node
+- onbrain_autonomous.py
+    functions: ensure_venv_and_reexec, write_wav_mono16, stft_mag, sha_to_u64, u_hash, sign_hash, ngrams, embed_text, cos_sim, knn_idx, mc_var, stability, anneal_sigma, ring_edges, energetics, synth_signal, default_maps, label_for, home, teach, status, frame
+    classes: Memory, MathSolver, LogicPlanner, Retriever, AvatarSynth, Broadcaster, BrainState, Brain
+- onbrain_groundbreaking.py
+    functions: ensure_venv_and_reexec, write_wav_mono16, stft_mag, make_bands, head_features, sha_to_u64, u_hash, sign_hash, ngrams, embed_text, cos_sim, knn_idx, mc_var, stability, anneal_sigma, expected_cos_noise, ring_edges, energetics, _u32, _rng, _palette, _avatar_svg, synth_voice_from_memory, spectral_stats, mouth_curvature, coherence_score, label_for, home, teach, status, recent, persona_avatar, persona_layout, persona_say, metrics_coherence
+    classes: Memory, FormalMap, TinyController, MathSolver, LogicPlanner, Retriever, Broadcaster, BrainState, OnBrain
+- onbrain_online_avatar.py
+    functions: ensure_venv_and_reexec, write_wav_mono16, stft_mag, sha_to_u64, u_hash, sign_hash, ngrams, embed_text, cos_sim, knn_idx, mc_var, stability, anneal_sigma, expected_cos_noise, ring_edges, energetics, _u32, _rng, _palette, _avatar_svg, synth_voice_from_memory, spectral_stats, home, persona_avatar, teach, think, status, recent, explore_seed, explore_allow, explore_status
+    classes: Memory, Explorer, Broadcaster, BrainState, OnBrain
+- orchestrator.py
+    doc: Orchestrator for existing EchoVoice bytecode modules.
+    functions: default_descriptors
+    classes: ComponentDescriptor, ComponentRegistry
+- organic_ai.py
+    classes: OrganicAI
+- paths.py
+    classes: PathRegistry
+- perspective_engine.py
+    classes: PerspectiveEngine
+- phenotyping_tracker.py
+    classes: FragmentClass, FragmentMetadata, PhenotypingTracker
+- phi_calculator.py
+    classes: PhiCalculator
+- policy.py
+    classes: GuardianPolicy
+- predictive_safety.py
+    classes: PredictiveSafetySystem
+- profile.py
+    classes: VoiceSample, VoiceProfile
+- prosody (2).py
+    functions: extract_prosody, _interp_to_num_frames, apply_prosody_to_tts
+    classes: ProsodyProfile
+- prosody (3).py
+    doc: This module is responsible for extracting emotional and prosodic features
+    functions: extract_prosody
+    classes: ProsodyProfile
+- prosody.py
+    functions: extract_prosody
+    classes: ProsodyProfile
+- reports.py
+    doc: Caregiver-facing reporting utilities.
+    functions: summarize
+    classes: SummaryRow
+- router.py
+    doc: Core routing between Echo sensory packets, crystalline memory, thought engines,
+    functions: process_sensory_packet, pull_echo_commands, pull_hid_commands, get_latest_state
+- seed.py
+    classes: SeedState, Seed
+- seed_crystal_brain.py
+    functions: ensure_venv_and_reexec, write_wav_mono16, sha_to_u64, u_hash, sign_hash, tokenize, signed_hash_embedding, embed_text, cos_sim, knn_indices, monte_carlo_variance, stability_score, anneal_schedule, expected_cos_with_noise, weights_tension, energetics, synth_signal, default_maps, stft_mag, make_bands, head_features, project_and_attention, fetch_summaries, kw, captions_from_shapes, make_reflection, heuristic_adjust, ask_ollama_refine, simple_edges, status, recent, ingest, home
+    classes: Phase, MemoryStore, Node, Bond, Cube, Broadcaster, Avatar18k, Orchestrator
+- semantic_mapper.py
+    classes: HolographicSemanticMapper
+- sensory_gears.py
+    doc: sensory_gears.py
+    classes: AudioInputGear
+- server.py
+    functions: init_llm, main
+- settings.py
+    functions: load_settings, _apply_json, _update_dataclass
+    classes: AudioSettings, SpeechSettings, LLMSettings, BehaviorSettings, HeartSettings, SystemSettings
+- settings_store.py
+    classes: SettingsStore
+- similarity.py
+    doc: Audio similarity scoring using MFCC + DTW.
+    classes: SimilarityScorer
+- speech.py
+    doc: speech.py
+    classes: SpeechProcessorGear
+- speech_io.py
+    functions: _load_vad_model, get_speech_prob
+    classes: AudioStream
+- speech_loop (2).py
+    doc: Core speech companion loop with inner-voice echo + passive voice learning.
+    classes: SpeechLoop, SimulatedSpeechLoop
+- speech_loop (3).py
+    classes: SpeechLoop
+- speech_loop.py
+    classes: SpeechLoop, SimulatedSpeechLoop
+- speech_processing.py
+    doc: Speech-to-text plus grammar correction pipeline.
+    classes: SpeechProcessor
+- speech_synthesis.py
+    classes: SpeechSynthesizer
+- speechinterventionsystem.py
+    doc: Legacy entrypoint that now proxies to the package CLI.
+- speechinterventionsystem_2.py
+    doc: Secondary entrypoint maintained for backwards compatibility.
+- store.py
+    classes: MemoryRecord, AudioSnippetRecord, TriggerRecord, MemoryStore
+- strategies.py
+    classes: Strategy, StrategyAdvisor
+- streamlit_app.py
+- stt.py
+    classes: STT
+- system_state.py
+    classes: SystemSnapshot, SystemState
+- text.py
+    classes: TextProcessor
+- text_normalizer.py
+    functions: normalize
+- text_to_speech.py
+    classes: TextToSpeechGenerationParameters, TextToSpeechParameters, TextToSpeechInput, TextToSpeechOutput
+- text_utils (2).py
+    doc: Shared text normalization helpers.
+    functions: normalize_simple, similarity
+- text_utils.py
+    doc: text_utils.py
+    functions: normalize_simple, text_similarity
+- thought_pipeline.py
+    doc: Thought pipeline that converts a sensory packet + memory context into a list of
+    classes: ThoughtPipeline
+- tk_gui.py
+    doc: Tkinter GUI for the KQBC agent.
+    functions: _safe_bool, load_metrics, load_guidance, compute_behavior_summary, compute_meltdown_risk, run_gui
+    classes: MetricsSnapshot, BehaviorSummary, MeltdownRisk, CompanionGUI
+- trigger_engine.py
+    classes: TriggerMatch, TriggerEngine
+- types.py
+    functions: default_avatar_frame
+- unified_system_agi_core (2).py
+    doc: agi_core.py
+    functions: now_seconds, stable_hash_bytes
+    classes: BitRegister, SimulatedHardware, RelationalMatrix, ThoughtEngines, EmotionalChemistry, MemorySystem, Planner, AGISystem
+- unified_system_agi_core (3).py
+    doc: agi_core.py
+    functions: now_seconds, stable_hash_bytes
+    classes: BitRegister, SimulatedHardware, RelationalMatrix, ThoughtEngines, EmotionalChemistry, MemorySystem, Planner, AGISystem
+- unified_system_agi_core (4).py
+    doc: agi_core.py
+    functions: now_seconds, stable_hash_bytes
+    classes: BitRegister, SimulatedHardware, RelationalMatrix, ThoughtEngines, EmotionalChemistry, MemorySystem, Planner, AGISystem
+- unified_system_agi_core.py
+    doc: agi_core.py
+    functions: now_seconds, stable_hash_bytes
+    classes: BitRegister, SimulatedHardware, RelationalMatrix, ThoughtEngines, EmotionalChemistry, MemorySystem, Planner, AGISystem
+- voice.py
+    doc: voice.py
+    classes: VoiceMimic
+- voice_crystal_ppp.py
+    functions: mock_extract_embedding
+    classes: DefaultAudioConfig, DefaultModelPaths, DefaultConfig, VoiceCrystal
+- voice_mimic.py
+    doc: Voice synthesis backend that works on Python 3.12 without Coqui TTS.
+    functions: _ensure_mono
+    classes: VoiceMimic
+- voice_timbre.py
+    functions: _auto_timbre_path, update_auto_timbre_from_audio, get_auto_timbre_wav
+- web_crawler.py
+    classes: WebCrawler
+- ws_server.py
+    classes: WSServer

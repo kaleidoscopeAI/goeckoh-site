@@ -1,0 +1,27 @@
+# docker-compose.yml
+# Orchestrates the UNI system core deployment (v2).
+
+services:
+  uni-core:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount the genesis key into the container
+      - ./genesis.key:/app/genesis.key
+    depends_on:
+      - ollama
+    # The application will connect to ollama via its service name on the docker network.
+
+  ollama:
+    image: ollama/ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    # This command will run on startup, pulling the model if it doesn't exist.
+    # It's a simple way to ensure the model is available.
+    command: /bin/sh -c "ollama serve & sleep 5 && ollama pull llama3:8b & wait"
+
+volumes:
+  ollama_data:

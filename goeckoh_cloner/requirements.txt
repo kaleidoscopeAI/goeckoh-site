@@ -1,0 +1,12 @@
+numpy
+scipy
+librosa
+sounddevice
+webrtcvad
+openai-whisper
+speechbrain
+torch
+torchaudio
+requests
+websockets
+soundfile

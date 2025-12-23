@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Goeckoh Voice Bubble</title>
+  <style>
+    :root {
+      --bg-dark: #020617;
+      --bg-card: #0b1120;
+      --accent-cyan: #22d3ee;
+      --accent-lime: #a3e635;
+      --metal-light: #e5e7eb;
+      --metal-med: #64748b;
+      --text-main: #e5e7eb;
+      --text-muted: #94a3b8;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background: radial-gradient(circle at top, #0f172a 0%, #020617 55%, #000000 100%);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-main);
+    }
+
+    #overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    #status {
+      position: absolute;
+      top: 10px;
+      left: 12px;
+      padding: 6px 10px;
+      background: linear-gradient(135deg, rgba(15,23,42,0.9), rgba(15,23,42,0.7));
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.25);
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    #status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #ef4444;
+      box-shadow: 0 0 6px rgba(248,113,113,0.9);
+    }
+
+    #brand {
+      position: absolute;
+      bottom: 12px;
+      right: 14px;
+      text-align: right;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--text-muted);
+      opacity: 0.85;
+    }
+
+    #brand-title {
+      font-size: 11px;
+      color: var(--metal-light);
+    }
+
+    #brand-sub {
+      margin-top: 2px;
+      font-size: 9px;
+    }
+
+    canvas {
+      display: block;
+    }
+
+    /* faint circuit lines */
+    #grid-overlay {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(to right, rgba(148,163,184,0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148,163,184,0.08) 1px, transparent 1px);
+      background-size: 80px 80px;
+      mix-blend-mode: soft-light;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+<div id="overlay">
+  <div id="grid-overlay"></div>
+  <div id="status">
+    <div id="status-dot"></div>
+    <span id="status-text">Connecting</span>
+  </div>
+  <div id="brand">
+    <div id="brand-title">GOECKOH</div>
+    <div id="brand-sub">NEURO-ACOUSTIC CLONER</div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
+<script>
+  const statusDot = document.getElementById('status-dot');
+  const statusText = document.getElementById('status-text');
+
+  // --- Scene setup ---
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 100);
+  camera.position.z = 4;
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setPixelRatio(window.devicePixelRatio || 1);
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  // Bubble (Voice Crystal)
+  const bubbleGeom = new THREE.SphereGeometry(1, 96, 96);
+  const bubbleMat = new THREE.MeshStandardMaterial({
+    color: new THREE.Color(0.25, 0.7, 1.0),
+    roughness: 0.35,
+    metalness: 0.7
+  });
+  const bubble = new THREE.Mesh(bubbleGeom, bubbleMat);
+  scene.add(bubble);
+
+  // Halo ring (agency field)
+  const ringInner = 1.15;
+  const ringOuter = 1.45;
+  const ringGeom = new THREE.RingGeometry(ringInner, ringOuter, 128);
+  const ringMat = new THREE.MeshBasicMaterial({
+    color: new THREE.Color(0.13, 0.83, 0.93), // mix cyan/lime
+    transparent: true,
+    opacity: 0.0,
+    side: THREE.DoubleSide
+  });
+  const ring = new THREE.Mesh(ringGeom, ringMat);
+  ring.rotation.x = Math.PI / 2;
+  scene.add(ring);
+
+  // Lighting: cool & clean
+  const keyLight = new THREE.PointLight(0xffffff, 1.4, 0);
+  keyLight.position.set(3, 3, 5);
+  scene.add(keyLight);
+
+  const rimLight = new THREE.PointLight(0x22d3ee, 0.9, 0);
+  rimLight.position.set(-3, -2, -4);
+  scene.add(rimLight);
+
+  const amb = new THREE.AmbientLight(0x111827, 0.8);
+  scene.add(amb);
+
+  // Keep a copy of base positions for spikes
+  const basePositions = bubbleGeom.attributes.position.array.slice();
+  let spikeAmount = 0.0;
+
+  function applySpikes(spike) {
+    const pos = bubbleGeom.attributes.position.array;
+    for (let i = 0; i < pos.length; i += 3) {
+      const x = basePositions[i];
+      const y = basePositions[i+1];
+      const z = basePositions[i+2];
+      const baseR = Math.sqrt(x*x + y*y + z*z);
+      const r = baseR + spike * 0.25;
+      const scale = r / baseR;
+      pos[i]   = x * scale;
+      pos[i+1] = y * scale;
+      pos[i+2] = z * scale;
+    }
+    bubbleGeom.attributes.position.needsUpdate = true;
+    bubbleGeom.computeVertexNormals();
+  }
+
+  function hsvToRgb(h, s, v) {
+    let r, g, b;
+    let i = Math.floor(h * 6);
+    let f = h * 6 - i;
+    let p = v * (1 - s);
+    let q = v * (1 - f * s);
+    let t = v * (1 - (1 - f) * s);
+    switch (i % 6) {
+      case 0: r = v, g = t, b = p; break;
+      case 1: r = q, g = v, b = p; break;
+      case 2: r = p, g = v, b = t; break;
+      case 3: r = p, g = q, b = v; break;
+      case 4: r = t, g = p, b = v; break;
+      case 5: r = v, g = p, b = q; break;
+    }
+    return new THREE.Color(r, g, b);
+  }
+
+  let currentState = {
+    radius: 1.0,
+    spike: 0.0,
+    metalness: 0.6,
+    roughness: 0.4,
+    hue: 0.6,
+    halo: 0.0,
+    idle: true
+  };
+
+  // --- WebSocket connection ---
+  function connectWS() {
+    const ws = new WebSocket("ws://127.0.0.1:8765");
+    ws.onopen = () => {
+      statusDot.style.background = "#22c55e";
+      statusDot.style.boxShadow = "0 0 8px rgba(34,197,94,0.9)";
+      statusText.textContent = "Online • Listening";
+    };
+    ws.onclose = () => {
+      statusDot.style.background = "#ef4444";
+      statusDot.style.boxShadow = "0 0 8px rgba(248,113,113,0.9)";
+      statusText.textContent = "Disconnected • Retrying...";
+      setTimeout(connectWS, 2000);
+    };
+    ws.onerror = () => {
+      statusDot.style.background = "#f97316";
+      statusDot.style.boxShadow = "0 0 8px rgba(249,115,22,0.9)";
+      statusText.textContent = "Error • Retrying...";
+      ws.close();
+    };
+    ws.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        currentState = Object.assign({}, currentState, data);
+      } catch (e) {
+        console.error("Bad WS message", e);
+      }
+    };
+  }
+
+  connectWS();
+
+  // --- Animation loop ---
+  function animate() {
+    requestAnimationFrame(animate);
+
+    // gentle rotation
+    bubble.rotation.y += 0.003;
+    bubble.rotation.x += 0.0015;
+
+    // scale bubble
+    const targetScale = currentState.radius;
+    const s = bubble.scale.x + (targetScale - bubble.scale.x) * 0.15;
+    bubble.scale.setScalar(s);
+
+    // spikes
+    spikeAmount += (currentState.spike - spikeAmount) * 0.12;
+    applySpikes(spikeAmount);
+
+    // surface
+    bubbleMat.roughness = currentState.roughness;
+    bubbleMat.metalness = currentState.metalness;
+    bubbleMat.color = hsvToRgb(currentState.hue, 0.65, 1.0);
+
+    // halo ring intensity
+    const haloTarget = currentState.halo;
+    const haloOpacity = ringMat.opacity + (haloTarget - ringMat.opacity) * 0.18;
+    ringMat.opacity = Math.max(0.05, Math.min(haloOpacity, 0.9));
+
+    // subtle halo color shift with hue
+    const haloColor = hsvToRgb(
+      0.45 * currentState.hue + 0.25, 0.8, 1.0
+    );
+    ringMat.color.copy(haloColor);
+
+    renderer.render(scene, camera);
+  }
+
+  animate();
+
+  window.addEventListener("resize", () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+# --- System Operating Mode ---
+# 'online': Uses live web crawler and external Ollama LLM.
+# 'offline': Uses local file corpus and an embedded mini-LLM. Runs fully offline.
+mode: 'offline'
+
+simulation:
+  cube_size: 6
+  time_step: 0.1
+  stiffness: 20.0
+  damping: 0.01
+  mass: 1.0
+  bond_threshold_factor: 0.3
+  external_force: [0.0, 0.0, 0.0]
+  external_force_period: 0.0
+
+llm:
+  # Settings for 'online' mode
+  online_model: "llama3:8b"
+  server_url: "http://localhost:11434"
+  temperature: 0.2
+  # Settings for 'offline' mode are internal to the embedded model
+
+websockets:
+  host: "localhost"
+  port: 8765
+
+logging:
+  level: "INFO"
+  file: "cube.log"
+
+triggers:
+  stress_threshold: 0.7

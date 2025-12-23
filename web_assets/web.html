@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goeckoh | The Neuro-Acoustic Mirror</title>
+    <style>
+        /* --- GLOBAL VARIABLES & RESET --- */
+        :root {
+            --chrome-bg: linear-gradient(145deg, #ffffff, #e6e6e6);
+            --chrome-shadow: 5px 5px 10px #d1d1d1, -5px -5px 10px #ffffff;
+            --pastel-grad: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            --text-dark: #2d3436;
+            --text-light: #636e72;
+            --glass: rgba(255, 255, 255, 0.7);
+            --border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- BACKGROUND ACCENTS (The Pastel Glow) --- */
+        .glow-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(168, 237, 234, 0.4) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(254, 214, 227, 0.4) 0%, transparent 50%);
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            backdrop-filter: blur(10px);
+            background: rgba(255,255,255,0.5);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255,255,255,0.8);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-img {
+            height: 50px;
+            width: auto;
+            border-radius: 50%;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: -webkit-linear-gradient(45deg, #555, #000);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            margin-left: 2rem;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #74b9ff;
+        }
+
+        /* --- BUTTONS (Chrome Style) --- */
+        .btn {
+            padding: 12px 30px;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-chrome {
+            background: var(--chrome-bg);
+            box-shadow: var(--chrome-shadow);
+            color: var(--text-dark);
+            border: 1px solid #fff;
+        }
+
+        .btn-chrome:active {
+            box-shadow: inset 5px 5px 10px #d1d1d1, inset -5px -5px 10px #ffffff;
+        }
+
+        .btn-primary {
+            background: var(--pastel-grad);
+            color: #fff;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 20px rgba(168, 237, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px rgba(168, 237, 234, 0.6);
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 80px 20px;
+            min-height: 80vh;
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: #2d3436;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-light);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* --- CARDS (The Chrome/Glass look) --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            border: var(--border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .icon-box {
+            width: 60px;
+            height: 60px;
+            background: var(--pastel-grad);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: white;
+        }
+
+        /* --- PRICING --- */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .price-card {
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            border-radius: 30px;
+            padding: 50px 30px;
+            text-align: center;
+            border: 1px solid #fff;
+            box-shadow: 10px 10px 20px #d1d1d1, -10px -10px 20px #ffffff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .price-card.featured {
+            border: 2px solid #a8edea;
+        }
+
+        .price-tag {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #2d3436;
+            margin: 20px 0;
+        }
+
+        .price-tag span {
+            font-size: 1rem;
+            color: var(--text-light);
+            font-weight: 400;
+        }
+
+        .features-list {
+            list-style: none;
+            margin-bottom: 30px;
+            text-align: left;
+            padding-left: 10px;
+        }
+
+        .features-list li {
+            margin-bottom: 10px;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+        }
+
+        .features-list li::before {
+            content: "•";
+            color: #74b9ff;
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background: #fff;
+            padding: 50px 20px;
+            text-align: center;
+            margin-top: 100px;
+            border-top: 1px solid #eee;
+        }
+
+        .footer-logo {
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .hero { padding: 40px 20px; }
+            nav { flex-direction: column; gap: 20px; }
+            .nav-links a { margin: 0 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glow-bg"></div>
+
+    <nav>
+        <div class="logo-container">
+            <img src="goeckoh-logo.jpg" alt="Goeckoh Logo" class="logo-img" onerror="this.style.display='none'">
+            <span class="logo-text">Goeckoh</span>
+        </div>
+        <div class="nav-links">
+            <a href="#science">The Science</a>
+            <a href="#features">Features</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#contact" class="btn btn-chrome" style="padding: 8px 20px; margin-left: 20px;">Contact</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>A Calm Inner Voice for<br> Growing Brains</h1>
+            <p class="subtitle">
+                A private, offline psychoacoustic engine for autism and brain injury that listens, gently corrects, and echoes speech back in the child's own voice.
+            </p>
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <a href="#pricing" class="btn btn-primary">Get Goeckoh</a>
+                <a href="#science" class="btn btn-chrome">Understand the Science</a>
+            </div>
+            <p style="margin-top: 20px; font-size: 0.9rem; color: #888;">
+                <em>"I say it. Goeckoh helps me hear myself say it clearly."</em>
+            </p>
+        </div>
+    </section>
+
+    <section id="features" class="container">
+        <div class="section-title">
+            <h2>The Psychoacoustic Engine</h2>
+            <p>From Social Speech to Inner Speech</p>
+        </div>
+
+        <div class="grid-3">
+            <div class="card">
+                <div class="icon-box">✦</div>
+                <h3>Neuro-Acoustic Mirror</h3>
+                <p>A computational feedback loop designed to initiate speech internalization. It moves beyond traditional therapy by directly addressing biological prerequisites for self-agency.</p>
+            </div>
+            <div class="card">
+                <div class="icon-box">🔊</div>
+                <h3>Spatial Audio & Clarity</h3>
+                <p>Uses cognitive-based spatial audio localization. Goeckoh cleans up grammar and clarity while strictly preserving the child's intent, rhythm, and vocal identity.</p>
+            </div>
+            <div class="card">
+                <div class="icon-box">🔒</div>
+                <h3>100% Offline Privacy</h3>
+                <p>No cloud APIs listening to your home. The Neuro-Acoustic Exocortex runs entirely on your device. Your family's data never leaves your control.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="container">
+        <div class="section-title">
+            <h2>Access the Mirror</h2>
+            <p>Flexible options for families and clinics.</p>
+        </div>
+
+        <div class="pricing-grid">
+            <div class="price-card">
+                <h3>Subscription Plan</h3>
+                <div class="price-tag">$30 <span>/ month</span></div>
+                <ul class="features-list">
+                    <li>Lower initial cost</li>
+                    <li>Automatic software updates</li>
+                    <li>Full Psychoacoustic Engine</li>
+                    <li>Caregiver Support Chat</li>
+                    <li>Cancel anytime</li>
+                </ul>
+                <a href="#" class="btn btn-chrome" style="width: 100%;">Subscribe Now</a>
+            </div>
+
+            <div class="price-card featured">
+                <div style="position: absolute; top: 0; right: 0; background: #a8edea; padding: 5px 15px; font-size: 0.8rem; border-bottom-left-radius: 15px; font-weight: bold;">BEST VALUE</div>
+                <h3>Ownership Plan</h3>
+                <div class="price-tag">$500 <span>/ one-time</span></div>
+                <ul class="features-list">
+                    <li>Own the software indefinitely</li>
+                    <li>No recurring fees</li>
+                    <li>100% Data Sovereignty</li>
+                    <li>Full Psychoacoustic Engine</li>
+                    <li>Caregiver Support Chat</li>
+                </ul>
+                <a href="#" class="btn btn-primary" style="width: 100%;">Secure Ownership</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <span class="footer-logo">Goeckoh</span>
+        <p style="color: #888; margin-bottom: 20px;">
+            1230 Heman Crt Dr, Guinasi, CA 56333<br>
+            contact@goeckoh.com
+        </p>
+        <div style="display: flex; gap: 15px; justify-content: center; opacity: 0.6;">
+            <span>Instagram</span> | <span>Twitter</span> | <span>YouTube</span>
+        </div>
+        <br>
+        <p style="font-size: 0.8rem; color: #aaa;">© 2025 Goeckoh. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

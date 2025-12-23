@@ -1,0 +1,1175 @@
+~/echovoice > tree -L 4                                          at 03:45:22 PM
+.
+├── all_scripts_combined.txt
+├── build
+│   └── echovoice
+├── build_desktop.sh
+├── cognitive_crystal_ai
+│   ├── agireal 
+│   │   ├── mergethesesystemsintoone.txt
+│   │   ├── onbrain_auto
+│   │   │   ├── audio
+│   │   │   ├── avatar_frames
+│   │   │   ├── inbox
+│   │   │   ├── onbrain.db
+│   │   │   └── spec
+│   │   ├── onbrain_autonomous.py
+│   │   ├── onbrain_gb
+│   │   │   ├── audio
+│   │   │   ├── onbrain.db
+│   │   │   ├── onbrain.db-journal
+│   │   │   └── shapes
+│   │   ├── onbrain_groundbreaking.py
+│   │   ├── onbrain_online
+│   │   │   ├── audio
+│   │   │   └── onbrain.db
+│   │   ├── onbrain_online_avatar.py
+│   │   └── __pycache__
+│   │       └── onbrain_autonomous.cpython-312.pyc
+│   ├── backend
+│   │   ├── core
+│   │   │   ├── attention.py
+│   │   │   ├── hamiltonian.py
+│   │   │   ├── __init__.py
+│   │   │   ├── node.py
+│   │   │   ├── phi_calculator.py
+│   │   │   ├── __pycache__
+│   │   │   └── semantic_mapper.py
+│   │   ├── data
+│   │   │   ├── __init__.py
+│   │   │   ├── membrane.py
+│   │   │   └── __pycache__
+│   │   ├── engines
+│   │   │   ├── __init__.py
+│   │   │   ├── kaleidoscope_engine.py
+│   │   │   ├── perspective_engine.py
+│   │   │   └── __pycache__
+│   │   ├── gui
+│   │   │   ├── __init__.py
+│   │   │   └── kaleidoscope_gui.py
+│   │   ├── __init__.py
+│   │   ├── main.py
+│   │   ├── memory
+│   │   │   ├── graph.py
+│   │   │   ├── __init__.py
+│   │   │   └── __pycache__
+│   │   ├── __pycache__
+│   │   │   └── __init__.cpython-312.pyc
+│   │   ├── requirements.txt
+│   │   ├── server.py
+│   │   └── utils
+│   │       ├── ethics
+│   │       ├── __init__.py
+│   │       ├── __pycache__
+│   │       └── safety
+│   ├── centralcreativeness
+│   │   ├── GAIA CPU prototype.pdf
+│   │   ├── new_index.html
+│   │   ├── Polyglot AGI system.pdf
+│   │   ├── polyglot_layout.txt
+│   │   ├── polyglot.txt
+│   │   ├── __pycache__
+│   │   │   └── seed_crystal_brain.cpython-312.pyc
+│   │   └── seed_crystal_brain.py
+│   ├── frontend
+│   │   ├── index.html
+│   │   ├── node_modules
+│   │   │   ├── @babel
+│   │   │   ├── base64-js
+│   │   │   ├── baseline-browser-mapping
+│   │   │   ├── bidi-js
+│   │   │   ├── browserslist
+│   │   │   ├── buffer
+│   │   │   ├── camera-controls
+│   │   │   ├── caniuse-lite
+│   │   │   ├── convert-source-map
+│   │   │   ├── cross-env
+│   │   │   ├── cross-spawn
+│   │   │   ├── csstype
+│   │   │   ├── debug
+│   │   │   ├── detect-gpu
+│   │   │   ├── @dimforge
+│   │   │   ├── draco3d
+│   │   │   ├── electron-to-chromium
+│   │   │   ├── @esbuild
+│   │   │   ├── esbuild
+│   │   │   ├── escalade
+│   │   │   ├── fdir
+│   │   │   ├── fflate
+│   │   │   ├── gensync
+│   │   │   ├── glsl-noise
+│   │   │   ├── hls.js
+│   │   │   ├── ieee754
+│   │   │   ├── immediate
+│   │   │   ├── isexe
+│   │   │   ├── is-promise
+│   │   │   ├── its-fine
+│   │   │   ├── @jridgewell
+│   │   │   ├── jsesc
+│   │   │   ├── json5
+│   │   │   ├── js-tokens
+│   │   │   ├── lie
+│   │   │   ├── lru-cache
+│   │   │   ├── maath
+│   │   │   ├── @mediapipe
+│   │   │   ├── meshline
+│   │   │   ├── meshoptimizer
+│   │   │   ├── @monogrid
+│   │   │   ├── ms
+│   │   │   ├── nanoid
+│   │   │   ├── node-releases
+│   │   │   ├── path-key
+│   │   │   ├── picocolors
+│   │   │   ├── picomatch
+│   │   │   ├── postcss
+│   │   │   ├── potpack
+│   │   │   ├── promise-worker-transferable
+│   │   │   ├── react
+│   │   │   ├── react-dom
+│   │   │   ├── react-reconciler
+│   │   │   ├── react-refresh
+│   │   │   ├── @react-three
+│   │   │   ├── react-use-measure
+│   │   │   ├── require-from-string
+│   │   │   ├── @rolldown
+│   │   │   ├── @rollup
+│   │   │   ├── rollup
+│   │   │   ├── scheduler
+│   │   │   ├── semver
+│   │   │   ├── shebang-command
+│   │   │   ├── shebang-regex
+│   │   │   ├── source-map-js
+│   │   │   ├── stats-gl
+│   │   │   ├── stats.js
+│   │   │   ├── suspend-react
+│   │   │   ├── three
+│   │   │   ├── three-mesh-bvh
+│   │   │   ├── three-stdlib
+│   │   │   ├── tinyglobby
+│   │   │   ├── troika-three-text
+│   │   │   ├── troika-three-utils
+│   │   │   ├── troika-worker-utils
+│   │   │   ├── tunnel-rat
+│   │   │   ├── @tweenjs
+│   │   │   ├── @types
+│   │   │   ├── typescript
+│   │   │   ├── undici-types
+│   │   │   ├── update-browserslist-db
+│   │   │   ├── @use-gesture
+│   │   │   ├── use-sync-external-store
+│   │   │   ├── utility-types
+│   │   │   ├── vite
+│   │   │   ├── @vitejs
+│   │   │   ├── webgl-constants
+│   │   │   ├── webgl-sdf-generator
+│   │   │   ├── @webgpu
+│   │   │   ├── which
+│   │   │   ├── yallist
+│   │   │   └── zustand
+│   │   ├── package.json
+│   │   ├── package-lock.json
+│   │   ├── public
+│   │   ├── src
+│   │   │   ├── App.jsx
+│   │   │   ├── components
+│   │   │   ├── main.jsx
+│   │   │   ├── services
+│   │   │   ├── styles.css
+│   │   │   └── workers
+│   │   └── vite.config.js
+│   ├── organic_ai_final
+│   │   ├── adapters
+│   │   │   ├── KotlinAdapter.kt
+│   │   │   └── rust_adapter.rs
+│   │   ├── dash
+│   │   │   └── streamlit_app.py
+│   │   ├── main.py
+│   │   ├── organic_ai
+│   │   │   ├── config.py
+│   │   │   ├── crystal_memory.py
+│   │   │   ├── ethics.py
+│   │   │   ├── gears.py
+│   │   │   ├── hid_controller.py
+│   │   │   ├── __init__.py
+│   │   │   ├── organic_ai.py
+│   │   │   ├── seed.py
+│   │   │   ├── web_crawler.py
+│   │   │   └── ws_server.py
+│   │   ├── README.md
+│   │   ├── requirements.txt
+│   │   ├── run.sh
+│   │   ├── setup.sh
+│   │   └── venv
+│   │       ├── bin
+│   │       ├── etc
+│   │       ├── include
+│   │       ├── lib
+│   │       ├── lib64 -> lib
+│   │       ├── pyvenv.cfg
+│   │       └── share
+│   ├── README.md
+│   ├── scripts
+│   │   ├── package-lock.json
+│   │   ├── run_system.sh
+│   │   └── setup.sh
+│   ├── seed_crystal_agi
+│   │   ├── audio
+│   │   │   ├── sonification_1000.wav
+│   │   │   ├── sonification_1005.wav
+│   │   │   ├── sonification_100.wav
+│   │   │   ├── sonification_1010.wav
+│   │   │   ├── sonification_1015.wav
+│   │   │   ├── sonification_1020.wav
+│   │   │   ├── sonification_1025.wav
+│   │   │   ├── sonification_1030.wav
+│   │   │   ├── sonification_1035.wav
+│   │   │   ├── sonification_1040.wav
+│   │   │   ├── sonification_1045.wav
+│   │   │   ├── sonification_1050.wav
+│   │   │   ├── sonification_1055.wav
+│   │   │   ├── sonification_105.wav
+│   │   │   ├── sonification_1060.wav
+│   │   │   ├── sonification_1065.wav
+│   │   │   ├── sonification_1070.wav
+│   │   │   ├── sonification_1075.wav
+│   │   │   ├── sonification_1080.wav
+│   │   │   ├── sonification_1085.wav
+│   │   │   ├── sonification_1090.wav
+│   │   │   ├── sonification_1095.wav
+│   │   │   ├── sonification_1100.wav
+│   │   │   ├── sonification_1105.wav
+│   │   │   ├── sonification_110.wav
+│   │   │   ├── sonification_1110.wav
+│   │   │   ├── sonification_1115.wav
+│   │   │   ├── sonification_1120.wav
+│   │   │   ├── sonification_115.wav
+│   │   │   ├── sonification_120.wav
+│   │   │   ├── sonification_125.wav
+│   │   │   ├── sonification_130.wav
+│   │   │   ├── sonification_135.wav
+│   │   │   ├── sonification_140.wav
+│   │   │   ├── sonification_145.wav
+│   │   │   ├── sonification_150.wav
+│   │   │   ├── sonification_155.wav
+│   │   │   ├── sonification_160.wav
+│   │   │   ├── sonification_165.wav
+│   │   │   ├── sonification_170.wav
+│   │   │   ├── sonification_175.wav
+│   │   │   ├── sonification_180.wav
+│   │   │   ├── sonification_185.wav
+│   │   │   ├── sonification_190.wav
+│   │   │   ├── sonification_195.wav
+│   │   │   ├── sonification_200.wav
+│   │   │   ├── sonification_205.wav
+│   │   │   ├── sonification_20.wav
+│   │   │   ├── sonification_210.wav
+│   │   │   ├── sonification_215.wav
+│   │   │   ├── sonification_220.wav
+│   │   │   ├── sonification_225.wav
+│   │   │   ├── sonification_230.wav
+│   │   │   ├── sonification_235.wav
+│   │   │   ├── sonification_240.wav
+│   │   │   ├── sonification_245.wav
+│   │   │   ├── sonification_250.wav
+│   │   │   ├── sonification_255.wav
+│   │   │   ├── sonification_25.wav
+│   │   │   ├── sonification_260.wav
+│   │   │   ├── sonification_265.wav
+│   │   │   ├── sonification_270.wav
+│   │   │   ├── sonification_275.wav
+│   │   │   ├── sonification_280.wav
+│   │   │   ├── sonification_285.wav
+│   │   │   ├── sonification_290.wav
+│   │   │   ├── sonification_295.wav
+│   │   │   ├── sonification_300.wav
+│   │   │   ├── sonification_305.wav
+│   │   │   ├── sonification_30.wav
+│   │   │   ├── sonification_310.wav
+│   │   │   ├── sonification_315.wav
+│   │   │   ├── sonification_320.wav
+│   │   │   ├── sonification_325.wav
+│   │   │   ├── sonification_330.wav
+│   │   │   ├── sonification_335.wav
+│   │   │   ├── sonification_340.wav
+│   │   │   ├── sonification_345.wav
+│   │   │   ├── sonification_350.wav
+│   │   │   ├── sonification_355.wav
+│   │   │   ├── sonification_35.wav
+│   │   │   ├── sonification_360.wav
+│   │   │   ├── sonification_365.wav
+│   │   │   ├── sonification_370.wav
+│   │   │   ├── sonification_375.wav
+│   │   │   ├── sonification_380.wav
+│   │   │   ├── sonification_385.wav
+│   │   │   ├── sonification_390.wav
+│   │   │   ├── sonification_395.wav
+│   │   │   ├── sonification_400.wav
+│   │   │   ├── sonification_405.wav
+│   │   │   ├── sonification_40.wav
+│   │   │   ├── sonification_410.wav
+│   │   │   ├── sonification_415.wav
+│   │   │   ├── sonification_420.wav
+│   │   │   ├── sonification_425.wav
+│   │   │   ├── sonification_430.wav
+│   │   │   ├── sonification_435.wav
+│   │   │   ├── sonification_440.wav
+│   │   │   ├── sonification_445.wav
+│   │   │   ├── sonification_450.wav
+│   │   │   ├── sonification_455.wav
+│   │   │   ├── sonification_45.wav
+│   │   │   ├── sonification_460.wav
+│   │   │   ├── sonification_465.wav
+│   │   │   ├── sonification_470.wav
+│   │   │   ├── sonification_475.wav
+│   │   │   ├── sonification_480.wav
+│   │   │   ├── sonification_485.wav
+│   │   │   ├── sonification_490.wav
+│   │   │   ├── sonification_495.wav
+│   │   │   ├── sonification_500.wav
+│   │   │   ├── sonification_505.wav
+│   │   │   ├── sonification_50.wav
+│   │   │   ├── sonification_510.wav
+│   │   │   ├── sonification_515.wav
+│   │   │   ├── sonification_520.wav
+│   │   │   ├── sonification_525.wav
+│   │   │   ├── sonification_530.wav
+│   │   │   ├── sonification_535.wav
+│   │   │   ├── sonification_540.wav
+│   │   │   ├── sonification_545.wav
+│   │   │   ├── sonification_550.wav
+│   │   │   ├── sonification_555.wav
+│   │   │   ├── sonification_55.wav
+│   │   │   ├── sonification_560.wav
+│   │   │   ├── sonification_565.wav
+│   │   │   ├── sonification_570.wav
+│   │   │   ├── sonification_575.wav
+│   │   │   ├── sonification_580.wav
+│   │   │   ├── sonification_585.wav
+│   │   │   ├── sonification_590.wav
+│   │   │   ├── sonification_595.wav
+│   │   │   ├── sonification_600.wav
+│   │   │   ├── sonification_605.wav
+│   │   │   ├── sonification_60.wav
+│   │   │   ├── sonification_610.wav
+│   │   │   ├── sonification_615.wav
+│   │   │   ├── sonification_620.wav
+│   │   │   ├── sonification_625.wav
+│   │   │   ├── sonification_630.wav
+│   │   │   ├── sonification_635.wav
+│   │   │   ├── sonification_640.wav
+│   │   │   ├── sonification_645.wav
+│   │   │   ├── sonification_650.wav
+│   │   │   ├── sonification_655.wav
+│   │   │   ├── sonification_65.wav
+│   │   │   ├── sonification_660.wav
+│   │   │   ├── sonification_665.wav
+│   │   │   ├── sonification_670.wav
+│   │   │   ├── sonification_675.wav
+│   │   │   ├── sonification_680.wav
+│   │   │   ├── sonification_685.wav
+│   │   │   ├── sonification_690.wav
+│   │   │   ├── sonification_695.wav
+│   │   │   ├── sonification_700.wav
+│   │   │   ├── sonification_705.wav
+│   │   │   ├── sonification_70.wav
+│   │   │   ├── sonification_710.wav
+│   │   │   ├── sonification_715.wav
+│   │   │   ├── sonification_720.wav
+│   │   │   ├── sonification_725.wav
+│   │   │   ├── sonification_730.wav
+│   │   │   ├── sonification_735.wav
+│   │   │   ├── sonification_740.wav
+│   │   │   ├── sonification_745.wav
+│   │   │   ├── sonification_750.wav
+│   │   │   ├── sonification_755.wav
+│   │   │   ├── sonification_75.wav
+│   │   │   ├── sonification_760.wav
+│   │   │   ├── sonification_765.wav
+│   │   │   ├── sonification_770.wav
+│   │   │   ├── sonification_775.wav
+│   │   │   ├── sonification_780.wav
+│   │   │   ├── sonification_785.wav
+│   │   │   ├── sonification_790.wav
+│   │   │   ├── sonification_795.wav
+│   │   │   ├── sonification_800.wav
+│   │   │   ├── sonification_805.wav
+│   │   │   ├── sonification_80.wav
+│   │   │   ├── sonification_810.wav
+│   │   │   ├── sonification_815.wav
+│   │   │   ├── sonification_820.wav
+│   │   │   ├── sonification_825.wav
+│   │   │   ├── sonification_830.wav
+│   │   │   ├── sonification_835.wav
+│   │   │   ├── sonification_840.wav
+│   │   │   ├── sonification_845.wav
+│   │   │   ├── sonification_850.wav
+│   │   │   ├── sonification_855.wav
+│   │   │   ├── sonification_85.wav
+│   │   │   ├── sonification_860.wav
+│   │   │   ├── sonification_865.wav
+│   │   │   ├── sonification_870.wav
+│   │   │   ├── sonification_875.wav
+│   │   │   ├── sonification_880.wav
+│   │   │   ├── sonification_885.wav
+│   │   │   ├── sonification_890.wav
+│   │   │   ├── sonification_895.wav
+│   │   │   ├── sonification_900.wav
+│   │   │   ├── sonification_905.wav
+│   │   │   ├── sonification_90.wav
+│   │   │   ├── sonification_910.wav
+│   │   │   ├── sonification_915.wav
+│   │   │   ├── sonification_920.wav
+│   │   │   ├── sonification_925.wav
+│   │   │   ├── sonification_930.wav
+│   │   │   ├── sonification_935.wav
+│   │   │   ├── sonification_940.wav
+│   │   │   ├── sonification_945.wav
+│   │   │   ├── sonification_950.wav
+│   │   │   ├── sonification_955.wav
+│   │   │   ├── sonification_95.wav
+│   │   │   ├── sonification_960.wav
+│   │   │   ├── sonification_965.wav
+│   │   │   ├── sonification_970.wav
+│   │   │   ├── sonification_975.wav
+│   │   │   ├── sonification_980.wav
+│   │   │   ├── sonification_985.wav
+│   │   │   ├── sonification_990.wav
+│   │   │   └── sonification_995.wav
+│   │   ├── seed_crystal.db
+│   │   ├── shapes
+│   │   │   ├── captions_1000.json
+│   │   │   ├── captions_1005.json
+│   │   │   ├── captions_100.json
+│   │   │   ├── captions_1010.json
+│   │   │   ├── captions_1015.json
+│   │   │   ├── captions_1020.json
+│   │   │   ├── captions_1025.json
+│   │   │   ├── captions_1030.json
+│   │   │   ├── captions_1035.json
+│   │   │   ├── captions_1040.json
+│   │   │   ├── captions_1045.json
+│   │   │   ├── captions_1050.json
+│   │   │   ├── captions_1055.json
+│   │   │   ├── captions_105.json
+│   │   │   ├── captions_1060.json
+│   │   │   ├── captions_1065.json
+│   │   │   ├── captions_1070.json
+│   │   │   ├── captions_1075.json
+│   │   │   ├── captions_1080.json
+│   │   │   ├── captions_1085.json
+│   │   │   ├── captions_1090.json
+│   │   │   ├── captions_1095.json
+│   │   │   ├── captions_1100.json
+│   │   │   ├── captions_1105.json
+│   │   │   ├── captions_110.json
+│   │   │   ├── captions_1110.json
+│   │   │   ├── captions_1115.json
+│   │   │   ├── captions_1120.json
+│   │   │   ├── captions_115.json
+│   │   │   ├── captions_120.json
+│   │   │   ├── captions_125.json
+│   │   │   ├── captions_130.json
+│   │   │   ├── captions_135.json
+│   │   │   ├── captions_140.json
+│   │   │   ├── captions_145.json
+│   │   │   ├── captions_150.json
+│   │   │   ├── captions_155.json
+│   │   │   ├── captions_160.json
+│   │   │   ├── captions_165.json
+│   │   │   ├── captions_170.json
+│   │   │   ├── captions_175.json
+│   │   │   ├── captions_180.json
+│   │   │   ├── captions_185.json
+│   │   │   ├── captions_190.json
+│   │   │   ├── captions_195.json
+│   │   │   ├── captions_200.json
+│   │   │   ├── captions_205.json
+│   │   │   ├── captions_20.json
+│   │   │   ├── captions_210.json
+│   │   │   ├── captions_215.json
+│   │   │   ├── captions_220.json
+│   │   │   ├── captions_225.json
+│   │   │   ├── captions_230.json
+│   │   │   ├── captions_235.json
+│   │   │   ├── captions_240.json
+│   │   │   ├── captions_245.json
+│   │   │   ├── captions_250.json
+│   │   │   ├── captions_255.json
+│   │   │   ├── captions_25.json
+│   │   │   ├── captions_260.json
+│   │   │   ├── captions_265.json
+│   │   │   ├── captions_270.json
+│   │   │   ├── captions_275.json
+│   │   │   ├── captions_280.json
+│   │   │   ├── captions_285.json
+│   │   │   ├── captions_290.json
+│   │   │   ├── captions_295.json
+│   │   │   ├── captions_300.json
+│   │   │   ├── captions_305.json
+│   │   │   ├── captions_30.json
+│   │   │   ├── captions_310.json
+│   │   │   ├── captions_315.json
+│   │   │   ├── captions_320.json
+│   │   │   ├── captions_325.json
+│   │   │   ├── captions_330.json
+│   │   │   ├── captions_335.json
+│   │   │   ├── captions_340.json
+│   │   │   ├── captions_345.json
+│   │   │   ├── captions_350.json
+│   │   │   ├── captions_355.json
+│   │   │   ├── captions_35.json
+│   │   │   ├── captions_360.json
+│   │   │   ├── captions_365.json
+│   │   │   ├── captions_370.json
+│   │   │   ├── captions_375.json
+│   │   │   ├── captions_380.json
+│   │   │   ├── captions_385.json
+│   │   │   ├── captions_390.json
+│   │   │   ├── captions_395.json
+│   │   │   ├── captions_400.json
+│   │   │   ├── captions_405.json
+│   │   │   ├── captions_40.json
+│   │   │   ├── captions_410.json
+│   │   │   ├── captions_415.json
+│   │   │   ├── captions_420.json
+│   │   │   ├── captions_425.json
+│   │   │   ├── captions_430.json
+│   │   │   ├── captions_435.json
+│   │   │   ├── captions_440.json
+│   │   │   ├── captions_445.json
+│   │   │   ├── captions_450.json
+│   │   │   ├── captions_455.json
+│   │   │   ├── captions_45.json
+│   │   │   ├── captions_460.json
+│   │   │   ├── captions_465.json
+│   │   │   ├── captions_470.json
+│   │   │   ├── captions_475.json
+│   │   │   ├── captions_480.json
+│   │   │   ├── captions_485.json
+│   │   │   ├── captions_490.json
+│   │   │   ├── captions_495.json
+│   │   │   ├── captions_500.json
+│   │   │   ├── captions_505.json
+│   │   │   ├── captions_50.json
+│   │   │   ├── captions_510.json
+│   │   │   ├── captions_515.json
+│   │   │   ├── captions_520.json
+│   │   │   ├── captions_525.json
+│   │   │   ├── captions_530.json
+│   │   │   ├── captions_535.json
+│   │   │   ├── captions_540.json
+│   │   │   ├── captions_545.json
+│   │   │   ├── captions_550.json
+│   │   │   ├── captions_555.json
+│   │   │   ├── captions_55.json
+│   │   │   ├── captions_560.json
+│   │   │   ├── captions_565.json
+│   │   │   ├── captions_570.json
+│   │   │   ├── captions_575.json
+│   │   │   ├── captions_580.json
+│   │   │   ├── captions_585.json
+│   │   │   ├── captions_590.json
+│   │   │   ├── captions_595.json
+│   │   │   ├── captions_600.json
+│   │   │   ├── captions_605.json
+│   │   │   ├── captions_60.json
+│   │   │   ├── captions_610.json
+│   │   │   ├── captions_615.json
+│   │   │   ├── captions_620.json
+│   │   │   ├── captions_625.json
+│   │   │   ├── captions_630.json
+│   │   │   ├── captions_635.json
+│   │   │   ├── captions_640.json
+│   │   │   ├── captions_645.json
+│   │   │   ├── captions_650.json
+│   │   │   ├── captions_655.json
+│   │   │   ├── captions_65.json
+│   │   │   ├── captions_660.json
+│   │   │   ├── captions_665.json
+│   │   │   ├── captions_670.json
+│   │   │   ├── captions_675.json
+│   │   │   ├── captions_680.json
+│   │   │   ├── captions_685.json
+│   │   │   ├── captions_690.json
+│   │   │   ├── captions_695.json
+│   │   │   ├── captions_700.json
+│   │   │   ├── captions_705.json
+│   │   │   ├── captions_70.json
+│   │   │   ├── captions_710.json
+│   │   │   ├── captions_715.json
+│   │   │   ├── captions_720.json
+│   │   │   ├── captions_725.json
+│   │   │   ├── captions_730.json
+│   │   │   ├── captions_735.json
+│   │   │   ├── captions_740.json
+│   │   │   ├── captions_745.json
+│   │   │   ├── captions_750.json
+│   │   │   ├── captions_755.json
+│   │   │   ├── captions_75.json
+│   │   │   ├── captions_760.json
+│   │   │   ├── captions_765.json
+│   │   │   ├── captions_770.json
+│   │   │   ├── captions_775.json
+│   │   │   ├── captions_780.json
+│   │   │   ├── captions_785.json
+│   │   │   ├── captions_790.json
+│   │   │   ├── captions_795.json
+│   │   │   ├── captions_800.json
+│   │   │   ├── captions_805.json
+│   │   │   ├── captions_80.json
+│   │   │   ├── captions_810.json
+│   │   │   ├── captions_815.json
+│   │   │   ├── captions_820.json
+│   │   │   ├── captions_825.json
+│   │   │   ├── captions_830.json
+│   │   │   ├── captions_835.json
+│   │   │   ├── captions_840.json
+│   │   │   ├── captions_845.json
+│   │   │   ├── captions_850.json
+│   │   │   ├── captions_855.json
+│   │   │   ├── captions_85.json
+│   │   │   ├── captions_860.json
+│   │   │   ├── captions_865.json
+│   │   │   ├── captions_870.json
+│   │   │   ├── captions_875.json
+│   │   │   ├── captions_880.json
+│   │   │   ├── captions_885.json
+│   │   │   ├── captions_890.json
+│   │   │   ├── captions_895.json
+│   │   │   ├── captions_900.json
+│   │   │   ├── captions_905.json
+│   │   │   ├── captions_90.json
+│   │   │   ├── captions_910.json
+│   │   │   ├── captions_915.json
+│   │   │   ├── captions_920.json
+│   │   │   ├── captions_925.json
+│   │   │   ├── captions_930.json
+│   │   │   ├── captions_935.json
+│   │   │   ├── captions_940.json
+│   │   │   ├── captions_945.json
+│   │   │   ├── captions_950.json
+│   │   │   ├── captions_955.json
+│   │   │   ├── captions_95.json
+│   │   │   ├── captions_960.json
+│   │   │   ├── captions_965.json
+│   │   │   ├── captions_970.json
+│   │   │   ├── captions_975.json
+│   │   │   ├── captions_980.json
+│   │   │   ├── captions_985.json
+│   │   │   ├── captions_990.json
+│   │   │   ├── captions_995.json
+│   │   │   ├── shapes_1000.json
+│   │   │   ├── shapes_1005.json
+│   │   │   ├── shapes_100.json
+│   │   │   ├── shapes_1010.json
+│   │   │   ├── shapes_1015.json
+│   │   │   ├── shapes_1020.json
+│   │   │   ├── shapes_1025.json
+│   │   │   ├── shapes_1030.json
+│   │   │   ├── shapes_1035.json
+│   │   │   ├── shapes_1040.json
+│   │   │   ├── shapes_1045.json
+│   │   │   ├── shapes_1050.json
+│   │   │   ├── shapes_1055.json
+│   │   │   ├── shapes_105.json
+│   │   │   ├── shapes_1060.json
+│   │   │   ├── shapes_1065.json
+│   │   │   ├── shapes_1070.json
+│   │   │   ├── shapes_1075.json
+│   │   │   ├── shapes_1080.json
+│   │   │   ├── shapes_1085.json
+│   │   │   ├── shapes_1090.json
+│   │   │   ├── shapes_1095.json
+│   │   │   ├── shapes_1100.json
+│   │   │   ├── shapes_1105.json
+│   │   │   ├── shapes_110.json
+│   │   │   ├── shapes_1110.json
+│   │   │   ├── shapes_1115.json
+│   │   │   ├── shapes_1120.json
+│   │   │   ├── shapes_115.json
+│   │   │   ├── shapes_120.json
+│   │   │   ├── shapes_125.json
+│   │   │   ├── shapes_130.json
+│   │   │   ├── shapes_135.json
+│   │   │   ├── shapes_140.json
+│   │   │   ├── shapes_145.json
+│   │   │   ├── shapes_150.json
+│   │   │   ├── shapes_155.json
+│   │   │   ├── shapes_160.json
+│   │   │   ├── shapes_165.json
+│   │   │   ├── shapes_170.json
+│   │   │   ├── shapes_175.json
+│   │   │   ├── shapes_180.json
+│   │   │   ├── shapes_185.json
+│   │   │   ├── shapes_190.json
+│   │   │   ├── shapes_195.json
+│   │   │   ├── shapes_200.json
+│   │   │   ├── shapes_205.json
+│   │   │   ├── shapes_20.json
+│   │   │   ├── shapes_210.json
+│   │   │   ├── shapes_215.json
+│   │   │   ├── shapes_220.json
+│   │   │   ├── shapes_225.json
+│   │   │   ├── shapes_230.json
+│   │   │   ├── shapes_235.json
+│   │   │   ├── shapes_240.json
+│   │   │   ├── shapes_245.json
+│   │   │   ├── shapes_250.json
+│   │   │   ├── shapes_255.json
+│   │   │   ├── shapes_25.json
+│   │   │   ├── shapes_260.json
+│   │   │   ├── shapes_265.json
+│   │   │   ├── shapes_270.json
+│   │   │   ├── shapes_275.json
+│   │   │   ├── shapes_280.json
+│   │   │   ├── shapes_285.json
+│   │   │   ├── shapes_290.json
+│   │   │   ├── shapes_295.json
+│   │   │   ├── shapes_300.json
+│   │   │   ├── shapes_305.json
+│   │   │   ├── shapes_30.json
+│   │   │   ├── shapes_310.json
+│   │   │   ├── shapes_315.json
+│   │   │   ├── shapes_320.json
+│   │   │   ├── shapes_325.json
+│   │   │   ├── shapes_330.json
+│   │   │   ├── shapes_335.json
+│   │   │   ├── shapes_340.json
+│   │   │   ├── shapes_345.json
+│   │   │   ├── shapes_350.json
+│   │   │   ├── shapes_355.json
+│   │   │   ├── shapes_35.json
+│   │   │   ├── shapes_360.json
+│   │   │   ├── shapes_365.json
+│   │   │   ├── shapes_370.json
+│   │   │   ├── shapes_375.json
+│   │   │   ├── shapes_380.json
+│   │   │   ├── shapes_385.json
+│   │   │   ├── shapes_390.json
+│   │   │   ├── shapes_395.json
+│   │   │   ├── shapes_400.json
+│   │   │   ├── shapes_405.json
+│   │   │   ├── shapes_40.json
+│   │   │   ├── shapes_410.json
+│   │   │   ├── shapes_415.json
+│   │   │   ├── shapes_420.json
+│   │   │   ├── shapes_425.json
+│   │   │   ├── shapes_430.json
+│   │   │   ├── shapes_435.json
+│   │   │   ├── shapes_440.json
+│   │   │   ├── shapes_445.json
+│   │   │   ├── shapes_450.json
+│   │   │   ├── shapes_455.json
+│   │   │   ├── shapes_45.json
+│   │   │   ├── shapes_460.json
+│   │   │   ├── shapes_465.json
+│   │   │   ├── shapes_470.json
+│   │   │   ├── shapes_475.json
+│   │   │   ├── shapes_480.json
+│   │   │   ├── shapes_485.json
+│   │   │   ├── shapes_490.json
+│   │   │   ├── shapes_495.json
+│   │   │   ├── shapes_500.json
+│   │   │   ├── shapes_505.json
+│   │   │   ├── shapes_50.json
+│   │   │   ├── shapes_510.json
+│   │   │   ├── shapes_515.json
+│   │   │   ├── shapes_520.json
+│   │   │   ├── shapes_525.json
+│   │   │   ├── shapes_530.json
+│   │   │   ├── shapes_535.json
+│   │   │   ├── shapes_540.json
+│   │   │   ├── shapes_545.json
+│   │   │   ├── shapes_550.json
+│   │   │   ├── shapes_555.json
+│   │   │   ├── shapes_55.json
+│   │   │   ├── shapes_560.json
+│   │   │   ├── shapes_565.json
+│   │   │   ├── shapes_570.json
+│   │   │   ├── shapes_575.json
+│   │   │   ├── shapes_580.json
+│   │   │   ├── shapes_585.json
+│   │   │   ├── shapes_590.json
+│   │   │   ├── shapes_595.json
+│   │   │   ├── shapes_600.json
+│   │   │   ├── shapes_605.json
+│   │   │   ├── shapes_60.json
+│   │   │   ├── shapes_610.json
+│   │   │   ├── shapes_615.json
+│   │   │   ├── shapes_620.json
+│   │   │   ├── shapes_625.json
+│   │   │   ├── shapes_630.json
+│   │   │   ├── shapes_635.json
+│   │   │   ├── shapes_640.json
+│   │   │   ├── shapes_645.json
+│   │   │   ├── shapes_650.json
+│   │   │   ├── shapes_655.json
+│   │   │   ├── shapes_65.json
+│   │   │   ├── shapes_660.json
+│   │   │   ├── shapes_665.json
+│   │   │   ├── shapes_670.json
+│   │   │   ├── shapes_675.json
+│   │   │   ├── shapes_680.json
+│   │   │   ├── shapes_685.json
+│   │   │   ├── shapes_690.json
+│   │   │   ├── shapes_695.json
+│   │   │   ├── shapes_700.json
+│   │   │   ├── shapes_705.json
+│   │   │   ├── shapes_70.json
+│   │   │   ├── shapes_710.json
+│   │   │   ├── shapes_715.json
+│   │   │   ├── shapes_720.json
+│   │   │   ├── shapes_725.json
+│   │   │   ├── shapes_730.json
+│   │   │   ├── shapes_735.json
+│   │   │   ├── shapes_740.json
+│   │   │   ├── shapes_745.json
+│   │   │   ├── shapes_750.json
+│   │   │   ├── shapes_755.json
+│   │   │   ├── shapes_75.json
+│   │   │   ├── shapes_760.json
+│   │   │   ├── shapes_765.json
+│   │   │   ├── shapes_770.json
+│   │   │   ├── shapes_775.json
+│   │   │   ├── shapes_780.json
+│   │   │   ├── shapes_785.json
+│   │   │   ├── shapes_790.json
+│   │   │   ├── shapes_795.json
+│   │   │   ├── shapes_800.json
+│   │   │   ├── shapes_805.json
+│   │   │   ├── shapes_80.json
+│   │   │   ├── shapes_810.json
+│   │   │   ├── shapes_815.json
+│   │   │   ├── shapes_820.json
+│   │   │   ├── shapes_825.json
+│   │   │   ├── shapes_830.json
+│   │   │   ├── shapes_835.json
+│   │   │   ├── shapes_840.json
+│   │   │   ├── shapes_845.json
+│   │   │   ├── shapes_850.json
+│   │   │   ├── shapes_855.json
+│   │   │   ├── shapes_85.json
+│   │   │   ├── shapes_860.json
+│   │   │   ├── shapes_865.json
+│   │   │   ├── shapes_870.json
+│   │   │   ├── shapes_875.json
+│   │   │   ├── shapes_880.json
+│   │   │   ├── shapes_885.json
+│   │   │   ├── shapes_890.json
+│   │   │   ├── shapes_895.json
+│   │   │   ├── shapes_900.json
+│   │   │   ├── shapes_905.json
+│   │   │   ├── shapes_90.json
+│   │   │   ├── shapes_910.json
+│   │   │   ├── shapes_915.json
+│   │   │   ├── shapes_920.json
+│   │   │   ├── shapes_925.json
+│   │   │   ├── shapes_930.json
+│   │   │   ├── shapes_935.json
+│   │   │   ├── shapes_940.json
+│   │   │   ├── shapes_945.json
+│   │   │   ├── shapes_950.json
+│   │   │   ├── shapes_955.json
+│   │   │   ├── shapes_95.json
+│   │   │   ├── shapes_960.json
+│   │   │   ├── shapes_965.json
+│   │   │   ├── shapes_970.json
+│   │   │   ├── shapes_975.json
+│   │   │   ├── shapes_980.json
+│   │   │   ├── shapes_985.json
+│   │   │   ├── shapes_990.json
+│   │   │   └── shapes_995.json
+│   │   └── state
+│   │       └── corpus
+│   ├── tests
+│   │   ├── holographic_validation.py
+│   │   ├── __init__.py
+│   │   └── phi_tests.py
+│   └── venv
+│       ├── bin
+│       │   ├── activate
+│       │   ├── activate.csh
+│       │   ├── activate.fish
+│       │   ├── Activate.ps1
+│       │   ├── f2py
+│       │   ├── flask
+│       │   ├── fonttools
+│       │   ├── hypercorn
+│       │   ├── isympy
+│       │   ├── normalizer
+│       │   ├── numpy-config
+│       │   ├── pip
+│       │   ├── pip3
+│       │   ├── pip3.12
+│       │   ├── proton
+│       │   ├── proton-viewer
+│       │   ├── pyftmerge
+│       │   ├── pyftsubset
+│       │   ├── pylupdate5
+│       │   ├── pyrcc5
+│       │   ├── python -> python3
+│       │   ├── python3 -> /usr/bin/python3
+│       │   ├── python3.12 -> python3
+│       │   ├── pyuic5
+│       │   ├── quart
+│       │   ├── torchfrtrace
+│       │   ├── torchrun
+│       │   └── ttx
+│       ├── include
+│       │   └── python3.12
+│       ├── lib
+│       │   └── python3.12
+│       ├── lib64 -> lib
+│       ├── pyvenv.cfg
+│       └── share
+│           └── man
+├── dist
+├── documentsforsystem
+│   ├── 1.txt
+│   ├── agi_support.txt
+│   ├── AI Support for Brain Injuries, Autism, and Dementia-2.pdf
+│   ├── ai_support.txt
+│   ├── all_pdf_content.txt
+│   ├── Alright let s turn this.txt
+│   ├── Analysis-00.toc
+│   ├── autism - Echo v4 setup guide.pdf
+│   ├── autism - System overview explanation-1.pdf
+│   ├── autism - System overview explanation-2.pdf
+│   ├── autism - System overview explanation.pdf
+│   ├── autism System overview.txt
+│   ├── chatandextract every single equation.txt
+│   ├── ChatGPT - autism-1.pdf
+│   ├── ChatGPT autism lets start.txt
+│   ├── ChatGPT - autism.pdf
+│   ├── COMBINED_DOCUMENTS.txt
+│   ├── cursor_read_pdf_and_start_system_creati.md
+│   ├── Designing a Long-Term AGI Support Companion for a Child with Severe Autism.pdf
+│   ├── DOCTYPE html html lang.html
+│   ├── DOCUMENTS_COMBINED.txt
+│   ├── ech.txt
+│   ├── Equation extraction summary.pdf
+│   ├── EXE-00.toc
+│   ├── Expanded ABA Therapeutics.md
+│   ├── extract every single equation.txt
+│   ├── guidance.csv
+│   ├── HERE IS YOUR COMPLETE.txt
+│   ├── IT IS DONE.txt
+│   ├── Jackson s Companion How.txt
+│   ├── JACKSON S COMPANION v2.md
+│   ├── JACKSON S COMPANION v3.txt
+│   ├── JACKSON S COMPANION v4.txt
+│   ├── JACKSON S COMPANION v5.txt
+│   ├── metrics.csv
+│   ├── PACKAGING.md
+│   ├── PKG-00.toc
+│   ├── pyproject.toml
+│   ├── PYZ-00.pyz
+│   ├── PYZ-00.toc
+│   ├── Speech companion system-1.pdf
+│   ├── Speech companion system.pdf
+│   ├── Speech companion system.txt
+│   ├── Speech_Correction_Voice_Mimicry_System.txt
+│   ├── speech.html
+│   ├── speech_intervention_analysis.txt
+│   ├── speechinterventionsystem.spec
+│   ├── System overview explanation-1.pdf
+│   ├── System overview explanation.pdf
+│   ├── This is an excellent production.txt
+│   ├── voice mode Echo s voice.md
+│   ├── voice_setup.html
+│   ├── warn-speechinterventionsystem.txt
+│   └── xref-speechinterventionsystem.html
+├── echo_gui.py
+├── echo_prime.py
+├── echovoice.spec
+├── I have analyzed the contents.txt
+├── integration_plan_what_if.md
+├── integration_wiring_diagram.md
+├── mobile
+│   ├── ContentView.swift
+│   ├── EchoClient.swift
+│   └── EchoMobileApp.swift
+├── pkg
+│   ├── Analysis-00.toc
+│   ├── base_library.zip
+│   ├── EXE-00.toc
+│   ├── kqbc_agent (2).tar.gz
+│   ├── kqbc_agent.tar.gz
+│   ├── kqbc_guidance.csv
+│   ├── kqbc_metrics.csv
+│   ├── localpycs
+│   │   ├── pyimod01_archive.pyc
+│   │   ├── pyimod02_importers.pyc
+│   │   ├── pyimod03_ctypes.pyc
+│   │   └── struct.pyc
+│   ├── PKG-00.toc
+│   ├── pkg.zip
+│   ├── PYZ-00.pyz
+│   ├── PYZ-00.toc
+│   ├── speechinterventionsystem
+│   ├── speechinterventionsystem.pkg
+│   ├── warn-speechinterventionsystem.txt
+│   └── xref-speechinterventionsystem.html
+├── requirements.txt
+├── src
+│   ├── aba
+│   │   ├── engine.py
+│   │   ├── __init__.py
+│   │   └── strategies.py
+│   ├── agent.py
+│   ├── agi_seed.py
+│   ├── all_scripts_combined.txt
+│   ├── audio
+│   │   ├── __init__.py
+│   │   ├── io.py
+│   │   └── vad.py
+│   ├── behavior_monitor.py
+│   ├── calming_strategies.py
+│   ├── cli.py
+│   ├── companion.py
+│   ├── config.py
+│   ├── core
+│   │   ├── __init__.py
+│   │   ├── logging.py
+│   │   ├── models.py
+│   │   ├── paths.py
+│   │   └── settings.py
+│   ├── dashboard.py
+│   ├── echo_installer_package.py
+│   ├── echo_v4_complete.py
+│   ├── echo_v4.py
+│   ├── emotion
+│   │   ├── heart.py
+│   │   ├── __init__.py
+│   │   ├── llm.py
+│   │   └── prosody.py
+│   ├── expression_gears.py
+│   ├── gears.py
+│   ├── heart_core.py
+│   ├── __init__.py
+│   ├── llm.py
+│   ├── loop
+│   │   ├── decision.py
+│   │   ├── expressions.py
+│   │   └── __init__.py
+│   ├── main.py
+│   ├── __pycache__
+│   │   ├── advanced_voice_mimic.cpython-312.pyc
+│   │   ├── agent.cpython-311.pyc
+│   │   ├── agent.cpython-312.pyc
+│   │   ├── app_backend.cpython-312.pyc
+│   │   ├── audio_io.cpython-312.pyc
+│   │   ├── automatic_speech_recognition.cpython-312 (2).pyc
+│   │   ├── automatic_speech_recognition.cpython-312.pyc
+│   │   ├── behavior_monitor.cpython-312.pyc
+│   │   ├── broken_speech_tool.cpython-312.pyc
+│   │   ├── calming_strategies.cpython-312.pyc
+│   │   ├── cli (2).py
+│   │   ├── cli.cpython-312 (2).pyc
+│   │   ├── cli.cpython-312 (3).pyc
+│   │   ├── cli.cpython-312 (4).pyc
+│   │   ├── cli.cpython-312.pyc
+│   │   ├── cli.py
+│   │   ├── config.cpython-311.pyc
+│   │   ├── config.cpython-312 (2).pyc
+│   │   ├── config.cpython-312 (3).pyc
+│   │   ├── config.cpython-312.pyc
+│   │   ├── config.py
+│   │   ├── dashboard.cpython-312.pyc
+│   │   ├── data_store.cpython-312.pyc
+│   │   ├── guidance.cpython-312.pyc
+│   │   ├── __init__.cpython-311.pyc
+│   │   ├── __init__.cpython-312 (2).pyc
+│   │   ├── __init__.cpython-312 (3).pyc
+│   │   ├── __init__.cpython-312.pyc
+│   │   ├── inner_voice.cpython-312.pyc
+│   │   ├── prosody.cpython-312.pyc
+│   │   ├── pyimod01_archive.pyc
+│   │   ├── pyimod02_importers.pyc
+│   │   ├── pyimod03_ctypes.pyc
+│   │   ├── reports.cpython-312.pyc
+│   │   ├── similarity.cpython-312.pyc
+│   │   ├── speechinterventionsystem_2.cpython-312.pyc
+│   │   ├── speechinterventionsystem.cpython-312.pyc
+│   │   ├── speech_loop.cpython-311.pyc
+│   │   ├── speech_loop.cpython-312 (2).pyc
+│   │   ├── speech_loop.cpython-312 (3).pyc
+│   │   ├── speech_loop.cpython-312 (4).pyc
+│   │   ├── speech_loop.cpython-312.pyc
+│   │   ├── speech_processing.cpython-312.pyc
+│   │   ├── struct.pyc
+│   │   ├── text_to_speech.cpython-312 (2).pyc
+│   │   ├── text_to_speech.cpython-312.pyc
+│   │   ├── text_utils.cpython-312.pyc
+│   │   ├── tk_gui.cpython-311.pyc
+│   │   ├── tk_gui.cpython-312 (2).pyc
+│   │   ├── tk_gui.cpython-312 (3).pyc
+│   │   ├── tk_gui.cpython-312.pyc
+│   │   ├── unified_system_agi_core.cpython-312.pyc
+│   │   └── voice_mimic.cpython-312.pyc
+│   ├── python
+│   │   ├── advanced_voice_mimic.py
+│   │   ├── agent.py
+│   │   ├── app_backend.py
+│   │   ├── audio_io.py
+│   │   ├── automatic_speech_recognition.py
+│   │   ├── behavior_monitor.py
+│   │   ├── broken_speech_tool.py
+│   │   ├── calming_strategies.py
+│   │   ├── cli.py
+│   │   ├── config.py
+│   │   ├── dashboard.py
+│   │   ├── data_store.py
+│   │   ├── guidance.py
+│   │   ├── __init__.py
+│   │   ├── inner_voice.py
+│   │   ├── prosody.py
+│   │   ├── reports.py
+│   │   ├── settings_store.py
+│   │   ├── similarity.py
+│   │   ├── speechinterventionsystem_2.py
+│   │   ├── speechinterventionsystem.py
+│   │   ├── speech_loop.py
+│   │   ├── speech_processing.py
+│   │   ├── speech_synthesis.py
+│   │   ├── text_to_speech.py
+│   │   ├── text_utils.py
+│   │   ├── tk_gui.py
+│   │   ├── unified_system_agi_core (2).py
+│   │   ├── unified_system_agi_core (3).py
+│   │   ├── unified_system_agi_core (4).py
+│   │   ├── unified_system_agi_core.py
+│   │   └── voice_mimic.py
+│   ├── sensory_gears.py
+│   ├── speech
+│   │   ├── __init__.py
+│   │   ├── stt.py
+│   │   └── text.py
+│   ├── speech_loop.py
+│   ├── speech.py
+│   ├── text_utils.py
+│   ├── tk_gui.py
+│   ├── unified_system_agi_core.py
+│   ├── voice
+│   │   ├── __init__.py
+│   │   ├── mimic.py
+│   │   ├── profile.py
+│   │   └── prosody.py
+│   └── voice.py
+├── THE UNIFIED ECHO ORGANIC.py
+└── tmp_deleted_files
+    ├── cli (2).py
+    ├── config (2).py
+    ├── config (3).py
+    ├── config (4).py
+    ├── config (5).py
+    ├── echo_installer_package(1).py
+    ├── echo_v4_complete (2).py
+    ├── __init__ (2).py
+    ├── __init__ (3).py
+    ├── speech_loop (2).py
+    └── tk_gui (2).py
+
+175 directories, 995 files
+~/echovoice >                                                    at 03:45:24 PM
+

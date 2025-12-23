@@ -1,0 +1,9 @@
+numpy
+scipy
+sounddevice
+sherpa-onnx
+kivy
+kivymd
+textual
+requests
+Cython

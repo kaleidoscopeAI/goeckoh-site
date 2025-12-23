@@ -1,0 +1,36 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Goeckoh Neuro-Acoustic System
+GenericName=Voice Therapy System
+Comment=Therapeutic voice therapy and AGI system for autism support and speech correction
+Exec=/home/jacob/bubble/launch_bubble_system.sh gui
+Icon=/home/jacob/bubble/icons/goeckoh-icon.png
+Terminal=false
+Categories=Education;Therapy;Science;Accessibility;
+Keywords=speech;therapy;autism;voice;correction;ai;agi;therapeutic;accessibility;
+StartupNotify=true
+MimeType=
+Path=/home/jacob/bubble
+Actions=Universe;Child;Clinician;API;
+
+[Desktop Action Universe]
+Name=Launch Universe Mode
+Exec=/home/jacob/bubble/launch_bubble_system.sh universe
+Icon=/home/jacob/bubble/icons/goeckoh-icon.png
+
+[Desktop Action Child]
+Name=Launch Child Mode
+Exec=/home/jacob/bubble/launch_bubble_system.sh child
+Icon=/home/jacob/bubble/icons/goeckoh-icon.png
+
+[Desktop Action Clinician]
+Name=Launch Clinician Mode
+Exec=/home/jacob/bubble/launch_bubble_system.sh clinician
+Icon=/home/jacob/bubble/icons/goeckoh-icon.png
+
+[Desktop Action API]
+Name=Launch API Server
+Exec=/home/jacob/bubble/launch_bubble_system.sh api
+Icon=/home/jacob/bubble/icons/goeckoh-icon.png
+

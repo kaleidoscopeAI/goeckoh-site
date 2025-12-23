@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Seed-Crystal Brain</title>
+<style>
+:root { color-scheme: dark; }
+body { margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell; background:#0b0c10; color:#d7e1eb; }
+main { display:flex; flex-direction:row; height:100vh; }
+#viewer { flex: 1 1 60%; position:relative; display:flex; align-items:center; justify-content:center; background:linear-gradient(160deg,#0b0c10,#111826); }
+#canvas { width:100%; height:100%; touch-action:none; }
+#overlay { position:absolute; top:14px; left:18px; background:rgba(9,12,20,0.55); border:1px solid rgba(120,170,255,0.25); border-radius:8px; padding:10px 14px; font-size:14px; }
+#overlay strong { font-size:16px; display:block; margin-bottom:4px; }
+#panel { flex:1 1 40%; max-width:420px; padding:24px; box-sizing:border-box; display:flex; flex-direction:column; gap:18px; }
+#log { background:#05070d; border:1px solid rgba(120,170,255,0.18); border-radius:8px; padding:12px; font-family:SFMono-Regular,Consolas,Monaco,monospace; font-size:13px; height:45vh; overflow:auto; }
+#log div { margin-bottom:6px; }
+button { background:#1c2f4a; border:none; color:#d7e1eb; padding:9px 14px; border-radius:6px; font-size:14px; cursor:pointer; }
+button:hover { background:#224667; }
+.controls { display:flex; gap:10px; flex-wrap:wrap; }
+.small { font-size:12px; color:#99a5bb; }
+</style>
+</head>
+<body>
+<main>
+  <section id="viewer">
+    <canvas id="canvas"></canvas>
+    <div id="overlay"><strong>Avatar</strong><span id="state">connecting...</span><br/><span class="small">Drag to orbit • Scroll to zoom</span></div>
+  </section>
+  <aside id="panel">
+    <div>
+      <h2 style="margin:0 0 8px 0; font-size:20px;">Console</h2>
+      <div id="log"></div>
+    </div>
+    <div class="controls">
+      <button id="speak">Speak last caption</button>
+      <button id="seed">Add local seed</button>
+      <button id="crawl">Trigger web crawl</button>
+    </div>
+    <p class="small">Open <span style="font-family:monospace;">/status</span> or <span style="font-family:monospace;">/recent</span> for data. The system runs headless even if this page is closed.</p>
+  </aside>
+</main>
+<script>
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const stateLabel = document.getElementById('state');
+const logEl = document.getElementById('log');
+let deviceRatio = window.devicePixelRatio || 1;
+let positions = new Float32Array(0);
+let pointCount = 0;
+let yaw = Math.PI * 0.35;
+let pitch = 0.3;
+let distance = 3.0;
+let autoRotate = true;
+let lastFrame = performance.now();
+function resize(){
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * deviceRatio;
+  canvas.height = rect.height * deviceRatio;
+  ctx.setTransform(deviceRatio,0,0,deviceRatio,0,0);
+}
+resize();
+window.addEventListener('resize', resize);
+function log(msg){
+  const row = document.createElement('div');
+  const ts = new Date().toLocaleTimeString();
+  row.textContent = `[${ts}] ${msg}`;
+  logEl.appendChild(row);
+  logEl.scrollTop = logEl.scrollHeight;
+}
+let dragging = false;
+let lastX = 0, lastY = 0;
+canvas.addEventListener('pointerdown', (ev)=>{ dragging = true; autoRotate = false; lastX = ev.clientX; lastY = ev.clientY; canvas.setPointerCapture(ev.pointerId); });
+canvas.addEventListener('pointermove', (ev)=>{ if(!dragging) return; const dx = (ev.clientX - lastX) * 0.005; const dy = (ev.clientY - lastY) * 0.005; yaw += dx; pitch = Math.max(-Math.PI/2 + 0.05, Math.min(Math.PI/2 - 0.05, pitch + dy)); lastX = ev.clientX; lastY = ev.clientY; });
+canvas.addEventListener('pointerup', ()=>{ dragging = false; });
+canvas.addEventListener('wheel', (ev)=>{ ev.preventDefault(); distance *= (1 + ev.deltaY * 0.0015); distance = Math.max(1.2, Math.min(8.0, distance)); }, {passive:false});
+function colorForPoint(x,y,z){
+  const r = Math.min(1.0, Math.sqrt(x*x + y*y + z*z));
+  const R = 0.25 + 0.75*r;
+  const G = 0.55 + 0.45*(1.0 - Math.abs(r-0.5)*2.0);
+  const B = 1.0 - 0.8*r;
+  return `rgba(${Math.floor(R*255)}, ${Math.floor(G*255)}, ${Math.floor(B*255)}, 0.9)`;
+}
+function render(now){
+  requestAnimationFrame(render);
+  const dt = (now - lastFrame) / 1000;
+  lastFrame = now;
+  if(autoRotate && !dragging) yaw += dt * 0.25;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = '#05070d';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  if(pointCount === 0) return;
+  const width = canvas.width / deviceRatio;
+  const height = canvas.height / deviceRatio;
+  const cx = width / 2;
+  const cy = height / 2;
+  const cosY = Math.cos(yaw), sinY = Math.sin(yaw);
+  const cosP = Math.cos(pitch), sinP = Math.sin(pitch);
+  const fov = 1.3;
+  for(let i=0;i<pointCount;i++){
+    const x = positions[3*i];
+    const y = positions[3*i+1];
+    const z = positions[3*i+2];
+    const x1 = x * cosY - z * sinY;
+    const z1 = x * sinY + z * cosY;
+    const y1 = y * cosP - z1 * sinP;
+    const z2 = y * sinP + z1 * cosP;
+    const depth = distance + z2;
+    const scale = fov / depth;
+    const sx = cx + x1 * scale * width * 0.45;
+    const sy = cy + y1 * scale * width * 0.45;
+    if(sx < -20 || sx > width + 20 || sy < -20 || sy > height + 20) continue;
+    const size = Math.max(1, 2.5 * (1 - Math.min(1, depth / 6)));
+    ctx.fillStyle = colorForPoint(x,y,z);
+    ctx.beginPath();
+    ctx.arc(sx, sy, size, 0, Math.PI*2);
+    ctx.fill();
+  }
+}
+requestAnimationFrame(render);
+function wsText(){
+  const proto = (location.protocol === 'https:') ? 'wss' : 'ws';
+  const ws = new WebSocket(`${proto}://${location.host}/ws`);
+  ws.onmessage = ev => {
+    try {
+      const msg = JSON.parse(ev.data);
+      if(msg.type === 'caption') log(`Caption: ${msg.data.caption || ''}`);
+      if(msg.type === 'metrics') stateLabel.textContent = `connected * tick ${msg.data.tick.toString()}`;
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+  ws.onopen = ()=> log('ws:/ws connected');
+  ws.onclose = ()=> { log('ws:/ws closed'); setTimeout(wsText, 1500); };
+}
+wsText();
+function wsAvatar(){
+  const proto = (location.protocol === 'https:') ? 'wss' : 'ws';
+  const ws = new WebSocket(`${proto}://${location.host}/avatar`);
+  ws.binaryType = 'arraybuffer';
+  ws.onopen = ()=> { stateLabel.textContent = 'streaming avatar...'; };
+  ws.onmessage = ev => {
+    const buf = ev.data;
+    if(!(buf instanceof ArrayBuffer)) return;
+    const header = new DataView(buf, 0, 4);
+    const count = header.getUint32(0, true);
+    const f32 = new Float32Array(buf, 4);
+    if(f32.length < count * 3) return;
+    positions = f32;
+    pointCount = count;
+    stateLabel.textContent = `connected * ${count.toLocaleString()} points`;
+  };
+  ws.onclose = ()=> { stateLabel.textContent = 'disconnected – retrying'; setTimeout(wsAvatar, 1200); };
+};
+wsAvatar();
+document.getElementById('speak').onclick = async ()=>{
+  const r = await fetch('/recent?table=captions&limit=1');
+  const js = await r.json();
+  if(js && js.rows && js.rows[0]) log(`Speak: ${js.rows[0][3] || ''}`);
+};
+document.getElementById('seed').onclick = async ()=>{
+  await fetch('/ingest', { method:'POST' });
+  log('Local seed added');
+};
+document.getElementById('crawl').onclick = async ()=>{
+  const resp = await fetch('/ingest?url=https://en.wikipedia.org/wiki/Artificial_general_intelligence', { method:'POST' });
+  const js = await resp.json();
+  if(js.ok) log('Crawl queued with doc_id ' + js.doc_id);
+  else log('Crawl failed: ' + (js.error || 'unknown error'));
+};
+</script>
+</body></html>

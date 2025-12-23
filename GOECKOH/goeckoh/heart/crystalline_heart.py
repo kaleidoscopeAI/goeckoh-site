@@ -1,0 +1,10 @@
+    # ... inside CrystallineHeart.process_input()
+    
+        # [Previous code to generate metrics and response_text...]
+        
+        # 5. Persistence (The memory)
+        # Only log significant events to save space/noise
+        if raw_text.strip() != "":
+            self.logger.log_interaction(raw_text, response_text, metrics)
+
+        return response_text, metrics
