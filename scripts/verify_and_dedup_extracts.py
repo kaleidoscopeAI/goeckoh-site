@@ -48,7 +48,7 @@ def find_additional_candidates():
     index = read_index()
     existing = find_existing_ranges_by_source(index)
     candidates = []
-    txt_files = list(ROOT.rglob("*.txt"))
+    txt_files = list(ROOT.rglob("*.txt")) + list(ROOT.rglob("*.md")) + list(ROOT.rglob("*.markdown"))
     for p in txt_files:
         rel = str(p.relative_to(ROOT))
         lines = p.read_text(errors="ignore").splitlines()

@@ -12,6 +12,8 @@ from __future__ import annotations
 import json
 import os
 import re
+import shutil
+import hashlib
 from collections import defaultdict
 from pathlib import Path
 from typing import List, Optional, Tuple
@@ -134,6 +136,58 @@ def extract_from_file(path: Path) -> List[dict]:
         else:
             i += 1
 
+    # Indented code blocks (Markdown): lines starting with 4 spaces or a tab
+    i = 0
+    while i < n:
+        if lines[i].startswith("    ") or lines[i].startswith("\t"):
+            start = i
+            block = [lines[i][4:] if lines[i].startswith("    ") else lines[i][1:]]
+            i += 1
+            while i < n and (lines[i].startswith("    ") or lines[i].startswith("\t") or lines[i].strip() == ""):
+                if lines[i].strip() == "":
+                    block.append("")
+                else:
+                    block.append(lines[i][4:] if lines[i].startswith("    ") else lines[i][1:])
+                i += 1
+            end = i - 1
+            entry = {
+                "type": "indented",
+                "lang_hint": None,
+                "start_line": start + 1,
+                "end_line": end + 1,
+                "lines": block,
+            }
+            out.append(entry)
+        else:
+            i += 1
+
+    # HTML blocks: <pre><code class="language-..."> ... </code></pre> and <script>..</script>
+    html_open_re = re.compile(r"<(pre|script)(?:\s+[^>]*)?>", re.I)
+    html_close_re = re.compile(r"</(pre|script)>", re.I)
+    i = 0
+    while i < n:
+        if html_open_re.search(lines[i]):
+            start = i
+            tag = html_open_re.search(lines[i]).group(1).lower()
+            block = []
+            i += 1
+            while i < n and not html_close_re.search(lines[i]):
+                line = re.sub(r"</?code[^>]*>", "", lines[i])
+                block.append(line)
+                i += 1
+            end = i
+            i += 1
+            entry = {
+                "type": "html",
+                "lang_hint": None,
+                "start_line": start + 1,
+                "end_line": end + 1,
+                "lines": block,
+            }
+            out.append(entry)
+        else:
+            i += 1
+
     return out
 
 
@@ -175,10 +229,16 @@ def write_snippets(file_path: Path, snippets: List[dict], index: list):
 
 
 def main():
-    txt_files = list(ROOT.rglob("*.txt"))
+    # Reset output dir so re-running replaces previous extraction cleanly
+    if OUTDIR.exists():
+        shutil.rmtree(OUTDIR)
+
+    # Process both .txt and .md files (and .markdown)
+    txt_files = list(ROOT.rglob("*.txt")) + list(ROOT.rglob("*.md")) + list(ROOT.rglob("*.markdown"))
     txt_files = [p for p in txt_files if "extracted_code" not in p.parts and "node_modules" not in p.parts]
     summary = {"processed_files": 0, "snippets": 0}
     index = []
+    seen_hashes = set()
     for p in txt_files:
         try:
             snippets = extract_from_file(p)
@@ -187,16 +247,29 @@ def main():
             continue
         if not snippets:
             continue
-        write_snippets(p, snippets, index)
+        # filter duplicates by content hash so re-running doesn't produce duplicates
+        filtered = []
+        for sn in snippets:
+            content = "\n".join(sn.get("lines", [])).strip()
+            if not content:
+                continue
+            h = hashlib.sha256(content.encode("utf-8")).hexdigest()
+            if h in seen_hashes:
+                continue
+            seen_hashes.add(h)
+            filtered.append(sn)
+        if not filtered:
+            continue
+        write_snippets(p, filtered, index)
         summary["processed_files"] += 1
-        summary["snippets"] += len(snippets)
+        summary["snippets"] += len(filtered)
 
     safe_mkdir(OUTDIR)
     (OUTDIR / "index.json").write_text(json.dumps(index, indent=2))
     readme = OUTDIR / "README.md"
     readme.write_text("""# Extracted Code
 
-This directory contains code snippets extracted from `.txt` files in the repository.
+This directory contains code snippets extracted from `.txt`, `.md`, and `.markdown` files in the repository.
 
 Heuristics used:
 - Extract fenced code blocks with triple backticks (```), respecting optional language hints.
