@@ -93,3 +93,4 @@ website/dist/
 
 # Editor files
 .eslintcache
+extracted_code/
