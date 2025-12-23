@@ -1,0 +1,1 @@
+- State is **relational**, not absolute. Confidence comes from **symmetry of evidence**.

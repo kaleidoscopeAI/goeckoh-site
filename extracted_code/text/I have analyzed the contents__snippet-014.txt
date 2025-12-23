@@ -1,0 +1,5 @@
+The `VoiceCrystal` class in the script uses **Coqui XTTS**.
+
+  * **Line 127:** `self.tts.tts_to_file(text=text, speaker_wav="path/to/childs_voice.wav", language="en")`
+  * **Action:** It takes the `speaker_wav` (a 6-second clip of your child you save in the folder) and uses it to synthesize the new, corrected sentence. It will sound like them.
+

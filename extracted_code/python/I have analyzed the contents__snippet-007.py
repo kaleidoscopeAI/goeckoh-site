@@ -1,0 +1,1 @@
+5.  **`cli.py`:** The command-line interface script has been updated with commands to run the speech loop, launch the GUI, and record voice facets, making the system fully interactive from the terminal.

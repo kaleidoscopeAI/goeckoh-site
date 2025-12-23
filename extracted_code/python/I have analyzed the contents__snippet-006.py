@@ -1,0 +1,2 @@
+1.  **`advanced_voice_mimic.py`:** This script is fully completed and implements the "Voice Crystal" logic. It handles voice profiles, sample management, and the synthesis of speech using the Coqui TTS engine, applying prosody transfer and style adjustments (neutral, calm, excited) based on the intended emotional tone.
+2.  **`prosody.py`:** This script provides the functionality to extract prosody features (pitch, energy) from reference audio and apply them to synthesized speech, ensuring the output sounds natural and matches the child's rhythm.

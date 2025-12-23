@@ -1,0 +1,2 @@
+Adjust configuration settings using sliders etc to make user changes possible and immediate.
+

@@ -1,0 +1,13 @@
+class CNode(ctypes.Structure):
+    _fields_ = [
+        ("energy", ctypes.c_int),
+        ("memory_used", ctypes.c_int),
+        ("memory", ctypes.c_char * 10),
+        ("engrained_behaviors", (ctypes.c_char * 20) * 5)
+    ]
+
+    lib = ctypes.CDLL('./dna_membrane_c.so')
+    lib.create_node.restype = ctypes.POINTER(CNode)
+    logging.error("Failed to load shared library: %s", e)
+    raise SystemExit("Critical error: unable to load C library.")
+

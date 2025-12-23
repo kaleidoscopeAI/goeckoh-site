@@ -1,0 +1,1 @@
+If we allow continual fine-tuning using node-local objectives:

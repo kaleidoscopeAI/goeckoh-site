@@ -1,0 +1,3 @@
+• I'm searching if the class defines self.emotional_state in its constructor or elsewhere to determine how emotional state is
+  managed.
+

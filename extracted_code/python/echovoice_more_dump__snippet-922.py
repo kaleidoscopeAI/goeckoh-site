@@ -1,0 +1,4 @@
+async def startup():
+    # no external calls; start idle
+    logging.info('Unified embedded system starting up')
+

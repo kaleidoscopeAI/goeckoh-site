@@ -1,0 +1,1 @@
+TEBD: if χmax small, implement SVD using CPU optimized LAPACK (via ndarray-linalg in Node, or numpy.linalg.svd in Python) and schedule TEBD at

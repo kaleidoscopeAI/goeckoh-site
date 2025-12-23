@@ -1,0 +1,1 @@
+_update_ai_models()	Executes training steps for the VAE and GNN using the current node states and interactions.

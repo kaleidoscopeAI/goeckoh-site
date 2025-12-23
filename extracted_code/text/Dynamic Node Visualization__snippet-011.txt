@@ -1,0 +1,2 @@
+Implementing real HID control: In hid_controller.py, added real logic using the evdev library for Linux-based keyboard/mouse simulation (common for local AGI deployments). Assumed Linux environment; added fallback warnings for other OS. (Note: evdev requires root or capabilities; in production, set cap_sys_admin or run as root.)
+Filling visualization stubs: Expanded viz_stub.py to include WebSocket server integration for real-time dashboard updates using websockets library.

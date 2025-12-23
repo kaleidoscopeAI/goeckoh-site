@@ -1,0 +1,1 @@
+I'm now formulating a comprehensive mathematical framework, beginning with a time-domain function: Excitation equals a pulse train convolved with a glottal shape. The filter will be modeled using Linear Predictive Coding or a similar Z-domain transfer function, representing varying cross-sectional areas. We will represent radiation using a lip radiation model.

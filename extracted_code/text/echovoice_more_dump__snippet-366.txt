@@ -1,0 +1,1 @@
+* Attention computed with normalized kernels; project top-d dims into node state using linear map (P).

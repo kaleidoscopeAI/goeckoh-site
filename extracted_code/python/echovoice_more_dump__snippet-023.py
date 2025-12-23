@@ -1,0 +1,4 @@
+Key concepts from AC include 6:
+    • Parameter Adjustment Mechanism: The core component that modifies controller parameters based on feedback.
+    • Reference Model: Defines the desired behavior or trajectory the system should follow. In Model Reference Adaptive Control (MRAC), the error between the actual system output and the reference model output drives parameter adaptation.8
+    • Stability Analysis: Rigorous mathematical tools (e.g., Lyapunov functions) are used to prove that the closed-loop system (system + adaptive controller) remains stable despite parameter changes and uncertainties.

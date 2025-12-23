@@ -1,0 +1,1 @@
+- Your HTML game is embedded as-is and treated as a first-class tab in-app.

@@ -1,0 +1,3 @@
+• I noticed the code uses an undefined emotional_state attribute in light mode returns, so I'll inspect the class to find the
+  correct state variable—likely self.state or self.echo_state—to fix this by using getattr with a fallback.
+

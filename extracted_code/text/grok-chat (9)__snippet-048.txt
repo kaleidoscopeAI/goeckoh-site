@@ -1,0 +1,3 @@
+• I'm checking the API service in mobile/lib/services/api_service.dart to adapt it for using the /asr endpoint and handling
+  mirror streaming.
+

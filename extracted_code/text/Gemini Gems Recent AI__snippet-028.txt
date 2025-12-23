@@ -1,0 +1,6 @@
+    Data Storage: The cube data (the graph) is stored in a hidden div using dcc.Store as JSON. This is a way to transfer data between the callbacks. For very large datasets, this could become a bottleneck. A more efficient approach would be to store the data in a database or use a server-side caching mechanism.
+
+    Callback Functions: The callback functions handle the similarity searches (classical and quantum-inspired) and molecule details retrieval.
+
+    Click Event Callback (Placeholder): I've added a comment indicating where you would add a callback to handle click events on the 3D graph. This callback would update the smiles-input field with the SMILES of the clicked molecule.
+

@@ -1,0 +1,1 @@
+- Local embedding using TF-IDF + PCA (no external model calls)

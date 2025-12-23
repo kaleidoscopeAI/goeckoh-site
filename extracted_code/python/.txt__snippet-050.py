@@ -1,0 +1,1 @@
+def temperature(self) -> float:

@@ -1,0 +1,3 @@
+The Quantum Engine evolves the state of molecular nodes using Laplacian spectral analysis, simulating quantum coherence and stability for reactions.
+
+

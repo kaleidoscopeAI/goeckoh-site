@@ -1,0 +1,5 @@
+def FillConsoleOutputAttribute(
+    std_handle: wintypes.HANDLE,
+    attributes: int,
+    length: int,
+    start: WindowsCoordinates,

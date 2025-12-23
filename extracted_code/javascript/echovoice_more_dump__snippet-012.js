@@ -1,0 +1,1 @@
+The critical function of this system is the Modulatory Loop, where emotional concentrations C dynamically adjust the fundamental Hamiltonian coefficients, λbit​ and λpos​, through bounded functions f(C),g(C).1

@@ -1,0 +1,1 @@
+LLMService: Could enhance transformations (e.g., generating type hints, rewriting code) using local LLMs.

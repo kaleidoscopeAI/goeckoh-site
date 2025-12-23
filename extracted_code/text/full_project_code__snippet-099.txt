@@ -1,0 +1,1 @@
+# To be accurate, the length of class 6 can be either 2 or 4.

@@ -1,0 +1,5 @@
+    • inner_voice.py: Manages all interaction with the Ollama LLM, including API calls, prompt construction (using templates), and parsing responses. This module would encapsulate the AI "mind."
+    • memory_store.py: Implements the persistence layer for saving and retrieving significant events, LLM insights, state patterns, or conversation history. Abstracting this allows for different storage backends (file, database) later.
+    • transformation_engine.py: Contains the logic for the feedback loop, interpreting LLM outputs and applying corresponding changes or analyses to the simulation state. This is the engine of self-modification.
+    • visualization.py: Manages the WebSocket server for UI communication, serializes state data into JSON for the front-end, and potentially serves the static web assets.
+    • app.py: Acts as the main entry point and orchestrator, initializing all modules, loading configuration, running the main simulation loop, and handling startup/shutdown.

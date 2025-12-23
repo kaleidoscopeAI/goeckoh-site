@@ -1,0 +1,5 @@
+The visualization core provides real-time rendering using tools like three.js, matplotlib (Python), or WebGL for dynamic interaction.
+
+
+
+

@@ -1,0 +1,4 @@
+• Planning to enhance the JSON serialization method to correctly convert complex numbers (e.g., by using their magnitude or real
+  part) to avoid Flask jsonify errors, ensuring API responses are JSON-serializable without relying on toggles or endpoint
+  changes.
+

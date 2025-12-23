@@ -1,0 +1,2 @@
+from .distro import main
+

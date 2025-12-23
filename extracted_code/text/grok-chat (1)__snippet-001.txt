@@ -1,0 +1,8 @@
+class SystemConfig:
+    sample_rate: int = 16000
+    vad_threshold: float = 0.45  # Gentle on quiet speech
+    min_silence_ms: int = 1200  # Patience for pauses
+    lattice_size: int = 32  # Emotional crystal
+    coupling: float = 0.15
+    decay: float = 0.08
+

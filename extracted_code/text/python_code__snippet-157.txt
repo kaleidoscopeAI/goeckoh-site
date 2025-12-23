@@ -1,0 +1,8 @@
+class _SyntaxError:
+    offset: int
+    filename: str
+    line: str
+    lineno: int
+    msg: str
+
+

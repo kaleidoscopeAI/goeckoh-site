@@ -1,0 +1,1 @@
+score_d := compute score for each candidate using Affinity/Cost/Uncertainty

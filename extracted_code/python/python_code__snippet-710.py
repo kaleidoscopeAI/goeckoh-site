@@ -1,0 +1,40 @@
+def main() -> None:
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(logging.StreamHandler(sys.stdout))
+
+    parser = argparse.ArgumentParser(description="OS distro info tool")
+    parser.add_argument(
+        "--json", "-j", help="Output in machine readable format", action="store_true"
+    )
+
+    parser.add_argument(
+        "--root-dir",
+        "-r",
+        type=str,
+        dest="root_dir",
+        help="Path to the root filesystem directory (defaults to /)",
+    )
+
+    args = parser.parse_args()
+
+    if args.root_dir:
+        dist = LinuxDistribution(
+            include_lsb=False,
+            include_uname=False,
+            include_oslevel=False,
+            root_dir=args.root_dir,
+        )
+    else:
+        dist = _distro
+
+    if args.json:
+        logger.info(json.dumps(dist.info(), indent=4, sort_keys=True))
+    else:
+        logger.info("Name: %s", dist.name(pretty=True))
+        distribution_version = dist.version(pretty=True)
+        logger.info("Version: %s", distribution_version)
+        distribution_codename = dist.codename()
+        logger.info("Codename: %s", distribution_codename)
+
+

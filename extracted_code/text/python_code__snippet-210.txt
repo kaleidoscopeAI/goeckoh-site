@@ -1,0 +1,4 @@
+class PipDeprecationWarning(Warning):
+    pass
+
+

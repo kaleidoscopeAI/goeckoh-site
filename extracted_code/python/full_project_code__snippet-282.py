@@ -1,0 +1,2 @@
+def _should_enable_warnings(
+    cmd_line_warn_options: typing.Iterable[str], warn_env_var: typing.Optional[str]

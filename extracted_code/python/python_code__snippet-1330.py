@@ -1,0 +1,4 @@
+def _check_link_requires_python(
+    link: Link,
+    version_info: Tuple[int, int, int],
+    ignore_requires_python: bool = False,

@@ -1,0 +1,7 @@
+async def stop_crawl():
+    crawler.stop()
+    # cancel background tasks
+    for t in list(bg_tasks):
+        t.cancel()
+    return jsonify({'status': 'crawler_stopped'})
+

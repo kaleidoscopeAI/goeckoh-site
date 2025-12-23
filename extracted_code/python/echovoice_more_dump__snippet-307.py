@@ -1,0 +1,1 @@
+We have a type alias Result<T> = std::result::Result<T, error::CrystalError>; and then we are trying to re-export Result from the error module which causes conflicts. We should not re-export Result if we have our own type alias.

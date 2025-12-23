@@ -1,0 +1,7 @@
+class LLMConfig:
+    enabled: bool = True
+    gcl_threshold: float = 6.0
+    ollama_model: str = "deepseek-r1:latest"
+    timeout_sec: int = 20
+
+

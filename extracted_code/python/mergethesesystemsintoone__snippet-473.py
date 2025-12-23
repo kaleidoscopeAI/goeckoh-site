@@ -1,0 +1,8 @@
+def analyze(self, insight: Dict) -> Dict[str, float]:
+      risks = {}
+      if insight.get ("confidence", 1.0) < 0.5:
+          risks ["low_confidence"] = self.risk_factors ["low_confidence"]
+      if insight.get("energy_cost", 0.0) > 10:
+        risks["high_energy_cost"] = self.risk_factors["high_energy_cost"]
+   
+      return risks

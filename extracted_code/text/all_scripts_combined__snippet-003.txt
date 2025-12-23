@@ -1,0 +1,3 @@
+Windows: C:\\Users\\<username>\\.echo_companion\\voices\\child_ref.wav
+macOS: /Users/<username>/.echo_companion/voices/child_ref.wav
+Linux: /home/<username>/.echo_companion/voices/child_ref.wav

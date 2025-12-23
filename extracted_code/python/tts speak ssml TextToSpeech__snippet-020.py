@@ -1,0 +1,3 @@
+class Recorder(private val context: Context) {
+    // Implementation from repo: records to WAV with VAD option
+    // ...

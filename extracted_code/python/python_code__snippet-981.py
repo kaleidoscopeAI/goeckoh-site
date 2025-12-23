@@ -1,0 +1,11 @@
+    from .console import ConsoleRenderable
+
+
+def render_scope(
+    scope: "Mapping[str, Any]",
+    *,
+    title: Optional[TextType] = None,
+    sort_keys: bool = True,
+    indent_guides: bool = False,
+    max_length: Optional[int] = None,
+    max_string: Optional[int] = None,

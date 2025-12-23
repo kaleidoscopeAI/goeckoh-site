@@ -1,0 +1,19 @@
+class CERT_TRUST_STATUS(Structure):
+    _fields_ = (
+        ("dwErrorStatus", DWORD),
+        ("dwInfoStatus", DWORD),
+    )
+
+
+class CERT_CHAIN_ELEMENT(Structure):
+    _fields_ = (
+        ("cbSize", DWORD),
+        ("pCertContext", PCERT_CONTEXT),
+        ("TrustStatus", CERT_TRUST_STATUS),
+        ("pRevocationInfo", c_void_p),
+        ("pIssuanceUsage", PCERT_ENHKEY_USAGE),
+        ("pApplicationUsage", PCERT_ENHKEY_USAGE),
+        ("pwszExtendedErrorInfo", LPCWSTR),
+    )
+
+

@@ -1,0 +1,5 @@
+    A module that was compiled using NumPy 1.x cannot be run in
+    … +36 lines
+    Missing log file: /home/jacob/Desktop/unified_goeckoh_system/backend/.run/
+    mirror_metrics.jsonl
+

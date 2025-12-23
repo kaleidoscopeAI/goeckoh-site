@@ -1,0 +1,21 @@
+    transcript/corrected text into NodeTargets on the client using a golden-
+    angle spread and a concise color palette. Phrases like “dog chasing car”
+    immediately spawn corresponding thought nodes. (File: cognitive-nebula/agi-
+    thought-visualizer/App.tsx)
+  - Dashboard wording already switched to “Activation” (no further copy changes
+    needed).
+  - Rust heart snapshot is exposed via /status and shown on the dashboard;
+    mirror heart state flows through /mirror/metrics.
+
+  Next actionable steps
+
+  1. Run the mirror to generate telemetry, then validate latency:
+      - python scripts/measure_loop_latency.py (hardware loopback)
+      - python scripts/validate_mirror_metrics.py
+  2. Surface the Rust lattice profile visually on the dashboard (side-by-side
+     with Python lattice) for parity.
+  3. If you want richer visual semantics, I can add a small keyword→geometry/
+     material map so “car” spawns a chassis shape, “dog” a warm particle
+     cluster, etc.
+
+

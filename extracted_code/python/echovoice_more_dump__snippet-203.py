@@ -1,0 +1,1 @@
+This completes the system. Run docker-compose up to start (server on 4000, worker on 5001, frontend on 3000). Data flows from ingestion to cube integration as described, with all math implemented robustly. If needed, I can add more (e.g., membrane module).

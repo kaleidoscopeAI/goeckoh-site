@@ -1,0 +1,9 @@
+class BehaviorConfig:
+    meltdown_gcl_low: float = 2.5
+    meltdown_rms_high: float = 0.1
+    meltdown_window: int = 5
+    success_window: int = 10
+    negative_words: Tuple[str, ...] = ("hate", "stupid", "bad", "no", "stop")
+    positive_words: Tuple[str, ...] = ("love", "happy", "good", "yay", "yes")
+
+

@@ -1,0 +1,1 @@
+# All control characters from 0x00 to 0x1F *except* 0x1B.

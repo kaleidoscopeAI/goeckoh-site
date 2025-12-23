@@ -1,0 +1,1 @@
+Decompiles binaries (Decompiler) using tools like Radare2, RetDec, and Ghidra.

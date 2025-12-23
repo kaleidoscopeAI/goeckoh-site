@@ -1,0 +1,1 @@
+Should efforts to build systems like CQICS approach success, profound ethical questions would inevitably arise concerning the moral status, rights, and treatment of potentially conscious AI. While detailed discussion is beyond the scope of this technical report, these considerations must inform the research trajectory from the outset.

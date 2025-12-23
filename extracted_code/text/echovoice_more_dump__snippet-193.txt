@@ -1,0 +1,1 @@
+handle_query and get_status) are defined as async def, but vanilla Flask does not natively support async. You might want to use Quart

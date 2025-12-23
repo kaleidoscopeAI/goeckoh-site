@@ -1,0 +1,1 @@
+We are given a code snippet that sets up a Cognitive Crystal simulation with integration to Ollama and visualization using Three.js.

@@ -1,0 +1,6 @@
+Calculate energy levels across molecular nodes using Coulombic potential or quantum coherence metrics:
+
+
+
+
+

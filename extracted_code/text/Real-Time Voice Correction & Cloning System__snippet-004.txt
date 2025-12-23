@@ -1,0 +1,3 @@
+This kernel captures raw audio using cpal, applies real-time noise reduction, and executes the ASR model. Use maturin to build this as a Python extension.
+
+

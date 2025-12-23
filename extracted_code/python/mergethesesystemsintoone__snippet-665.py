@@ -1,0 +1,1 @@
+OptimizedTaskScheduler (task_manager.py): A robust, resource-aware scheduler that handles task prioritization, dependency resolution, retries, and CPU/memory allocation. It replaces or enhances the earlier OptimizedTaskScheduler from unravel_ai_task_manager.py.

@@ -1,0 +1,5 @@
+class PackageDetails(NamedTuple):
+    version: DistributionVersion
+    dependencies: List[Requirement]
+
+

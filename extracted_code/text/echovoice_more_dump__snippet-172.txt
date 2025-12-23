@@ -1,0 +1,2 @@
+Important: We are using ES6 classes and modern JavaScript features.
+

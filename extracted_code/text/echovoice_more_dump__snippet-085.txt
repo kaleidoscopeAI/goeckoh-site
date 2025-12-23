@@ -1,0 +1,1 @@
+# 6) Add build helper to create a test keystore using keytool if available

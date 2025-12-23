@@ -1,0 +1,1 @@
+def default(cls) -> "InstallPaths":

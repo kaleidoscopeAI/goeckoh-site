@@ -1,0 +1,1 @@
+# This class integrates the crystalline heart with real-time ASR, emotion detection, and TTS.

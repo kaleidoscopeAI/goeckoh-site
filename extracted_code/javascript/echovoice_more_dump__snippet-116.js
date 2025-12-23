@@ -1,0 +1,7 @@
+  for (const n of this.nodes.values()) {
+    // L0: flip with XOR noise
+    n.e = n.e.map(b => b ^ (Math.random() < 0.01 ? 1 : 0));
+    // L1: pack to float, change sign bit if v <0
+    if (n.v < 0) n.e[0] = 1 - n.e[0];
+    // L2: vec add noise, L3 mat mul transform, etc. (integrated in semanticStep)
+  }

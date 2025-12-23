@@ -1,0 +1,28 @@
+    • Hypergraph clustering using Ricci curvature: an edge transport perspective - arXiv, accessed May 5, 2025, https://arxiv.org/html/2412.15695v1
+    • Tutorial: GraphRicciCurvature - Read the Docs, accessed May 5, 2025, https://graphriccicurvature.readthedocs.io/en/v0.5.1/tutorial.html
+    • GraphRicciCurvature/notebooks/tutorial.ipynb at master - GitHub, accessed May 5, 2025, https://github.com/saibalmars/GraphRicciCurvature/blob/master/notebooks/tutorial.ipynb
+    • Overview — GraphRicciCurvature 0.5.3.1 documentation, accessed May 5, 2025, https://graphriccicurvature.readthedocs.io/en/latest/
+    • arxiv.org, accessed May 5, 2025, https://arxiv.org/pdf/2409.03108
+    • Tensor networks for quantum computing - arXiv, accessed May 5, 2025, https://arxiv.org/html/2503.08626v1
+    • arxiv.org, accessed May 5, 2025, https://arxiv.org/pdf/2306.17837
+    • [1908.08833] DMRG Approach to Optimizing Two-Dimensional Tensor Networks - ar5iv, accessed May 5, 2025, https://ar5iv.labs.arxiv.org/html/1908.08833
+    • Density Matrix Renormalization Group with Tensor Processing Units | PRX Quantum, accessed May 5, 2025, https://link.aps.org/doi/10.1103/PRXQuantum.4.010317
+    • Fast Numerical Methods for Stochastic Computations: A Review ..., accessed May 5, 2025, https://global-sci.com/pdf/article/81084/fast-numerical-methods-for-stochastic-computations-a-review.pdf
+    • Numerically solve complex differential equation - Mathematics Stack Exchange, accessed May 5, 2025, https://math.stackexchange.com/questions/2610087/numerically-solve-complex-differential-equation
+    • Numerical method for Coupled PDE (system of conservation laws) - Math Stack Exchange, accessed May 5, 2025, https://math.stackexchange.com/questions/2194910/numerical-method-for-coupled-pde-system-of-conservation-laws
+    • The implementation comparison between the Euler and trivial coupling schemes for achieving strong convergence - AIMS Press, accessed May 5, 2025, https://www.aimspress.com/article/doi/10.3934/math.20231520
+    • Partial Differential Equations - MONTE CARLO METHODS, accessed May 5, 2025, https://geometrycollective.github.io/monte-carlo/slides/Lecture12-PDEsStochasticProcesses-CMUMonteCarloFA23.pdf
+    • Large Language Models Meet Symbolic Provers for Logical Reasoning Evaluation, accessed May 5, 2025, https://openreview.net/forum?id=C25SgeXWjE
+    • Digital Twin | Siemens Software, accessed May 5, 2025, https://www.sw.siemens.com/en-US/technology/digital-twin/
+    • INTEGRATING DATA ANALYTICS AND SIMULATION METHODS TO SUPPORT MANUFACTURING DECISION MAKING - PMC, accessed May 5, 2025, https://pmc.ncbi.nlm.nih.gov/articles/PMC5497469/
+    • HIVE: An Integrating Environment for Simulation and Analysis - DSIAC, accessed May 5, 2025, https://dsiac.dtic.mil/articles/hive-an-integrating-environment-for-simulation-and-analysis/
+    • Transforming Decision-Making with the Future of Simulation-Based Optimization - Simio, accessed May 5, 2025, https://www.simio.com/transforming-the-future-of-simulation-based-optimization/
+    • Integrating simulations with real-time expert systems - ResearchGate, accessed May 5, 2025, https://www.researchgate.net/publication/269701030_Integrating_simulations_with_real-time_expert_systems
+    • Data & Integration Framework | Simio, accessed May 5, 2025, https://www.simio.com/data-integration-framework/
+    • The Φ measure of integrated information is not well-defined for general physical systems - arXiv, accessed May 5, 2025, https://arxiv.org/pdf/1902.04321
+    • parham.ai, accessed May 5, 2025, http://parham.ai/ece1724_2023/2023_3.pdf
+    • ITCMA: A Generative Agent Based on a Computational Consciousness Structure - arXiv, accessed May 5, 2025, https://arxiv.org/html/2403.20097v2
+    • Global Workspace Theory (GWT) and Prefrontal Cortex: Recent Developments - Frontiers, accessed May 5, 2025, https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2021.749868/full
+
+
+

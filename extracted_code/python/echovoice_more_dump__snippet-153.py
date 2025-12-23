@@ -1,0 +1,1 @@
+- **Determination Process**: Data is ingested if it maximizes affinity minus stress cost, routed from Membrane or prior outputs. This replicates

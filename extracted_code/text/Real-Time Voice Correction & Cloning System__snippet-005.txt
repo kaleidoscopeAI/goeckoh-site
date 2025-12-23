@@ -1,0 +1,5 @@
+The Claim: The "Functional Transformation Loop" using a SequentialAgent to map ASR state to real-time TTS synthesis via a high-concurrency Rust bridge.
+
+The Deployment: Package as a self-contained binary using Maturin and PyInstaller for zero-server, offline universal operation.
+
+

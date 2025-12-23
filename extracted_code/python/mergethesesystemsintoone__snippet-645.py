@@ -1,0 +1,2 @@
+# Assuming missing classes are definedfrom AdvancedOrchestrator import AdvancedOrchestratorfrom TextNode import TextNodefrom VisualNode import VisualNodefrom PatternRecognition import PatternRecognitionfrom PerspectiveManager import PerspectiveManagerfrom SeedManager import SeedManagerfrom visualization.visualizer import SystemVisualizer# Initialize systemorchestrator = AdvancedOrchestrator(enable_visualization=True)seed_manager = SeedManager()
+

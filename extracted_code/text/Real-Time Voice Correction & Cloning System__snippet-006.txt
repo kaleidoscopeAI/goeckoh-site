@@ -1,0 +1,3 @@
+This core handles low-latency I/O using cpal and applies a Wiener Filter for stationary noise reduction.
+
+

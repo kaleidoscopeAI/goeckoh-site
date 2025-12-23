@@ -1,0 +1,3 @@
+• I'm verifying whether port 8080 is occupied by another process using lsof to identify any unexpected holders blocking the
+  port.
+

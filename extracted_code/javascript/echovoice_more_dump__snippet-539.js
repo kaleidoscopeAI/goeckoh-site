@@ -1,0 +1,1 @@
+const svc = getSharedActuationService(firebaseConfig);

@@ -1,0 +1,1 @@
+Use asynchronous I/O and avoid blocking calls. Consider using CPU-only builds (no GPU) and optimize (e.g. reduce precision).

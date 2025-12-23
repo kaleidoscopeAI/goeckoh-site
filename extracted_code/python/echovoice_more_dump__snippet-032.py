@@ -1,0 +1,5 @@
+    4. Prioritize Logging and Visualization: Implement comprehensive logging of states, parameters, and performance metrics from the outset. Develop visualization tools (potentially leveraging AI techniques as discussed) early to understand and debug the system's behavior.
+    5. Define Objectives Clearly: If using RL or AC, carefully define the reward function or reference model that quantifies the goal of "understanding." This is non-trivial and critical for success.
+    6. Address Stability: Particularly when implementing complex feedback loops involving RL or AC, explicitly consider stability. Use techniques from AC theory or carefully tune RL hyperparameters to prevent divergence or undesirable oscillations.
+    7. Manage Computation: Be mindful of the computational cost, especially frequent LLM calls. Optimize prompts, consider smaller local models offered by Ollama where appropriate, and leverage caching if possible.22
+    8. Handle Integration Challenges: Plan for potential integration issues, such as CORS when deploying browser-based components interacting with the local Ollama server.85

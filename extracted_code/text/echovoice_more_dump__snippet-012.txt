@@ -1,0 +1,3 @@
+    • Data Format: Continue using JSON for simplicity unless profiling reveals it as a bottleneck [User Plan].
+    • Message Frequency & Batching: Send state updates at a rate sufficient for smooth visualization (e.g., 10-30 Hz). If the simulation produces updates much faster, batch several state snapshots into single WebSocket messages to reduce network and processing overhead.61
+    • Connection Management: For a local application, complex keep-alives are likely unnecessary, but ensure the client handles potential disconnections and attempts reconnection gracefully.61

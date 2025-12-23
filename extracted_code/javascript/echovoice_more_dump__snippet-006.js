@@ -1,0 +1,1 @@
+This function sends a prompt to the specified model using /api/generate and expects a single JSON object back (stream: false). It includes basic error handling for network issues and non-OK HTTP responses.81

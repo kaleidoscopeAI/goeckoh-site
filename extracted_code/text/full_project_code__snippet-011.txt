@@ -1,0 +1,4 @@
+class NoWayToWaitForSocketError(Exception):
+    pass
+
+

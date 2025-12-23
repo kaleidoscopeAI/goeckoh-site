@@ -1,0 +1,1 @@
+pub extern "C" fn Java_com_kaleidoscope_body_DeviceHAL_nativeComputeQuantumKernel(

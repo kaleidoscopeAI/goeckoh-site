@@ -1,0 +1,3 @@
+• The API server won't run because Flask isn't installed; I need to install Flask using pip with the appropriate flags to
+  proceed.
+

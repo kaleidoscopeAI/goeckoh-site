@@ -1,0 +1,6 @@
+class GuidanceEvent:
+    timestamp: float
+    event_type: EventType
+    title: str
+    message: str
+

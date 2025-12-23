@@ -1,0 +1,3 @@
+• I'm updating the command to properly set the environment variable using env KIVY_NO_ARGS=1 before running Python within the
+  virtual environment.
+

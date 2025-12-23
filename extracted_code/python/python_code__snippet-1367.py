@@ -1,0 +1,3 @@
+    import bz2  # noqa
+
+    SUPPORTED_EXTENSIONS += BZ2_EXTENSIONS

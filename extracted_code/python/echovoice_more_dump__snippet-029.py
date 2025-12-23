@@ -1,0 +1,2 @@
+    • Solution 3: Server-Side Proxy: Implement a backend service (e.g., using Node.js) that runs on the same machine as Ollama. The browser application communicates with this backend proxy, which then makes the requests to http://localhost:11434. Since the proxy-to-Ollama communication is server-to-server on localhost, CORS issues are avoided.88
+Direct calls from server-side JavaScript (e.g., Node.js) running on the same machine as the Ollama server do not typically encounter CORS problems.88

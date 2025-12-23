@@ -1,0 +1,1 @@
+self.cur.executemany("INSERT OR REPLACE INTO dna VALUES (?, ?)", data)

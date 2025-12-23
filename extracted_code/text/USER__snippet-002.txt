@@ -1,0 +1,12 @@
+// Example 1: Autism therapy
+User says: "you feel overwhelmed by the noise"
+System hears: "I feel overwhelmed by the noise" (in user's vocal style)
+GCL drops to 0.4 → AI responds: "I am safe. I can breathe deeply."
+
+// Example 2: Productivity enhancement  
+User says: "research quantum computing applications"
+GCL is 0.92 → AI performs advanced research and summarizes findings
+
+// Example 3: Cognitive support
+User with TBI struggles: "the... words... don't... come"
+System provides fluent version: "The words don't come out easily"

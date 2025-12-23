@@ -1,0 +1,7 @@
+note: if you're trying to build a new `universal_engine::error::Error` consider using one of the following associated functions:
+      universal_engine::error::Error::processing
+      universal_engine::error::Error::invalid_format
+  --> src/universal_engine/error.rs:48:5
+   |
+48 |     pub fn processing<S: Into<String>>(msg: S) -> Self {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

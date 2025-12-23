@@ -1,0 +1,1 @@
+Weighted Summation (Aggregation): The Ki​values are aggregated using a dynamic weighting mask (Wconstruct​). This mask represents an

@@ -1,0 +1,1 @@
+val S = ThoughtEngine.computeState() // returns a data class of consciousness state

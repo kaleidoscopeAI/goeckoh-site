@@ -1,0 +1,306 @@
+    issues when using infix_notation. See
+    :class:`ParserElement.enable_packrat` for a mechanism to potentially
+    improve your parser performance.
+
+    Parameters:
+
+    - ``base_expr`` - expression representing the most basic operand to
+      be used in the expression
+    - ``op_list`` - list of tuples, one for each operator precedence level
+      in the expression grammar; each tuple is of the form ``(op_expr,
+      num_operands, right_left_assoc, (optional)parse_action)``, where:
+
+      - ``op_expr`` is the pyparsing expression for the operator; may also
+        be a string, which will be converted to a Literal; if ``num_operands``
+        is 3, ``op_expr`` is a tuple of two expressions, for the two
+        operators separating the 3 terms
+      - ``num_operands`` is the number of terms for this operator (must be 1,
+        2, or 3)
+      - ``right_left_assoc`` is the indicator whether the operator is right
+        or left associative, using the pyparsing-defined constants
+        ``OpAssoc.RIGHT`` and ``OpAssoc.LEFT``.
+      - ``parse_action`` is the parse action to be associated with
+        expressions matching this operator expression (the parse action
+        tuple member may be omitted); if the parse action is passed
+        a tuple or list of functions, this is equivalent to calling
+        ``set_parse_action(*fn)``
+        (:class:`ParserElement.set_parse_action`)
+    - ``lpar`` - expression for matching left-parentheses; if passed as a
+      str, then will be parsed as ``Suppress(lpar)``. If lpar is passed as
+      an expression (such as ``Literal('(')``), then it will be kept in
+      the parsed results, and grouped with them. (default= ``Suppress('(')``)
+    - ``rpar`` - expression for matching right-parentheses; if passed as a
+      str, then will be parsed as ``Suppress(rpar)``. If rpar is passed as
+      an expression (such as ``Literal(')')``), then it will be kept in
+      the parsed results, and grouped with them. (default= ``Suppress(')')``)
+
+    Example::
+
+        # simple example of four-function arithmetic with ints and
+        # variable names
+        integer = pyparsing_common.signed_integer
+        varname = pyparsing_common.identifier
+
+        arith_expr = infix_notation(integer | varname,
+            [
+            ('-', 1, OpAssoc.RIGHT),
+            (one_of('* /'), 2, OpAssoc.LEFT),
+            (one_of('+ -'), 2, OpAssoc.LEFT),
+            ])
+
+        arith_expr.run_tests('''
+            5+3*6
+            (5+3)*6
+            -2--11
+            ''', full_dump=False)
+
+    prints::
+
+        5+3*6
+        [[5, '+', [3, '*', 6]]]
+
+        (5+3)*6
+        [[[5, '+', 3], '*', 6]]
+
+        (5+x)*y
+        [[[5, '+', 'x'], '*', 'y']]
+
+        -2--11
+        [[['-', 2], '-', ['-', 11]]]
+    """
+
+    # captive version of FollowedBy that does not do parse actions or capture results names
+    class _FB(FollowedBy):
+        def parseImpl(self, instring, loc, doActions=True):
+            self.expr.try_parse(instring, loc)
+            return loc, []
+
+    _FB.__name__ = "FollowedBy>"
+
+    ret = Forward()
+    if isinstance(lpar, str):
+        lpar = Suppress(lpar)
+    if isinstance(rpar, str):
+        rpar = Suppress(rpar)
+
+    # if lpar and rpar are not suppressed, wrap in group
+    if not (isinstance(rpar, Suppress) and isinstance(rpar, Suppress)):
+        lastExpr = base_expr | Group(lpar + ret + rpar)
+    else:
+        lastExpr = base_expr | (lpar + ret + rpar)
+
+    arity: int
+    rightLeftAssoc: opAssoc
+    pa: typing.Optional[ParseAction]
+    opExpr1: ParserElement
+    opExpr2: ParserElement
+    for i, operDef in enumerate(op_list):
+        opExpr, arity, rightLeftAssoc, pa = (operDef + (None,))[:4]  # type: ignore[assignment]
+        if isinstance(opExpr, str_type):
+            opExpr = ParserElement._literalStringClass(opExpr)
+        opExpr = typing.cast(ParserElement, opExpr)
+        if arity == 3:
+            if not isinstance(opExpr, (tuple, list)) or len(opExpr) != 2:
+                raise ValueError(
+                    "if numterms=3, opExpr must be a tuple or list of two expressions"
+                )
+            opExpr1, opExpr2 = opExpr
+            term_name = f"{opExpr1}{opExpr2} term"
+        else:
+            term_name = f"{opExpr} term"
+
+        if not 1 <= arity <= 3:
+            raise ValueError("operator must be unary (1), binary (2), or ternary (3)")
+
+        if rightLeftAssoc not in (OpAssoc.LEFT, OpAssoc.RIGHT):
+            raise ValueError("operator must indicate right or left associativity")
+
+        thisExpr: ParserElement = Forward().set_name(term_name)
+        thisExpr = typing.cast(Forward, thisExpr)
+        if rightLeftAssoc is OpAssoc.LEFT:
+            if arity == 1:
+                matchExpr = _FB(lastExpr + opExpr) + Group(lastExpr + opExpr[1, ...])
+            elif arity == 2:
+                if opExpr is not None:
+                    matchExpr = _FB(lastExpr + opExpr + lastExpr) + Group(
+                        lastExpr + (opExpr + lastExpr)[1, ...]
+                    )
+                else:
+                    matchExpr = _FB(lastExpr + lastExpr) + Group(lastExpr[2, ...])
+            elif arity == 3:
+                matchExpr = _FB(
+                    lastExpr + opExpr1 + lastExpr + opExpr2 + lastExpr
+                ) + Group(lastExpr + OneOrMore(opExpr1 + lastExpr + opExpr2 + lastExpr))
+        elif rightLeftAssoc is OpAssoc.RIGHT:
+            if arity == 1:
+                # try to avoid LR with this extra test
+                if not isinstance(opExpr, Opt):
+                    opExpr = Opt(opExpr)
+                matchExpr = _FB(opExpr.expr + thisExpr) + Group(opExpr + thisExpr)
+            elif arity == 2:
+                if opExpr is not None:
+                    matchExpr = _FB(lastExpr + opExpr + thisExpr) + Group(
+                        lastExpr + (opExpr + thisExpr)[1, ...]
+                    )
+                else:
+                    matchExpr = _FB(lastExpr + thisExpr) + Group(
+                        lastExpr + thisExpr[1, ...]
+                    )
+            elif arity == 3:
+                matchExpr = _FB(
+                    lastExpr + opExpr1 + thisExpr + opExpr2 + thisExpr
+                ) + Group(lastExpr + opExpr1 + thisExpr + opExpr2 + thisExpr)
+        if pa:
+            if isinstance(pa, (tuple, list)):
+                matchExpr.set_parse_action(*pa)
+            else:
+                matchExpr.set_parse_action(pa)
+        thisExpr <<= (matchExpr | lastExpr).setName(term_name)
+        lastExpr = thisExpr
+    ret <<= lastExpr
+    return ret
+
+
+def indentedBlock(blockStatementExpr, indentStack, indent=True, backup_stacks=[]):
+    """
+    (DEPRECATED - use :class:`IndentedBlock` class instead)
+    Helper method for defining space-delimited indentation blocks,
+    such as those used to define block statements in Python source code.
+
+    Parameters:
+
+    - ``blockStatementExpr`` - expression defining syntax of statement that
+      is repeated within the indented block
+    - ``indentStack`` - list created by caller to manage indentation stack
+      (multiple ``statementWithIndentedBlock`` expressions within a single
+      grammar should share a common ``indentStack``)
+    - ``indent`` - boolean indicating whether block must be indented beyond
+      the current level; set to ``False`` for block of left-most statements
+      (default= ``True``)
+
+    A valid block must contain at least one ``blockStatement``.
+
+    (Note that indentedBlock uses internal parse actions which make it
+    incompatible with packrat parsing.)
+
+    Example::
+
+        data = '''
+        def A(z):
+          A1
+          B = 100
+          G = A2
+          A2
+          A3
+        B
+        def BB(a,b,c):
+          BB1
+          def BBA():
+            bba1
+            bba2
+            bba3
+        C
+        D
+        def spam(x,y):
+             def eggs(z):
+                 pass
+        '''
+
+
+        indentStack = [1]
+        stmt = Forward()
+
+        identifier = Word(alphas, alphanums)
+        funcDecl = ("def" + identifier + Group("(" + Opt(delimitedList(identifier)) + ")") + ":")
+        func_body = indentedBlock(stmt, indentStack)
+        funcDef = Group(funcDecl + func_body)
+
+        rvalue = Forward()
+        funcCall = Group(identifier + "(" + Opt(delimitedList(rvalue)) + ")")
+        rvalue << (funcCall | identifier | Word(nums))
+        assignment = Group(identifier + "=" + rvalue)
+        stmt << (funcDef | assignment | identifier)
+
+        module_body = stmt[1, ...]
+
+        parseTree = module_body.parseString(data)
+        parseTree.pprint()
+
+    prints::
+
+        [['def',
+          'A',
+          ['(', 'z', ')'],
+          ':',
+          [['A1'], [['B', '=', '100']], [['G', '=', 'A2']], ['A2'], ['A3']]],
+         'B',
+         ['def',
+          'BB',
+          ['(', 'a', 'b', 'c', ')'],
+          ':',
+          [['BB1'], [['def', 'BBA', ['(', ')'], ':', [['bba1'], ['bba2'], ['bba3']]]]]],
+         'C',
+         'D',
+         ['def',
+          'spam',
+          ['(', 'x', 'y', ')'],
+          ':',
+          [[['def', 'eggs', ['(', 'z', ')'], ':', [['pass']]]]]]]
+    """
+    backup_stacks.append(indentStack[:])
+
+    def reset_stack():
+        indentStack[:] = backup_stacks[-1]
+
+    def checkPeerIndent(s, l, t):
+        if l >= len(s):
+            return
+        curCol = col(l, s)
+        if curCol != indentStack[-1]:
+            if curCol > indentStack[-1]:
+                raise ParseException(s, l, "illegal nesting")
+            raise ParseException(s, l, "not a peer entry")
+
+    def checkSubIndent(s, l, t):
+        curCol = col(l, s)
+        if curCol > indentStack[-1]:
+            indentStack.append(curCol)
+        else:
+            raise ParseException(s, l, "not a subentry")
+
+    def checkUnindent(s, l, t):
+        if l >= len(s):
+            return
+        curCol = col(l, s)
+        if not (indentStack and curCol in indentStack):
+            raise ParseException(s, l, "not an unindent")
+        if curCol < indentStack[-1]:
+            indentStack.pop()
+
+    NL = OneOrMore(LineEnd().set_whitespace_chars("\t ").suppress())
+    INDENT = (Empty() + Empty().set_parse_action(checkSubIndent)).set_name("INDENT")
+    PEER = Empty().set_parse_action(checkPeerIndent).set_name("")
+    UNDENT = Empty().set_parse_action(checkUnindent).set_name("UNINDENT")
+    if indent:
+        smExpr = Group(
+            Opt(NL)
+            + INDENT
+            + OneOrMore(PEER + Group(blockStatementExpr) + Opt(NL))
+            + UNDENT
+        )
+    else:
+        smExpr = Group(
+            Opt(NL)
+            + OneOrMore(PEER + Group(blockStatementExpr) + Opt(NL))
+            + Opt(UNDENT)
+        )
+
+    # add a parse action to remove backup_stack from list of backups
+    smExpr.add_parse_action(
+        lambda: backup_stacks.pop(-1) and None if backup_stacks else None
+    )
+    smExpr.set_fail_action(lambda a, b, c, d: reset_stack())
+    blockStatementExpr.ignore(_bslash + LineEnd())
+    return smExpr.set_name("indented block")
+
+

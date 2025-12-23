@@ -1,0 +1,11 @@
+async def avatar_stream(ws: WebSocket):
+    await ws.accept()
+    try:
+        while True:
+            buf = orch.avatar.frame_bytes() if hasattr(orch, "avatar") else None
+            if buf is not None:
+                await ws.send_bytes(buf)
+            await asyncio.sleep(0.08)  # ~12.5 FPS
+    except WebSocketDisconnect:
+        return
+

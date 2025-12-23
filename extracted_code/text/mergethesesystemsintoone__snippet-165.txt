@@ -1,0 +1,1 @@
+LLMService (llm_service.py): Provides CPU-optimized LLM inference using local models (via llama.cpp or Ollama), with a fallback mechanism and a FastAPI-based HTTP API. It supersedes the earlier LLMProcessor and GPTProcessor, offering a unified language processing backbone.

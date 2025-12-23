@@ -1,0 +1,20 @@
+def finder_for_path(path):
+    """
+    Return a resource finder for a path, which should represent a container.
+
+    :param path: The path.
+    :return: A :class:`ResourceFinder` instance for the path.
+    """
+    result = None
+    # calls any path hooks, gets importer into cache
+    pkgutil.get_importer(path)
+    loader = sys.path_importer_cache.get(path)
+    finder = _finder_registry.get(type(loader))
+    if finder:
+        module = _dummy_module
+        module.__file__ = os.path.join(path, '')
+        module.__loader__ = loader
+        result = finder(module)
+    return result
+
+

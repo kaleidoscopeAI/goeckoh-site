@@ -1,0 +1,2 @@
+FeatureK-AGI (Kaleidoscope)EADS (Actuation Dial)Computational HardwareHybrid Architecture using Quantum components (C-implemented quantum ops , PennyLane ) and distributed processing (Ray/Dask).
+

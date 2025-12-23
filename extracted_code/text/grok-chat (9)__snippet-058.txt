@@ -1,0 +1,15 @@
+  floor updates, and denoising logic using FFT-based Wiener filtering and
+  spectral gating. I’m setting up how to feed pre-roll audio to ASR on speech
+  start, handle noise profile updates only during non-speech, and integrate
+  telemetry metrics. It also covers helper methods for power-of-two FFT sizing,
+  windowing, and robustness checks before actual coding.
+
+  Finalizing noise reduction and SNR computations
+
+  I’m refining noise reduction to handle different modes—wiener, spectral
+  gating, or both—and implementing efficient SNR estimation based on RMS and
+  noise floor to avoid redundant FFTs. The noise floor adapts modestly, VAD
+  threshold calculation clamps values sensibly, and telemetry updates will
+  include SNR and VAD state. I’m preparing to carefully apply these detailed
+  incremental code changes.
+

@@ -1,0 +1,12 @@
+def GetStdHandle(handle: int = STDOUT) -> wintypes.HANDLE:
+    """Retrieves a handle to the specified standard device (standard input, standard output, or standard error).
+
+    Args:
+        handle (int): Integer identifier for the handle. Defaults to -11 (stdout).
+
+    Returns:
+        wintypes.HANDLE: The handle
+    """
+    return cast(wintypes.HANDLE, _GetStdHandle(handle))
+
+

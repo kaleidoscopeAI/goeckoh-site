@@ -1,0 +1,16 @@
+def load_cdll(name, macos10_16_path):
+    """Loads a CDLL by name, falling back to known path on 10.16+"""
+    try:
+        # Big Sur is technically 11 but we use 10.16 due to the Big Sur
+        # beta being labeled as 10.16.
+        if version_info >= (10, 16):
+            path = macos10_16_path
+        else:
+            path = find_library(name)
+        if not path:
+            raise OSError  # Caught and reraised as 'ImportError'
+        return CDLL(path, use_errno=True)
+    except OSError:
+        raise_from(ImportError("The library %s failed to load" % name), None)
+
+

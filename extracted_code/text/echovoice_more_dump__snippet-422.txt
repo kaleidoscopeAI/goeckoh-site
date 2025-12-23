@@ -1,0 +1,1 @@
+- **Jacobian**: compute_jacobian uses finite differences; check_stability computes spectral radius using np.linalg.eigvals (can be optimized with

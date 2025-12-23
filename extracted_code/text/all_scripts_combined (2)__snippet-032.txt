@@ -1,0 +1,10 @@
+class MetricsSnapshot:
+    total_attempts: int = 0
+    total_corrections: int = 0
+    overall_rate: float = 0.0
+    last_phrase: str = ""
+    last_raw: str = ""
+    last_corrected: str = ""
+    last_needs_correction: bool = False
+
+

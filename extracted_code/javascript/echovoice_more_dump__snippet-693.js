@@ -1,0 +1,1 @@
+function updateRibbons(constructs: CognitiveConstruct[]) {

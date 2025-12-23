@@ -1,0 +1,3 @@
+def escape(
+    markup: str,
+    _escape: _EscapeSubMethod = re.compile(r"(\\*)(\[[a-z#/@][^[]*?])").sub,

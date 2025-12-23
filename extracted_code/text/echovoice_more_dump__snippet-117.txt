@@ -1,0 +1,1 @@
+Sketch proof: take derivative of V using ODEs above, show negative contributions dominate positive ones under parameter inequalities (provide exact

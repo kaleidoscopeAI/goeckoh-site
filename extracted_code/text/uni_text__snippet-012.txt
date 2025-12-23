@@ -1,0 +1,1 @@
+Optionally, embed a simpler fallback by hardcoding responses or using a small local transformer if Ollama isn’t ready.

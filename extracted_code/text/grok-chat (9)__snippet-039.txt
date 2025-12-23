@@ -1,0 +1,3 @@
+• Decided to update the section header comment and class docstring to "Neurocoherence Lattice" while keeping the class name
+  unchanged for compatibility, avoiding more complex refactoring. I'll patch just the comment and docstring accordingly.
+

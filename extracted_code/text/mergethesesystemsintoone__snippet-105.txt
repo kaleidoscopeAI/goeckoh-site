@@ -1,0 +1,1 @@
+Takes data and reasons over extracted patterns to update the knowledge graph using helper modules

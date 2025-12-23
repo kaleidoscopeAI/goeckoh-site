@@ -1,0 +1,4 @@
+def index():
+    """Render the main page"""
+    return render_template('index.html')
+

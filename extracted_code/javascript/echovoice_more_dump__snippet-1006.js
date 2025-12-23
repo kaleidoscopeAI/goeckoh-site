@@ -1,0 +1,1 @@
+- **Lyapunov Stability**: A Lyapunov function **V(S) = ||S - S*||²** was defined, and its derivative was shown to be negative definite under

@@ -1,0 +1,30 @@
+    helps drive p95 down when not using full Light Mode. (backend/goeckoh/systems/complete_unified_system.py)
+  - Surface richer lattice state: /status now includes heart_topk (top-32 activations). Dashboard renders a micro-bar sparkline
+    of those peaks. (backend/goeckoh/systems/complete_unified_system.py, frontend/pages/Dashboard.tsx)
+  - Mobile/Flutter wired to backend APIs: ApiService defaults to emulator host 10.0.2.2:8080, adds /asr, /process, /mirror/
+    status; EchoService now streams mirror telemetry; main UI shows live GCL/mode/latency badges. (mobile/lib/services/
+    api_service.dart, mobile/lib/logic/echo_service.dart, mobile/lib/main.dart)
+
+  Runtime snapshots
+
+  - Server currently not running (last run was PID 180905). Start with one of:
+      - Full demo with perf mode:
+        cd backend && KIVY_NO_ARGS=1 USE_HEADLESS=1 GOECKOH_DISABLE_TTS=1 GOECKOH_DISABLE_RTVC=1 GOECKOH_DISABLE_TORCH=1
+        GOECKOH_USE_RUST_VC=0 GOECKOH_ASR_BACKEND=sherpa GOECKOH_PERF_MODE=1 LOG_DIR=/tmp/goeckoh_run python -m
+        goeckoh.apps.real_unified_system --api --config real_system_config.ini
+      - Light fastest path: add GOECKOH_LIGHT_MODE=1 (keeps p95 ~4 ms on digit batch).
+  - Quick checks:
+      - ASR: cd backend && python ../scripts/run_digit_asr.py --server http://127.0.0.1:8080 --limit 10
+      - Process latency: python ../scripts/run_digit_batch.py --server http://127.0.0.1:8080 --limit 3
+      - Metrics: python scripts/validate_mirror_metrics.py
+
+  What remains to hit “most groundbreaking”
+
+  1. Tune the non-Light path (with PERF_MODE) to reach p95 <200 ms: profile and trim heavy steps in process_input (e.g.,
+     Hamiltonian, random lattice injections).
+  2. Improve ASR accuracy further: add Whisper small (int8) or a smaller Sherpa model; keep Vosk as fallback.
+  3. Expand lattice visual: expose heart_topk via SSE (/mirror/stream) and render a small chart in the dashboard.
+  4. Mobile polish: point base URL to your LAN host/IP; optionally add SSE/EventSource for live mirror updates and inline audio
+     playback instead of TTS fallback.
+
+

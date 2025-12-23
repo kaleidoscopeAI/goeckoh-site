@@ -1,0 +1,3 @@
+Molecular interaction energy at each point in the cube is calculated using Coulombic potential for atomic pairs :
+
+

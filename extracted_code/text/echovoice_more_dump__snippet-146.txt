@@ -1,0 +1,1 @@
+This engine adjusts the continuous vectors (state.x) using their analytic gradient, smoothly guiding the semantic concepts toward a state of lower energy. This is analogous to a ball rolling downhill on the energy landscape.

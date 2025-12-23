@@ -1,0 +1,5 @@
+class LLMMessage:
+    """Message for LLM conversation"""
+    role: str  # "system", "user", "assistant"
+    content: str
+

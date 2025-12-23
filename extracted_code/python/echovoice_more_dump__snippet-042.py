@@ -1,0 +1,4 @@
+    6. Visualization: Employ Three.js served via Python/WebSockets. Use a global panel for the primary thought log. Implement node-attached thoughts sparingly using Sprites + CanvasTexture optimized with a texture atlas. Use InstancedMesh for rendering nodes/bonds if their count exceeds a few hundred.
+    7. Architecture: Adhere strictly to the modular design centered around the unified CubeState. Utilize an in-process event/callback system for internal module communication if needed for decoupling beyond direct function calls from app.py.
+    8. Configuration: Implement config.yaml (or similar) early and make it comprehensive to facilitate easy tuning and experimentation with LLMs, simulation parameters, and feedback logic.
+    9. Feedback Loop: Begin with simple, interpretable rules in the Transformation Engine and incrementally add complexity, guided by observation and the LLM's generated insights.

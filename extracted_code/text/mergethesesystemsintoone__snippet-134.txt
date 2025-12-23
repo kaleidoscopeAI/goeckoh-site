@@ -1,0 +1,1 @@
+CapabilityNode: The base class for TextNode, VisualNode, and DataSimulationNode is missing. It’s critical for capability execution and energy management.

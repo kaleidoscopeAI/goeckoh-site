@@ -1,0 +1,3 @@
+• The backend requires the soundfile package, which is currently missing and needs to be installed with system package break
+  enabled.
+

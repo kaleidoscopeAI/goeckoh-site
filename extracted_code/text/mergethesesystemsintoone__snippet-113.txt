@@ -1,0 +1,27 @@
+class TaskConfig:
+    # Existing fields remain the same
+    task_id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    task_name: str = "unnamed_task"
+    description: str = ""
+    priority: int = 5
+    dependencies: List[str] = field(default_factory=list)
+    estimated_duration: int = 0
+    resources: Dict[str, float] = field(default_factory=dict)
+    command: List[str] = field(default_factory=list)
+    working_dir: Optional[str] = None
+    environment: Dict[str, str] = field(default_factory=dict)
+    retry_count: int = 0
+    max_retries: int = 3
+    status: str = "pending"
+    start_time: Optional[float] = None
+    end_time: Optional[float] = None
+    error_message: Optional[str] = None
+    output_file: Optional[str] = None
+    result: Any = None
+    # New fields
+    timeout: Optional[int] = None  # Task timeout in seconds
+    tags: List[str] = field(default_factory=list)  # For categorization
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+

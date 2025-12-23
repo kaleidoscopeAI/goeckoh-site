@@ -1,0 +1,1 @@
+- Application class `KaleidoscopeApp` exposes a global context for native calls.

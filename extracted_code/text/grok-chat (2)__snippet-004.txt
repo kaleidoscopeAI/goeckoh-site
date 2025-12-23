@@ -1,0 +1,5 @@
+class CompanionConfig:
+    paths: Paths = field(default_factory=Paths)
+    audio: AudioSettings = field(default_factory=AudioSettings)
+    speech: SpeechModelSettings = field(default_factory=SpeechModelSettings)
+

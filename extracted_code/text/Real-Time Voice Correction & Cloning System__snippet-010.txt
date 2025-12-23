@@ -1,0 +1,8 @@
+class ProstheticOutput(BaseModel):
+    corrected_text: str = Field(
+        description="The sentence converted to first-person, grammatically corrected."
+    )
+    intent_tag: str = Field(
+        description="The detected emotional intent (e.g., 'assertive', 'question')."
+    )
+

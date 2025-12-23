@@ -1,0 +1,5 @@
+    • Tensor Networks (TNs): Represents high-dimensional states (e.g., Φ-structures, GW content) efficiently, using algorithms like Belief Propagation for optimization.
+    • Numerical PDE/SDE Solvers: Simulates continuous and stochastic dynamics for system-environment interactions via the GI.
+    • Neurosymbolic AI: Grounds internal symbols in external knowledge graphs (KGs) through the GI, enhancing meaning and accuracy.
+    • Real-time Data Integration: Links the GI to external data streams, enabling real-time environmental interaction.
+    • Machine Learning: Implements SM functions, GW learning, and MC policies, forming the computational foundation.

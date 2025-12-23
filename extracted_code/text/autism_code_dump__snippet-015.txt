@@ -1,0 +1,1 @@
+# ASR using faster-whisper (local, offline)

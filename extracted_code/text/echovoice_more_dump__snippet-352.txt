@@ -1,0 +1,1 @@
+4. Implement estimate_rho using power iteration and test on small networks by building the full J via finite differences for validation.

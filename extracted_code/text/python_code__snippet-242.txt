@@ -1,0 +1,23 @@
+class PsiState:
+    """
+    Unified state Ψ_t = (world, body, self_model, history, emotion)
+    Represents the complete internal universe of the entity
+    """
+    t: int = 0
+    
+    # World representation (beliefs about environment)
+    world: Dict[str, any] = field(default_factory=dict)
+    
+    # Body/hardware state (somatic signals)
+    body: Dict[str, float] = field(default_factory=dict)
+    
+    # Self-model (internal parameters and policy)
+    self_model: Dict[str, any] = field(default_factory=dict)
+    
+    # Compressed history (holographic self-encoding)
+    history_hashes: List[int] = field(default_factory=list)
+    
+    # Emotional state vector [arousal, valence, dominance, confidence, rhythm]
+    emotion: np.ndarray = field(default_factory=lambda: np.zeros(5, dtype=np.float32))
+
+

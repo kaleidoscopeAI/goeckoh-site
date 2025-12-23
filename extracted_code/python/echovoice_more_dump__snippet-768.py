@@ -1,0 +1,42 @@
+def update_velocities_with_chaos(self, iteration: int, T_max: int, ca_generator: 'CellularChaosGenerator'):
+    """
+    Updates agent velocities using the standard PSO formula, 
+    plus the dynamic parameters and the Directional Chaos Bias (V_chaos).
+    
+    Attaches to: self.agents[i].velocity_update
+    """
+    # 1. Get CA Features
+    ca_entropy, V_chaos = ca_generator.extract_features(D=self.D)
+    
+    # 2. Get Dynamic Parameters
+    params = dynamic_scheduling_params(iteration, T_max, ca_entropy)
+    w, c1, c2 = params['w'], params['c1'], params['c2']
+    
+    g_best_pos = self.g_best.position # Global best position
+    
+    for agent in self.agents:
+        r1 = np.random.rand(self.D)
+        r2 = np.random.rand(self.D)
+        
+        # PSO terms
+        v_inertia = w * agent.velocity
+        v_cognitive = c1 * r1 * (agent.p_best.position - agent.position)
+        v_social = c2 * r2 * (g_best_pos - agent.position)
+        
+        # (B) Richer CA Features: Directional Chaos Bias Term
+        # Scale V_chaos (which is already scaled by CA activity) by the entropy.
+        # This provides maximum directional bias when the system is in an unstable, chaotic state.
+        chaos_influence = np.tanh(ca_entropy) # Tanh ensures smooth scaling between 0 and 1
+        v_chaos_bias = chaos_influence * V_chaos
+        
+        # New Velocity
+        new_velocity = v_inertia + v_cognitive + v_social + v_chaos_bias
+        
+        # Update Agent State
+        agent.velocity = new_velocity
+        agent.position = agent.position + agent.velocity
+        
+        # Boundary constraints/clamping logic (omitted for brevity, assume agent handles this)
+        
+    return ca_entropy, params # Return for instrumentation
+

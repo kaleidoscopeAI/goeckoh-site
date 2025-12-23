@@ -1,0 +1,1 @@
+#: The namedtuple class used to construct keys for the connection pool.

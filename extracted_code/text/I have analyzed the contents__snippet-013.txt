@@ -1,0 +1,2 @@
+1.  **Your Child Speaks:** The system listens via `speech_loop.py` (using `sounddevice` and `VAD`).
+2.  **System Transcribes:** It converts the speech to text using **Whisper**.

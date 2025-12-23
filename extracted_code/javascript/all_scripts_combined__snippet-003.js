@@ -1,0 +1,5 @@
+    "lmk": "let me know",
+    "asap": "as soon as possible",
+    "msg": "message",
+    "info": "information",
+    "prob": "problem",

@@ -1,0 +1,1 @@
+The SDE can be solved explicitly using an integrating factor method (multiplying by (e^{\theta t})).27 The solution is given by:

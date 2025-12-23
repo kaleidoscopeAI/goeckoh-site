@@ -1,0 +1,32 @@
+def audio_callback(indata, frames, time_info, status):
+    """
+    Called continuously by sounddevice. We accumulate chunks into
+    audio_buffer while voice is present; when we've seen 1.2s of
+    silence after speech, we push the full utterance into audio_queue.
+    """
+    global audio_buffer, is_speech, silence_start
+    if status:
+        print(f"[AUDIO] Status: {status}")
+    indata = indata.copy()
+    rms = float(np.sqrt(np.mean(indata**2)))
+    if rms > 0.01:
+        # voice detected
+        audio_buffer.append(indata)
+        is_speech = True
+        silence_start = None
+    else:
+        # silence region
+        if is_speech and silence_start is None:
+            silence_start = time.time()
+        elif is_speech and silence_start is not None:
+            if time.time() - silence_start > 1.2: # 1.2s = end of utterance
+                if audio_buffer:
+                    full_audio = np.concatenate(audio_buffer, axis=0).astype(
+                        np.float32
+                    )
+                    # Flatten to 1-D mono for Whisper
+                    full_audio = full_audio.reshape(-1)
+                    audio_queue.put(full_audio)
+                audio_buffer = []
+                is_speech = False
+                silence_start = None

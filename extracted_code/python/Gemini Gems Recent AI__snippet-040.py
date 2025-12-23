@@ -1,0 +1,20 @@
+def check_dependencies():
+    deps = {
+        "RDKit (Chemical)": Chem,
+        "Plotly (Interactive Viz)": go,
+        "Gudhi (TDA)": gd,
+        "OpenCV (Visual)": cv2,
+        "pyttsx3 (Voice)": pyttsx3,
+        "PyTorch (AI)": torch,
+        "PyTorch Geometric (GNN)": GCNConv,
+        "Requests (Web)": requests,
+        "BeautifulSoup (Web)": BeautifulSoup,
+        "WebSocket (Real-time)": websocket,
+        "Matplotlib (Visualization)": plt
+    }
+    for name, module in deps.items():
+        status = "Available" if module else "MISSING"
+        logging.info(f"Dependency {name}: {status}")
+        if not module:
+            logging.warning(f"{name} is missing, related features disabled.")
+

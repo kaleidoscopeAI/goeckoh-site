@@ -1,0 +1,1 @@
+const allowed = { ...mods };

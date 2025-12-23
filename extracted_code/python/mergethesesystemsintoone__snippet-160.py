@@ -1,0 +1,8 @@
+async def shutdown():
+    agi.pool.close()
+    agi.pool.join()
+    if redis:
+        await redis.close()
+    loop = asyncio.get_running_loop()
+    await loop.shutdown_asyncgens()
+

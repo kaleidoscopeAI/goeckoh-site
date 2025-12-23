@@ -1,0 +1,2 @@
+Single Binary: Package the final application using PyInstaller, bundling the ONNX models as local assets to ensure full offline capability.
+

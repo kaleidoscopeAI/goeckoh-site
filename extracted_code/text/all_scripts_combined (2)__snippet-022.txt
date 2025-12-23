@@ -1,0 +1,8 @@
+class Phrase:
+    phrase_id: str
+    text: str
+    audio_file: Path
+    duration: float
+    normalized_text: str
+
+

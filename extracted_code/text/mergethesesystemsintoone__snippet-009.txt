@@ -1,0 +1,4 @@
+class Trait:
+    name: str
+    value: float = 0.5
+

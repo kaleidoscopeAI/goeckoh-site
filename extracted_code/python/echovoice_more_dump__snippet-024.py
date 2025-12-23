@@ -1,0 +1,3 @@
+    • Stability analysis techniques from AC can be used to design adaptation rules that guarantee the process does not become unstable (e.g., parameters diverging, oscillations). This is particularly important given the complex feedback loops involving data, internal state, and potentially LLM interactions.
+    • Techniques from AC like high-order tuners or specifically designed time-varying learning rates might lead to faster and more robust convergence compared to standard gradient descent methods used in ML.62
+    • Hybrid AC-RL approaches combine the strengths of both: RL learns complex policies or optimizes high-level goals, while AC provides underlying stability and parameter adaptation mechanisms.57

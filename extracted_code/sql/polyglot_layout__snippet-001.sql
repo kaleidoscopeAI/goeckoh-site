@@ -1,0 +1,18 @@
+         cur.execute("INSERT INTO snapshots(ts, source, phi, gen, conscious) VALUES (?, ?, ?, ?, ?)", (ts, name, phi, gen, conscious))
+         con.commit(); con.close()
+
+  now = time.time()
+  if now - last_emit >= 1.0 and window:
+    # compute median consensus φ over last second
+    phi_vals = [x[2] for x in window[-30:]] # recent lines
+    consensus = statistics.median(phi_vals)
+    ts = time.strftime("%Y-%m-%d %H:%M:%S")
+    con = sqlite3.connect(DB)
+    cur = con.cursor()
+    cur.execute("INSERT INTO consensus(ts, phi) VALUES (?, ?)", (ts, consensus))
+    con.commit(); con.close()
+    last_emit = now
+
+
+
+

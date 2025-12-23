@@ -1,0 +1,11 @@
+from urllib.parse import (
+    quote,
+    quote_plus,
+    unquote,
+    unquote_plus,
+    urldefrag,
+    urlencode,
+    urljoin,
+    urlparse,
+    urlsplit,
+    urlunparse,

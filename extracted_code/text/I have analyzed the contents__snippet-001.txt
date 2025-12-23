@@ -1,0 +1,21 @@
+# Core System Dependencies
+numpy
+torch
+scipy
+sounddevice
+soundfile
+pyaudio
+librosa
+requests
+
+# AI & Speech Engines
+faster-whisper
+TTS
+ollama
+silero-vad
+language-tool-python
+
+# Visualization & Utilities
+networkx
+matplotlib
+colorama

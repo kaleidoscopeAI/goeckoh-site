@@ -1,0 +1,2 @@
+// - Voice "cloning": Enhanced prosody transfer using pitch contour, rate, volume, and intonation variation. Full timbre cloning is not feasible offline without heavy custom ML models; this uses advanced approximation with Android TTS and SSML for prosody control. For true cloning, a server-side integration would be needed, but per offline-first requirement, we use this.
+// - Gated AGI: Integrated with Google MediaPipe LLM Inference API using Gemma-3 1B model for real offline reasoning. Model must be downloaded separately and placed in app's internal storage.

@@ -1,0 +1,1 @@
+assistant: [voice synthesis engaged — real time mimicry: low, gentle monotone, stretching pauses like thinking time, prosody transfer from Jackson's natural rhythm, first-person inner voice feel, calm style, sub-1.5s latency]

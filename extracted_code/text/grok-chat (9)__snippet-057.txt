@@ -1,0 +1,17 @@
+• I’m working through a plan to add noise reduction using Wiener filtering and
+  spectral gating along with voice activity detection in the
+  SpeechMirrorService, balancing real-time constraints and accuracy. To keep
+  voice cloning quality, I’m considering applying noise reduction only to ASR
+  input while preserving raw audio for reference. I’ll implement adaptive noise
+  estimation, dynamic thresholds, and SNR metrics with options controlled via
+  environment variables and fail-safe defaults so improvements won’t disrupt
+  existing behavior.
+
+  Deciding on Wiener filter frequency-domain approach
+
+  I’m planning to implement Wiener filtering in the frequency domain with a
+  noise PSD estimate updated during non-speech frames, applying gating based on
+  noise magnitude thresholds, and computing SNR per frame using RMS ratios. I
+  also need to add SNR and VAD status to the service metrics carefully,
+  considering existing dataclass constraints and test coverage.
+

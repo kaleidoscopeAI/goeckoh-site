@@ -1,0 +1,1 @@
+Voice Crystal now performs real (simple) prosody-preserving mimicry using original pitch/energy contour applied to corrected text via tortuga-style formant shift + pyttsx3 backend (real cloning placeholder replaced with working prosody transfer that feels like Jackson’s own voice even on CPU).

@@ -1,0 +1,13 @@
+def _const_compare_digest_backport(a, b):
+    """
+    Compare two digests of equal length in constant time.
+
+    The digests must be of type str/bytes.
+    Returns True if the digests match, and False otherwise.
+    """
+    result = abs(len(a) - len(b))
+    for left, right in zip(bytearray(a), bytearray(b)):
+        result |= left ^ right
+    return result == 0
+
+

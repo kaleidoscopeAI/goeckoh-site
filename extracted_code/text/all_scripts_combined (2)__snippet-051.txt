@@ -1,0 +1,8 @@
+class AgentDecision:
+    """
+    Represents a decision made by the agent.
+    """
+
+    target_text: str
+    mode: Mode = "inner"
+    metadata: dict | None = None

@@ -1,0 +1,19 @@
+def _eval_op(lhs: str, op: Op, rhs: str) -> bool:
+    try:
+        spec = Specifier("".join([op.serialize(), rhs]))
+    except InvalidSpecifier:
+        pass
+    else:
+        return spec.contains(lhs)
+
+    oper: Optional[Operator] = _operators.get(op.serialize())
+    if oper is None:
+        raise UndefinedComparison(f"Undefined {op!r} on {lhs!r} and {rhs!r}.")
+
+    return oper(lhs, rhs)
+
+
+class Undefined:
+    pass
+
+

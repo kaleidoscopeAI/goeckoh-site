@@ -1,0 +1,1 @@
+const scale = (raw: number) =>

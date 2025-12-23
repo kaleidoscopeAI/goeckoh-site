@@ -1,0 +1,1 @@
+# If pip's going to use distutils, it should not be using the copy that setuptools

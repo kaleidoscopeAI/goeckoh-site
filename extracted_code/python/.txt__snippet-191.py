@@ -1,0 +1,1 @@
+def call_installer():

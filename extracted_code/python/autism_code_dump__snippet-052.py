@@ -1,0 +1,59 @@
+def audio_callback(indata, frames, time_info, status):
+    global audio_buffer, is_speech, silence_start
+    rms = np.sqrt(np.mean(indata**2))
+    if rms > 0.01:
+        audio_buffer.append(indata.copy())
+        is_speech = True
+        silence_start = None
+    else:
+        if is_speech and silence_start is None:
+            silence_start = time.time()
+        elif is_speech and silence_start and (time.time() - silence_start > 1.2):
+            full_audio = np.concatenate(audio_buffer)
+            audio_queue.put(full_audio)
+            audio_buffer = []
+            is_speech = False
+            silence_start = None
+
+
+def listening_loop():
+    print("Jackson, I wait in silence. Speak freely.")
+    while True:
+        try:
+            audio = audio_queue.get(timeout=1.0)
+            result = model.transcribe(audio, language="en", fp16=False, no_speech_threshold=0.45)
+            raw_text = result["text"].strip().lower()
+            if not raw_text or len(raw_text) < 2:
+                gcl = heart_system.get_gcl()
+                inner_gcl = inner_heart.update_and_get_gcl(0.6)
+                average_gcl = (gcl + inner_gcl) / 2
+                if average_gcl < 0.5:
+                    calming = "I am calm. Breathe deep."
+                    synth = voice_crystal.synthesize(calming, "calm")
+                    sd.play(synth, samplerate=16000)
+                    sd.wait()
+                continue
+            corrected = raw_text.capitalize()
+            if not corrected.endswith((".", "!", "?")):
+                corrected += "."
+            corrected = re.sub(r"\byou\b", "I", corrected, flags=re.IGNORECASE)
+            corrected = re.sub(r"\byour\b", "my", corrected, flags=re.IGNORECASE)
+            corrected = re.sub(r"\byou're\b", "I'm", corrected, flags=re.IGNORECASE)
+            arousal_input = -0.5 if any(w in raw_text for w in ["happy", "love", "good"]) else 0.4
+            gcl = heart_system.get_gcl()
+            inner_gcl = inner_heart.update_and_get_gcl(arousal_input)
+            average_gcl = (gcl + inner_gcl) / 2
+            style = "calm" if average_gcl < 0.5 else "excited" if average_gcl > 0.85 else "inner"
+            synth_audio = voice_crystal.synthesize(corrected, style)
+            sd.play(synth_audio, samplerate=16000)
+            sd.wait()
+            success_score = 1.0 if raw_text in corrected.lower() else 0.7
+            voice_crystal.add_fragment(audio, success_score)
+            heart_system.replicate_nodes()
+            heart_system.self_reflect()
+        except queue.Empty:
+            continue
+        except Exception as e:  # pragma: no cover - runtime safety
+            print(f"Continuing after: {e}")
+
+

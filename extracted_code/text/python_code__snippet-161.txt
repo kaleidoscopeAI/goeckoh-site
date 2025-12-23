@@ -1,0 +1,4 @@
+class ColorParseError(Exception):
+    """The color could not be parsed."""
+
+

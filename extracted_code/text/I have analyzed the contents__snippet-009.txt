@@ -1,0 +1,2 @@
+(Self-Correction): The `OrganicCore` code in snippet 21 imports `NodeDNA`. I need to include `NodeDNA` class too. I have it in snippet 21 .
+

@@ -1,0 +1,57 @@
+def audio_callback(indata, frames, time_info, status):
+    audio_queue.put(indata.copy())
+
+def listening_loop():
+    print("Jackson, I am here. Always listening. Speak whenever you want.")
+    while True:
+        try:
+            audio = audio_queue.get(timeout=1.0)
+            rms = np.sqrt(np.mean(audio**2))
+            if rms < 0.008:  # autism-tuned silence threshold
+                continue
+
+            result = model.transcribe(audio, language="en", fp16=False)
+            raw_text = result["text"].strip().lower()
+
+            if not raw_text:
+                # Nonverbal vocalization → calming only
+                gcl = heart(0.6)  # high arousal input
+                if gcl < 0.5:
+                    corrected = "I am safe. I can breathe slowly."
+                    voice_crystal.synthesize(corrected, "calm")
+                continue
+
+            # Simple grammar correction
+            corrected = raw_text.capitalize()
+            if not corrected.endswith(('.', '!', '?')):
+                corrected += "."
+
+            # First-person rewrite
+            corrected = re.sub(r"\byou\b", "I", corrected, flags=re.IGNORECASE)
+            corrected = re.sub(r"\byour\b", "my", corrected, flags=re.IGNORECASE)
+
+            # GCL gating — AGI executive access
+            gcl = heart(-0.3 if "happy" in raw_text else 0.3)  # example input
+            if gcl < 0.5:
+                style = "calm"
+            elif gcl > 0.85:
+                style = "excited"
+            else:
+                style = "inner"
+
+            # SYNTHESIZE IN JACKSON'S VOICE
+            synth_audio = voice_crystal.synthesize(corrected, style)
+
+            # PLAY BACK
+            sd.play(synth_audio, samplerate=22050)
+            sd.wait()
+
+            # Learn from attempt if successful
+            success_score = 1.0 if raw_text in corrected.lower() else 0.6
+            voice_crystal.add_fragment(audio, success_score)
+
+        except queue.Empty:
+            continue
+        except Exception as e:
+            print(f"Error: {e}")
+

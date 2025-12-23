@@ -1,0 +1,7 @@
+class TextToSpeechOutput:
+    """Outputs of inference for the Text To Speech task"""
+
+    audio: Any
+    """The generated audio"""
+    sampling_rate: Optional[float] = None
+    """The sampling rate of the generated audio waveform."""

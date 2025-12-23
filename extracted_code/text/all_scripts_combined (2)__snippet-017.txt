@@ -1,0 +1,7 @@
+class AutomaticSpeechRecognitionOutputChunk:
+    text: str
+    """A chunk of text identified by the model"""
+    timestamp: List[float]
+    """The start and end timestamps corresponding with the text"""
+
+

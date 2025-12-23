@@ -1,0 +1,5 @@
+  correctness for echo test. Server runs at 127.0.0.1:8080 using Vosk, logs at /tmp/goeckoh_backend.log; restart with standard
+  command. Evaluation vs blueprint: core audio-to-speech bridging present but missing mobile integration and additional PPP;
+  optimization needed to meet latency targets (50ms). Provided concise ASCII mind map linking main modules. Next steps focus on
+  latency optimization and mobile integration.
+

@@ -1,0 +1,21 @@
+        probably using either the PIP_NO_USE_PEP517 environment variable
+        or the "no-use-pep517" config file option. Use an appropriate value
+        of the PIP_USE_PEP517 environment variable or the "use-pep517"
+        config file option instead.
+        """
+        raise_option_error(parser, option=option, msg=msg)
+
+    # If user doesn't wish to use pep517, we check if setuptools and wheel are installed
+    # and raise error if it is not.
+    packages = ("setuptools", "wheel")
+    if not all(importlib.util.find_spec(package) for package in packages):
+        msg = (
+            f"It is not possible to use --no-use-pep517 "
+            f"without {' and '.join(packages)} installed."
+        )
+        raise_option_error(parser, option=option, msg=msg)
+
+    # Otherwise, --no-use-pep517 was passed via the command-line.
+    parser.values.use_pep517 = False
+
+

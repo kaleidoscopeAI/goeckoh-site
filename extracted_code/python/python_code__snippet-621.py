@@ -1,0 +1,8 @@
+def tempdir():
+    td = tempfile.mkdtemp()
+    try:
+        yield td
+    finally:
+        shutil.rmtree(td)
+
+

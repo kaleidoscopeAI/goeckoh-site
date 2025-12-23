@@ -1,0 +1,3 @@
+• I'm redirecting backend logs to /tmp to avoid permission issues with the .run directory, using nohup to start the process in
+  the background.
+

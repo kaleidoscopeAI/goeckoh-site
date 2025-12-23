@@ -1,0 +1,1 @@
+- **Determination Process**: Ingestion aggregates from high-affinity supernodes (via Laplacian), prioritizing low-stress data for stable clusters.

@@ -1,0 +1,1 @@
+self-explanatory class names, and the use of :class:`'+'<And>`,

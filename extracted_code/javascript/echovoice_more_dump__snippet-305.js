@@ -1,0 +1,1 @@
+const allowed: Modulators = { ...mods };

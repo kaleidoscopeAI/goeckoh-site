@@ -1,0 +1,2 @@
+  by using a getattr default with the EmotionalState dataclass.
+

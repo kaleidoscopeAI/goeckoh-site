@@ -1,0 +1,2 @@
+from pip._vendor.urllib3.exceptions import DependencyWarning
+

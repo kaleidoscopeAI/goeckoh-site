@@ -1,0 +1,2 @@
+Okay, let's aim to create a more comprehensive and open-source molecular bio-mimicking visualization add-on for drug discovery. Because "complete" is a very ambitious goal, we'll focus on a solid foundation and key features, using open-source libraries as much as possible.
+

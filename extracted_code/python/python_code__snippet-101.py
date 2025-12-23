@@ -1,0 +1,3 @@
+    from ssl import PROTOCOL_TLS
+
+    PROTOCOL_SSLv23 = PROTOCOL_TLS

@@ -1,0 +1,61 @@
+import os, subprocess, sys, platform
+
+def build_rust_kernel():
+    print("--- Building Rust Audio Kernel ---")
+    rust_path = "rust_core"
+    if not os.path.exists(rust_path):
+        print(f"[ERROR] Rust project not found at '{rust_path}'"); return False
+    try:
+        # Use capture_output to hide build messages unless there's an error
+        result = subprocess.run(
+            ["cargo", "build", "--release"], 
+            cwd=rust_path, 
+            check=True, 
+            capture_output=True, 
+            text=True
+        )
+        
+        os_platform = platform.system()
+        ext, target_name = ("", "")
+        if os_platform == "Windows": ext, target_name = ".dll", "bio_audio.pyd"
+        elif os_platform == "Linux": ext, target_name = ".so", "bio_audio.so"
+        elif os_platform == "Darwin": ext, target_name = ".dylib", "bio_audio.so"
+        else: print(f"[ERROR] Unsupported OS: {os_platform}"); return False
+        
+        source = os.path.join(rust_path, "target", "release", f"libbio_audio{ext}")
+        if os.path.exists(source):
+            if os.path.exists(target_name): os.remove(target_name)
+            # Use os.rename for efficiency
+            os.rename(source, target_name)
+            print(f"--- Rust Kernel built successfully: -> {target_name} ---")
+            return True
+        else:
+            print(f"[ERROR] Build artifact not found at '{source}'"); return False
+    except subprocess.CalledProcessError as e:
+        print(f"[ERROR] Failed to build Rust kernel. Cargo exited with code {e.returncode}.")
+        print(f"--- Cargo stderr ---\n{e.stderr}")
+        return False
+    except Exception as e:
+        print(f"[ERROR] An unexpected error occurred during build: {e}"); return False
+
+def main():
+    print("--- NEURO-ACOUSTIC EXOCORTEX LAUNCHER ---")
+    if not build_rust_kernel():
+        print("--- Aborting due to build failure. ---")
+        sys.exit(1)
+    
+    print("\n--- Starting GUI ---")
+    try:
+        # Ensure the project root is in the Python path
+        sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
+        
+        # The main app is now inside the goeckoh package, so we run it as a module
+        subprocess.run([sys.executable, "-m", "goeckoh.gui_main"], check=True)
+    except FileNotFoundError:
+        print("[ERROR] Could not find 'goeckoh/gui_main.py'. Make sure the script was created correctly.")
+    except subprocess.CalledProcessError as e:
+        print(f"[ERROR] GUI process failed with exit code {e.returncode}")
+    except Exception as e:
+        print(f"[ERROR] An unexpected error occurred while starting the GUI: {e}")
+
+

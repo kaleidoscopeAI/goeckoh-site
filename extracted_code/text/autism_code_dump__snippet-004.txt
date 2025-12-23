@@ -1,0 +1,3 @@
+KQBC Agent package for the ultimate unified system.
+
+This package integrates the speech companion with an advanced cognitive

@@ -1,0 +1,4 @@
+-   **Listens continuously** to your speech using microphone input
+    
+-   **Transcribes** what you say using Whisper STT (multi-language support)
+    

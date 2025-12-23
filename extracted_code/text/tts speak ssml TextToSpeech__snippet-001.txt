@@ -1,0 +1,2 @@
+// - Crystalline Heart: Implemented with ODE solving using Apache Commons Math (add dependency: implementation 'org.apache.commons:commons-math3:3.6.1').
+// - Gated AGI: Stubbed with simple rule-based reasoning (e.g., using a basic decision tree). A full AGI like GAIA isn't implementable here; this uses a placeholder for deep reasoning (e.g., integrate with a local LLM if available, like via TensorFlow Lite).

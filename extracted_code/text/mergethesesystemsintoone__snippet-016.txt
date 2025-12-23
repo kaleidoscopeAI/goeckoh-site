@@ -1,0 +1,3 @@
+class MemoryStore:
+    # Same as before, with added methods for new components if needed
+

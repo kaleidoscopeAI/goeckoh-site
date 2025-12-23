@@ -1,0 +1,5 @@
+class GrowthState:
+    maturity: float = 0.0
+    knowledge: float = 0.0
+    specialization: Optional[str] = None
+

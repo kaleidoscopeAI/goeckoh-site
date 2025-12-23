@@ -1,0 +1,14 @@
+class VersionDict(TypedDict):
+    major: str
+    minor: str
+    build_number: str
+
+
+class InfoDict(TypedDict):
+    id: str
+    version: str
+    version_parts: VersionDict
+    like: str
+    codename: str
+
+

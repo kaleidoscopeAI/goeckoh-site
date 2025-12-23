@@ -1,0 +1,4 @@
+class InnerVoiceConfig:
+    log_events: bool = True
+    min_gap_s: float = 2.0
+

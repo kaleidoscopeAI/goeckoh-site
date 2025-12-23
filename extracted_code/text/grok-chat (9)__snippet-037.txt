@@ -1,0 +1,2 @@
+• I'm using curl to verify the /routes endpoint is accessible and responding correctly.
+

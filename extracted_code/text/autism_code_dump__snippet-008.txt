@@ -1,0 +1,7 @@
+class CrystalConfig:
+    num_nodes: int = 1024
+    energy_threshold: float = 5.0
+    replication_rate: float = 0.1
+    dt: float = 0.1
+
+

@@ -1,0 +1,4 @@
+def null_ns_handler(importer, path_item, packageName, module):
+    return None
+
+

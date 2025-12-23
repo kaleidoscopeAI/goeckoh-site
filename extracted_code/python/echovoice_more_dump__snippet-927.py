@@ -1,0 +1,10 @@
+async def ingest_local():
+    data = await request.get_json()
+    path = data.get('path')
+    if not path or not os.path.exists(path):
+        return jsonify({'error': 'path not found'}), 400
+    url = 'file://' + os.path.abspath(path)
+    # add to crawler queue
+    crawler.queue.appendleft(url)
+    return jsonify({'status': 'queued', 'url': url})
+

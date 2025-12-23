@@ -1,0 +1,21 @@
+class CERT_USAGE_MATCH(Structure):
+    _fields_ = (
+        ("dwType", DWORD),
+        ("Usage", CERT_ENHKEY_USAGE),
+    )
+
+
+class CERT_CHAIN_PARA(Structure):
+    _fields_ = (
+        ("cbSize", DWORD),
+        ("RequestedUsage", CERT_USAGE_MATCH),
+        ("RequestedIssuancePolicy", CERT_USAGE_MATCH),
+        ("dwUrlRetrievalTimeout", DWORD),
+        ("fCheckRevocationFreshnessTime", BOOL),
+        ("dwRevocationFreshnessTime", DWORD),
+        ("pftCacheResync", LPFILETIME),
+        ("pStrongSignPara", c_void_p),
+        ("dwStrongSignFlags", DWORD),
+    )
+
+

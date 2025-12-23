@@ -1,0 +1,5 @@
+• I'm focusing on implementing a hardware latency test script using sounddevice
+  and cross-correlation in scripts/measure_loop_latency.py, setting a default
+  latency target, and improving Rust voice path integration with environment
+  checks and UI feedback while keeping changes minimal.
+

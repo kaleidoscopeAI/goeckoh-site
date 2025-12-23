@@ -1,0 +1,1 @@
+- \( \theta_r \): Rule threshold (from ruleset dict).

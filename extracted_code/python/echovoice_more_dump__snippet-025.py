@@ -1,0 +1,1 @@
+    • Model Management Endpoints: (GET /api/tags, POST /api/show, POST /api/pull, POST /api/copy, DELETE /api/delete, POST /api/create, POST /api/push) Allow listing, inspecting, downloading, copying, deleting, creating (from Modelfile), and pushing local models.3

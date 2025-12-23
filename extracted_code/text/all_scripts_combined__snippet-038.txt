@@ -1,0 +1,11 @@
+class AutomaticSpeechRecognitionInput:
+    """Inputs for Automatic Speech Recognition inference"""
+
+    inputs: str
+    """The input audio data as a base64-encoded string. If no `parameters` are provided, you can
+    also provide the audio data as a raw bytes payload.
+    """
+    parameters: Optional[AutomaticSpeechRecognitionParameters] = None
+    """Additional inference parameters for Automatic Speech Recognition"""
+
+

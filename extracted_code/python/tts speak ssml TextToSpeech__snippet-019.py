@@ -1,0 +1,3 @@
+class Whisper(private val context: Context) {
+    // Implementation from repo: loads model, transcribes WAV or buffer
+    // ...

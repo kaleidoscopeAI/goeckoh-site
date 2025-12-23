@@ -1,0 +1,1 @@
+- **Operators Oᵢ**: Each operator **Oᵢ** was assumed to be a Lipschitz-continuous nonlinear function (e.g., tanh or sigmoid). Tests confirmed

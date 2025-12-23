@@ -1,0 +1,3 @@
+• I'm opting to install the vosk package quietly in the user site with pip using the --user flag to avoid system conflicts and
+  keep setup straightforward.
+

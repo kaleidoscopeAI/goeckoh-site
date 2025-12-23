@@ -1,0 +1,2 @@
+Actually, the "Crystalline Heart" seems to *be* the organic component in this version (using ODEs and nodes). I will stick to the Crystalline Heart as the "Organic" brain implementation to avoid bloat.
+

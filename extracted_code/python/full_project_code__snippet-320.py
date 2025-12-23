@@ -1,0 +1,9 @@
+def replace_by(stream):
+    orig_stdout = sys.stdout
+    orig_stderr = sys.stderr
+    sys.stdout = stream
+    sys.stderr = stream
+    yield
+    sys.stdout = orig_stdout
+    sys.stderr = orig_stderr
+

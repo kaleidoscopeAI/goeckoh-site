@@ -1,0 +1,1 @@
+provides refined code for a working AI system called kaleidoscope AI. All code must be enhanced and refined using nothing but the code provided and open source tools. no conceptual work no place holders. this mustbe a eorking ai system .

@@ -1,0 +1,2 @@
+ 4. Run your app as usual; the agent renders frames continuously using live metrics/captions.
+

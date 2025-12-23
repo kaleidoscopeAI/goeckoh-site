@@ -1,0 +1,5 @@
+def calculate_similarity(smiles1, smiles2):
+    #... (Quantum-inspired similarity calculation - time consuming part)
+    similarity = cube.quantum_inspired_similarity(smiles1, smiles2)
+    return similarity
+

@@ -1,0 +1,8 @@
+def energetics(E: np.ndarray, S: np.ndarray, edges: np.ndarray, sigma: float) -> dict:
+    # Original calculation
+    en = {}  # Implement as before
+    # Add Φ
+    phis = np.array([calculate_phi(E[i]) for i in range(E.shape[0])])
+    en["avg_phi"] = float(np.mean(phis))
+    return en
+

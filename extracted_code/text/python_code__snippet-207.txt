@@ -1,0 +1,8 @@
+        # The package provides no information
+        return True
+    requires_python_specifier = specifiers.SpecifierSet(requires_python)
+
+    python_version = version.parse(".".join(map(str, version_info)))
+    return python_version in requires_python_specifier
+
+

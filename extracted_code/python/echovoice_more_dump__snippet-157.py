@@ -1,0 +1,1 @@
+- \( L = D - A \): Laplacian (D degree matrix, A adjacency from tensions).

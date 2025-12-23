@@ -1,0 +1,4 @@
+def find_nothing(importer, path_item, only=False):
+    return ()
+
+

@@ -1,0 +1,1 @@
+  - Extracted all equations across all sections, including duplicates from repeated documents.

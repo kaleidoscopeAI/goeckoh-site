@@ -1,0 +1,11 @@
+def install_editable(
+    *,
+    global_options: Sequence[str],
+    prefix: Optional[str],
+    home: Optional[str],
+    use_user_site: bool,
+    name: str,
+    setup_py_path: str,
+    isolated: bool,
+    build_env: BuildEnvironment,
+    unpacked_source_directory: str,

@@ -1,0 +1,6 @@
+async def query_reflect():
+    data = await request.get_json()
+    text = data.get('text', '')
+    reflection = core.llm.reflect(text)
+    return jsonify({'reflection': reflection})
+

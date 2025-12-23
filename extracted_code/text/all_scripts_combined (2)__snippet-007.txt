@@ -1,0 +1,6 @@
+class SpeechData:
+    """Payload for transcribed speech information."""
+    raw_text: str
+    corrected_text: str
+    is_final: bool
+

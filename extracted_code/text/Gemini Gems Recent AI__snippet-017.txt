@@ -1,0 +1,3 @@
+Convert molecular data (e.g., SMILES format) into numerical features using cheminformatics libraries like RDKit.
+
+

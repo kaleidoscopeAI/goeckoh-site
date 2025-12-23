@@ -1,0 +1,19 @@
+def ensure_venv_and_reexec():
+    ROOT.mkdir(parents=True, exist_ok=True)
+    (ROOT / "state").mkdir(exist_ok=True, parents=True)
+    if os.environ.get("SC_BOOTED") == "1":
+        return
+    if not VENV.exists():
+        print("[setup] Creating venv:", VENV)
+        venv.create(VENV, with_pip=True)
+    pip = VENV / ("Scripts/pip.exe" if os.name == "nt" else "bin/pip")
+    py = VENV / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
+    print("[setup] Installing deps…")
+    subprocess.check_call([str(pip), "install", "--upgrade", "pip"], stdout=sys.stdout)
+    subprocess.check_call([str(pip), "install"] + REQ, stdout=sys.stdout)
+    env = os.environ.copy()
+    env["SC_BOOTED"] = "1"
+    print("[setup] Relaunching inside venv…")
+    os.execvpe(str(py), [str(py), __file__], env)
+
+# Allow running from /mnt/data sandbox by copying into project dir when started via stdin

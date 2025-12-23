@@ -1,0 +1,3 @@
+  with the blueprint. Next, I'll check the heart class definition to understand
+  available data and plan the implementation accordingly.
+

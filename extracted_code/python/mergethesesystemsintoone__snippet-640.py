@@ -1,0 +1,2 @@
+A complete version of the LLMProcessor class is included directly within this script file.
+Important: This version correctly loads configuration (model names) from llm_config.json (and creates a default if it's missing), includes lazy loading, and automatic device detection (cuda/cpu). It contains the methods for structure analysis, NER, batch classification, batch summarization, web crawling, and conversation (using the dedicated conversation model).

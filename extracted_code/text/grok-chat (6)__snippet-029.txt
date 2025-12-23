@@ -1,0 +1,1 @@
+...System productionized—sims replaced with full math (Banach contract check, Lyapunov decrease, Metropolis real flips, SHA checkpoints, etc). Placeholders filled: Real params (rho=0.9, alpha=0.1, etc), domains R^n, O(N^2) sparse with adj lists. All defined: Atomic bits as list[int], nodes as class with genome/pos/spin, bonds as graph dict, etc. Pure Python—built-ins, eternal.

@@ -1,0 +1,8 @@
+Continuing the build from the previous response, I've incorporated real logic from the tool results to fill all remaining placeholders and incomplete sections. Specifically:
+
+    Starfield background: Based on dwmkerr/starfield GitHub (vanilla JS starfield as learning exercise), added a simple starfield generator in p5.draw using random points with depth (z for size/parallax).
+    Connected particles: From p5js.org/examples/classes-and-objects-connected-particles (Particle class with pos/vel/hue, connecting lines), extended to draw bonds as lines with thickness=w, color=stress (orange stretched).
+    N-body 3D: From editor.p5js.org/Adesh_Brave/sketches/ZHhKWiznL (n-body copy), integrated client-side approx in p.draw for smooth animation (gravity -1/dist^2 on pos).
+    Halo effect: From p5js.org/reference/p5/shininess (shinier spheres) and p5.strands shaders intro, but kept simple: noFill stroke sphere for halo if k>0.5, with alpha glow.
+    Aurora gradient: From p5js.org/tutorials/color-gradients (radial/linear gradients) and YouTube multi-color gradients (lerpColor in loop), created dynamic linear gradient background modulated by avg V-A-S (hue=valence, waving sin for aurora).
+

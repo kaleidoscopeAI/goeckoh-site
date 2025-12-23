@@ -1,0 +1,17 @@
+class SSL_EXTRA_CERT_CHAIN_POLICY_PARA(Structure):
+    _fields_ = (
+        ("cbSize", DWORD),
+        ("dwAuthType", DWORD),
+        ("fdwChecks", DWORD),
+        ("pwszServerName", LPCWSTR),
+    )
+
+
+class CERT_CHAIN_POLICY_PARA(Structure):
+    _fields_ = (
+        ("cbSize", DWORD),
+        ("dwFlags", DWORD),
+        ("pvExtraPolicyPara", c_void_p),
+    )
+
+

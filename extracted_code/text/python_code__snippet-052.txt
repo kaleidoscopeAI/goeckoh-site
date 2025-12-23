@@ -1,0 +1,2 @@
+# * \PY@toks parses the list of classes, using magic inspired by the
+#   keyval package (but modified to use plusses instead of commas

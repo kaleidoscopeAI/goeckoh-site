@@ -1,0 +1,2 @@
+class a user of ``chardet`` should use.
+

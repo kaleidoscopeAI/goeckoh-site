@@ -1,0 +1,10 @@
+def evo():
+    con = sqlite3.connect(DB_PATH)
+    cur = con.cursor()
+    cur.execute("SELECT * FROM evo_states ORDER BY id DESC LIMIT 1")
+    row = cur.fetchone()
+    con.close()
+    if row:
+        return {"dna": json.loads(row[3]), "phi": row[4], "generation": row[5]}
+    return {"dna": [], "phi": 0.0, "generation": 0}
+

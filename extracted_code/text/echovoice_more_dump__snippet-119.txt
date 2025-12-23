@@ -1,0 +1,1 @@
+Selection: evaluate Seli using batched affinity computations (vectorized dot products).

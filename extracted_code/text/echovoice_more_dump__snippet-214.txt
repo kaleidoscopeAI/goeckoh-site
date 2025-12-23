@@ -1,0 +1,1 @@
+Real-time streaming: push projections Ei (t) to users for UI; compress using PCA/UMAP for bandwidth.

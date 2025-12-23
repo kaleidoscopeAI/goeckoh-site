@@ -1,0 +1,12 @@
+ 1. Add Avatar18k class and integrate:
+           Construct in Orchestrator.__init__.
+
+           Call self.avatar.update(self.hbits, self.sfield, self.last_caption_text) each tick.
+ 2. Expose /avatar websocket that sends avatar.frame_bytes() ~10 FPS.
+ 3. Autonomous ingest priority: local → cache → (optional) online (guard with ALLOW_ONLINE).
+
+ 4. Startup: launch orch.run() and avatar stream without needing UI events.
+ 5. Status: add hbits and sfield to /status.
+ 6. UI: point the 3D panel at /avatar (or open the provided avatar_client.html).
+
+

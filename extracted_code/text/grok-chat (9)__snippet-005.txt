@@ -1,0 +1,5 @@
+  on port 8080, using EnhancedVisualizationService to process streamed
+  transcript updates with debounced handling. I'll add SSE connection state
+  handling and update UI targets accordingly, including a connection badge in
+  the header.
+

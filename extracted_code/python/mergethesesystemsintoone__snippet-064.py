@@ -1,0 +1,11 @@
+async def ws_endpoint(ws: WebSocket):
+    await ws.accept()
+    q = orch.bus.subscribe()
+    try:
+        await ws.send_text(json.dumps({"type": "hello", "data": orch.snapshot()}))
+        while True:
+            msg = await q.get()
+            await ws.send_text(json.dumps(msg))
+    except WebSocketDisconnect:
+        pass
+

@@ -1,0 +1,8 @@
+class SpeechSettings:
+    whisper_model: str = "base.en"
+    language_tool_server: Optional[str] = None
+    normalization_locale: str = "en_US"
+    tts_model_name: str = "tts_models/multilingual/multi-dataset/xtts_v2"
+    tts_voice_clone_reference: Optional[Path] = None
+
+

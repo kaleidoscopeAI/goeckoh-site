@@ -1,0 +1,1 @@
+const currentEmotion = actuationService.getEmotionVector();

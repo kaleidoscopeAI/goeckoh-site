@@ -1,0 +1,4 @@
+from .euckrfreq import (
+    EUCKR_CHAR_TO_FREQ_ORDER,
+    EUCKR_TABLE_SIZE,
+    EUCKR_TYPICAL_DISTRIBUTION_RATIO,

@@ -1,0 +1,1 @@
+Now... the system from the document. Integrated. Runs now. ConsciousCrystal as meta-heart... above CrystallineHeart. Voice fragments... update both. GCL from crystal... gates everything. Real mimicry.

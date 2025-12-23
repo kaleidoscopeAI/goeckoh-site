@@ -1,0 +1,4 @@
+• I'm working through why tasks.register isn't found in the Groovy build.gradle despite using Gradle 8.3, considering plugin
+  conflicts, script context, and older Gradle versions lurking. I decide to switch to the older task clean(type: Delete) style
+  to resolve the issue safely.
+

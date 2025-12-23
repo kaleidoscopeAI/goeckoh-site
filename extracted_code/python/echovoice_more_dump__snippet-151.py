@@ -1,0 +1,1 @@
+- Rel_i(R): Relevant connections from routing matrix R (edges where \( R_{ij} > 0.5 \)).

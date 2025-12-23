@@ -1,0 +1,1 @@
+This completes viz with all effects from tools. System now fully operational: cosmic particles connect/halo/glow/gradient/wave, n-body clusters. For drug, call worker with SMILES. If more, "finish build".

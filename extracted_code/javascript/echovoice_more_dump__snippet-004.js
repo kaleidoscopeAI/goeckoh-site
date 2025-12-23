@@ -1,0 +1,1 @@
+    • AC typically focuses on real-time performance, stability guarantees, and scenarios with limited data, whereas ML often deals with large datasets and complex function approximation, sometimes offline.62

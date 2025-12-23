@@ -1,0 +1,1 @@
+device-state and internal-state using cryptographic commitments + entropy checks. Put this in native/src/security.rs:

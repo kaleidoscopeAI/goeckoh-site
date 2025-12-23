@@ -1,0 +1,12 @@
+def install_req_from_editable(
+    editable_req: str,
+    comes_from: Optional[Union[InstallRequirement, str]] = None,
+    *,
+    use_pep517: Optional[bool] = None,
+    isolated: bool = False,
+    global_options: Optional[List[str]] = None,
+    hash_options: Optional[Dict[str, List[str]]] = None,
+    constraint: bool = False,
+    user_supplied: bool = False,
+    permit_editable_wheels: bool = False,
+    config_settings: Optional[Dict[str, Union[str, List[str]]]] = None,

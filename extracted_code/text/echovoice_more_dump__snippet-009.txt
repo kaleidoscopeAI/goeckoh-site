@@ -1,0 +1,1 @@
+The user's plan leans towards Phi-2 due to its reasoning capabilities. While valid, this choice necessitates addressing the conversational deficit. Relying on Dolphin Phi or extensive prompt engineering introduces uncertainty and potential development overhead compared to using models explicitly designed for instruction following.

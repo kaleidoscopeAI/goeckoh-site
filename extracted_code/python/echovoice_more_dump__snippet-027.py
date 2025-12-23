@@ -1,0 +1,1 @@
+Interacting with the Ollama API from a JavaScript environment (e.g., a Node.js backend, a browser-based visualization tool, or a browser extension) can be achieved using the standard fetch API.81 Below are conceptual examples for making POST requests.

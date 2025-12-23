@@ -1,0 +1,1 @@
+- 100% offline & private (Ollama & models local)

@@ -1,0 +1,4 @@
+• I'm planning to keep the original class name for compatibility but add a new
+  alias reflecting a more scientific term, adding a clear docstring and a
+  comment, while leaving existing references and field names unchanged.
+

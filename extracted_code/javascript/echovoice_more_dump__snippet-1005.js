@@ -1,0 +1,1 @@
+- **Contraction Mapping**: The global function **G** was designed to be a contraction mapping. In a simplified example with **G(S, O, R, I) = A S

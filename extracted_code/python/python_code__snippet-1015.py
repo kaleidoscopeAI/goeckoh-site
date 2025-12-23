@@ -1,0 +1,9 @@
+def install(
+    console: Optional["Console"] = None,
+    overflow: "OverflowMethod" = "ignore",
+    crop: bool = False,
+    indent_guides: bool = False,
+    max_length: Optional[int] = None,
+    max_string: Optional[int] = None,
+    max_depth: Optional[int] = None,
+    expand_all: bool = False,

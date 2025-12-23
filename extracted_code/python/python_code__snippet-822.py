@@ -1,0 +1,2 @@
+def SetConsoleCursorInfo(
+    std_handle: wintypes.HANDLE, cursor_info: CONSOLE_CURSOR_INFO

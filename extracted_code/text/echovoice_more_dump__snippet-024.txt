@@ -1,0 +1,2 @@
+The UNI system exhibits advanced autonomy through Self-Directed Information Foraging.1 The LLM, acting on internal states and goals, actively generates targeted queries, modeled by Query=f(State,Goals), which directs the AutonomousWebCrawler to acquire external data.1 The crawler processes this web data using parsing methods like BeautifulSoup and injects the raw content directly into the organic cycle as web_input, influencing memory formation and emotional dynamics.1 This feedback loop drives continuous adaptive learning.
+

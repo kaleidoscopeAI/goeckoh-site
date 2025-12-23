@@ -1,0 +1,2 @@
+I'm now implementing the AudioKernel struct, integrating cpal for audio I/O and ringbuf for thread-safe buffer transfer. My focus is the wiener_filter function utilizing rustfft, ensuring proper spectral gating, and simulated ort session setup. I'm also setting up the maturin build process, and I'm updating goeckoh_brain/agents.py with SequentialAgent and Agent classes. I'm prioritizing complete code over conceptual examples, aiming to provide a runnable foundation.
+

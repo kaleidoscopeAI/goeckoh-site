@@ -1,0 +1,1 @@
+Extracting Mathematical Equations from Documents

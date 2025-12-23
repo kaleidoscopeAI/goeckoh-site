@@ -1,0 +1,3 @@
+  If you want, I’ll add a “data capture + export” script to package PPP fragments and transcripts into a training-ready zip for
+  when a GPU is available.
+

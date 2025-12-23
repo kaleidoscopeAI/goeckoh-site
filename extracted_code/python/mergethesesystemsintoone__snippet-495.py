@@ -1,0 +1,30 @@
+    async def _process_complex(
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def _apply_specialization(self, data: Dict[str, Any]) -> Dict[str, Any]:
+
+
+
+

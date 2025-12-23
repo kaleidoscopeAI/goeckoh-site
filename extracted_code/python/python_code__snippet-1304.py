@@ -1,0 +1,7 @@
+def get_scheme(
+    dist_name: str,
+    user: bool = False,
+    home: typing.Optional[str] = None,
+    root: typing.Optional[str] = None,
+    isolated: bool = False,
+    prefix: typing.Optional[str] = None,

@@ -1,0 +1,2 @@
+53 |     pub fn invalid_format<S: Into<String>>(msg: S) -> Self {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

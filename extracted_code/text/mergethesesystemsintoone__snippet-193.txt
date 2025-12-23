@@ -1,0 +1,2 @@
+Builds a dependency graph (dependencies_graph) using NetworkX.
+Detects potential security issues using regex-based pattern matching.

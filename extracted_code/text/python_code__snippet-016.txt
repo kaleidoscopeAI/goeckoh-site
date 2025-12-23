@@ -1,0 +1,4 @@
+    class BaseSSLError(BaseException):
+        pass
+
+

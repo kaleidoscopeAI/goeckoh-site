@@ -1,0 +1,6 @@
+class SpeechModelSettings:
+    whisper_model: str = "small.en"
+    language_tool_server: str = "http://localhost:8081"
+    tts_model_name: str = "tts_models/multilingual/multi-dataset/your_tts"
+    tts_voice_clone_reference: Path | None = None
+

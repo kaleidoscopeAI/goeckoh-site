@@ -1,0 +1,6 @@
+The Cube tracks molecular stability using advanced spectral graph theory and state evolution techniques:
+
+
+Stability Metrics: Computes node stability using Laplacian eigenvectors, identifying stable binding configurations.
+
+

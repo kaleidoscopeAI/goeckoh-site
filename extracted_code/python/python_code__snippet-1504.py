@@ -1,0 +1,9 @@
+def install_given_reqs(
+    requirements: List[InstallRequirement],
+    global_options: Sequence[str],
+    root: Optional[str],
+    home: Optional[str],
+    prefix: Optional[str],
+    warn_script_location: bool,
+    use_user_site: bool,
+    pycompile: bool,

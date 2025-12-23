@@ -1,0 +1,1 @@
+Implement ∂w_ij/∂K_i analytically or compute using small functions produced by bond module.

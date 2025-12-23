@@ -1,0 +1,1 @@
+can be embedded in React using react-plotly.js or @plotly/react-plotly.js.

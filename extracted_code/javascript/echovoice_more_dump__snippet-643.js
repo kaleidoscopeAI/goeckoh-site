@@ -1,0 +1,1 @@
+function colorForActivation(a: number) {

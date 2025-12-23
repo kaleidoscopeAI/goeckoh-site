@@ -1,0 +1,4 @@
+• The ASR helper fails to initialize likely due to missing ONNX asset files or the sherpa_onnx package not being installed in
+  the environment; the helper returns None causing a 503 error. Next, I'll examine the logs in /tmp to confirm the failure
+  reason.
+

@@ -1,0 +1,1 @@
+Text Processing: TextNode analyzes, summarizes, extracts entities, and generates responses using a GPT processor, with concurrency for scalability.

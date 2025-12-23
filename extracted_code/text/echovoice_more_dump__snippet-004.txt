@@ -1,0 +1,1 @@
+For computational implementation, the OU process is typically simulated using discretization methods like the Euler-Maruyama scheme.27 This approximates the continuous SDE with a discrete-time update rule:

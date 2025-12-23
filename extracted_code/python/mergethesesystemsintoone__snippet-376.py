@@ -1,0 +1,12 @@
+def evaluate(self, insight: Dict) -> float:
+    """Evaluates an insight against the defined values."""
+    score = 0.0
+    if insight.get("type") == "logical_result":
+        score += self.values["truth"] * insight.get("validity", 0.0)
+    if insight.get("type") == "new_pattern":
+        score += self.values["novelty"] * insight.get("uniqueness", 0.0)
+    if insight.get("type") == "optimization":
+        score += self.values["efficiency"] * insight.get("efficiency_gain", 0.0)
+    if insight.get("type") == "merged_insight":
+        score += self.values["coherence"] * insight.get("coherence_score", 0.0)
+    return score

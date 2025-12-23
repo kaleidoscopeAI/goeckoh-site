@@ -1,0 +1,1 @@
+continue in the most logical direction. only produce code from here out. the explainations srown out the code. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 46

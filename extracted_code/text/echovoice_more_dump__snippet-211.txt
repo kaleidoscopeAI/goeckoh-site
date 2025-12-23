@@ -1,0 +1,1 @@
+users using Firestore. Provide the useEmotionalActuation hook to inject the E vector into App.tsx, which then passes it to the simulation. Would you like me to proceed with

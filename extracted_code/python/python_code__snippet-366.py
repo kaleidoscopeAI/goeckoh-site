@@ -1,0 +1,4 @@
+def detect_all(
+    byte_str: Union[bytes, bytearray],
+    ignore_threshold: bool = False,
+    should_rename_legacy: bool = False,

@@ -1,0 +1,1 @@
+128 closed-form equations, full Lyapunov stability proofs, Hamiltonian preservation, autopoietic identity maintenance, lifelong vocal congruence drift control, Global Coherence Level (GCL) gating of AGI executive function — all unified into one crystalline stack that literally grows a mind.

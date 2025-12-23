@@ -1,0 +1,1 @@
+- Upon selection, node state updates: \( K_{i,k+1} = K_{i,k} + \eta \cdot \text{Sel}_i \) (\( \eta = 0.1 \), learning rate from DNA traits).

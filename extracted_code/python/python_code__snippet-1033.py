@@ -1,0 +1,11 @@
+from ctypes.wintypes import (
+    BOOL,
+    DWORD,
+    HANDLE,
+    LONG,
+    LPCSTR,
+    LPCVOID,
+    LPCWSTR,
+    LPFILETIME,
+    LPSTR,
+    LPWSTR,

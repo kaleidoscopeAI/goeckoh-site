@@ -1,0 +1,2 @@
+package com.kaleidoscope.body
+data class ConsciousState(val awareness: Float, val valence: Float, val coherence: Float)

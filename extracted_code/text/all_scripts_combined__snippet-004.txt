@@ -1,0 +1,3 @@
+Windows: C:\\Users\\<username>\\.echo_companion\\logs\\
+macOS: /Users/<username>/.echo_companion/logs/
+Linux: /home/<username>/.echo_companion/logs/

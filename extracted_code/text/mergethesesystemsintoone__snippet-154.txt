@@ -1,0 +1,1 @@
+Code Analysis Pipeline: The UnravelAITaskManager defines a specific workflow for analyzing codebases—setup, code analysis, and summarization—using the LLMProcessor’s advanced methods (e.g., structure analysis, NER, summarization).

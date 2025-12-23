@@ -1,0 +1,3 @@
+- Add a Jacobian computation method using finite differences to check \(\rho(J_G) < 1\).
+- Implement emergence detection using z-score on GCL and spectral radius checks.
+- Add Lyapunov function monitoring (\( V(S) = \|S - S^*\|_2^2 \)).

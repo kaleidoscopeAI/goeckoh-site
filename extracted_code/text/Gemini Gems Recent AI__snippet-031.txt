@@ -1,0 +1,5 @@
+class Molecule(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    smiles = db.Column(db.String, unique=True, nullable=False)
+    #... other properties (calculated features, etc.)
+

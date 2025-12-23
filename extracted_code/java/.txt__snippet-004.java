@@ -1,0 +1,1 @@
+- 100% local & private (Whisper + XTTS + Ollama on your own machine)

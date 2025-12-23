@@ -1,0 +1,5 @@
+def get_supported(
+    version: Optional[str] = None,
+    platforms: Optional[List[str]] = None,
+    impl: Optional[str] = None,
+    abis: Optional[List[str]] = None,

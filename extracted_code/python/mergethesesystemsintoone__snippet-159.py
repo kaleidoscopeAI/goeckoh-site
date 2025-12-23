@@ -1,0 +1,9 @@
+async def startup():
+    global redis
+    try:
+        redis = await aioredis.Redis.from_url(REDIS_URL)
+        await redis.ping()
+    except:
+        redis = None  # Fallback
+    await init_llm()
+

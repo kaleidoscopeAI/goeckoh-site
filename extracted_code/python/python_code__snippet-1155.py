@@ -1,0 +1,2 @@
+    ENV="env",  # from PIP_CONFIG_FILE
+    ENV_VAR="env-var",  # from Environment Variables

@@ -1,0 +1,2 @@
+2.  `LocalLLM` class (DeepSeek wrapper)
+3.  `CrystallineHeart` class (Emotion Engine)

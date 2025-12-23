@@ -1,0 +1,4 @@
+class BehaviorSettings:
+    correction_echo_enabled: bool = True
+    support_voice_enabled: bool = False
+

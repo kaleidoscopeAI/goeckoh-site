@@ -1,0 +1,7 @@
+def get_scheme(
+    dist_name: str,
+    user: bool = False,
+    home: Optional[str] = None,
+    root: Optional[str] = None,
+    isolated: bool = False,
+    prefix: Optional[str] = None,

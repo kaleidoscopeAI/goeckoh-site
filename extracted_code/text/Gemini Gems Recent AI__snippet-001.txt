@@ -1,0 +1,16 @@
+
+You: "Find me compounds similar to aspirin but safer for the stomach"
+
+
+AI: *Streams PubChem data for NSAIDs*
+
+*Queries protein structures for COX-1/COX-2 selectivity*
+
+*Generates 3D visualization of binding sites*
+
+"I found 47 compounds with COX-2 selectivity. Watch as I simulate
+
+their binding to see which ones avoid gastric side effects..."
+
+*Nodes begin interacting in 3D space*
+

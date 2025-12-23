@@ -1,0 +1,1 @@
+1. npm install firebase (or firebase-admin + adapt init if using admin SDK).

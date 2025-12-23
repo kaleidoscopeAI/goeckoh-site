@@ -1,0 +1,8 @@
+Printed using ChatGPT to PDF, powered by PDFCrowd HTML to PDF API.                                                                                  66/124
+
+  # /status   -> JSON snapshot
+  # /recent?table=energetics   -> latest energetics/captions/etc.
+  # /ws      -> realtime stream (metrics, suggestions, energetics, captions)
+
+
+

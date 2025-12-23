@@ -1,0 +1,10 @@
+async def ws_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while True:
+            data = await websocket.receive_text()
+            response = await llm_generate([data])
+            await websocket.send_text(response[0])
+    except WebSocketDisconnect:
+        pass
+

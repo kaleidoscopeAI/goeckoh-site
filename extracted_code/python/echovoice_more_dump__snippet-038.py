@@ -1,0 +1,1 @@
+The proposed loop structure explicitly incorporates feedback from the LLM's reflection back into the simulation via the Transformation Engine. This design holds the potential for generating emergent behaviors, where the system's trajectory is altered in non-trivial ways by its own "internal" commentary.

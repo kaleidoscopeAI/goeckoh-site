@@ -1,0 +1,8 @@
+class GuidanceScript:
+    event: str
+    title: str
+    message: str
+    style: str = "neutral"  # Default voice style
+    breathing_steps: Optional[List[str]] = None
+
+

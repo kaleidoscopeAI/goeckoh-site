@@ -1,0 +1,22 @@
+def setup_virtual_environment():
+    """Set up and activate a virtual environment for the task manager."""
+    venv_dir = Path(".venv")
+    if sys.prefix != sys.base_prefix:
+        print("Already in a virtual environment.")
+        return True
+    
+    if not venv_dir.exists():
+        print(f"Creating virtual environment in {venv_dir}...")
+        try:
+            subprocess.run([sys.executable, "-m", "venv", str(venv_dir)], check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Failed to create virtual environment: {e}")
+            return False
+    
+    if platform.system() == "Windows
+
+
+
+
+
+

@@ -1,0 +1,3 @@
+• I'm listing processes matching the target pattern to confirm the exact process to terminate, since using pkill by pattern
+  might kill unintended processes.
+

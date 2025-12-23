@@ -1,0 +1,18 @@
+LOCAL_PATH := $(call my-dir)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := webrtc_ns_jni
+LOCAL_SRC_FILES := webrtc_ns_wrapper.cpp
+LOCAL_LDLIBS := -llog
+LOCAL_STATIC_LIBRARIES := webrtc_ns
+include $(BUILD_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := webrtc_ns
+LOCAL_SRC_FILES := $(WEBRTC_SRC)/modules/audio_processing/ns/ns.cc \
+                   $(WEBRTC_SRC)/modules/audio_processing/ns/nsx_core.cc \
+                   $(WEBRTC_SRC)/modules/audio_processing/ns/nsx_core_c.cc \
+                   # Add other necessary WebRTC NS source files
+LOCAL_C_INCLUDES := $(WEBRTC_SRC)
+LOCAL_CFLAGS := -DWEBRTC_POSIX -DWEBRTC_LINUX -DWEBRTC_ANDROID
+include $(BUILD_STATIC_LIBRARY)

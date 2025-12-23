@@ -1,0 +1,4 @@
+from .euctwfreq import (
+    EUCTW_CHAR_TO_FREQ_ORDER,
+    EUCTW_TABLE_SIZE,
+    EUCTW_TYPICAL_DISTRIBUTION_RATIO,

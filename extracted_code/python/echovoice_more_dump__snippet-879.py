@@ -1,0 +1,17 @@
+def main():
+    parser = argparse.ArgumentParser(description="Kaleidoscope AI - Unified Core System")
+    parser.add_argument("--file", "-f", help="Path to software file to ingest")
+    args = parser.parse_args()
+    
+    if not args.file:
+        print("Please specify a file with --file")
+        return 1
+    
+    kaleidoscope = KaleidoscopeCore()
+    result = kaleidoscope.ingest_software(args.file)
+    
+    print(f"Ingested {args.file} - Type: {result['file_type']}")
+    print(f"Decompiled files: {len(result['decompiled_files'])}")
+    
+    return 0
+

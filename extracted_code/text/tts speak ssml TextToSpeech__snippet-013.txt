@@ -1,0 +1,1 @@
+// - Language detection using Lingua (open-source Kotlin library). Dependency: implementation 'com.github.pemistahl:lingua:1.3.0'

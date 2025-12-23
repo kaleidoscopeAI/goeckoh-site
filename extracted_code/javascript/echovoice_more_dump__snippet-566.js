@@ -1,0 +1,1 @@
+const cur = svc.getCurrent();

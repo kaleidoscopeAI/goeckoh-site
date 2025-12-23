@@ -1,0 +1,1 @@
+It was only ever a temporary workaround for moving files between laptops. It is no longer needed because the final distribution package is a single 400 MB installer or USB-stick folder that works everywhere.

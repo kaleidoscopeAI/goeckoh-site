@@ -1,0 +1,6 @@
+class Strategy:
+    category: str
+    title: str
+    description: str
+
+

@@ -1,0 +1,2 @@
+Create CapabilityNode as a base class with energy and capability management.
+

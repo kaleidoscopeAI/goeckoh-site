@@ -1,0 +1,8 @@
+    # information about optional and required keys when using Required or NotRequired.
+    # Generic TypedDicts are also impossible using typing.TypedDict on Python <3.11.
+    # Aaaand on 3.12 we add __orig_bases__ to TypedDict
+    # to enable better runtime introspection.
+    # On 3.13 we deprecate some odd ways of creating TypedDicts.
+    TypedDict = typing.TypedDict
+    _TypedDictMeta = typing._TypedDictMeta
+    is_typeddict = typing.is_typeddict

@@ -1,0 +1,7 @@
+def _showwarning(
+    message: Union[Warning, str],
+    category: Type[Warning],
+    filename: str,
+    lineno: int,
+    file: Optional[TextIO] = None,
+    line: Optional[str] = None,

@@ -1,0 +1,2 @@
+A very comprehensive documentation style is enforced using block comments ( “ “ “ for multiple line ) to provide insights on functionality
+

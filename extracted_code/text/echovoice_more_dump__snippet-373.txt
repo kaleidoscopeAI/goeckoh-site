@@ -1,0 +1,1 @@
+// simple Euler-like per-node update using engine deltas (deterministic small step)

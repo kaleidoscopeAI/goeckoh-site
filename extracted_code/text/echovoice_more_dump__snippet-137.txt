@@ -1,0 +1,8 @@
+ │ ✓  ReadManyFiles Will attempt to read and concatenate files using patterns:…                                       │
+ │                                                                                                                    │
+ │                                                                                                                    │
+ │    ### ReadManyFiles Result (Target Dir: `/home/jacob/CascadeProjects`)                                            │
+ │                                                                                                                    │
+ │    No files were read and concatenated based on the criteria.                                                      │
+ ╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+

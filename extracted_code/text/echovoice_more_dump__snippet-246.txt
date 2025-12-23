@@ -1,0 +1,1 @@
+Perfect. The next step is to replace the placeholder sparse math with a GPU-accelerated implementation using WebGPU. This will give you orders-of-

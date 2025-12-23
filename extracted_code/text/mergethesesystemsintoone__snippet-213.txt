@@ -1,0 +1,1 @@
+$stmt = $this->db->prepare('INSERT OR REPLACE INTO dna (gen, phi) VALUES (:gen, :phi);');

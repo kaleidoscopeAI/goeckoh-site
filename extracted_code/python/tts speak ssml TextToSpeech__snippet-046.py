@@ -1,0 +1,20 @@
+  2. Run from repo root:
+     gradle wrapper --gradle-version 8.3 --distribution-type=bin
+     (Ensure the new Gradle is first on PATH, e.g., export PATH=/path/to/gradle-8.3/bin:$PATH.)
+
+  After that you’ll have ./gradlew, gradle/wrapper/gradle-wrapper.properties, and the wrapper JAR, and you can run ./gradlew
+  assembleDebug.
+
+  Assets still needed in app/src/main/assets/:
+
+  - vosk-model-small-en-us-0.15.zip
+  - vosk-model-small-es-0.42.zip
+  - vosk-model-small-fr-0.22.zip
+  - vits-piper-en_US-amy-medium.onnx
+  - vits-piper-es_ES-mls_9972-medium.onnx
+  - vits-piper-fr_FR-upmc-medium.onnx
+  - gemma-1.1-2b-it-q4f16.task
+
+  Once the wrapper is generated and assets are in place, build with ./gradlew assembleDebug and install the APK.
+
+

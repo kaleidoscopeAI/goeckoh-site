@@ -1,0 +1,31 @@
+    def _simple_clustering(self, nodes):
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def adjust_clusters(self):
+
+
+
+
+
+
+
+
+

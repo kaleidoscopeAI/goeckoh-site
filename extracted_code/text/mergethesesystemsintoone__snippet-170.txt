@@ -1,0 +1,8 @@
+class DecompStrategy(Enum):
+    RADARE2 = "radare2"
+    GHIDRA = "ghidra"
+    RETDEC = "retdec"
+    IDA = "ida"
+    BINARY_NINJA = "binary_ninja"
+    CUSTOM = "custom"
+

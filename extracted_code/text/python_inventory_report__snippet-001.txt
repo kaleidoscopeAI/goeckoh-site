@@ -1,0 +1,2 @@
+    doc: Audio similarity scoring using MFCC + DTW.
+    classes: SimilarityScorer

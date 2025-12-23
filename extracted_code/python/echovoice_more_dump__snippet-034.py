@@ -1,0 +1,1 @@
+Llama 3.2 3B Instruct 5 emerges as another compelling candidate. Its smaller size compared to Mistral 7B suggests potentially faster CPU inference, while still benefiting from the improved Llama 3 architecture.4 Benchmarks indicate it performs well for its size 7, making it a strong contender for CPU-bound tasks.

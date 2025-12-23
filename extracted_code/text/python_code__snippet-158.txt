@@ -1,0 +1,8 @@
+class Stack:
+    exc_type: str
+    exc_value: str
+    syntax_error: Optional[_SyntaxError] = None
+    is_cause: bool = False
+    frames: List[Frame] = field(default_factory=list)
+
+
