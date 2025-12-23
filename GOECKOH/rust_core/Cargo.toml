@@ -1,0 +1,13 @@
+[package]
+name = "bio_audio"
+version = "5.0.0"
+edition = "2021"
+
+[lib]
+name = "bio_audio"
+crate-type = ["cdylib"]
+
+[dependencies]
+# Pinning to a recent, stable version of pyo3
+pyo3 = { version = "0.21.2", features = ["extension-module"] }
+rand = "0.8.5"

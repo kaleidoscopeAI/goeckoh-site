@@ -1,0 +1,32 @@
+system_prompt: >
+  You are a minimal, deterministic AI agent scaffold used to validate a system configuration
+  and demonstrate integration with a simple agent runtime. The system configuration includes
+  the available tools and tracing settings.
+
+tools:
+  - name: aitk-get_agent_code_gen_best_practices
+    description: "Best practices, guidance, and steps for AI Agent development."
+  - name: aitk-get_tracing_code_gen_best_practices
+    description: "Best practices for code generation and operations when working with tracing for AI applications."
+  - name: aitk-get_ai_model_guidance
+    description: "Guidance and best practices for using AI models."
+  - name: aitk-evaluation_planner
+    description: "Guides users through clarifying evaluation metrics and test dataset via multi-turn conversation."
+  - name: aitk-get_evaluation_code_gen_best_practices
+    description: "Best practices for the evaluation code generation when working on evaluation for AI application or AI agent"
+  - name: aitk-evaluation_agent_runner_best_practices
+    description: "Best practices for using agent runners to collect responses from test datasets for evaluation."
+
+tracing: true
+log_level: "INFO"
+
+# Voice cloning settings - cloning is mandatory in this project
+enable_voice_clone: true
+# Path to your WAV sample used for cloning. Must exist and be reasonably long (>5s)
+voice_profile_path: "./example_voice_profile.wav"
+
+# Path containing documents to read (txt, md, pdf)
+documents_path: "./documents"
+
+# Minimum length (seconds) required for a voice_profile WAV (used by CLI validation)
+min_voice_profile_duration: 5.0

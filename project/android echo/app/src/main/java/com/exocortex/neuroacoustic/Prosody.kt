@@ -1,0 +1,9 @@
+package com.exocortex.neuroacoustic
+
+data class Prosody(
+    val pitch: Double,
+    val rate: Double,
+    val arousal: Double,
+    val volume: Double,
+    val pitchVariance: Double
+)

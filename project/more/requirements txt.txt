@@ -1,0 +1,10 @@
+requirements.txt
+
+fastapi
+uvicorn[standard]
+numpy
+For local LLM integration as implied by the architecture
+ollama package or direct API calls would be used in a production environment
+Adding a common HTTP library for external calls
+
+httpx

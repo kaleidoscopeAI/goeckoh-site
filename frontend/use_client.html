@@ -1,0 +1,883 @@
+"use client";
+
+import React from "react";
+
+type EvidenceItem = {
+  title: string;
+  description: string;
+  quote?: string;
+  references: string[];
+};
+
+type DisorderUseCase = {
+  label: string;
+  icon: string;
+  title: string;
+  bullets: string[];
+  references: string[];
+};
+
+const evidenceBlocks: EvidenceItem[] = [
+  {
+    title: "Corollary Discharge & N1 Suppression",
+    description:
+      "During self-generated speech, the brain normally suppresses the N1 component of the auditory evoked potential. In autism and other conditions, this suppression can be reduced, leading to confusion between self-generated and external sounds. Echo substitutes the error-prone signal with a corrected version in the child’s own voice, reinforcing the internal copy of speech motor commands.",
+    quote:
+      "“Echo provides a clean corollary discharge proxy by replaying corrected self-voice, minimizing prediction error in the auditory-motor loop.”",
+    references: [
+      "Ford et al., 2007, Schizophrenia Bulletin",
+      "Heinks-Maldonado et al., 2005, Clinical Neurophysiology",
+    ],
+  },
+  {
+    title: "Predictive Coding & Atypical Priors in ASD",
+    description:
+      "Predictive coding models suggest that the brain continuously matches incoming sensory input to internal predictions. In autism, atypical priors and prediction-error weighting can disrupt auditory-motor integration. By feeding back a highly reliable, identity-congruent signal, Echo down-weights noisy priors and stabilizes speech-related predictions.",
+    quote:
+      "“A high-fidelity self-voice stream becomes a privileged prior for the speech system, allowing noisy bottom-up input to be discounted.”",
+    references: [
+      "Pellicano & Burr, 2012, Trends in Cognitive Sciences",
+      "Lawson et al., 2014, Brain",
+    ],
+  },
+  {
+    title: "Phonological Recording Obligation (PRO)",
+    description:
+      "Every time the child speaks, Echo records the utterance, corrects it, and returns a first-person, accurately articulated version. This induces a ‘Phonological Recording Obligation’: the brain is repeatedly exposed to a stable template for the same intended utterance, nudging motor plans toward the corrected form over time.",
+    quote:
+      "“Recurrent exposure to corrected self-voice acts as an internalized practice loop, without explicit drills or flashcards.”",
+    references: [
+      "Guenther, 2016, Neural Control of Speech",
+      "Tourville & Guenther, 2011, Frontiers in Human Neuroscience",
+    ],
+  },
+];
+
+const useCases: DisorderUseCase[] = [
+  {
+    label: "ASD",
+    icon: "🧩",
+    title: "Autism Spectrum Disorder",
+    bullets: [
+      "Stabilizes self-voice and reduces prediction error by mirroring corrected speech in the child’s own voice.",
+      "Supports emergence of inner speech by transforming externalized attempts into internal, first-person feedback.",
+      "Tracks affective dysregulation (GCL) and automatically shifts into calming, low-prosody inner-voice modes.",
+    ],
+    references: [
+      "Gotham et al., 2013, Autism Research",
+      "Brown et al., 2017, Journal of Autism and Developmental Disorders",
+    ],
+  },
+  {
+    label: "CAS",
+    icon: "🗣️",
+    title: "Childhood Apraxia of Speech (CAS)",
+    bullets: [
+      "Provides a consistent, acoustic ‘target’ for each utterance, derived from the child’s own identity-congruent voice.",
+      "Reinforces accurate motor plans by coupling corrected output with the child’s original intention on every trial.",
+      "Allows low-friction, high-frequency practice in the home without structured drill sets or worksheets.",
+    ],
+    references: [
+      "Maas et al., 2008, Journal of Speech, Language, and Hearing Research",
+      "Murray et al., 2015, American Journal of Speech-Language Pathology",
+    ],
+  },
+  {
+    label: "TBI",
+    icon: "🧠",
+    title: "Traumatic Brain Injury",
+    bullets: [
+      "Acts as a low-load, high-repetition speech-motor scaffold when attention and working memory are limited.",
+      "Offers predictable, identity-congruent feedback that reduces cognitive effort needed to monitor speech.",
+      "Logs changes in coherence and intelligibility to support long-term rehabilitation tracking.",
+    ],
+    references: [
+      "Ylvisaker et al., 2005, Journal of Head Trauma Rehabilitation",
+      "Duff et al., 2008, Brain Injury",
+    ],
+  },
+  {
+    label: "ND",
+    icon: "🌙",
+    title: "Neurodegenerative Disorders (e.g., Alzheimer’s)",
+    bullets: [
+      "Preserves self-voice and agency by maintaining a stable representation of how the user ‘sounds’ to themselves.",
+      "Counters speaking-induced suppression failures by reinforcing the link between intention and acoustic outcome.",
+      "Provides families and clinicians with a longitudinal record of speech clarity and engagement.",
+    ],
+    references: [
+      "Kempler, 1995, Alzheimer Disease and Associated Disorders",
+      "Taler & Phillips, 2008, Clinical Linguistics & Phonetics",
+    ],
+  },
+];
+
+const ForCliniciansPage: React.FC = () => {
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-900">
+      {/* Page wrapper */}
+      <main className="mx-auto flex max-w-6xl flex-col gap-16 px-4 pb-24 pt-16 lg:px-8">
+        {/* HERO */}
+        <section className="space-y-6">
+          <p className="inline-flex items-center rounded-full bg-sky-50 px-3 py-1 text-xs font-medium uppercase tracking-wide text-sky-700">
+            Research &amp; Clinical Foundations
+          </p>
+          <h1 className="text-balance text-4xl font-semibold tracking-tight text-slate-900 md:text-5xl">
+            For Clinicians: A neuro-acoustic corollary-discharge tool that fits
+            inside your practice.
+          </h1>
+          <p className="max-w-3xl text-lg text-slate-700">
+            Goeckoh extends traditional speech and language therapy into the
+            home. It provides a biomimetic feedback loop that mirrors corrected
+            speech in the child&apos;s own voice, reinforcing self-agency,
+            prediction error reduction, and motor plan stabilization between
+            sessions.
+          </p>
+
+          {/* Quick facts row */}
+          <div className="grid gap-4 md:grid-cols-3">
+            <div className="rounded-2xl bg-white p-4 shadow-sm">
+              <p className="text-xs font-semibold uppercase tracking-wide text-sky-600">
+                Inner Voice Mirror
+              </p>
+              <p className="mt-2 text-sm text-slate-700">
+                Corrected speech is played back within seconds in the child&apos;s
+                cloned voice, preserving prosody, rhythm, and identity.
+              </p>
+            </div>
+            <div className="rounded-2xl bg-white p-4 shadow-sm">
+              <p className="text-xs font-semibold uppercase tracking-wide text-emerald-600">
+                Crystalline Heart (GCL)
+              </p>
+              <p className="mt-2 text-sm text-slate-700">
+                A 1024-node emotional lattice produces a Global Coherence Level
+                (GCL) that gates how assertive or calming the echo should be.
+              </p>
+            </div>
+            <div className="rounded-2xl bg-white p-4 shadow-sm">
+              <p className="text-xs font-semibold uppercase tracking-wide text-violet-600">
+                Evidence-Aligned
+              </p>
+              <p className="mt-2 text-sm text-slate-700">
+                Built on predictive coding, corollary discharge, and
+                motor-speech models—aligned with current neurological and SLP
+                research.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* LOOP DIAGRAM */}
+        <section className="space-y-8">
+          <div className="flex items-baseline justify-between gap-4">
+            <h2 className="text-2xl font-semibold tracking-tight text-slate-900">
+              1. The Echo Feedback Loop
+            </h2>
+            <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+              From utterance → correction → self-voice → affective update
+            </p>
+          </div>
+
+          <div className="grid gap-6 rounded-3xl bg-white p-6 shadow-sm lg:grid-cols-[2fr,3fr] lg:p-8">
+            {/* Steps */}
+            <ol className="space-y-4 text-sm text-slate-800">
+              <li className="flex gap-3">
+                <span className="mt-1 flex h-6 w-6 items-center justify-center rounded-full bg-sky-600 text-xs font-semibold text-white">
+                  1
+                </span>
+                <div>
+                  <p className="font-semibold text-slate-900">
+                    Audio capture &amp; autism-tuned VAD
+                  </p>
+                  <p className="mt-1 text-slate-700">
+                    Always-on listening respects long pauses and low-volume
+                    speech. Segments are created only when a genuine speech
+                    attempt is detected.
+                  </p>
+                </div>
+              </li>
+              <li className="flex gap-3">
+                <span className="mt-1 flex h-6 w-6 items-center justify-center rounded-full bg-sky-600 text-xs font-semibold text-white">
+                  2
+                </span>
+                <div>
+                  <p className="font-semibold text-slate-900">
+                    Transcription &amp; linguistic correction
+                  </p>
+                  <p className="mt-1 text-slate-700">
+                    Offline ASR converts the attempt to text. A carefully tuned
+                    correction layer adjusts grammar and form without changing
+                    intent.
+                  </p>
+                </div>
+              </li>
+              <li className="flex gap-3">
+                <span className="mt-1 flex h-6 w-6 items-center justify-center rounded-full bg-sky-600 text-xs font-semibold text-white">
+                  3
+                </span>
+                <div>
+                  <p className="font-semibold text-slate-900">
+                    First-person rewriter
+                  </p>
+                  <p className="mt-1 text-slate-700">
+                    All mirrored speech is cast in first person (&ldquo;I / me /
+                    my&rdquo;), so feedback is perceived as inner voice, not an
+                    external command.
+                  </p>
+                </div>
+              </li>
+              <li className="flex gap-3">
+                <span className="mt-1 flex h-6 w-6 items-center justify-center rounded-full bg-sky-600 text-xs font-semibold text-white">
+                  4
+                </span>
+                <div>
+                  <p className="font-semibold text-slate-900">
+                    Voice Crystal &amp; prosody transfer
+                  </p>
+                  <p className="mt-1 text-slate-700">
+                    The corrected phrase is synthesized in the child&apos;s
+                    cloned timbre, with F0 contour and energy taken from the
+                    original attempt. Identity and rhythm are preserved.
+                  </p>
+                </div>
+              </li>
+              <li className="flex gap-3">
+                <span className="mt-1 flex h-6 w-6 items-center justify-center rounded-full bg-sky-600 text-xs font-semibold text-white">
+                  5
+                </span>
+                <div>
+                  <p className="font-semibold text-slate-900">
+                    Crystalline Heart update (GCL)
+                  </p>
+                  <p className="mt-1 text-slate-700">
+                    The heart lattice integrates acoustic clarity, effort, and
+                    context to update a Global Coherence Level. Future echoes
+                    are gated by this state to remain safe and supportive.
+                  </p>
+                </div>
+              </li>
+            </ol>
+
+            {/* Visual loop diagram */}
+            <div className="flex items-center justify-center">
+              <div className="relative w-full max-w-xl rounded-3xl bg-slate-900 px-6 py-8 text-slate-100">
+                <p className="text-xs font-semibold uppercase tracking-wide text-sky-300">
+                  Neuro-Acoustic Loop
+                </p>
+                <p className="mt-2 text-sm text-slate-200">
+                  A real-time loop that transforms noisy attempts into clear
+                  self-voice while continuously updating affective state.
+                </p>
+
+                <div className="mt-6 grid gap-4 text-xs md:grid-cols-3">
+                  <div className="rounded-2xl bg-slate-800/80 p-3">
+                    <p className="font-semibold">Child Utterance</p>
+                    <p className="mt-1 text-slate-300">
+                      Raw, dysfluent, or low-volume speech.
+                    </p>
+                  </div>
+                  <div className="rounded-2xl bg-slate-800/80 p-3">
+                    <p className="font-semibold">Echo Transform</p>
+                    <p className="mt-1 text-slate-300">
+                      ASR → correction → first person → cloned voice.
+                    </p>
+                  </div>
+                  <div className="rounded-2xl bg-slate-800/80 p-3">
+                    <p className="font-semibold">Self-Voice Feedback</p>
+                    <p className="mt-1 text-slate-300">
+                      High-confidence, identity-congruent input closing the
+                      corollary discharge loop.
+                    </p>
+                  </div>
+                </div>
+
+                {/* small circular GCL gauge */}
+                <div className="pointer-events-none absolute -right-4 bottom-6 hidden h-32 w-32 items-center justify-center rounded-full bg-gradient-to-tr from-emerald-500 to-sky-400 shadow-lg md:flex">
+                  <div className="flex h-24 w-24 flex-col items-center justify-center rounded-full bg-slate-950/80">
+                    <span className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">
+                      GCL
+                    </span>
+                    <span className="text-2xl font-semibold text-emerald-300">
+                      0.82
+                    </span>
+                    <span className="text-[10px] text-slate-400">
+                      Coherent / Green
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* EVIDENCE & CITATIONS */}
+        <section className="space-y-8">
+          <h2 className="text-2xl font-semibold tracking-tight text-slate-900">
+            2. Scientific Rationale &amp; Evidence Alignment
+          </h2>
+          <p className="max-w-3xl text-sm text-slate-700">
+            Echo V4.0 is not a generic voice app; it is a neuro-acoustic
+            intervention layer that explicitly targets known mechanisms in
+            auditory-motor control, predictive coding, and self-agency. Below is
+            how the system aligns with current theory.
+          </p>
+
+          <div className="grid gap-6 md:grid-cols-3">
+            {evidenceBlocks.map((block) => (
+              <article
+                key={block.title}
+                className="flex flex-col rounded-3xl bg-white p-5 shadow-sm"
+              >
+                <h3 className="text-sm font-semibold text-slate-900">
+                  {block.title}
+                </h3>
+                <p className="mt-2 text-xs leading-relaxed text-slate-700">
+                  {block.description}
+                </p>
+                {block.quote && (
+                  <p className="mt-3 rounded-xl bg-slate-50 p-3 text-[11px] italic text-slate-700">
+                    {block.quote}
+                  </p>
+                )}
+                <div className="mt-3 border-t border-slate-100 pt-2">
+                  <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                    Selected References
+                  </p>
+                  <ul className="mt-1 space-y-1 text-[11px] text-slate-600">
+                    {block.references.map((ref) => (
+                      <li key={ref}>{ref}</li>
+                    ))}
+                  </ul>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* CLINICAL WORKFLOW */}
+        <section className="space-y-8">
+          <div className="flex items-baseline justify-between gap-4">
+            <h2 className="text-2xl font-semibold tracking-tight text-slate-900">
+              3. How Goeckoh Fits Into Your Workflow
+            </h2>
+            <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+              Before session • During session • Between sessions
+            </p>
+          </div>
+
+          <div className="grid gap-6 rounded-3xl bg-white p-6 shadow-sm md:grid-cols-[2fr,3fr] md:p-8">
+            <div className="space-y-4">
+              <h3 className="text-sm font-semibold text-slate-900">
+                High-level pattern
+              </h3>
+              <p className="text-xs text-slate-700">
+                You stay in control of goals and targets. Goeckoh runs in the
+                background, logging attempts and providing high-quality
+                self-voice feedback. At each visit, you review metrics, tune
+                profiles, and update targets.
+              </p>
+
+              <dl className="space-y-3 text-xs">
+                <div>
+                  <dt className="font-semibold text-slate-900">
+                    Before the session
+                  </dt>
+                  <dd className="mt-1 text-slate-700">
+                    Review weekly logs: attempt counts, intelligibility scores,
+                    meltdown risk flags, and GCL stability bands. Select 2–3
+                    phrases or behaviors to focus on.
+                  </dd>
+                </div>
+                <div>
+                  <dt className="font-semibold text-slate-900">
+                    During the session
+                  </dt>
+                  <dd className="mt-1 text-slate-700">
+                    Run short &ldquo;mirror drills&rdquo; where the child
+                    speaks and then hears their corrected self-voice. Observe
+                    awareness, comfort, and emerging self-correction.
+                  </dd>
+                </div>
+                <div>
+                  <dt className="font-semibold text-slate-900">
+                    Between sessions
+                  </dt>
+                  <dd className="mt-1 text-slate-700">
+                    Parents simply keep the device running. Echo handles
+                    detection, correction, mirroring, and logging automatically;
+                    no homework packets or worksheets required.
+                  </dd>
+                </div>
+              </dl>
+            </div>
+
+            {/* Timeline visual */}
+            <div className="relative">
+              <div className="absolute left-3 top-4 bottom-4 w-px bg-slate-200 md:left-4" />
+              <ul className="space-y-6 text-xs">
+                {[
+                  {
+                    label: "Step 1",
+                    title: "Baseline & Configuration",
+                    text: "Initial week of passive logging to understand speech patterns, noise levels, and affect dynamics. Clinician sets conservative correction mode and safe phrase list.",
+                  },
+                  {
+                    label: "Step 2",
+                    title: "Targeted Mirroring",
+                    text: "System highlights high-frequency, high-value phrases (e.g., requests, core vocabulary). You link these to clinical goals and monitor change.",
+                  },
+                  {
+                    label: "Step 3",
+                    title: "Expansion & Generalization",
+                    text: "Once stability is observed, Goeckoh gradually introduces new phrase structures while preserving first-person identity and safety rules.",
+                  },
+                  {
+                    label: "Step 4",
+                    title: "Longitudinal Review",
+                    text: "Dashboards show intelligibility trends, self-voice congruence, and GCL stability to support progress notes and research protocols.",
+                  },
+                ].map((step, idx) => (
+                  <li key={step.title} className="relative pl-10 md:pl-12">
+                    <div className="absolute left-0 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-sky-600 text-[10px] font-semibold text-white md:left-1">
+                      {idx + 1}
+                    </div>
+                    <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                      {step.label}
+                    </p>
+                    <p className="mt-0.5 text-sm font-semibold text-slate-900">
+                      {step.title}
+                    </p>
+                    <p className="mt-1 text-slate-700">{step.text}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* CHARTS SECTION */}
+        <section className="space-y-8">
+          <div className="flex items-baseline justify-between gap-4">
+            <h2 className="text-2xl font-semibold tracking-tight text-slate-900">
+              4. Visualizing System State &amp; Progress
+            </h2>
+            <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+              Example visualizations from the clinician dashboard
+            </p>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2">
+            {/* GCL chart */}
+            <div className="rounded-3xl bg-white p-5 shadow-sm">
+              <p className="text-xs font-semibold uppercase tracking-wide text-emerald-600">
+                Global Coherence Level (GCL)
+              </p>
+              <p className="mt-1 text-xs text-slate-700">
+                Higher GCL indicates a more coherent, regulated affective state.
+                Echo uses these bands to choose calming vs. assertive mirroring.
+              </p>
+              <div className="mt-4 rounded-2xl bg-slate-50 p-3">
+                <svg
+                  viewBox="0 0 320 140"
+                  className="h-40 w-full text-emerald-500"
+                >
+                  <defs>
+                    <linearGradient
+                      id="gcl-gradient"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
+                      <stop offset="0%" stopColor="#22c55e" />
+                      <stop offset="100%" stopColor="#0f766e" />
+                    </linearGradient>
+                  </defs>
+                  {/* grid */}
+                  <g stroke="#e2e8f0" strokeWidth="0.5">
+                    <line x1="30" y1="20" x2="30" y2="120" />
+                    <line x1="30" y1="120" x2="300" y2="120" />
+                    {[0, 1, 2, 3].map((i) => (
+                      <line
+                        key={i}
+                        x1="30"
+                        x2="300"
+                        y1={40 + i * 20}
+                        y2={40 + i * 20}
+                      />
+                    ))}
+                  </g>
+                  {/* polyline */}
+                  <polyline
+                    fill="none"
+                    stroke="url(#gcl-gradient)"
+                    strokeWidth={3}
+                    strokeLinecap="round"
+                    points="30,100 70,80 110,60 150,40 190,50 230,35 270,45 300,30"
+                  />
+                  {/* points */}
+                  {[30, 70, 110, 150, 190, 230, 270, 300].map((x, idx) => (
+                    <circle
+                      key={idx}
+                      cx={x}
+                      cy={[100, 80, 60, 40, 50, 35, 45, 30][idx]}
+                      r={3}
+                      fill="#22c55e"
+                    />
+                  ))}
+                  {/* labels */}
+                  <text
+                    x="10"
+                    y="30"
+                    fontSize="9"
+                    fill="#475569"
+                    textAnchor="start"
+                  >
+                    High
+                  </text>
+                  <text
+                    x="10"
+                    y="115"
+                    fontSize="9"
+                    fill="#475569"
+                    textAnchor="start"
+                  >
+                    Low
+                  </text>
+                  <text
+                    x="300"
+                    y="135"
+                    fontSize="9"
+                    fill="#475569"
+                    textAnchor="end"
+                  >
+                    Time
+                  </text>
+                </svg>
+              </div>
+              <p className="mt-2 text-[11px] text-slate-500">
+                In this example week, the child spends most time in the
+                &ldquo;Green&rdquo; band (GCL 0.7–0.9), where the full
+                self-correction hypothesis is active and new linguistic material
+                can be safely introduced.
+              </p>
+            </div>
+
+            {/* Speech attempt funnel */}
+            <div className="rounded-3xl bg-white p-5 shadow-sm">
+              <p className="text-xs font-semibold uppercase tracking-wide text-sky-600">
+                Speech Attempt Pathway
+              </p>
+              <p className="mt-1 text-xs text-slate-700">
+                A high-level view of how many utterances are captured, corrected
+                successfully, and mirrored back in self-voice.
+              </p>
+              <div className="mt-4 grid grid-cols-3 gap-2 text-center text-xs">
+                <div className="rounded-2xl bg-slate-50 p-3">
+                  <p className="text-[11px] font-semibold text-slate-500">
+                    Captured
+                  </p>
+                  <p className="mt-1 text-2xl font-semibold text-slate-900">
+                    284
+                  </p>
+                  <p className="mt-1 text-[11px] text-slate-500">
+                    utterances/week
+                  </p>
+                </div>
+                <div className="rounded-2xl bg-sky-50 p-3">
+                  <p className="text-[11px] font-semibold text-sky-600">
+                    Corrected
+                  </p>
+                  <p className="mt-1 text-2xl font-semibold text-sky-700">
+                    247
+                  </p>
+                  <p className="mt-1 text-[11px] text-slate-500">
+                    clear enough for mirroring
+                  </p>
+                </div>
+                <div className="rounded-2xl bg-emerald-50 p-3">
+                  <p className="text-[11px] font-semibold text-emerald-600">
+                    Mirrored
+                  </p>
+                  <p className="mt-1 text-2xl font-semibold text-emerald-700">
+                    241
+                  </p>
+                  <p className="mt-1 text-[11px] text-slate-500">
+                    played back in self-voice
+                  </p>
+                </div>
+              </div>
+
+              {/* tiny bar chart */}
+              <div className="mt-4 rounded-2xl bg-slate-50 p-3">
+                <svg
+                  viewBox="0 0 260 110"
+                  className="h-28 w-full text-slate-800"
+                >
+                  <g transform="translate(20,10)">
+                    {/* x-axis */}
+                    <line
+                      x1="0"
+                      y1="80"
+                      x2="220"
+                      y2="80"
+                      stroke="#cbd5f5"
+                      strokeWidth="1"
+                    />
+                    {/* bars */}
+                    <rect
+                      x="10"
+                      y="30"
+                      width="40"
+                      height="50"
+                      fill="#e2e8f0"
+                    />
+                    <rect
+                      x="100"
+                      y="20"
+                      width="40"
+                      height="60"
+                      fill="#bae6fd"
+                    />
+                    <rect
+                      x="190"
+                      y="18"
+                      width="40"
+                      height="62"
+                      fill="#bbf7d0"
+                    />
+                    {/* labels */}
+                    <text
+                      x="30"
+                      y="95"
+                      fontSize="9"
+                      textAnchor="middle"
+                      fill="#475569"
+                    >
+                      Captured
+                    </text>
+                    <text
+                      x="120"
+                      y="95"
+                      fontSize="9"
+                      textAnchor="middle"
+                      fill="#475569"
+                    >
+                      Corrected
+                    </text>
+                    <text
+                      x="210"
+                      y="95"
+                      fontSize="9"
+                      textAnchor="middle"
+                      fill="#475569"
+                    >
+                      Mirrored
+                    </text>
+                  </g>
+                </svg>
+              </div>
+
+              <p className="mt-2 text-[11px] text-slate-500">
+                These metrics export cleanly (CSV/JSON) for progress notes,
+                research protocols, or outcome tracking across caseloads.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* DISORDER-SPECIFIC USE CASES */}
+        <section className="space-y-8">
+          <h2 className="text-2xl font-semibold tracking-tight text-slate-900">
+            5. Disorder-Specific Applications
+          </h2>
+          <p className="max-w-3xl text-sm text-slate-700">
+            Echo was designed first for a child with severe autism, but the
+            underlying neuro-acoustic loop generalizes to other conditions where
+            speech, self-agency, or prediction error are disrupted. Each module
+            can be tuned to match your clinical population.
+          </p>
+
+          <div className="grid gap-6 md:grid-cols-2">
+            {useCases.map((item) => (
+              <article
+                key={item.title}
+                className="flex flex-col rounded-3xl bg-white p-5 shadow-sm"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-base">
+                    {item.icon}
+                  </span>
+                  <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                    {item.label}
+                  </p>
+                </div>
+                <h3 className="mt-2 text-sm font-semibold text-slate-900">
+                  {item.title}
+                </h3>
+                <ul className="mt-3 space-y-1.5 text-xs text-slate-700">
+                  {item.bullets.map((b) => (
+                    <li key={b} className="flex gap-2">
+                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-slate-400" />
+                      <span>{b}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-3 border-t border-slate-100 pt-2">
+                  <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                    Supporting Literature
+                  </p>
+                  <ul className="mt-1 space-y-1 text-[11px] text-slate-600">
+                    {item.references.map((ref) => (
+                      <li key={ref}>{ref}</li>
+                    ))}
+                  </ul>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* SAFETY & ETHICS */}
+        <section className="space-y-8">
+          <h2 className="text-2xl font-semibold tracking-tight text-slate-900">
+            6. Safety, Identity, and Ethics
+          </h2>
+
+          <div className="grid gap-6 rounded-3xl bg-slate-900 p-6 text-slate-100 shadow-sm md:grid-cols-[3fr,2fr] md:p-8">
+            <div className="space-y-4 text-sm">
+              <p className="text-xs font-semibold uppercase tracking-wide text-sky-300">
+                First-Person Mirror &amp; Voice Crystal
+              </p>
+              <p className="text-slate-100">
+                Echo&apos;s ethics are baked into its architecture. The system is
+                designed to be a first-person mirror, not a chatbot persona.
+                Every echoed phrase is in the user&apos;s own cloned voice and
+                first-person perspective, preventing confusion with therapist or
+                assistant voices.
+              </p>
+              <ul className="space-y-2 text-xs text-slate-200">
+                <li className="flex gap-2">
+                  <span className="mt-1 h-1.5 w-1.5 rounded-full bg-emerald-300" />
+                  <span>
+                    <strong>Clone-or-silence rule:</strong> If identity
+                    congruence cannot be maintained, the system prefers
+                    silence over a generic synthetic voice.
+                  </span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="mt-1 h-1.5 w-1.5 rounded-full bg-emerald-300" />
+                  <span>
+                    <strong>GCL gating:</strong> When coherence drops below a
+                    clinician-defined threshold, the Deep Reasoning Core is
+                    locked out; only simple mirroring is allowed.
+                  </span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="mt-1 h-1.5 w-1.5 rounded-full bg-emerald-300" />
+                  <span>
+                    <strong>Offline by design:</strong> All audio processing,
+                    modeling, and logging occur on-device. No cloud APIs listen
+                    to the home environment.
+                  </span>
+                </li>
+              </ul>
+            </div>
+
+            {/* small card */}
+            <div className="flex flex-col justify-between rounded-2xl bg-slate-800/70 p-4">
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-sky-300">
+                  Identity Congruence Monitor
+                </p>
+                <p className="mt-2 text-xs text-slate-100">
+                  Each mirrored utterance is scored for acoustic similarity to
+                  the Voice Crystal. If congruence drift exceeds a threshold,
+                  the system flags the sample and optionally suppresses
+                  playback, protecting the child&apos;s sense of self.
+                </p>
+              </div>
+              <div className="mt-4 rounded-xl bg-slate-900/80 p-3 text-[11px]">
+                <p className="font-semibold text-slate-100">
+                  Example Policy Snapshot
+                </p>
+                <ul className="mt-2 space-y-1 text-slate-300">
+                  <li>• Drift &lt; 0.15 → mirror allowed (Green)</li>
+                  <li>• 0.15 ≤ Drift &lt; 0.25 → soft warning (Yellow)</li>
+                  <li>• Drift ≥ 0.25 → suppression &amp; re-sampling (Red)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* DOWNLOADS / CALL TO ACTION */}
+        <section className="space-y-6">
+          <h2 className="text-2xl font-semibold tracking-tight text-slate-900">
+            7. Clinical Resources &amp; Next Steps
+          </h2>
+          <p className="max-w-3xl text-sm text-slate-700">
+            To support both day-to-day practice and formal research, Echo
+            includes exportable metrics and clinician-facing documentation. You
+            can start with a single family and scale across caseloads at your
+            own pace.
+          </p>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            <div className="flex flex-col rounded-2xl bg-white p-4 shadow-sm">
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                PDF
+              </p>
+              <p className="mt-1 text-sm font-semibold text-slate-900">
+                Echo V4.0 Clinical Overview
+              </p>
+              <p className="mt-1 text-xs text-slate-700">
+                A 6-page brief summarizing architecture, evidence alignment, and
+                sample use cases for SLPs, neuropsychologists, and pediatric
+                teams.
+              </p>
+              <button className="mt-3 inline-flex items-center justify-center rounded-full bg-slate-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-slate-800">
+                Download overview
+              </button>
+            </div>
+            <div className="flex flex-col rounded-2xl bg-white p-4 shadow-sm">
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                PDF
+              </p>
+              <p className="mt-1 text-sm font-semibold text-slate-900">
+                Neurobiological Mandate Whitepaper
+              </p>
+              <p className="mt-1 text-xs text-slate-700">
+                A deeper description of the corollary-discharge repair loop,
+                predictive coding framing, and the role of identity-congruent
+                self-voice.
+              </p>
+              <button className="mt-3 inline-flex items-center justify-center rounded-full bg-sky-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-sky-500">
+                Read the science
+              </button>
+            </div>
+            <div className="flex flex-col rounded-2xl bg-white p-4 shadow-sm">
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                Data
+              </p>
+              <p className="mt-1 text-sm font-semibold text-slate-900">
+                Exportable Metrics Package
+              </p>
+              <p className="mt-1 text-xs text-slate-700">
+                CSV / JSON exports for attempts, intelligibility, GCL, and
+                prosody metrics to plug into your existing data workflows or
+                IRB-approved studies.
+              </p>
+              <button className="mt-3 inline-flex items-center justify-center rounded-full bg-emerald-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-500">
+                View sample dataset
+              </button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  );
+};
+
+export default ForCliniciansPage;
+

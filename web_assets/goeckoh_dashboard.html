@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GOECKOH | Neuro-Acoustic Exocortex Console</title>
+    
+    <!-- TAILWIND CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- CHART.JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- PLOTLY.JS -->
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+
+    <!-- Chosen Palette: "Bio-Digital Clinical"
+         Background: Slate-50 (Clean, light, clinical).
+         Text: Slate-800 (High contrast).
+         Accents: 
+            - Cyan-600 (The Mirror/Fast Path).
+            - Violet-600 (The Deep Core/Slow Path).
+            - Emerald-500 (GCL Safe).
+            - Rose-500 (GCL Risk).
+    -->
+
+    <!-- Application Structure Plan:
+         The app is structured as a vertical scrolling dashboard with sticky navigation.
+         1. Executive Brief: Introduction to Jacob Graham's vision and the "Self-Congruence Mandate."
+         2. The Dual-Core Engine: Interactive CSS-based logic gate showing the Fast vs. Slow path separation.
+         3. The Crystalline Heart (Sim): A live, interactive Chart.js simulation of the GCL Gating logic. User can "stress" the system to see the AGI throttle.
+         4. Therapeutic Impact: A Plotly Radar chart comparing Goeckoh to traditional therapy across key dimensions.
+         5. Hardware Architecture: A visualization of the mobile resource constraints (RAM/CPU).
+    -->
+
+    <style>
+        /* CRITICAL: Chart Container Styling per Requirements */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 400px;
+        }
+
+        /* Utility for "Cards" */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border-radius: 0.75rem; /* rounded-xl */
+        }
+
+        /* Flow Connector Lines (CSS-only visualization) */
+        .connector-v {
+            width: 2px;
+            background-color: #cbd5e1;
+            margin: 0 auto;
+        }
+        .connector-h {
+            height: 2px;
+            background-color: #cbd5e1;
+            margin: auto 0;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans leading-relaxed selection:bg-cyan-100 selection:text-cyan-900">
+
+    <!-- NAVIGATION -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl">💎</span>
+                    <div>
+                        <h1 class="font-bold text-xl tracking-tight text-slate-900">GOECKOH</h1>
+                        <p class="text-xs text-slate-500 uppercase tracking-widest">Neuro-Acoustic Exocortex</p>
+                    </div>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#mission" class="text-sm font-medium text-slate-600 hover:text-cyan-600 transition-colors">Mission</a>
+                    <a href="#architecture" class="text-sm font-medium text-slate-600 hover:text-cyan-600 transition-colors">Architecture</a>
+                    <a href="#simulation" class="text-sm font-medium text-slate-600 hover:text-violet-600 transition-colors">Live Heart</a>
+                    <a href="#impact" class="text-sm font-medium text-slate-600 hover:text-emerald-600 transition-colors">Therapeutic Impact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-20">
+
+        <!-- SECTION 1: EXECUTIVE BRIEF (Mission) -->
+        <section id="mission">
+            <div class="max-w-3xl mx-auto text-center mb-10">
+                <h2 class="text-4xl font-extrabold text-slate-900 mb-4">The Self-Congruence Mandate</h2>
+                <p class="text-lg text-slate-600">
+                    A radical departure from traditional AGI. Goeckoh is not a chatbot; it is a <strong>Corollary Discharge Proxy</strong>.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="glass-panel p-8">
+                    <h3 class="text-xl font-bold text-cyan-700 mb-3 flex items-center gap-2">
+                        <span>👤</span> The Architect
+                    </h3>
+                    <p class="text-slate-600 mb-4 text-sm">
+                        Designed by <strong>Jacob Graham</strong>, a 36-year-old self-taught engineer and father to a child on the autism spectrum. Operating outside institutional frameworks, Graham prioritized <strong>neurobiological fidelity</strong> over commercial metrics.
+                    </p>
+                    <p class="text-slate-600 text-sm">
+                        His goal: To disrupt the "black box" corporate AI model and deliver a privacy-first, 100% offline system that restores power and agency to the average person.
+                    </p>
+                </div>
+                <div class="glass-panel p-8 bg-gradient-to-br from-slate-50 to-cyan-50/50">
+                    <h3 class="text-xl font-bold text-cyan-700 mb-3 flex items-center gap-2">
+                        <span>🎯</span> The Core Problem
+                    </h3>
+                    <p class="text-slate-600 mb-4 text-sm">
+                        <strong>Auditory Prediction Error (APE):</strong> In many neurodevelopmental conditions (ASD, TBI), the brain fails to predict the sound of its own voice. This creates "noise" instead of "self," inhibiting inner speech.
+                    </p>
+                    <div class="bg-white p-4 rounded-lg border-l-4 border-cyan-500 shadow-sm">
+                        <p class="font-semibold text-slate-800 text-sm">The Goeckoh Solution:</p>
+                        <p class="text-xs text-slate-500 mt-1">
+                            An external loop that captures intent, corrects it to first-person ("I want..."), and plays it back in a <strong>cloned voice</strong> within <150ms.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: DUAL-CORE ARCHITECTURE (CSS Visual) -->
+        <!-- Visualization & Content Choices: 
+             Goal: Organize the complex system into its two distinct pathways (Fast vs Slow).
+             Method: Interactive CSS Grid/Flexbox diagram. No SVG.
+             Interaction: Hover states to explain components.
+        -->
+        <section id="architecture" class="scroll-mt-24">
+            <div class="mb-6">
+                <h2 class="text-3xl font-bold text-slate-900">Hybrid Gated Dual-Core Architecture</h2>
+                <p class="text-slate-600 mt-2 max-w-4xl">
+                    To solve the conflict between <strong>latency</strong> (therapeutic need) and <strong>intelligence</strong> (AGI capability), Goeckoh splits into two distinct processing paths running on embedded mobile hardware.
+                </p>
+            </div>
+
+            <div class="glass-panel p-6 bg-slate-100">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    
+                    <!-- FAST PATH -->
+                    <div class="bg-white p-6 rounded-xl border-t-4 border-cyan-500 shadow-sm relative overflow-hidden group hover:shadow-md transition-all">
+                        <div class="absolute top-0 right-0 bg-cyan-100 text-cyan-800 text-xs font-bold px-2 py-1 rounded-bl">LATENCY &lt; 150ms</div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">⚡ The Neuro-Acoustic Mirror</h3>
+                        <p class="text-xs text-slate-500 mb-4 uppercase tracking-wider">Fast Path (Therapeutic)</p>
+                        
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 bg-slate-200 rounded-full flex items-center justify-center text-sm">🎤</div>
+                                <div class="flex-1 bg-slate-50 p-2 rounded border border-slate-200 text-sm">
+                                    <strong>Input:</strong> Raw Audio (VAD)
+                                </div>
+                            </div>
+                            <div class="h-4 connector-v border-l border-dashed border-cyan-300"></div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 bg-cyan-100 rounded-full flex items-center justify-center text-sm">🔄</div>
+                                <div class="flex-1 bg-cyan-50 p-2 rounded border border-cyan-200 text-sm">
+                                    <strong>Correction:</strong> "You" &rarr; "I/My"
+                                </div>
+                            </div>
+                            <div class="h-4 connector-v border-l border-dashed border-cyan-300"></div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 bg-cyan-100 rounded-full flex items-center justify-center text-sm">🗣️</div>
+                                <div class="flex-1 bg-cyan-50 p-2 rounded border border-cyan-200 text-sm">
+                                    <strong>Voice Crystal:</strong> F5-TTS Cloning
+                                </div>
+                            </div>
+                        </div>
+                        <p class="mt-4 text-xs text-slate-500 italic">
+                            *Intervenes directly in the Auditory-Motor Feedback Loop.*
+                        </p>
+                    </div>
+
+                    <!-- SLOW PATH -->
+                    <div class="bg-white p-6 rounded-xl border-t-4 border-violet-500 shadow-sm relative overflow-hidden group hover:shadow-md transition-all">
+                        <div class="absolute top-0 right-0 bg-violet-100 text-violet-800 text-xs font-bold px-2 py-1 rounded-bl">ASYNC / GATED</div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">🧠 Deep Reasoning Core (DRC)</h3>
+                        <p class="text-xs text-slate-500 mb-4 uppercase tracking-wider">Slow Path (Cognitive)</p>
+                        
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 bg-slate-200 rounded-full flex items-center justify-center text-sm">📊</div>
+                                <div class="flex-1 bg-slate-50 p-2 rounded border border-slate-200 text-sm flex justify-between items-center">
+                                    <span><strong>Context:</strong> Long-term Memory</span>
+                                    <span class="text-xs bg-slate-200 px-1 rounded">SQLite</span>
+                                </div>
+                            </div>
+                            <div class="h-4 connector-v border-l-2 border-violet-300"></div>
+                            
+                            <!-- GATING MECHANISM VISUAL -->
+                            <div class="bg-slate-800 text-white p-3 rounded text-center relative">
+                                <div class="text-xs font-bold uppercase text-emerald-400">GCL GATE</div>
+                                <div class="text-[10px] text-slate-400 mt-1">Is GCL > 0.65?</div>
+                                <div class="absolute -right-2 top-1/2 w-4 h-4 bg-emerald-500 rounded-full animate-pulse border-2 border-white"></div>
+                            </div>
+
+                            <div class="h-4 connector-v border-l-2 border-violet-300"></div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 bg-violet-100 rounded-full flex items-center justify-center text-sm">💡</div>
+                                <div class="flex-1 bg-violet-50 p-2 rounded border border-violet-200 text-sm">
+                                    <strong>Inference:</strong> Llama 3.2 3B
+                                </div>
+                            </div>
+                        </div>
+                        <p class="mt-4 text-xs text-slate-500 italic">
+                            *Executes only when affective state permits.*
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: CRYSTALLINE HEART SIMULATION (Interactive) -->
+        <!-- Visualization & Content Choices:
+             Goal: Demonstrate the "State-Based Alignment" concept.
+             Method: Chart.js real-time line chart simulating GCL.
+             Interaction: User injects "Stress" or "Coherence" to see the Gate open/close.
+        -->
+        <section id="simulation" class="scroll-mt-24">
+            <div class="mb-6">
+                <h2 class="text-3xl font-bold text-slate-900">The Crystalline Heart: GCL Simulator</h2>
+                <p class="text-slate-600 mt-2 max-w-4xl">
+                    The <strong>Global Coherence Level (GCL)</strong> is a real-time metric (0.0 - 1.0) derived from a 1024-node ODE lattice. It acts as the system's "conscience," gating the AI based on the user's stress.
+                </p>
+                <div class="mt-4 bg-blue-50 border border-blue-200 p-4 rounded-lg text-sm text-blue-800">
+                    <strong>Instructions:</strong> Use the buttons below to simulate environmental triggers. Watch how the <strong>System Status</strong> changes. If GCL drops below 0.3, the AI is silenced (Safety Mode).
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- CHART -->
+                <div class="lg:col-span-2 glass-panel p-4">
+                    <div class="chart-container">
+                        <canvas id="gclChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- CONTROLS & STATUS -->
+                <div class="space-y-4">
+                    <!-- Status Card -->
+                    <div id="status-card" class="p-6 rounded-xl border-l-8 border-emerald-500 bg-white shadow-sm transition-all duration-500">
+                        <h4 class="text-xs font-bold text-slate-400 uppercase">System State</h4>
+                        <div id="status-text" class="text-2xl font-bold text-emerald-600 mt-1">OPTIMAL FLOW</div>
+                        <p id="status-desc" class="text-xs text-slate-500 mt-2">Deep Reasoning Core is ACTIVE. Cognitive scaffolding enabled.</p>
+                    </div>
+
+                    <!-- Metrics -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 text-center">
+                            <div class="text-xs text-slate-400 font-bold">GCL</div>
+                            <div id="gcl-value" class="text-3xl font-mono text-slate-800">0.85</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 text-center">
+                            <div class="text-xs text-slate-400 font-bold">STRESS</div>
+                            <div id="stress-value" class="text-3xl font-mono text-slate-800">0.15</div>
+                        </div>
+                    </div>
+
+                    <!-- Controls -->
+                    <div class="space-y-2">
+                        <button onclick="injectEvent('stress')" class="w-full py-3 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg font-bold text-sm transition-colors flex items-center justify-center gap-2">
+                            <span>📉</span> Inject Stress (Latency Spike)
+                        </button>
+                        <button onclick="injectEvent('calm')" class="w-full py-3 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-lg font-bold text-sm transition-colors flex items-center justify-center gap-2">
+                            <span>📈</span> Inject Coherence (Voice Match)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: THERAPEUTIC IMPACT (Data Viz) -->
+        <!-- Visualization & Content Choices:
+             Goal: Compare Goeckoh to standard interventions.
+             Method: Plotly Radar Chart.
+             Rationale: Radar charts are excellent for multi-variable comparison (Cost, Agency, Privacy, etc.).
+        -->
+        <section id="impact" class="scroll-mt-24">
+            <div class="mb-6">
+                <h2 class="text-3xl font-bold text-slate-900">Therapeutic & Societal Impact</h2>
+                <p class="text-slate-600 mt-2 max-w-4xl">
+                    By operating 100% offline and prioritizing "Voice Agency," Goeckoh outperforms traditional digital assistants and standard therapy tools in critical dimensions for ASD, TBI, and Alzheimer's care.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <div class="glass-panel p-4">
+                    <div id="impactRadar" style="width:100%; height:400px;"></div>
+                </div>
+                
+                <div class="space-y-6">
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:border-cyan-400 transition-colors cursor-default">
+                        <h4 class="font-bold text-slate-800 flex items-center gap-2">
+                            <span class="text-cyan-500">🧩</span> Autism Spectrum (ASD)
+                        </h4>
+                        <p class="text-sm text-slate-600 mt-2">
+                            <strong>Impact:</strong> Reduces cognitive overhead during communication. The cloned, corrected voice provides the consistent acoustic feedback required to scaffold inner dialogue.
+                        </p>
+                    </div>
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:border-violet-400 transition-colors cursor-default">
+                        <h4 class="font-bold text-slate-800 flex items-center gap-2">
+                            <span class="text-violet-500">🧠</span> Traumatic Brain Injury (TBI)
+                        </h4>
+                        <p class="text-sm text-slate-600 mt-2">
+                            <strong>Impact:</strong> The GCL Gate serves as an "external frontal lobe," preventing the AI from overwhelming the user during emotional lability while providing executive task breakdown.
+                        </p>
+                    </div>
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:border-emerald-400 transition-colors cursor-default">
+                        <h4 class="font-bold text-slate-800 flex items-center gap-2">
+                            <span class="text-emerald-500">👴</span> Alzheimer's & Dementia
+                        </h4>
+                        <p class="text-sm text-slate-600 mt-2">
+                            <strong>Impact:</strong> Provides a "Voice of Continuity." The offline nature anchors the user in conversation without data privacy risks, preserving dignity through memory loss.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="border-t border-slate-200 pt-10 pb-10 text-center">
+            <p class="text-slate-400 text-sm">
+                &copy; 2025 Goeckoh Systems. Designed by Jacob Graham. 
+                <br>
+                <span class="text-xs">Built with Flutter | Llama 3.2 3B | F5-TTS | 100% Offline</span>
+            </p>
+            <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+        </footer>
+
+    </main>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // --- 1. CRYSTALLINE HEART SIMULATION (Chart.js) ---
+        const ctx = document.getElementById('gclChart').getContext('2d');
+        
+        // Initial Data
+        const initialData = Array(30).fill(0.85); // Start healthy
+        
+        const gclChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Array(30).fill(''),
+                datasets: [{
+                    label: 'Global Coherence Level (GCL)',
+                    data: initialData,
+                    borderColor: '#10b981', // Emerald-500
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: { duration: 0 }, // Performance optimization
+                scales: {
+                    y: {
+                        min: 0,
+                        max: 1,
+                        grid: { color: '#f1f5f9' },
+                        ticks: { font: { family: 'sans-serif' } }
+                    },
+                    x: { display: false }
+                },
+                plugins: {
+                    legend: { display: false },
+                    annotation: {
+                        annotations: {
+                            line1: {
+                                type: 'line',
+                                yMin: 0.6,
+                                yMax: 0.6,
+                                borderColor: 'rgba(244, 63, 94, 0.5)', // Rose-500
+                                borderWidth: 2,
+                                borderDash: [6, 6],
+                                label: {
+                                    content: 'Gating Threshold',
+                                    enabled: true,
+                                    position: 'start',
+                                    backgroundColor: 'rgba(244, 63, 94, 0.8)',
+                                    color: 'white',
+                                    font: { size: 10 }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Simulation State
+        let currentGCL = 0.85;
+        let targetGCL = 0.85;
+        const statusCard = document.getElementById('status-card');
+        const statusText = document.getElementById('status-text');
+        const statusDesc = document.getElementById('status-desc');
+        const gclDisplay = document.getElementById('gcl-value');
+        const stressDisplay = document.getElementById('stress-value');
+
+        // Core Loop
+        setInterval(() => {
+            // physics: move current towards target with simple lerp
+            currentGCL = currentGCL + (targetGCL - currentGCL) * 0.1;
+            
+            // Add slight organic noise
+            currentGCL += (Math.random() - 0.5) * 0.02;
+            currentGCL = Math.max(0, Math.min(1, currentGCL)); // Clamp
+
+            // Update Chart
+            const data = gclChart.data.datasets[0].data;
+            data.shift();
+            data.push(currentGCL);
+            
+            // Dynamic Color based on Gate
+            if (currentGCL < 0.3) {
+                gclChart.data.datasets[0].borderColor = '#f43f5e'; // Rose
+                gclChart.data.datasets[0].backgroundColor = 'rgba(244, 63, 94, 0.1)';
+            } else if (currentGCL < 0.6) {
+                gclChart.data.datasets[0].borderColor = '#f59e0b'; // Amber
+                gclChart.data.datasets[0].backgroundColor = 'rgba(245, 158, 11, 0.1)';
+            } else {
+                gclChart.data.datasets[0].borderColor = '#10b981'; // Emerald
+                gclChart.data.datasets[0].backgroundColor = 'rgba(16, 185, 129, 0.1)';
+            }
+            
+            gclChart.update();
+
+            // Update UI Numbers
+            gclDisplay.innerText = currentGCL.toFixed(2);
+            stressDisplay.innerText = (1 - currentGCL).toFixed(2);
+
+            // Update Status UI
+            updateStatusUI(currentGCL);
+
+        }, 200); // 5Hz update
+
+        function updateStatusUI(val) {
+            statusCard.className = "p-6 rounded-xl border-l-8 bg-white shadow-sm transition-all duration-500";
+            
+            if (val < 0.3) {
+                // RED STATE
+                statusCard.classList.add('border-rose-500');
+                statusText.className = "text-2xl font-bold text-rose-600 mt-1";
+                statusText.innerText = "⛔ SAFETY LOCKOUT";
+                statusDesc.innerText = "DRC Silenced. Environmental Calming Protocol Active.";
+            } else if (val < 0.6) {
+                // YELLOW STATE
+                statusCard.classList.add('border-amber-500');
+                statusText.className = "text-2xl font-bold text-amber-600 mt-1";
+                statusText.innerText = "⚠️ GATE THROTTLED";
+                statusDesc.innerText = "Complex reasoning limited. Mirror Mode Active.";
+            } else {
+                // GREEN STATE
+                statusCard.classList.add('border-emerald-500');
+                statusText.className = "text-2xl font-bold text-emerald-600 mt-1";
+                statusText.innerText = "✅ OPTIMAL FLOW";
+                statusDesc.innerText = "Deep Reasoning Core is ACTIVE. Full cognitive support.";
+            }
+        }
+
+        function injectEvent(type) {
+            if (type === 'stress') {
+                targetGCL = 0.2; // Crash the system
+                setTimeout(() => { targetGCL = 0.5; }, 2000); // Recover slowly
+            } else {
+                targetGCL = 0.95; // Boost
+            }
+        }
+
+        // --- 2. IMPACT RADAR CHART (Plotly.js) ---
+        const radarData = [{
+            type: 'scatterpolar',
+            r: [9, 8, 9, 10, 8],
+            theta: ['Data Sovereignty', 'Latency Speed', 'Personalization', 'Cost Efficiency', 'Accessibility'],
+            fill: 'toself',
+            name: 'Goeckoh System',
+            line: { color: '#0891b2' } // Cyan-600
+        }, {
+            type: 'scatterpolar',
+            r: [2, 4, 5, 3, 6],
+            theta: ['Data Sovereignty', 'Latency Speed', 'Personalization', 'Cost Efficiency', 'Accessibility'],
+            fill: 'toself',
+            name: 'Traditional Cloud AI',
+            line: { color: '#94a3b8' } // Slate-400
+        }];
+
+        const radarLayout = {
+            polar: {
+                radialaxis: {
+                    visible: true,
+                    range: [0, 10]
+                }
+            },
+            showlegend: true,
+            margin: { t: 30, b: 30, l: 30, r: 30 },
+            paper_bgcolor: "rgba(0,0,0,0)",
+            plot_bgcolor: "rgba(0,0,0,0)"
+        };
+
+        Plotly.newPlot('impactRadar', radarData, radarLayout, {displayModeBar: false});
+
+    </script>
+</body>
+</html>

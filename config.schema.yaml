@@ -1,0 +1,44 @@
+type: object
+required:
+  - system_prompt
+  - tools
+properties:
+  system_prompt:
+    type: string
+    minLength: 1
+  tools:
+    type: array
+    items:
+      type: object
+      required: [name, description]
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+  tracing:
+    type: boolean
+  log_level:
+    type: string
+    enum: ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+  voice_profile_path:
+    type: ["string", "null"]
+    description: "Path to a WAV voice profile used for voice cloning. Required if enable_voice_clone is true."
+  enable_voice_clone:
+    type: boolean
+    description: "Attempt voice cloning using an external TTS/Voice cloning pipeline. When true, a voice_profile_path is required."
+  documents_path:
+    type: ["string", "null"]
+    description: "Optional path to a directory of documents to ingest (txt/md/pdf)."
+  min_voice_profile_duration:
+    type: ["number", "null"]
+    minimum: 0
+    description: "Minimum required voice profile duration in seconds. Default: 5.0"
+additionalProperties: false
+allOf:
+  - if:
+      properties:
+        enable_voice_clone:
+          const: true
+    then:
+      required: ["voice_profile_path"]

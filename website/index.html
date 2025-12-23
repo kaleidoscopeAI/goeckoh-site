@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GOECKOH (Go Echo) — Identity‑Matched Speech Replay</title>
+  <meta name="description" content="Goeckoh (Go Echo) is an offline‑first speech support system that gently corrects speech and replays it in the user’s own voice, in first person." />
+
+  <!-- Open Graph metadata -->
+  <meta property="og:title" content="GOECKOH (Go Echo) — Identity‑Matched Speech Replay" />
+  <meta property="og:description" content="Corrected speech, replayed in the user’s own voice—offline‑first and privacy‑forward." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://goeckoh.com/" />
+  <meta property="og:image" content="images/og-image.png" />
+
+  <link rel="icon" href="images/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Import Montserrat for headings and Inter for body text -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Use relative paths for styles and scripts so they resolve under /goeckoh-site on GitHub Pages -->
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <header class="header">
+    <div class="container header__inner">
+      <a class="brand" href="index.html" aria-label="Goeckoh home">
+        <img src="images/logo.png" class="brand__logo" alt="Goeckoh logo">
+        <div class="brand__text">
+          <div class="brand__name">GOECKOH</div>
+          <div class="brand__sub">pronounced “Go Echo”</div>
+        </div>
+      </a>
+      <nav class="nav">
+        <a href="#how">How it works</a>
+        <a href="#pricing">Pricing</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="support.html">Support</a>
+      </nav>
+      <div class="header__cta">
+        <a class="btn btn--ghost" href="#how">See how it works</a>
+        <a class="btn btn--primary" href="#pricing">Buy & Download</a>
+      </div>
+      <button class="burger" aria-label="Open menu" aria-expanded="false" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div id="mobileMenu" class="mobileMenu" aria-hidden="true">
+      <div class="container mobileMenu__inner">
+        <a href="#how" onclick="closeMenu()">How it works</a>
+        <a href="#pricing" onclick="closeMenu()">Pricing</a>
+        <a href="privacy.html" onclick="closeMenu()">Privacy</a>
+        <a href="terms.html" onclick="closeMenu()">Terms</a>
+        <a href="support.html" onclick="closeMenu()">Support</a>
+        <a class="btn btn--primary mobileMenu__btn" href="#pricing" onclick="closeMenu()">Buy & Download</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="top" class="hero">
+    <div class="container hero__grid">
+      <section class="hero__copy">
+        <div class="pill">Offline‑first • Identity‑matched replay • First‑person only</div>
+        <h1>Clear speech.<br/><span class="grad">In my own voice.</span></h1>
+        <p class="lead">
+          <strong>Goeckoh (Go Echo)</strong> is a speech support system that listens, gently corrects phrasing,
+          then replays it in the user’s <strong>own voice</strong>—always in <strong>first person</strong>—so it feels like self‑speech,
+          not an outside command.
+        </p>
+        <div class="hero__buttons">
+          <a class="btn btn--primary" href="#pricing">Buy & Download</a>
+          <a class="btn btn--ghost" href="#demo">Hear a demo</a>
+        </div>
+        <div class="hero__trust">
+          <div class="trustCard">
+            <div class="trustCard__title">Identity‑Matched Voice Replay</div>
+            <div class="trustCard__desc">Corrected speech replayed in the user’s own vocal identity.</div>
+          </div>
+          <div class="trustCard">
+            <div class="trustCard__title">First‑Person Mirror</div>
+            <div class="trustCard__desc">Feedback phrased as “I / me / my” to preserve agency.</div>
+          </div>
+          <div class="trustCard">
+            <div class="trustCard__title">Privacy‑Forward</div>
+            <div class="trustCard__desc">Designed to run locally, minimizing data exposure.</div>
+          </div>
+        </div>
+        <div class="origin">
+          <strong>Why the name “Goeckoh”?</strong>
+          It’s how “Go Echo” sounded when a neurodivergent individual said it—so the name itself starts with the voice we’re protecting.
+        </div>
+      </section>
+      <aside class="hero__visual" aria-label="Product visualization">
+        <!-- Show the hero concept art as the visual instead of a placeholder card -->
+        <img src="images/hero.png" alt="Goeckoh hero visual" class="hero-image" />
+      </aside>
+    </div>
+  </main>
+
+  <section class="section">
+    <div class="container">
+      <h2>What Go Echo does</h2>
+      <p class="sectionLead">
+        Many tools replace the user’s voice with a generic synthetic voice. <strong>Go Echo preserves identity.</strong>
+      </p>
+      <div class="cards3">
+        <div class="card">
+          <h3>Listen</h3>
+          <p>Captures speech naturally, without demanding perfect timing.</p>
+        </div>
+        <div class="card">
+          <h3>Correct</h3>
+          <p>Gently rewrites speech while keeping intent intact.</p>
+        </div>
+        <div class="card">
+          <h3>Replay</h3>
+          <p>Plays the corrected phrase back in the user’s own voice, always first person.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Science & Impact section: show evidence and charts -->
+  <section id="research" class="section section--alt">
+    <div class="container">
+      <h2>Science &amp; Impact</h2>
+      <p class="sectionLead">
+        Goeckoh is built on evidence‑based principles of predictive coding and identity‑matched feedback. These charts
+        highlight our pilot study results, demonstrating significant reductions in speech errors and extremely low latency
+        compared to conventional online solutions.
+      </p>
+      <div class="charts">
+        <div class="chart">
+          <img src="images/speech_errors_reduction.png" alt="Speech error reduction chart">
+          <div class="chartCaption">Reduction in speech errors after 30 sessions with Go Echo</div>
+        </div>
+        <div class="chart">
+          <img src="images/latency_comparison.png" alt="Latency comparison chart">
+          <div class="chartCaption">Latency comparison: Go Echo offline vs. online systems</div>
+        </div>
+      </div>
+      <p class="sectionLead" style="margin-top:20px;">
+        Our findings show that identity‑matched replay reinforces self‑generated speech patterns, improving articulation and
+        fluency while maintaining privacy and responsiveness.
+      </p>
+    </div>
+  </section>
+
+  <section id="how" class="section section--alt">
+    <div class="container">
+      <h2>How it works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step__num">1</div>
+          <div class="step__body">
+            <h3>Listen</h3>
+            <p>Audio is captured locally, respecting long pauses and quiet attempts.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step__num">2</div>
+          <div class="step__body">
+            <h3>Understand</h3>
+            <p>Speech recognition runs locally where possible to reduce exposure.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step__num">3</div>
+          <div class="step__body">
+            <h3>Correct</h3>
+            <p>Rewrites phrasing while preserving meaning—no drills, no pressure.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step__num">4</div>
+          <div class="step__body">
+            <h3>Identity‑Matched Replay</h3>
+            <p>Plays corrected speech back in the user’s own voice, always first person.</p>
+          </div>
+        </div>
+      </div>
+      <div class="callout">
+        <strong>Design principle:</strong> Go Echo doesn’t “speak at” the user. It mirrors.
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing" class="section">
+    <div class="container">
+      <h2>Pricing</h2>
+      <p class="sectionLead">
+        Use Stripe Payment Links now (no backend needed). Later you can upgrade to full account and license delivery.
+      </p>
+      <div class="pricing">
+        <div class="priceCard">
+          <div class="priceCard__top">
+            <h3>Starter</h3>
+            <div class="price">$X<span>/mo</span></div>
+            <p>Core loop • 1 device • updates</p>
+          </div>
+          <a class="btn btn--primary btn--full" href="https://buy.stripe.com/REPLACE_STARTER">Checkout</a>
+        </div>
+        <div class="priceCard priceCard--featured">
+          <div class="badge">Most popular</div>
+          <div class="priceCard__top">
+            <h3>Family</h3>
+            <div class="price">$Y<span>/mo</span></div>
+            <p>Multiple profiles • caregiver controls</p>
+          </div>
+          <a class="btn btn--primary btn--full" href="https://buy.stripe.com/REPLACE_FAMILY">Checkout</a>
+        </div>
+        <div class="priceCard">
+          <div class="priceCard__top">
+            <h3>Professional</h3>
+            <div class="price">$Z<span>/mo</span></div>
+            <p>Extended configuration • priority onboarding</p>
+          </div>
+          <a class="btn btn--primary btn--full" href="https://buy.stripe.com/REPLACE_PRO">Checkout</a>
+        </div>
+      </div>
+      <div class="platforms">
+        <strong>Platforms:</strong> Windows • macOS • Linux • Android
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__left">
+        <div class="footerBrand">GOECKOH</div>
+        <div class="footerSub">pronounced “Go Echo”</div>
+        <div class="footerTiny">© <span id="year"></span> Goeckoh. All rights reserved.</div>
+      </div>
+      <div class="footer__right">
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="support.html">Support</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('year').textContent = new Date().getFullYear();
+    });
+  </script>
+</body>
+</html>

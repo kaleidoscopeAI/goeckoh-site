@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Cognitive Nebula
+Comment=Launch the Cognitive Nebula desktop app
+Exec=/bin/sh -c 'cd "/home/jacob/cognitive-nebula(8)" && npm run desktop'
+Icon=/home/jacob/cognitive-nebula(8)/icons/app.png
+Terminal=false
+Categories=Utility;

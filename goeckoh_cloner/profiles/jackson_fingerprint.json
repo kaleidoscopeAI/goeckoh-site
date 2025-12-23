@@ -1,0 +1,11 @@
+{
+  "mu_f0": 75.67430360635782,
+  "sigma_f0": 208.844230632413,
+  "base_roughness": 0.0,
+  "base_metalness": 1.0,
+  "base_sharpness": 0.23661072144288575,
+  "rate": 24.04809619238477,
+  "jitter_base": 0.08,
+  "shimmer_base": 0.08,
+  "base_radius": 1.0
+}

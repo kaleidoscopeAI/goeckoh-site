@@ -1,0 +1,3 @@
+Seed-Crystal Manifesto:
+We anneal noisy bits into stable memory facets, sonify our state, and speak captions.
+The avatar is not a mask; it is the field itself rendered as 18k nodes.

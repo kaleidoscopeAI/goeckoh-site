@@ -1,0 +1,101 @@
+timestamp,phrase_text,raw_text,corrected_text,needs_correction
+2025-11-18T05:13:42.207478,thank you,thank yoi,thank yoi,0
+2025-11-18T05:13:44.135456,no,no,no,0
+2025-11-18T05:13:45.684156,thank you,thank you,thank you,0
+2025-11-18T05:13:48.052972,help,help,help,0
+2025-11-18T05:13:49.726365,water,wate,wate,0
+2025-11-18T05:13:52.604238,thank you,tank you,tank you,0
+2025-11-18T05:13:55.038539,help,help,help,0
+2025-11-18T05:13:56.728669,no,no,no,0
+2025-11-18T05:13:58.680971,water,waer,waer,0
+2025-11-18T05:14:01.196961,hello,helo,helo,0
+2025-11-18T05:14:03.566230,no,no,no,0
+2025-11-18T05:14:05.378000,hello,hello,hello,0
+2025-11-18T05:14:07.902726,yes,yes,yes,0
+2025-11-18T05:14:10.104285,yes,yes,yes,0
+2025-11-18T05:14:12.620148,water,ater,ater,0
+2025-11-18T05:14:14.454222,good morning,good morning,good morning,0
+2025-11-18T05:14:17.007202,good morning,good morning,good morning,0
+2025-11-18T05:14:19.241988,thank you,thank you,thank you,0
+2025-11-18T05:14:21.932901,help,help,help,0
+2025-11-18T05:14:23.566449,help,holp,help,1
+2025-11-18T05:14:26.117030,thank you,thank you,thank you,0
+2025-11-18T05:14:28.643514,yes,yes,yes,0
+2025-11-18T05:14:31.220977,hello,hello,hello,0
+2025-11-18T05:14:33.156386,thank you,thank you,thank you,0
+2025-11-18T05:14:35.478425,water,water,water,0
+2025-11-18T05:14:37.892347,yes,es,es,0
+2025-11-18T05:14:39.697090,hello,hullo,hullo,0
+2025-11-18T05:14:41.221225,no,no,no,0
+2025-11-18T05:14:42.786189,good morning,good morning,good morning,0
+2025-11-18T05:14:44.727264,good morning,good morning,good morning,0
+2025-11-18T05:14:46.676983,help,elp,elp,0
+2025-11-18T05:14:48.788072,hello,hello,hello,0
+2025-11-18T05:14:51.130955,yes,yes,yes,0
+2025-11-18T05:14:53.627964,help,help,help,0
+2025-11-18T05:14:56.164037,good morning,good moning,good moning,0
+2025-11-18T05:14:58.077908,help,help,help,0
+2025-11-18T05:14:59.691393,no,no,no,0
+2025-11-18T05:15:01.839477,hello,hello,hello,0
+2025-11-18T05:15:03.700970,water,watir,watir,0
+2025-11-18T05:15:06.162981,yes,es,es,0
+2025-11-18T05:15:08.658908,no,no,no,0
+2025-11-18T05:15:10.463981,water,water,water,0
+2025-11-18T05:15:12.455170,water,waer,waer,0
+2025-11-18T05:15:14.091026,water,water,water,0
+2025-11-18T05:15:16.212041,water,water,water,0
+2025-11-18T05:15:19.189586,no,no,no,0
+2025-11-18T05:15:22.191574,help,help,help,0
+2025-11-18T05:15:24.551088,help,help,help,0
+2025-11-18T05:15:27.078236,good morning,good morning,good morning,0
+2025-11-18T05:15:29.026654,help,help,help,0
+2025-11-18T05:15:31.963958,water,water,water,0
+2025-11-18T05:15:34.784340,help,help,help,0
+2025-11-18T05:15:36.543070,water,water,water,0
+2025-11-18T05:15:39.245983,water,water,water,0
+2025-11-18T05:15:41.417188,thank you,thank you,thank you,0
+2025-11-18T05:15:44.162991,no,no,no,0
+2025-11-18T05:15:46.037278,help,help,help,0
+2025-11-18T05:15:48.995213,water,water,water,0
+2025-11-18T05:15:51.072058,water,water,water,0
+2025-11-18T05:15:53.640024,yes,yes,yes,0
+2025-11-18T05:15:55.519684,good morning,good morning,good morning,0
+2025-11-18T05:15:58.374414,thank you,thank you,thank you,0
+2025-11-18T05:16:01.292494,hello,hello,hello,0
+2025-11-18T05:16:03.106219,good morning,good morning,good morning,0
+2025-11-18T05:16:05.117315,thank you,thank you,thank you,0
+2025-11-18T05:16:07.361845,help,help,help,0
+2025-11-18T05:16:09.413174,help,help,help,0
+2025-11-18T05:16:11.805357,yes,yes,yes,0
+2025-11-18T05:16:14.264991,hello,hellu,hellu,0
+2025-11-18T05:16:17.268188,hello,hello,hello,0
+2025-11-18T05:16:19.606758,yes,yes,yes,0
+2025-11-18T05:16:21.324761,yes,ye,ye,0
+2025-11-18T05:16:23.651356,yes,yes,yes,0
+2025-11-18T05:16:26.011403,thank you,thank you,thank you,0
+2025-11-18T05:16:27.816769,yes,ye,ye,0
+2025-11-18T05:16:29.336963,help,elp,elp,0
+2025-11-18T05:16:31.766979,hello,hillo,hillo,0
+2025-11-18T05:16:34.030982,yes,yes,yes,0
+2025-11-18T05:16:36.561020,thank you,thank you,thank you,0
+2025-11-18T05:16:38.361091,help,hilp,help,1
+2025-11-18T05:16:40.310159,thank you,thak you,thak you,0
+2025-11-18T05:16:42.278943,water,water,water,0
+2025-11-18T05:16:44.587974,yes,yos,yes,1
+2025-11-18T05:16:46.512048,no,no,no,0
+2025-11-18T05:16:48.397978,yes,yes,yes,0
+2025-11-18T05:16:51.176377,water,water,water,0
+2025-11-18T05:16:53.457600,good morning,good moring,good moring,0
+2025-11-18T05:16:55.420069,good morning,good morning,good morning,0
+2025-11-18T05:16:57.691820,thank you,thank you,thank you,0
+2025-11-18T05:16:59.345861,no,no,no,0
+2025-11-18T05:17:01.897177,good morning,good morning,good morning,0
+2025-11-18T05:17:03.714180,hello,hello,hello,0
+2025-11-18T05:17:05.737204,help,help,help,0
+2025-11-18T05:17:08.090095,thank you,thank you,thank you,0
+2025-11-18T05:17:10.589194,help,help,help,0
+2025-11-18T05:17:13.145454,help,help,help,0
+2025-11-18T05:17:15.792283,good morning,good morning,good morning,0
+2025-11-18T05:17:18.596964,no,no,no,0
+2025-11-18T05:17:20.811946,thank you,thank you,thank you,0
+2025-11-18T05:17:23.722817,good morning,good morning,good morning,0

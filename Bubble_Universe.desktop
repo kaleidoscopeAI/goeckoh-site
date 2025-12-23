@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Bubble Universe
+Comment=Revolutionary Therapeutic Voice & Universe System
+Exec=python3 /home/jacob/bubble /system_launcher.py --mode universe
+Icon=applications-games
+Terminal=false
+Categories=Education;Therapy;Game;
+Keywords=speech;therapy;autism;tbi;3d;universe;ai;
