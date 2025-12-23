@@ -1,0 +1,6 @@
+Participants: N=22 recruited (neurotypical + ASD, ages 18-65+)
+Conditions: 1) Real-time self-voice (<250ms), 2) Delayed self (600ms), 3) External voice
+Montage: Fz, FCz, Cz (10-20), linked mastoids reference
+Trials: 80 clean epochs/condition (480 total)
+Safety: Audiometric screen, stop-gesture, volume <75dB SPL
+Analysis: RM-ANOVA → LMM with covariates → emmeans pairwise

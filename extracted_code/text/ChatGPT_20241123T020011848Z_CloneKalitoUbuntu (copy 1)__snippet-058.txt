@@ -1,0 +1,2 @@
+  - Incorporate object detection and labeling using pretrained models (e.g., TensorFlow, PyTorch).
+  - Annotate images based on nouns crawled.

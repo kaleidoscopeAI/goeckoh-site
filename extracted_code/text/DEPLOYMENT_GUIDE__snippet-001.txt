@@ -1,0 +1,16 @@
+goeckoh-system-1.0.0/
+├── bin/
+│   └── launch_bubble_system.sh
+├── assets/
+│   ├── model_stt/
+│   └── model_tts/
+├── GOECKOH/
+│   └── goeckoh/
+│       └── systems/
+│           └── complete_unified_system.py
+├── icons/
+│   └── goeckoh-icon.png
+├── install.sh
+├── requirements.txt
+├── README.md
+└── [all Python source files]

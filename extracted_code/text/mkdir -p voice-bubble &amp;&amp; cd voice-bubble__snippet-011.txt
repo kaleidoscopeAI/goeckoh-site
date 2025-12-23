@@ -1,0 +1,3 @@
+N1 amplitude: Baseline-to-peak (100ms pre → 150ms post-stimulus onset)
+Location: Grand average Fz/FCz/Cz (not single electrode)
+Artifact rejection: ±100µV, EOG correlation >0.8, muscular artifacts

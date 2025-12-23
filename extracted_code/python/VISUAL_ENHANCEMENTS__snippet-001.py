@@ -1,0 +1,2 @@
+- **Frequency Ripples**: Pitch-based surface ripples using F0 data
+- **Volumetric Light Rays**: 32 dynamic light rays emanating from the bubble

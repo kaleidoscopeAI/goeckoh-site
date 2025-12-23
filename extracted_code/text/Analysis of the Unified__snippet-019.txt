@@ -1,0 +1,2 @@
+Save as `hybrid_relational_engine.py`. This integrates `core_er_epr.RelationalCore` and provides an `AdaptiveHybridEngine` class that runs the physics core, an adaptive controller, and exposes sandbox/test commit API.
+

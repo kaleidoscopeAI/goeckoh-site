@@ -1,0 +1,23 @@
+organic_ai/
+│
+├── core.py
+├── learning.py
+├── resource_management.py
+├── node_creation.py
+├── shared_resources.py
+├── mirrored_network.py
+│
+├── data/
+│   ├── input_data/
+│   │   ├── images/
+│   │   └── text/
+│   └── node_logs/
+│
+├── visualizations/
+│   ├── dynamic_visualization.py
+│   └── node_graphs.py
+│
+├── tests/
+│   ├── functional_tests.py
+│   └── visualization_tests.py
+

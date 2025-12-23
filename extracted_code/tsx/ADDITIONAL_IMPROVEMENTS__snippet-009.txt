@@ -1,0 +1,5 @@
+const EnhancedBubble = React.lazy(() => import('./components/EnhancedBubble'));
+
+<Suspense fallback={<LoadingStates />}>
+  <EnhancedBubble />
+</Suspense>

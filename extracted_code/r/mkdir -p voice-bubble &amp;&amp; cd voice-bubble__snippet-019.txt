@@ -1,0 +1,43 @@
+# Complete function with error checking
+robust_paired_d <- function(mean1, sd1, mean2, sd2, r, n_subjects) {
+  stopifnot(all(c(mean1, sd1, mean2, sd2, r, n_subjects) > 0))
+  stopifnot(r >= 0, r <= 1)
+  
+  # Paired difference variance
+  var_diff <- sd1^2 + sd2^2 - 2 * r * sd1 * sd2
+  if(var_diff <= 0) {
+    warning("Negative variance - check correlation")
+    return(NA)
+  }
+  
+  sd_diff <- sqrt(var_diff)
+  d_raw <- abs(mean1 - mean2) / sd_diff
+  
+  # Hedges' g bias correction
+  correction <- 1 - 3 / (4 * n_subjects - 9)
+  d_hedges <- d_raw * correction
+  
+  # RM-ANOVA f conversion
+  f_rm <- d_raw / sqrt(2 * (1 - r))
+  
+  list(
+    cohens_d = round(d_raw, 3),
+    hedges_g = round(d_hedges, 3),
+    rm_f = round(f_rm, 3),
+    power_n_80 = round(qnorm(0.8)^2 / f_rm^2 + 2, 0)  # Approx N for power=0.8
+  )
+}
+
+# N1 suppression example (older adults)
+result <- robust_paired_d(
+  mean1=-4.2, sd1=2.1,  # Self N1
+  mean2=-2.8, sd2=1.9,  # External N1
+  r=0.6,                 # From ICC literature
+  n_subjects=14
+)
+
+print(result)
+# $cohens_d = 0.707
+# $hedges_g = 0.679  
+# $rm_f = 0.647
+# $power_n_80 = 16

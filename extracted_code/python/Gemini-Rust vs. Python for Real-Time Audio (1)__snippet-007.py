@@ -1,0 +1,1 @@
+> > I'm currently focused on incorporating the `AudioStreamManager` into the core library. My immediate step involves importing the audio module within `lib.rs`, which is foundational. This import will enable access to the manager and is the first step in ensuring smooth integration.

@@ -1,0 +1,2 @@
+This module replaces the "black box" neural networks typical in AI with a **transparent, physics-based dynamical system**. It models your "10x24 node lattice" using Hamiltonian dynamics (energy conservation).
+

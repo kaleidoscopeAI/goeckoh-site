@@ -1,0 +1,14 @@
+To allow the AI to affect its host computer (e.g., to implement a calculated power-saving policy), the system bypasses the need for low-level drivers using Human Interface Device (HID) Emulation.
+
+    Control Flow: Hardware control actions are first mapped to ControlMapper intents, which are then executed by an HIDController.
+
+    Simulated Actions: The HardwareControl class simulates user input to execute specific operating system actions, including:
+
+        set_cpu_frequency
+
+        set_display_gamma
+
+        control_network_qos
+
+    Bit-Level Placeholder: The quantum_write method exists as a placeholder to simulate a low-level, bit-level hardware register manipulation.
+

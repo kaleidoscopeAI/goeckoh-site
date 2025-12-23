@@ -1,0 +1,1 @@
+- Python: 4-space indentation, PEP 8 layout, `snake_case` for functions/variables, `PascalCase` for classes; prefer type hints and short docstrings on public APIs.

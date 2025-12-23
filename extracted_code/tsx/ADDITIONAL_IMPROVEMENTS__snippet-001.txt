@@ -1,0 +1,9 @@
+<AnimatedPanel
+  isOpen={isOpen}
+  onClose={() => setIsOpen(false)}
+  position="right"
+  size="medium"
+  title="Settings"
+>
+  <YourContent />
+</AnimatedPanel>

@@ -1,0 +1,8 @@
+    Architecture: Renders 50,000+ nodes using React, Three.js, and a Web Worker.
+
+    Decoupling: Rendering and physics calculations are completely decoupled via Shared Buffers, resulting in Zero main-thread CPU load.
+
+    Analysis: This architecture allows for deterministic analysis, where the user can freeze, replay, and sample the full state for scientific computation.
+
+    Network Layout: The Resonance Network visualization specifically uses nx.spring_layout with a fixed seed=42 for deterministic, reproducible visualization of connections.
+

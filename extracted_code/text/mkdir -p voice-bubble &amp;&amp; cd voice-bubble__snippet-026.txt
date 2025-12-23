@@ -1,0 +1,4 @@
+HOUR 1: PDF + Screenshots → investor@goeckoh.com
+HOUR 2: APK wrapper (Capacitor, no Rust rebuild)
+HOUR 3: Rust STT→TTS binary (pre-set voice)
+HOUR 4: Clinician demo video (90s script + states)

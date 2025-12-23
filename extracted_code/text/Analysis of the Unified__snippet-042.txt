@@ -1,0 +1,2 @@
+This ensures that data processing is both specialized (using the 1.5× boost) and distributed (using the inverse time-since-active function), directly managing the system's torque propagation efficiency.
+

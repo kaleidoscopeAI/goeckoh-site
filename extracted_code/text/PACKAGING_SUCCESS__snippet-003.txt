@@ -1,0 +1,6 @@
+- [ ] DEB package created (optional)
+- [ ] Windows package created (optional)
+- [ ] macOS package created (optional)
+- [ ] Android package created (optional)
+- [ ] iOS package created (optional)
+

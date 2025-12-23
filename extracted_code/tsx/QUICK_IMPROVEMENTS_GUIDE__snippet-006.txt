@@ -1,0 +1,10 @@
+// In your voice processing callback
+setVoiceData({
+  energy: bubbleState.energy || 0,
+  f0: bubbleState.f0 || 220,
+  clarity: calculateClarity(audioData),
+  fluency: calculateFluency(audioData),
+  volume: calculateVolume(audioData),
+  waveform: audioBuffer,
+  spectrum: frequencySpectrum
+});

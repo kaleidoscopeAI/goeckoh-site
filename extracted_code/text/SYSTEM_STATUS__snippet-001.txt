@@ -1,0 +1,8 @@
+┌─────────────────────────────────────────────────┐
+│  Canonical System                                │
+│  GOECKOH/goeckoh/systems/complete_unified_system.py │
+│  └── CompleteUnifiedSystem class                 │
+└─────────────────────────────────────────────────┘
+         │
+         ├── Used by apps/real_unified_system.py
+         └── Used by systems/realtime_loop.py

@@ -1,0 +1,2 @@
+This will package for all available platforms with prompts.
+

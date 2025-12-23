@@ -1,11 +1,11 @@
 # Deduplication report
 
-Total snippets (from index): 9284
-Unique snippet groups: 6229
+Total snippets (from index): 11721
+Unique snippet groups: 7794
 
 Top duplicated snippet groups (top 20):
 - count=438 lang=text example=extracted_code/text/polyglot__snippet-003.txt
-- count=353 lang=text example=extracted_code/text/grok-chat (1)__snippet-022.txt
+- count=402 lang=text example=extracted_code/text/grok-chat (1)__snippet-022.txt
 - count=21 lang=python example=extracted_code/python/grok-chat (9)__snippet-032.py
 - count=18 lang=python example=extracted_code/python/grok-chat (9)__snippet-064.py
 - count=14 lang=python example=extracted_code/python/.txt__snippet-080.py

@@ -1,0 +1,1 @@
+  - Nodes pass on learned information and experiences to their neighboring nodes, which allows the network as a whole to benefit from each node’s experiences. This interconnectedness means that nodes collectively evolve, learning from the successes and failures of their counterparts.

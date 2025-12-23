@@ -1,0 +1,2 @@
+Worklet: 10ms features → 16ms render → browser audio stack ~80-150ms
+Total: 110-180ms on desktop Chrome, 150-250ms mobile Safari

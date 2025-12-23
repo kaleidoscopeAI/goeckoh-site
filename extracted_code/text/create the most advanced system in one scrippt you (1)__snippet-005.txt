@@ -1,0 +1,1 @@
+d_paired = (M_pre - M_post) / SD_pooled_paired

@@ -1,0 +1,1 @@
+- **Linux**: DEB package for Debian/Ubuntu, tar.gz for others

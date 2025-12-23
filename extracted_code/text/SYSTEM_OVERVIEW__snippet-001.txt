@@ -1,0 +1,1 @@
+4. **Voice Synthesis (TTS)** → Generates corrected speech using neural TTS

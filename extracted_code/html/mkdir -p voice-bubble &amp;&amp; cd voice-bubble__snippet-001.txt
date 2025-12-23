@@ -1,0 +1,16 @@
+<div class="row">
+  <div class="label">Monitor</div>
+  <div class="value">
+    <label style="display:flex;gap:10px;align-items:center;font-size:13px;">
+      <input id="monitorOn" type="checkbox"/>
+      <span>Hear lattice DSP</span>
+    </label>
+  </div>
+</div>
+<div class="row">
+  <div class="label">Gain</div>
+  <div class="value">
+    <input id="monitorGain" type="range" min="0" max="0.35" step="0.01" value="0.12"/>
+    <span id="gainVal">0.12</span>
+  </div>
+</div>

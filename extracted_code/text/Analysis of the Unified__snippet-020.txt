@@ -1,0 +1,3 @@
+  * Replace `SimpleController` with PPO/SAC using `stable-baselines3` and vectorized sandbox rollouts.
+  * Keep the current sandbox evaluator as the environment (Gym wrapper).
+

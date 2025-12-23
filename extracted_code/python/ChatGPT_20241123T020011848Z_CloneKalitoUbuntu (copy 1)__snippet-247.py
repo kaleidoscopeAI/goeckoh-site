@@ -1,0 +1,2 @@
+back to the project and I'll stop deviating.  let's systematically check off each file as we go down the file structure you have decided was best. . i want you to go over the original architecture and i want you to review all code from this conversation before we officially start building. i know i keep asking you to do the same things over and over but being meticulous is going to be the attribute that makes this succesful . there is never too much preperation. 
+

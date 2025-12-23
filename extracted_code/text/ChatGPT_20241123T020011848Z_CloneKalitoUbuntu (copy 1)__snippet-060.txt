@@ -1,0 +1,6 @@
+    - Attempts to categorize them using known characteristics (e.g., "bun," "tail," "mustard").
+  - Shared Hub:
+    - Combines results: "Hot dog" is stored as "food item" based on textual and visual alignment.
+
+
+

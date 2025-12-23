@@ -1,0 +1,77 @@
+ECHO-CRYSTAL AGI COMPANION
+├── I. SENSORY INPUT & PREPROCESSING
+│   ├── A. Audio Input (EchoVoice)
+│   │   ├── Microphone Stream
+│   │   ├── VAD (Voice Activity Detection)
+│   │   └── Noise Reduction
+│   ├── B. Auditory Feature Extraction (EchoVoice)
+│   │   ├── RMS (Emotional Intensity)
+│   │   └── Prosody (Pitch, Energy, Rhythm)
+│   ├── C. Speech-to-Text (EchoVoice - Whisper)
+│   │   └── Transcribed Text
+│   └── D. Environmental/Physiological Data (Cognitive Crystal AI - via backend/adapters)
+│       ├── Wearable Sensors (HRV, Skin Conductance)
+│       ├── Room Sensors (Light, Temp, Sound Level)
+│       └── Camera Input (Simplified visual context - e.g., activity level)
+│
+├── II. COGNITIVE PROCESSING & INTERNAL STATE (Cognitive Crystal AI Core)
+│   ├── A. Emotional Mathematics Engine (Hybrid: EchoVoice's Heart feeds Crystal AI)
+│   │   ├── Integrates RMS, Prosody, Physiological data, Text Sentiment
+│   │   ├── Calculates nuanced Arousal, Valence, Coherence (EchoVoice's Crystalline Heart enhanced)
+│   │   └── Feeds Emotional Intensity to Organic Core
+│   ├── B. Organic Node Network (Organic AI Final)
+│   │   ├── Nodes: Fundamental processing units with DNA (traits)
+│   │   ├── Metabolism: Nodes "eat" emotional/cognitive stimuli (arousal, information novelty)
+│   │   ├── Replication & Mutation: Self-evolution of node network based on feedback
+│   │   └── Dynamic Topology: Connections grow/decay based on experience
+│   ├── C. Crystalline Memory Lattice (Backend/Memory)
+│   │   ├── Stores Experiences: Transcripts, Emotional Context, Interventions, Outcomes
+│   │   ├── Emotional Tagging: Memories are linked to emotional states
+│   │   ├── Annealing & Optimization: Memory consolidation, retrieval path optimization
+│   │   └── Semantic Search & Context Retrieval
+│   ├── D. Thought Engines (Backend/Engines - e.g., Kaleidoscope, Perspective)
+│   │   ├── Pattern Recognition: Detects recurring child behaviors/triggers
+│   │   ├── Predictive Modeling: Forecasts potential dysregulation based on context/history
+│   │   └── Creativity/Novelty Generation: Explores new solutions from node network
+│   ├── E. LLM Self-Reflection & Reasoning (Backend/LLM - Ollama)
+│   │   ├── Internal Monologue: Explains internal state, validates hypotheses
+│   │   └── Strategic Planning: Develops long-term therapeutic plans
+│
+├── III. DECISION MAKING & THERAPEUTIC STRATEGY (Hybrid)
+│   ├── A. ABA Engine (EchoVoice - Initial Filtering)
+│   │   ├── Rule-based Intervention: Based on simple thresholds (e.g., high emotional intensity)
+│   │   └── Skill Tracking: Monitors progress on specific developmental goals
+│   ├── B. LLM Therapeutic Advisor (Cognitive Crystal AI Enhancement)
+│   │   ├── Contextual Strategy Selection: Recommends nuanced ABA adjustments from Crystalline Memory
+│   │   ├── Ethical Constraint Checking: Ensures decisions align with master Hamiltonian
+│   │   └── Personalized Dialogue Generation: Crafts empathetic, developmentally appropriate responses
+│   ├── C. Organic Emergent Strategies (Cognitive Crystal AI)
+│   │   └── Novel Intervention Discovery: AI's self-organizing properties propose new therapeutic approaches
+│   ├── D. Master Hamiltonian (Cognitive Crystal AI - Overarching Goal)
+│   │   └── Guides all decision-making towards child's well-being and developmental goals
+│
+├── IV. ACTION OUTPUT (Hybrid)
+│   ├── A. Speech Generation (EchoVoice Core)
+│   │   ├── Therapeutic Response Text
+│   │   ├── Voice Crystal (Coqui TTS): Speech Synthesis
+│   │   └── Prosody Transfer/Emotional Toning: Applies appropriate vocal style (calm, encouraging)
+│   ├── B. HID Emulation (Cognitive Crystal AI - via scripts/backend)
+│   │   ├── Environmental Control: Adjusts smart lights, ambient sound, screen content
+│   │   └── Robotic Companion Control: Guides physical interactions, tactile feedback
+│   ├── C. Frontend Visualization Update (Cognitive Crystal AI)
+│   │   └── Real-time "Cognitive Cube" and "Emotional Radar" updates for caregivers
+│
+└── V. FEEDBACK & CONTINUOUS LEARNING
+    ├── A. Child's Response Monitoring
+    │   ├── Audio: Vocal tone, volume, rate
+    │   ├── Physiological: (if sensors available) HR, GSR, attention
+    │   └── Behavioral: (via camera/manual input) Engagement, compliance
+    ├── B. Crystalline Memory Update
+    │   └── Integrates new data, outcomes, and internal state
+    ├── C. Organic Evolution
+    │   ├── Node Reinforcement: Successful interactions strengthen relevant nodes/connections
+    │   ├── DNA Mutation: Failures or novel situations drive evolutionary adaptation
+    │   └── Resource Allocation: Directs computational resources to active cognitive areas
+    └── D. Caregiver Feedback Loop (GUI)
+        └── Explicit input to refine AI's therapeutic model and preferences
+

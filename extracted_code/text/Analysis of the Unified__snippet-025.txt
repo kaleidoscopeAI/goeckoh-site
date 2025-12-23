@@ -1,0 +1,2 @@
+The simulation environment manages time, resources, and node evolution. A production-ready real-time renderer handles the visualization of 50,000+ nodes without lag using React, Three.js, and a Web Worker.
+

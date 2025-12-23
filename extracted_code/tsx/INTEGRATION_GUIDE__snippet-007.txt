@@ -1,0 +1,3 @@
+<ThemeProvider defaultTheme="dark" defaultColorScheme="purple">
+  <YourApp />
+</ThemeProvider>

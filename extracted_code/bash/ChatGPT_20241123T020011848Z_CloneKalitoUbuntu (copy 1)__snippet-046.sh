@@ -1,0 +1,2 @@
+tree /path/to/project
+

@@ -1,0 +1,1 @@
+- Review and integrate the code snippets from the document into their respective modules.

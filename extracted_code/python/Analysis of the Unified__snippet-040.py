@@ -1,0 +1,1 @@
+*   **`kaleidoscope_engine.py`:** The `KaleidoscopeEngine` uses the `E8Lattice`'s `mirror_state` method to perform the "Cognitive Actuation" on each node. This is a key part of the main simulation loop, integrated with quantum computations from October 08.

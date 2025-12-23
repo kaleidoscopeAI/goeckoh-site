@@ -1,0 +1,7 @@
+librosa                  # Audio analysis
+webrtcvad                # Voice activity detection
+openai-whisper          # Alternative STT
+speechbrain              # Speech processing
+torch, torchaudio        # Deep learning
+websockets               # Real-time communication
+soundfile                # Audio file I/O

@@ -1,0 +1,27 @@
+library(pdftools); library(stringr); library(purrr); library(dplyr)
+
+batch_extract_iccs <- function(pdf_dir) {
+  pdf_files <- list.files(pdf_dir, pattern="*.pdf", full.names=TRUE)
+  
+  results <- map_dfr(pdf_files, function(file) {
+    text <- pdf_text(file)
+    text <- str_c(text, collapse=" ")
+    
+    # Extract ICC values with context
+    icc_hits <- str_extract_all(text, "ICC[:\\s]*([0-9\\.]+)(?:[;\\s,]+(?:older|elderly|age [6-9])?)?")[[^21_1]]
+    n_hits <- str_extract_all(text, "(?:N|n|participants?|subjects?)[:\\s]*([0-9]+)")[[^21_1]]
+    
+    data.frame(
+      file = basename(file),
+      ICC = as.numeric(str_extract(icc_hits, "[0-9\\.]+")),
+      N = as.numeric(str_extract(n_hits, "[0-9]+")),
+      stringsAsFactors=FALSE
+    ) %>% filter(!is.na(ICC))
+  })
+  
+  return(results)
+}
+
+# Usage
+iccs <- batch_extract_iccs("n1_papers/")
+summary(iccs$ICC)  # Mean ICC, range for power calcs

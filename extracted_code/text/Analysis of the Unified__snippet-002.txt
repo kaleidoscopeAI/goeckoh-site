@@ -1,0 +1,9 @@
+Application Layer:    User-facing applications and services
+                     ↓
+Control Mapper:      Translates cognitive intentions to hardware commands
+                     ↓  
+HID Controller:      Generates precise input device commands
+                     ↓
+Operating System:    Processes commands as user input
+                     ↓
+Hardware Sensors:    Provide environmental feedback

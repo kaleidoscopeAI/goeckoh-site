@@ -1,0 +1,39 @@
+library(tabulizer)
+library(dplyr)
+
+# Extract table from specific PDF page
+extract_n1_icc_table <- function(pdf_file, pages = 1) {
+  # Extract all tables from page
+  tables <- extract_tables(pdf_file, pages = pages)
+  
+  # Find N1 ICC table (look for "ICC" or "N1" keywords)
+  n1_table <- NULL
+  for(i in seq_along(tables)) {
+    tbl <- tables[[i]]
+    if(any(grepl("ICC|N1", tbl, ignore.case=TRUE))) {
+      n1_table <- tbl
+      break
+    }
+  }
+  
+  if(is.null(n1_table)) return(NULL)
+  
+  # Clean and parse
+  df <- as.data.frame(n1_table)
+  icc_cols <- grep("ICC|Reliab", colnames(df), ignore.case=TRUE)
+  n_col <- grep("N|sample|subjects", colnames(df), ignore.case=TRUE, value=TRUE)
+  
+  icc_data <- df %>%
+    select(all_of(c(n_col, icc_cols))) %>%
+    filter(grepl("older|elderly|OA|65", X1, ignore.case=TRUE)) %>%
+    mutate(
+      ICC_amplitude = as.numeric(X2),
+      N = as.numeric(X1)
+    )
+  
+  return(icc_data)
+}
+
+# Usage
+icc_older <- extract_n1_icc_table("mirdamadi_2025.pdf", pages=5)
+print(icc_older)

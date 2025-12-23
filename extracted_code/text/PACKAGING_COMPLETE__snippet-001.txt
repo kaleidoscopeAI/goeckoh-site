@@ -1,0 +1,10 @@
+goeckoh-system-1.0.0/
+├── install.sh                    # Installation script
+├── bin/
+│   └── launch_bubble_system.sh   # Launcher
+├── assets/                       # Models
+├── GOECKOH/                      # Canonical system
+├── icons/                        # Icon files
+├── requirements.txt              # Dependencies
+├── README.md                     # Documentation
+└── [all source files]

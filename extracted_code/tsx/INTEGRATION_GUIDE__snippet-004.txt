@@ -1,0 +1,111 @@
+import React, { useState, useEffect } from 'react';
+import { ThemeProvider } from './components/ThemeProvider';
+import ErrorBoundary from './components/ErrorBoundary';
+import MobileOptimized from './components/MobileOptimized';
+import { useVoiceData } from './hooks/useVoiceData';
+import { useSession } from './hooks/useSession';
+import { useBubbleState } from './hooks/useBubbleState';
+import EnhancedThreeCanvas from './components/EnhancedThreeCanvas';
+import EnhancedUIOverlay from './components/EnhancedUIOverlay';
+import PerformanceMonitor from './components/PerformanceMonitor';
+
+const AppContent = () => {
+  // Voice data hook
+  const { voiceData, isConnected } = useVoiceData({
+    updateInterval: 100
+  });
+
+  // Session hook
+  const {
+    currentSession,
+    isActive,
+    startSession,
+    endSession,
+    completeExercise,
+    updateMetrics,
+    getSessionTime
+  } = useSession({
+    autoStart: false
+  });
+
+  // Bubble state hook
+  const { bubbleState } = useBubbleState(
+    voiceData ? {
+      energy: voiceData.metrics.energy,
+      f0: voiceData.metrics.f0,
+      zcr: 0.3, // Calculate from audio
+      tilt: 0.5,
+      hnr: 0.8
+    } : null
+  );
+
+  // Update session metrics
+  useEffect(() => {
+    if (voiceData && isActive) {
+      updateMetrics(
+        voiceData.metrics.clarity,
+        voiceData.metrics.fluency
+      );
+    }
+  }, [voiceData, isActive, updateMetrics]);
+
+  return (
+    <div className="relative w-full h-screen bg-black overflow-hidden">
+      {/* 3D Visualization */}
+      <EnhancedThreeCanvas
+        metrics={metrics}
+        aiThought={aiThought}
+        imageData={imageData}
+        settings={settings}
+        voiceData={{
+          bubbleState,
+          waveform: voiceData?.waveform,
+          spectrum: voiceData?.spectrum
+        }}
+      />
+
+      {/* UI Overlay */}
+      <EnhancedUIOverlay
+        metrics={metrics}
+        aiThought={aiThought}
+        isLoading={isLoading}
+        isDreaming={isDreaming}
+        onPromptSubmit={handlePromptSubmit}
+        chatHistory={chatHistory}
+        settings={settings}
+        onSettingsChange={handleSettingsChange}
+        voiceData={voiceData ? {
+          energy: voiceData.metrics.energy,
+          f0: voiceData.metrics.f0,
+          clarity: voiceData.metrics.clarity,
+          fluency: voiceData.metrics.fluency,
+          volume: voiceData.metrics.volume,
+          waveform: voiceData.waveform,
+          spectrum: voiceData.spectrum
+        } : undefined}
+        showVoicePanel={true}
+        showProgress={true}
+        showVoiceFeedback={true}
+      />
+
+      {/* Performance Monitor (dev only) */}
+      {process.env.NODE_ENV === 'development' && (
+        <PerformanceMonitor enabled={true} />
+      )}
+    </div>
+  );
+};
+
+const App = () => {
+  return (
+    <ErrorBoundary>
+      <ThemeProvider>
+        <MobileOptimized>
+          <AppContent />
+        </MobileOptimized>
+      </ThemeProvider>
+    </ErrorBoundary>
+  );
+};
+
+export default App;

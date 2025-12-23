@@ -1,0 +1,29 @@
+// Replace UIOverlay import
+import EnhancedUIOverlay from './components/EnhancedUIOverlay';
+
+// Add voice data state
+const [voiceData, setVoiceData] = useState({
+  energy: 0,
+  f0: 220,
+  clarity: 0.7,
+  fluency: 0.7,
+  volume: 0.5,
+  waveform: new Float32Array(512),
+  spectrum: new Float32Array(128)
+});
+
+// Update component
+<EnhancedUIOverlay
+  metrics={metrics}
+  aiThought={aiThought}
+  isLoading={isLoading}
+  isDreaming={isDreaming}
+  onPromptSubmit={handlePromptSubmit}
+  chatHistory={chatHistory}
+  settings={settings}
+  onSettingsChange={handleSettingsChange}
+  voiceData={voiceData}
+  showVoicePanel={true}
+  showProgress={false}
+  showVoiceFeedback={true}
+/>

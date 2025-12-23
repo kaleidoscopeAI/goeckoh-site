@@ -1,0 +1,1 @@
+4. **Bond adaptation:** The AI layer monitors stress, updating bond weights (B) using Hebbian-like rules. Strong correlations are reinforced, unstable ones decay.

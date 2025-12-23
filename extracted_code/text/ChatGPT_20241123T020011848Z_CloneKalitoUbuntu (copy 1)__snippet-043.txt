@@ -1,0 +1,2 @@
+This code implements an Objective-Driven Node class that includes adaptive modes based on a dynamically calculated objective score. Here’s a breakdown of its major functionalities:
+

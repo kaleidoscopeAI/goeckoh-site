@@ -1,0 +1,57 @@
+[package]
+name = "goeckoh_core"
+version = "0.1.0"
+edition = "2021"
+authors = ["Jacob Graham"]
+description = "The bio-mimetic crystalline heart engine for Echo V4.0"
+
+# "cdylib" is for Android (.so), "staticlib" is for iOS (.a)
+[lib]
+crate-type = ["cdylib", "staticlib", "lib"]
+name = "goeckoh_core"
+
+[dependencies]
+# --- THE BRIDGE (Mobile Interop) ---
+# Generates the Kotlin and Swift bindings automatically.
+uniffi = { version = "0.25", features = ["cli"] }
+
+# --- THE MATH (Crystalline Heart) ---
+# 'nalgebra' provides linear algebra with SIMD optimizations.
+# Essential for your 10x24 lattice and ODE vector operations.
+nalgebra = { version = "0.32", features = ["serde-serialize"] }
+
+# --- THE AUDIO (Low Latency) ---
+# Cross-platform audio host. On Android, this wraps Oboe/AAudio.
+cpal = "0.15"
+
+# --- THE GLUE (Concurrency & Safety) ---
+# CRITICAL: A lock-free ring buffer. You CANNOT use standard Mutexes
+# or allocate memory inside the audio callback (it causes glitches).
+# This allows the audio thread to "consume" data from the math thread safely.
+ringbuf = "0.3"
+
+# Standard error handling to prevent the app from crashing silently.
+thiserror = "1.0"
+
+# Async runtime (for non-audio tasks like networking/state saving).
+tokio = { version = "1.34", features = ["full"] }
+
+# Serialization for saving state/models.
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# --- PLATFORM SPECIFIC ---
+[target.'cfg(target_os = "android")'.dependencies]
+# Allows Rust to log directly to Android Logcat (adb logcat).
+android_logger = "0.13"
+log = "0.4"
+jni = "0.21"
+
+[target.'cfg(target_os = "ios")'.dependencies]
+# Logging for iOS.
+oslog = "0.1"
+log = "0.4"
+
+[build-dependencies]
+# Required for UniFFI to generate the scaffolding code during compile.
+uniffi_build = "0.25"

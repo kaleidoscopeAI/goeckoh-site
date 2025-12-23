@@ -1,0 +1,6 @@
+// In your voice processing code
+const handleVoiceData = (audioBuffer: Float32Array) => {
+  extractVoiceMetrics(audioBuffer).then(metrics => {
+    setVoiceMetrics(metrics);
+  });
+};

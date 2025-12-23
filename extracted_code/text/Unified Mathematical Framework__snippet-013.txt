@@ -1,0 +1,222 @@
+class SocialStoryTemplate:
+    id: str
+    category: SkillCategory
+    title: str
+    paragraphs: list[str]           # Uses {child_name} and other placeholders
+    visual_cues: list[str] = field(default_factory=list)  # Optional image descriptions for GUI
+
+class ABAEngine:
+    """
+    Complete 2025-Standard ABA Therapeutics Engine
+    - Positive reinforcement only (no punishment)
+    - Dynamic social stories & visual scripts
+    - Mastery-based progression (5 levels)
+    - Success streaks → excited coach voice
+    - Emotion-linked interventions
+    - Full progress tracking (CSV + JSON)
+    - Parent-customizable via GUI
+    """
+
+    # Evidence-based default skills (expandable)
+    DEFAULT_SKILLS = {
+        "self_care": ["brush_teeth", "wash_hands", "get_dressed", "toilet"],
+        "communication": ["request_item", "manding", "commenting", "greeting"],
+        "social": ["turn_taking", "eye_contact", "sharing", "joint_attention"],
+        "emotional_regulation": ["deep_breath", "ask_for_break", "name_feeling"],
+        "academic": ["count_to_10", "colors", "letters"],
+    }
+
+    # Built-in social story templates (first-person, calming)
+    SOCIAL_STORIES = [
+        SocialStoryTemplate(
+            id="waiting",
+            category="emotional_regulation",
+            title="Waiting Is Okay",
+            paragraphs=[
+                "Sometimes I have to wait. Waiting can feel hard.",
+                "When I wait, I can count to 10 or take deep breaths.",
+                "Waiting helps me get what I want safely.",
+                "I am proud when I wait calmly."
+            ],
+            visual_cues=["hourglass", "deep breath animation", "happy face"]
+        ),
+        SocialStoryTemplate(
+            id="transition",
+            category="emotional_regulation",
+            title="Changing Activities",
+            paragraphs=[
+                "Right now I am playing with trains.",
+                "Soon it will be time for dinner.",
+                "I can say 'one more minute' and then put trains away.",
+                "Dinner is yummy and then I can play again.",
+                "I am good at changing activities."
+            ]
+        ),
+        SocialStoryTemplate(
+            id="requesting",
+            category="communication",
+            title="How to Ask for Things",
+            paragraphs=[
+                "When I want something, I can use my words.",
+                "I look at mommy and say 'I want juice please'.",
+                "When I use my words, I get what I want faster.",
+                "Using words makes everyone happy."
+            ]
+        )
+    ]
+
+    def __init__(self, voice_crystal: VoiceCrystal, config, behavior_monitor=None):
+        self.vc = voice_crystal
+        self.config = config
+        self.bm = behavior_monitor
+
+        self.progress_path = config.paths.base / "aba_progress.json"
+        self.skills_path = config.paths.base / "aba_skills.json"
+        self.metrics_csv = config.paths.metrics_csv
+
+        self.progress: Dict[str, SkillProgress] = self._load_progress()
+        self.skills: Dict[SkillCategory, list[str]] = self._load_skills()
+
+        # Ensure metrics CSV exists with header
+        if not self.metrics_csv.exists():
+            with self.metrics_csv.open("w", newline="") as f:
+                writer = csv.writer(f)
+                writer.writerow(["timestamp", "category", "skill", "attempts", "success", "level", "streak"])
+
+    def _load_progress(self) -> Dict[str, SkillProgress]:
+        if self.progress_path.exists():
+            try:
+                data = json.loads(self.progress_path.read_text())
+                return {k: SkillProgress(**v) for k, v in data.items()}
+            except Exception:
+                pass
+        return {skill: SkillProgress() for cat, skills in self.DEFAULT_SKILLS.items() for skill in skills}
+
+    def _load_skills(self) -> Dict[str, list[str]]:
+        if self.skills_path.exists():
+            try:
+                return json.loads(self.skills_path.read_text())
+            except Exception:
+                pass
+        return self.DEFAULT_SKILLS.copy()
+
+    def save_progress(self) -> None:
+        data = {k: v.__dict__ for k, v in self.progress.items()}
+        self.progress_path.write_text(json.dumps(data, indent=2))
+
+    def _log_metric(self, category: str, skill: str, success: bool) -> None:
+        prog = self.progress.get(skill, SkillProgress())
+        with self.metrics_csv.open("a", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow([
+                datetime.utcnow().isoformat(),
+                category,
+                skill,
+                prog.attempts,
+                prog.successes,
+                prog.current_level,
+                prog.streak
+            ])
+
+    def track_skill_progress(self, skill_key: str, success: bool) -> None:
+        if skill_key not in self.progress:
+            # Auto-create custom skill
+            self.progress[skill_key] = SkillProgress()
+
+        prog = self.progress[skill_key]
+        prog.attempts += 1
+        if success:
+            prog.successes += 1
+            prog.streak += 1
+            prog.last_success_ts = datetime.now().timestamp()
+
+            # Mastery level up every 10 consecutive successes
+            if prog.streak > 0 and prog.streak % 10 == 0:
+                prog.current_level = min(5, prog.current_level + 1)
+                self.vc.say_inner(f"I reached level {prog.current_level} in {skill_key.replace('_', ' ')}! Amazing!", style="excited")
+        else:
+            prog.streak = 0
+
+        self.save_progress()
+        self._log_metric("custom", skill_key, success)
+
+    def reinforce_success(self, corrected_text: str) -> None:
+        # Positive reinforcement for any clear utterance
+        reinforcements = [
+            "That was awesome!",
+            "I did it! So proud!",
+            "Perfect words!",
+            "Yay me!"
+        ]
+        if self.bm and self.bm.success_streak >= 3:
+            style: Style = "excited"
+            message = random.choice(reinforcements)
+            self.vc.say_inner(message, style=style)
+            self.bm.success_streak += 1
+        elif self.bm and self.bm.current_state in ["anxious", "high_energy"]:
+            self.vc.say_inner("Great job staying calm while talking.", style="calm")
+
+    def intervene(self, event: EventType, context_text: Optional[str] = None) -> None:
+        if event == "meltdown_risk":
+            self.vc.say_inner(
+                "Everything is okay. I can close my eyes and breathe. I am safe. Mommy is here.",
+                style="calm"
+            )
+            self.generate_social_story("emotional_regulation", {"topic": "calming"})
+        
+        elif event == "high_energy":
+            self.vc.say_inner("Let's do jumping jacks to get the wiggles out!", style="excited")
+        
+        elif event == "transition":
+            self.generate_social_story("emotional_regulation", {"topic": "transition"})
+        
+        elif event == "waiting":
+            self.generate_social_story("emotional_regulation", {"topic": "waiting"})
+        
+        elif event == "request" and context_text:
+            # Reinforce manding
+            self.track_skill_progress("manding", success=True)
+            self.vc.say_inner("Great asking! I used my words!", style="excited")
+
+    def generate_social_story(self, category: SkillCategory, params: dict = None) -> str:
+        templates = [t for t in self.SOCIAL_STORIES if t.category == category]
+        if not templates:
+            return ""
+
+        story = random.choice(templates)
+        params = params or {}
+        params.setdefault("child_name", "I")  # First-person default
+
+        full_text = story.title + "\n\n" + "\n\n".join(
+            para.format(**params) for para in story.paragraphs
+        )
+
+        # Speak in calm voice, first-person
+        self.vc.say_inner(full_text, style="calm")
+
+        # GUI can display visual_cues if on strategies screen
+        return full_text
+
+    def get_progress_report(self) -> Dict[str, Dict[str, float]]:
+        report = {}
+        for skill, prog in self.progress.items():
+            mastery = (prog.successes / max(prog.attempts, 1)) * 100
+            report[skill] = {
+                "mastery_percent": mastery,
+                "level": prog.current_level,
+                "streak": prog.streak,
+                "attempts": prog.attempts
+            }
+        return report
+
+    # GUI-accessible methods
+    def add_custom_skill(self, category: str, skill_name: str) -> None:
+        if category not in self.skills:
+            self.skills[category] = []
+        self.skills[category].append(skill_name)
+        self.progress[skill_name] = SkillProgress()
+        Path(self.skills_path).write_text(json.dumps(self.skills, indent=2))
+
+    def get_all_skills(self) -> Dict[str, list[str]]:
+        return self.skills
+

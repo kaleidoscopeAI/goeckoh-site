@@ -1,0 +1,2 @@
+The package includes everything needed to run standalone.
+

@@ -1,0 +1,1 @@
+- Add debug logs in the scripts using Python's logging module:

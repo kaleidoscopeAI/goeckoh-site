@@ -1,0 +1,15 @@
+const processVoiceData = (rawData: any) => {
+  return {
+    metrics: {
+      energy: rawData.energy || 0,
+      f0: rawData.f0 || 220,
+      clarity: calculateClarity(rawData),
+      fluency: calculateFluency(rawData),
+      volume: rawData.volume || 0,
+      pitchStability: calculatePitchStability(rawData)
+    },
+    waveform: rawData.waveform || new Float32Array(512),
+    spectrum: rawData.spectrum || new Float32Array(128),
+    timestamp: Date.now()
+  };
+};

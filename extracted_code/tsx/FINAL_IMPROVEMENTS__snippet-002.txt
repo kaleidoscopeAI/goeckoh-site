@@ -1,0 +1,7 @@
+<AdvancedDataVisualization
+  data={dataPoints}
+  type="line"
+  title="Progress Over Time"
+  color="#22d3ee"
+  height={200}
+/>

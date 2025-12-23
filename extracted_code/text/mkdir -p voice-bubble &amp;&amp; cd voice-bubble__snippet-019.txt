@@ -1,0 +1,4 @@
+Whisper tiny: ~150MB
+Piper voice: ~100MB  
+Ringbufs + state: ~50MB
+Total: <350MB → ✅ iPhone XR / mid Android viable

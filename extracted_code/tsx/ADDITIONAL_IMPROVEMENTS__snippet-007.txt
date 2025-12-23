@@ -1,0 +1,5 @@
+<PerformanceMonitor
+  enabled={true}
+  position="top-right"
+  showDetails={true}
+/>

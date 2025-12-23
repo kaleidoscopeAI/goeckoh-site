@@ -1,6 +1,6 @@
 # Extracted Code
 
-This directory contains code snippets extracted from `.txt` files in the repository.
+This directory contains code snippets extracted from `.txt`, `.md`, and `.markdown` files in the repository.
 
 Heuristics used:
 - Extract fenced code blocks with triple backticks (```), respecting optional language hints.

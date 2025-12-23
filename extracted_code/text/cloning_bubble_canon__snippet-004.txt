@@ -1,0 +1,1 @@
+R_total(n,t) = G_active(t) * R_active(n,t) + (1 - G_active(t)) * R_idle(t)

@@ -1,0 +1,1 @@
+G_active(t) = sigmoid((Volume(t) - 0.05) * 10.0)

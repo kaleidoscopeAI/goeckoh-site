@@ -1,0 +1,2 @@
+(A TypeScript class mirroring previous JS; includes `integrateOllamaFeedback` stub for main-thread updates.)
+

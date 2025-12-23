@@ -1,0 +1,1 @@
+2. In each cognitive loop iteration, generate hypotheses for each node using PerspectiveEngine, evaluate, and update if confidence passes a threshold.

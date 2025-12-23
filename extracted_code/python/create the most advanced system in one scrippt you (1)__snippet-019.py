@@ -1,0 +1,1 @@
+The human brain distinguishes self-generated speech from external speech via N1 Suppression. When we speak, the motor cortex sends a copy of the command (Corollary Discharge) to the auditory cortex, effectively saying, "Expect this sound." If the sound arrives within a tight temporal window (<300ms) and matches the prediction, the brain tags it as "Self."

@@ -1,0 +1,5 @@
+{
+  "sensorInput": "optional sensor data string or object",
+  "webInput": "optional contextual web input text",
+  "command": "optional device control command (e.g., 'optimize hardware')"
+}

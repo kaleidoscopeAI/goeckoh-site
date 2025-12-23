@@ -1,0 +1,2 @@
+  - Ensure nodes crawl and annotate information from Wikipedia.
+  - Verify stored knowledge does not contain duplicates.

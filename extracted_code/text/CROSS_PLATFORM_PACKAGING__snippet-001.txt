@@ -1,0 +1,12 @@
+dist/
+├── goeckoh-system-1.0.0.tar.gz          # Linux source
+├── goeckoh-system_1.0.0_all.deb        # Linux DEB
+├── windows/
+│   └── goeckoh-system-1.0.0-windows-portable.zip
+├── macos/
+│   ├── goeckoh-system-1.0.0-macos.zip
+│   └── goeckoh-system-1.0.0-macos.dmg
+├── android/
+│   └── goeckoh-1.0.0-debug.apk
+└── ios/
+    └── (Xcode project)

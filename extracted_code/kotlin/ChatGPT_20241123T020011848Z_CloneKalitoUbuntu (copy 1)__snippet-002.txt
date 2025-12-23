@@ -1,0 +1,91 @@
+AI_Project/
+│
+├── core/
+│   ├── building_blocks/
+│   │   ├── node_building_block.py
+│   │   ├── instinct_module.py
+│   │   ├── replication_mechanism.py
+│   │   └── synaptic_overlay.py
+│   │
+│   ├── resource_management/
+│   │   ├── resource_sharing.py
+│   │   ├── waste_handling.py
+│   │   ├── energy_distribution.py
+│   │   └── memory_allocation.py
+│   │
+│   ├── thought_hub/
+│   │   ├── knowledge_base.py
+│   │   ├── thought_hub.py
+│   │   └── overlay_querying.py
+│   │
+│   └── mirrored_network/
+│       ├── mirrored_network.py
+│       ├── visualization.py
+│       └── communication_protocols.py
+│
+├── modules/
+│   ├── learning_mechanisms/
+│   │   ├── advanced_learning_mechanism.py
+│   │   ├── self_teaching_system.py
+│   │   ├── objective_driven_node.py
+│   │   └── wiki_crawler.py
+│   │
+│   ├── neural_augmentation/
+│   │   ├── enhanced_pattern_recognition.py
+│   │   ├── organic_learning_system.py
+│   │   ├── noun_vision_system.py
+│   │   └── image_annotation.py
+│
+├── tests/
+│   ├── functional_tests/
+│   │   ├── test_mirrored_network.py
+│   │   ├── test_resource_management.py
+│   │   └── test_synaptic_overlay.py
+│   │
+│   ├── integration_tests/
+│   │   ├── test_full_node_architecture.py
+│   │   ├── test_resource_sharing_and_thought_hub.py
+│   │   └── test_learning_and_replication.py
+│
+├── data/
+│   ├── resources/
+│   │   ├── images/
+│   │   │   ├── hotdog_1.jpg
+│   │   │   ├── hotdog_2.jpg
+│   │   │   └── elephant.jpg
+│   │   ├── annotated_texts.json
+│   │   └── resource_pool.json
+│   │
+│   └── logs/
+│       ├── node_activity_logs.json
+│       ├── system_performance_logs.json
+│       └── error_logs.json
+│
+├── docs/
+│   ├── architecture_overview.md
+│   ├── node_functionality.md
+│   ├── mirrored_network_documentation.md
+│   └── resource_sharing_explanation.md
+│
+├── demos/
+│   ├── wiki_crawler_demo.py
+│   ├── mirrored_network_demo.py
+│   ├── resource_sharing_demo.py
+│   └── organic_ai_demo.py
+│
+└── visualization/
+    ├── network_graphs/
+    │   ├── node_relationships.png
+    │   ├── synaptic_connections.png
+    │   └── resource_distribution.png
+    │
+    ├── interactive_visuals/
+    │   ├── network_animation.py
+    │   ├── node_lifecycle_visualizer.py
+    │   └── thought_hub_map.py
+    │
+    └── dashboards/
+        ├── node_activity_dashboard.html
+        ├── resource_sharing_dashboard.html
+        └── system_health_dashboard.html
+

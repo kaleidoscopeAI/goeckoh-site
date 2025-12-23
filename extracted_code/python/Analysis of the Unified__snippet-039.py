@@ -1,0 +1,4 @@
+*   **E8 Roots:** The class generates the 240 root vectors of the E8 lattice, which are the fundamental building blocks of this mathematical structure. Includes cosine similarity and entropy minimization from September 28 rebuttals.
+*   **Projection and Reflection:** The class provides methods to project vectors from the 3D space of the simulation into the 8D space of the lattice, and then to reflect them across the E8 root vectors. This reflection is the key mathematical operation. The reflection calculation is performed in C for high performance, with bit-level XOR and thresholding from bit breakdowns.
+*   **Mirror State:** The main function of this class is the `mirror_state` method. It takes a 3D vector, projects it to 8D, reflects it across a randomly chosen E8 root, and then projects it back to 3D. This "mirroring" is what creates the "Kaleidoscope force" that drives the evolution of the nodes, quantum-extended for superposition.
+

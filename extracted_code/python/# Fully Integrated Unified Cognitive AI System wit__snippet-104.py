@@ -1,0 +1,1 @@
+- **Safety and Ethics:** Build continuous ethical validation layers and human-in-the-loop overrides from Phase 2 onward.

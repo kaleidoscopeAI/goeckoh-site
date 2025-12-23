@@ -1,0 +1,1 @@
+- **Spike patterns**: Bouba/Kiki effect using smooth noise

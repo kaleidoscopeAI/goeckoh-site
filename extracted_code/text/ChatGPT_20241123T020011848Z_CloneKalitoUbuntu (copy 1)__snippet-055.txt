@@ -1,0 +1,1 @@
+  - VMs share the physical resources of the host efficiently, often using only the resources they actively need.

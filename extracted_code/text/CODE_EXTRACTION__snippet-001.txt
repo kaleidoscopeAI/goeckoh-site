@@ -1,0 +1,19 @@
+extracted_code/
+├── README.md                    # Detailed extraction documentation
+├── extraction_summary.json      # Machine-readable summary
+├── GOECKOH/
+│   ├── full_project_code/      # 1,259 blocks
+│   ├── python_code/            # 4,317 blocks
+│   └── rust_code/              # 23 blocks
+├── project/
+│   ├── android echo/
+│   │   ├── tts speak ssml TextToSpeech/  # 190 blocks
+│   │   └── USER/               # 4 blocks
+│   ├── autism_code_dump/       # 88 blocks
+│   ├── echovoice_more_dump/    # 17 blocks
+│   └── more/
+│       ├── Dynamic Node Visualization/  # 173 blocks
+│       └── uni_text/           # 12 blocks
+├── grok-chat (1-14)/           # Various conversation logs
+├── all_scripts_combined/       # 86 blocks
+└── ...other sources

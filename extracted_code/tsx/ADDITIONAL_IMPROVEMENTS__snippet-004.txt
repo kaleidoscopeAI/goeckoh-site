@@ -1,0 +1,3 @@
+<LoadingStates type="spinner" message="Loading..." size="medium" />
+<LoadingStates type="progress" progress={75} message="Processing..." />
+<LoadingStates type="skeleton" />

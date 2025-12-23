@@ -1,0 +1,12 @@
+class EthicalPrinciple:
+    """Represents a fundamental ethical principle with evolving understanding."""
+    principle_id: str
+    description: str
+    weight: float = 1.0
+    confidence: float = 0.5
+    dependencies: Set[str] = field(default_factory=set)
+    contradictions: Set[str] = field(default_factory=set)
+    applications: int = 0
+    success_rate: float = 1.0
+    context_sensitivity: Dict[str, float] = field(default_factory=dict)
+

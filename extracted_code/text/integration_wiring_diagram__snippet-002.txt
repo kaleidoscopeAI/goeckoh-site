@@ -1,0 +1,69 @@
+ECHO-CRYSTAL AGI (Integrated System)
+├── ECHO_PRIME.PY (Therapeutic Interface & Sensing Layer)
+│   ├── Inputs:
+│   │   ├── Microphone (sounddevice)
+│   │   └── Child's Speech
+│   ├── Processing:
+│   │   ├── VAD
+│   │   ├── faster_whisper --> Transcribed Text
+│   │   ├── CrystallineHeart (audio RMS) --> Emotional Intensity (local)
+│   │   └── VoiceCrystal (Coqui TTS)
+│   ├── Outputs:
+│   │   ├── Speaker (voice.speak) --> Corrected/Therapeutic Speech
+│   │   ├── HTTP POST / WebSocket to CCA Backend --> Text, Emotional Intensity, Raw Audio (optional)
+│   │   └── GUI Callback to ECHO_GUI.PY
+│   └── Internal Threads:
+│       └── OrganicSubconscious (simplified, locally fed)
+│
+├── COGNITIVE_CRYSTAL_AI (Core Cognitive Processing & Control)
+│   ├── BACKEND/ (Main Brain & API Gateway)
+│   │   ├── SERVER.PY (Quart API)
+│   │   │   ├── INPUT ROUTES:
+│   │   │   │   ├── /api/sensory/text <-- from ECHO_PRIME.PY
+│   │   │   │   ├── /api/sensory/emotion <-- from ECHO_PRIME.PY
+│   │   │   │   ├── /api/sensory/audio <-- from ECHO_PRIME.PY (optional)
+│   │   │   │   └── /api/environment/sensors <-- from External Sensors
+│   │   │   ├── OUTPUT ROUTES:
+│   │   │   │   ├── /api/commands/speech --> to ECHO_PRIME.PY (Text, Prosody/Style)
+│   │   │   │   ├── /api/commands/aba --> to ECHO_PRIME.PY (ABA Strategy Trigger)
+│   │   │   │   ├── /api/commands/hid --> to ORGANIC_AI_FINAL/MAIN.PY (HID Controls)
+│   │   │   │   └── /api/state/updates --> to FRONTEND/ (for visualization)
+│   │   │   ├── Backend GUI (cognitive_crystal_ai/backend/gui/): For debugging/admin
+│   │   ├── MEMORY/CRYSTALLINE_MEMORY.PY
+│   │   │   ├── Inputs: Transcribed Text, Emotional Context, Environmental Data, Outcomes
+│   │   │   └── Outputs: Semantic Search Results, Context for Thought Engines
+│   │   ├── ENGINES/THOUGHT_ENGINES.PY (Kaleidoscope, Perspective)
+│   │   │   ├── Inputs: Crystalline Memory, Emotional State, Organic AI State
+│   │   │   └── Outputs: Cognitive Insights, Therapeutic Recommendations
+│   │   ├── ENGINES/LLM_REASONING.PY (Ollama)
+│   │   │   ├── Inputs: Context from Thought Engines, Crystalline Memory
+│   │   │   └── Outputs: Self-Reflection, Strategic Plans, Response Generation
+│   │   └── DATA/, CORE/, UTILS/ (Supporting Modules)
+│   │
+│   ├── ORGANIC_AI_FINAL/ (Self-Evolving Learning & Physical Interface)
+│   │   ├── ORGANIC_AI/MAIN.PY (Core Node Logic)
+│   │   │   ├── Inputs: Emotional Stimuli, Cognitive Novelty from BACKEND/
+│   │   │   └── Outputs: Node Network State, Emergent Strategies
+│   │   └── ADAPTERS/, DASH/, HID_EMULATION.PY (Pynput/Pyautogui)
+│   │       ├── Inputs: HID Commands from BACKEND/
+│   │       └── Outputs: Physical Device Control, Environmental Adjustments
+│   │
+│   ├── SEED_CRYSTAL_AGI/ (Specialized AGI Instance/State Management)
+│   │   ├── STATE/ (Persistent AGI State)
+│   │   └── SEED_CRYSTAL.DB (Database)
+│   │
+│   ├── AGIREAL/ (Specialized AGI Modes/Avatars)
+│   │   ├── ONBRAIN_AUTONOMOUS.PY (Main AGI Decision Maker)
+│   │   │   ├── Inputs: Outputs from BACKEND Thought Engines, Organic AI, ABA
+│   │   │   └── Outputs: Action Plan, Commands to ECHO_PRIME.PY, HID Emulation
+│   │   └── ONBRAIN_ONLINE_AVATAR.PY (Specific AGI persona/interface)
+│   │
+│   └── FRONTEND/ (React/Three.js Web UI)
+│       ├── Inputs: Real-time State from BACKEND/SERVER.PY (WebSockets/SSE)
+│       └── Outputs: Cognitive Cube Visualization, Emotional Radar, Caregiver Input
+│
+└── ECHO_GUI.PY (Therapeutic Monitor - OPTIONAL CLIENT)
+    ├── Inputs: Real-time State from BACKEND/SERVER.PY (WebSockets/REST)
+    ├── Outputs: Manual Override Commands to BACKEND/SERVER.PY
+    └── Renders: Live Transcript, Emotional Intensity Bar, ABA Log, Organic Node Count
+

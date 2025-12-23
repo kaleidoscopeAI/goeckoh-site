@@ -1,0 +1,19 @@
+@dataclass
+class VoiceFingerprint:
+    """Static Bubble Constraints Θ_u for one child."""
+    mu_f0: float
+    sigma_f0: float
+    base_roughness: float    # 0..1
+    base_metalness: float    # 0..1
+    base_sharpness: float    # 0..1
+    rate: float              # syllables/sec
+    jitter_base: float
+    shimmer_base: float
+    base_radius: float = 1.0
+
+
+@dataclass
+class SpeakerProfile:
+    user_id: str
+    fingerprint: VoiceFingerprint
+    embedding: np.ndarray    # 1D float32 vector

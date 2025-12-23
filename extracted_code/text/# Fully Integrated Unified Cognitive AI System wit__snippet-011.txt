@@ -1,0 +1,2 @@
+It couples backend cognitive states with frontend visualization using Plotly and Three.js, supporting interactive 3D network views, radar, timeline metrics, and device control overlays. This multimodal, responsive design is rare in open or commercial cognitive AI systems.[^7_1]
+

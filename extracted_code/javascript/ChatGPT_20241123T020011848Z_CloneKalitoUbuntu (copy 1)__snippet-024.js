@@ -1,0 +1,1 @@
+  - Highlight the system's ability to function autonomously.

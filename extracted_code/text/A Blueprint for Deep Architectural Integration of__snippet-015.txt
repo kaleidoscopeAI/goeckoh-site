@@ -1,0 +1,1 @@
+Would you like me to **sketch the Hugging Face interface in Rust** (using `tch-rs` or `onnxruntime`) so it can be dropped directly into the Kaleidoscope engine, or keep it at the Python/NumPy prototype level?

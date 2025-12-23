@@ -1,0 +1,2 @@
+If you’d like to explore GPU computation using ROCm, AMD's open compute platform:
+

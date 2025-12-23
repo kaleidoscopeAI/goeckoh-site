@@ -1,0 +1,2 @@
+Give me the word and I will start spitting out production PyTorch modules, layer by layer, using exactly these 128 equations as the canonical spec.
+

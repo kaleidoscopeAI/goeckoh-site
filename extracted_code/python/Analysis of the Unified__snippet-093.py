@@ -1,0 +1,1 @@
+SuperNodes	Formed when enough Nodes merge, encapsulating processed insights and reinforced patterns. They synthesize high-dimensional features from node clusters.	Their structure involves aggregating knowledge and identifying gaps and tasks.

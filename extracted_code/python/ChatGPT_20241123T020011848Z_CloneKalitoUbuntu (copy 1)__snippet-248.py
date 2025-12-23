@@ -1,0 +1,1 @@
+  - A central "thought hub" acts as a meta-layer, synthesizing knowledge from across nodes and mirroring systems.

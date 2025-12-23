@@ -1,0 +1,1 @@
+- `prosody.py` – Extracts F0/RMS envelopes from waveforms (`extract_prosody`) and can transfer pitch/energy onto synthesized TTS audio (`apply_prosody_to_tts`).

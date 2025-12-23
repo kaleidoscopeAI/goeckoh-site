@@ -1,0 +1,7 @@
+class SkillProgress:
+    attempts: int = 0
+    successes: int = 0
+    current_level: int = 1          # 1–5 mastery levels
+    last_success_ts: float = 0.0
+    streak: int = 0
+

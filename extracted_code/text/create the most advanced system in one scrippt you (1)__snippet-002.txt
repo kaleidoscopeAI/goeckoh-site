@@ -1,0 +1,1 @@
+G*Power: "ANOVA: Repeated measures, between factors" → add 1 covariate

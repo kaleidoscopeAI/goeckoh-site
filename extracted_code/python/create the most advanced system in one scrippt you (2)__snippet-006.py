@@ -1,0 +1,1 @@
+Foster–Lyapunov drift: hybrid chain ((E,X,P,Z)) admits (V=H+\eta|Z|^2) with negative expected drift away from high energy, ensuring geometric ergodicity (under standard coercivity/small-set conditions).

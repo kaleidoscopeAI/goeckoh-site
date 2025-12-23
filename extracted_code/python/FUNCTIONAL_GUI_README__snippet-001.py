@@ -1,0 +1,1 @@
+- **Real-time Updates**: 10Hz updates from actual system state

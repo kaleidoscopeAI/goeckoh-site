@@ -1,0 +1,3 @@
+<MobileOptimized breakpoint={768}>
+  <YourContent />
+</MobileOptimized>

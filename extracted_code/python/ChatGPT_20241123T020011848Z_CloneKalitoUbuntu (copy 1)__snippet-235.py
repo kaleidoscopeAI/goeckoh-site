@@ -1,0 +1,2 @@
+  - Each node actively learns from its environment (simulated here as random data).
+  - This learning drive is encoded as a core function.

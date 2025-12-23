@@ -1,0 +1,1 @@
+1. Starting Small with Core Capabilities: Begin with a small, manageable set of foundational tasks and allow the AI to build from there. This allows you to test and refine its ability to self-improve before expanding its scope.

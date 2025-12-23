@@ -1,0 +1,6 @@
+<MultiViewLayout defaultMode="split">
+  <YourContent />
+</MultiViewLayout>
+
+// In child components
+const { currentMode, setMode } = useViewMode();

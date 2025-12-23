@@ -1,0 +1,1 @@
+const MemoizedComponent = React.memo(ExpensiveComponent);

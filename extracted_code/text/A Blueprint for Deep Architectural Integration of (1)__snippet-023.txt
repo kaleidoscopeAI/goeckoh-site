@@ -1,0 +1,2 @@
+- **Parameter Update (Gradient Descent):** Each thought engine \$ i \$ adapts its parameters \$ p_i \$ to minimize task-specific loss \$ L(p_i) \$, using learning rate \$ \eta \$:
+

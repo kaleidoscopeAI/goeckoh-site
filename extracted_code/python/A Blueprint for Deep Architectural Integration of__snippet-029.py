@@ -1,0 +1,2 @@
+The entire system mathematically flows from **bit-level discrete states** through **vector projections** into **parameterized nonlinear operators** representing specialized thought engines, routed sparse via a constrained routing graph, integrated globally, with stochastic and continuous dynamics, under stability and contraction conditions, all within a mathematically provable framework that supports complex cognitive operations.
+

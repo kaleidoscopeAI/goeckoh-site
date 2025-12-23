@@ -1,0 +1,1 @@
+- `χ(t) = smoothstep(Z(t), 0.10, 0.40)` – Bouba/Kiki coefficient from ZCR

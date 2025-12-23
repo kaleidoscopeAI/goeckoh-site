@@ -1,0 +1,1 @@
+R(n, t) = R₀ * [ 1 + u_energy(t) + β ∑_k u_k(n,t) + χ(t) * γ_spike * |N_spiky(n)| ]

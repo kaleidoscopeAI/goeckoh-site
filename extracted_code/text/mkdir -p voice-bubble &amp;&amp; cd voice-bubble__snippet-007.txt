@@ -1,0 +1,1 @@
+r_estimated = (SD_cond1² + SD_cond2² - SD_diff²) / (2 * SD_cond1 * SD_cond2)

@@ -1,0 +1,2 @@
+im using ubuntu studio with the evga x299 and the mentioned graphics card. what are the libraries i should have read? give me the commands for quick copy past and then continue on the demo code 
+

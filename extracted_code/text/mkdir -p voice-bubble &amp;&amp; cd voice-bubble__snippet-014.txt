@@ -1,0 +1,6 @@
+✅ AudioWorklet (native, zero-jank, <10ms latency)
+✅ Fallback ScriptProcessor (iOS Safari compatibility)
+✅ No GC pauses in hot path (pre-allocated ring buffers)
+✅ Production shaders (vertex displacement, transmission, sheen)
+✅ Mobile-responsive (320px panel → full-width)
+✅ Cross-browser (Chrome/Edge optimal, Safari functional)

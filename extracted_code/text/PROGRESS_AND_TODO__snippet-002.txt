@@ -1,0 +1,2 @@
+*   [ ] 7.2 Implement Voice Profile Growth Chart: While backend data logging (`store.py`) is in place, the GUI integration for proper charting (e.g., using Kivy's `garden.graph` or similar) is pending.
+

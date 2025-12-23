@@ -1,0 +1,2 @@
+We provide construction of rank-1 jump operators (L_k) that remove amplitude proportional to local stress (|R_{ij}|^2 - |Q_{ij}|^2) (when using mirrored Q). For small systems we integrate an Euler step.
+

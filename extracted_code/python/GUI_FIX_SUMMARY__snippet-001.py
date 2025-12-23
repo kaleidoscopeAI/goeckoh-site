@@ -1,0 +1,1 @@
+- **Problem**: GUI would fail to launch due to import errors

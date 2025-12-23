@@ -1,0 +1,12 @@
+const mockVoiceData = {
+  metrics: {
+    energy: 0.7,
+    f0: 220,
+    clarity: 0.85,
+    fluency: 0.78,
+    volume: 0.6,
+    pitchStability: 0.8
+  },
+  waveform: new Float32Array(512).map(() => Math.random() * 2 - 1),
+  spectrum: new Float32Array(128).map(() => Math.random())
+};

@@ -1,0 +1,34 @@
+project/
+├── core/
+│   ├── seed_node.py
+│   ├── adaptive_ai_node.py
+│   ├── resource_management.py
+│   ├── knowledge_pool.py
+│   ├── reflection_analysis.py
+│   └── emotional_state.py
+├── modules/
+│   ├── advanced_concept_formation.py
+│   ├── advanced_learning_mechanisms.py
+│   ├── enhanced_wiki_learner.py
+│   ├── noun_vision_system.py
+│   └── organic_learning_system.py
+├── demos/
+│   ├── core_demo.py
+│   ├── functional_ai_demo.py
+│   ├── organic_ai_demo.py
+│   └── interactive_graph_demo.py
+├── data/
+│   ├── Nodes.txt
+│   └── information_on_node_growth_function
+├── tests/
+│   ├── test_advanced_learning.py
+│   ├── test_core_functions.py
+│   ├── test_emotional_state.py
+│   └── test_resource_management.py
+├── docs/
+│   └── complete_system_documentation.md
+└── visualization/
+    ├── learning_flow.mermaid
+    ├── learning_process_visualization.mermaid
+    └── ai_nutrition_viz.tsx
+

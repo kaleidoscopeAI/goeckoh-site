@@ -1,0 +1,9 @@
+cognitive-nebula/
+├── components/
+│   ├── EnhancedBubble.tsx          # NEW: Advanced bubble visualization
+│   ├── VoiceVisualizer.tsx         # NEW: Audio analysis visualization
+│   ├── EnhancedThreeCanvas.tsx     # NEW: Upgraded nebula
+│   ├── ThreeCanvas.tsx             # Original (still works)
+│   └── UIOverlay.tsx               # Original
+├── VISUAL_ENHANCEMENTS.md          # Detailed documentation
+└── package.json                    # Dependencies (no changes needed)

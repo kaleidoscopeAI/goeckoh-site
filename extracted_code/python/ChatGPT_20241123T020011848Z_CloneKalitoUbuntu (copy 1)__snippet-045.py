@@ -1,0 +1,49 @@
+from core_node import Node
+from mirrored_network import MirroredNetwork
+from resource_manager import ResourceManager
+from data_crawler import WikiCrawler
+from dynamic_visualization import DynamicVisualization
+import time
+
+def main():
+    # Initialize components
+    nodes = [Node()]
+    mirrored_network = MirroredNetwork()
+    resource_manager = ResourceManager()
+    visualization = DynamicVisualization()
+
+    # Initialize crawler for testing
+    crawler = WikiCrawler("Artificial Intelligence")
+    data = crawler.fetch_data()
+
+    # Simulation parameters
+    epochs = 100
+    population = []
+    avg_maturity = []
+    avg_energy = []
+
+    # Run simulation
+    for epoch in range(epochs):
+        # Node learning and sharing
+        for node in nodes:
+            node.learn(data)
+            node.adapt()
+
+        if epoch % 10 == 0:
+            mirrored_network.simulate(10)
+
+        # Resource management
+        resource_manager.allocate(nodes)
+
+        # Metrics tracking
+        population.append(len(nodes))
+        avg_maturity.append(sum(node.maturity for node in nodes) / len(nodes))
+        avg_energy.append(sum(node.energy for node in nodes) / len(nodes))
+
+        # Visualization
+        visualization.update(list(range(epoch + 1)), population, avg_maturity, avg_energy)
+        time.sleep(0.1)
+
+if __name__ == "__main__":
+    main()
+

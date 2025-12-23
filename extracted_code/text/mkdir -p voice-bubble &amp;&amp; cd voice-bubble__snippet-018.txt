@@ -1,0 +1,4 @@
+CPAL (512 frames @ 16kHz) = 32ms I/O
+Whisper tiny (streaming) = 80-120ms 
+Piper TTS = 40-90ms
+Total: 152-242ms → ✅ <300ms corollary discharge window

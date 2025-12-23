@@ -1,0 +1,2 @@
+- `inner_voice.py` – Runs “inner echo” guidance using `VoiceCrystal`, optionally logging attempts via `DataStore`.
+

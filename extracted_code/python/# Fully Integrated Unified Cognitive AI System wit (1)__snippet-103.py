@@ -1,0 +1,1 @@
+- Add **Causal and Explainable Reasoning** tracing to track symbolic causal chains from input to decision paths, emotional shifts, and outputs.

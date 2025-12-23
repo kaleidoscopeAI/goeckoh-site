@@ -1,0 +1,12 @@
+const shortcuts = [
+  { key: 'k', description: 'Open chat', action: () => openChat() },
+  { key: 's', modifier: 'ctrl', description: 'Open settings', action: () => openSettings() }
+];
+
+useKeyboardShortcuts(shortcuts);
+
+<KeyboardShortcuts
+  shortcuts={shortcuts}
+  showHelp={showHelp}
+  onToggleHelp={() => setShowHelp(!showHelp)}
+/>

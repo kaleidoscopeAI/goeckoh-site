@@ -1,0 +1,1 @@
+- r = expected correlation (0.5–0.6 from ICC literature).

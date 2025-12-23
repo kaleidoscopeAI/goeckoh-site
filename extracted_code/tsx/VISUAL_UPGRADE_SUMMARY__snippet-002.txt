@@ -1,0 +1,14 @@
+// Change this:
+import ThreeCanvas from './components/ThreeCanvas';
+
+// To this:
+import EnhancedThreeCanvas from './components/EnhancedThreeCanvas';
+
+// Update component usage:
+<EnhancedThreeCanvas
+  metrics={metrics}
+  aiThought={aiThought}
+  imageData={imageData}
+  settings={settings}
+  voiceData={voiceData}  // Add voice data prop
+/>

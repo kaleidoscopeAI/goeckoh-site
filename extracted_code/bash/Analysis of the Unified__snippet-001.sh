@@ -1,0 +1,1 @@
+python -c "from hybrid_orchestrator import start_hybrid_job_from_target, step_job, apply_action_safe; jid=start_hybrid_job_from_target([0.4,0.6]); step_job(jid, dt=0.01, steps=40); print(apply_action_safe(jid, {'mix_delta':0.05,'gamma_delta':0.01}))"

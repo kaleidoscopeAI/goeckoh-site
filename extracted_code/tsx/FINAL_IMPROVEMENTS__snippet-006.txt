@@ -1,0 +1,31 @@
+import React from 'react';
+import { ThemeProvider } from './components/ThemeProvider';
+import ErrorBoundary from './components/ErrorBoundary';
+import MobileOptimized from './components/MobileOptimized';
+import MultiViewLayout, { ViewModeSelector } from './components/MultiViewLayout';
+import TutorialSystem from './components/TutorialSystem';
+import UserPreferences from './components/UserPreferences';
+import ExportImport from './components/ExportImport';
+
+const App = () => {
+  const tutorialSteps = [
+    { id: '1', title: 'Welcome', content: 'Welcome to Bubble!' },
+    { id: '2', title: 'Voice Panel', content: 'Use the voice panel for feedback' }
+  ];
+
+  return (
+    <ErrorBoundary>
+      <ThemeProvider>
+        <MobileOptimized>
+          <MultiViewLayout defaultMode="split">
+            <ViewModeSelector />
+            <TutorialSystem steps={tutorialSteps} />
+            <YourMainContent />
+            <UserPreferences {...prefsProps} />
+            <ExportImport {...exportProps} />
+          </MultiViewLayout>
+        </MobileOptimized>
+      </ThemeProvider>
+    </ErrorBoundary>
+  );
+};

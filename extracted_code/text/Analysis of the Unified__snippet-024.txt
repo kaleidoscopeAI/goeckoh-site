@@ -1,0 +1,1 @@
+The Node state Ni​ updates at each time step t using combined forces:

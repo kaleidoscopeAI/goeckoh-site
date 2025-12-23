@@ -1,0 +1,3 @@
+- Bitwise operations like XOR and hardware **popcount** are critical for speed, enabling the processing of millions of pairs quickly, especially when using SIMD/vectorization and multithreading.
+
+

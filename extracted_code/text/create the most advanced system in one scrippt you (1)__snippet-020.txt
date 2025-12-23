@@ -1,0 +1,1 @@
+    - Android: Recent mid/high-tier Snapdragon-based phones (≥4 GB RAM) using low-latency audio paths (AAudio/OpenSL ES equivalents) plus native Rust cores are realistic; lower-end devices may need larger buffers and looser budgets.[^10_9]

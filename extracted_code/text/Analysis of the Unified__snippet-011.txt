@@ -1,0 +1,2 @@
+This PDF describes novel methods for anomaly detection within the system, using the lattice and state vectors to detect deviations. From September 28, this includes mathematical equations for components like Membrane Stage.
+

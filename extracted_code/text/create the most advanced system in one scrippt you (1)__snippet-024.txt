@@ -1,0 +1,1 @@
+    - In practice, you can still plan using **paired‑t power** as a baseline (for the simplest contrast), then fit LMEs in analysis; this makes your a priori N **conservative**.[^13_3]

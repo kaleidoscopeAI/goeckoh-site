@@ -1,0 +1,1 @@
+*   **HID Emulation:** The key insight from this file is that all hardware control is done via **Human Interface Device (HID) emulation**. This means the AI is not directly controlling the hardware in a low-level way. Instead, it's simulating the actions of a user (typing, moving the mouse, etc.) to interact with the operating system and change hardware settings.

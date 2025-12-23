@@ -1,0 +1,9 @@
+import React from 'react';
+import { ThemeProvider } from './components/ThemeProvider';
+import ErrorBoundary from './components/ErrorBoundary';
+import MobileOptimized from './components/MobileOptimized';
+import { useVoiceData } from './hooks/useVoiceData';
+import { useSession } from './hooks/useSession';
+import { useBubbleState } from './hooks/useBubbleState';
+import EnhancedThreeCanvas from './components/EnhancedThreeCanvas';
+import EnhancedUIOverlay from './components/EnhancedUIOverlay';

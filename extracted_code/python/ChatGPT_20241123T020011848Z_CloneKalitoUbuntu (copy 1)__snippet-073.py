@@ -1,0 +1,7 @@
+def allocate_resources(nodes):
+    for node in nodes:
+        if not node.resources:
+            node.resources = {"default": "placeholder"}
+        else:
+            node.resources["allocated"] = "updated"
+

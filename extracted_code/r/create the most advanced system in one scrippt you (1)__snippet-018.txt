@@ -1,0 +1,26 @@
+library(dplyr)
+
+icc_to_power_params <- function(icc_df) {
+  icc_df %>%
+    mutate(
+      # ICC → correlation for RM-ANOVA
+      r_rm = ICC,
+      
+      # Variance explained by subject
+      var_subject = ICC / (1 - ICC),
+      
+      # Effect size f approximation (ICC → η²)
+      eta2 = ICC^2 / (1 - ICC^2),
+      f = sqrt(eta2 / (1 - eta2)),
+      
+      # 95% CI width → precision
+      ci_width = CI_upper - CI_lower,
+      precision = 1 / ci_width
+    ) %>%
+    select(file, ICC, r_rm, f, var_subject, ci_width)
+}
+
+# Convert batch results
+power_params <- icc_to_power_params(iccs)
+print(power_params)
+# Typical: ICC=0.93 → r=0.93 → f=1.8 (large effect)

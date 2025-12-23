@@ -1,0 +1,2 @@
+4. Iterate nested dependencies using fixed-point or bounded recursive evaluation to resolve all \$ O_i \$.
+5. Integrate all \$ O_i \$ together with \$ S_k \$, \$ R \$, \$ I_k \$ using \$ G \$ to get \$ S_{k+1} \$.

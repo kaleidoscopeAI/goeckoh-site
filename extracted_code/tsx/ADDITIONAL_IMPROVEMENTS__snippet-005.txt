@@ -1,0 +1,6 @@
+<ErrorBoundary
+  fallback={<CustomErrorUI />}
+  onError={(error, errorInfo) => console.error(error, errorInfo)}
+>
+  <YourApp />
+</ErrorBoundary>

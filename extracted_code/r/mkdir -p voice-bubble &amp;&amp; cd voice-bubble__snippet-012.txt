@@ -1,0 +1,26 @@
+library(pdftools)
+library(stringr)
+library(dplyr)
+
+extract_icc_n <- function(pdf_path) {
+  text <- pdf_text(pdf_path)
+  
+  # Regex patterns for ICC tables
+  icc_pattern <- "ICC[:\\s]*([0-9\\.]+)"
+  n_pattern <- "(?:N|n|sample|participants)[:\\s]*([0-9]+)"
+  age_pattern <- "(?:older|elderly|age [6-9][0-9]+)[:\\s]*ICC[:\\s]*([0-9\\.]+)"
+  
+  icc_matches <- str_extract_all(text, icc_pattern)
+  n_matches <- str_extract_all(text, n_pattern)
+  
+  data.frame(
+    ICC = as.numeric(unlist(icc_matches)),
+    N = as.numeric(unlist(n_matches)),
+    source_page = seq_along(icc_matches)
+  ) %>% filter(!is.na(ICC))
+}
+
+# Batch process
+pdf_files <- list.files("pdfs/", pattern="*.pdf", full.names=TRUE)
+icc_summary <- map_dfr(pdf_files, extract_icc_n, .id="file")
+print(icc_summary)

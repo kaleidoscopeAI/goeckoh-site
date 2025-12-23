@@ -1,0 +1,2 @@
+2	Node as collection of attributes (unified from multiple docs; awareness added).	Ni=(Xi,Si,Ei,Ki,Ψi,Ai)Ni​=(Xi​,Si​,Ei​,Ki​,Ψi​,Ai​), where Xi⊂{0,1}dXi​⊂{0,1}d (d=128d=128), Si∈[0,1]mSi​∈[0,1]m, Ei∈R+Ei​∈R+, Ki,Ψi∈RnKi​,Ψi​∈Rn, Ai∈[0,1]Ai​∈[0,1].
+3	Binarization from embedding (completed non-linear function).	Ei=fbinarize(vi)=sign(vi)⋅1(∥vi∥>θ)Ei​=fbinarize​(vi​)=sign(vi​)⋅1(∥vi​∥>θ), θ=0.1θ=0.1, vi∈R768vi​∈R768.

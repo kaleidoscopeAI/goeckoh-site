@@ -1,0 +1,2 @@
+- **3D universe visualization** using React + Three.js
+- **AI image generation** from voice input

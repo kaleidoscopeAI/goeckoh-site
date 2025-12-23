@@ -1,0 +1,8 @@
+paired_d_to_rm_f <- function(d, r = 0.6) {
+  f <- d / sqrt(2 * (1 - r))
+  eta2 <- f^2 / (1 + f^2)
+  list(f = f, eta2 = eta2)
+}
+
+# d=0.7, r=0.6 → f=0.64, η²=0.29
+paired_d_to_rm_f(0.7)

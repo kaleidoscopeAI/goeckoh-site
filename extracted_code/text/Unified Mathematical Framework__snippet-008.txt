@@ -1,0 +1,4 @@
+class CompanionConfig:
+    audio: AudioSettings = AudioSettings()
+    paths: Paths = Paths()
+

@@ -1,0 +1,18 @@
+// Replace this:
+const connectToVoicePipeline = () => {
+  // Mock connection
+};
+
+// With your actual connection:
+const connectToVoicePipeline = () => {
+  // Your WebSocket or callback connection
+  const ws = new WebSocket('ws://localhost:8765');
+  
+  ws.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    // Update voice data
+    setVoiceData(processVoiceData(data));
+  };
+  
+  return () => ws.close();
+};

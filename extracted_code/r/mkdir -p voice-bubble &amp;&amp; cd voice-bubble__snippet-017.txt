@@ -1,0 +1,42 @@
+library(pdftools)
+library(stringr)
+library(purrr)
+library(dplyr)
+
+batch_extract_n1_iccs <- function(pdf_dir) {
+  pdf_files <- list.files(pdf_dir, pattern="*.pdf", full.names=TRUE)
+  
+  results <- map_dfr(seq_along(pdf_files), ~{
+    file <- pdf_files[.x]
+    cat("Processing:", basename(file), "\n")
+    
+    text <- pdf_text(file) %>% str_c(collapse=" ")
+    
+    # Extract ICC values with context
+    icc_pattern <- "(?:ICC|reliability)[^0-9]*([0\\.]{1,4}[0-9]{1,3})(?:[;\\s,\\)]+95%?\\s*CI[^0-9]*([0-9\\.]+)[,\\s-]+([0-9\\.]+))?"
+    icc_matches <- str_match_all(text, icc_pattern)[[^22_1]]
+    
+    # Extract N/sample size
+    n_pattern <- "(?:N|n|participants?|subjects?|older adults?)[^0-9]*([0-9]{1,3})"
+    n_matches <- str_extract_all(text, n_pattern)[[^22_1]]
+    
+    if(nrow(icc_matches) > 0) {
+      data.frame(
+        file = basename(file),
+        ICC = as.numeric(icc_matches[,2]),
+        CI_lower = as.numeric(icc_matches[,3]),
+        CI_upper = as.numeric(icc_matches[,4]),
+        N = as.numeric(n_matches[^22_1]),
+        stringsAsFactors = FALSE
+      ) %>% filter(!is.na(ICC))
+    } else {
+      data.frame(file=basename(file), ICC=NA, N=NA)
+    }
+  })
+  
+  return(results %>% filter(!is.na(ICC)))
+}
+
+# Run
+iccs <- batch_extract_n1_iccs("./n1_papers/")
+summary(iccs$ICC)  # Mean ICC for power analysis

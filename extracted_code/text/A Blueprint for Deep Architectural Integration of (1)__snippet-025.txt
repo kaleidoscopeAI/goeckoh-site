@@ -1,0 +1,2 @@
+- Add customizable Gaussian noise using the `rand_distr` crate with Normal distribution.
+

@@ -1,0 +1,3 @@
+showVoicePanel={true}    // Show/hide voice therapy panel
+showProgress={false}      // Show/hide progress dashboard
+showVoiceFeedback={true}  // Show/hide voice feedback overlay

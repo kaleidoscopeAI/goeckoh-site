@@ -1,0 +1,1 @@
+A self-contained module that accepts a logical system and automatically produces contraction proofs, inequality chains, and numerical validation using Rust plus a lightweight symbolic engine.

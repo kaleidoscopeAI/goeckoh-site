@@ -1,0 +1,13 @@
+# .cargo/config.toml
+[target.aarch64-linux-android]
+linker = "aarch64-linux-android-clang"
+ar = "aarch64-linux-android-ar"
+
+[target.armv7-linux-androideabi]
+linker = "arm-linux-androideabi-clang"
+ar = "arm-linux-androideabi-ar"
+
+[build]
+target = "aarch64-linux-android"  # For Android
+# or
+target = "armv7-unknown-linux-gnueabihf"  # For Raspberry Pi

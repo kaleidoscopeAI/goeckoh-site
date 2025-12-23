@@ -1,0 +1,10 @@
+kaleidoscope-dash/
+├─ requirements.txt
+├─ server.py
+├─ dev/proxy-ollama.py (optional)
+├─ client/
+│  ├─ index.html
+│  └─ static/
+│     └─ app.js
+└─ replay/
+   └─ replay_test.py

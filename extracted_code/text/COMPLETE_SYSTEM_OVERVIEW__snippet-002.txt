@@ -1,0 +1,7 @@
+cognitive-nebula/
+├── components/          # 19 React components
+├── hooks/              # 3 custom hooks
+├── utils/              # Utility functions
+├── styles/             # CSS animations
+├── examples/           # Integration examples
+└── *.md               # 8 documentation files

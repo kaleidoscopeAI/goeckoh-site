@@ -1,0 +1,1 @@
+- I’ll provide a code-based “genetic sequence” for the seed, each function representing an aspect of its behavior.

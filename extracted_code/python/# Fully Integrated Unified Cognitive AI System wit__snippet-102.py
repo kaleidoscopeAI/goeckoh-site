@@ -1,0 +1,1 @@
+- Integrate **real, multimodal sensorimotor feedback** streaming into cognitive fields from cameras, microphones, touch, and hardware health sensors.

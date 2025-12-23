@@ -1,0 +1,4 @@
+1. "Watch this bubble respond to my voice physics" → speak → bubble reacts
+2. "Now hear the mirror: corrected speech in my voice" → Rust STT→TTS plays
+3. "Lattice state drives both visual + audio DSP" → show energy/coherence numbers
+4. "Sub-250ms total → hits the brain's self/other window"

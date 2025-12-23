@@ -1,0 +1,1 @@
+- This pseudocode abstracts operator \$ O_i \$ as closure/function member per engine.

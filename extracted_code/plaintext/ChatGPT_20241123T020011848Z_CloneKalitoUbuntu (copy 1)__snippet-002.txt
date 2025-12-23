@@ -1,0 +1,8 @@
+/your_project_directory/
+├── core_demo.py               # Core Node and Environment Demo
+├── shared_pool_demo.py         # Shared Knowledge Pool Visualization Demo
+├── self_reflection_demo.py     # Self-Reflection Demo
+├── adaptive_ai_node.py         # Contains EnhancedAdaptiveNode, EmotionalState, etc.
+├── knowledge_pool.py           # Contains EnhancedSharedKnowledgePool, ContextualPattern
+└── reflection_analysis.py      # Contains SelfReflection
+

@@ -1,0 +1,4 @@
+<UserPreferences
+  preferences={userPrefs}
+  onPreferencesChange={(prefs) => updatePrefs(prefs)}
+/>

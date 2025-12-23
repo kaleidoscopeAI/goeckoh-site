@@ -1,0 +1,2 @@
+Here is a concrete example of how to set up and run benchmarks for the Rust cognitive system using Criterion.rs, following best practices described earlier:
+

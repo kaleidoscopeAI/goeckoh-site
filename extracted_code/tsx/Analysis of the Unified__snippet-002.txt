@@ -1,0 +1,43 @@
+import React, { useCallback, useRef, useState, useEffect } from 'react';
+import ParticleCanvas from './components/ParticleCanvas';
+import AIDashboard from './components/AIDashboard';
+import ControlPanel from './components/ControlPanel';
+import { OllamaMediator } from './mediation/ollamaMediator';
+import { openDBPersistence } from './util/persistence';
+
+export default function App() {
+  const [systemState, setSystemState] = useState<any>({
+    nodeCount: 50000,
+    globalCoherence: 0.5,
+    emotionalField: { valence: 0.0, arousal: 0.5 },
+    knowledgeCrystals: 0,
+    hypotheses: []
+  });
+  const workerRef = useRef<Worker | null>(null);
+  const mediatorRef = useRef<OllamaMediator | null>(null);
+
+  useEffect(() => {
+    openDBPersistence(); // ensure persistence DB ready
+  }, []);
+
+  const handleSystemUpdate = useCallback((data: any) => {
+    setSystemState((prev: any) => ({ ...prev, ...data }));
+  }, []);
+
+  const onWorkerReady = useCallback((worker: Worker) => {
+    workerRef.current = worker;
+    mediatorRef.current = new OllamaMediator(worker);
+  }, []);
+
+  return (
+    <div className="app">
+      <div className="sidebar">
+        <AIDashboard systemState={systemState} particleData={null} />
+        <ControlPanel nodeCount={systemState.nodeCount} />
+      </div>
+      <div className="main-viz">
+        <ParticleCanvas nodeCount={systemState.nodeCount} onSystemUpdate={handleSystemUpdate} onWorkerReady={onWorkerReady} />
+      </div>
+    </div>
+  );
+}

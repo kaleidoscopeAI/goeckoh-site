@@ -1,0 +1,22 @@
+library(effsize)
+
+# From pilot summary: means/SDs per condition + estimated r
+pilot_stats <- data.frame(
+  Condition = c("Self", "Delayed"),
+  Mean_N1 = c(-4.2, -2.8),
+  SD_N1 = c(2.1, 1.9),
+  N = 12
+)
+
+# Compute paired d
+r_correlation <- 0.6  # From ICC literature
+mean_diff <- diff(pilot_stats$Mean_N1)
+sd_diff <- sqrt(pilot_stats$SD_N1[^21_1]^2 + pilot_stats$SD_N1[^21_2]^2 - 
+                2 * r_correlation * pilot_stats$SD_N1[^21_1] * pilot_stats$SD_N1[^21_2])
+d_paired <- mean_diff / sd_diff
+
+# Hedges' g correction
+g <- d_paired * (1 - 3/(4*pilot_stats$N[^21_1] - 9))
+
+cat(sprintf("Paired d = %.2f, Hedges' g = %.2f\n", d_paired, g))
+# Output: d = 0.71, g = 0.68

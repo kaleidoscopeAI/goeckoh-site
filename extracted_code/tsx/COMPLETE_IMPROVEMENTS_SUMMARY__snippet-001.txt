@@ -1,0 +1,6 @@
+import EnhancedUIOverlay from './components/EnhancedUIOverlay';
+import EnhancedThreeCanvas from './components/EnhancedThreeCanvas';
+
+// Add to your App.tsx
+<EnhancedThreeCanvas {...props} voiceData={voiceData} />
+<EnhancedUIOverlay {...props} voiceData={voiceData} />

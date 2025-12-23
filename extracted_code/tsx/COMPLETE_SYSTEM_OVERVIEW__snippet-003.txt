@@ -1,0 +1,2 @@
+import EnhancedThreeCanvas from './components/EnhancedThreeCanvas';
+import EnhancedUIOverlay from './components/EnhancedUIOverlay';

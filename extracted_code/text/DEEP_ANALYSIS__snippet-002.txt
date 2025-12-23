@@ -1,0 +1,11 @@
+1. Audio Capture & Utterance Detection
+   ↓
+2. Speech-to-Text (STT) - sherpa-onnx
+   ↓
+3. Linguistic Correction & First-Person Mirroring
+   ↓
+4. Voice Synthesis (TTS with Cloning) - Coqui TTS
+   ↓
+5. Prosody Transfer (Preserve original speech characteristics)
+   ↓
+6. Audio Playback

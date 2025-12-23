@@ -1,0 +1,1 @@
+- **Images**: Renamed from `assets/` to `images/` to avoid conflicts

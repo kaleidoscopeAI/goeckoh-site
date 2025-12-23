@@ -1,0 +1,40 @@
+/unified-cognitive-ai-system
+│
+├── backend/
+│   ├── backend.py
+│   ├── requirements.txt
+│   ├── ollama_integration.py       # if any separate helper modules
+│   ├── device_controller.py
+│   ├── cognitive_modules.py
+│   ├── visualization.py
+│   └── ... (other Python modules)
+│
+├── frontend/
+│   ├── public/
+│   │   ├── index.html
+│   │   ├── manifest.json
+│   │   └── icon.png
+│   ├── src/
+│   │   ├── App.tsx
+│   │   ├── components/
+│   │   │   ├── UIOverlay.tsx
+│   │   │   ├── InstancedNodes.tsx
+│   │   │   ├── DynamicEdges.tsx
+│   │   │   └── ...
+│   │   ├── services/
+│   │   │   └── simulationService.ts
+│   │   └── index.tsx
+│   ├── package.json
+│   ├── tsconfig.json
+│   ├── vite.config.ts
+│   └── index.css
+│
+├── scripts/
+│   ├── setup_backend.sh
+│   ├── run_backend.sh
+│   ├── setup_frontend.sh
+│   ├── run_frontend.sh
+│   └── build_frontend.sh
+│
+├── README.md
+└── LICENSE

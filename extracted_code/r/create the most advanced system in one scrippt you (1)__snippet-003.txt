@@ -1,0 +1,3 @@
+lmer(N1_amp ~ Condition * Group + Age + Hearing_Thresh + 
+     (1 + Condition|Subject) + (1|Trial),
+     data = erp_data)

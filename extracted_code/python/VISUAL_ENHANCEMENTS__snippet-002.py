@@ -1,0 +1,1 @@
+- **Base Color**: Derived from F0 (pitch)

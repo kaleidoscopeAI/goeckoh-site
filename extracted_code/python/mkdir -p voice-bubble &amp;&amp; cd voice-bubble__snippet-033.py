@@ -1,0 +1,1 @@
+**Goeckoh pre-registration recommendation**: η²=0.4 (f=0.7, from literature), r=0.6, ε=0.75, recruit N=25 (analyze N=20), 80 trials/condition. This gives >90% power for main N1 suppression effect even if true effect is medium (η²=0.25).

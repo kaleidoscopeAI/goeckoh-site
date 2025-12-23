@@ -1,0 +1,1 @@
+Var_total = Var_between_subjects + Var_within_subjects + Var_error

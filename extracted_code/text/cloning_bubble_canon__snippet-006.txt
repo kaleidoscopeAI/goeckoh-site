@@ -1,0 +1,2 @@
+Hue = (μ_F0 - 80) / (400 - 80)  [maps 80-400 Hz to 0-1]
+RGB = hue_to_rgb(Hue)  [HSV conversion with S=1, V=1]

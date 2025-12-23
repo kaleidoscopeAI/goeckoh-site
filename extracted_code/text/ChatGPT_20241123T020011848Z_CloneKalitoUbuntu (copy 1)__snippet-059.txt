@@ -1,0 +1,2 @@
+  - The counterpart attempts to refine or "challenge" the interpretation using its own logic pathways (e.g., text parsing, visual disambiguation).
+  - The two outputs are reconciled and stored in the "node memory" as contextualized knowledge.

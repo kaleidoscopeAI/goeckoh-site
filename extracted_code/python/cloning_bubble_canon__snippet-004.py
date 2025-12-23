@@ -1,0 +1,5 @@
+@dataclass
+class BubbleState:
+    radii: np.ndarray          # [N_vertices]
+    colors: np.ndarray         # [N_vertices, 3] RGB
+    pbr_props: Dict[str, float]  # {"rough", "metal", "spike"}

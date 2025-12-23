@@ -1,0 +1,13 @@
+bubble/
+├── apps/                    # Application entry points
+├── audio/                   # Audio processing pipeline
+├── voice/                   # Voice synthesis & cloning
+├── systems/                  # Unified system implementations
+├── integrations/             # External system integrations
+├── cognitive-nebula/         # React/Three.js 3D visualization
+├── heart/                    # Emotional regulation core
+├── goeckoh_cloner/           # Voice cloning system
+├── rust_core/                # Performance-critical Rust code
+├── tests/                    # Test suite
+├── docs/                     # Documentation
+└── legacy/                   # Deprecated code

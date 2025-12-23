@@ -1,0 +1,6 @@
+<ProgressDashboard
+  sessions={sessionHistory}
+  currentStreak={7}
+  totalTime={7200}
+  onExport={() => {}}
+/>

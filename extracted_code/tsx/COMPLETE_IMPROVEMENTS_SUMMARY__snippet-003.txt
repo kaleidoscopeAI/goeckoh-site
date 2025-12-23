@@ -1,0 +1,11 @@
+import { ThemeProvider } from './components/ThemeProvider';
+import ErrorBoundary from './components/ErrorBoundary';
+import MobileOptimized from './components/MobileOptimized';
+
+<ErrorBoundary>
+  <ThemeProvider>
+    <MobileOptimized>
+      <YourApp />
+    </MobileOptimized>
+  </ThemeProvider>
+</ErrorBoundary>

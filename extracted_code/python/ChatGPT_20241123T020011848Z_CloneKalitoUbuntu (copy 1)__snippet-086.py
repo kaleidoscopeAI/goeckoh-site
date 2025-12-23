@@ -1,0 +1,4 @@
+def handle_replication_failure(self, error_message):
+    self.logs.append(f"Replication failed: {error_message}")
+    self.resources["energy"] += 0.1  # Recover some resources
+

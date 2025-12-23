@@ -1,0 +1,12 @@
+Before (goeckoh-site):          After (merged):
+├── index.html                  ├── website/
+├── *.html                      │   ├── index.html
+├── styles.css                  │   ├── *.html, *.css, *.js
+├── script.js                   │   └── images/
+└── assets/                     │       └── *.png
+                                │
+                                ├── GOECKOH/
+                                ├── src/
+                                ├── docs/
+                                ├── assets/ (app assets)
+                                └── ... (all goeckoh files)

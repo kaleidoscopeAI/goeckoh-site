@@ -1,0 +1,6 @@
+  2. Matches it to known words using a vision-language model.
+  3. Associates sound clips (e.g., barking for a dog).
+  4. Links to abstract concepts (e.g., loyalty, companionship).
+
+
+

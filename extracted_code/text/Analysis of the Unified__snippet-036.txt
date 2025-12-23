@@ -1,0 +1,20 @@
+    Vectorization: Operations are vectorized using matrix multiplications for efficient computation of bonds (B) and weights (W).
+
+    Stabilization: Continuous encoders are stabilized with normalization and gradient clipping.
+
+    Forgetting Prevention: Experience replay or reservoir sampling is used for web ingestion to avoid catastrophic forgetting.
+
+    Minimal Parameter Set (Example): Suggested constants for initial tuning include:
+
+        η=0.1 (Metamorphosis rate)
+
+        λΦ​=0.2 (Unravel rate)
+
+        γ=0.5
+
+        δ=0.05 (Mimicry rate)
+
+        λM​=0.1,λD​=0.05,λU​=0.02
+
+        α=1.0,β=1.0 (Stress Tensor coefficients)
+

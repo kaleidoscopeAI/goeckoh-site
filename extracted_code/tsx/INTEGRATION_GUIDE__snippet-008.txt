@@ -1,0 +1,8 @@
+import UserPreferences, { defaultPreferences } from './components/UserPreferences';
+
+const [prefs, setPrefs] = useState(defaultPreferences);
+
+<UserPreferences
+  preferences={prefs}
+  onPreferencesChange={(newPrefs) => setPrefs({ ...prefs, ...newPrefs })}
+/>

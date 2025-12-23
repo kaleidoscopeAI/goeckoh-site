@@ -1,0 +1,2 @@
+position="top-right"  // top-left | top-right | bottom-left | bottom-right
+size="medium"         // small | medium | large

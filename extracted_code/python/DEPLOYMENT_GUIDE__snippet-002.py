@@ -1,0 +1,1 @@
+- **Node.js**: For Cognitive Nebula frontend (if building from source)

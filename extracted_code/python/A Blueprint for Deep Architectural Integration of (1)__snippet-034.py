@@ -1,0 +1,1 @@
+This matches the precision and formulas given in the attached system blueprint and provides a formal basis for implementing numerically stable operations starting from the bit-level IEEE754 primitives upwards.

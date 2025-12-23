@@ -1,0 +1,2 @@
+Contains the `SelfReflection` class to manage self-reflection and performance analysis.
+

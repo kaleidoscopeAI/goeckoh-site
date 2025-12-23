@@ -1,0 +1,1 @@
+- **Bubble color:** Derived from μ_F0

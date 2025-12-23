@@ -1,0 +1,1 @@
+- They leverage a differential Lyapunov function realized as neural nets trained via convex optimization for real-time evaluation and feedback control.

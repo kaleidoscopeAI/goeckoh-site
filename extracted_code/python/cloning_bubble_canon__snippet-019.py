@@ -1,0 +1,1 @@
+- `R₀` – base radius from fingerprint

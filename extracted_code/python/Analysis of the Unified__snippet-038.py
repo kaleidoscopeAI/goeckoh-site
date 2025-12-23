@@ -1,0 +1,4 @@
+*   **`complete_system_state.py`:** The `CompleteAdaptiveResonanceSystem` holds a `CompleteSystemState` object, which in turn contains all the other components of the system (the nodes, the `KaleidoscopeEngine`, etc.). The `global_update` method of the `CompleteSystemState` is where the actual work of the simulation is done, including quantum substrate and node embodiment from August 04.
+
+While the file is named "Adaptive Resonance System," it doesn't seem to implement the ART algorithm directly. Instead, it appears to use the term in a broader sense to describe the overall process of the system settling into a stable, "resonant" state. The ART-like behavior is likely an emergent property of the interactions between the various components, enhanced by chaos swarm optimization from October 08.
+

@@ -1,0 +1,29 @@
+kaleidoscope-react/
+├─ package.json
+├─ tsconfig.json
+├─ vite.config.ts
+├─ dev/
+│  └─ proxy-ollama.js
+├─ src/
+│  ├─ main.tsx
+│  ├─ App.tsx
+│  ├─ components/
+│  │  ├─ ParticleCanvas.tsx
+│  │  ├─ AIDashboard.tsx
+│  │  └─ ControlPanel.tsx
+│  ├─ workers/
+│  │  └─ particleWorker.ts
+│  ├─ engines/
+│  │  ├─ EnhancedQuantumConsciousnessEngine.ts
+│  │  └─ types.ts
+│  ├─ mediation/
+│  │  ├─ ollamaMediator.ts
+│  │  └─ ollamaClient.ts
+│  ├─ util/
+│  │  ├─ persistence.ts
+│  │  ├─ watchdog.ts
+│  │  └─ safeJson.ts
+│  ├─ styles.css
+│  └─ tests/
+│     └─ replay.test.ts
+└─ jest.config.js

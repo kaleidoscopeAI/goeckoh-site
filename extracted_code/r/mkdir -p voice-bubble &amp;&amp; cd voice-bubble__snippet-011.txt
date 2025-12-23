@@ -1,0 +1,18 @@
+library(lme4)
+library(emmeans)
+
+# Full model with random slopes/intercepts
+n1_full <- lmer(N1_amp ~ Condition * Group + Age + Hearing + 
+                (1 + Condition|Subject) + (1|Trial),
+                data = erp_data,
+                control = lmerControl(optimizer = "bobyqa"))
+
+# Simplified intercept-only
+n1_simple <- lmer(N1_amp ~ Condition + (1|Subject/Trial), data = erp_data)
+
+# Variance components
+VarCorr(n1_full)
+
+# Post-hoc contrasts
+emm <- emmeans(n1_full, ~ Condition | Group)
+pairs(emm, adjust = "tukey")

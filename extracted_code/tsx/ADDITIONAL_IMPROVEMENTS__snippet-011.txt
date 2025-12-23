@@ -1,0 +1,5 @@
+const useDebug = (value: any, label: string) => {
+  useEffect(() => {
+    console.log(`${label}:`, value);
+  }, [value, label]);
+};

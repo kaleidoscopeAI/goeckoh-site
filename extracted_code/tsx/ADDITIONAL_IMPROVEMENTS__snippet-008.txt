@@ -1,0 +1,30 @@
+import React from 'react';
+import { ThemeProvider, ThemeToggle } from './components/ThemeProvider';
+import ErrorBoundary from './components/ErrorBoundary';
+import MobileOptimized from './components/MobileOptimized';
+import PerformanceMonitor from './components/PerformanceMonitor';
+import { useKeyboardShortcuts } from './components/KeyboardShortcuts';
+import EnhancedUIOverlay from './components/EnhancedUIOverlay';
+import EnhancedThreeCanvas from './components/EnhancedThreeCanvas';
+
+function App() {
+  const shortcuts = [
+    { key: 'k', description: 'Focus chat', action: () => focusChat() },
+    { key: '?', description: 'Show shortcuts', action: () => toggleShortcuts() }
+  ];
+
+  useKeyboardShortcuts(shortcuts);
+
+  return (
+    <ErrorBoundary>
+      <ThemeProvider>
+        <MobileOptimized>
+          <PerformanceMonitor enabled={process.env.NODE_ENV === 'development'} />
+          <EnhancedThreeCanvas {...props} />
+          <EnhancedUIOverlay {...props} />
+          <ThemeToggle />
+        </MobileOptimized>
+      </ThemeProvider>
+    </ErrorBoundary>
+  );
+}

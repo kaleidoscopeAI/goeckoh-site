@@ -1,0 +1,1 @@
+  - Intelligence emerges from collective node behavior rather than central control, mirroring a decentralized neural network.

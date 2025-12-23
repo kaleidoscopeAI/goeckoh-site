@@ -1,0 +1,6 @@
+    MemoryGear: A specific class responsible for storing node memory with a defined capacity.
+
+    LogicPath: A specific class for data routing and execution of processing steps.
+
+    CrystallizationChamber: The final component that takes the engine's current_insights and aggregates them into the perfect_node (the crystallized, coherent representation of knowledge).
+

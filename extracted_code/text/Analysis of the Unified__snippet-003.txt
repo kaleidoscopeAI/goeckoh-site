@@ -1,0 +1,3 @@
+Raw Experience → Emotional Tagging → Pattern Extraction → Symbolic Encoding → Graph Integration → PII Redaction
+     ↓               ↓               ↓               ↓               ↓               ↓
+Sensor Data   →  Emotional LLM   →  Pattern Engine →  Symbol Maker →  Graph Update →  Privacy Filter

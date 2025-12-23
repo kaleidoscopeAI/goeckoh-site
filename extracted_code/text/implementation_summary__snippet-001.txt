@@ -1,0 +1,1 @@
+R_active = R₀ * (1.0 + energy * 2.0 + χ * γ_spike) + modal_term

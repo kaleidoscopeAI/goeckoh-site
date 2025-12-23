@@ -1,0 +1,1 @@
+*   **`hid_controller.py`:** The `HardwareControl` class uses an `HIDController` to execute the simulated user actions, with WebSocket and REST APIs for mobile integration.

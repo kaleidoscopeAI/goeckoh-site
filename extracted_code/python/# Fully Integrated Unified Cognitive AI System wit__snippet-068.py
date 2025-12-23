@@ -1,0 +1,1 @@
+- Use modern NLP libraries (e.g., Hugging Face Transformers or spaCy) to extract contextual embeddings from crawled web pages.

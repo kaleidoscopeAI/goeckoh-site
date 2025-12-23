@@ -1,0 +1,2 @@
+This file includes the main `EnhancedAdaptiveNode` class and the `EmotionalState` enum.
+

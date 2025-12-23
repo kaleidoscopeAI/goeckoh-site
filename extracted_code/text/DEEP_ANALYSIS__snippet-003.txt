@@ -1,0 +1,7 @@
+numpy, scipy              # Scientific computing
+sounddevice               # Audio I/O
+sherpa-onnx              # Speech recognition
+kivy, kivymd             # Mobile GUI framework
+textual                  # Terminal UI
+requests                 # HTTP client
+Cython                   # Python-C interop

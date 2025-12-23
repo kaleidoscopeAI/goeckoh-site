@@ -1,0 +1,2 @@
+Activity Factor	1.0+time_since_active/36001.0​	Promotes load balancing by penalizing gears that were recently active, using a 1-hour scale (3600 seconds) for distribution.
+

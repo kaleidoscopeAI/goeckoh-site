@@ -1,0 +1,2 @@
+where typically $d = 128$ bits. This vector is compactly stored using packed machine words—either:
+

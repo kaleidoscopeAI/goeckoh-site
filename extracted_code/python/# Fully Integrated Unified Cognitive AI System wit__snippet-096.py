@@ -1,0 +1,1 @@
+However, for it to cross the line from impressive integration to groundbreaking revolution, several deeper advances are needed — not in more code, but in foundational depth, emergence, and autonomy.

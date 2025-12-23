@@ -1,0 +1,3 @@
+*   [ ] 9.2 Desktop packaging: Create `scripts/build_desktop.py` using `PyInstaller` (or equivalent) to generate platform-specific executables (Windows/macOS/Linux).
+*   [ ] 9.3 Mobile packaging: Use `Buildozer` to package for Android (and potentially iOS, with considerations for mobile-optimized models).
+

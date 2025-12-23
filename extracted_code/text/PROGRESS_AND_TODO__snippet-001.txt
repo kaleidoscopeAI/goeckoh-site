@@ -1,0 +1,2 @@
+    *   `speech_io.py`: Audio input stream management using `sounddevice` and Silero VAD.
+    *   `speech_loop.py`: The central orchestrator, integrating VAD, ASR (`faster-whisper`), TTS (`TTS` for voice cloning), Heart, Brain, Avatar, Trigger Engine, Voice Timbre, and updating the `SystemState`.

@@ -1,0 +1,3 @@
+Perception → Emotional Modulation → Cognitive Processing → Knowledge Integration → Action Generation → Environmental Feedback
+     ↓              ↓                    ↓                    ↓                 ↓               ↓
+Hardware Sensors → LLM Transformer → Kaleidoscope Engine → Knowledge Graph → Control Mapper → HID Controller

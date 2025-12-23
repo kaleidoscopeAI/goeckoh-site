@@ -1,0 +1,1 @@
+| 46 | Correlation function (exponential decay; \xi as length). | \( C(d) = \langle s_i s_j \rangle_{d(i,j)=d} - \langle s \rangle^2 \approx C_0 e^{-d/\xi} \), \( \xi \approx 5 \) (correlation length). |

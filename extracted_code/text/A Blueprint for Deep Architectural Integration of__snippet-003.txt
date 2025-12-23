@@ -1,0 +1,86 @@
+
+
+## 12. Reinforcement Learning for Curiosity Resolution
+
+### 12.1. Motivation
+
+Our cognitive architecture integrates multiple Thought Engines connected via routing matrices whose weights govern information flow. To enable adaptive self-improvement, these routing weights are updated via reinforcement learning (RL) driven by curiosity resolution signals representing uncertainty reduction.
+
+### 12.2. Curiosity and Reward Definition
+
+Let $U(S_k)$ quantify the system’s \emph{uncertainty} or \emph{curiosity tension} at step $k$ based on entropy measures or prediction errors. The instantaneous reward $r_k$ for RL is:
+
+$$
+r_k = U(S_{k-1}) - U(S_k).
+$$
+
+This captures the reduction in uncertainty attributable to system processing and external knowledge acquisition, providing a natural and interpretable signal for reinforcement learning algorithms.
+
+### 12.3. Policy and Weight Updates
+
+Routing weights $w_{ij}$ connecting Thought Engine $i$ to engine $j$ define influence probabilities for message passing and integration. We model the routing policy $\pi(w|S_k)$ over weights conditioned on the current cognitive state.
+
+Weights are updated using policy gradient methods:
+
+$$
+\Delta w_{ij} \propto \eta r_k \nabla_{w_{ij}} \log \pi(w_{ij}|S_k),
+$$
+
+where $\eta$ is a learning rate. This update strengthens pathways contributing most to curiosity resolution.
+
+### 12.4. Integration with WebCrawler Activation
+
+The web crawler’s activation threshold and query generation policy parameters are included in the RL framework, allowing the system to learn efficient search strategies that optimize uncertainty reduction versus resource cost.
+
+### 12.5. Algorithmic Overview
+
+$$
+\begin{verbatim}
+// At each cognitive update step k:
+1. Compute uncertainty U(S_k)
+2. Calculate reward r_k = U(S_{k-1}) - U(S_k)
+3. For each routing weight w_ij:
+    - Compute policy gradient ∇ log π(w_ij | S_k)
+    - Update weights w_ij += η * r_k * gradient
+4. Update policies controlling O_crawl activation parameters
+\end{verbatim}
+$$
+
+### 12.6. Related Work
+
+Our approach aligns closely with contemporary research integrating reinforcement learning within cognitive architectures \cite{Morais2025RLFramework,Sun2019IntegratedCognitive, Rosenbloom2018RL} that demonstrate efficient policy learning in multilayered, modular agents.
+
+***
+
+Would you like the references section next or proceed to detailed Rust integration code samples for this RL mechanism?
+<span style="display:none">[^47_1][^47_10][^47_2][^47_3][^47_4][^47_5][^47_6][^47_7][^47_8][^47_9]</span>
+
+<div align="center">⁂</div>
+
+[^47_1]: https://www.sciencedirect.com/science/article/abs/pii/S1389041725000348
+
+[^47_2]: https://www.frontiersin.org/journals/robotics-and-ai/articles/10.3389/frobt.2019.00131/full
+
+[^47_3]: https://ict.usc.edu/pubs/Deconstructing Reinforcement Learning in Sigma.pdf
+
+[^47_4]: https://www.nature.com/articles/s41598-023-32234-y
+
+[^47_5]: https://arxiv.org/abs/2406.06297
+
+[^47_6]: https://www.sciencedirect.com/science/article/pii/S0959438818301077
+
+[^47_7]: https://www.osti.gov/servlets/purl/1120855
+
+[^47_8]: https://www.humanbrainproject.eu/en/science-development/focus-areas/brain-inspired-cognitive-architectures/
+
+[^47_9]: https://pmc.ncbi.nlm.nih.gov/articles/PMC10200004/
+
+[^47_10]: https://onlinelibrary.wiley.com/doi/10.1111/tops.12573
+
+
+---
+
+# yes
+
+Here is a detailed Rust code sample demonstrating the integration of a simple RL update mechanism within a cognitive architecture for dynamic routing adjustment and curiosity-driven activation:
+

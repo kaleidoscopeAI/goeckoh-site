@@ -1,0 +1,1 @@
+* **Physical fidelity**: The entanglement-corrected mapping is heuristic (one of many possible ER=EPR → geometry maps). It is consistent as a computational model but **should not be claimed** as a proven derivation from quantum gravity — rather, it is an operational engine implementing the conceptual mapping (entanglement ↔ geometry) for simulations.

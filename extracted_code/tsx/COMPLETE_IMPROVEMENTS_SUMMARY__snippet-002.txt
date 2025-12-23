@@ -1,0 +1,4 @@
+import CompleteEnhancedApp from './examples/CompleteEnhancedApp';
+
+// Replace your App component
+export default CompleteEnhancedApp;

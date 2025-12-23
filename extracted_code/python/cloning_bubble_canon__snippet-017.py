@@ -1,0 +1,3 @@
+- **base_roughness** – from HNR (breathy vs clean)
+- **base_metalness** – from spectral tilt (soft vs bright)
+- **base_sharpness** – from ZCR (Bouba vs Kiki baseline)

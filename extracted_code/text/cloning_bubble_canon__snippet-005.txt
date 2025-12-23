@@ -1,0 +1,1 @@
+R_idle(t) = R₀ * (0.85 + A_idle * sin(ω_idle * t))

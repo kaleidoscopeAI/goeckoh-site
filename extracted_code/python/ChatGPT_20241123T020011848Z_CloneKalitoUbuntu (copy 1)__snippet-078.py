@@ -1,0 +1,11 @@
+from core import Node
+
+def create_new_node(existing_nodes, dna_base, threshold):
+    node_id_counter = len(existing_nodes)
+    for node in existing_nodes:
+        new_node = node.replicate(threshold, node_id_counter)
+        if new_node:
+            existing_nodes.append(new_node)
+            return new_node
+    return None
+

@@ -1,0 +1,1 @@
+  - Nodes contribute to and retrieve from a global shared knowledge system, ensuring collaborative learning and memory persistence across generations.

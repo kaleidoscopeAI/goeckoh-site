@@ -1,0 +1,1 @@
+Performance Bridge	Physics and Rendering Decoupled using Shared Buffers	Achieves Zero main-thread CPU load, ensuring the core cognitive simulation runs unencumbered.

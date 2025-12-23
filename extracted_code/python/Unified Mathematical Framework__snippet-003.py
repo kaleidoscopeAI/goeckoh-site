@@ -1,0 +1,2 @@
+| 2 | Node as collection of attributes (unified from multiple docs; awareness added). | \( N_i = (X_i, S_i, E_i, K_i, \Psi_i, A_i) \), where \( X_i \subset \{0,1\}^d \) (\( d=128 \)), \( S_i \in [0,1]^m \), \( E_i \in \mathbb{R}^+ \), \( K_i, \Psi_i \in \mathbb{R}^n \), \( A_i \in [0,1] \). |
+| 3 | Binarization from embedding (completed non-linear function). | \( E_i = f_{\text{binarize}}(v_i) = \text{sign}(v_i) \cdot \mathbb{1}(\|v_i\| > \theta) \), \( \theta=0.1 \), \( v_i \in \mathbb{R}^{768} \). |

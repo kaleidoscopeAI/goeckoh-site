@@ -1,0 +1,10 @@
+numpy
+torch
+networkx
+scikit-learn
+scipy
+requests
+beautifulsoup4
+quart
+faiss-cpu
+plotly

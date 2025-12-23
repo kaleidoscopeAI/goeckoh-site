@@ -1,0 +1,1 @@
+*   **Neural Rendering:** Uses neural networks to render 3D scenes of nodes, their connections, and emotional states as color-coded elements. Integrates Three.js for real-time animations like "run" or "chase" from nouns and verbs.

@@ -1,0 +1,2 @@
+1. Capture a spoken utterance using an autism-optimized VAD.
+2. Transcribe the utterance to text using a fast, offline STT engine.

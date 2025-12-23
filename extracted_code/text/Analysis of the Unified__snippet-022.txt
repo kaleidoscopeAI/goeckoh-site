@@ -1,0 +1,1 @@
+3. Start proxy (if using ollama locally): `npm run proxy` (starts dev/proxy-ollama.js)

@@ -1,0 +1,1 @@
+- Check audio devices: `python3 -c "import sounddevice; print(sounddevice.query_devices())"`

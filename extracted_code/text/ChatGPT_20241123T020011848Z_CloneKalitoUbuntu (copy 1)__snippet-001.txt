@@ -1,0 +1,6 @@
+           - Attempt Self-Correction using Memory (prior learning)
+           - IF self-correction fails:
+               - Generate redundant node Nk
+               - Transfer Ni’s Memory to Nk
+               - Deactivate Ni (set state to Passive)
+

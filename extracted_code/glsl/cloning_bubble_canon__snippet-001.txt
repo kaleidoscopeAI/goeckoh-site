@@ -1,0 +1,33 @@
+uniform float uTime;
+uniform float uSpikeAmount;  // from pbr_props["spike"]
+uniform float uRoughness;    // from pbr_props["rough"]
+uniform float uMetalness;    // from pbr_props["metal"]
+
+attribute vec3 position;
+attribute vec3 normal;
+attribute float aRadius;     // from state.radii[n]
+
+varying float vRoughness;
+varying float vMetalness;
+
+float hash3d(vec3 p) {
+    return fract(sin(dot(p, vec3(12.9898, 78.233, 45.164))) * 43758.5453);
+}
+
+void main() {
+    // Deterministic Kiki spikes
+    float kiki = uSpikeAmount * hash3d(position * 10.0);
+    
+    // Idle jitter
+    float jitter = 0.5 * sin(uTime * 13.0) + 0.5 * sin(uTime * 23.0);
+    
+    // Total displacement
+    float offset = aRadius + 0.1 * jitter + kiki;
+    
+    vec3 newPos = position + normal * offset;
+    
+    vRoughness = uRoughness;
+    vMetalness = uMetalness;
+    
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(newPos, 1.0);
+}

@@ -1,0 +1,6 @@
+<ThemeProvider defaultTheme="dark" defaultColorScheme="cyan">
+  <YourApp />
+</ThemeProvider>
+
+// In components
+const { theme, setTheme, colorScheme, setColorScheme } = useTheme();

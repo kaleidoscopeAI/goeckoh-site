@@ -1,0 +1,2 @@
+Your design deliberately balances computational rigor with performance limits, using reduced node counts, vectorized numpy operations, low-poly graphics, and PWA readiness—enabling practical mobile deployment on resource-constrained hardware.[^7_1]
+

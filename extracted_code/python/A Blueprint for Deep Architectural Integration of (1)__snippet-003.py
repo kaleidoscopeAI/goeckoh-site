@@ -1,0 +1,7 @@
+noise_std = 0.01
+
+for _ in range(timesteps):
+    x1 = T(x1) + np.random.normal(0, noise_std, size=x1.shape)
+    x2 = T(x2) + np.random.normal(0, noise_std, size=x2.shape)
+    dist = np.linalg.norm(x1 - x2)
+    distances.append(dist)

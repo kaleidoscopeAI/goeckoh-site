@@ -1,0 +1,7 @@
+<EnhancedUIOverlay
+  // ... all existing props
+  voiceData={voiceData}
+  showVoicePanel={true}
+  showProgress={false}
+  showVoiceFeedback={true}
+/>

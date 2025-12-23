@@ -1,0 +1,25 @@
+import { connectVoicePipeline } from './utils/voicePipeline';
+
+const App = () => {
+  const { voiceData, isConnected } = useVoiceData({
+    updateInterval: 100,
+    onUpdate: (data) => {
+      console.log('Voice data updated', data);
+    }
+  });
+
+  useEffect(() => {
+    const connection = connectVoicePipeline({
+      wsUrl: 'ws://localhost:8765',
+      onVoiceData: (data) => {
+        // Process voice data
+        setVoiceMetrics(data);
+      },
+      onError: (error) => {
+        console.error('Voice pipeline error', error);
+      }
+    });
+
+    return () => connection.disconnect();
+  }, []);
+};

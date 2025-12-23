@@ -1,0 +1,11 @@
+Voice Pipeline
+    ↓
+useVoiceData Hook
+    ↓
+useBubbleState Hook
+    ↓
+EnhancedThreeCanvas (Visual)
+    ↓
+EnhancedUIOverlay (UI)
+    ↓
+VoiceTherapyPanel (Feedback)

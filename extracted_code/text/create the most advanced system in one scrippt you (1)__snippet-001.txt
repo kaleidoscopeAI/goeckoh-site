@@ -1,0 +1,1 @@
+Power = f(α, N_subjects, conditions, ε, f, corr)

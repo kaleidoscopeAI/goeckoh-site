@@ -1,0 +1,1 @@
+- Slide-in animations from any direction

@@ -1,0 +1,12 @@
+{
+  "health": 0.95,
+  "coherence": 0.87,
+  "complexity": 0.75,
+  "emergenceLevel": 0.54,
+  "energyEfficiency": 0.81,
+  "valence": 0.62,
+  "arousal": 0.77,
+  "dominance": 0.56,
+  "confidence": 0.90,
+  "regulation": 0.80
+}

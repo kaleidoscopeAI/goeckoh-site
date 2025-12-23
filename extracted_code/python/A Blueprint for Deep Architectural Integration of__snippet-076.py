@@ -1,0 +1,1 @@
+The crawler leverages signals from speculative and kaleidoscopic processing (`O_speculation`, `O_kaleidoscope`), closing the loop by reducing curiosity tension, which mathematically can be integrated into the Lyapunov stability proof as a controlled feedback perturbation.

@@ -1,0 +1,2 @@
+lmer(N1 ~ Condition + (1 + Condition|Subject) + (1|Trial))
+summary()$varcor  # Extracts Var_subject, Var_residual

@@ -1,0 +1,4 @@
+    Master State Vector (Ψ): This vector combines the four core properties of all nodes—Energy, Awareness, Knowledge, and Position—into a single, high-dimensional representation. Its evolution is calculated by a Master State Evolution Equation, which is implemented using a C library for high-performance processing.
+
+    Cognitive Actuation (C∧): This is the core mechanism linking abstract state to behavior. It involves projecting a node's state onto an 8-dimensional E8 lattice. This projection yields a "Kaleidoscope force" (C∧) that directly influences the node's spatial position within the simulation and, critically, its internal emotional state (valence and arousal). This implies emotion is a topologically derived output of the cognitive structure.
+

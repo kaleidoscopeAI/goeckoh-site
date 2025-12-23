@@ -1,0 +1,2 @@
+This script is a tool for rendering the system's state in 3D, using neural techniques to visualize node interactions and lattice projections. From October 12, this includes dynamic visualizations based on conversation content, with image lookup and edge detection.
+
