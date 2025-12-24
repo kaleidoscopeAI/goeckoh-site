@@ -22,8 +22,8 @@ if __package__:
     from .attempt_analysis import AttemptFeatures
     from .voice_profile import VoiceProfile
 else:
-    from attempt_analysis import AttemptFeatures  # type: ignore
-    from voice_profile import VoiceProfile  # type: ignore
+    from attempt_analysis import AttemptFeatures
+    from voice_profile import VoiceProfile
 
 
 def _sigmoid(x: float | np.ndarray) -> float | np.ndarray:

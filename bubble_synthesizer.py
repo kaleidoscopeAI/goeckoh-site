@@ -17,8 +17,8 @@ if __package__:
     from .voice_profile import SpeakerProfile
     from .attempt_analysis import AttemptFeatures
 else:
-    from voice_profile import SpeakerProfile  # type: ignore
-    from attempt_analysis import AttemptFeatures  # type: ignore
+    from voice_profile import SpeakerProfile
+    from attempt_analysis import AttemptFeatures
 
 
 # Phoneme classification for Bouba/Kiki mapping
