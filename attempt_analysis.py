@@ -150,10 +150,7 @@ def analyze_chunk(y: np.ndarray, sr: int, frame_length: int = 2048, hop_length: 
     if len(y) < frame_length:
         raise ValueError(f"Audio too short: {len(y)} samples < {frame_length}")
     
-    # Normalize audio
     y = y.astype(np.float32)
-    if np.max(np.abs(y)) > 0:
-        y = y / np.max(np.abs(y))
     
     # Extract features
     energy = _compute_rms_energy(y, frame_length, hop_length)
