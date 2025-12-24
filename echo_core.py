@@ -98,7 +98,9 @@ def softmax(logits):
 
 def ring_buffer_update(buffer, entry, limit):
     # Performance: Use deque with maxlen for O(1) append/pop instead of O(n) list.pop(0)
-    # Convert list to deque if needed for backward compatibility
+    # Convert list to deque if needed for backward compatibility.
+    # Note: When converting, deque keeps only the rightmost (most recent) `limit` elements,
+    # which is the correct ring buffer behavior.
     if isinstance(buffer, list):
         buffer = deque(buffer, maxlen=limit)
     buffer.append(entry)
