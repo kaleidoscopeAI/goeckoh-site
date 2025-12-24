@@ -163,8 +163,6 @@
   </div>
 
   <script>
-    const { ipcRenderer } = require('electron');
-
     const logContainer = document.getElementById('logContainer');
 
     function addLog(message, type = 'info') {
@@ -180,14 +178,16 @@
       logContainer.scrollTop = logContainer.scrollHeight;
     }
 
-    // Listen for Python backend logs
-    ipcRenderer.on('python-log', (event, data) => {
-      addLog(data.trim());
-    });
+    // Listen for Python backend logs using secure API
+    if (window.electronAPI) {
+      window.electronAPI.onPythonLog((event, data) => {
+        addLog(data.trim());
+      });
 
-    ipcRenderer.on('python-error', (event, data) => {
-      addLog(data.trim(), 'error');
-    });
+      window.electronAPI.onPythonError((event, data) => {
+        addLog(data.trim(), 'error');
+      });
+    }
 
     addLog('Goeckoh Desktop Application started');
     addLog('Connecting to Python backend...');

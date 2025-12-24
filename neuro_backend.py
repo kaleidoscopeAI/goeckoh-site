@@ -18,6 +18,7 @@ class NeuroKernel:
         self.mic_q = queue.Queue()
         self.spk_q = queue.Queue()
         self.csv_q = queue.Queue()
+        self.running = False  # Add shutdown flag
         
         self.logger_svc = ClinicalLogger(self.csv_q)
         self.logger_svc.start()
@@ -51,13 +52,20 @@ class NeuroKernel:
         )
 
     def start(self):
+        self.running = True
         if self.driver:
             self.driver.start()
         threading.Thread(target=self._loop, daemon=True).start()
 
+    def stop(self):
+        """Gracefully stop the processing loop"""
+        self.running = False
+        if self.driver:
+            self.driver.stop()
+        logger.info("NeuroKernel stopped")
+
     def _loop(self):
-.
-        while True:
+        while self.running:  # Use running flag instead of infinite loop
             try:
                 try:
                     chunk = self.mic_q.get(timeout=2.0)
