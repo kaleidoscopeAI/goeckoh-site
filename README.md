@@ -33,12 +33,22 @@ Goeckoh (pronounced "Go Echo") is an offline-first speech support system that ge
 - **Privacy-Forward**: All processing happens locally on your device
 - **Real-Time Correction**: Gentle speech error correction and replay
 
-## Getting Started
+## Download Desktop App
+
+**Want to use Goeckoh right away?** Download the desktop application:
+
+- **[Download for Windows](https://github.com/kaleidoscopeAI/goeckoh-site/releases/latest)** (NSIS Installer)
+- **[Download for macOS](https://github.com/kaleidoscopeAI/goeckoh-site/releases/latest)** (DMG)
+- **[Download for Linux](https://github.com/kaleidoscopeAI/goeckoh-site/releases/latest)** (AppImage / DEB)
+
+See [QUICKSTART.md](QUICKSTART.md) for installation instructions.
+
+## Getting Started (Development)
 
 ### Prerequisites
 
 - Python 3.8+
-- Node.js (for frontend development)
+- Node.js 16+ (for desktop app development)
 - Git
 
 ### Installation
@@ -56,7 +66,12 @@ Goeckoh (pronounced "Go Echo") is an offline-first speech support system that ge
    pip install -r requirements.txt
    ```
 
-3. Run the application:
+3. Run the desktop application:
+   ```bash
+   python desktop_app.py --mode child
+   ```
+
+   Or run the CLI:
    ```bash
    python -m cli start
    ```
@@ -115,6 +130,37 @@ The marketing website is located in the `website/` directory. To view it locally
    python -m http.server 8000
    # Visit http://localhost:8000
    ```
+
+## Building Desktop Application
+
+To build distributable packages for the desktop app:
+
+### Quick Build
+
+```bash
+# Build for all platforms
+./build_desktop_app.sh all
+
+# Build for specific platform
+./build_desktop_app.sh windows   # Windows installer
+./build_desktop_app.sh macos     # macOS DMG
+./build_desktop_app.sh linux     # Linux AppImage + DEB
+```
+
+### Manual Build
+
+```bash
+cd electron-app
+npm install
+npm run dist         # Build for current platform
+npm run dist:win     # Windows
+npm run dist:mac     # macOS
+npm run dist:linux   # Linux
+```
+
+Build artifacts will be in `dist/electron/`.
+
+For detailed build instructions, see [BUILDING.md](BUILDING.md).
 
 ## Documentation
 
