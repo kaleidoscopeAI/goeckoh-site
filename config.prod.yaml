@@ -1,0 +1,72 @@
+# Production Configuration for Goeckoh System
+# This file extends config.yaml with production-specific settings
+
+system_prompt: >
+  You are a therapeutic voice support system for neurodivergent individuals.
+  You provide gentle speech correction and replay in the user's own voice.
+  Your purpose is to support communication and build confidence through
+  positive reinforcement and identity-matched voice replay.
+
+tools:
+  - name: aitk-get_agent_code_gen_best_practices
+    description: "Best practices, guidance, and steps for AI Agent development."
+  - name: aitk-get_tracing_code_gen_best_practices
+    description: "Best practices for code generation and operations when working with tracing for AI applications."
+  - name: aitk-get_ai_model_guidance
+    description: "Guidance and best practices for using AI models."
+  - name: aitk-evaluation_planner
+    description: "Guides users through clarifying evaluation metrics and test dataset via multi-turn conversation."
+  - name: aitk-get_evaluation_code_gen_best_practices
+    description: "Best practices for the evaluation code generation when working on evaluation for AI application or AI agent"
+  - name: aitk-evaluation_agent_runner_best_practices
+    description: "Best practices for using agent runners to collect responses from test datasets for evaluation."
+
+# Production settings
+tracing: false  # Disable tracing for performance
+log_level: "INFO"  # Standard logging level
+
+# Voice cloning settings - REQUIRED in production
+enable_voice_clone: true
+# Users must provide their own voice profile
+# This should be set to the actual user voice profile path
+voice_profile_path: "./voice_profiles/user_voice.wav"
+
+# Path containing documents to read (txt, md, pdf)
+documents_path: "./documents"
+
+# Minimum length (seconds) required for a voice_profile WAV
+min_voice_profile_duration: 5.0
+
+# Production-specific settings
+production:
+  # Strict validation
+  strict_validation: true
+  
+  # All models must be loaded
+  require_all_models: true
+  
+  # Disable hot reload for stability
+  hot_reload: false
+  
+  # High quality processing
+  fast_mode: false
+  
+  # Disable debug endpoints
+  debug_endpoints: false
+  
+  # Enable safety monitoring
+  safety_monitoring: true
+  
+  # Session persistence
+  save_sessions: true
+  
+  # Privacy settings
+  privacy:
+    # Never send data externally
+    offline_only: true
+    
+    # Encrypt saved sessions
+    encrypt_sessions: true
+    
+    # Auto-delete old sessions
+    auto_cleanup_days: 30

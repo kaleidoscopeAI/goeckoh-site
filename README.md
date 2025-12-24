@@ -35,12 +35,6 @@ Goeckoh (pronounced "Go Echo") is an offline-first speech support system that ge
 
 ## Getting Started
 
-### Prerequisites
-
-- Python 3.8+
-- Node.js (for frontend development)
-- Git
-
 ### Installation
 
 1. Clone this repository:
@@ -49,17 +43,55 @@ Goeckoh (pronounced "Go Echo") is an offline-first speech support system that ge
    cd goeckoh-site
    ```
 
-2. Set up Python environment:
+2. Run the automated setup:
+   ```bash
+   ./setup.sh
+   ```
+   
+   Or manually:
    ```bash
    python -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    pip install -r requirements.txt
+   python integrate_config.py  # Integrate subsystems
+   python validate_config.py   # Validate configuration
    ```
 
 3. Run the application:
    ```bash
    python -m cli start
    ```
+
+### Configuration Quick Start
+
+**For Development** (fastest setup, voice cloning disabled):
+```bash
+export GOECKOH_ENV=development
+./setup.sh
+python -m cli start
+```
+
+**For Production** (full features, voice cloning enabled):
+```bash
+# 1. Create your voice profile
+# Record 5+ seconds of your voice and save as voice_profiles/my_voice.wav
+
+# 2. Update config.yaml
+# Set: voice_profile_path: "./voice_profiles/my_voice.wav"
+
+# 3. Run setup
+export GOECKOH_ENV=production
+./setup.sh
+python -m cli start
+```
+
+**Validate Your Configuration**:
+```bash
+python validate_config.py  # Check for issues
+python integrate_config.py # Fix integration
+```
+
+See [CONFIGURATION_GUIDE.md](CONFIGURATION_GUIDE.md) for complete details.
 
 ### CLI Commands
 
@@ -119,6 +151,7 @@ The marketing website is located in the `website/` directory. To view it locally
 ## Documentation
 
 - [System Overview](SYSTEM_OVERVIEW.md)
+- [Configuration Guide](CONFIGURATION_GUIDE.md) - **Complete configuration reference**
 - [Quick Start Guide](QUICK_START.md)
 - [Deployment Guide](DEPLOYMENT_GUIDE.md)
 - [Cross-Platform Packaging](CROSS_PLATFORM_PACKAGING.md)
