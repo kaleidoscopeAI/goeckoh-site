@@ -1,5 +1,296 @@
-body {
-  margin: 0;
-  overflow: hidden;
-  font-family: monospace;
+/*
+ * GOECKOH website styles
+ * Dark background with neon accents matching the brand palette.
+ */
+
+:root{
+  /* Refined palette inspired by autism‑friendly websites.  
+     We switch to a dark navy base with muted teal and green accents.  
+     These colours maintain a tech feel without the harsh neon saturation of the previous design.  */
+  --bg:#0e274d;        /* primary background: dark navy */
+  --bg2:#152e57;       /* secondary background: slightly lighter navy */
+  --text:#E4EBF5;      /* base text colour: soft off‑white */
+  --muted:#8CA2C7;     /* muted text colour: pale blue‑grey */
+  --line:rgba(255,255,255,.08); /* subtle lines and borders */
+  --glass:rgba(255,255,255,.04); /* frosted glass overlay */
+  --cyan:#2BB7CC;      /* muted cyan accent for buttons and highlights */
+  --lime:#7BC67D;      /* soft green accent for secondary highlights */
+  --shadow:0 20px 60px rgba(0,0,0,.35); /* slightly softer shadow */
+  --radius:18px;
 }
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:radial-gradient(circle at 20% 20%, rgba(53,211,255,.12), transparent 45%),
+                                 radial-gradient(circle at 20% 20%, rgba(43,183,204,.10), transparent 45%),
+                                 radial-gradient(circle at 80% 30%, rgba(123,198,125,.08), transparent 55%),
+                                 linear-gradient(180deg, var(--bg), var(--bg2));
+          color:var(--text);
+          /* Use Inter for body text with Montserrat fallback */
+          font-family:'Inter','Montserrat',system-ui,Segoe UI,Roboto,Arial,sans-serif;}
+a{color:inherit;text-decoration:none}
+.container{max-width:1100px;margin:0 auto;padding:0 18px}
+h1,h2,h3{font-family:'Montserrat', 'Inter', system-ui; letter-spacing:.2px}
+h1{font-size:44px; line-height:1.05; margin:14px 0 10px}
+h2{font-size:32px; margin:0 0 10px}
+h3{font-size:18px; margin:0 0 8px}
+p{line-height:1.6; color:var(--muted)}
+strong{color:var(--text)}
+
+.grad{
+  background:linear-gradient(90deg,var(--cyan),var(--lime));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+
+.header{
+  position:sticky; top:0; z-index:50;
+  backdrop-filter: blur(12px);
+  background: rgba(7,16,24,.55);
+  border-bottom:1px solid var(--line);
+}
+
+.header__inner{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 0; gap:16px;
+}
+.brand{display:flex;align-items:center;gap:12px}
+.brand__logo{width:40px;height:40px;border-radius:999px;object-fit:cover}
+.brand__name{font-weight:800;letter-spacing:.8px}
+.brand__sub{font-size:12px;color:rgba(201,212,227,.85);margin-top:2px}
+
+.nav{display:flex;gap:18px;color:rgba(201,212,227,.9);font-size:14px}
+.nav a{padding:8px 6px;border-radius:10px}
+.nav a:hover{background:rgba(255,255,255,.06);color:var(--text)}
+
+.header__cta{display:flex;gap:10px}
+.btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:12px 14px; border-radius:14px;
+  border:1px solid transparent; font-weight:700;
+  cursor:pointer;
+}
+.btn--primary{
+  background:linear-gradient(90deg,var(--cyan),var(--lime));
+  color:#031017;
+  box-shadow: 0 10px 40px rgba(53,211,255,.10);
+}
+.btn--ghost{
+  border-color: rgba(53,211,255,.35);
+  background: rgba(255,255,255,.03);
+  color: var(--text);
+}
+.btn--full{width:100%}
+
+.burger{display:none;background:none;border:0;cursor:pointer}
+.burger span{display:block;width:24px;height:2px;background:rgba(245,248,252,.85);margin:5px 0;border-radius:2px}
+
+.mobileMenu{
+  display:none;
+  border-bottom:1px solid var(--line);
+  background: rgba(7,16,24,.85);
+}
+.mobileMenu__inner{padding:14px 0;display:flex;flex-direction:column;gap:10px}
+.mobileMenu__inner a{padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.04)}
+.mobileMenu__btn{margin-top:6px}
+
+.hero{padding:46px 0 22px}
+.hero__grid{display:grid;grid-template-columns:1.15fr .85fr;gap:26px;align-items:start}
+.pill{
+  display:inline-flex; gap:8px; align-items:center;
+  padding:8px 12px;border-radius:999px;border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+  font-size:12px;color:rgba(201,212,227,.95)
+}
+.lead{font-size:16px;margin:10px 0 0}
+.hero__buttons{display:flex;gap:10px;margin:16px 0 12px;flex-wrap:wrap}
+.hero__trust{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.trustCard{
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+  border-radius:16px;
+  padding:12px;
+}
+.trustCard__title{font-weight:800;font-size:13px}
+.trustCard__desc{font-size:12px;color:rgba(201,212,227,.92);margin-top:4px;line-height:1.45}
+
+.origin{
+  margin-top:14px;
+  padding:14px;
+  border-radius:16px;
+  border:1px solid rgba(167,240,70,.22);
+  background:rgba(167,240,70,.06);
+  color:rgba(245,248,252,.95);
+  font-size:14px;
+  line-height:1.55;
+}
+
+.hero__visual .glass{
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.05);
+  border-radius:24px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  position:relative;
+}
+
+/* New hero visual: when the aside contains an image, style it */
+.hero__visual img {
+  width: 100%;
+  border-radius: 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
+  display: block;
+}
+.glass__inner{padding:22px; position:relative; z-index:2}
+.halo{
+  position:absolute; inset:-30%;
+  background:
+    radial-gradient(circle at 45% 50%, rgba(53,211,255,.22), transparent 52%),
+    radial-gradient(circle at 55% 45%, rgba(167,240,70,.16), transparent 58%);
+  filter: blur(14px);
+  z-index:1;
+}
+.kicker{font-size:12px;color:rgba(201,212,227,.85)}
+.loopTitle{font-size:22px;font-weight:800;margin-top:6px}
+.muted{font-size:13px;color:rgba(201,212,227,.85)}
+.readouts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.readout{
+  border:1px solid var(--line);
+  background:rgba(7,16,24,.35);
+  border-radius:16px;
+  padding:12px;
+  display:flex; align-items:baseline; justify-content:space-between;
+}
+.readout span{font-size:12px;color:rgba(201,212,227,.85)}
+.readout strong{font-size:13px}
+.toast{
+  margin-top:12px;
+  font-size:12px;
+  color:rgba(245,248,252,.95);
+  min-height:16px;
+}
+
+.section{padding:56px 0}
+.section--alt{background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0))}
+.sectionLead{max-width:760px;margin:10px 0 0}
+.cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+.card{
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+  border-radius:var(--radius);
+  padding:18px;
+}
+.card p{margin:0;color:rgba(201,212,227,.9)}
+
+.steps{display:grid;gap:12px;margin-top:16px}
+.step{
+  display:flex; gap:14px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+  border-radius:var(--radius);
+  padding:16px;
+}
+.step__num{
+  width:34px;height:34px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(90deg, rgba(53,211,255,.25), rgba(167,240,70,.18));
+  border:1px solid rgba(255,255,255,.10);
+  font-weight:900;
+}
+.step__body p{margin:0;color:rgba(201,212,227,.92)}
+.callout{
+  margin-top:18px;
+  border:1px solid rgba(53,211,255,.25);
+  background:rgba(53,211,255,.06);
+  border-radius:var(--radius);
+  padding:16px;
+  color:rgba(245,248,252,.95);
+}
+
+.pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+.priceCard{
+  position:relative;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+  border-radius:22px;
+  padding:18px;
+}
+.priceCard--featured{
+  border-color: rgba(167,240,70,.30);
+  background:rgba(167,240,70,.06);
+}
+.badge{
+  position:absolute; top:14px; right:14px;
+  font-size:11px; font-weight:900;
+  padding:6px 10px; border-radius:999px;
+  background:rgba(7,16,24,.55);
+  border:1px solid rgba(255,255,255,.12);
+}
+.priceCard__top p{margin:8px 0 0}
+.price{
+  font-family:"Space Grotesk",Inter;
+  font-size:36px;font-weight:900;margin-top:10px;color:var(--text)
+}
+.price span{font-size:14px;color:rgba(201,212,227,.85);margin-left:4px}
+
+.platforms{margin-top:14px;color:rgba(201,212,227,.9)}
+.faq{margin-top:16px;display:grid;gap:10px}
+details{
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+  border-radius:var(--radius);
+  padding:14px 16px;
+}
+summary{cursor:pointer;font-weight:900}
+details p{margin:10px 0 0;color:rgba(201,212,227,.92)}
+.finalCta{
+  margin-top:22px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.04);
+  border-radius:22px;
+  padding:18px;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:12px; flex-wrap:wrap;
+}
+.finalCta h3{margin:0}
+.footer{
+  border-top:1px solid var(--line);
+  background:rgba(7,16,24,.60);
+  padding:26px 0;
+}
+
+/* Research section styles */
+.charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+}
+.chart img {
+  width: 100%;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.chartCaption {
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--muted);
+  text-align: center;
+}
+.footer__inner{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.footerBrand{font-weight:900;letter-spacing:.8px}
+.footerSub{font-size:12px;color:rgba(201,212,227,.85);margin-top:2px}
+.footerTiny{font-size:12px;color:rgba(201,212,227,.72);margin-top:10px}
+.footer__right{display:flex;gap:16px;color:rgba(201,212,227,.9)}
+.footer__right a:hover{color:var(--text)}
+
+@media (max-width: 980px){
+  .hero__grid{grid-template-columns:1fr;gap:18px}
+  .hero__trust{grid-template-columns:1fr}
+  .cards3{grid-template-columns:1fr}
+  .pricing{grid-template-columns:1fr}
+  .nav,.header__cta{display:none}
+  .burger{display:block}
+}
+
+/* Additional styles for support page, links and code blocks */
+code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+.link { text-decoration: underline; text-underline-offset: 3px; opacity: .95; }
+.link:hover { opacity: 1; }
