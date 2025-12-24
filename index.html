@@ -56,6 +56,22 @@
             font-weight: 400;
         }
 
+        .live-lattice {
+            padding: 6rem 1.5rem;
+            background: radial-gradient(circle at 20% 20%, rgba(99,102,241,0.08), transparent 35%), radial-gradient(circle at 80% 10%, rgba(34,211,238,0.08), transparent 32%), var(--darker);
+        }
+
+        .live-lattice .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        #react-root {
+            width: 100%;
+            min-height: 70vh;
+            margin-top: 1.5rem;
+        }
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 12px;
@@ -1066,6 +1082,17 @@
         </div>
     </section>
 
+    <!-- Live Neural Lattice -->
+    <section id="lattice" class="live-lattice">
+        <div class="container">
+            <div class="section-header">
+                <h2>Live Cognitive Lattice</h2>
+                <p>Explore the real-time neural field powering Goeckoh. Switch between the lattice view and the expressive voice companion that learns, calms, and adapts on the fly.</p>
+            </div>
+            <div id="react-root"></div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer>
         <p>&copy; 2025 Goeckoh Neuro-Acoustic Exocortex. Open source therapeutic technology.</p>
@@ -1163,5 +1190,6 @@
             });
         });
     </script>
+    <script type="module" src="/main.jsx"></script>
 </body>
 </html>

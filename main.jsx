@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
 import '@react-three/fiber';
 
-const rootElement = document.getElementById('root');
+const rootElement = document.getElementById('react-root');
 if (!rootElement) {
   throw new Error("Could not find root element to mount to");
 }
