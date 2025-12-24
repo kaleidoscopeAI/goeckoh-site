@@ -56,7 +56,13 @@ DEFAULT_CONFIG = {
 }
 
 
-def load_config(path="config.json"):
+def load_config(path="config/config.json"):
+    # Support both old and new config paths
+    if not os.path.exists(path):
+        old_path = "config.json"
+        if os.path.exists(old_path):
+            path = old_path
+    
     if os.path.exists(path):
         with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
