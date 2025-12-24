@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 
 const BASE_URL = 'http://localhost:5000';
+const MAX_SYNTHETIC_NODES = 800;
+const ROTATION_SPEED = 0.002;
 
 export const useNodeSimulation = (nodeCount) => {
   const [nodes, setNodes] = useState([]);
@@ -10,8 +12,9 @@ export const useNodeSimulation = (nodeCount) => {
   const tickRef = useRef(0);
 
   const createSyntheticState = () => {
-    const syntheticNodes = Array.from({ length: Math.min(nodeCount, 800) }, (_, i) => {
-      const phase = i / Math.min(nodeCount, 800);
+    const cappedCount = Math.min(nodeCount, MAX_SYNTHETIC_NODES);
+    const syntheticNodes = Array.from({ length: cappedCount }, (_, i) => {
+      const phase = i / cappedCount;
       const radius = 40 + (phase * 40);
       const angle = phase * Math.PI * 4;
       return {
@@ -42,6 +45,14 @@ export const useNodeSimulation = (nodeCount) => {
 
   const advanceSynthetic = () => {
     tickRef.current += 1;
+    if (!syntheticRef.current) {
+      const { syntheticNodes, syntheticEdges } = createSyntheticState();
+      syntheticRef.current = true;
+      setNodes(syntheticNodes);
+      setEdges(syntheticEdges);
+      setMetrics({ nodeCount: syntheticNodes.length, updateTime: 0 });
+      return;
+    }
     setNodes((prev) =>
       prev.map((node, idx) => {
         const phase = (tickRef.current * 0.02) + idx * 0.03;
@@ -49,9 +60,9 @@ export const useNodeSimulation = (nodeCount) => {
         return {
           ...node,
           pos: [
-            node.pos[0] * Math.cos(0.002) - node.pos[2] * Math.sin(0.002),
+            node.pos[0] * Math.cos(ROTATION_SPEED) - node.pos[2] * Math.sin(ROTATION_SPEED),
             node.pos[1] + wobble * 0.1,
-            node.pos[0] * Math.sin(0.002) + node.pos[2] * Math.cos(0.002),
+            node.pos[0] * Math.sin(ROTATION_SPEED) + node.pos[2] * Math.cos(ROTATION_SPEED),
           ],
           E: 0.5 + 0.4 * Math.sin(phase + idx * 0.01),
           A: 0.5 + 0.25 * Math.cos(phase * 0.7),
@@ -145,7 +156,15 @@ export const useNodeSimulation = (nodeCount) => {
         }
       } catch (error) {
         console.error('Error stepping simulation:', error);
-        advanceSynthetic();
+        if (!syntheticRef.current) {
+          const { syntheticNodes, syntheticEdges } = createSyntheticState();
+          syntheticRef.current = true;
+          setNodes(syntheticNodes);
+          setEdges(syntheticEdges);
+          setMetrics({ nodeCount: syntheticNodes.length, updateTime: 0 });
+        } else {
+          advanceSynthetic();
+        }
       }
       const endTime = performance.now();
       setMetrics(prevMetrics => ({ ...prevMetrics, updateTime: endTime - startTime }));
