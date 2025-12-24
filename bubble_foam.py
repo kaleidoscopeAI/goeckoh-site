@@ -16,12 +16,12 @@ from typing import Any, Dict, Optional
 
 import numpy as np
 
-try:
-    # Relative imports for when installed as a package
+# Use relative imports when this module is part of a package,
+# otherwise fall back to absolute imports for standalone usage
+if __package__:
     from .attempt_analysis import AttemptFeatures
     from .voice_profile import VoiceProfile
-except ImportError:
-    # Fallback to absolute imports for standalone usage
+else:
     from attempt_analysis import AttemptFeatures  # type: ignore
     from voice_profile import VoiceProfile  # type: ignore
 

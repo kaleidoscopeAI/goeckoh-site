@@ -11,11 +11,11 @@ from typing import Dict, List, Tuple
 
 import numpy as np
 
-try:
-    # Relative imports for when installed as a package
+# Use relative imports when this module is part of a package,
+# otherwise fall back to absolute imports for standalone usage
+if __package__:
     from .voice_profile import SpeakerProfile
-except ImportError:
-    # Fallback to absolute imports for standalone usage
+else:
     from voice_profile import SpeakerProfile  # type: ignore
 
 
@@ -211,9 +211,9 @@ def controls_to_attempt_features(controls: Dict[str, np.ndarray], dt: float = 0.
         controls: Dict from feed_text_through_bubble
         dt: Time step (default 0.01s)
     """
-    try:
+    if __package__:
         from .attempt_analysis import AttemptFeatures
-    except ImportError:
+    else:
         from attempt_analysis import AttemptFeatures  # type: ignore
     
     return AttemptFeatures(
