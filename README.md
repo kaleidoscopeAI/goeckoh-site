@@ -208,7 +208,13 @@ All build and deployment scripts are located in the `scripts/` directory:
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit issues and pull requests.
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for:
+- Repository organization guidelines
+- Development setup instructions
+- Code and documentation standards
+- Pull request process
+
+Please feel free to submit issues and pull requests.
 
 ## License
 
