@@ -43,6 +43,10 @@ export const useNodeSimulation = (nodeCount) => {
     return { syntheticNodes, syntheticEdges };
   };
 
+  // Performance: Pre-compute trigonometric values for ROTATION_SPEED
+  const cosRotation = Math.cos(ROTATION_SPEED);
+  const sinRotation = Math.sin(ROTATION_SPEED);
+
   const advanceSynthetic = () => {
     tickRef.current += 1;
     if (!syntheticRef.current) {
@@ -57,13 +61,12 @@ export const useNodeSimulation = (nodeCount) => {
       prev.map((node, idx) => {
         const phase = (tickRef.current * 0.02) + idx * 0.03;
         const wobble = Math.sin(phase) * 4;
+        // Performance: Reuse pre-computed cos/sin values instead of calling Math.cos/sin repeatedly
+        const newPosX = node.pos[0] * cosRotation - node.pos[2] * sinRotation;
+        const newPosZ = node.pos[0] * sinRotation + node.pos[2] * cosRotation;
         return {
           ...node,
-          pos: [
-            node.pos[0] * Math.cos(ROTATION_SPEED) - node.pos[2] * Math.sin(ROTATION_SPEED),
-            node.pos[1] + wobble * 0.1,
-            node.pos[0] * Math.sin(ROTATION_SPEED) + node.pos[2] * Math.cos(ROTATION_SPEED),
-          ],
+          pos: [newPosX, node.pos[1] + wobble * 0.1, newPosZ],
           E: 0.5 + 0.4 * Math.sin(phase + idx * 0.01),
           A: 0.5 + 0.25 * Math.cos(phase * 0.7),
         };

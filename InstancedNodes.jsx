@@ -24,6 +24,9 @@ const InstancedNodes = ({
   }, [instanceCap]);
 
   const dummy = useMemo(() => new THREE.Object3D(), []);
+  
+  // Performance: Reuse a single Color object to avoid allocations on each frame
+  const tempColor = useMemo(() => new THREE.Color(), []);
 
   useFrame(() => {
     if (!meshRef.current) return;
@@ -37,8 +40,9 @@ const InstancedNodes = ({
       dummy.updateMatrix();
       meshRef.current.setMatrixAt(i, dummy.matrix);
 
-      const color = new THREE.Color().setHSL(node.K, 1.0, 0.5);
-      colorsRef.current.setXYZ(i, color.r, color.g, color.b);
+      // Performance: Reuse tempColor instead of creating new Color() each iteration
+      tempColor.setHSL(node.K, 1.0, 0.5);
+      colorsRef.current.setXYZ(i, tempColor.r, tempColor.g, tempColor.b);
       intensitiesRef.current.setX(i, node.E * 3 + (isHovered ? 2 : 0));
     });
 

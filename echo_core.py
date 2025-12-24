@@ -4,6 +4,7 @@ Implementation following the provided spec using only stdlib + numpy.
 """
 
 import ctypes
+from collections import deque
 import json
 import math
 import os
@@ -96,9 +97,11 @@ def softmax(logits):
 
 
 def ring_buffer_update(buffer, entry, limit):
+    # Performance: Use deque with maxlen for O(1) append/pop instead of O(n) list.pop(0)
+    # Convert list to deque if needed for backward compatibility
+    if isinstance(buffer, list):
+        buffer = deque(buffer, maxlen=limit)
     buffer.append(entry)
-    if len(buffer) > limit:
-        buffer.pop(0)
     return buffer
 
 
@@ -572,7 +575,11 @@ def crystal_update(e_k, t_fp, state, cfg, A, B, w_m, b_m, derived):
         "duration": derived.get("duration_sec", 0.0),
         "success": 1.0 if t_fp else 0.0,
     }
-    history = ring_buffer_update(state.get("H", []), entry, cfg["history_len"])
+    # Performance: Get or create deque for history buffer
+    history = state.get("H")
+    if history is None:
+        history = deque(maxlen=cfg["history_len"])
+    history = ring_buffer_update(history, entry, cfg["history_len"])
     R_prev = state.get("R")
     R_k = update_routine(R_prev, e_k, cfg)
     state_updated = {
@@ -739,7 +746,8 @@ class EchoCore:
         )
         self.state = {
             "q": np.zeros((self.cfg["crystal"]["D"],), dtype=np.float32),
-            "H": [],
+            # Performance: Use deque with maxlen for O(1) append operations
+            "H": deque(maxlen=self.cfg["history_len"]),
             "R": np.zeros(
                 (self.cfg["routine"]["contexts"], self.cfg["routine"]["features"]),
                 dtype=np.float32,
