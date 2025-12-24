@@ -11,7 +11,14 @@ from typing import Dict, List, Tuple
 
 import numpy as np
 
-from voice_profile import SpeakerProfile
+# Use relative imports when this module is part of a package,
+# otherwise fall back to absolute imports for standalone usage
+if __package__:
+    from .voice_profile import SpeakerProfile
+    from .attempt_analysis import AttemptFeatures
+else:
+    from voice_profile import SpeakerProfile
+    from attempt_analysis import AttemptFeatures
 
 
 # Phoneme classification for Bouba/Kiki mapping
@@ -206,8 +213,6 @@ def controls_to_attempt_features(controls: Dict[str, np.ndarray], dt: float = 0.
         controls: Dict from feed_text_through_bubble
         dt: Time step (default 0.01s)
     """
-    from attempt_analysis import AttemptFeatures
-    
     return AttemptFeatures(
         energy_attempt=controls["energy"],
         f0_attempt=controls["f0"],

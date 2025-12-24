@@ -16,8 +16,14 @@ from typing import Any, Dict, Optional
 
 import numpy as np
 
-from attempt_analysis import AttemptFeatures
-from voice_profile import VoiceProfile
+# Use relative imports when this module is part of a package,
+# otherwise fall back to absolute imports for standalone usage
+if __package__:
+    from .attempt_analysis import AttemptFeatures
+    from .voice_profile import VoiceProfile
+else:
+    from attempt_analysis import AttemptFeatures
+    from voice_profile import VoiceProfile
 
 
 def _sigmoid(x: float | np.ndarray) -> float | np.ndarray:
