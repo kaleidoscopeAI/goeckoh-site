@@ -1,0 +1,21 @@
+{
+  "name": "goeckoh-desktop",
+  "version": "1.0.0",
+  "description": "Goeckoh - Identity-Matched Speech Replay System",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "dist:win": "electron-builder --win",
+    "dist:mac": "electron-builder --mac",
+    "dist:linux": "electron-builder --linux"
+  },
+  "keywords": ["speech", "therapy", "voice", "accessibility"],
+  "author": "Goeckoh Team",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1"
+  }
+}
