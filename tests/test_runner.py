@@ -8,20 +8,7 @@ Run this to verify all tests pass:
 import sys
 import numpy as np
 
-# Mock the cloning_bubble package structure
 sys.path.insert(0, '.')
-
-class MockCloningBubble:
-    """Mock package structure for tests."""
-    class core:
-        # Import the actual modules
-        from attempt_analysis import analyze_chunk, AttemptFeatures
-        from voice_profile import VoiceFingerprint, SpeakerProfile
-        from bubble_foam import compute_bubble_state
-        from bubble_synthesizer import feed_text_through_bubble, MockVocoder
-
-sys.modules['cloning_bubble'] = MockCloningBubble()
-sys.modules['cloning_bubble.core'] = MockCloningBubble.core
 
 
 # Now run the actual tests

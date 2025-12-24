@@ -16,8 +16,8 @@ from typing import Any, Dict, Optional
 
 import numpy as np
 
-from .attempt_analysis import AttemptFeatures
-from .voice_profile import VoiceProfile
+from attempt_analysis import AttemptFeatures
+from voice_profile import VoiceProfile
 
 
 def _sigmoid(x: float | np.ndarray) -> float | np.ndarray:
