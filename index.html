@@ -1,1195 +1,250 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Goeckoh Neuro-Acoustic Exocortex | Revolutionary Therapeutic Voice Therapy & AGI System</title>
-    <meta name="description" content="Revolutionary therapeutic voice therapy system with real-time speech correction, voice cloning, emotional regulation, and 3D visualization. Optimized for autism support.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --primary-light: #818cf8;
-            --secondary: #8b5cf6;
-            --accent: #ec4899;
-            --accent-light: #f472b6;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --dark: #0f172a;
-            --darker: #020617;
-            --dark-card: rgba(15, 23, 42, 0.8);
-            --light: #f8fafc;
-            --light-dim: #cbd5e1;
-            --text: #e2e8f0;
-            --text-light: #94a3b8;
-            --text-muted: #64748b;
-            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --gradient-4: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-            --gradient-5: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
-            --shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            --shadow-lg: 0 20px 80px rgba(0, 0, 0, 0.3);
-            --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.3);
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            line-height: 1.7;
-            color: var(--text);
-            background: var(--darker);
-            overflow-x: hidden;
-            font-weight: 400;
-        }
-
-        .live-lattice {
-            padding: 6rem 1.5rem;
-            background: radial-gradient(circle at 20% 20%, rgba(99,102,241,0.08), transparent 35%), radial-gradient(circle at 80% 10%, rgba(34,211,238,0.08), transparent 32%), var(--darker);
-        }
-
-        .live-lattice .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        #react-root {
-            width: 100%;
-            min-height: 70vh;
-            margin-top: 1.5rem;
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 12px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--dark);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--gradient-1);
-            border-radius: 6px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary);
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(2, 6, 23, 0.8);
-            backdrop-filter: blur(20px) saturate(180%);
-            padding: 1.25rem 2rem;
-            z-index: 1000;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        nav.scrolled {
-            padding: 0.75rem 2rem;
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
-        }
-
-        nav .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.75rem;
-            font-weight: 800;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: -0.5px;
-            position: relative;
-        }
-
-        .logo::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: var(--gradient-1);
-            border-radius: 2px;
-            opacity: 0.5;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2.5rem;
-            list-style: none;
-            align-items: center;
-        }
-
-        .nav-links a {
-            color: var(--text);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.95rem;
-            position: relative;
-            transition: color 0.3s ease;
-            padding: 0.5rem 0;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--gradient-1);
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--primary-light);
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--darker);
-            position: relative;
-            overflow: hidden;
-            padding-top: 100px;
-        }
-
-        /* Animated Background */
-        .hero-bg {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: 0;
-        }
-
-        .gradient-orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.4;
-            animation: float 20s ease-in-out infinite;
-        }
-
-        .orb-1 {
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.6) 0%, transparent 70%);
-            top: -300px;
-            left: -300px;
-            animation-delay: 0s;
-        }
-
-        .orb-2 {
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(139, 92, 246, 0.5) 0%, transparent 70%);
-            bottom: -250px;
-            right: -250px;
-            animation-delay: 2s;
-        }
-
-        .orb-3 {
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(236, 72, 153, 0.4) 0%, transparent 70%);
-            top: 50%;
-            right: 10%;
-            animation-delay: 4s;
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translate(0, 0) scale(1);
-            }
-            33% {
-                transform: translate(30px, -30px) scale(1.1);
-            }
-            66% {
-                transform: translate(-20px, 20px) scale(0.9);
-            }
-        }
-
-        /* Particle Effect */
-        .particles {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: 1;
-        }
-
-        .particle {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: var(--primary);
-            border-radius: 50%;
-            opacity: 0.6;
-            animation: particle-float 15s infinite;
-        }
-
-        @keyframes particle-float {
-            0% {
-                transform: translateY(100vh) translateX(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.6;
-            }
-            90% {
-                opacity: 0.6;
-            }
-            100% {
-                transform: translateY(-100vh) translateX(100px);
-                opacity: 0;
-            }
-        }
-
-        .hero-content {
-            max-width: 1000px;
-            text-align: center;
-            z-index: 2;
-            padding: 2rem;
-            position: relative;
-        }
-
-        .hero-badge {
-            display: inline-block;
-            padding: 0.5rem 1.25rem;
-            background: rgba(99, 102, 241, 0.1);
-            border: 1px solid rgba(99, 102, 241, 0.3);
-            border-radius: 50px;
-            color: var(--primary-light);
-            font-size: 0.875rem;
-            font-weight: 600;
-            margin-bottom: 2rem;
-            backdrop-filter: blur(10px);
-            animation: fadeInDown 0.8s ease-out;
-        }
-
-        .hero h1 {
-            font-size: clamp(2.5rem, 7vw, 5.5rem);
-            font-weight: 900;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1.1;
-            letter-spacing: -2px;
-            animation: fadeInUp 1s ease-out 0.2s both;
-        }
-
-        .hero .tagline {
-            font-size: clamp(1.25rem, 3.5vw, 2rem);
-            color: var(--text-light);
-            margin-bottom: 1.5rem;
-            line-height: 1.5;
-            font-weight: 400;
-            animation: fadeInUp 1s ease-out 0.4s both;
-        }
-
-        .hero .description {
-            font-size: clamp(1rem, 2vw, 1.25rem);
-            color: var(--text-muted);
-            margin-bottom: 3rem;
-            max-width: 750px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.8;
-            animation: fadeInUp 1s ease-out 0.6s both;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 1.25rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 3rem;
-            animation: fadeInUp 1s ease-out 0.8s both;
-        }
-
-        .btn {
-            padding: 1.125rem 2.5rem;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            position: relative;
-            overflow: hidden;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .btn:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .btn-primary {
-            background: var(--gradient-1);
-            color: white;
-            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 50px rgba(99, 102, 241, 0.5);
-        }
-
-        .btn-secondary {
-            background: rgba(99, 102, 241, 0.1);
-            color: var(--primary-light);
-            border: 2px solid rgba(99, 102, 241, 0.5);
-            backdrop-filter: blur(10px);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(99, 102, 241, 0.2);
-            border-color: var(--primary);
-            transform: translateY(-3px);
-        }
-
-        .platforms {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            animation: fadeInUp 1s ease-out 1s both;
-        }
-
-        .platform-badge {
-            background: rgba(15, 23, 42, 0.6);
-            padding: 0.625rem 1.25rem;
-            border-radius: 25px;
-            border: 1px solid rgba(99, 102, 241, 0.2);
-            color: var(--text);
-            font-size: 0.875rem;
-            font-weight: 500;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-        }
-
-        .platform-badge:hover {
-            border-color: var(--primary);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(99, 102, 241, 0.3);
-        }
-
-        /* Section Styles */
-        section {
-            padding: 6rem 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .section-badge {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            background: rgba(99, 102, 241, 0.1);
-            border: 1px solid rgba(99, 102, 241, 0.3);
-            border-radius: 50px;
-            color: var(--primary-light);
-            font-size: 0.875rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        .section-title {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 800;
-            margin-bottom: 1rem;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: -1px;
-        }
-
-        .section-subtitle {
-            text-align: center;
-            color: var(--text-light);
-            font-size: clamp(1.1rem, 2vw, 1.35rem);
-            max-width: 700px;
-            margin: 0 auto;
-            line-height: 1.7;
-        }
-
-        /* Features Grid */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .feature-card {
-            background: var(--dark-card);
-            backdrop-filter: blur(20px) saturate(180%);
-            padding: 2.5rem;
-            border-radius: 24px;
-            border: 1px solid rgba(99, 102, 241, 0.2);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--gradient-1);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            z-index: 0;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-8px);
-            border-color: var(--primary);
-            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.3);
-        }
-
-        .feature-card:hover::before {
-            opacity: 0.05;
-        }
-
-        .feature-card > * {
-            position: relative;
-            z-index: 1;
-        }
-
-        .feature-icon {
-            font-size: 3.5rem;
-            margin-bottom: 1.5rem;
-            display: inline-block;
-            transform: scale(1);
-            transition: transform 0.3s ease;
-        }
-
-        .feature-card:hover .feature-icon {
-            transform: scale(1.1) rotate(5deg);
-        }
-
-        .feature-card h3 {
-            font-size: 1.75rem;
-            margin-bottom: 1rem;
-            color: var(--text);
-            font-weight: 700;
-        }
-
-        .feature-card p {
-            color: var(--text-light);
-            line-height: 1.8;
-            font-size: 1.05rem;
-        }
-
-        /* Architecture Section */
-        .architecture {
-            background: var(--dark-card);
-            backdrop-filter: blur(20px);
-            border-radius: 32px;
-            padding: 4rem;
-            margin-top: 3rem;
-            border: 1px solid rgba(99, 102, 241, 0.2);
-        }
-
-        .architecture-diagram {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .arch-component {
-            background: rgba(2, 6, 23, 0.6);
-            padding: 2rem;
-            border-radius: 20px;
-            border-left: 4px solid var(--primary);
-            transition: all 0.3s ease;
-        }
-
-        .arch-component:hover {
-            transform: translateX(5px);
-            border-left-width: 6px;
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2);
-        }
-
-        .arch-component h4 {
-            color: var(--text);
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .arch-component ul {
-            list-style: none;
-            color: var(--text-light);
-        }
-
-        .arch-component li {
-            padding: 0.5rem 0;
-            padding-left: 1.5rem;
-            position: relative;
-            transition: color 0.3s ease;
-        }
-
-        .arch-component li::before {
-            content: '▸';
-            position: absolute;
-            left: 0;
-            color: var(--primary);
-            font-weight: bold;
-        }
-
-        .arch-component li:hover {
-            color: var(--text);
-        }
-
-        /* Stats Section */
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 2rem;
-            margin-top: 4rem;
-        }
-
-        .stat-card {
-            text-align: center;
-            padding: 2.5rem 2rem;
-            background: var(--dark-card);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            border: 1px solid rgba(99, 102, 241, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary);
-            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.2);
-        }
-
-        .stat-number {
-            font-size: 3.5rem;
-            font-weight: 900;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            color: var(--text-light);
-            font-size: 1.1rem;
-            font-weight: 500;
-        }
-
-        /* Code Block */
-        .code-block {
-            background: rgba(2, 6, 23, 0.8);
-            border: 1px solid rgba(99, 102, 241, 0.3);
-            border-radius: 16px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            overflow-x: auto;
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        .code-block code {
-            color: #a78bfa;
-            font-size: 0.9rem;
-            line-height: 1.8;
-            white-space: pre;
-        }
-
-        /* Use Cases */
-        .use-cases {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .use-case {
-            background: var(--dark-card);
-            backdrop-filter: blur(20px);
-            padding: 2.5rem;
-            border-radius: 24px;
-            border-top: 4px solid var(--accent);
-            transition: all 0.3s ease;
-        }
-
-        .use-case:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(236, 72, 153, 0.2);
-        }
-
-        .use-case h3 {
-            color: var(--text);
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .use-case p {
-            color: var(--text-light);
-            line-height: 1.8;
-            font-size: 1.05rem;
-        }
-
-        /* Footer */
-        footer {
-            background: rgba(2, 6, 23, 0.8);
-            backdrop-filter: blur(20px);
-            padding: 4rem 2rem 2rem;
-            text-align: center;
-            border-top: 1px solid rgba(99, 102, 241, 0.2);
-            margin-top: 6rem;
-        }
-
-        footer p {
-            color: var(--text-light);
-            font-size: 1.05rem;
-        }
-
-        footer .heart {
-            color: var(--accent);
-            animation: heartbeat 1.5s ease-in-out infinite;
-        }
-
-        @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fade-in {
-            animation: fadeInUp 0.8s ease-out;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            section {
-                padding: 4rem 1.5rem;
-            }
-
-            .hero {
-                padding-top: 120px;
-            }
-
-            .architecture {
-                padding: 2rem;
-            }
-        }
-
-        /* Loading Animation */
-        .loading {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-
-        .loading.loaded {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GOECKOH (Go Echo) — Identity‑Matched Speech Replay</title>
+  <meta name="description" content="Goeckoh (Go Echo) is an offline‑first speech support system that gently corrects speech and replays it in the user’s own voice, in first person." />
+
+  <!-- Open Graph metadata -->
+  <meta property="og:title" content="GOECKOH (Go Echo) — Identity‑Matched Speech Replay" />
+  <meta property="og:description" content="Corrected speech, replayed in the user’s own voice—offline‑first and privacy‑forward." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://goeckoh.com/" />
+  <meta property="og:image" content="images/og-image.png" />
+
+  <link rel="icon" href="images/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Import Montserrat for headings and Inter for body text -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Use relative paths for styles and scripts so they resolve under /goeckoh-site on GitHub Pages -->
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="script.js"></script>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav id="navbar">
-        <div class="container">
-            <div class="logo">Goeckoh</div>
-            <ul class="nav-links">
-                <li><a href="#features">Features</a></li>
-                <li><a href="#architecture">Architecture</a></li>
-                <li><a href="#use-cases">Use Cases</a></li>
-                <li><a href="#deployment">Deployment</a></li>
-            </ul>
+  <header class="header">
+    <div class="container header__inner">
+      <a class="brand" href="index.html" aria-label="Goeckoh home">
+        <img src="images/logo.png" class="brand__logo" alt="Goeckoh logo">
+        <div class="brand__text">
+          <div class="brand__name">GOECKOH</div>
+          <div class="brand__sub">pronounced “Go Echo”</div>
         </div>
-    </nav>
+      </a>
+      <nav class="nav">
+        <a href="#how">How it works</a>
+        <a href="#pricing">Pricing</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="support.html">Support</a>
+      </nav>
+      <div class="header__cta">
+        <a class="btn btn--ghost" href="#how">See how it works</a>
+        <a class="btn btn--primary" href="#pricing">Buy & Download</a>
+      </div>
+      <button class="burger" aria-label="Open menu" aria-expanded="false" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div id="mobileMenu" class="mobileMenu" aria-hidden="true">
+      <div class="container mobileMenu__inner">
+        <a href="#how" onclick="closeMenu()">How it works</a>
+        <a href="#pricing" onclick="closeMenu()">Pricing</a>
+        <a href="privacy.html" onclick="closeMenu()">Privacy</a>
+        <a href="terms.html" onclick="closeMenu()">Terms</a>
+        <a href="support.html" onclick="closeMenu()">Support</a>
+        <a class="btn btn--primary mobileMenu__btn" href="#pricing" onclick="closeMenu()">Buy & Download</a>
+      </div>
+    </div>
+  </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-bg">
-            <div class="gradient-orb orb-1"></div>
-            <div class="gradient-orb orb-2"></div>
-            <div class="gradient-orb orb-3"></div>
-        </div>
-        <div class="particles" id="particles"></div>
-        <div class="hero-content">
-            <div class="hero-badge">🚀 Revolutionary Therapeutic Technology</div>
-            <h1>Goeckoh Neuro-Acoustic Exocortex</h1>
-            <p class="tagline">Transforming Voice Therapy Through AI & Neuroscience</p>
-            <p class="description">
-                A comprehensive therapeutic AGI system providing real-time voice therapy through advanced voice cloning, 
-                speech correction, emotional regulation, and therapeutic interventions. Optimized for autistic 
-                individuals and anyone needing speech therapy or communication support.
-            </p>
-            <div class="cta-buttons">
-                <a href="#deployment" class="btn btn-primary">🚀 Get Started</a>
-                <a href="#features" class="btn btn-secondary">📖 Learn More</a>
-            </div>
-            <div class="platforms">
-                <span class="platform-badge">🐧 Linux</span>
-                <span class="platform-badge">🪟 Windows</span>
-                <span class="platform-badge">🍎 macOS</span>
-                <span class="platform-badge">📱 Android</span>
-                <span class="platform-badge">📱 iOS</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="features">
-        <div class="section-header">
-            <div class="section-badge">✨ Core Features</div>
-            <h2 class="section-title">Advanced Therapeutic Technology</h2>
-            <p class="section-subtitle">Powered by cutting-edge AI, neuroscience, and real-time processing</p>
-        </div>
-        
-        <div class="features-grid">
-            <div class="feature-card loading">
-                <div class="feature-icon">🎤</div>
-                <h3>Real-Time Voice Processing</h3>
-                <p>6-step voice-to-clone pipeline: Audio capture → Speech-to-Text → Linguistic correction → Voice synthesis → Prosody transfer → Audio playback. All in real-time with &lt;100ms latency for seamless interaction.</p>
-            </div>
-
-            <div class="feature-card loading">
-                <div class="feature-icon">🧬</div>
-                <h3>Voice Cloning & Mirroring</h3>
-                <p>Auto-captures and clones user's voice using neural TTS (Coqui TTS). Mirrors speech back with corrections while maintaining natural voice characteristics through advanced prosody transfer algorithms.</p>
-            </div>
-
-            <div class="feature-card loading">
-                <div class="feature-icon">🧠</div>
-                <h3>Autism-Optimized VAD</h3>
-                <p>1.2 second pause tolerance for processing pauses common in autistic speech. Lower threshold (0.45) for quiet/monotone patterns. Respects natural speech rhythms without interruption.</p>
-            </div>
-
-            <div class="feature-card loading">
-                <div class="feature-icon">💎</div>
-                <h3>Crystalline Heart</h3>
-                <p>1024-node emotional regulation lattice tracking 8D emotional states. Real-time co-regulation, crisis detection, and sensory overwhelm monitoring with Global Coherence Level (GCL) computation.</p>
-            </div>
-
-            <div class="feature-card loading">
-                <div class="feature-icon">🎮</div>
-                <h3>3D Cognitive Nebula</h3>
-                <p>Interactive 3D universe visualization using React + Three.js. Real-time voice bubble visualization, AI image generation from voice input, and engaging therapeutic gaming mechanics.</p>
-            </div>
-
-            <div class="feature-card loading">
-                <div class="feature-icon">🔬</div>
-                <h3>ABA Therapeutics</h3>
-                <p>Evidence-based interventions for autism support. Positive reinforcement, social stories, and comprehensive skill tracking across self-care, communication, and social theory of mind categories.</p>
-            </div>
-
-            <div class="feature-card loading">
-                <div class="feature-icon">⚡</div>
-                <h3>Rust Performance Core</h3>
-                <p>High-performance bio-acoustic engine (libbio_audio.so) for real-time audio processing. Neural TTS integration with ultra-low-latency audio bridge for seamless, responsive experience.</p>
-            </div>
-
-            <div class="feature-card loading">
-                <div class="feature-icon">🌐</div>
-                <h3>Cross-Platform Support</h3>
-                <p>Packaged for Linux (.deb), Windows (NSIS installer), macOS (.app/.dmg), Android (APK), and iOS (IPA). One-click desktop launcher with multiple operational modes for every use case.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Architecture Section -->
-    <section id="architecture">
-        <div class="section-header">
-            <div class="section-badge">🏗️ System Architecture</div>
-            <h2 class="section-title">Modular & Scalable Design</h2>
-            <p class="section-subtitle">Production-ready architecture built for performance and reliability</p>
-        </div>
-
-        <div class="architecture">
-            <div class="architecture-diagram">
-                <div class="arch-component loading">
-                    <h4>🎤 Audio System</h4>
-                    <ul>
-                        <li>Rust bio-acoustic engine</li>
-                        <li>Neural TTS (Coqui TTS)</li>
-                        <li>Real-time audio bridge</li>
-                        <li>Device selection & routing</li>
-                        <li>Low-latency processing</li>
-                    </ul>
-                </div>
-
-                <div class="arch-component loading">
-                    <h4>🧠 Voice Engine</h4>
-                    <ul>
-                        <li>Prosody extraction</li>
-                        <li>Prosody transfer</li>
-                        <li>Voice adaptation</li>
-                        <li>Lifelong learning</li>
-                        <li>Neural voice cloning</li>
-                    </ul>
-                </div>
-
-                <div class="arch-component loading">
-                    <h4>💎 Crystalline Heart</h4>
-                    <ul>
-                        <li>1024-node lattice</li>
-                        <li>8D emotional states</li>
-                        <li>GCL computation</li>
-                        <li>Co-regulation system</li>
-                        <li>Crisis detection</li>
-                    </ul>
-                </div>
-
-                <div class="arch-component loading">
-                    <h4>🌌 Cognitive Nebula</h4>
-                    <ul>
-                        <li>React + Three.js</li>
-                        <li>3D voice visualization</li>
-                        <li>AI image generation</li>
-                        <li>Therapeutic gaming</li>
-                        <li>Real-time feedback</li>
-                    </ul>
-                </div>
-
-                <div class="arch-component loading">
-                    <h4>💾 Memory Systems</h4>
-                    <ul>
-                        <li>Crystalline lattice memory</li>
-                        <li>FAISS-like indexing</li>
-                        <li>Session persistence</li>
-                        <li>Emotional context encoding</li>
-                        <li>Long-term learning</li>
-                    </ul>
-                </div>
-
-                <div class="arch-component loading">
-                    <h4>⚛️ Quantum Systems</h4>
-                    <ul>
-                        <li>Hamiltonian dynamics</li>
-                        <li>Molecular quantum systems</li>
-                        <li>Pure NumPy implementation</li>
-                        <li>Advanced computation</li>
-                        <li>State evolution</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="stats">
-            <div class="stat-card loading">
-                <div class="stat-number">777+</div>
-                <div class="stat-label">Files Committed</div>
-            </div>
-            <div class="stat-card loading">
-                <div class="stat-number">1024</div>
-                <div class="stat-label">Emotional Nodes</div>
-            </div>
-            <div class="stat-card loading">
-                <div class="stat-number">6</div>
-                <div class="stat-label">Platform Support</div>
-            </div>
-            <div class="stat-card loading">
-                <div class="stat-number">&lt;100ms</div>
-                <div class="stat-label">Processing Latency</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Use Cases Section -->
-    <section id="use-cases">
-        <div class="section-header">
-            <div class="section-badge">🎯 Use Cases</div>
-            <h2 class="section-title">Transforming Lives</h2>
-            <p class="section-subtitle">Therapeutic technology for diverse needs and applications</p>
-        </div>
-
-        <div class="use-cases">
-            <div class="use-case loading">
-                <h3>🎯 Autism Speech Therapy</h3>
-                <p>Primary use case for speech and communication support. Autism-optimized VAD, ABA interventions, and real-time feedback help build communication confidence and reduce anxiety.</p>
-            </div>
-
-            <div class="use-case loading">
-                <h3>🗣️ Voice Therapy</h3>
-                <p>General speech correction and improvement. Users hear their corrected speech in their own voice, building confidence through positive reinforcement and natural prosody.</p>
-            </div>
-
-            <div class="use-case loading">
-                <h3>📚 Language Learning</h3>
-                <p>Pronunciation and grammar practice with real-time correction. Prosody transfer maintains natural speech patterns while improving accuracy and fluency.</p>
-            </div>
-
-            <div class="use-case loading">
-                <h3>🎮 Therapeutic Gaming</h3>
-                <p>Engaging visual feedback for therapy. 3D Cognitive Nebula creates immersive experiences where every word creates AI-generated images in real-time.</p>
-            </div>
-
-            <div class="use-case loading">
-                <h3>🔬 Research Platform</h3>
-                <p>AGI and consciousness research. Advanced quantum systems, memory architectures, and emotional regulation models for scientific exploration and innovation.</p>
-            </div>
-
-            <div class="use-case loading">
-                <h3>♿ Accessibility Tool</h3>
-                <p>Communication support for various needs. Real-time speech assistance, emotional regulation, and sensory monitoring for diverse users and abilities.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Deployment Section -->
-    <section id="deployment">
-        <div class="section-header">
-            <div class="section-badge">🚀 Deployment</div>
-            <h2 class="section-title">Installation & Setup</h2>
-            <p class="section-subtitle">Ready to deploy across all major platforms with one-click installation</p>
-        </div>
-
-        <div class="features-grid">
-            <div class="feature-card loading">
-                <h3>🐧 Linux</h3>
-                <div class="code-block">
-                    <code># Source Package<br>tar -xzf goeckoh-system-1.0.0.tar.gz<br>cd goeckoh-system-1.0.0<br>./install.sh<br><br># DEB Package<br>sudo dpkg -i goeckoh-system_1.0.0_all.deb</code>
-                </div>
-            </div>
-
-            <div class="feature-card loading">
-                <h3>🪟 Windows</h3>
-                <div class="code-block">
-                    <code># Portable ZIP<br>Extract goeckoh-system-1.0.0-windows-portable.zip<br>Run goeckoh.bat<br><br># NSIS Installer<br>Run goeckoh-installer.exe<br>Follow installation wizard</code>
-                </div>
-            </div>
-
-            <div class="feature-card loading">
-                <h3>🍎 macOS</h3>
-                <div class="code-block">
-                    <code># DMG Installer<br>Open goeckoh-system-1.0.0-macos.dmg<br>Drag app to Applications folder<br>Launch from Applications</code>
-                </div>
-            </div>
-
-            <div class="feature-card loading">
-                <h3>📱 Android</h3>
-                <div class="code-block">
-                    <code># Via ADB<br>adb install goeckoh-1.0.0-debug.apk<br><br># Or transfer APK to device<br># and install manually</code>
-                </div>
-            </div>
-
-            <div class="feature-card loading">
-                <h3>📱 iOS</h3>
-                <div class="code-block">
-                    <code># Build with Xcode<br>Open goeckoh.xcodeproj<br>Build and deploy to device<br>Or use TestFlight for distribution</code>
-                </div>
-            </div>
-
-            <div class="feature-card loading">
-                <h3>🚀 Quick Launch</h3>
-                <div class="code-block">
-                    <code># Desktop Launcher<br>Click "Goeckoh System" icon<br><br># Command Line<br>./launch_bubble_system.sh gui<br>./launch_bubble_system.sh universe<br>./launch_bubble_system.sh child</code>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Live Neural Lattice -->
-    <section id="lattice" class="live-lattice">
-        <div class="container">
-            <div class="section-header">
-                <h2>Live Cognitive Lattice</h2>
-                <p>Explore the real-time neural field powering Goeckoh. Switch between the lattice view and the expressive voice companion that learns, calms, and adapts on the fly.</p>
-            </div>
-            <div id="react-root"></div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2025 Goeckoh Neuro-Acoustic Exocortex. Open source therapeutic technology.</p>
-        <p style="margin-top: 1rem; font-size: 1rem;">
-            Built with <span class="heart">❤️</span> for autism support and communication therapy
+  <main id="top" class="hero">
+    <div class="container hero__grid">
+      <section class="hero__copy">
+        <div class="pill">Offline‑first • Identity‑matched replay • First‑person only</div>
+        <h1>Clear speech.<br/><span class="grad">In my own voice.</span></h1>
+        <p class="lead">
+          <strong>Goeckoh (Go Echo)</strong> is a speech support system that listens, gently corrects phrasing,
+          then replays it in the user’s <strong>own voice</strong>—always in <strong>first person</strong>—so it feels like self‑speech,
+          not an outside command.
         </p>
-    </footer>
+        <div class="hero__buttons">
+          <a class="btn btn--primary" href="#pricing">Buy & Download</a>
+          <a class="btn btn--ghost" href="#demo">Hear a demo</a>
+        </div>
+        <div class="hero__trust">
+          <div class="trustCard">
+            <div class="trustCard__title">Identity‑Matched Voice Replay</div>
+            <div class="trustCard__desc">Corrected speech replayed in the user’s own vocal identity.</div>
+          </div>
+          <div class="trustCard">
+            <div class="trustCard__title">First‑Person Mirror</div>
+            <div class="trustCard__desc">Feedback phrased as “I / me / my” to preserve agency.</div>
+          </div>
+          <div class="trustCard">
+            <div class="trustCard__title">Privacy‑Forward</div>
+            <div class="trustCard__desc">Designed to run locally, minimizing data exposure.</div>
+          </div>
+        </div>
+        <div class="origin">
+          <strong>Why the name “Goeckoh”?</strong>
+          It’s how “Go Echo” sounded when a neurodivergent individual said it—so the name itself starts with the voice we’re protecting.
+        </div>
+      </section>
+      <aside class="hero__visual" aria-label="Product visualization">
+        <!-- Show the hero concept art as the visual instead of a placeholder card -->
+        <img src="images/hero.png" alt="Goeckoh hero visual" class="hero-image" />
+      </aside>
+    </div>
+  </main>
 
-    <script>
-        // Smooth scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
+  <section class="section">
+    <div class="container">
+      <h2>What Go Echo does</h2>
+      <p class="sectionLead">
+        Many tools replace the user’s voice with a generic synthetic voice. <strong>Go Echo preserves identity.</strong>
+      </p>
+      <div class="cards3">
+        <div class="card">
+          <h3>Listen</h3>
+          <p>Captures speech naturally, without demanding perfect timing.</p>
+        </div>
+        <div class="card">
+          <h3>Correct</h3>
+          <p>Gently rewrites speech while keeping intent intact.</p>
+        </div>
+        <div class="card">
+          <h3>Replay</h3>
+          <p>Plays the corrected phrase back in the user’s own voice, always first person.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        // Navbar scroll effect
-        const navbar = document.getElementById('navbar');
-        let lastScroll = 0;
+  <!-- Science & Impact section: show evidence and charts -->
+  <section id="research" class="section section--alt">
+    <div class="container">
+      <h2>Science &amp; Impact</h2>
+      <p class="sectionLead">
+        Goeckoh is built on evidence‑based principles of predictive coding and identity‑matched feedback. These charts
+        highlight our pilot study results, demonstrating significant reductions in speech errors and extremely low latency
+        compared to conventional online solutions.
+      </p>
+      <div class="charts">
+        <div class="chart">
+          <img src="images/speech_errors_reduction.png" alt="Speech error reduction chart">
+          <div class="chartCaption">Reduction in speech errors after 30 sessions with Go Echo</div>
+        </div>
+        <div class="chart">
+          <img src="images/latency_comparison.png" alt="Latency comparison chart">
+          <div class="chartCaption">Latency comparison: Go Echo offline vs. online systems</div>
+        </div>
+      </div>
+      <p class="sectionLead" style="margin-top:20px;">
+        Our findings show that identity‑matched replay reinforces self‑generated speech patterns, improving articulation and
+        fluency while maintaining privacy and responsiveness.
+      </p>
+    </div>
+  </section>
 
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-            
-            if (currentScroll > 100) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-            
-            lastScroll = currentScroll;
-        });
+  <section id="how" class="section section--alt">
+    <div class="container">
+      <h2>How it works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step__num">1</div>
+          <div class="step__body">
+            <h3>Listen</h3>
+            <p>Audio is captured locally, respecting long pauses and quiet attempts.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step__num">2</div>
+          <div class="step__body">
+            <h3>Understand</h3>
+            <p>Speech recognition runs locally where possible to reduce exposure.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step__num">3</div>
+          <div class="step__body">
+            <h3>Correct</h3>
+            <p>Rewrites phrasing while preserving meaning—no drills, no pressure.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step__num">4</div>
+          <div class="step__body">
+            <h3>Identity‑Matched Replay</h3>
+            <p>Plays corrected speech back in the user’s own voice, always first person.</p>
+          </div>
+        </div>
+      </div>
+      <div class="callout">
+        <strong>Design principle:</strong> Go Echo doesn’t “speak at” the user. It mirrors.
+      </div>
+    </div>
+  </section>
 
-        // Particle system
-        function createParticles() {
-            const particlesContainer = document.getElementById('particles');
-            const particleCount = 50;
+  <section id="pricing" class="section">
+    <div class="container">
+      <h2>Pricing</h2>
+      <p class="sectionLead">
+        Use Stripe Payment Links now (no backend needed). Later you can upgrade to full account and license delivery.
+      </p>
+      <div class="pricing">
+        <div class="priceCard">
+          <div class="priceCard__top">
+            <h3>Starter</h3>
+            <div class="price">$X<span>/mo</span></div>
+            <p>Core loop • 1 device • updates</p>
+          </div>
+          <a class="btn btn--primary btn--full" href="https://buy.stripe.com/REPLACE_STARTER">Checkout</a>
+        </div>
+        <div class="priceCard priceCard--featured">
+          <div class="badge">Most popular</div>
+          <div class="priceCard__top">
+            <h3>Family</h3>
+            <div class="price">$Y<span>/mo</span></div>
+            <p>Multiple profiles • caregiver controls</p>
+          </div>
+          <a class="btn btn--primary btn--full" href="https://buy.stripe.com/REPLACE_FAMILY">Checkout</a>
+        </div>
+        <div class="priceCard">
+          <div class="priceCard__top">
+            <h3>Professional</h3>
+            <div class="price">$Z<span>/mo</span></div>
+            <p>Extended configuration • priority onboarding</p>
+          </div>
+          <a class="btn btn--primary btn--full" href="https://buy.stripe.com/REPLACE_PRO">Checkout</a>
+        </div>
+      </div>
+      <div class="platforms">
+        <strong>Platforms:</strong> Windows • macOS • Linux • Android
+      </div>
+    </div>
+  </section>
 
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 15 + 's';
-                particle.style.animationDuration = (10 + Math.random() * 10) + 's';
-                particlesContainer.appendChild(particle);
-            }
-        }
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__left">
+        <div class="footerBrand">GOECKOH</div>
+        <div class="footerSub">pronounced “Go Echo”</div>
+        <div class="footerTiny">© <span id="year"></span> Goeckoh. All rights reserved.</div>
+      </div>
+      <div class="footer__right">
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="support.html">Support</a>
+      </div>
+    </div>
+  </footer>
 
-        // Intersection Observer for animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('loaded');
-                }
-            });
-        }, observerOptions);
-
-        // Observe all loading elements
-        document.querySelectorAll('.loading').forEach(el => {
-            observer.observe(el);
-        });
-
-        // Initialize particles
-        createParticles();
-
-        // Add parallax effect to hero orbs
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const orbs = document.querySelectorAll('.gradient-orb');
-            orbs.forEach((orb, index) => {
-                const speed = 0.5 + (index * 0.2);
-                orb.style.transform = `translateY(${scrolled * speed}px)`;
-            });
-        });
-
-        // Add hover effect to buttons
-        document.querySelectorAll('.btn').forEach(btn => {
-            btn.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-3px) scale(1.02)';
-            });
-            
-            btn.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) scale(1)';
-            });
-        });
-    </script>
-    <script type="module" src="/main.jsx"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('year').textContent = new Date().getFullYear();
+    });
+  </script>
 </body>
 </html>

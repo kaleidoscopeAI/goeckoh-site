@@ -94,3 +94,6 @@ website/dist/
 # Editor files
 .eslintcache
 extracted_code/
+
+# Archive directory for non-website files
+archive/
