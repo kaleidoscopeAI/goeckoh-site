@@ -15,11 +15,41 @@ This repository contains both the Goeckoh application code and its marketing web
 │   ├── terms.html        # Terms of service
 │   ├── support.html      # Support information
 │   └── images/           # Website images and assets
-├── src/                  # Application source code
-├── docs/                 # Documentation
-├── tests/                # Test files
-├── assets/               # Application assets (models, etc.)
-└── ...                   # Other application files
+│
+├── docs/                 # Documentation (see docs/INDEX.md)
+│   ├── deployment/       # Deployment and packaging guides
+│   ├── system/          # System architecture and status
+│   └── guides/          # User guides and setup instructions
+│
+├── config/              # Configuration files
+│   ├── config.yaml      # Main configuration
+│   ├── config.schema.yaml  # Configuration schema
+│   └── ...              # Other config files
+│
+├── scripts/             # Build and deployment scripts
+│
+├── cognitive-nebula/    # 3D visualization frontend (React + Three.js)
+│
+├── GOECKOH/             # Main application package
+│   ├── goeckoh/         # Core Python application
+│   ├── frontend/        # React frontend
+│   └── rust_core/       # Rust performance core
+│
+├── mobile/              # Mobile platform code
+│   ├── ios/            # iOS Swift code
+│   └── android/        # Android Kotlin code
+│
+├── assets/              # Application assets (models, icons, etc.)
+│   ├── model_stt/      # Speech-to-text models
+│   └── model_tts/      # Text-to-speech models
+│
+├── tests/               # Test files
+├── archive/             # Archived/reference materials
+│   ├── research/       # Research papers and chat logs
+│   ├── old-docs/       # Old documentation
+│   └── media/          # Archive media files
+│
+└── [core Python files] # Core application Python files at root
 ```
 
 ## About Goeckoh
@@ -56,7 +86,15 @@ Goeckoh (pronounced "Go Echo") is an offline-first speech support system that ge
    pip install -r requirements.txt
    ```
 
-3. Run the application:
+3. Configure the system:
+   ```bash
+   # Configuration files are in the config/ directory
+   # Main configuration: config/config.yaml
+   # Validate configuration:
+   python -m cli validate
+   ```
+
+4. Run the application:
    ```bash
    python -m cli start
    ```
@@ -71,7 +109,7 @@ Goeckoh (pronounced "Go Echo") is an offline-first speech support system that ge
 
 The CLI enforces voice cloning with no fallback to local TTS. You MUST provide a clean WAV sample of your voice:
 
-- Via config: Set `voice_profile_path` in config.yaml
+- Via config: Set `voice_profile_path` in `config/config.yaml`
 - Via CLI: Use `--voice-profile` flag
 
 **Requirements:**
@@ -86,6 +124,27 @@ python -m cli speak --record --duration 5 --voice-profile ./sample_voice.wav
 # Use existing WAV sample
 python -m cli speak --input-file ./input.wav --voice-profile ./sample_voice.wav
 ```
+
+## Configuration
+
+The system uses YAML-based configuration files located in the `config/` directory:
+
+- **`config/config.yaml`** - Main system configuration
+- **`config/config.schema.yaml`** - Configuration schema for validation
+- **`config/guardian_policy.json`** - Safety and guardian policies
+- **`config/buildozer.spec`** - Mobile build configuration
+
+### Configuration Management
+
+```bash
+# Validate your configuration
+python -m cli validate
+
+# Auto-fix common configuration issues
+python -m cli fix
+```
+
+See `config/config.yaml` for all available configuration options.
 
 ### Read Documents
 
@@ -118,10 +177,21 @@ The marketing website is located in the `website/` directory. To view it locally
 
 ## Documentation
 
-- [System Overview](SYSTEM_OVERVIEW.md)
-- [Quick Start Guide](QUICK_START.md)
-- [Deployment Guide](DEPLOYMENT_GUIDE.md)
-- [Cross-Platform Packaging](CROSS_PLATFORM_PACKAGING.md)
+For comprehensive documentation, see the [`docs/`](docs/) directory:
+
+- **[Documentation Index](docs/INDEX.md)** - Complete documentation overview
+- **[System Overview](docs/system/SYSTEM_OVERVIEW.md)** - System architecture and features
+- **[Quick Start Guide](docs/guides/QUICK_START.md)** - Getting started quickly
+- **[Deployment Guide](docs/deployment/DEPLOYMENT_GUIDE.md)** - Production deployment
+- **[Cross-Platform Packaging](docs/deployment/CROSS_PLATFORM_PACKAGING.md)** - Building for multiple platforms
+
+### Build and Deployment Scripts
+
+All build and deployment scripts are located in the `scripts/` directory:
+- `scripts/run_system.sh` - Run the system locally
+- `scripts/build_desktop.sh` - Build desktop application
+- `scripts/package_*.sh` - Platform-specific packaging scripts
+- `scripts/deploy_system.sh` - Deployment automation
 
 ## Technical Stack
 

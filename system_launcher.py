@@ -107,9 +107,13 @@ class SystemHealthChecker:
     
     def check_configuration(self) -> bool:
         """Validate system configuration"""
-        config_file = PROJECT_ROOT / "config.yaml"
+        config_file = PROJECT_ROOT / "config" / "config.yaml"
+        # Support old path for backward compatibility
         if not config_file.exists():
-            self.issues.append("config.yaml not found")
+            config_file = PROJECT_ROOT / "config.yaml"
+        
+        if not config_file.exists():
+            self.issues.append("config.yaml not found (checked config/config.yaml and config.yaml)")
             return False
         
         # Additional config validation can go here
