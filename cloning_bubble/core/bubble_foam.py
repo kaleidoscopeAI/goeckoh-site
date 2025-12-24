@@ -1,4 +1,4 @@
-from bubble_foam import (
+from ...bubble_foam import (
     BubbleState,
     compute_bubble_state,
     compute_bubble_state_vertices,
