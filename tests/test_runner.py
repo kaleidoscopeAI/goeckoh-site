@@ -2,19 +2,23 @@
 Test runner for the Cloning Bubble psychoacoustic core.
 
 Run this to verify all tests pass:
-    python test_runner.py
+    python tests/test_runner.py
+or:
+    python -m tests.test_runner
 """
 
 import sys
+import os
 import numpy as np
 
-sys.path.insert(0, '.')
+# Add parent directory to path to import root modules
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 # Now run the actual tests
 def test_analyze_chunk_silence():
     """Ensure silence returns near-zero energy and valid shapes."""
-    from cloning_bubble.core.attempt_analysis import analyze_chunk
+    from attempt_analysis import analyze_chunk
     
     mock_audio_silence = np.zeros(22050, dtype=np.float32)
     feat = analyze_chunk(mock_audio_silence, sr=22050)
@@ -26,7 +30,7 @@ def test_analyze_chunk_silence():
 
 def test_analyze_chunk_sine_wave():
     """Ensure a pure sine wave is detected correctly."""
-    from cloning_bubble.core.attempt_analysis import analyze_chunk
+    from attempt_analysis import analyze_chunk
     
     sr = 22050
     t = np.linspace(0, 1, sr)
@@ -46,9 +50,9 @@ def test_analyze_chunk_sine_wave():
 
 def test_compute_bubble_state_idle():
     """Test bubble state when audio energy is zero (Idle Mode)."""
-    from cloning_bubble.core.voice_profile import VoiceFingerprint, SpeakerProfile
-    from cloning_bubble.core.attempt_analysis import AttemptFeatures
-    from cloning_bubble.core.bubble_foam import compute_bubble_state
+    from voice_profile import VoiceFingerprint, SpeakerProfile
+    from attempt_analysis import AttemptFeatures
+    from bubble_foam import compute_bubble_state
     
     fp = VoiceFingerprint(
         mu_f0=200.0,
@@ -84,9 +88,9 @@ def test_compute_bubble_state_idle():
 
 def test_compute_bubble_state_active():
     """Test bubble expansion under high energy."""
-    from cloning_bubble.core.voice_profile import VoiceFingerprint, SpeakerProfile
-    from cloning_bubble.core.attempt_analysis import AttemptFeatures
-    from cloning_bubble.core.bubble_foam import compute_bubble_state
+    from voice_profile import VoiceFingerprint, SpeakerProfile
+    from attempt_analysis import AttemptFeatures
+    from bubble_foam import compute_bubble_state
     
     fp = VoiceFingerprint(
         mu_f0=200.0,
@@ -122,8 +126,8 @@ def test_compute_bubble_state_active():
 
 def test_feed_text_through_bubble():
     """Ensure synthesizer produces audio and aligned control curves."""
-    from cloning_bubble.core.voice_profile import VoiceFingerprint, SpeakerProfile
-    from cloning_bubble.core.bubble_synthesizer import feed_text_through_bubble
+    from voice_profile import VoiceFingerprint, SpeakerProfile
+    from bubble_synthesizer import feed_text_through_bubble
     
     fp = VoiceFingerprint(
         mu_f0=200.0,
