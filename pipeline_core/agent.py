@@ -34,6 +34,8 @@ class Agent:
             self.logger.info("Tracing enabled")
         # store ingested documents
         self.documents = []
+        # Performance: Dictionary for O(1) lookup instead of O(n) linear search
+        self._documents_by_path = {}
 
     def respond(self, message: str) -> str:
         message = (message or "").strip()
@@ -59,6 +61,8 @@ class Agent:
             raise RuntimeError("No documents_path provided for ingestion.")
         docs = read_all_documents(documents_path, extensions=extensions, recursive=recursive)
         self.documents = docs
+        # Performance: Build dictionary for O(1) lookup
+        self._documents_by_path = {d["path"]: d["text"] for d in docs}
         summaries = []
         for d in docs:
             text = d["text"]
@@ -76,7 +80,5 @@ class Agent:
         return [d["path"] for d in self.documents]
 
     def get_document_text(self, path: str):
-        for d in self.documents:
-            if d["path"] == path:
-                return d["text"]
-        return None
+        # Performance: O(1) dictionary lookup instead of O(n) linear search
+        return self._documents_by_path.get(path)
