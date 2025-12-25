@@ -94,3 +94,20 @@ website/dist/
 # Editor files
 .eslintcache
 extracted_code/
+
+# Goeckoh Configuration - Auto-generated
+# Voice profiles (personal data)
+voice_profiles/*.wav
+voice_profiles/*.mp3
+
+# User documents
+documents/*.pdf
+documents/*.docx
+
+# Environment-specific configs
+.env.local
+config.local.yaml
+
+# Session data
+sessions/
+*.session

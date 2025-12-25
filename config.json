@@ -24,14 +24,14 @@
     "hidden_size": 64,
     "blank_id": 0,
     "vocab": " _abcdefghijklmnopqrstuvwxyz'",
-    "weight_path": "asr_weights.npz"
+    "weight_path": "project/echo_companion/JacksonCompanion/asr_weights.npz"
   },
   "tts": {
     "embedding_dim": 64,
     "decoder_dim": 64,
     "griffin_lim_iters": 16,
     "max_duration": 5,
-    "weight_path": "tts_weights.npz"
+    "weight_path": "project/echo_companion/JacksonCompanion/tts_weights.npz"
   },
   "crystal": {
     "D": 24,
