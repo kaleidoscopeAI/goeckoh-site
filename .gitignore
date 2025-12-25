@@ -8,6 +8,7 @@ venv/
 new_venv/
 env/
 ENV/
+.venv/
 build/
 develop-eggs/
 dist/
@@ -23,6 +24,12 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+
+# Python virtual environments in rust_core
+rust_core/build_env/
+rust_core/.venv/
+GOECKOH/rust_core/build_env/
+GOECKOH/rust_core/.venv/
 
 # Rust
 target/
