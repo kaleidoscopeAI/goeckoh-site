@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Goeckoh | Get Started Today</title>
+    <meta name="description" content="Download Goeckoh for Linux, Windows, macOS, Android, or iOS. Start your voice therapy journey today.">
+    <link rel="stylesheet" href="shared-styles.css">
+    <style>
+        .page-hero {
+            padding: 10rem 2rem 6rem;
+            background: var(--gradient-hero);
+            text-align: center;
+        }
+
+        .download-card {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 32px;
+            border: 2px solid var(--gray);
+            margin: 2rem 0;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-md);
+        }
+
+        .download-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .download-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid var(--gray);
+        }
+
+        .download-icon {
+            font-size: 5rem;
+            flex-shrink: 0;
+        }
+
+        .download-info h3 {
+            font-size: 2rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .download-info p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .download-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .download-btn {
+            padding: 1.5rem 2rem;
+            background: var(--gradient-primary);
+            color: var(--text-dark);
+            border: none;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .download-btn .label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        .installation-steps {
+            background: var(--pastel-lavender);
+            padding: 2rem;
+            border-radius: 20px;
+            margin-top: 2rem;
+        }
+
+        .installation-steps h4 {
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .installation-steps ol {
+            padding-left: 1.5rem;
+        }
+
+        .installation-steps li {
+            padding: 0.75rem 0;
+            color: var(--text-dark);
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+
+        .code-snippet {
+            background: rgba(0, 0, 0, 0.05);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            margin: 1rem 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        .requirements-box {
+            background: var(--pastel-mint);
+            padding: 2rem;
+            border-radius: 20px;
+            margin: 2rem 0;
+        }
+
+        .requirements-box h4 {
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .requirements-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .requirements-box li {
+            padding: 0.5rem 0;
+            padding-left: 2rem;
+            position: relative;
+            color: var(--text-medium);
+        }
+
+        .requirements-box li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--secondary);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .quick-start-box {
+            background: var(--gradient-secondary);
+            padding: 3rem;
+            border-radius: 24px;
+            margin: 3rem 0;
+            border: 2px solid var(--secondary);
+        }
+
+        .quick-start-box h3 {
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="container">
+            <div class="logo">
+                <div class="logo-icon">🌸</div>
+                <span>Goeckoh</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="science.html">Science</a></li>
+                <li><a href="features.html">Features</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="download.html" class="active">Download</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Hero -->
+    <section class="page-hero">
+        <div class="section-badge">📥 Download</div>
+        <h1 class="section-title">Get Started with Goeckoh</h1>
+        <p class="section-subtitle">
+            Choose your platform and start your voice therapy journey today. 
+            All downloads are free and open source.
+        </p>
+    </section>
+
+    <!-- Desktop Downloads -->
+    <section>
+        <div class="section-header">
+            <div class="section-badge">💻 Desktop</div>
+            <h2 class="section-title">Desktop Platforms</h2>
+        </div>
+
+        <!-- Linux -->
+        <div class="download-card loading">
+            <div class="download-header">
+                <div class="download-icon">🐧</div>
+                <div class="download-info">
+                    <h3>Linux</h3>
+                    <p>Debian, Ubuntu, and compatible distributions</p>
+                </div>
+            </div>
+
+            <div class="download-options">
+                <a href="#" class="download-btn">
+                    <span>📦 DEB Package</span>
+                    <span class="label">Easy Install</span>
+                </a>
+                <a href="#" class="download-btn">
+                    <span>📁 Source Tarball</span>
+                    <span class="label">Advanced Users</span>
+                </a>
+            </div>
+
+            <div class="installation-steps">
+                <h4>Installation Instructions</h4>
+                <ol>
+                    <li>Download the .deb package</li>
+                    <li>Open terminal in download directory</li>
+                    <li>Run: <div class="code-snippet">sudo dpkg -i goeckoh-system_1.0.0_all.deb</div></li>
+                    <li>Launch from applications menu or terminal: <div class="code-snippet">goeckoh</div></li>
+                </ol>
+            </div>
+
+            <div class="requirements-box">
+                <h4>System Requirements</h4>
+                <ul>
+                    <li>Ubuntu 20.04+ or Debian 11+</li>
+                    <li>Python 3.8 or higher</li>
+                    <li>4GB RAM minimum (8GB recommended)</li>
+                    <li>Working microphone and speakers/headphones</li>
+                    <li>2GB free disk space</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Windows -->
+        <div class="download-card loading">
+            <div class="download-header">
+                <div class="download-icon">🪟</div>
+                <div class="download-info">
+                    <h3>Windows</h3>
+                    <p>Windows 10 and Windows 11</p>
+                </div>
+            </div>
+
+            <div class="download-options">
+                <a href="#" class="download-btn">
+                    <span>📦 Installer (EXE)</span>
+                    <span class="label">Recommended</span>
+                </a>
+                <a href="#" class="download-btn">
+                    <span>📁 Portable ZIP</span>
+                    <span class="label">No Installation</span>
+                </a>
+            </div>
+
+            <div class="installation-steps">
+                <h4>Installation Instructions</h4>
+                <ol>
+                    <li>Download the installer (goeckoh-installer.exe)</li>
+                    <li>Run the installer and follow the setup wizard</li>
+                    <li>Choose installation directory (default: C:\Program Files\Goeckoh)</li>
+                    <li>Launch from Start Menu or desktop shortcut</li>
+                </ol>
+            </div>
+
+            <div class="requirements-box">
+                <h4>System Requirements</h4>
+                <ul>
+                    <li>Windows 10 (build 1809+) or Windows 11</li>
+                    <li>Python 3.8 or higher (included in installer)</li>
+                    <li>4GB RAM minimum (8GB recommended)</li>
+                    <li>Working microphone and audio output</li>
+                    <li>2GB free disk space</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- macOS -->
+        <div class="download-card loading">
+            <div class="download-header">
+                <div class="download-icon">🍎</div>
+                <div class="download-info">
+                    <h3>macOS</h3>
+                    <p>macOS 11 (Big Sur) and later</p>
+                </div>
+            </div>
+
+            <div class="download-options">
+                <a href="#" class="download-btn">
+                    <span>📦 DMG Installer</span>
+                    <span class="label">Easy Install</span>
+                </a>
+                <a href="#" class="download-btn">
+                    <span>📁 App Bundle</span>
+                    <span class="label">Advanced</span>
+                </a>
+            </div>
+
+            <div class="installation-steps">
+                <h4>Installation Instructions</h4>
+                <ol>
+                    <li>Download the DMG file (goeckoh-system-1.0.0-macos.dmg)</li>
+                    <li>Open the DMG file</li>
+                    <li>Drag Goeckoh.app to your Applications folder</li>
+                    <li>Launch from Applications or Spotlight</li>
+                    <li>Grant microphone permissions when prompted</li>
+                </ol>
+            </div>
+
+            <div class="requirements-box">
+                <h4>System Requirements</h4>
+                <ul>
+                    <li>macOS 11 (Big Sur) or later</li>
+                    <li>Apple Silicon (M1/M2) or Intel processor</li>
+                    <li>4GB RAM minimum (8GB recommended)</li>
+                    <li>Working microphone and audio output</li>
+                    <li>2GB free disk space</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mobile Downloads -->
+    <section>
+        <div class="section-header">
+            <div class="section-badge">📱 Mobile</div>
+            <h2 class="section-title">Mobile Platforms</h2>
+        </div>
+
+        <!-- Android -->
+        <div class="download-card loading">
+            <div class="download-header">
+                <div class="download-icon">📱</div>
+                <div class="download-info">
+                    <h3>Android</h3>
+                    <p>Android 8.0 (Oreo) and later</p>
+                </div>
+            </div>
+
+            <div class="download-options">
+                <a href="#" class="download-btn">
+                    <span>📦 APK Package</span>
+                    <span class="label">Direct Install</span>
+                </a>
+            </div>
+
+            <div class="installation-steps">
+                <h4>Installation Instructions</h4>
+                <ol>
+                    <li>Download the APK file (goeckoh-1.0.0.apk)</li>
+                    <li>Enable "Install from Unknown Sources" in Settings → Security</li>
+                    <li>Open the APK file and tap Install</li>
+                    <li>Grant microphone permissions when prompted</li>
+                    <li>Launch Goeckoh from your app drawer</li>
+                </ol>
+            </div>
+
+            <div class="requirements-box">
+                <h4>System Requirements</h4>
+                <ul>
+                    <li>Android 8.0 (Oreo) or later</li>
+                    <li>2GB RAM minimum (4GB recommended)</li>
+                    <li>Working microphone</li>
+                    <li>500MB free storage</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- iOS -->
+        <div class="download-card loading">
+            <div class="download-header">
+                <div class="download-icon">📱</div>
+                <div class="download-info">
+                    <h3>iOS</h3>
+                    <p>iOS 14 and later, iPadOS 14+</p>
+                </div>
+            </div>
+
+            <div class="download-options">
+                <a href="#" class="download-btn">
+                    <span>🧪 TestFlight</span>
+                    <span class="label">Beta Testing</span>
+                </a>
+            </div>
+
+            <div class="installation-steps">
+                <h4>Installation Instructions</h4>
+                <ol>
+                    <li>Install TestFlight from the App Store</li>
+                    <li>Click the Goeckoh TestFlight invitation link</li>
+                    <li>Accept the invitation and install Goeckoh</li>
+                    <li>Grant microphone permissions when prompted</li>
+                    <li>Launch from your home screen</li>
+                </ol>
+            </div>
+
+            <div class="requirements-box">
+                <h4>System Requirements</h4>
+                <ul>
+                    <li>iOS 14 or later, iPadOS 14+</li>
+                    <li>iPhone 7 or later, iPad 5th gen+</li>
+                    <li>Working microphone</li>
+                    <li>500MB free storage</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Start Guide -->
+    <section class="quick-start-box">
+        <h3>🚀 Quick Start Guide</h3>
+        <div class="grid-2" style="margin-top: 2rem;">
+            <div>
+                <h4 style="color: var(--text-dark); margin-bottom: 1rem;">1️⃣ First Launch</h4>
+                <p style="color: var(--text-medium); line-height: 1.8;">
+                    When you first launch Goeckoh, you'll be guided through a quick setup process:
+                </p>
+                <ul style="margin-top: 1rem; color: var(--text-medium);">
+                    <li style="padding: 0.5rem 0;">Select your audio input/output devices</li>
+                    <li style="padding: 0.5rem 0;">Record a 5+ second voice sample for cloning</li>
+                    <li style="padding: 0.5rem 0;">Choose your preferred mode (GUI, Universe, or Child)</li>
+                    <li style="padding: 0.5rem 0;">Configure sensitivity settings if needed</li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 style="color: var(--text-dark); margin-bottom: 1rem;">2️⃣ Using Goeckoh</h4>
+                <p style="color: var(--text-medium); line-height: 1.8;">
+                    Once set up, using Goeckoh is simple:
+                </p>
+                <ul style="margin-top: 1rem; color: var(--text-medium);">
+                    <li style="padding: 0.5rem 0;">Speak naturally into your microphone</li>
+                    <li style="padding: 0.5rem 0;">Goeckoh will process and correct your speech</li>
+                    <li style="padding: 0.5rem 0;">Hear the corrected version in your own voice</li>
+                    <li style="padding: 0.5rem 0;">Watch the visual feedback in real-time</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Support Section -->
+    <section>
+        <div class="section-header">
+            <div class="section-badge">💬 Need Help?</div>
+            <h2 class="section-title">Support & Resources</h2>
+        </div>
+
+        <div class="grid-3">
+            <div class="card loading">
+                <h4>📚 Documentation</h4>
+                <p>Comprehensive guides, tutorials, and API documentation to help you get the most out of Goeckoh.</p>
+                <a href="#" class="btn btn-secondary" style="margin-top: 1rem; display: inline-flex;">View Docs</a>
+            </div>
+
+            <div class="card loading">
+                <h4>💬 Community</h4>
+                <p>Join our community forum to ask questions, share experiences, and connect with other users.</p>
+                <a href="#" class="btn btn-secondary" style="margin-top: 1rem; display: inline-flex;">Join Forum</a>
+            </div>
+
+            <div class="card loading">
+                <h4>🐛 Report Issues</h4>
+                <p>Found a bug or have a feature request? Let us know on GitHub and help improve Goeckoh.</p>
+                <a href="https://github.com/kaleidoscopeAI/goeckoh-site/issues" class="btn btn-secondary" style="margin-top: 1rem; display: inline-flex;" target="_blank">GitHub Issues</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Goeckoh Neural Voice System. Open source therapeutic technology.</p>
+        <p style="margin-top: 1rem;">
+            Built with <span class="heart">❤️</span> for autism support and communication therapy
+        </p>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('loaded');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.loading').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

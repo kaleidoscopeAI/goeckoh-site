@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Features | Goeckoh Neural Voice System</title>
+    <meta name="description" content="Explore the comprehensive features of Goeckoh: voice cloning, real-time processing, emotional regulation, 3D visualization, and cross-platform support.">
+    <link rel="stylesheet" href="shared-styles.css">
+    <style>
+        .page-hero {
+            padding: 10rem 2rem 6rem;
+            background: var(--gradient-hero);
+            text-align: center;
+        }
+
+        .feature-showcase {
+            background: var(--white);
+            padding: 4rem 3rem;
+            border-radius: 32px;
+            margin: 3rem 0;
+            box-shadow: var(--shadow-xl);
+            border: 2px solid var(--primary-light);
+        }
+
+        .feature-showcase-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-showcase-icon {
+            font-size: 4rem;
+            flex-shrink: 0;
+        }
+
+        .feature-showcase h3 {
+            font-size: 2rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--pastel-lavender);
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-details {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--gray);
+        }
+
+        .feature-details h4 {
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .feature-list li {
+            padding: 1rem 0;
+            padding-left: 2rem;
+            position: relative;
+            color: var(--text-medium);
+            font-size: 1.05rem;
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--secondary);
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .comparison-table {
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            margin: 3rem 0;
+        }
+
+        .comparison-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .comparison-table th {
+            background: var(--gradient-primary);
+            color: var(--text-dark);
+            padding: 1.5rem;
+            text-align: left;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .comparison-table td {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--gray);
+            color: var(--text-medium);
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:hover {
+            background: var(--pastel-lavender);
+        }
+
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .platform-card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 24px;
+            border: 2px solid var(--gray);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .platform-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .platform-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .platform-card h4 {
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .platform-card .status {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--pastel-mint);
+            color: var(--text-dark);
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="container">
+            <div class="logo">
+                <div class="logo-icon">🌸</div>
+                <span>Goeckoh</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="science.html">Science</a></li>
+                <li><a href="features.html" class="active">Features</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="download.html">Download</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Hero -->
+    <section class="page-hero">
+        <div class="section-badge">✨ Features</div>
+        <h1 class="section-title">Comprehensive Capabilities</h1>
+        <p class="section-subtitle">
+            Discover the full range of therapeutic, technical, and accessibility features 
+            that make Goeckoh a revolutionary voice support system.
+        </p>
+    </section>
+
+    <!-- Core Features -->
+    <section>
+        <div class="section-header">
+            <div class="section-badge">🎯 Core Features</div>
+            <h2 class="section-title">The Foundation</h2>
+        </div>
+
+        <div class="feature-showcase loading">
+            <div class="feature-showcase-header">
+                <div class="feature-showcase-icon">🎤</div>
+                <div>
+                    <h3>Neural Voice Cloning</h3>
+                    <div>
+                        <span class="feature-tag">Real-Time</span>
+                        <span class="feature-tag">Privacy-First</span>
+                        <span class="feature-tag">High-Fidelity</span>
+                    </div>
+                </div>
+            </div>
+            <p style="color: var(--text-medium); font-size: 1.15rem; line-height: 1.8;">
+                Advanced neural text-to-speech technology that captures and preserves your unique voice characteristics. 
+                Your voice is cloned locally on your device and used to provide corrected speech feedback in your own voice, 
+                not a synthetic one.
+            </p>
+            <div class="feature-details">
+                <h4>Key Capabilities:</h4>
+                <ul class="feature-list">
+                    <li>Requires only 5+ seconds of voice sample for cloning</li>
+                    <li>Preserves pitch, timbre, speaking rate, and prosodic patterns</li>
+                    <li>Adapts to your voice over time with continual learning</li>
+                    <li>Maintains emotional expression and natural variation</li>
+                    <li>100% local processing - your voice never leaves your device</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="feature-showcase loading">
+            <div class="feature-showcase-header">
+                <div class="feature-showcase-icon">⚡</div>
+                <div>
+                    <h3>Real-Time Processing</h3>
+                    <div>
+                        <span class="feature-tag">&lt;100ms Latency</span>
+                        <span class="feature-tag">Rust-Powered</span>
+                        <span class="feature-tag">Optimized</span>
+                    </div>
+                </div>
+            </div>
+            <p style="color: var(--text-medium); font-size: 1.15rem; line-height: 1.8;">
+                Ultra-low latency voice processing enables natural conversation flow without disruption. 
+                Powered by a high-performance Rust audio core that processes your voice faster than you can notice.
+            </p>
+            <div class="feature-details">
+                <h4>Processing Pipeline:</h4>
+                <ul class="feature-list">
+                    <li>Audio capture at 16kHz with high-fidelity preservation</li>
+                    <li>Instant speech-to-text conversion using optimized ASR</li>
+                    <li>Real-time grammatical and pronunciation correction</li>
+                    <li>Neural voice synthesis in your own voice</li>
+                    <li>Prosody transfer maintaining natural expression</li>
+                    <li>Audio playback with &lt;100ms total latency</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="feature-showcase loading">
+            <div class="feature-showcase-header">
+                <div class="feature-showcase-icon">🧠</div>
+                <div>
+                    <h3>Autism-Optimized VAD</h3>
+                    <div>
+                        <span class="feature-tag">Extended Pauses</span>
+                        <span class="feature-tag">Lower Threshold</span>
+                        <span class="feature-tag">Respectful</span>
+                    </div>
+                </div>
+            </div>
+            <p style="color: var(--text-medium); font-size: 1.15rem; line-height: 1.8;">
+                Voice Activity Detection specifically designed for autistic communication patterns. 
+                Respects processing pauses, quiet speech, and reduced prosodic variation without interruption.
+            </p>
+            <div class="feature-details">
+                <h4>Specialized Adaptations:</h4>
+                <ul class="feature-list">
+                    <li>1.2 second pause tolerance (vs. standard 0.5s) for processing time</li>
+                    <li>Lower sensitivity threshold (0.45) for quiet or monotone speech</li>
+                    <li>Filters background noise while preserving speech</li>
+                    <li>Respects natural speech rhythms without rushing</li>
+                    <li>Configurable parameters for individual needs</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="feature-showcase loading">
+            <div class="feature-showcase-header">
+                <div class="feature-showcase-icon">💎</div>
+                <div>
+                    <h3>Crystalline Heart Emotional System</h3>
+                    <div>
+                        <span class="feature-tag">1024 Nodes</span>
+                        <span class="feature-tag">8D States</span>
+                        <span class="feature-tag">Real-Time</span>
+                    </div>
+                </div>
+            </div>
+            <p style="color: var(--text-medium); font-size: 1.15rem; line-height: 1.8;">
+                Advanced emotional regulation lattice that monitors and supports your emotional state in real-time. 
+                Detects stress, provides co-regulation, and offers therapeutic interventions when needed.
+            </p>
+            <div class="feature-details">
+                <h4>Emotional Intelligence:</h4>
+                <ul class="feature-list">
+                    <li>1024 interconnected emotional nodes forming coherent field</li>
+                    <li>8D emotional state tracking: joy, fear, anger, sadness, trust, disgust, anticipation, surprise</li>
+                    <li>Global Coherence Level (GCL) computation for stability monitoring</li>
+                    <li>Real-time crisis detection with automatic interventions</li>
+                    <li>Sensory overwhelm detection and calming protocols</li>
+                    <li>ABA-based therapeutic interventions and positive reinforcement</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="feature-showcase loading">
+            <div class="feature-showcase-header">
+                <div class="feature-showcase-icon">🌌</div>
+                <div>
+                    <h3>3D Cognitive Nebula Visualization</h3>
+                    <div>
+                        <span class="feature-tag">Interactive</span>
+                        <span class="feature-tag">Beautiful</span>
+                        <span class="feature-tag">Engaging</span>
+                    </div>
+                </div>
+            </div>
+            <p style="color: var(--text-medium); font-size: 1.15rem; line-height: 1.8;">
+                Stunning 3D visualization of your voice and emotional state using React and Three.js. 
+                Transforms therapy into an engaging, visual experience with real-time feedback.
+            </p>
+            <div class="feature-details">
+                <h4>Visual Features:</h4>
+                <ul class="feature-list">
+                    <li>Real-time voice bubble visualization showing speech patterns</li>
+                    <li>AI-generated images from voice input creating unique visual feedback</li>
+                    <li>Interactive 3D universe that responds to your voice</li>
+                    <li>Emotional state visualization with color and movement</li>
+                    <li>Therapeutic gaming mechanics for engagement</li>
+                    <li>Customizable visual themes and preferences</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Specifications -->
+    <section>
+        <div class="section-header">
+            <div class="section-badge">⚙️ Specifications</div>
+            <h2 class="section-title">Technical Details</h2>
+        </div>
+
+        <div class="comparison-table loading">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Component</th>
+                        <th>Specification</th>
+                        <th>Performance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Audio Processing</strong></td>
+                        <td>16kHz sampling, Rust bio-acoustic engine</td>
+                        <td>&lt;100ms total latency</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Voice Cloning</strong></td>
+                        <td>Neural TTS (Coqui), 5s minimum sample</td>
+                        <td>High-fidelity voice preservation</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Speech Recognition</strong></td>
+                        <td>Advanced ASR with error correction</td>
+                        <td>95%+ accuracy on clear speech</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Emotional Nodes</strong></td>
+                        <td>1024-node crystalline lattice</td>
+                        <td>8D emotional state tracking</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Memory System</strong></td>
+                        <td>FAISS-like indexing with persistence</td>
+                        <td>Long-term learning & adaptation</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Visualization</strong></td>
+                        <td>React + Three.js 3D rendering</td>
+                        <td>60fps smooth graphics</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Privacy</strong></td>
+                        <td>100% local processing</td>
+                        <td>Zero data transmission</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Platform Support -->
+    <section>
+        <div class="section-header">
+            <div class="section-badge">🌍 Platforms</div>
+            <h2 class="section-title">Cross-Platform Support</h2>
+            <p class="section-subtitle">
+                Goeckoh runs on all major platforms with optimized packages for each operating system.
+            </p>
+        </div>
+
+        <div class="platform-grid">
+            <div class="platform-card loading">
+                <div class="platform-icon">🐧</div>
+                <h4>Linux</h4>
+                <p style="color: var(--text-medium); margin-bottom: 1rem;">
+                    Debian package (.deb), source tarball, desktop launcher
+                </p>
+                <span class="status">✓ Available</span>
+            </div>
+
+            <div class="platform-card loading">
+                <div class="platform-icon">🪟</div>
+                <h4>Windows</h4>
+                <p style="color: var(--text-medium); margin-bottom: 1rem;">
+                    NSIS installer, portable ZIP, full integration
+                </p>
+                <span class="status">✓ Available</span>
+            </div>
+
+            <div class="platform-card loading">
+                <div class="platform-icon">🍎</div>
+                <h4>macOS</h4>
+                <p style="color: var(--text-medium); margin-bottom: 1rem;">
+                    DMG installer, .app bundle, native integration
+                </p>
+                <span class="status">✓ Available</span>
+            </div>
+
+            <div class="platform-card loading">
+                <div class="platform-icon">📱</div>
+                <h4>Android</h4>
+                <p style="color: var(--text-medium); margin-bottom: 1rem;">
+                    APK package with mobile-optimized interface
+                </p>
+                <span class="status">✓ Available</span>
+            </div>
+
+            <div class="platform-card loading">
+                <div class="platform-icon">📱</div>
+                <h4>iOS</h4>
+                <p style="color: var(--text-medium); margin-bottom: 1rem;">
+                    IPA package, TestFlight distribution
+                </p>
+                <span class="status">✓ Available</span>
+            </div>
+
+            <div class="platform-card loading">
+                <div class="platform-icon">🌐</div>
+                <h4>Web</h4>
+                <p style="color: var(--text-medium); margin-bottom: 1rem;">
+                    Browser-based visualization and monitoring
+                </p>
+                <span class="status">✓ Available</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" style="background: var(--gradient-hero); padding: 6rem 2rem; text-align: center; border-radius: 32px; margin: 4rem 0;">
+        <h2>Ready to Experience These Features?</h2>
+        <p style="font-size: 1.25rem; margin-bottom: 2.5rem; max-width: 700px; margin-left: auto; margin-right: auto;">
+            Download Goeckoh today and discover how advanced voice therapy can transform your communication.
+        </p>
+        <div class="cta-buttons">
+            <a href="download.html" class="btn btn-primary">Download Now</a>
+            <a href="science.html" class="btn btn-secondary">Learn the Science</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Goeckoh Neural Voice System. Open source therapeutic technology.</p>
+        <p style="margin-top: 1rem;">
+            Built with <span class="heart">❤️</span> for autism support and communication therapy
+        </p>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('loaded');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.loading').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

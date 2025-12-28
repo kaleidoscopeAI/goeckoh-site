@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goeckoh - Revolutionary Voice Therapy & Neural Support System</title>
+    <meta name="description" content="Advanced therapeutic voice system using AI, neuroscience, and real-time processing for speech therapy, autism support, and communication enhancement.">
+    <link rel="stylesheet" href="shared-styles.css">
+    <style>
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient-hero);
+            position: relative;
+            overflow: hidden;
+            padding-top: 100px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(230, 230, 250, 0.4) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 217, 236, 0.4) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(200, 244, 222, 0.3) 0%, transparent 60%);
+            z-index: 0;
+        }
+
+        .hero-content {
+            max-width: 1000px;
+            text-align: center;
+            z-index: 2;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid var(--primary-light);
+            border-radius: 50px;
+            color: var(--primary-dark);
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .hero h1 {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        .hero .tagline {
+            font-size: clamp(1.25rem, 3vw, 1.75rem);
+            color: var(--text-medium);
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+
+        .hero .description {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            color: var(--text-light);
+            margin-bottom: 3rem;
+            max-width: 750px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.8;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.25rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+            animation: fadeInUp 1s ease-out 0.8s both;
+        }
+
+        /* Feature Cards */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 24px;
+            border: 2px solid var(--gray);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 0;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .feature-card:hover::before {
+            opacity: 0.08;
+        }
+
+        .feature-card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            filter: grayscale(0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.15) rotate(-5deg);
+            filter: grayscale(0);
+        }
+
+        .feature-card h3 {
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .feature-card p {
+            color: var(--text-medium);
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: var(--white);
+            padding: 5rem 2rem;
+            margin: 4rem 0;
+            border-radius: 32px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            font-family: var(--font-heading);
+        }
+
+        .stat-label {
+            color: var(--text-medium);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--gradient-hero);
+            padding: 6rem 2rem;
+            text-align: center;
+            border-radius: 32px;
+            margin: 4rem 0;
+        }
+
+        .cta-section h2 {
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.25rem;
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="container">
+            <div class="logo">
+                <div class="logo-icon">🌸</div>
+                <span>Goeckoh</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="home.html" class="active">Home</a></li>
+                <li><a href="science.html">Science</a></li>
+                <li><a href="features.html">Features</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="download.html">Download</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">🌸 Revolutionary Therapeutic Technology</div>
+            <h1>Goeckoh Neural Voice System</h1>
+            <p class="tagline">Transforming Communication Through Compassionate AI</p>
+            <p class="description">
+                A gentle, intelligent voice therapy system that listens, learns, and supports. 
+                Using advanced neural technology and acoustic science, Goeckoh helps individuals 
+                communicate with confidence and clarity.
+            </p>
+            <div class="cta-buttons">
+                <a href="download.html" class="btn btn-primary">🚀 Get Started</a>
+                <a href="science.html" class="btn btn-secondary">📖 Learn the Science</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Overview -->
+    <section>
+        <div class="section-header">
+            <div class="section-badge">✨ What is Goeckoh?</div>
+            <h2 class="section-title">Voice Therapy Reimagined</h2>
+            <p class="section-subtitle">
+                Goeckoh is an advanced therapeutic system that uses your own voice to provide 
+                real-time speech correction, emotional support, and communication enhancement. 
+                Designed with neurodiversity in mind.
+            </p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card loading">
+                <div class="feature-icon">🎤</div>
+                <h3>Your Voice, Perfected</h3>
+                <p>Advanced neural voice cloning captures your unique voice characteristics and mirrors them back with gentle corrections, building confidence naturally.</p>
+            </div>
+
+            <div class="feature-card loading">
+                <div class="feature-icon">🧠</div>
+                <h3>Autism-Aware Processing</h3>
+                <p>Specially designed voice detection that respects natural speech patterns, processing pauses, and communication styles common in autistic individuals.</p>
+            </div>
+
+            <div class="feature-card loading">
+                <div class="feature-icon">💎</div>
+                <h3>Emotional Intelligence</h3>
+                <p>Real-time emotional regulation through our Crystalline Heart system, monitoring and supporting your emotional state with 1024 neural nodes.</p>
+            </div>
+
+            <div class="feature-card loading">
+                <div class="feature-icon">🌈</div>
+                <h3>Beautiful Visualization</h3>
+                <p>Engaging 3D cognitive visualization transforms your voice into stunning visual feedback, making therapy interactive and enjoyable.</p>
+            </div>
+
+            <div class="feature-card loading">
+                <div class="feature-icon">🔒</div>
+                <h3>Privacy First</h3>
+                <p>All processing happens locally on your device. Your voice data never leaves your computer, ensuring complete privacy and security.</p>
+            </div>
+
+            <div class="feature-card loading">
+                <div class="feature-icon">⚡</div>
+                <h3>Real-Time Performance</h3>
+                <p>Ultra-low latency processing (&lt;100ms) powered by optimized Rust core ensures seamless, natural conversation flow.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <div class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">&lt;100ms</div>
+                <div class="stat-label">Processing Latency</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">1024</div>
+                <div class="stat-label">Emotional Nodes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">8D</div>
+                <div class="stat-label">Emotional States</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">6</div>
+                <div class="stat-label">Platform Support</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Use Cases -->
+    <section>
+        <div class="section-header">
+            <div class="section-badge">💫 Who Benefits?</div>
+            <h2 class="section-title">Supporting Diverse Needs</h2>
+            <p class="section-subtitle">
+                Goeckoh is designed to support anyone seeking communication enhancement, 
+                with special focus on neurodivergent individuals and speech therapy needs.
+            </p>
+        </div>
+
+        <div class="grid-3">
+            <div class="card loading">
+                <h3>🎯 Autism Support</h3>
+                <p>Customized voice detection, sensory monitoring, and therapeutic interventions designed specifically for autistic communication patterns.</p>
+            </div>
+
+            <div class="card loading">
+                <h3>🗣️ Speech Therapy</h3>
+                <p>Real-time correction and feedback helps improve articulation, pronunciation, and speech clarity through positive reinforcement.</p>
+            </div>
+
+            <div class="card loading">
+                <h3>📚 Language Learning</h3>
+                <p>Practice pronunciation and fluency in a supportive environment that maintains your natural voice characteristics.</p>
+            </div>
+
+            <div class="card loading">
+                <h3>💼 Communication Skills</h3>
+                <p>Build confidence in professional and social settings with real-time feedback and emotional regulation support.</p>
+            </div>
+
+            <div class="card loading">
+                <h3>♿ Accessibility</h3>
+                <p>Assistive technology for individuals with various communication challenges, providing real-time support and adaptation.</p>
+            </div>
+
+            <div class="card loading">
+                <h3>🔬 Research</h3>
+                <p>Advanced platform for studying voice processing, emotional regulation, and neural-acoustic interfaces.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2>Ready to Transform Your Communication?</h2>
+        <p>Experience the future of voice therapy and neural support. Download Goeckoh today and discover your true voice.</p>
+        <div class="cta-buttons">
+            <a href="download.html" class="btn btn-primary">Download Now</a>
+            <a href="features.html" class="btn btn-secondary">Explore Features</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Goeckoh Neural Voice System. Open source therapeutic technology.</p>
+        <p style="margin-top: 1rem;">
+            Built with <span class="heart">❤️</span> for autism support and communication therapy
+        </p>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('loaded');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.loading').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Science Behind Goeckoh | Neural Voice Technology</title>
+    <meta name="description" content="Deep dive into the neuroscience, acoustic engineering, and AI technology powering Goeckoh's revolutionary voice therapy system.">
+    <link rel="stylesheet" href="shared-styles.css">
+    <style>
+        .page-hero {
+            padding: 10rem 2rem 6rem;
+            background: var(--gradient-hero);
+            text-align: center;
+        }
+
+        .science-diagram {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 24px;
+            margin: 3rem 0;
+            box-shadow: var(--shadow-lg);
+            border: 2px solid var(--primary-light);
+        }
+
+        .pipeline-step {
+            background: var(--gradient-secondary);
+            padding: 2rem;
+            border-radius: 20px;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--secondary);
+            transition: all 0.3s ease;
+        }
+
+        .pipeline-step:hover {
+            transform: translateX(10px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .pipeline-step h4 {
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .pipeline-step p {
+            color: var(--text-medium);
+            line-height: 1.8;
+        }
+
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .tech-item {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 2px solid var(--gray);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .tech-item:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .tech-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .architecture-box {
+            background: var(--pastel-lavender);
+            padding: 2.5rem;
+            border-radius: 20px;
+            margin: 2rem 0;
+            border: 2px solid var(--primary-light);
+        }
+
+        .architecture-box h4 {
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+        }
+
+        .architecture-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .architecture-box li {
+            padding: 0.75rem 0;
+            padding-left: 2rem;
+            position: relative;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .architecture-box li::before {
+            content: '✦';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .visual-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 2rem 0;
+            padding: 2rem;
+            background: var(--gradient-secondary);
+            border-radius: 20px;
+        }
+
+        .flow-item {
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .flow-arrow {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .scientific-fact {
+            background: var(--pastel-mint);
+            padding: 2rem;
+            border-radius: 16px;
+            margin: 2rem 0;
+            border-left: 4px solid var(--pastel-sage);
+        }
+
+        .scientific-fact h4 {
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .scientific-fact p {
+            color: var(--text-medium);
+            font-size: 1.05rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="container">
+            <div class="logo">
+                <div class="logo-icon">🌸</div>
+                <span>Goeckoh</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="science.html" class="active">Science</a></li>
+                <li><a href="features.html">Features</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="download.html">Download</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Hero -->
+    <section class="page-hero">
+        <div class="section-badge">🔬 The Science</div>
+        <h1 class="section-title">How Goeckoh Works</h1>
+        <p class="section-subtitle">
+            Understanding the neuroscience, acoustic engineering, and artificial intelligence 
+            that powers revolutionary voice therapy and neural support.
+        </p>
+    </section>
+
+    <!-- Neural Voice Pipeline -->
+    <section>
+        <div class="section-header">
+            <div class="section-badge">🎯 Core Technology</div>
+            <h2 class="section-title">The Neural Voice Pipeline</h2>
+            <p class="section-subtitle">
+                Goeckoh processes your voice through a sophisticated 6-stage pipeline, 
+                each optimized for real-time therapeutic intervention.
+            </p>
+        </div>
+
+        <div class="science-diagram">
+            <div class="visual-flow">
+                <div class="flow-item">🎤 Audio<br/>Capture</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-item">📝 Speech-to-<br/>Text</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-item">✨ Linguistic<br/>Correction</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-item">🗣️ Voice<br/>Synthesis</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-item">🎵 Prosody<br/>Transfer</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-item">🔊 Audio<br/>Playback</div>
+            </div>
+
+            <div class="pipeline-step loading">
+                <h4>Stage 1: Audio Capture</h4>
+                <p>
+                    <strong>Technology:</strong> High-fidelity microphone input processing at 16kHz sampling rate.<br/>
+                    <strong>Science:</strong> Captures acoustic waveforms with sufficient resolution to preserve voice 
+                    characteristics including pitch, timbre, and formant frequencies critical for voice identity.
+                </p>
+            </div>
+
+            <div class="pipeline-step loading">
+                <h4>Stage 2: Speech-to-Text (STT)</h4>
+                <p>
+                    <strong>Technology:</strong> Advanced automatic speech recognition (ASR) using neural acoustic models.<br/>
+                    <strong>Science:</strong> Converts acoustic signals into phonetic representations, then into text 
+                    using Hidden Markov Models and deep learning. Accounts for speech variations and disfluencies.
+                </p>
+            </div>
+
+            <div class="pipeline-step loading">
+                <h4>Stage 3: Linguistic Correction</h4>
+                <p>
+                    <strong>Technology:</strong> Natural language processing with grammar correction and error detection.<br/>
+                    <strong>Science:</strong> Applies computational linguistics to identify and correct grammatical errors, 
+                    pronunciation mistakes, and semantic inconsistencies while preserving intended meaning.
+                </p>
+            </div>
+
+            <div class="pipeline-step loading">
+                <h4>Stage 4: Voice Synthesis</h4>
+                <p>
+                    <strong>Technology:</strong> Neural Text-to-Speech (TTS) using Coqui TTS with your cloned voice model.<br/>
+                    <strong>Science:</strong> Generates speech waveforms from text using deep neural networks trained on 
+                    your voice sample. Preserves vocal characteristics: pitch range, speaking rate, and voice quality.
+                </p>
+            </div>
+
+            <div class="pipeline-step loading">
+                <h4>Stage 5: Prosody Transfer</h4>
+                <p>
+                    <strong>Technology:</strong> Advanced prosodic feature extraction and transfer algorithms.<br/>
+                    <strong>Science:</strong> Captures and transfers suprasegmental features (rhythm, stress, intonation) 
+                    from your original speech to the corrected output, maintaining natural expression and emotional content.
+                </p>
+            </div>
+
+            <div class="pipeline-step loading">
+                <h4>Stage 6: Audio Playback</h4>
+                <p>
+                    <strong>Technology:</strong> Low-latency audio rendering through optimized Rust audio bridge.<br/>
+                    <strong>Science:</strong> Delivers corrected speech with &lt;100ms latency, within the threshold for 
+                    natural conversation (150ms), enabling real-time therapeutic feedback without disrupting communication flow.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Autism-Specific Technology -->
+    <section>
+        <div class="section-header">
+            <div class="section-badge">🧠 Neurodiversity</div>
+            <h2 class="section-title">Autism-Aware Voice Processing</h2>
+            <p class="section-subtitle">
+                Specialized algorithms designed to respect and support autistic communication patterns.
+            </p>
+        </div>
+
+        <div class="scientific-fact loading">
+            <h4>🎯 Extended Pause Tolerance</h4>
+            <p>
+                Research shows autistic individuals often use longer processing pauses (1-2 seconds) during speech. 
+                Goeckoh's Voice Activity Detection (VAD) system extends tolerance to 1.2 seconds, preventing premature 
+                cutoffs and respecting natural speech rhythms. This accommodates executive function differences and 
+                processing time needs without rushing the speaker.
+            </p>
+        </div>
+
+        <div class="scientific-fact loading">
+            <h4>🔊 Adjusted Sensitivity Thresholds</h4>
+            <p>
+                Autistic speech patterns may include quieter volume and reduced prosodic variation (monotone speech). 
+                Our VAD uses a lower threshold (0.45 vs standard 0.6) to reliably detect speech while filtering 
+                background noise, ensuring consistent recognition regardless of speaking volume or prosodic style.
+            </p>
+        </div>
+
+        <div class="scientific-fact loading">
+            <h4>💎 Sensory Overwhelm Monitoring</h4>
+            <p>
+                The Crystalline Heart system continuously monitors physiological and behavioral indicators of sensory 
+                overwhelm. When stress markers increase, the system automatically adjusts processing parameters, reduces 
+                feedback intensity, and provides calming interventions based on Applied Behavior Analysis (ABA) principles.
+            </p>
+        </div>
+    </section>
+
+    <!-- Crystalline Heart Architecture -->
+    <section>
+        <div class="section-header">
+            <div class="section-badge">💎 Emotional AI</div>
+            <h2 class="section-title">The Crystalline Heart System</h2>
+            <p class="section-subtitle">
+                A 1024-node emotional regulation lattice that monitors, understands, and supports your emotional state.
+            </p>
+        </div>
+
+        <div class="architecture-box loading">
+            <h4>🌐 Lattice Architecture</h4>
+            <ul>
+                <li>1024 interconnected emotional nodes forming a coherent field</li>
+                <li>8-dimensional emotional state space: joy, fear, anger, sadness, trust, disgust, anticipation, surprise</li>
+                <li>Real-time Global Coherence Level (GCL) computation measuring emotional stability</li>
+                <li>Adaptive co-regulation responding to detected emotional patterns</li>
+                <li>Crisis detection with automatic intervention protocols</li>
+            </ul>
+        </div>
+
+        <div class="scientific-fact loading">
+            <h4>🧬 How It Works</h4>
+            <p>
+                The Crystalline Heart uses a computational model inspired by neurobiological emotional processing. 
+                Each node represents an emotional micros state, with connections representing emotional relationships. 
+                Voice acoustic features (pitch variation, energy, speaking rate) are mapped to emotional dimensions. 
+                The system computes coherence across the lattice to detect emotional dysregulation, then applies 
+                therapeutic interventions including breathing exercises, positive affirmations, and calming audio cues.
+            </p>
+        </div>
+    </section>
+
+    <!-- Technical Architecture -->
+    <section>
+        <div class="section-header">
+            <div class="section-badge">⚙️ Architecture</div>
+            <h2 class="section-title">System Architecture</h2>
+            <p class="section-subtitle">
+                Production-ready, modular design built for performance, reliability, and scalability.
+            </p>
+        </div>
+
+        <div class="tech-stack">
+            <div class="tech-item loading">
+                <div class="tech-icon">⚡</div>
+                <h4>Rust Core</h4>
+                <p>High-performance bio-acoustic engine (libbio_audio.so) for real-time audio processing with zero-cost abstractions</p>
+            </div>
+
+            <div class="tech-item loading">
+                <div class="tech-icon">🐍</div>
+                <h4>Python Backend</h4>
+                <p>Neural processing, TTS integration, and therapeutic algorithms with NumPy/SciPy optimization</p>
+            </div>
+
+            <div class="tech-item loading">
+                <div class="tech-icon">⚛️</div>
+                <h4>React Frontend</h4>
+                <p>Interactive 3D visualization using React + Three.js for engaging therapeutic feedback</p>
+            </div>
+
+            <div class="tech-item loading">
+                <div class="tech-icon">🎤</div>
+                <h4>Neural TTS</h4>
+                <p>Coqui TTS with voice cloning capability preserving individual voice characteristics</p>
+            </div>
+
+            <div class="tech-item loading">
+                <div class="tech-icon">🧠</div>
+                <h4>Memory Systems</h4>
+                <p>FAISS-like indexing with crystalline lattice memory for long-term learning and adaptation</p>
+            </div>
+
+            <div class="tech-item loading">
+                <div class="tech-icon">🔐</div>
+                <h4>Privacy First</h4>
+                <p>100% local processing - no cloud dependencies, no data transmission, complete user privacy</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scientific Evidence -->
+    <section>
+        <div class="section-header">
+            <div class="section-badge">📚 Evidence Base</div>
+            <h2 class="section-title">Research Foundation</h2>
+            <p class="section-subtitle">
+                Goeckoh is built on decades of research in speech therapy, neuroscience, and autism support.
+            </p>
+        </div>
+
+        <div class="grid-2">
+            <div class="card loading">
+                <h3>Voice Therapy Research</h3>
+                <p>
+                    Studies show that hearing corrected speech in one's own voice (vs. synthetic voice) significantly 
+                    improves learning outcomes and builds confidence. Self-voice feedback creates stronger neural 
+                    associations and reduces anxiety associated with speech correction.
+                </p>
+            </div>
+
+            <div class="card loading">
+                <h3>Autism Speech Patterns</h3>
+                <p>
+                    Research on autistic communication identifies specific prosodic patterns, extended processing 
+                    times, and sensory sensitivities. Goeckoh's design directly addresses these findings with 
+                    customized VAD, reduced sensory load, and respect for individual processing speeds.
+                </p>
+            </div>
+
+            <div class="card loading">
+                <h3>Real-Time Feedback</h3>
+                <p>
+                    Neuroscience research demonstrates that immediate feedback (&lt;150ms) is critical for motor 
+                    learning and speech improvement. Delayed feedback can disrupt learning. Goeckoh's &lt;100ms 
+                    latency ensures optimal therapeutic effectiveness.
+                </p>
+            </div>
+
+            <div class="card loading">
+                <h3>Emotional Regulation</h3>
+                <p>
+                    Applied Behavior Analysis (ABA) and emotional regulation research supports the use of real-time 
+                    monitoring, co-regulation strategies, and positive reinforcement. The Crystalline Heart implements 
+                    these evidence-based approaches in a computational framework.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" style="background: var(--gradient-hero); padding: 6rem 2rem; text-align: center; border-radius: 32px; margin: 4rem 0;">
+        <h2>Experience the Technology</h2>
+        <p style="font-size: 1.25rem; margin-bottom: 2.5rem; max-width: 700px; margin-left: auto; margin-right: auto;">
+            See how cutting-edge neuroscience and AI come together to support your communication journey.
+        </p>
+        <div class="cta-buttons">
+            <a href="download.html" class="btn btn-primary">Download Goeckoh</a>
+            <a href="features.html" class="btn btn-secondary">Explore Features</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Goeckoh Neural Voice System. Open source therapeutic technology.</p>
+        <p style="margin-top: 1rem;">
+            Built with <span class="heart">❤️</span> for autism support and communication therapy
+        </p>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('loaded');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.loading').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
