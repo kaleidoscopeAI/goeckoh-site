@@ -157,7 +157,7 @@ def test_feature_validates():
 - **UI**: kivy, kivymd, textual
 - **Network**: requests
 - **Testing**: pytest (dev dependency)
-- **Optional**: TTS (Coqui TTS for voice cloning)
+- **Optional**: TTS (Coqui TTS for voice cloning - listed in requirements_deployment.txt)
 - Only add new dependencies if absolutely necessary and after security review
 
 ### JavaScript Dependencies
