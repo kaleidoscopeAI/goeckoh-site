@@ -152,9 +152,10 @@ def test_feature_validates():
 
 ### Python Dependencies
 - **Core**: numpy, scipy, sounddevice
-- **Voice processing**: sherpa-onnx, Coqui TTS (implied)
+- **Voice processing**: sherpa-onnx
 - **UI**: kivy, kivymd, textual
 - **Testing**: pytest
+- **Optional**: TTS (Coqui TTS for voice cloning)
 - Only add new dependencies if absolutely necessary and after security review
 
 ### JavaScript Dependencies
