@@ -5,7 +5,6 @@ baseurl: ""
 url: "https://kaleidoscopeai.github.io/goeckoh-site"
 
 # Build settings
-source: website
 markdown: kramdown
 theme: jekyll-theme-primer
 
