@@ -14,7 +14,8 @@
 
 ### Repository Structure
 - `src/`, `goeckoh_cloner/`, `pipeline_core/` - Application source code (Python)
-- `frontend/`, `*.jsx` - React/Three.js visualization frontend
+- Root directory `*.jsx` files - React/Three.js visualization components
+- `frontend/goeckoh-react/` - React frontend project
 - `website/` - Marketing and information website (static HTML/CSS/JS)
 - `tests/` - Test files (pytest)
 - `docs/` - Documentation
@@ -151,10 +152,11 @@ def test_feature_validates():
 ## Dependencies
 
 ### Python Dependencies
-- **Core**: numpy, scipy, sounddevice
+- **Core**: numpy, scipy, sounddevice, Cython
 - **Voice processing**: sherpa-onnx
 - **UI**: kivy, kivymd, textual
-- **Testing**: pytest
+- **Network**: requests
+- **Testing**: pytest (dev dependency)
 - **Optional**: TTS (Coqui TTS for voice cloning)
 - Only add new dependencies if absolutely necessary and after security review
 
