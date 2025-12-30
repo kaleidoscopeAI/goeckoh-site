@@ -161,7 +161,7 @@ def test_feature_validates():
 - Only add new dependencies if absolutely necessary and after security review
 
 ### JavaScript Dependencies
-- **React**: react, react-dom (v19.1.1)
+- **React**: react, react-dom (^19.1.1 in root, ^19.2.0 in frontend/goeckoh-react)
 - **3D Graphics**: three, @react-three/fiber, @react-three/drei
 - **Build**: vite, @vitejs/plugin-react
 - **TypeScript**: For type checking where needed
