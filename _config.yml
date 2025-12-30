@@ -1,0 +1,55 @@
+# Jekyll configuration for GitHub Pages
+title: Goeckoh
+description: Static website for Goeckoh speech mirror
+baseurl: ""
+url: "https://kaleidoscopeai.github.io/goeckoh-site"
+
+# Build settings
+source: website
+markdown: kramdown
+theme: jekyll-theme-primer
+
+# Plugins
+plugins:
+  - jekyll-github-metadata
+  - jekyll-seo-tag
+  - jekyll-coffeescript
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - package.json
+  - package-lock.json
+  - README.md
+  - "*.py"
+  - "*.sh"
+  - "*.txt"
+  - "*.pdf"
+  - "*.md"
+  - .git
+  - .gitignore
+  - apps
+  - assets
+  - audio
+  - cloning_bubble
+  - cognitive-nebula
+  - docs
+  - examples
+  - frontend
+  - goeckoh_cloner
+  - heart
+  - icons
+  - integrations
+  - persistence
+  - pipeline_core
+  - project
+  - rust_core
+  - src
+  - systems
+  - tests
+  - voice
+  - web_assets
+  - GOECKOH
