@@ -17,12 +17,10 @@ plugins:
 # Exclude from processing
 exclude:
   - Gemfile
-  - Gemfile.lock
   - node_modules
   - vendor
   - package.json
   - package-lock.json
-  - README.md
   - "*.py"
   - "*.sh"
   - "*.txt"
