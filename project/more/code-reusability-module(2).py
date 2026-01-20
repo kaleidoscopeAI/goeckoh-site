@@ -429,4 +429,6 @@ class LanguageAdapter(ABC):
         pass
     
     @abstractmethod
-    async def parse(self, code: str, file
+    async def parse(self, code: str, filename: str) -> 'CodeBlock':
+        """Parse code into a CodeBlock structure"""
+        pass

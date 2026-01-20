@@ -340,3 +340,4 @@ class SensorimotorFeedback:
             'haptic': haptic,
             'visual_amplification': self.feedback_gain,
             'synchronization': sync
+        }

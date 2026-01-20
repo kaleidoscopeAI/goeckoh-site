@@ -56,7 +56,7 @@ class NeuroKernel:
         threading.Thread(target=self._loop, daemon=True).start()
 
     def _loop(self):
-.
+        """Main processing loop for audio chunks"""
         while True:
             try:
                 try:

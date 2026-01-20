@@ -688,7 +688,7 @@ class UnifiedOrganicAI:
 ---
 
 # file: unified_organic_ai/tests/test_system.py
-(keep prior smoke test — runs against new production-ready logic)
+# (keep prior smoke test - runs against new production-ready logic)
 
 ---
 
