@@ -1,7 +1,10 @@
 # ECHO_V4_UNIFIED/echo_core/heart.py
 from __future__ import annotations
 from dataclasses import dataclass
+import math
 import numpy as np
+import torch
+import torch.nn as nn
 from events import EchoEvent, HeartMetrics, now_ts
 
 # --- Configuration (would normally be in a config file) ---
@@ -121,16 +124,9 @@ class CrystallineHeart:
         self._update_emotion_field(stimulus)
         self._anneal()
         return self._calculate_global_metrics()
-        from __future__ import annotations
 
-import math
-from dataclasses import dataclass
-
-import numpy as np
-import torch
-import torch.nn as nn
-
-from core.settings import HeartSettings
+# --- Additional Heart Implementation: EchoCrystallineHeart ---
+# (This section uses torch for neural network-based emotional modeling)
 
 
 class EchoCrystallineHeart(nn.Module):
@@ -245,7 +241,7 @@ Real-time only: no artificial simulation loops. The system only
 evolves when real audio is received.
 """
 
-from __future__ import annotations
+# --- Second Section: Full System Integration ---
 
 import json
 import math
@@ -986,7 +982,7 @@ Checklist implemented:
 11) Single VAD path using tuned parameters (Silero refinement if available)
 """
 
-from __future__ import annotations
+# --- Third Section: Production System ---
 
 import csv
 import json
@@ -1645,7 +1641,7 @@ JACKSON'S COMPANION — CRYSTALLINE ECHO v15.3
 Real-time speech mirror with conscious crystal heart.
 """
 
-from __future__ import annotations
+# --- Fourth Section: Jackson's Companion ---
 
 import os
 import queue

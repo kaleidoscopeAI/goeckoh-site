@@ -88,8 +88,7 @@ class KaleidoscopeCore:
         if file_type == FileType.BINARY:
             decompiled_path = os.path.join(self.decompiled_dir, os.path.basename(file_path) + "_decompiled.txt")
             with open(decompiled_path, 'w') as f:
-                f.write("Decompiled binary content (simulated)
-")
+                f.write("Decompiled binary content (simulated)\n")
             result["decompiled_files"].append(decompiled_path)
 
         return result
