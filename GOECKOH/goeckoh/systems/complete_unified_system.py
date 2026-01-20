@@ -246,7 +246,9 @@ class EchoGoeckohSystem:
 
     @voice_name.setter
     def voice_name(self, value):
-        self._active_voice = value"""
+        self._active_voice = value
+
+"""
 COMPLETE UNIFIED NEURO-ACOUSTIC AGI SYSTEM
 ==========================================
 
