@@ -238,6 +238,18 @@
                 </div>
             </div>
 
+            <!-- ABA Skill Progress panel -->
+            <div id="abaPanel" style="margin-bottom:1.5rem">
+                <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#64748b;margin-bottom:0.75rem">
+                    ABA Skill Progress
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.6rem" id="abaGrid">
+                    <div class="glass-panel p-3" style="color:#94a3b8;font-size:0.75rem;text-align:center">
+                        Waiting for session data…
+                    </div>
+                </div>
+            </div>
+
             <!-- Guardian note -->
             <div style="background:#fefce8;border:1px solid #fde68a;border-radius:10px;padding:0.9rem 1.1rem;font-size:0.75rem;color:#78350f;line-height:1.65">
                 <strong>Note for caregivers:</strong> Metrics update in real time while the user's session is active. Normal HNR is ≥11 dB on sustained vowels. F1 and F2 positions indicate vowel space coverage — wider spread = better articulation. Latency under 50ms keeps the corrected signal within the brain's corollary discharge window.
@@ -450,6 +462,62 @@
 
                 fetchStats();
                 setInterval(fetchStats, 30000);  // refresh every 30s
+
+                // ── ABA progress panel ────────────────────────────────────────
+                const LEVEL_LABELS = ['', 'Prompted', 'Partial', 'Independent'];
+                const CAT_COLORS   = { phonology:'#6366f1', fluency:'#22c55e', regulation:'#f59e0b' };
+
+                function renderAba(data) {
+                    const grid = document.getElementById('abaGrid');
+                    if (!grid || data.status === 'no_data' || !data.skills) return;
+                    const cards = [];
+                    for (const [cat, skills] of Object.entries(data.skills)) {
+                        for (const [sk, p] of Object.entries(skills)) {
+                            if (p.attempts === 0) continue;
+                            const pct  = p.mastery;
+                            const col  = CAT_COLORS[cat] || '#94a3b8';
+                            const barW = Math.round(pct);
+                            cards.push(`
+                              <div class="glass-panel p-3">
+                                <div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;color:${col};margin-bottom:0.25rem">${cat}</div>
+                                <div style="font-size:0.78rem;font-weight:600;color:#0f172a;margin-bottom:0.3rem">${sk.replace(/_/g,' ')}</div>
+                                <div style="background:#e2e8f0;border-radius:4px;height:6px;margin-bottom:0.3rem">
+                                  <div style="background:${col};width:${barW}%;height:100%;border-radius:4px;transition:width 0.5s"></div>
+                                </div>
+                                <div style="font-size:0.65rem;color:#64748b;display:flex;justify-content:space-between">
+                                  <span>${pct.toFixed(0)}% mastery</span>
+                                  <span>Lv ${p.level} · ${LEVEL_LABELS[p.level]}</span>
+                                </div>
+                                <div style="font-size:0.6rem;color:#94a3b8">${p.successes}/${p.attempts} attempts</div>
+                              </div>`);
+                        }
+                    }
+                    if (cards.length) {
+                        grid.innerHTML = cards.join('');
+                    }
+                    if (data.session && data.session.flow_pct != null) {
+                        const note = `Session: ${data.session.flow_pct}% FLOW · ${data.session.meltdown_pct}% MELTDOWN`;
+                        let tag = document.getElementById('abaSessionNote');
+                        if (!tag) {
+                            tag = document.createElement('div');
+                            tag.id = 'abaSessionNote';
+                            tag.style.cssText = 'font-size:0.65rem;color:#94a3b8;margin-top:0.4rem;text-align:right';
+                            document.getElementById('abaPanel').appendChild(tag);
+                        }
+                        tag.textContent = note;
+                    }
+                }
+
+                async function fetchAba() {
+                    try {
+                        const resp = await fetch(BACKEND_HTTP + '/session/aba-progress');
+                        if (!resp.ok) return;
+                        renderAba(await resp.json());
+                    } catch (_) {}
+                }
+
+                fetchAba();
+                setInterval(fetchAba, 30000);
             })();
             </script>
 

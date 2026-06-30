@@ -858,6 +858,34 @@ async def ws_monitor(websocket: WebSocket, code: str):
 # Override via SESSION_LOG_PATH environment variable.
 _SESSION_LOG_DEFAULT = Path.home() / ".goeckoh" / "sessions" / "session_log.jsonl"
 
+@app.get("/session/aba-progress")
+async def session_aba_progress(request: Request,
+                               aba_path: Optional[str] = None):
+    """Return ABA skill mastery report as JSON.
+
+    Reads ~/.goeckoh/aba_progress.json written by AbaTracker in realtime_loop.
+    Returns per-skill attempts, successes, mastery %, level (1/2/3).
+    """
+    _aba_default = Path.home() / ".goeckoh" / "aba_progress.json"
+    path = Path(aba_path) if aba_path else Path(
+        os.getenv("ABA_PROGRESS_PATH", str(_aba_default)))
+
+    if not path.exists():
+        return JSONResponse(content={
+            "status": "no_data",
+            "skills": {},
+            "session": {}
+        })
+
+    try:
+        data = json.loads(path.read_text())
+        data["status"] = "ok"
+        return JSONResponse(content=data)
+    except Exception as exc:
+        log.warning("ABA progress read failed: %s", exc)
+        return JSONResponse(content={"status": "error", "detail": str(exc)})
+
+
 @app.get("/session/stats")
 async def session_stats(request: Request,
                         log_path: Optional[str] = None):
