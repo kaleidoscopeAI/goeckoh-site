@@ -1,0 +1,46 @@
+# ── Secrets ──────────────────────────────────────────────────────────────────
+.env
+**/.env
+
+# ── Python ───────────────────────────────────────────────────────────────────
+backend/venv/
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.pytest_cache/
+
+# ── Database ─────────────────────────────────────────────────────────────────
+*.db
+*.db-shm
+*.db-wal
+
+# ── Logs ─────────────────────────────────────────────────────────────────────
+*.log
+
+# ── Backend downloads (binaries deployed separately) ─────────────────────────
+backend/downloads/*.tar.gz
+backend/downloads/*.zip
+backend/downloads/*.apk
+backend/downloads/SHA256SUMS.txt
+
+# ── Legacy / archive (local only — never pushed) ─────────────────────────────
+_archive/
+
+# ── Editor & OS ──────────────────────────────────────────────────────────────
+.vscode/
+.codacy/
+.DS_Store
+Thumbs.db
+*.swp
+
+# ── Large binary files ────────────────────────────────────────────────────────
+*.zip
+*.tar.gz
+*.bz2
+*.so
+*.bin
+
+# ── Codacy AI rules ───────────────────────────────────────────────────────────
+.github/instructions/codacy.instructions.md

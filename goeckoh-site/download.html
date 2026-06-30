@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Download GOECKOH — Go Echo Speech Mirror</title>
+  <meta name="description" content="Download Goeckoh (Go Echo), the identity-matched speech mirror that corrects speech and replays it in the user's own voice.">
+  <meta property="og:title" content="Download GOECKOH — Go Echo Speech Mirror">
+  <meta property="og:description" content="Offline-first. Identity-matched. Sub-50ms latency.">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="goeckoh-shared.css">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--gk-font);
+      background: var(--gk-bg);
+      color: var(--gk-text);
+      min-height: 100vh;
+    }
+
+    .page {
+      padding: calc(var(--gk-nav-h) + 4rem) 1.5rem 5rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .dl-hero { text-align: center; margin-bottom: 3.5rem; }
+    .dl-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(0,245,160,0.07);
+      border: 1px solid rgba(0,245,160,0.15);
+      color: var(--gk-green);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.9rem;
+      border-radius: 999px;
+      margin-bottom: 1.25rem;
+    }
+    .dl-title {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      margin-bottom: 0.85rem;
+    }
+    .dl-title .g {
+      background: linear-gradient(130deg, var(--gk-green) 20%, var(--gk-blue) 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .dl-lead {
+      font-size: 1rem;
+      color: var(--gk-text-2);
+      line-height: 1.75;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .platform-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .platform-card {
+      background: var(--gk-bg-card);
+      border: 1px solid var(--gk-border);
+      border-radius: var(--gk-radius);
+      padding: 1.75rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      text-align: center;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .platform-card:hover { border-color: var(--gk-border-2); transform: translateY(-2px); }
+
+    .platform-icon { font-size: 2.2rem; }
+    .platform-name { font-size: 1rem; font-weight: 700; }
+    .platform-pkg  { font-size: 0.72rem; color: var(--gk-muted); font-family: var(--gk-mono); margin-bottom: 0.5rem; }
+
+    .dl-btn {
+      display: block;
+      width: 100%;
+      padding: 0.65rem;
+      border-radius: 999px;
+      background: var(--gk-green);
+      color: #080d18;
+      font-family: var(--gk-font);
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-decoration: none;
+      text-align: center;
+      transition: opacity 0.15s, transform 0.15s;
+      margin-top: auto;
+    }
+    .dl-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    .android-row {
+      background: var(--gk-bg-card);
+      border: 1px solid var(--gk-border);
+      border-radius: var(--gk-radius);
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .android-icon { font-size: 2rem; flex-shrink: 0; }
+    .android-info { flex: 1; }
+    .android-name { font-weight: 700; margin-bottom: 0.2rem; }
+    .android-meta { font-size: 0.75rem; color: var(--gk-muted); font-family: var(--gk-mono); }
+
+    @media (max-width: 520px) {
+      .android-row { flex-direction: column; text-align: center; }
+    }
+
+    .callout {
+      background: rgba(0,195,255,0.05);
+      border: 1px solid rgba(0,195,255,0.18);
+      border-radius: var(--gk-radius-sm);
+      padding: 1.1rem 1.4rem;
+      font-size: 0.83rem;
+      color: var(--gk-text-2);
+      line-height: 1.7;
+    }
+    .callout strong { color: var(--gk-text); }
+    .callout a { color: var(--gk-blue); text-decoration: none; }
+    .callout a:hover { text-decoration: underline; }
+
+    .browser-notice { margin-top: 3rem; text-align: center; }
+    .browser-notice p { font-size: 0.82rem; color: var(--gk-muted); margin-bottom: 1rem; }
+    .tool-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.6rem; }
+    .tool-links a {
+      font-size: 0.78rem;
+      color: var(--gk-text-2);
+      text-decoration: none;
+      padding: 0.35rem 0.85rem;
+      border: 1px solid var(--gk-border);
+      border-radius: 999px;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .tool-links a:hover { border-color: var(--gk-green); color: var(--gk-green); }
+
+    .site-footer {
+      border-top: 1px solid var(--gk-border);
+      padding: 2rem 1.5rem;
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footer-brand { font-size: 0.82rem; font-weight: 800; letter-spacing: 0.1em; color: var(--gk-text-2); }
+    .footer-brand span { color: var(--gk-green); }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { font-size: 0.75rem; color: var(--gk-muted); text-decoration: none; }
+    .footer-links a:hover { color: var(--gk-text); }
+    .footer-year { font-size: 0.72rem; color: var(--gk-muted); }
+  </style>
+</head>
+<body>
+
+  <nav class="gk-nav">
+    <a href="index.html" class="gk-nav-brand">
+      <img src="images/logo-clean.png" alt="Goeckoh" class="gk-nav-logo">
+      <div>
+        <div class="gk-nav-brand-name">GOECK<span>OH</span></div>
+        <div class="gk-nav-brand-sub">Go Echo</div>
+      </div>
+    </a>
+    <div class="gk-nav-links" id="gkNav">
+      <a href="real_time_therapeutic_voice_cloning_system.html" class="gk-nav-link">Echo Therapy</a>
+      <a href="advanced_voice_visualizer_pro.html"              class="gk-nav-link">Visualizer</a>
+      <a href="voice_therapy_profile_transform.html"            class="gk-nav-link">Profile Lab</a>
+      <a href="goeckoh_dashboard.html"                          class="gk-nav-link">Dashboard</a>
+      <a href="observatory.html"                                 class="gk-nav-link">Observatory</a>
+      <a href="voice_setup.html"                                class="gk-nav-link">Setup</a>
+    </div>
+    <a href="download.html" class="gk-nav-cta" style="background:var(--gk-blue)!important">↓ Download</a>
+    <button class="gk-nav-toggle" onclick="document.getElementById('gkNav').classList.toggle('gk-open')" aria-label="Menu">☰</button>
+  </nav>
+
+  <main class="page">
+    <div class="dl-hero">
+      <div class="dl-pill">◈ Offline-First · Identity-Matched · Sub-50ms</div>
+      <h1 class="dl-title">Download <span class="g">Goeckoh</span></h1>
+      <p class="dl-lead">Get the Go Echo speech mirror for your platform. Corrected speech replayed in your own voice — entirely on-device, no cloud required.</p>
+    </div>
+
+    <div class="platform-grid">
+      <div class="platform-card">
+        <div class="platform-icon">🪟</div>
+        <div class="platform-name">Windows</div>
+        <div class="platform-pkg">.exe installer</div>
+        <a href="downloads/goeckoh-windows.exe" class="dl-btn">Download</a>
+      </div>
+      <div class="platform-card">
+        <div class="platform-icon">🍎</div>
+        <div class="platform-name">macOS</div>
+        <div class="platform-pkg">.dmg installer</div>
+        <a href="downloads/goeckoh-macos.dmg" class="dl-btn">Download</a>
+      </div>
+      <div class="platform-card">
+        <div class="platform-icon">🐧</div>
+        <div class="platform-name">Linux</div>
+        <div class="platform-pkg">.AppImage</div>
+        <a href="downloads/goeckoh-linux.AppImage" class="dl-btn">Download</a>
+      </div>
+    </div>
+
+    <div class="android-row">
+      <div class="android-icon">🤖</div>
+      <div class="android-info">
+        <div class="android-name">Android</div>
+        <div class="android-meta">.apk · sideload install</div>
+      </div>
+      <a href="downloads/goeckoh-android.apk" class="dl-btn" style="min-width:140px;width:auto;padding:0.65rem 1.5rem">Download APK</a>
+    </div>
+
+    <div class="callout">
+      <strong>Having trouble?</strong> Check our <a href="support.html">support page</a>, or try opening the tools directly in your browser — no install needed.
+    </div>
+
+    <div class="browser-notice">
+      <p>Or launch the browser tools right now — no download required:</p>
+      <div class="tool-links">
+        <a href="real_time_therapeutic_voice_cloning_system.html">Echo Therapy</a>
+        <a href="advanced_voice_visualizer_pro.html">Visualizer</a>
+        <a href="voice_therapy_profile_transform.html">Profile Lab</a>
+        <a href="goeckoh_dashboard.html">Dashboard</a>
+        <a href="observatory.html">Observatory</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-brand">GOECK<span>OH</span> — "Go Echo"</div>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="voice_setup.html">Setup</a>
+    </div>
+    <div class="footer-year">© <span id="year"></span> Goeckoh. All rights reserved.</div>
+  </footer>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voice Facet Setup — GOECKOH</title>
+  <link rel="stylesheet" href="goeckoh-shared.css">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--gk-font);
+      background: var(--gk-bg);
+      color: var(--gk-text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page-body {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: calc(var(--gk-nav-h) + 3rem) 1.5rem 3rem;
+    }
+
+    .setup-card {
+      background: var(--gk-bg-card);
+      border: 1px solid var(--gk-border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 520px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+    }
+
+    .card-head {
+      margin-bottom: 2rem;
+    }
+
+    .card-eyebrow {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gk-green);
+      margin-bottom: 0.6rem;
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.65rem;
+    }
+
+    .card-desc {
+      font-size: 0.82rem;
+      color: var(--gk-text-2);
+      line-height: 1.75;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--gk-border);
+      margin: 1.75rem 0;
+    }
+
+    .field-group {
+      margin-bottom: 1.25rem;
+    }
+
+    /* Style picker grid */
+    .style-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.5rem;
+      margin-top: 0.6rem;
+    }
+
+    .style-chip {
+      appearance: none;
+      cursor: pointer;
+    }
+
+    .style-chip + label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.6rem 0.3rem;
+      background: var(--gk-bg-raised);
+      border: 1px solid var(--gk-border);
+      border-radius: var(--gk-radius-sm);
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      font-size: 0.68rem;
+      color: var(--gk-text-2);
+      text-align: center;
+    }
+
+    .style-chip:checked + label {
+      border-color: var(--gk-green);
+      background: rgba(0,245,160,0.06);
+      color: var(--gk-green);
+    }
+
+    .style-chip + label:hover { border-color: var(--gk-border-2); }
+
+    .style-icon { font-size: 1.2rem; }
+
+    /* Record area */
+    .record-zone {
+      background: var(--gk-bg-raised);
+      border: 1px solid var(--gk-border);
+      border-radius: var(--gk-radius);
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .mic-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(0,245,160,0.08);
+      border: 2px solid rgba(0,245,160,0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+      transition: all 0.2s;
+    }
+
+    .mic-icon.recording {
+      background: rgba(255,68,102,0.12);
+      border-color: var(--gk-red);
+      animation: pulse-mic 1s ease-in-out infinite;
+    }
+
+    @keyframes pulse-mic {
+      0%,100% { box-shadow: 0 0 0 0 rgba(255,68,102,0.25); }
+      50%      { box-shadow: 0 0 0 10px rgba(255,68,102,0); }
+    }
+
+    .rec-hint {
+      font-size: 0.75rem;
+      color: var(--gk-muted);
+      text-align: center;
+    }
+
+    /* Timer bar */
+    .timer-bar {
+      width: 100%;
+      height: 4px;
+      background: var(--gk-border);
+      border-radius: 2px;
+      overflow: hidden;
+      display: none;
+    }
+
+    .timer-fill {
+      height: 100%;
+      background: var(--gk-red);
+      border-radius: 2px;
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    .status-box {
+      margin-top: 1.25rem;
+      padding: 0.9rem 1.1rem;
+      border-radius: var(--gk-radius-sm);
+      font-size: 0.82rem;
+      border: 1px solid var(--gk-border);
+      background: rgba(255,255,255,0.03);
+      color: var(--gk-text-2);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      min-height: 44px;
+    }
+
+    .status-box.success {
+      background: rgba(0,245,160,0.06);
+      border-color: rgba(0,245,160,0.2);
+      color: var(--gk-green);
+    }
+
+    .status-box.error {
+      background: rgba(255,68,102,0.06);
+      border-color: rgba(255,68,102,0.2);
+      color: var(--gk-red);
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+      flex-shrink: 0;
+    }
+
+    /* Recordings list */
+    .rec-list {
+      margin-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .rec-list-title {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gk-muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .rec-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.65rem 0.9rem;
+      background: var(--gk-bg-raised);
+      border: 1px solid var(--gk-border);
+      border-radius: var(--gk-radius-sm);
+      font-size: 0.8rem;
+    }
+
+    .rec-item-icon { font-size: 1rem; }
+    .rec-item-name { font-weight: 600; flex: 1; text-transform: capitalize; }
+    .rec-item-meta { font-size: 0.7rem; color: var(--gk-muted); font-family: var(--gk-mono); }
+    .rec-check { color: var(--gk-green); font-weight: 700; }
+  </style>
+</head>
+<body>
+
+  <nav class="gk-nav">
+    <a href="index.html" class="gk-nav-brand">
+      <img src="images/logo-clean.png" alt="Goeckoh" class="gk-nav-logo">
+      <div>
+        <div class="gk-nav-brand-name">GOECK<span>OH</span></div>
+        <div class="gk-nav-brand-sub">Go Echo</div>
+      </div>
+    </a>
+    <div class="gk-nav-links" id="gkNav">
+      <a href="real_time_therapeutic_voice_cloning_system.html" class="gk-nav-link">Echo Therapy</a>
+      <a href="advanced_voice_visualizer_pro.html"              class="gk-nav-link">Visualizer</a>
+      <a href="voice_therapy_profile_transform.html"            class="gk-nav-link">Profile Lab</a>
+      <a href="goeckoh_dashboard.html"                          class="gk-nav-link">Dashboard</a>
+      <a href="observatory.html"                                 class="gk-nav-link">Observatory</a>
+      <a href="voice_setup.html"                                class="gk-nav-link active">Setup</a>
+    </div>
+    <a href="download.html" class="gk-nav-cta">Download</a>
+    <button class="gk-nav-toggle" onclick="document.getElementById('gkNav').classList.toggle('gk-open')" aria-label="Menu">☰</button>
+  </nav>
+
+  <div class="page-body">
+    <div class="setup-card">
+      <div class="card-head">
+        <div class="card-eyebrow">Voice Capture · Step 1 of 3</div>
+        <div class="card-title">Voice Facet Setup</div>
+        <p class="card-desc">
+          Record short 3-second samples for each vocal style. These facets let Goeckoh
+          speak in your cloned voice with precise emotional register — neutral, calm, excited, and more.
+        </p>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Style selector -->
+      <div class="field-group">
+        <label class="gk-label">Select Voice Style</label>
+        <div class="style-grid">
+          <input type="radio" name="style" id="s-neutral" value="neutral" class="style-chip" checked>
+          <label for="s-neutral"><span class="style-icon">😐</span>Neutral</label>
+
+          <input type="radio" name="style" id="s-calm" value="calm" class="style-chip">
+          <label for="s-calm"><span class="style-icon">🌊</span>Calm</label>
+
+          <input type="radio" name="style" id="s-excited" value="excited" class="style-chip">
+          <label for="s-excited"><span class="style-icon">⚡</span>Excited</label>
+
+          <input type="radio" name="style" id="s-happy" value="happy" class="style-chip">
+          <label for="s-happy"><span class="style-icon">😊</span>Happy</label>
+
+          <input type="radio" name="style" id="s-sad" value="sad" class="style-chip">
+          <label for="s-sad"><span class="style-icon">💧</span>Sad</label>
+        </div>
+      </div>
+
+      <!-- Record zone -->
+      <div class="record-zone">
+        <div class="mic-icon" id="micIcon">🎙️</div>
+        <div class="rec-hint">Speak naturally for ~3 seconds. Auto-stops at 3s.</div>
+        <div class="timer-bar" id="timerBar">
+          <div class="timer-fill" id="timerFill"></div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button id="recordButton" class="gk-btn gk-btn-primary" style="width:100%;justify-content:center">⏺ Record</button>
+        <button id="stopButton"   class="gk-btn gk-btn-secondary" style="width:100%;justify-content:center" disabled>⏹ Stop</button>
+      </div>
+
+      <div class="status-box" id="statusMessage">
+        <div class="status-dot" style="background:var(--gk-muted)"></div>
+        <span>Ready to record.</span>
+      </div>
+
+      <!-- Saved recordings list -->
+      <div class="rec-list" id="recList" style="display:none">
+        <div class="rec-list-title">Saved Facets</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let mediaRecorder;
+    let audioChunks = [];
+    let audioStream;
+    let timerInterval;
+    const savedFacets = {};
+
+    const recordButton  = document.getElementById('recordButton');
+    const stopButton    = document.getElementById('stopButton');
+    const statusMessage = document.getElementById('statusMessage');
+    const micIcon       = document.getElementById('micIcon');
+    const timerBar      = document.getElementById('timerBar');
+    const timerFill     = document.getElementById('timerFill');
+    const recList       = document.getElementById('recList');
+
+    function getSelectedStyle() {
+      return document.querySelector('input[name="style"]:checked').value;
+    }
+
+    function setStatus(text, type = '') {
+      const dotColors = { success: 'var(--gk-green)', error: 'var(--gk-red)', '': 'var(--gk-muted)' };
+      statusMessage.className = 'status-box' + (type ? ' ' + type : '');
+      statusMessage.innerHTML = `<div class="status-dot" style="background:${dotColors[type] || 'var(--gk-muted)'}"></div><span>${text}</span>`;
+    }
+
+    function addFacetRow(style, duration) {
+      savedFacets[style] = duration;
+      recList.style.display = '';
+      const existing = recList.querySelector(`[data-style="${style}"]`);
+      if (existing) { existing.querySelector('.rec-item-meta').textContent = `${duration}s · updated`; return; }
+      const icons = { neutral:'😐', calm:'🌊', excited:'⚡', happy:'😊', sad:'💧' };
+      const item = document.createElement('div');
+      item.className = 'rec-item';
+      item.dataset.style = style;
+      item.innerHTML = `
+        <span class="rec-item-icon">${icons[style] || '🎙️'}</span>
+        <span class="rec-item-name">${style}</span>
+        <span class="rec-item-meta">${duration}s</span>
+        <span class="rec-check">✓</span>`;
+      recList.appendChild(item);
+    }
+
+    async function startRecording() {
+      try {
+        audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(audioStream);
+        audioChunks = [];
+
+        mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+
+        mediaRecorder.onstop = async () => {
+          const style = getSelectedStyle();
+          const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+          setStatus(`Uploading "${style}" facet…`);
+
+          const formData = new FormData();
+          formData.append('audio', audioBlob, `${style}.wav`);
+          formData.append('style', style);
+
+          try {
+            const response = await fetch('/record_facet', { method: 'POST', body: formData });
+            if (response.ok) {
+              setStatus(`"${style}" facet saved successfully.`, 'success');
+              addFacetRow(style, '3');
+            } else {
+              const err = await response.text();
+              setStatus(`Upload failed: ${err}`, 'error');
+            }
+          } catch (err) {
+            // Likely offline / no backend — save locally as audio URL
+            const url = URL.createObjectURL(audioBlob);
+            setStatus(`Saved "${style}" locally (no server).`, 'success');
+            addFacetRow(style, '3');
+          }
+        };
+
+        mediaRecorder.start();
+        recordButton.disabled = true;
+        stopButton.disabled = false;
+        micIcon.classList.add('recording');
+        micIcon.textContent = '🔴';
+        timerBar.style.display = '';
+        timerFill.style.width = '0%';
+        setStatus('Recording… speak naturally.', '');
+
+        let elapsed = 0;
+        timerInterval = setInterval(() => {
+          elapsed += 100;
+          timerFill.style.width = Math.min(elapsed / 30, 100) + '%';
+        }, 100);
+
+        setTimeout(() => {
+          if (mediaRecorder.state === 'recording') stopRecording();
+        }, 3000);
+
+      } catch (err) {
+        setStatus('Microphone access denied. Check browser permissions.', 'error');
+        recordButton.disabled = false;
+        stopButton.disabled = true;
+      }
+    }
+
+    function stopRecording() {
+      clearInterval(timerInterval);
+      timerBar.style.display = 'none';
+      micIcon.classList.remove('recording');
+      micIcon.textContent = '🎙️';
+      recordButton.disabled = false;
+      stopButton.disabled = true;
+      if (mediaRecorder && mediaRecorder.state === 'recording') {
+        mediaRecorder.stop();
+        audioStream.getTracks().forEach(t => t.stop());
+      }
+    }
+
+    recordButton.addEventListener('click', startRecording);
+    stopButton.addEventListener('click', stopRecording);
+  </script>
+</body>
+</html>

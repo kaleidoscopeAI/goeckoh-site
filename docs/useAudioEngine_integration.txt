@@ -1,0 +1,86 @@
+INTEGRATION — corrected spectral path in useAudioEngine.js
+==========================================================
+
+Place dspSpectralFixed.js at:  frontend/src/lib/dspSpectralFixed.js
+(It imports BARK_EDGES from ../data/voiceData, which already exists.)
+
+The fix is deliberately small: the feature formulas in dsp.js were already
+correct FOR LINEAR MAGNITUDE. The bug was that the engine fed them
+getByteFrequencyData()/255 (clipped, quantized dB). So we change what is fed,
+not the formulas. The byte path stays for the Spectrum/Spectrogram visuals.
+
+
+STEP 1 — import (top of useAudioEngine.js)
+------------------------------------------
+  import { linearMagnitudeFromDb, spectralShape } from "../lib/dspSpectralFixed";
+
+  // spectralFeatures and spectralTilt are no longer used for METRICS; spectralShape
+  // replaces both. Keep barkBands / pickFormants / spectralFlux imports.
+
+
+STEP 2 — add a dB scratch ref (next to freqRef / magRef)
+--------------------------------------------------------
+  const dbRef = useRef(new Float32Array(1024));   // getFloatFrequencyData target
+
+
+STEP 3 — inside loop(), replace the spectral block
+--------------------------------------------------
+REMOVE:
+  const freq = freqRef.current, mag = magRef.current;
+  an.getFloatTimeDomainData(time);
+  an.getByteFrequencyData(freq);
+  for (let i = 0; i < bins; i++) mag[i] = freq[i] / 255;
+
+  const r = rms(time);
+  const { f0, clarity } = autocorrPitch(time, sr);
+  const hnr = hnrFromClarity(clarity);
+  const sf = spectralFeatures(mag, sr, size);
+  const flux = spectralFlux(mag, prevMag.current);
+  prevMag.current = mag.slice();
+  const tilt = spectralTilt(mag, sr, size);
+  const { f1, f2, f3 } = pickFormants(mag, sr, size);
+  const zcr = zeroCrossingRate(time, sr);
+  barkRef.current = barkBands(mag, sr, size);
+
+REPLACE WITH:
+  const freq = freqRef.current, mag = magRef.current;
+  an.getFloatTimeDomainData(time);
+
+  // --- VISUAL path (unchanged): byte dB drives the spectrum bars & spectrogram ---
+  an.getByteFrequencyData(freq);
+  for (let i = 0; i < bins; i++) mag[i] = freq[i] / 255;
+  barkRef.current = barkBands(mag, sr, size); // visual Bark panel only
+
+  // --- MEASUREMENT path (corrected): float dB -> floored linear magnitude ---
+  if (dbRef.current.length !== bins) dbRef.current = new Float32Array(bins);
+  an.getFloatFrequencyData(dbRef.current);
+  const magLin = linearMagnitudeFromDb(dbRef.current);
+
+  const r = rms(time);
+  const { f0, clarity } = autocorrPitch(time, sr); // time-domain, already correct
+  const hnr = hnrFromClarity(clarity);
+  const sf = spectralShape(magLin, sr, size);       // centroid/spread/rolloff/flatness/crest/tilt
+  const tilt = sf.tilt;
+  const flux = spectralFlux(magLin, prevMag.current);
+  prevMag.current = magLin.slice();
+  const { f1, f2, f3 } = pickFormants(magLin, sr, size);
+  const zcr = zeroCrossingRate(time, sr);
+
+
+STEP 4 — the feature object `f` needs no key changes
+----------------------------------------------------
+sf still exposes .centroid .spread .rolloff .flatness .crest, so the existing
+lines (sf.centroid, sf.spread, sf.rolloff, sf.flatness, sf.crest) keep working.
+Optionally surface the flatness floor for honest labeling:
+
+  flatnessFloorDb: sf.floorDb,   // e.g. show "flatness 0.04 @ -80 dB" in the tile
+
+
+WHAT THIS DOES / DOES NOT CHANGE
+--------------------------------
+Fixes (verified): centroid no longer +129% high; reads ~497-504 Hz for a
+500/1500 Hz vowel instead of 3465 Hz. Floor-stable from 60 dB on.
+Honest now: flatness and tilt are floor-referenced; floorDb is reported.
+Unchanged: F0 (time-domain, was already accurate), the visual spectrum/
+spectrogram (byte dB is correct for a dB display), and the backend /api/analyze
+(already linear-domain; remains the verifier for formants/HNR/tilt).

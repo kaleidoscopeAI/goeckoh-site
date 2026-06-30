@@ -1,0 +1,14 @@
+[Unit]
+Description=Goeckoh License Server Backend
+After=network.target
+
+[Service]
+User=jacob
+WorkingDirectory=/home/jacob/Desktop/collective/goeckoh-platform/backend
+Environment="PATH=/home/jacob/Desktop/collective/goeckoh-platform/backend/venv/bin"
+EnvironmentFile=/home/jacob/Desktop/collective/goeckoh-platform/.env
+ExecStart=/home/jacob/Desktop/collective/goeckoh-platform/backend/venv/bin/python -m uvicorn main:app --host 0.0.0.0 --port 8000
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Semantic Crystal Observatory</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --paper:#ECE6D8;        /* warm field-journal ground */
+    --paper-2:#E3DBC9;      /* card / inset */
+    --ink:#2A241C;          /* walnut ink */
+    --ink-soft:#6B6256;     /* faded annotation */
+    --rule:#C9BFA8;         /* hairline */
+    --verdigris:#6E7B5E;    /* oxidized copper accent */
+    --iron:#B5512F;         /* iron-oxide — reserved for live signal only */
+    --plate:#16140F;        /* the dark inside the specimen plate */
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    --sans:"Avenir Next",ui-sans-serif,system-ui,"Segoe UI",sans-serif;
+    --mono:"SFMono-Regular",ui-monospace,Menlo,Consolas,monospace;
+  }
+  html,body{width:100%;height:100%;background:var(--paper);color:var(--ink);
+    font-family:var(--sans);overflow:hidden}
+
+  /* the cabinet frame: a header card like a specimen ledger */
+  #ledger{position:fixed;top:0;left:0;right:0;z-index:10;
+    background:var(--paper);border-bottom:1px solid var(--rule);
+    padding:14px 22px 12px;display:flex;align-items:baseline;gap:18px}
+  #ledger .plate-no{font-family:var(--mono);font-size:11px;color:var(--ink-soft);
+    letter-spacing:.12em}
+  #ledger h1{font-family:var(--serif);font-weight:500;font-size:20px;
+    letter-spacing:.01em}
+  #ledger h1 em{font-style:italic;color:var(--verdigris)}
+  #ledger .sub{font-size:12px;color:var(--ink-soft);margin-left:auto;
+    font-style:italic;font-family:var(--serif)}
+
+  /* the input reads like a field note being written */
+  #compose{position:fixed;top:54px;left:0;right:0;z-index:10;
+    display:flex;gap:0;padding:10px 22px 12px;background:var(--paper);
+    border-bottom:1px solid var(--rule);align-items:center}
+  #compose label{font-family:var(--mono);font-size:10px;letter-spacing:.16em;
+    color:var(--ink-soft);text-transform:uppercase;margin-right:14px}
+  #prompt{flex:1;background:transparent;border:none;border-bottom:1px solid var(--rule);
+    color:var(--ink);font-family:var(--serif);font-size:17px;font-style:italic;
+    padding:6px 2px;outline:none}
+  #prompt::placeholder{color:var(--ink-soft);opacity:.7}
+  #prompt:focus{border-bottom-color:var(--verdigris)}
+  button{background:transparent;border:1px solid var(--ink);color:var(--ink);
+    font-family:var(--mono);font-size:11px;letter-spacing:.14em;padding:9px 16px;
+    margin-left:16px;cursor:pointer;text-transform:uppercase;transition:.18s}
+  button:hover{background:var(--ink);color:var(--paper)}
+
+  /* the specimen plate: the only dark surface, framed like a mounted slide */
+  #plate-frame{position:fixed;top:104px;left:22px;right:22px;bottom:54px;z-index:1;
+    border:1px solid var(--rule);background:var(--plate);
+    box-shadow:inset 0 0 0 6px var(--paper),inset 0 0 0 7px var(--rule)}
+  canvas{display:block;border-radius:1px}
+
+  /* specimen label, lower-left, like a museum card */
+  #label{position:fixed;left:42px;bottom:74px;z-index:10;max-width:48%;
+    pointer-events:none}
+  #label .taxon{font-family:var(--serif);font-style:italic;font-size:15px;
+    color:var(--paper);text-shadow:0 1px 6px #000;line-height:1.5}
+  #label .taxon b{font-style:normal;color:var(--iron);font-weight:600}
+
+  /* footer readout strip */
+  #strip{position:fixed;left:22px;right:22px;bottom:0;z-index:10;height:54px;
+    display:flex;align-items:center;gap:28px;padding:0 8px;
+    font-family:var(--mono);font-size:11px;color:var(--ink-soft);
+    letter-spacing:.06em}
+  #strip .k{color:var(--ink);font-weight:600}
+  #strip .live{color:var(--iron)}
+  #strip .gloss{margin-left:auto;font-family:var(--serif);font-style:italic;
+    color:var(--ink-soft);letter-spacing:0}
+  @media(max-width:640px){#label{max-width:80%}#ledger .sub{display:none}}
+</style>
+</head>
+<body>
+<div id="ledger">
+  <span class="plate-no">PLATE I</span>
+  <h1>Semantic Crystal <em>Observatory</em></h1>
+  <span class="sub">forms of thought, observed as they settle</span>
+</div>
+
+<div id="compose">
+  <label for="prompt">Observe</label>
+  <input id="prompt" placeholder="the bear in the woods near the river…"/>
+  <button onclick="speak()">Record</button>
+</div>
+
+<div id="plate-frame"></div>
+
+<div id="label"><div class="taxon" id="taxon">—</div></div>
+
+<div id="strip">
+  <span>stream <span class="k live" id="st">connecting…</span></span>
+  <span>rate <span class="k" id="fps">—</span> fps</span>
+  <span class="gloss">drag to orbit · scroll to draw near · the crystal is the thought</span>
+</div>
+
+<script src="three.min.js"></script>
+<script>
+// ── protocol (must match crystal_engine.py exactly: verified server-side) ──
+// Served same-origin by crystal_server.py — host comes from the address bar.
+const HOST = location.host || 'localhost:8765';
+const NODE_COUNT = 50000, FPN = 5, HEADER_SIZE = 8;
+
+// ── three.js scene ──
+const frame = document.getElementById('plate-frame');
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(70, frame.clientWidth/frame.clientHeight, .1, 4000);
+camera.position.set(120, 80, 160);
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(frame.clientWidth, frame.clientHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setClearColor(0x16140f);
+frame.appendChild(renderer.domElement);
+
+const geo = new THREE.BufferGeometry();
+const pos = new Float32Array(NODE_COUNT*3);
+const resn = new Float32Array(NODE_COUNT);
+const seq = new Float32Array(NODE_COUNT);
+for (let i=0;i<NODE_COUNT;i++){           // boot nebula
+  const r=80+Math.random()*40, t=Math.random()*6.283, p=Math.random()*3.1416;
+  pos[i*3]=r*Math.sin(p)*Math.cos(t); pos[i*3+1]=r*Math.cos(p); pos[i*3+2]=r*Math.sin(p)*Math.sin(t);
+  resn[i]=Math.random()*0.2; seq[i]=Math.random();
+}
+geo.setAttribute('position', new THREE.BufferAttribute(pos,3).setUsage(THREE.DynamicDrawUsage));
+geo.setAttribute('resonance', new THREE.BufferAttribute(resn,1).setUsage(THREE.DynamicDrawUsage));
+geo.setAttribute('seq', new THREE.BufferAttribute(seq,1).setUsage(THREE.DynamicDrawUsage));
+
+const mat = new THREE.ShaderMaterial({
+  transparent:true, depthTest:false, blending:THREE.AdditiveBlending,
+  uniforms:{ uTime:{value:0}, uGrowth:{value:1} },
+  vertexShader:`
+    attribute float resonance; attribute float seq;
+    varying float vR; uniform float uTime; uniform float uGrowth;
+    void main(){
+      vR = resonance;
+      vec3 p = position;
+      // sifting: ignorance vibrates — amplitude is (1 - W), driven by the BRAIN
+      float sift = (1.0 - resonance);
+      p += vec3(sin(uTime*9.0+position.y), cos(uTime*8.0+position.z),
+                sin(uTime*7.0+position.x)) * sift * 1.6;
+      // growth mask: nodes appear in toolpath order, like a 3D print
+      float vis = step(seq, uGrowth);
+      vec4 mv = modelViewMatrix * vec4(p,1.0);
+      gl_PointSize = (1.6 + 3.4*resonance) * vis * (300.0 / -mv.z);
+      gl_Position = projectionMatrix * mv;
+    }`,
+  fragmentShader:`
+    varying float vR;
+    void main(){
+      vec2 c = gl_PointCoord - .5; if (dot(c,c) > .25) discard;
+      vec3 nebula  = vec3(0.42,0.32,0.26);   // dim umber : unformed
+      vec3 sifting = vec3(0.71,0.32,0.18);   // iron-oxide: learning
+      vec3 crystal = vec3(0.62,0.74,0.55);   // verdigris : known/settled
+      vec3 col = vR > .7 ? mix(sifting, crystal, (vR-.7)/.3)
+                         : mix(nebula,  sifting, vR/.7);
+      gl_FragColor = vec4(col, .18 + .82*vR);
+    }`
+});
+scene.add(new THREE.Points(geo, mat));
+
+// ── orbit (manual, no imports) ──
+let drag=false, px=0, py=0,
+    th=Math.atan2(camera.position.x, camera.position.z),
+    ph=Math.acos(camera.position.y/camera.position.length()),
+    rad=camera.position.length();
+const cv=renderer.domElement;
+cv.onmousedown=e=>{drag=true;px=e.clientX;py=e.clientY;};
+cv.onmouseup=()=>drag=false;
+cv.onmousemove=e=>{ if(!drag) return;
+  th-= (e.clientX-px)*.005; ph=Math.max(.05,Math.min(3.09,ph+(e.clientY-py)*.005));
+  px=e.clientX; py=e.clientY; setCam(); };
+cv.onwheel=e=>{ rad=Math.max(30,Math.min(600,rad+e.deltaY*.2)); setCam(); };
+function setCam(){ camera.position.set(rad*Math.sin(ph)*Math.sin(th),
+  rad*Math.cos(ph), rad*Math.sin(ph)*Math.cos(th)); camera.lookAt(0,0,0); }
+
+// ── binary observatory stream ──
+let growth = 1.0;
+function connectObs(){
+  const ws = new WebSocket(`ws://${HOST}/ws/observatory`);
+  ws.binaryType = 'arraybuffer';
+  ws.onopen = ()=>{ st.textContent='LIVE'; setInterval(()=>ws.readyState===1&&ws.send('PING'),5000); };
+  ws.onmessage = e=>{
+    if (!(e.data instanceof ArrayBuffer)) return;
+    const dv = new DataView(e.data);
+    if (dv.getUint8(0)!==1 || dv.getUint32(1)!==NODE_COUNT) return;   // header guard
+    const body = new Float32Array(e.data.slice(HEADER_SIZE));
+    for (let i=0;i<NODE_COUNT;i++){
+      const s=i*FPN;
+      pos[i*3]=body[s]; pos[i*3+1]=body[s+1]; pos[i*3+2]=body[s+2];
+      resn[i]=body[s+3]; seq[i]=body[s+4];
+    }
+    geo.attributes.position.needsUpdate=true;
+    geo.attributes.resonance.needsUpdate=true;
+    geo.attributes.seq.needsUpdate=true;
+  };
+  ws.onclose = ()=>{ st.textContent='RECONNECTING'; setTimeout(connectObs,2500); };
+}
+connectObs();
+
+// ── chat channel ──
+let chat=null;
+function connectChat(){
+  chat = new WebSocket(`ws://${HOST}/ws/chat`);
+  chat.onmessage = e=>{
+    try{ const m=JSON.parse(e.data);
+      if (m.type==='SCENE_META'){
+        // render as a specimen determination: name + observed solidity
+        taxon.innerHTML = m.components.map(c=>{
+          const state = c.resonance>0.7?'settled':c.resonance>0.45?'forming':'nebulous';
+          return `<b>${c.word}</b> <span style="opacity:.8">— ${state} (W ${c.resonance})</span>`;
+        }).join('<br>');
+        growth = 0;                              // re-grow the new thought
+      }
+    }catch(_){}
+  };
+  chat.onclose = ()=>setTimeout(connectChat,2500);
+}
+connectChat();
+function speak(){
+  const v = prompt_.value.trim(); if(!v||!chat||chat.readyState!==1) return;
+  chat.send(JSON.stringify({prompt:v})); prompt_.value='';
+}
+const prompt_=document.getElementById('prompt');
+prompt_.addEventListener('keydown',e=>{ if(e.key==='Enter') speak(); });
+const st=document.getElementById('st'), taxon=document.getElementById('taxon'),
+      fpsEl=document.getElementById('fps');
+
+// ── render loop ──
+let frames=0, t0=performance.now();
+(function loop(){
+  requestAnimationFrame(loop);
+  mat.uniforms.uTime.value = performance.now()*.001;
+  growth = Math.min(1, growth + 0.012);          // toolpath growth animation
+  mat.uniforms.uGrowth.value = growth;
+  renderer.render(scene, camera);
+  if (++frames && performance.now()-t0>1000){ fpsEl.textContent=frames; frames=0; t0=performance.now(); }
+})();
+addEventListener('resize',()=>{ camera.aspect=frame.clientWidth/frame.clientHeight;
+  camera.updateProjectionMatrix(); renderer.setSize(frame.clientWidth,frame.clientHeight); });
+</script>
+</body>
+</html>

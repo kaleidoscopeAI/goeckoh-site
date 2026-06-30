@@ -1,0 +1,2601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced Voice Visualizer Pro</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #121212;
+      color: #f0f0f0;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      padding: 16px 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      position: sticky;
+      top: 60px;
+      z-index: 100;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+      color: #00ffa0;
+    }
+
+    /* Theme Toggle */
+    .theme-controls {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .theme-btn {
+      padding: 6px 12px;
+      font-size: 12px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #f0f0f0;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .theme-btn:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    .theme-btn.active {
+      background: #00ffa0;
+      color: #000;
+      border-color: #00ffa0;
+    }
+
+    /* Control Panel */
+    #controlPanel {
+      background: #1e1e1e;
+      padding: 20px;
+      margin: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    }
+
+    .control-section {
+      margin-bottom: 20px;
+    }
+
+    .control-section h3 {
+      margin: 0 0 12px 0;
+      font-size: 16px;
+      color: #00ffa0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .control-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 14px;
+      border: none;
+      border-radius: 6px;
+      background: linear-gradient(135deg, #0066cc 0%, #004999 100%);
+      color: white;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    button:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,102,204,0.4);
+    }
+
+    button:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    button.stop-btn {
+      background: linear-gradient(135deg, #cc0066 0%, #990049 100%);
+    }
+
+    button.recording {
+      background: linear-gradient(135deg, #cc0000 0%, #990000 100%);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    button.success {
+      background: linear-gradient(135deg, #00cc66 0%, #009949 100%);
+    }
+
+    /* Sliders */
+    .slider-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 200px;
+    }
+
+    .slider-container label {
+      font-size: 13px;
+      min-width: 80px;
+    }
+
+    input[type="range"] {
+      flex: 1;
+      height: 6px;
+      border-radius: 3px;
+      background: #333;
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #00ffa0;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #00ffa0;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .slider-value {
+      min-width: 40px;
+      text-align: right;
+      font-size: 13px;
+      font-weight: 500;
+      color: #00ffa0;
+    }
+
+    /* Toggle Switches */
+    .toggle-switches {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .toggle-switch {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .toggle-switch input {
+      display: none;
+    }
+
+    .toggle-slider {
+      width: 44px;
+      height: 24px;
+      background: #333;
+      border-radius: 12px;
+      position: relative;
+      transition: background 0.3s;
+    }
+
+    .toggle-slider::after {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      background: white;
+      border-radius: 50%;
+      top: 3px;
+      left: 3px;
+      transition: transform 0.3s;
+    }
+
+    .toggle-switch input:checked + .toggle-slider {
+      background: #00ffa0;
+    }
+
+    .toggle-switch input:checked + .toggle-slider::after {
+      transform: translateX(20px);
+    }
+
+    .toggle-switch label {
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    /* Info Display */
+    #statusInfo {
+      background: rgba(0,255,160,0.1);
+      padding: 12px;
+      border-radius: 6px;
+      margin-top: 12px;
+      border-left: 3px solid #00ffa0;
+      font-size: 13px;
+    }
+
+    #voiceQualityScore {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      background: rgba(0,102,204,0.2);
+      border-radius: 4px;
+      margin-left: 12px;
+    }
+
+    .score-value {
+      font-weight: bold;
+      font-size: 16px;
+      color: #00ffa0;
+    }
+
+    /* Canvas Containers */
+    .viz-section {
+      margin: 20px;
+      background: #1e1e1e;
+      padding: 16px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    }
+
+    .viz-section.hidden {
+      display: none;
+    }
+
+    .viz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .viz-header h3 {
+      margin: 0;
+      font-size: 16px;
+      color: #00ffa0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .viz-controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 6px 10px;
+      font-size: 12px;
+      min-width: auto;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .icon-btn:hover {
+      background: rgba(255,255,255,0.2);
+      transform: none;
+    }
+
+    canvas {
+      display: block;
+      margin: 0 auto;
+      background: #000;
+      border: 1px solid #333;
+      border-radius: 6px;
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* Metrics Grid */
+    #metricsContainer {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .metric {
+      text-align: center;
+      background: #000;
+      padding: 12px;
+      border-radius: 6px;
+      border: 1px solid #333;
+      position: relative;
+    }
+
+    .metric canvas {
+      background: transparent;
+      border: none;
+      margin: 0;
+    }
+
+    .metric-label {
+      margin-top: 8px;
+      font-size: 13px;
+      color: #b0b0b0;
+      font-weight: 500;
+    }
+
+    .metric-value {
+      font-size: 11px;
+      color: #00ffa0;
+      margin-top: 4px;
+    }
+
+    .metric-trend {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      font-size: 16px;
+    }
+
+    .metric-minmax {
+      font-size: 10px;
+      color: #666;
+      margin-top: 2px;
+    }
+
+    /* Feature Display */
+    #featureDisplay {
+      font-size: 13px;
+      font-family: 'Courier New', monospace;
+      margin-top: 12px;
+      padding: 12px;
+      background: #000;
+      border-radius: 6px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      border: 1px solid #333;
+    }
+
+    /* Tooltip */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      cursor: help;
+      width: 16px;
+      height: 16px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      text-align: center;
+      line-height: 16px;
+      font-size: 11px;
+      color: #aaa;
+    }
+
+    .tooltip:hover::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #333;
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 6px;
+      white-space: nowrap;
+      z-index: 1000;
+      font-size: 12px;
+      margin-bottom: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    .tooltip:hover::before {
+      content: '';
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: #333;
+      margin-bottom: 2px;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-content {
+      background: #1e1e1e;
+      padding: 24px;
+      border-radius: 8px;
+      max-width: 90%;
+      max-height: 90%;
+      overflow: auto;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .modal-header h2 {
+      margin: 0;
+      color: #00ffa0;
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 0;
+      width: 32px;
+      height: 32px;
+      color: #aaa;
+    }
+
+    .close-modal:hover {
+      color: #fff;
+      transform: none;
+    }
+
+    /* Export Panel */
+    .export-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .export-option {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      background: #000;
+      border-radius: 6px;
+    }
+
+    /* Comparison Mode */
+    .comparison-slot {
+      background: #000;
+      padding: 16px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      border: 2px solid transparent;
+    }
+
+    .comparison-slot.active {
+      border-color: #00ffa0;
+    }
+
+    .comparison-slot h4 {
+      margin: 0 0 8px 0;
+      color: #00ffa0;
+    }
+
+    .comparison-metrics {
+      font-size: 12px;
+      font-family: 'Courier New', monospace;
+      line-height: 1.6;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 18px;
+      }
+
+      .theme-controls {
+        position: static;
+        margin-top: 8px;
+      }
+
+      header {
+        text-align: center;
+      }
+
+      #controlPanel {
+        margin: 12px;
+        padding: 16px;
+      }
+
+      .control-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .slider-container {
+        min-width: auto;
+      }
+
+      #metricsContainer {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .viz-section {
+        margin: 12px;
+      }
+    }
+
+    /* Light Theme */
+    body.light-theme {
+      background: #f5f5f5;
+      color: #1a1a1a;
+    }
+
+    body.light-theme header {
+      background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+    }
+
+    body.light-theme h1 {
+      color: #0066cc;
+    }
+
+    body.light-theme #controlPanel,
+    body.light-theme .viz-section {
+      background: #ffffff;
+      color: #1a1a1a;
+    }
+
+    body.light-theme canvas {
+      background: #f0f0f0;
+      border-color: #d0d0d0;
+    }
+
+    body.light-theme .metric {
+      background: #f8f8f8;
+      border-color: #d0d0d0;
+    }
+
+    body.light-theme #featureDisplay {
+      background: #f8f8f8;
+      border-color: #d0d0d0;
+      color: #1a1a1a;
+    }
+
+    body.light-theme .theme-btn {
+      background: rgba(0,0,0,0.05);
+      border-color: rgba(0,0,0,0.1);
+      color: #1a1a1a;
+    }
+
+    body.light-theme .icon-btn {
+      background: rgba(0,0,0,0.05);
+      border-color: rgba(0,0,0,0.1);
+      color: #1a1a1a;
+    }
+
+    /* Colorblind Theme */
+    body.colorblind-theme {
+      /* High contrast with colorblind-safe palette */
+    }
+
+    body.colorblind-theme canvas {
+      background: #000;
+    }
+
+    /* Loading Indicator */
+    .loading {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #00ffa0;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Help Panel */
+    .help-content {
+      line-height: 1.8;
+    }
+
+    .help-content h3 {
+      color: #00ffa0;
+      margin-top: 20px;
+    }
+
+    .help-content ul {
+      padding-left: 20px;
+    }
+
+    .help-content code {
+      background: #000;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+    }
+  </style>
+  <link rel="stylesheet" href="goeckoh-shared.css">
+</head>
+<body>
+  <nav class="gk-nav">
+    <a href="index.html" class="gk-nav-brand">
+      <img src="images/logo-clean.png" alt="Goeckoh" class="gk-nav-logo">
+      <div>
+        <div class="gk-nav-brand-name">GOECK<span>OH</span></div>
+        <div class="gk-nav-brand-sub">Go Echo</div>
+      </div>
+    </a>
+    <div class="gk-nav-links" id="gkNav">
+      <a href="real_time_therapeutic_voice_cloning_system.html" class="gk-nav-link">Echo Therapy</a>
+      <a href="advanced_voice_visualizer_pro.html"              class="gk-nav-link active">Visualizer</a>
+      <a href="voice_therapy_profile_transform.html"            class="gk-nav-link">Profile Lab</a>
+      <a href="goeckoh_dashboard.html"                          class="gk-nav-link">Dashboard</a>
+      <a href="observatory.html"                                 class="gk-nav-link">Observatory</a>
+      <a href="voice_setup.html"                                class="gk-nav-link">Setup</a>
+    </div>
+    <a href="download.html" class="gk-nav-cta">Download</a>
+    <button class="gk-nav-toggle" onclick="document.getElementById('gkNav').classList.toggle('gk-open')" aria-label="Menu">☰</button>
+  </nav>
+  <header>
+    <h1>🎤 Advanced Voice Visualizer Pro</h1>
+    <div class="theme-controls">
+      <button class="theme-btn active" data-theme="dark">Dark</button>
+      <button class="theme-btn" data-theme="light">Light</button>
+      <button class="theme-btn" data-theme="colorblind">Accessible</button>
+      <button class="icon-btn" onclick="showHelp()">❓ Help</button>
+    </div>
+  </header>
+
+  <div id="controlPanel">
+    <!-- Main Controls -->
+    <div class="control-section">
+      <h3>
+        🎙️ Audio Control
+        <span class="tooltip" data-tip="Start/stop microphone capture and recording">ℹ️</span>
+      </h3>
+      <div class="control-row">
+        <button id="startButton">▶️ Start Visualization</button>
+        <button id="stopButton" disabled>⏹️ Stop</button>
+        <button id="pauseButton" disabled>⏸️ Pause</button>
+        <button id="recordButton" disabled>⏺️ Record</button>
+        <button id="uploadButton">📁 Upload Audio</button>
+        <input type="file" id="audioFileInput" accept="audio/*" style="display: none;">
+      </div>
+    </div>
+
+    <!-- Sliders -->
+    <div class="control-section">
+      <h3>
+        🎚️ Audio Settings
+        <span class="tooltip" data-tip="Adjust input gain and smoothing">ℹ️</span>
+      </h3>
+      <div class="control-row">
+        <div class="slider-container">
+          <label>Gain:</label>
+          <input type="range" id="gainSlider" min="0" max="200" value="100">
+          <span class="slider-value" id="gainValue">100%</span>
+        </div>
+        <div class="slider-container">
+          <label>Smoothing:</label>
+          <input type="range" id="smoothingSlider" min="0" max="100" value="80">
+          <span class="slider-value" id="smoothingValue">0.80</span>
+        </div>
+        <div class="slider-container">
+          <label>FFT Size:</label>
+          <input type="range" id="fftSlider" min="8" max="14" value="11" step="1">
+          <span class="slider-value" id="fftValue">2048</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Display Toggles -->
+    <div class="control-section">
+      <h3>📊 Display Options</h3>
+      <div class="toggle-switches">
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggleWaveform" checked>
+          <div class="toggle-slider"></div>
+          <label for="toggleWaveform">Waveform</label>
+        </label>
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggleFrequency" checked>
+          <div class="toggle-slider"></div>
+          <label for="toggleFrequency">Frequency</label>
+        </label>
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggleSpectrogram" checked>
+          <div class="toggle-slider"></div>
+          <label for="toggleSpectrogram">Spectrogram</label>
+        </label>
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggleMetrics" checked>
+          <div class="toggle-slider"></div>
+          <label for="toggleMetrics">Metrics</label>
+        </label>
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggleFeatures" checked>
+          <div class="toggle-slider"></div>
+          <label for="toggleFeatures">Features</label>
+        </label>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="control-section">
+      <h3>⚡ Actions</h3>
+      <div class="control-row">
+        <button onclick="resetStats()">🔄 Reset Stats</button>
+        <button onclick="saveSnapshot()">📸 Save Snapshot</button>
+        <button onclick="showExportModal()">💾 Export Data</button>
+        <button onclick="showCompareModal()">📊 Compare</button>
+        <button onclick="downloadVisualization()">⬇️ Download Image</button>
+      </div>
+    </div>
+
+    <!-- Status Info -->
+    <div id="statusInfo">
+      <strong>Status:</strong> <span id="statusText">Ready</span>
+      <span id="voiceQualityScore" style="display: none;">
+        Voice Quality: <span class="score-value" id="qualityValue">--</span>/100
+      </span>
+      <div id="voiceTypeDisplay" style="margin-top: 8px; display: none;">
+        <strong>Detected Voice Type:</strong> <span id="voiceType">--</span>
+      </div>
+      <div id="healthIndicators" style="margin-top: 8px; display: none;">
+        <strong>Health Indicators:</strong> <span id="healthStatus">--</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Waveform -->
+  <div class="viz-section" id="waveformSection">
+    <div class="viz-header">
+      <h3>
+        🌊 Waveform (Time Domain)
+        <span class="tooltip" data-tip="Shows amplitude over time">ℹ️</span>
+      </h3>
+      <div class="viz-controls">
+        <button class="icon-btn" onclick="fullscreen('waveform')">⛶</button>
+      </div>
+    </div>
+    <canvas id="waveform" width="800" height="200"></canvas>
+  </div>
+
+  <!-- Frequency Spectrum -->
+  <div class="viz-section" id="frequencySection">
+    <div class="viz-header">
+      <h3>
+        📊 Frequency Spectrum
+        <span class="tooltip" data-tip="Shows frequency distribution (FFT)">ℹ️</span>
+      </h3>
+      <div class="viz-controls">
+        <button class="icon-btn" onclick="fullscreen('frequency')">⛶</button>
+      </div>
+    </div>
+    <canvas id="frequency" width="800" height="200"></canvas>
+  </div>
+
+  <!-- Spectrogram -->
+  <div class="viz-section" id="spectrogramSection">
+    <div class="viz-header">
+      <h3>
+        🎨 Spectrogram (Time-Frequency)
+        <span class="tooltip" data-tip="Shows frequency content over time">ℹ️</span>
+      </h3>
+      <div class="viz-controls">
+        <button class="icon-btn" onclick="fullscreen('spectrogram')">⛶</button>
+      </div>
+    </div>
+    <canvas id="spectrogram" width="800" height="256"></canvas>
+  </div>
+
+  <!-- Volume Meter -->
+  <div class="viz-section">
+    <div class="viz-header">
+      <h3>🔊 Volume Meter</h3>
+    </div>
+    <canvas id="volumeMeter" width="800" height="40"></canvas>
+  </div>
+
+  <!-- Features Display -->
+  <div class="viz-section" id="featuresSection">
+    <div class="viz-header">
+      <h3>
+        📋 Voice Features
+        <span class="tooltip" data-tip="Detailed voice characteristics and metrics">ℹ️</span>
+      </h3>
+    </div>
+    <div id="featureDisplay">No data yet...</div>
+  </div>
+
+  <!-- Metrics Grid -->
+  <div class="viz-section" id="metricsSection">
+    <div class="viz-header">
+      <h3>
+        🎯 Metrics Dashboard
+        <span class="tooltip" data-tip="Visual representation of voice metrics">ℹ️</span>
+      </h3>
+    </div>
+    <div id="metricsContainer">
+      <div class="metric">
+        <div class="metric-trend" id="pitchTrend"></div>
+        <canvas id="pitchGauge" width="120" height="120"></canvas>
+        <div class="metric-label">Pitch (Hz)</div>
+        <div class="metric-value" id="pitchValue">--</div>
+        <div class="metric-minmax" id="pitchMinMax">--</div>
+      </div>
+      <div class="metric">
+        <div class="metric-trend" id="zcrTrend"></div>
+        <canvas id="zcrBar" width="120" height="30"></canvas>
+        <div class="metric-label">Zero Crossing Rate</div>
+        <div class="metric-value" id="zcrValue">--</div>
+        <div class="metric-minmax" id="zcrMinMax">--</div>
+      </div>
+      <div class="metric">
+        <div class="metric-trend" id="centroidTrend"></div>
+        <canvas id="centroidGauge" width="120" height="120"></canvas>
+        <div class="metric-label">Spectral Centroid</div>
+        <div class="metric-value" id="centroidValue">--</div>
+        <div class="metric-minmax" id="centroidMinMax">--</div>
+      </div>
+      <div class="metric">
+        <div class="metric-trend" id="rolloffTrend"></div>
+        <canvas id="rolloffGauge" width="120" height="120"></canvas>
+        <div class="metric-label">Spectral Rolloff</div>
+        <div class="metric-value" id="rolloffValue">--</div>
+        <div class="metric-minmax" id="rolloffMinMax">--</div>
+      </div>
+      <div class="metric">
+        <div class="metric-trend" id="spreadTrend"></div>
+        <canvas id="spreadGauge" width="120" height="120"></canvas>
+        <div class="metric-label">Spectral Spread</div>
+        <div class="metric-value" id="spreadValue">--</div>
+        <div class="metric-minmax" id="spreadMinMax">--</div>
+      </div>
+      <div class="metric">
+        <div class="metric-trend" id="flatnessTrend"></div>
+        <canvas id="flatnessBar" width="120" height="30"></canvas>
+        <div class="metric-label">Spectral Flatness</div>
+        <div class="metric-value" id="flatnessValue">--</div>
+        <div class="metric-minmax" id="flatnessMinMax">--</div>
+      </div>
+      <div class="metric">
+        <div class="metric-trend" id="jitterTrend"></div>
+        <canvas id="jitterBar" width="120" height="30"></canvas>
+        <div class="metric-label">Jitter</div>
+        <div class="metric-value" id="jitterValue">--</div>
+        <div class="metric-minmax" id="jitterMinMax">--</div>
+      </div>
+      <div class="metric">
+        <div class="metric-trend" id="shimmerTrend"></div>
+        <canvas id="shimmerBar" width="120" height="30"></canvas>
+        <div class="metric-label">Shimmer</div>
+        <div class="metric-value" id="shimmerValue">--</div>
+        <div class="metric-minmax" id="shimmerMinMax">--</div>
+      </div>
+      <div class="metric">
+        <div class="metric-trend" id="hnrTrend"></div>
+        <canvas id="hnrGauge" width="120" height="120"></canvas>
+        <div class="metric-label">HNR (dB)</div>
+        <div class="metric-value" id="hnrValue">--</div>
+        <div class="metric-minmax" id="hnrMinMax">--</div>
+      </div>
+      <div class="metric" style="grid-column: span 2;">
+        <canvas id="fluxChart" width="240" height="60"></canvas>
+        <div class="metric-label">Spectral Flux History</div>
+        <div class="metric-value" id="fluxValue">--</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Export Modal -->
+  <div id="exportModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>💾 Export Data</h2>
+        <button class="close-modal" onclick="closeModal('exportModal')">✕</button>
+      </div>
+      <div class="export-options">
+        <div class="export-option">
+          <div>
+            <strong>Export Metrics (CSV)</strong>
+            <p style="margin: 4px 0 0 0; font-size: 12px; color: #aaa;">
+              All voice metrics with timestamps
+            </p>
+          </div>
+          <button onclick="exportCSV()">Download CSV</button>
+        </div>
+        <div class="export-option">
+          <div>
+            <strong>Export Metrics (JSON)</strong>
+            <p style="margin: 4px 0 0 0; font-size: 12px; color: #aaa;">
+              Structured data for analysis
+            </p>
+          </div>
+          <button onclick="exportJSON()">Download JSON</button>
+        </div>
+        <div class="export-option">
+          <div>
+            <strong>Save Visualization</strong>
+            <p style="margin: 4px 0 0 0; font-size: 12px; color: #aaa;">
+              Current canvases as PNG image
+            </p>
+          </div>
+          <button onclick="exportVisualization()">Download PNG</button>
+        </div>
+        <div class="export-option" id="recordingExport" style="display: none;">
+          <div>
+            <strong>Recorded Audio</strong>
+            <p style="margin: 4px 0 0 0; font-size: 12px; color: #aaa;">
+              Save recorded audio file
+            </p>
+          </div>
+          <button onclick="downloadRecording()">Download WAV</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Compare Modal -->
+  <div id="compareModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>📊 Voice Comparison</h2>
+        <button class="close-modal" onclick="closeModal('compareModal')">✕</button>
+      </div>
+      <div id="comparisonContent">
+        <div class="comparison-slot" id="baselineSlot">
+          <h4>Baseline (Current)</h4>
+          <div class="comparison-metrics" id="baselineMetrics">
+            No baseline saved. Click "Save as Baseline" during visualization.
+          </div>
+        </div>
+        <button onclick="saveBaseline()" id="saveBaselineBtn" disabled>Save Current as Baseline</button>
+        <div class="comparison-slot" id="compareSlot" style="margin-top: 16px;">
+          <h4>Comparison</h4>
+          <div class="comparison-metrics" id="compareMetrics">
+            Start visualizing to compare with baseline
+          </div>
+        </div>
+        <div id="comparisonDiff" style="margin-top: 16px; padding: 12px; background: #000; border-radius: 6px;">
+          <strong>Differences:</strong>
+          <div id="diffMetrics" style="font-family: 'Courier New', monospace; font-size: 12px; margin-top: 8px;">
+            --
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Help Modal -->
+  <div id="helpModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>❓ Help & Documentation</h2>
+        <button class="close-modal" onclick="closeModal('helpModal')">✕</button>
+      </div>
+      <div class="help-content">
+        <h3>Getting Started</h3>
+        <ol>
+          <li>Click <strong>"Start Visualization"</strong> and allow microphone access</li>
+          <li>Speak or make sounds to see real-time analysis</li>
+          <li>Use toggles to show/hide different visualizations</li>
+          <li>Adjust gain and smoothing sliders for better results</li>
+        </ol>
+
+        <h3>Voice Metrics Explained</h3>
+        <ul>
+          <li><strong>Pitch (Hz):</strong> Fundamental frequency - higher for females/children, lower for males</li>
+          <li><strong>Zero Crossing Rate:</strong> How often signal crosses zero - indicates voicing vs noise</li>
+          <li><strong>Spectral Centroid:</strong> "Center of mass" of frequencies - brightness of sound</li>
+          <li><strong>Spectral Rolloff:</strong> Frequency below which 85% of energy is contained</li>
+          <li><strong>Spectral Spread:</strong> Standard deviation of frequency distribution</li>
+          <li><strong>Spectral Flatness:</strong> 0=tonal (voice), 1=noisy - indicates voice quality</li>
+          <li><strong>Jitter:</strong> Pitch variation between frames - low is better for voice health</li>
+          <li><strong>Shimmer:</strong> Amplitude variation - low indicates stable voice</li>
+          <li><strong>HNR (Harmonics-to-Noise Ratio):</strong> Higher = clearer voice (>10dB is good)</li>
+          <li><strong>Spectral Flux:</strong> Rate of spectral change - detects onsets and transitions</li>
+        </ul>
+
+        <h3>Voice Quality Score</h3>
+        <p>Composite score (0-100) based on:</p>
+        <ul>
+          <li>Low jitter and shimmer (voice stability)</li>
+          <li>High HNR (clarity)</li>
+          <li>Appropriate spectral flatness (tonal quality)</li>
+          <li>Consistent pitch</li>
+        </ul>
+
+        <h3>Voice Health Indicators</h3>
+        <ul>
+          <li><strong>Normal:</strong> All metrics within healthy ranges</li>
+          <li><strong>High Jitter/Shimmer:</strong> May indicate vocal strain or fatigue</li>
+          <li><strong>Low HNR:</strong> Breathy or noisy voice - may need vocal rest</li>
+          <li><strong>Unusual Pitch:</strong> Very high or low sustained pitch</li>
+        </ul>
+
+        <h3>Keyboard Shortcuts</h3>
+        <ul>
+          <li><code>Space</code> - Start/Stop visualization</li>
+          <li><code>P</code> - Pause/Resume</li>
+          <li><code>R</code> - Toggle recording</li>
+          <li><code>S</code> - Save snapshot</li>
+          <li><code>E</code> - Export data</li>
+          <li><code>H</code> - Show help</li>
+        </ul>
+
+        <h3>Tips for Best Results</h3>
+        <ul>
+          <li>Use a good quality microphone for accurate measurements</li>
+          <li>Maintain consistent distance from microphone</li>
+          <li>Minimize background noise</li>
+          <li>Adjust gain if signal is too weak or clipping</li>
+          <li>Higher FFT size = better frequency resolution but slower</li>
+          <li>Use comparison mode to track changes over time</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ============================================================================
+    // GLOBAL STATE AND CONFIGURATION
+    // ============================================================================
+    
+    let audioCtx;
+    let analyser;
+    let microphone;
+    let gainNode;
+    let animationId;
+    let isPaused = false;
+    let isRecording = false;
+    let mediaRecorder;
+    let recordedChunks = [];
+    let audioBuffer = null;
+    let audioSource = null;
+
+    // Metric tracking
+    let prevPitch = null;
+    let prevRms = null;
+    let prevSpectrum = null;
+    let currentFormants = [];
+
+    // Metric bounds (for gauges)
+    let pitchMax = 500;
+    let centroidMax;
+    let rolloffMax;
+    let spreadMax;
+    let hnrMax = 30;
+    const zcrMax = 0.5;
+    const flatnessMax = 1;
+    const jitterMax = 50;
+    const shimmerMax = 0.1;
+
+    // History arrays
+    const fluxHistory = [];
+    const maxFluxPoints = 50;
+    
+    // Metric min/max tracking
+    const metricBounds = {
+      pitch: { min: Infinity, max: -Infinity, values: [] },
+      zcr: { min: Infinity, max: -Infinity, values: [] },
+      centroid: { min: Infinity, max: -Infinity, values: [] },
+      rolloff: { min: Infinity, max: -Infinity, values: [] },
+      spread: { min: Infinity, max: -Infinity, values: [] },
+      flatness: { min: Infinity, max: -Infinity, values: [] },
+      jitter: { min: Infinity, max: -Infinity, values: [] },
+      shimmer: { min: Infinity, max: -Infinity, values: [] },
+      hnr: { min: Infinity, max: -Infinity, values: [] }
+    };
+
+    // Statistics
+    const featureStats = {
+      count: 0,
+      sumPitch: 0,
+      sumCentroid: 0,
+      sumRolloff: 0,
+      sumSpread: 0,
+      sumFlatness: 0,
+      sumZCR: 0,
+      sumJitter: 0,
+      sumShimmer: 0,
+      sumHNR: 0,
+      sumFlux: 0
+    };
+
+    // Data export storage
+    const exportData = {
+      startTime: null,
+      samples: []
+    };
+
+    // Baseline for comparison
+    let baselineSnapshot = null;
+
+    // Canvas contexts (initialized later)
+    const canvasContexts = {};
+
+    // ============================================================================
+    // INITIALIZATION
+    // ============================================================================
+
+    function initAudio(stream) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      analyser = audioCtx.createAnalyser();
+      
+      // Set initial FFT size from slider
+      const fftSize = Math.pow(2, parseInt(document.getElementById('fftSlider').value));
+      analyser.fftSize = fftSize;
+      analyser.smoothingTimeConstant = parseFloat(document.getElementById('smoothingSlider').value) / 100;
+      
+      // Create gain node
+      gainNode = audioCtx.createGain();
+      gainNode.gain.value = parseFloat(document.getElementById('gainSlider').value) / 100;
+      
+      if (stream) {
+        // Microphone input
+        microphone = audioCtx.createMediaStreamSource(stream);
+        microphone.connect(gainNode);
+      } else if (audioSource) {
+        // File playback
+        audioSource.connect(gainNode);
+      }
+      
+      gainNode.connect(analyser);
+      
+      // Calculate frequency bounds
+      const nyquist = audioCtx.sampleRate / 2;
+      centroidMax = nyquist;
+      rolloffMax = nyquist;
+      spreadMax = nyquist;
+      
+      // Initialize canvas contexts
+      initCanvases();
+      
+      // Start visualization loop
+      exportData.startTime = Date.now();
+      exportData.samples = [];
+      visualize();
+      
+      // Update UI
+      document.getElementById('startButton').disabled = true;
+      document.getElementById('stopButton').disabled = false;
+      document.getElementById('pauseButton').disabled = false;
+      document.getElementById('recordButton').disabled = false;
+      document.getElementById('saveBaselineBtn').disabled = false;
+      document.getElementById('statusText').textContent = 'Visualizing...';
+      document.getElementById('voiceQualityScore').style.display = 'inline-flex';
+      document.getElementById('voiceTypeDisplay').style.display = 'block';
+      document.getElementById('healthIndicators').style.display = 'block';
+    }
+
+    function initCanvases() {
+      const canvasIds = [
+        'waveform', 'frequency', 'spectrogram', 'volumeMeter',
+        'pitchGauge', 'zcrBar', 'centroidGauge', 'rolloffGauge',
+        'spreadGauge', 'flatnessBar', 'jitterBar', 'shimmerBar',
+        'hnrGauge', 'fluxChart'
+      ];
+      
+      canvasIds.forEach(id => {
+        const canvas = document.getElementById(id);
+        if (canvas) {
+          canvasContexts[id] = canvas.getContext('2d');
+        }
+      });
+    }
+
+    function stopVisualization() {
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+      }
+      
+      if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.stop();
+      }
+      
+      if (microphone) {
+        microphone.disconnect();
+        microphone = null;
+      }
+      
+      if (audioSource) {
+        audioSource.stop();
+        audioSource = null;
+      }
+      
+      if (gainNode) {
+        gainNode.disconnect();
+      }
+      
+      if (analyser) {
+        analyser.disconnect();
+      }
+      
+      if (audioCtx) {
+        audioCtx.close();
+        audioCtx = null;
+      }
+      
+      // Reset UI
+      document.getElementById('startButton').disabled = false;
+      document.getElementById('stopButton').disabled = true;
+      document.getElementById('pauseButton').disabled = true;
+      document.getElementById('recordButton').disabled = true;
+      document.getElementById('saveBaselineBtn').disabled = true;
+      document.getElementById('statusText').textContent = 'Stopped';
+      isPaused = false;
+    }
+
+    // ============================================================================
+    // MAIN VISUALIZATION LOOP
+    // ============================================================================
+
+    function visualize() {
+      if (isPaused) {
+        animationId = requestAnimationFrame(visualize);
+        return;
+      }
+      
+      const bufferLength = analyser.frequencyBinCount;
+      const timeData = new Uint8Array(bufferLength);
+      const freqData = new Uint8Array(bufferLength);
+      
+      analyser.getByteTimeDomainData(timeData);
+      analyser.getByteFrequencyData(freqData);
+      
+      // Draw visualizations (if enabled)
+      if (document.getElementById('toggleWaveform').checked) {
+        drawWaveform(timeData);
+      }
+      
+      if (document.getElementById('toggleFrequency').checked) {
+        drawFrequency(freqData);
+      }
+      
+      if (document.getElementById('toggleSpectrogram').checked) {
+        drawSpectrogram(freqData);
+      }
+      
+      drawVolumeMeter(timeData);
+      
+      // Calculate features
+      const features = calculateFeatures(timeData, freqData);
+      
+      // Update metrics display
+      if (document.getElementById('toggleMetrics').checked) {
+        updateMetrics(features);
+      }
+      
+      // Update feature display
+      if (document.getElementById('toggleFeatures').checked) {
+        updateFeatureDisplay(features);
+      }
+      
+      // Calculate voice quality score
+      updateVoiceQuality(features);
+      
+      // Detect voice type
+      updateVoiceType(features);
+      
+      // Check health indicators
+      updateHealthIndicators(features);
+      
+      // Store sample for export
+      exportData.samples.push({
+        timestamp: Date.now() - exportData.startTime,
+        ...features
+      });
+      
+      // Update comparison if modal is open
+      if (document.getElementById('compareModal').classList.contains('show')) {
+        updateComparison(features);
+      }
+      
+      animationId = requestAnimationFrame(visualize);
+    }
+
+    // ============================================================================
+    // DRAWING FUNCTIONS
+    // ============================================================================
+
+    function drawWaveform(dataArray) {
+      const canvas = document.getElementById('waveform');
+      const ctx = canvasContexts.waveform;
+      const width = canvas.width;
+      const height = canvas.height;
+      
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, width, height);
+      
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#00ffa0';
+      ctx.beginPath();
+      
+      const sliceWidth = width / dataArray.length;
+      let x = 0;
+      
+      for (let i = 0; i < dataArray.length; i++) {
+        const v = dataArray[i] / 128.0;
+        const y = (v * height) / 2;
+        
+        if (i === 0) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
+        }
+        
+        x += sliceWidth;
+      }
+      
+      ctx.lineTo(width, height / 2);
+      ctx.stroke();
+      
+      // Draw center line
+      ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(0, height / 2);
+      ctx.lineTo(width, height / 2);
+      ctx.stroke();
+    }
+
+    function drawFrequency(dataArray) {
+      const canvas = document.getElementById('frequency');
+      const ctx = canvasContexts.frequency;
+      const width = canvas.width;
+      const height = canvas.height;
+      
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, width, height);
+      
+      const barWidth = width / dataArray.length;
+      let x = 0;
+      
+      for (let i = 0; i < dataArray.length; i++) {
+        const barHeight = (dataArray[i] / 255) * height;
+        
+        // Gradient color based on frequency
+        const hue = (i / dataArray.length) * 240;
+        ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+        
+        ctx.fillRect(x, height - barHeight, barWidth, barHeight);
+        x += barWidth;
+      }
+      
+      // Draw formant lines if available
+      if (currentFormants && currentFormants.length > 0) {
+        ctx.strokeStyle = 'rgba(255,255,255,0.8)';
+        ctx.lineWidth = 2;
+        const freqRes = audioCtx.sampleRate / analyser.fftSize;
+        
+        currentFormants.forEach((formant, idx) => {
+          const freq = parseFloat(formant);
+          const binIndex = Math.round(freq / freqRes);
+          const xPos = (binIndex / dataArray.length) * width;
+          
+          ctx.beginPath();
+          ctx.moveTo(xPos, 0);
+          ctx.lineTo(xPos, height);
+          ctx.stroke();
+          
+          // Label
+          ctx.fillStyle = '#fff';
+          ctx.font = '10px monospace';
+          ctx.fillText(`F${idx + 1}`, xPos + 2, 12);
+        });
+      }
+    }
+
+    function drawSpectrogram(dataArray) {
+      const canvas = document.getElementById('spectrogram');
+      const ctx = canvasContexts.spectrogram;
+      const width = canvas.width;
+      const height = canvas.height;
+      
+      // Shift existing image left by 1 pixel
+      const imageData = ctx.getImageData(1, 0, width - 1, height);
+      ctx.putImageData(imageData, 0, 0);
+      
+      // Draw new column on the right
+      for (let i = 0; i < dataArray.length; i++) {
+        const value = dataArray[i];
+        const y = height - (i / dataArray.length) * height;
+        
+        // Color based on intensity
+        const hue = 240 - (value / 255) * 240; // Blue to red
+        const saturation = 100;
+        const lightness = (value / 255) * 50;
+        
+        ctx.fillStyle = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+        ctx.fillRect(width - 1, y, 1, height / dataArray.length);
+      }
+    }
+
+    function drawVolumeMeter(dataArray) {
+      const canvas = document.getElementById('volumeMeter');
+      const ctx = canvasContexts.volumeMeter;
+      const width = canvas.width;
+      const height = canvas.height;
+      
+      // Calculate RMS
+      let sum = 0;
+      for (let i = 0; i < dataArray.length; i++) {
+        const normalized = (dataArray[i] - 128) / 128;
+        sum += normalized * normalized;
+      }
+      const rms = Math.sqrt(sum / dataArray.length);
+      const db = 20 * Math.log10(rms + 0.0001);
+      const normalized = Math.max(0, Math.min(1, (db + 60) / 60));
+      
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, width, height);
+      
+      // Draw meter
+      const meterWidth = normalized * width;
+      const gradient = ctx.createLinearGradient(0, 0, width, 0);
+      gradient.addColorStop(0, '#00ff00');
+      gradient.addColorStop(0.7, '#ffff00');
+      gradient.addColorStop(1, '#ff0000');
+      
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, meterWidth, height);
+      
+      // Draw scale lines
+      ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 10; i++) {
+        const x = (i / 10) * width;
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, height);
+        ctx.stroke();
+      }
+    }
+
+    // ============================================================================
+    // FEATURE CALCULATION
+    // ============================================================================
+
+    function calculateFeatures(timeData, freqData) {
+      const N = freqData.length;
+      const freqRes = audioCtx.sampleRate / analyser.fftSize;
+      
+      // RMS (volume)
+      let sumSq = 0;
+      for (let i = 0; i < timeData.length; i++) {
+        const normalized = (timeData[i] - 128) / 128;
+        sumSq += normalized * normalized;
+      }
+      const rms = Math.sqrt(sumSq / timeData.length);
+      
+      // Shimmer (RMS variation)
+      let shimmer = 0;
+      if (prevRms !== null) {
+        shimmer = Math.abs(rms - prevRms);
+      }
+      prevRms = rms;
+      
+      // Zero Crossing Rate
+      let crossings = 0;
+      for (let i = 1; i < timeData.length; i++) {
+        if ((timeData[i] >= 128 && timeData[i - 1] < 128) ||
+            (timeData[i] < 128 && timeData[i - 1] >= 128)) {
+          crossings++;
+        }
+      }
+      const zcr = crossings / (timeData.length - 1);
+      
+      // Spectral metrics
+      let sumAmp = 0;
+      let sumWeighted = 0;
+      
+      for (let i = 0; i < N; i++) {
+        sumAmp += freqData[i];
+        sumWeighted += freqData[i] * i * freqRes;
+      }
+      
+      const centroid = sumAmp > 0 ? sumWeighted / sumAmp : 0;
+      
+      // Spectral rolloff (85% of energy)
+      let energySum = 0;
+      const targetEnergy = sumAmp * 0.85;
+      let rolloff = 0;
+      
+      for (let i = 0; i < N; i++) {
+        energySum += freqData[i];
+        if (energySum >= targetEnergy) {
+          rolloff = i * freqRes;
+          break;
+        }
+      }
+      
+      // Spectral spread (std dev)
+      let sumSpreadSq = 0;
+      for (let i = 0; i < N; i++) {
+        const freq = i * freqRes;
+        const diff = freq - centroid;
+        sumSpreadSq += freqData[i] * diff * diff;
+      }
+      const spread = sumAmp > 0 ? Math.sqrt(sumSpreadSq / sumAmp) : 0;
+      
+      // Spectral flatness
+      let geomSum = 0;
+      for (let i = 0; i < N; i++) {
+        geomSum += Math.log(freqData[i] + 1);
+      }
+      const geomMean = Math.exp(geomSum / N) - 1;
+      const meanAmp = sumAmp / N;
+      const flatness = meanAmp > 0 ? geomMean / meanAmp : 0;
+      
+      // Pitch detection
+      let maxVal = 0;
+      let maxIdx = 1;
+      for (let i = 1; i < N; i++) {
+        if (freqData[i] > maxVal) {
+          maxVal = freqData[i];
+          maxIdx = i;
+        }
+      }
+      
+      let currentPitch = null;
+      if (maxVal >= 10) {
+        currentPitch = maxIdx * freqRes;
+      }
+      
+      // Jitter
+      let jitter = 0;
+      if (currentPitch && prevPitch) {
+        jitter = Math.abs(currentPitch - prevPitch);
+      }
+      if (currentPitch) prevPitch = currentPitch;
+      
+      // HNR (Harmonic-to-Noise Ratio)
+      let harmonicEnergy = 0;
+      let noiseEnergy = 0;
+      
+      if (currentPitch) {
+        const harmonicIndices = [];
+        const maxHarmonics = 5;
+        for (let h = 1; h <= maxHarmonics; h++) {
+          const idx = Math.round((currentPitch * h) / freqRes);
+          if (idx < N) harmonicIndices.push(idx);
+        }
+        
+        for (let i = 0; i < N; i++) {
+          if (harmonicIndices.includes(i)) {
+            harmonicEnergy += freqData[i];
+          } else {
+            noiseEnergy += freqData[i];
+          }
+        }
+      } else {
+        noiseEnergy = sumAmp;
+      }
+      
+      let hnr = 0;
+      if (harmonicEnergy > 0 && noiseEnergy > 0) {
+        hnr = 10 * Math.log10(harmonicEnergy / noiseEnergy);
+      }
+      
+      // Spectral flux
+      let flux = 0;
+      if (prevSpectrum && prevSpectrum.length === N) {
+        let sumDiff = 0;
+        for (let i = 0; i < N; i++) {
+          const diff = (freqData[i] - prevSpectrum[i]) / 255;
+          sumDiff += diff * diff;
+        }
+        flux = Math.sqrt(sumDiff / N);
+      }
+      prevSpectrum = new Uint8Array(freqData);
+      
+      // Formants
+      const peaks = [];
+      const minPeakDistance = 5;
+      const indices = Array.from({ length: N }, (_, i) => i);
+      indices.sort((a, b) => freqData[b] - freqData[a]);
+      
+      for (let idx of indices) {
+        const freq = idx * freqRes;
+        if (freq < 200) continue;
+        
+        let tooClose = false;
+        for (let p of peaks) {
+          if (Math.abs(idx - p.index) < minPeakDistance) {
+            tooClose = true;
+            break;
+          }
+        }
+        
+        if (!tooClose) {
+          peaks.push({ index: idx, amp: freqData[idx] });
+        }
+        if (peaks.length === 3) break;
+      }
+      
+      const formants = peaks.map(p => (p.index * freqRes).toFixed(1));
+      currentFormants = formants;
+      
+      // Update statistics
+      featureStats.count++;
+      featureStats.sumPitch += currentPitch || 0;
+      featureStats.sumCentroid += centroid;
+      featureStats.sumRolloff += rolloff;
+      featureStats.sumSpread += spread;
+      featureStats.sumFlatness += flatness;
+      featureStats.sumZCR += zcr;
+      featureStats.sumJitter += jitter;
+      featureStats.sumShimmer += shimmer;
+      featureStats.sumHNR += hnr;
+      featureStats.sumFlux += flux;
+      
+      return {
+        pitch: currentPitch,
+        zcr: zcr,
+        centroid: centroid,
+        rolloff: rolloff,
+        spread: spread,
+        flatness: flatness,
+        jitter: jitter,
+        shimmer: shimmer,
+        hnr: hnr,
+        flux: flux,
+        formants: formants,
+        rms: rms
+      };
+    }
+
+    // ============================================================================
+    // METRICS VISUALIZATION
+    // ============================================================================
+
+    function updateMetrics(features) {
+      const { pitch, zcr, centroid, rolloff, spread, flatness, jitter, shimmer, hnr, flux } = features;
+      
+      // Update bounds
+      updateBounds('pitch', pitch);
+      updateBounds('zcr', zcr);
+      updateBounds('centroid', centroid);
+      updateBounds('rolloff', rolloff);
+      updateBounds('spread', spread);
+      updateBounds('flatness', flatness);
+      updateBounds('jitter', jitter);
+      updateBounds('shimmer', shimmer);
+      updateBounds('hnr', hnr);
+      
+      // Update dynamic maxima
+      if (pitch && pitch > pitchMax) pitchMax = pitch;
+      if (hnr > hnrMax) hnrMax = hnr;
+      
+      // Update flux history
+      fluxHistory.push(flux);
+      if (fluxHistory.length > maxFluxPoints) {
+        fluxHistory.shift();
+      }
+      
+      // Draw gauges and bars
+      drawRadialGauge('pitchGauge', pitch || 0, pitchMax || 1, '#00ffa0');
+      drawHorizontalBar('zcrBar', zcr / zcrMax, 'zcr');
+      drawRadialGauge('centroidGauge', centroid, centroidMax || 1, '#ffa500');
+      drawRadialGauge('rolloffGauge', rolloff, rolloffMax || 1, '#ff0066');
+      drawRadialGauge('spreadGauge', spread, spreadMax || 1, '#66ccff');
+      drawHorizontalBar('flatnessBar', flatness / flatnessMax, 'flatness');
+      drawVerticalBar('jitterBar', jitter / jitterMax, 'jitter');
+      drawVerticalBar('shimmerBar', shimmer / shimmerMax, 'shimmer');
+      drawRadialGauge('hnrGauge', Math.max(hnr, 0), hnrMax || 1, '#bb88ff');
+      drawFluxChart('fluxChart', fluxHistory);
+      
+      // Update value displays
+      document.getElementById('pitchValue').textContent = pitch ? pitch.toFixed(1) + ' Hz' : '--';
+      document.getElementById('zcrValue').textContent = zcr.toFixed(3);
+      document.getElementById('centroidValue').textContent = centroid.toFixed(1) + ' Hz';
+      document.getElementById('rolloffValue').textContent = rolloff.toFixed(1) + ' Hz';
+      document.getElementById('spreadValue').textContent = spread.toFixed(1) + ' Hz';
+      document.getElementById('flatnessValue').textContent = flatness.toFixed(3);
+      document.getElementById('jitterValue').textContent = jitter.toFixed(2) + ' Hz';
+      document.getElementById('shimmerValue').textContent = shimmer.toFixed(3);
+      document.getElementById('hnrValue').textContent = hnr.toFixed(2) + ' dB';
+      document.getElementById('fluxValue').textContent = flux.toFixed(3);
+      
+      // Update min/max displays
+      updateMinMaxDisplay('pitch', pitch);
+      updateMinMaxDisplay('zcr', zcr);
+      updateMinMaxDisplay('centroid', centroid);
+      updateMinMaxDisplay('rolloff', rolloff);
+      updateMinMaxDisplay('spread', spread);
+      updateMinMaxDisplay('flatness', flatness);
+      updateMinMaxDisplay('jitter', jitter);
+      updateMinMaxDisplay('shimmer', shimmer);
+      updateMinMaxDisplay('hnr', hnr);
+      
+      // Update trend indicators
+      updateTrend('pitch', pitch);
+      updateTrend('zcr', zcr);
+      updateTrend('centroid', centroid);
+      updateTrend('rolloff', rolloff);
+      updateTrend('spread', spread);
+      updateTrend('flatness', flatness);
+      updateTrend('jitter', jitter);
+      updateTrend('shimmer', shimmer);
+      updateTrend('hnr', hnr);
+    }
+
+    function updateBounds(metric, value) {
+      if (value === null || value === undefined) return;
+      
+      const bounds = metricBounds[metric];
+      if (value < bounds.min) bounds.min = value;
+      if (value > bounds.max) bounds.max = value;
+      
+      bounds.values.push(value);
+      if (bounds.values.length > 10) {
+        bounds.values.shift();
+      }
+    }
+
+    function updateMinMaxDisplay(metric, currentValue) {
+      const bounds = metricBounds[metric];
+      const elem = document.getElementById(`${metric}MinMax`);
+      
+      if (elem && bounds.min !== Infinity) {
+        elem.textContent = `${bounds.min.toFixed(1)} - ${bounds.max.toFixed(1)}`;
+      }
+    }
+
+    function updateTrend(metric, currentValue) {
+      const bounds = metricBounds[metric];
+      const elem = document.getElementById(`${metric}Trend`);
+      
+      if (!elem || bounds.values.length < 3) return;
+      
+      const recent = bounds.values.slice(-5);
+      const avg = recent.reduce((a, b) => a + b, 0) / recent.length;
+      
+      if (currentValue > avg * 1.1) {
+        elem.textContent = '↑';
+        elem.style.color = '#00ff00';
+      } else if (currentValue < avg * 0.9) {
+        elem.textContent = '↓';
+        elem.style.color = '#ff6666';
+      } else {
+        elem.textContent = '→';
+        elem.style.color = '#ffff00';
+      }
+    }
+
+    function drawRadialGauge(canvasId, value, max, color) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+      const width = canvas.width;
+      const height = canvas.height;
+      const centerX = width / 2;
+      const centerY = height / 2;
+      const radius = Math.min(width, height) / 2 - 10;
+      
+      ctx.clearRect(0, 0, width, height);
+      
+      // Background arc
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius, 0.75 * Math.PI, 2.25 * Math.PI);
+      ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+      ctx.lineWidth = 8;
+      ctx.stroke();
+      
+      // Value arc
+      const angle = 0.75 * Math.PI + (value / max) * 1.5 * Math.PI;
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius, 0.75 * Math.PI, angle);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 8;
+      ctx.stroke();
+      
+      // Center text
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 16px monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(value.toFixed(0), centerX, centerY);
+    }
+
+    function drawHorizontalBar(canvasId, ratio, type) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+      const width = canvas.width;
+      const height = canvas.height;
+      
+      ctx.clearRect(0, 0, width, height);
+      
+      // Background
+      ctx.fillStyle = 'rgba(255,255,255,0.1)';
+      ctx.fillRect(0, 0, width, height);
+      
+      // Bar
+      const barWidth = Math.min(1, Math.max(0, ratio)) * width;
+      
+      let gradient;
+      if (type === 'zcr') {
+        gradient = ctx.createLinearGradient(0, 0, width, 0);
+        gradient.addColorStop(0, '#00ff00');
+        gradient.addColorStop(1, '#ff0000');
+      } else if (type === 'flatness') {
+        gradient = ctx.createLinearGradient(0, 0, width, 0);
+        gradient.addColorStop(0, '#0066ff');
+        gradient.addColorStop(1, '#ffff00');
+      }
+      
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, barWidth, height);
+    }
+
+    function drawVerticalBar(canvasId, ratio, type) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+      const width = canvas.width;
+      const height = canvas.height;
+      
+      ctx.clearRect(0, 0, width, height);
+      
+      // Background
+      ctx.fillStyle = 'rgba(255,255,255,0.1)';
+      ctx.fillRect(0, 0, width, height);
+      
+      // Bar
+      const barHeight = Math.min(1, Math.max(0, ratio)) * height;
+      
+      let gradient;
+      if (type === 'jitter') {
+        gradient = ctx.createLinearGradient(0, height, 0, 0);
+        gradient.addColorStop(0, '#00ffcc');
+        gradient.addColorStop(1, '#ff0000');
+      } else if (type === 'shimmer') {
+        gradient = ctx.createLinearGradient(0, height, 0, 0);
+        gradient.addColorStop(0, '#ff00ff');
+        gradient.addColorStop(1, '#00ffff');
+      }
+      
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, height - barHeight, width, barHeight);
+    }
+
+    function drawFluxChart(canvasId, history) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+      const width = canvas.width;
+      const height = canvas.height;
+      
+      ctx.clearRect(0, 0, width, height);
+      
+      if (history.length < 2) return;
+      
+      const max = Math.max(...history, 0.1);
+      const step = width / (maxFluxPoints - 1);
+      
+      ctx.strokeStyle = '#ffff00';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      
+      history.forEach((value, i) => {
+        const x = i * step;
+        const y = height - (value / max) * height;
+        
+        if (i === 0) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
+        }
+      });
+      
+      ctx.stroke();
+      
+      // Grid lines
+      ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 4; i++) {
+        const y = (i / 4) * height;
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(width, y);
+        ctx.stroke();
+      }
+    }
+
+    // ============================================================================
+    // FEATURE DISPLAY
+    // ============================================================================
+
+    function updateFeatureDisplay(features) {
+      const n = featureStats.count;
+      const avgPitch = featureStats.sumPitch / n;
+      const avgCentroid = featureStats.sumCentroid / n;
+      const avgRolloff = featureStats.sumRolloff / n;
+      const avgSpread = featureStats.sumSpread / n;
+      const avgFlatness = featureStats.sumFlatness / n;
+      const avgZCR = featureStats.sumZCR / n;
+      const avgJitter = featureStats.sumJitter / n;
+      const avgShimmer = featureStats.sumShimmer / n;
+      const avgHNR = featureStats.sumHNR / n;
+      const avgFlux = featureStats.sumFlux / n;
+      
+      const display = document.getElementById('featureDisplay');
+      display.textContent = 
+        `Pitch: ${features.pitch ? features.pitch.toFixed(1) : '—'} Hz (avg ${avgPitch.toFixed(1)} Hz)\n` +
+        `ZCR: ${features.zcr.toFixed(3)} (avg ${avgZCR.toFixed(3)})\n` +
+        `Spectral Centroid: ${features.centroid.toFixed(1)} Hz (avg ${avgCentroid.toFixed(1)} Hz)\n` +
+        `Spectral Rolloff: ${features.rolloff.toFixed(1)} Hz (avg ${avgRolloff.toFixed(1)} Hz)\n` +
+        `Spectral Spread: ${features.spread.toFixed(1)} Hz (avg ${avgSpread.toFixed(1)} Hz)\n` +
+        `Spectral Flatness: ${features.flatness.toFixed(3)} (avg ${avgFlatness.toFixed(3)})\n` +
+        `Jitter: ${features.jitter.toFixed(2)} Hz (avg ${avgJitter.toFixed(2)} Hz)\n` +
+        `Shimmer: ${features.shimmer.toFixed(3)} (avg ${avgShimmer.toFixed(3)})\n` +
+        `HNR: ${features.hnr.toFixed(2)} dB (avg ${avgHNR.toFixed(2)} dB)\n` +
+        `Spectral Flux: ${features.flux.toFixed(3)} (avg ${avgFlux.toFixed(3)})\n` +
+        `Formants: ${features.formants.join(', ')} Hz\n` +
+        `RMS: ${features.rms.toFixed(3)}`;
+    }
+
+    // ============================================================================
+    // VOICE QUALITY AND ANALYSIS
+    // ============================================================================
+
+    function updateVoiceQuality(features) {
+      // Calculate composite score (0-100)
+      let score = 50; // Base score
+      
+      // Low jitter is good (+20 max)
+      if (features.jitter < 5) score += 20;
+      else if (features.jitter < 10) score += 10;
+      else score += Math.max(0, 20 - features.jitter);
+      
+      // Low shimmer is good (+10 max)
+      if (features.shimmer < 0.02) score += 10;
+      else if (features.shimmer < 0.05) score += 5;
+      
+      // High HNR is good (+20 max)
+      if (features.hnr > 15) score += 20;
+      else if (features.hnr > 10) score += 15;
+      else if (features.hnr > 5) score += 10;
+      else score += Math.max(0, features.hnr * 2);
+      
+      // Appropriate flatness (+10 max)
+      if (features.flatness > 0.1 && features.flatness < 0.4) score += 10;
+      else if (features.flatness < 0.1) score += 5;
+      
+      score = Math.min(100, Math.max(0, score));
+      
+      const qualityElem = document.getElementById('qualityValue');
+      qualityElem.textContent = Math.round(score);
+      
+      // Color code
+      if (score >= 75) qualityElem.style.color = '#00ff00';
+      else if (score >= 50) qualityElem.style.color = '#ffff00';
+      else qualityElem.style.color = '#ff6666';
+    }
+
+    function updateVoiceType(features) {
+      if (!features.pitch) {
+        document.getElementById('voiceType').textContent = 'No voice detected';
+        return;
+      }
+      
+      let type = '';
+      const pitch = features.pitch;
+      const f1 = features.formants[0] ? parseFloat(features.formants[0]) : 0;
+      
+      // Simple heuristics based on pitch and first formant
+      if (pitch < 85) {
+        type = 'Male (Low Bass)';
+      } else if (pitch < 165) {
+        type = 'Male (Baritone/Tenor)';
+      } else if (pitch < 255) {
+        type = 'Female (Alto/Soprano)';
+      } else {
+        type = 'Child or High Voice';
+      }
+      
+      document.getElementById('voiceType').textContent = type;
+    }
+
+    function updateHealthIndicators(features) {
+      const warnings = [];
+      
+      // Check jitter
+      if (features.jitter > 20) {
+        warnings.push('⚠️ High jitter detected - possible vocal strain');
+      }
+      
+      // Check shimmer
+      if (features.shimmer > 0.08) {
+        warnings.push('⚠️ High shimmer - unstable voice amplitude');
+      }
+      
+      // Check HNR
+      if (features.hnr < 5 && features.pitch) {
+        warnings.push('⚠️ Low HNR - breathy or noisy voice');
+      }
+      
+      // Check pitch stability
+      const n = featureStats.count;
+      const avgPitch = featureStats.sumPitch / n;
+      if (features.pitch && Math.abs(features.pitch - avgPitch) > avgPitch * 0.3) {
+        warnings.push('ℹ️ Significant pitch variation detected');
+      }
+      
+      const statusElem = document.getElementById('healthStatus');
+      if (warnings.length === 0) {
+        statusElem.textContent = '✅ Normal';
+        statusElem.style.color = '#00ff00';
+      } else {
+        statusElem.innerHTML = warnings.join('<br>');
+        statusElem.style.color = '#ffaa00';
+      }
+    }
+
+    // ============================================================================
+    // EVENT HANDLERS
+    // ============================================================================
+
+    document.getElementById('startButton').addEventListener('click', function() {
+      navigator.mediaDevices.getUserMedia({ 
+        audio: {
+          echoCancellation: false,
+          noiseSuppression: false,
+          autoGainControl: false
+        } 
+      }).then(stream => {
+        initAudio(stream);
+        
+        // Setup recording capability
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.ondataavailable = function(e) {
+          if (e.data.size > 0) {
+            recordedChunks.push(e.data);
+          }
+        };
+      }).catch(err => {
+        document.getElementById('statusText').textContent = 'Microphone access denied';
+        console.error('Microphone error:', err);
+        alert('Unable to access microphone. Please check permissions.');
+      });
+    });
+
+    document.getElementById('stopButton').addEventListener('click', function() {
+      stopVisualization();
+    });
+
+    document.getElementById('pauseButton').addEventListener('click', function() {
+      isPaused = !isPaused;
+      this.textContent = isPaused ? '▶️ Resume' : '⏸️ Pause';
+      document.getElementById('statusText').textContent = isPaused ? 'Paused' : 'Visualizing...';
+    });
+
+    document.getElementById('recordButton').addEventListener('click', function() {
+      if (!isRecording) {
+        // Start recording
+        recordedChunks = [];
+        mediaRecorder.start();
+        isRecording = true;
+        this.textContent = '⏹️ Stop Recording';
+        this.classList.add('recording');
+        document.getElementById('statusText').textContent = 'Recording...';
+      } else {
+        // Stop recording
+        mediaRecorder.stop();
+        isRecording = false;
+        this.textContent = '⏺️ Record';
+        this.classList.remove('recording');
+        document.getElementById('statusText').textContent = 'Visualizing...';
+        document.getElementById('recordingExport').style.display = 'flex';
+      }
+    });
+
+    document.getElementById('uploadButton').addEventListener('click', function() {
+      document.getElementById('audioFileInput').click();
+    });
+
+    document.getElementById('audioFileInput').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const arrayBuffer = event.target.result;
+        
+        // Create audio context if needed
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        
+        audioCtx.decodeAudioData(arrayBuffer, function(buffer) {
+          audioBuffer = buffer;
+          
+          // Create buffer source
+          audioSource = audioCtx.createBufferSource();
+          audioSource.buffer = buffer;
+          audioSource.loop = true;
+          
+          initAudio(null);
+          audioSource.start();
+          
+          document.getElementById('statusText').textContent = 'Playing uploaded file';
+        }, function(err) {
+          console.error('Audio decode error:', err);
+          alert('Failed to decode audio file');
+        });
+      };
+      
+      reader.readAsArrayBuffer(file);
+    });
+
+    // Slider handlers
+    document.getElementById('gainSlider').addEventListener('input', function(e) {
+      const value = parseInt(e.target.value);
+      document.getElementById('gainValue').textContent = value + '%';
+      if (gainNode) {
+        gainNode.gain.value = value / 100;
+      }
+    });
+
+    document.getElementById('smoothingSlider').addEventListener('input', function(e) {
+      const value = parseInt(e.target.value);
+      document.getElementById('smoothingValue').textContent = (value / 100).toFixed(2);
+      if (analyser) {
+        analyser.smoothingTimeConstant = value / 100;
+      }
+    });
+
+    document.getElementById('fftSlider').addEventListener('input', function(e) {
+      const power = parseInt(e.target.value);
+      const size = Math.pow(2, power);
+      document.getElementById('fftValue').textContent = size;
+      
+      // Note: Changing FFT size requires recreating analyser
+      // For simplicity, we'll just show the value
+      // Full implementation would restart with new FFT size
+    });
+
+    // Toggle handlers
+    document.getElementById('toggleWaveform').addEventListener('change', function(e) {
+      document.getElementById('waveformSection').classList.toggle('hidden', !e.target.checked);
+    });
+
+    document.getElementById('toggleFrequency').addEventListener('change', function(e) {
+      document.getElementById('frequencySection').classList.toggle('hidden', !e.target.checked);
+    });
+
+    document.getElementById('toggleSpectrogram').addEventListener('change', function(e) {
+      document.getElementById('spectrogramSection').classList.toggle('hidden', !e.target.checked);
+    });
+
+    document.getElementById('toggleMetrics').addEventListener('change', function(e) {
+      document.getElementById('metricsSection').classList.toggle('hidden', !e.target.checked);
+    });
+
+    document.getElementById('toggleFeatures').addEventListener('change', function(e) {
+      document.getElementById('featuresSection').classList.toggle('hidden', !e.target.checked);
+    });
+
+    // Theme switcher
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        
+        const theme = this.dataset.theme;
+        document.body.className = theme === 'dark' ? '' : `${theme}-theme`;
+      });
+    });
+
+    // ============================================================================
+    // UTILITY FUNCTIONS
+    // ============================================================================
+
+    function resetStats() {
+      if (!confirm('Reset all statistics and metrics?')) return;
+      
+      featureStats.count = 0;
+      featureStats.sumPitch = 0;
+      featureStats.sumCentroid = 0;
+      featureStats.sumRolloff = 0;
+      featureStats.sumSpread = 0;
+      featureStats.sumFlatness = 0;
+      featureStats.sumZCR = 0;
+      featureStats.sumJitter = 0;
+      featureStats.sumShimmer = 0;
+      featureStats.sumHNR = 0;
+      featureStats.sumFlux = 0;
+      
+      fluxHistory.length = 0;
+      exportData.samples = [];
+      exportData.startTime = Date.now();
+      
+      Object.keys(metricBounds).forEach(key => {
+        metricBounds[key].min = Infinity;
+        metricBounds[key].max = -Infinity;
+        metricBounds[key].values = [];
+      });
+      
+      prevPitch = null;
+      prevRms = null;
+      prevSpectrum = null;
+      
+      document.getElementById('statusText').textContent = 'Statistics reset';
+      setTimeout(() => {
+        if (audioCtx) {
+          document.getElementById('statusText').textContent = 'Visualizing...';
+        }
+      }, 2000);
+    }
+
+    function saveSnapshot() {
+      const n = featureStats.count;
+      if (n === 0) {
+        alert('No data to save');
+        return;
+      }
+      
+      const snapshot = {
+        timestamp: new Date().toISOString(),
+        averages: {
+          pitch: (featureStats.sumPitch / n).toFixed(1),
+          zcr: (featureStats.sumZCR / n).toFixed(3),
+          centroid: (featureStats.sumCentroid / n).toFixed(1),
+          rolloff: (featureStats.sumRolloff / n).toFixed(1),
+          spread: (featureStats.sumSpread / n).toFixed(1),
+          flatness: (featureStats.sumFlatness / n).toFixed(3),
+          jitter: (featureStats.sumJitter / n).toFixed(2),
+          shimmer: (featureStats.sumShimmer / n).toFixed(3),
+          hnr: (featureStats.sumHNR / n).toFixed(2),
+          flux: (featureStats.sumFlux / n).toFixed(3)
+        },
+        sampleCount: n
+      };
+      
+      // Store in localStorage
+      const snapshots = JSON.parse(localStorage.getItem('voiceSnapshots') || '[]');
+      snapshots.push(snapshot);
+      localStorage.setItem('voiceSnapshots', JSON.stringify(snapshots));
+      
+      const btn = event.target;
+      const originalText = btn.textContent;
+      btn.textContent = '✅ Snapshot Saved';
+      btn.classList.add('success');
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.classList.remove('success');
+      }, 2000);
+    }
+
+    function showExportModal() {
+      document.getElementById('exportModal').classList.add('show');
+    }
+
+    function showCompareModal() {
+      document.getElementById('compareModal').classList.add('show');
+      
+      // Display baseline if it exists
+      if (baselineSnapshot) {
+        document.getElementById('baselineMetrics').innerHTML = formatComparisonMetrics(baselineSnapshot);
+        document.getElementById('baselineSlot').classList.add('active');
+      }
+    }
+
+    function showHelp() {
+      document.getElementById('helpModal').classList.add('show');
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove('show');
+    }
+
+    function fullscreen(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      if (canvas.requestFullscreen) {
+        canvas.requestFullscreen();
+      } else if (canvas.webkitRequestFullscreen) {
+        canvas.webkitRequestFullscreen();
+      }
+    }
+
+    function downloadVisualization() {
+      // Create a composite image of all canvases
+      const canvas = document.createElement('canvas');
+      canvas.width = 800;
+      canvas.height = 1200;
+      const ctx = canvas.getContext('2d');
+      
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      let y = 0;
+      const canvases = ['waveform', 'frequency', 'spectrogram'];
+      
+      canvases.forEach(id => {
+        const sourceCanvas = document.getElementById(id);
+        if (sourceCanvas) {
+          ctx.drawImage(sourceCanvas, 0, y);
+          y += sourceCanvas.height + 10;
+        }
+      });
+      
+      // Download
+      canvas.toBlob(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `voice-visualization-${Date.now()}.png`;
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+    }
+
+    function exportCSV() {
+      if (exportData.samples.length === 0) {
+        alert('No data to export');
+        return;
+      }
+      
+      let csv = 'Timestamp (ms),Pitch (Hz),ZCR,Centroid (Hz),Rolloff (Hz),Spread (Hz),Flatness,Jitter (Hz),Shimmer,HNR (dB),Flux,RMS\n';
+      
+      exportData.samples.forEach(sample => {
+        csv += `${sample.timestamp},${sample.pitch || ''},${sample.zcr},${sample.centroid},${sample.rolloff},${sample.spread},${sample.flatness},${sample.jitter},${sample.shimmer},${sample.hnr},${sample.flux},${sample.rms}\n`;
+      });
+      
+      downloadFile(csv, `voice-metrics-${Date.now()}.csv`, 'text/csv');
+    }
+
+    function exportJSON() {
+      if (exportData.samples.length === 0) {
+        alert('No data to export');
+        return;
+      }
+      
+      const data = {
+        metadata: {
+          exportDate: new Date().toISOString(),
+          duration: Date.now() - exportData.startTime,
+          sampleCount: exportData.samples.length,
+          sampleRate: audioCtx ? audioCtx.sampleRate : null,
+          fftSize: analyser ? analyser.fftSize : null
+        },
+        samples: exportData.samples,
+        statistics: {
+          averages: {
+            pitch: featureStats.sumPitch / featureStats.count,
+            zcr: featureStats.sumZCR / featureStats.count,
+            centroid: featureStats.sumCentroid / featureStats.count,
+            rolloff: featureStats.sumRolloff / featureStats.count,
+            spread: featureStats.sumSpread / featureStats.count,
+            flatness: featureStats.sumFlatness / featureStats.count,
+            jitter: featureStats.sumJitter / featureStats.count,
+            shimmer: featureStats.sumShimmer / featureStats.count,
+            hnr: featureStats.sumHNR / featureStats.count,
+            flux: featureStats.sumFlux / featureStats.count
+          },
+          bounds: metricBounds
+        }
+      };
+      
+      downloadFile(JSON.stringify(data, null, 2), `voice-metrics-${Date.now()}.json`, 'application/json');
+    }
+
+    function exportVisualization() {
+      downloadVisualization();
+    }
+
+    function downloadRecording() {
+      if (recordedChunks.length === 0) {
+        alert('No recording available');
+        return;
+      }
+      
+      const blob = new Blob(recordedChunks, { type: 'audio/webm' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `voice-recording-${Date.now()}.webm`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function downloadFile(content, filename, mimeType) {
+      const blob = new Blob([content], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function saveBaseline() {
+      const n = featureStats.count;
+      if (n === 0) {
+        alert('No data to save as baseline');
+        return;
+      }
+      
+      baselineSnapshot = {
+        pitch: (featureStats.sumPitch / n).toFixed(1),
+        zcr: (featureStats.sumZCR / n).toFixed(3),
+        centroid: (featureStats.sumCentroid / n).toFixed(1),
+        rolloff: (featureStats.sumRolloff / n).toFixed(1),
+        spread: (featureStats.sumSpread / n).toFixed(1),
+        flatness: (featureStats.sumFlatness / n).toFixed(3),
+        jitter: (featureStats.sumJitter / n).toFixed(2),
+        shimmer: (featureStats.sumShimmer / n).toFixed(3),
+        hnr: (featureStats.sumHNR / n).toFixed(2),
+        flux: (featureStats.sumFlux / n).toFixed(3)
+      };
+      
+      document.getElementById('baselineMetrics').innerHTML = formatComparisonMetrics(baselineSnapshot);
+      document.getElementById('baselineSlot').classList.add('active');
+      
+      alert('Baseline saved! Continue speaking to see comparison.');
+    }
+
+    function updateComparison(features) {
+      if (!baselineSnapshot) return;
+      
+      const n = featureStats.count;
+      const current = {
+        pitch: (featureStats.sumPitch / n).toFixed(1),
+        zcr: (featureStats.sumZCR / n).toFixed(3),
+        centroid: (featureStats.sumCentroid / n).toFixed(1),
+        rolloff: (featureStats.sumRolloff / n).toFixed(1),
+        spread: (featureStats.sumSpread / n).toFixed(1),
+        flatness: (featureStats.sumFlatness / n).toFixed(3),
+        jitter: (featureStats.sumJitter / n).toFixed(2),
+        shimmer: (featureStats.sumShimmer / n).toFixed(3),
+        hnr: (featureStats.sumHNR / n).toFixed(2),
+        flux: (featureStats.sumFlux / n).toFixed(3)
+      };
+      
+      document.getElementById('compareMetrics').innerHTML = formatComparisonMetrics(current);
+      
+      // Calculate differences
+      let diff = '';
+      Object.keys(baselineSnapshot).forEach(key => {
+        const base = parseFloat(baselineSnapshot[key]);
+        const curr = parseFloat(current[key]);
+        const delta = curr - base;
+        const percent = base !== 0 ? ((delta / base) * 100).toFixed(1) : 'N/A';
+        const arrow = delta > 0 ? '↑' : delta < 0 ? '↓' : '→';
+        const color = Math.abs(delta) < base * 0.1 ? '#00ff00' : '#ffaa00';
+        
+        diff += `<span style="color: ${color}">${key}: ${delta > 0 ? '+' : ''}${delta.toFixed(2)} (${arrow} ${percent}%)</span>\n`;
+      });
+      
+      document.getElementById('diffMetrics').innerHTML = diff;
+    }
+
+    function formatComparisonMetrics(data) {
+      return `
+Pitch: ${data.pitch} Hz
+ZCR: ${data.zcr}
+Centroid: ${data.centroid} Hz
+Rolloff: ${data.rolloff} Hz
+Spread: ${data.spread} Hz
+Flatness: ${data.flatness}
+Jitter: ${data.jitter} Hz
+Shimmer: ${data.shimmer}
+HNR: ${data.hnr} dB
+Flux: ${data.flux}
+      `.trim();
+    }
+
+    // ============================================================================
+    // KEYBOARD SHORTCUTS
+    // ============================================================================
+
+    document.addEventListener('keydown', function(e) {
+      // Don't trigger if typing in input
+      if (e.target.tagName === 'INPUT') return;
+      
+      switch(e.key.toLowerCase()) {
+        case ' ':
+          e.preventDefault();
+          if (!audioCtx) {
+            document.getElementById('startButton').click();
+          } else {
+            document.getElementById('stopButton').click();
+          }
+          break;
+        case 'p':
+          if (audioCtx) {
+            document.getElementById('pauseButton').click();
+          }
+          break;
+        case 'r':
+          if (audioCtx) {
+            document.getElementById('recordButton').click();
+          }
+          break;
+        case 's':
+          if (audioCtx) {
+            saveSnapshot();
+          }
+          break;
+        case 'e':
+          showExportModal();
+          break;
+        case 'h':
+          showHelp();
+          break;
+        case 'escape':
+          document.querySelectorAll('.modal').forEach(m => m.classList.remove('show'));
+          break;
+      }
+    });
+
+    // ============================================================================
+    // RESPONSIVE CANVAS SIZING
+    // ============================================================================
+
+    function resizeCanvases() {
+      const containerWidth = Math.min(window.innerWidth - 40, 800);
+      
+      ['waveform', 'frequency', 'spectrogram', 'volumeMeter'].forEach(id => {
+        const canvas = document.getElementById(id);
+        if (canvas) {
+          const originalHeight = canvas.height;
+          canvas.width = containerWidth;
+          canvas.height = originalHeight;
+        }
+      });
+    }
+
+    window.addEventListener('resize', resizeCanvases);
+    
+    // Initialize on load
+    resizeCanvases();
+  </script>
+</body>
+</html>

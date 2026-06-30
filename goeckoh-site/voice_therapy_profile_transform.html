@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voice Therapy - Profile & Transform</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #0a0e1a 0%, #131829 100%);
+      color: #fff;
+      min-height: 100vh;
+      padding: 80px 20px 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin: 0 0 10px 0;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      color: #333;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .card h2 {
+      margin: 0 0 16px 0;
+      font-size: 20px;
+      color: #667eea;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .profile-list {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .profile-item {
+      background: #f8f9fa;
+      padding: 12px;
+      margin-bottom: 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 2px solid transparent;
+    }
+
+    .profile-item:hover {
+      background: #e9ecef;
+      transform: translateX(4px);
+    }
+
+    .profile-item.active {
+      border-color: #667eea;
+      background: #e7eaff;
+    }
+
+    .profile-item .name {
+      font-weight: bold;
+      color: #667eea;
+      margin-bottom: 4px;
+    }
+
+    .profile-item .meta {
+      font-size: 12px;
+      color: #6c757d;
+    }
+
+    .profile-item .params {
+      font-size: 11px;
+      color: #495057;
+      margin-top: 4px;
+      font-family: 'Courier New', monospace;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 14px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      width: 100%;
+      margin-bottom: 8px;
+    }
+
+    button:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    button.danger {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    button.success {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .recording {
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    .param-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .param-box {
+      background: #f8f9fa;
+      padding: 12px;
+      border-radius: 6px;
+      border-left: 3px solid #667eea;
+    }
+
+    .param-box .label {
+      font-size: 11px;
+      color: #6c757d;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .param-box .value {
+      font-size: 18px;
+      font-weight: bold;
+      color: #667eea;
+    }
+
+    .param-box .range {
+      font-size: 10px;
+      color: #adb5bd;
+      margin-top: 2px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #dee2e6;
+      border-radius: 6px;
+      font-size: 14px;
+      margin-bottom: 12px;
+      transition: border-color 0.3s;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .slider-container {
+      margin-bottom: 16px;
+    }
+
+    .slider-container label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: #dee2e6;
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #667eea;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #667eea;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .status {
+      padding: 12px;
+      border-radius: 6px;
+      margin-top: 12px;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .status.info {
+      background: #d1ecf1;
+      color: #0c5460;
+    }
+
+    .status.success {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status.warning {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .status.error {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    canvas {
+      width: 100%;
+      height: 200px;
+      background: #000;
+      border-radius: 6px;
+      margin-top: 12px;
+    }
+
+    .visualizer-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .comparison-viz {
+      background: rgba(255, 255, 255, 0.95);
+      color: #333;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .comparison-viz h3 {
+      margin: 0 0 12px 0;
+      font-size: 16px;
+      color: #667eea;
+    }
+
+    .match-meter {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 16px;
+    }
+
+    .match-meter .label {
+      font-size: 12px;
+      color: #6c757d;
+      margin-bottom: 8px;
+    }
+
+    .match-bar-container {
+      background: #dee2e6;
+      height: 24px;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .match-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #f093fb 0%, #667eea 50%, #4facfe 100%);
+      transition: width 0.5s;
+      border-radius: 12px;
+    }
+
+    .match-percentage {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-weight: bold;
+      font-size: 12px;
+      color: #333;
+    }
+
+    .training-tips {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 12px;
+      margin-top: 16px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: #856404;
+    }
+
+    .progress-tracker {
+      margin-top: 16px;
+    }
+
+    .progress-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #dee2e6;
+    }
+
+    .progress-item:last-child {
+      border-bottom: none;
+    }
+
+    .progress-item .metric-name {
+      font-size: 12px;
+      color: #495057;
+    }
+
+    .progress-item .metric-bar {
+      flex: 1;
+      margin: 0 12px;
+      background: #dee2e6;
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-item .metric-fill {
+      height: 100%;
+      background: #667eea;
+      border-radius: 4px;
+      transition: width 0.3s;
+    }
+
+    .progress-item .metric-value {
+      font-size: 11px;
+      font-weight: bold;
+      color: #667eea;
+      min-width: 60px;
+      text-align: right;
+    }
+
+    @media (max-width: 968px) {
+      .main-grid,
+      .visualizer-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .help-icon {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      background: #667eea;
+      color: white;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 18px;
+      font-size: 12px;
+      cursor: help;
+      margin-left: 4px;
+    }
+
+    .tab-container {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      border-bottom: 2px solid #dee2e6;
+    }
+
+    .tab {
+      padding: 8px 16px;
+      background: transparent;
+      border: none;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      font-weight: 500;
+      color: #6c757d;
+      transition: all 0.3s;
+      box-shadow: none;
+      margin-bottom: 0;
+      width: auto;
+    }
+
+    .tab:hover {
+      color: #667eea;
+      transform: none;
+    }
+
+    .tab.active {
+      color: #667eea;
+      border-bottom-color: #667eea;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .export-btn {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      margin-top: 8px;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #dee2e6;
+      border-radius: 6px;
+      font-size: 12px;
+      font-family: 'Courier New', monospace;
+      resize: vertical;
+      min-height: 100px;
+    }
+  </style>
+  <link rel="stylesheet" href="goeckoh-shared.css">
+</head>
+<body>
+  <nav class="gk-nav">
+    <a href="index.html" class="gk-nav-brand">
+      <img src="images/logo-clean.png" alt="Goeckoh" class="gk-nav-logo">
+      <div>
+        <div class="gk-nav-brand-name">GOECK<span>OH</span></div>
+        <div class="gk-nav-brand-sub">Go Echo</div>
+      </div>
+    </a>
+    <div class="gk-nav-links" id="gkNav">
+      <a href="real_time_therapeutic_voice_cloning_system.html" class="gk-nav-link">Echo Therapy</a>
+      <a href="advanced_voice_visualizer_pro.html"              class="gk-nav-link">Visualizer</a>
+      <a href="voice_therapy_profile_transform.html"            class="gk-nav-link active">Profile Lab</a>
+      <a href="goeckoh_dashboard.html"                          class="gk-nav-link">Dashboard</a>
+      <a href="observatory.html"                                 class="gk-nav-link">Observatory</a>
+      <a href="voice_setup.html"                                class="gk-nav-link">Setup</a>
+    </div>
+    <a href="download.html" class="gk-nav-cta">Download</a>
+    <button class="gk-nav-toggle" onclick="document.getElementById('gkNav').classList.toggle('gk-open')" aria-label="Menu">☰</button>
+  </nav>
+  <div class="container">
+    <header>
+      <h1>🎙️ Voice Therapy - Profile & Transform</h1>
+      <div class="subtitle">Map individual voice characteristics for therapeutic voice training and transformation</div>
+    </header>
+
+    <div class="main-grid">
+      <!-- Left Panel: Profile Management -->
+      <div class="card">
+        <h2>👤 Voice Profiles</h2>
+        
+        <div class="tab-container">
+          <button class="tab active" onclick="switchTab('create')">Create Profile</button>
+          <button class="tab" onclick="switchTab('load')">Load Profile</button>
+        </div>
+
+        <!-- Create Profile Tab -->
+        <div id="createTab" class="tab-content active">
+          <input type="text" id="profileName" placeholder="Enter profile name (e.g., 'Sarah - Target Voice')">
+          
+          <button id="recordProfileBtn">🎤 Record Reference Voice (30s)</button>
+          <div id="recordingStatus" class="status info" style="display: none;">
+            Recording: <span id="recordingTimer">0</span>s
+          </div>
+          
+          <button id="analyzeBtn" disabled>🔬 Analyze & Create Profile</button>
+          
+          <div id="profileStatus" style="display: none;" class="status"></div>
+        </div>
+
+        <!-- Load Profile Tab -->
+        <div id="loadTab" class="tab-content">
+          <div class="profile-list" id="profileList">
+            <p style="color: #6c757d; text-align: center;">No profiles saved yet</p>
+          </div>
+          
+          <button onclick="importProfile()">📥 Import Profile (JSON)</button>
+          <input type="file" id="importFile" accept=".json" style="display: none;">
+          
+          <button class="danger" onclick="deleteSelectedProfile()" id="deleteProfileBtn" disabled>
+            🗑️ Delete Selected Profile
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Panel: Current Profile Details -->
+      <div class="card">
+        <h2>📊 Voice Characteristics <span class="help-icon" title="Unique parameters that define this voice">?</span></h2>
+        
+        <div id="noProfileMsg" style="text-align: center; padding: 40px; color: #6c757d;">
+          <p>👆 Create or load a voice profile to see characteristics</p>
+        </div>
+
+        <div id="profileDetails" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h3 style="margin: 0; color: #667eea;" id="currentProfileName">--</h3>
+            <button class="export-btn" onclick="exportProfile()">💾 Export Profile</button>
+          </div>
+
+          <div class="param-grid">
+            <div class="param-box">
+              <div class="label">Average Pitch</div>
+              <div class="value" id="avgPitch">-- Hz</div>
+              <div class="range" id="pitchRange">--</div>
+            </div>
+            <div class="param-box">
+              <div class="label">Pitch Variance</div>
+              <div class="value" id="pitchVariance">-- Hz</div>
+              <div class="range">Stability indicator</div>
+            </div>
+            <div class="param-box">
+              <div class="label">Formant 1 (F1)</div>
+              <div class="value" id="f1Value">-- Hz</div>
+              <div class="range">Vowel openness</div>
+            </div>
+            <div class="param-box">
+              <div class="label">Formant 2 (F2)</div>
+              <div class="value" id="f2Value">-- Hz</div>
+              <div class="range">Vowel frontness</div>
+            </div>
+            <div class="param-box">
+              <div class="label">Formant 3 (F3)</div>
+              <div class="value" id="f3Value">-- Hz</div>
+              <div class="range">Voice resonance</div>
+            </div>
+            <div class="param-box">
+              <div class="label">Spectral Centroid</div>
+              <div class="value" id="centroidValue">-- Hz</div>
+              <div class="range">Voice brightness</div>
+            </div>
+            <div class="param-box">
+              <div class="label">Voice Quality (HNR)</div>
+              <div class="value" id="hnrValue">-- dB</div>
+              <div class="range">Clarity measure</div>
+            </div>
+            <div class="param-box">
+              <div class="label">Jitter</div>
+              <div class="value" id="jitterValue">-- Hz</div>
+              <div class="range">Pitch stability</div>
+            </div>
+            <div class="param-box">
+              <div class="label">Shimmer</div>
+              <div class="value" id="shimmerValue">--</div>
+              <div class="range">Amplitude stability</div>
+            </div>
+            <div class="param-box">
+              <div class="label">Spectral Tilt</div>
+              <div class="value" id="tiltValue">-- dB/oct</div>
+              <div class="range">Voice character</div>
+            </div>
+          </div>
+
+          <canvas id="profileSpectrum"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Voice Transformation Section -->
+    <div class="card" style="margin-bottom: 20px;">
+      <h2>🎯 Real-Time Voice Transformation <span class="help-icon" title="Transform your voice to match the target profile">?</span></h2>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+        <div>
+          <label style="display: block; margin-bottom: 8px; font-weight: 500;">Source (Your Voice)</label>
+          <button id="startTransformBtn" disabled>🎤 Start Live Transformation</button>
+          <button id="stopTransformBtn" disabled style="display: none;">⏹️ Stop Transformation</button>
+        </div>
+        <div>
+          <label style="display: block; margin-bottom: 8px; font-weight: 500;">Target Profile</label>
+          <select id="targetProfileSelect" style="width: 100%; padding: 12px; border-radius: 6px; border: 2px solid #dee2e6;">
+            <option value="">Select target profile...</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Manual Transformation Controls -->
+      <div id="transformControls" style="display: none;">
+        <h3 style="margin: 16px 0 12px 0; color: #667eea;">Transformation Parameters</h3>
+        
+        <div class="slider-container">
+          <label>
+            <span>Pitch Shift</span>
+            <span id="pitchShiftValue">0 semitones</span>
+          </label>
+          <input type="range" id="pitchShift" min="-12" max="12" value="0" step="0.1">
+        </div>
+
+        <div class="slider-container">
+          <label>
+            <span>Formant Shift</span>
+            <span id="formantShiftValue">0%</span>
+          </label>
+          <input type="range" id="formantShift" min="-50" max="50" value="0" step="1">
+        </div>
+
+        <div class="slider-container">
+          <label>
+            <span>Resonance</span>
+            <span id="resonanceValue">0 dB</span>
+          </label>
+          <input type="range" id="resonance" min="-12" max="12" value="0" step="0.5">
+        </div>
+
+        <div class="slider-container">
+          <label>
+            <span>Breathiness</span>
+            <span id="breathinessValue">0%</span>
+          </label>
+          <input type="range" id="breathiness" min="0" max="100" value="0" step="1">
+        </div>
+
+        <button id="autoMatchBtn" class="success">✨ Auto-Match Target Profile</button>
+      </div>
+    </div>
+
+    <!-- Visualization and Matching -->
+    <div class="visualizer-row">
+      <!-- Source Voice Viz -->
+      <div class="comparison-viz">
+        <h3>Your Voice (Source)</h3>
+        <canvas id="sourceViz"></canvas>
+        <div id="sourceParams" style="margin-top: 12px; font-size: 12px; font-family: 'Courier New', monospace; color: #6c757d;">
+          Waiting for audio input...
+        </div>
+      </div>
+
+      <!-- Target Voice Viz -->
+      <div class="comparison-viz">
+        <h3>Target Voice Profile</h3>
+        <canvas id="targetViz"></canvas>
+        <div id="targetParams" style="margin-top: 12px; font-size: 12px; font-family: 'Courier New', monospace; color: #6c757d;">
+          No target profile selected
+        </div>
+      </div>
+    </div>
+
+    <!-- Match Meter and Progress -->
+    <div class="card">
+      <h2>📈 Voice Match Progress</h2>
+      
+      <div class="match-meter">
+        <div class="label">Overall Voice Match</div>
+        <div class="match-bar-container">
+          <div class="match-bar" id="matchBar" style="width: 0%"></div>
+          <div class="match-percentage" id="matchPercentage">0%</div>
+        </div>
+      </div>
+
+      <div class="progress-tracker" id="progressTracker">
+        <div class="progress-item">
+          <span class="metric-name">Pitch Match</span>
+          <div class="metric-bar"><div class="metric-fill" id="pitchMatch" style="width: 0%"></div></div>
+          <span class="metric-value" id="pitchMatchVal">0%</span>
+        </div>
+        <div class="progress-item">
+          <span class="metric-name">Formant Match</span>
+          <div class="metric-bar"><div class="metric-fill" id="formantMatch" style="width: 0%"></div></div>
+          <span class="metric-value" id="formantMatchVal">0%</span>
+        </div>
+        <div class="progress-item">
+          <span class="metric-name">Spectral Match</span>
+          <div class="metric-bar"><div class="metric-fill" id="spectralMatch" style="width: 0%"></div></div>
+          <span class="metric-value" id="spectralMatchVal">0%</span>
+        </div>
+        <div class="progress-item">
+          <span class="metric-name">Quality Match</span>
+          <div class="metric-bar"><div class="metric-fill" id="qualityMatch" style="width: 0%"></div></div>
+          <span class="metric-value" id="qualityMatchVal">0%</span>
+        </div>
+      </div>
+
+      <div class="training-tips" id="trainingTips" style="display: none;">
+        <strong>💡 Training Tips:</strong>
+        <div id="tipsContent"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ============================================================================
+    // GLOBAL STATE
+    // ============================================================================
+    
+    let audioCtx;
+    let analyser;
+    let microphone;
+    let gainNode;
+    let currentStream;
+    
+    // Recording for profile creation
+    let profileRecorder;
+    let profileChunks = [];
+    let recordingTimer;
+    let recordingDuration = 0;
+    const MAX_RECORDING_TIME = 30; // seconds
+    
+    // Voice profiles
+    let profiles = [];
+    let currentProfile = null;
+    let selectedProfile = null;
+    
+    // Real-time transformation
+    let transformActive = false;
+    let targetProfile = null;
+    let pitchShifter;
+    let scriptProcessor;
+    
+    // Analysis buffers
+    let analysisBuffer = [];
+    const ANALYSIS_SAMPLES = 100;
+    
+    // Visualization
+    let vizAnimationId;
+    
+    // ============================================================================
+    // INITIALIZATION
+    // ============================================================================
+    
+    window.addEventListener('load', function() {
+      loadProfiles();
+      updateProfileList();
+      setupEventListeners();
+      initCanvases();
+    });
+    
+    function loadProfiles() {
+      const saved = localStorage.getItem('voiceProfiles');
+      if (saved) {
+        profiles = JSON.parse(saved);
+        updateTargetProfileSelect();
+      }
+    }
+    
+    function saveProfiles() {
+      localStorage.setItem('voiceProfiles', JSON.stringify(profiles));
+      updateTargetProfileSelect();
+    }
+    
+    function setupEventListeners() {
+      // Profile recording
+      document.getElementById('recordProfileBtn').addEventListener('click', startProfileRecording);
+      document.getElementById('analyzeBtn').addEventListener('click', analyzeAndCreateProfile);
+      
+      // Import
+      document.getElementById('importFile').addEventListener('change', handleImport);
+      
+      // Transformation
+      document.getElementById('startTransformBtn').addEventListener('click', startTransformation);
+      document.getElementById('stopTransformBtn').addEventListener('click', stopTransformation);
+      document.getElementById('autoMatchBtn').addEventListener('click', autoMatchProfile);
+      
+      // Transformation controls
+      document.getElementById('pitchShift').addEventListener('input', updatePitchShift);
+      document.getElementById('formantShift').addEventListener('input', updateFormantShift);
+      document.getElementById('resonance').addEventListener('input', updateResonance);
+      document.getElementById('breathiness').addEventListener('input', updateBreathiness);
+      
+      // Target profile selection
+      document.getElementById('targetProfileSelect').addEventListener('change', function() {
+        const profileId = this.value;
+        if (profileId) {
+          targetProfile = profiles.find(p => p.id === profileId);
+          updateTargetVisualization();
+          document.getElementById('startTransformBtn').disabled = false;
+          updateTargetParams();
+        } else {
+          targetProfile = null;
+          document.getElementById('startTransformBtn').disabled = true;
+        }
+      });
+    }
+    
+    function initCanvases() {
+      const canvases = ['profileSpectrum', 'sourceViz', 'targetViz'];
+      canvases.forEach(id => {
+        const canvas = document.getElementById(id);
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.offsetWidth;
+        canvas.height = 200;
+        
+        // Draw empty state
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      });
+    }
+    
+    // ============================================================================
+    // PROFILE CREATION
+    // ============================================================================
+    
+    function startProfileRecording() {
+      const name = document.getElementById('profileName').value.trim();
+      if (!name) {
+        alert('Please enter a profile name');
+        return;
+      }
+      
+      navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(stream => {
+          currentStream = stream;
+          profileChunks = [];
+          recordingDuration = 0;
+          
+          profileRecorder = new MediaRecorder(stream);
+          profileRecorder.ondataavailable = e => {
+            if (e.data.size > 0) profileChunks.push(e.data);
+          };
+          
+          profileRecorder.onstop = () => {
+            document.getElementById('analyzeBtn').disabled = false;
+          };
+          
+          profileRecorder.start();
+          
+          // Update UI
+          document.getElementById('recordProfileBtn').disabled = true;
+          document.getElementById('recordingStatus').style.display = 'block';
+          document.getElementById('recordingStatus').classList.add('recording');
+          
+          // Start timer
+          recordingTimer = setInterval(() => {
+            recordingDuration++;
+            document.getElementById('recordingTimer').textContent = recordingDuration;
+            
+            if (recordingDuration >= MAX_RECORDING_TIME) {
+              stopProfileRecording();
+            }
+          }, 1000);
+        })
+        .catch(err => {
+          console.error('Microphone error:', err);
+          alert('Unable to access microphone');
+        });
+    }
+    
+    function stopProfileRecording() {
+      if (profileRecorder && profileRecorder.state !== 'inactive') {
+        profileRecorder.stop();
+      }
+      
+      if (currentStream) {
+        currentStream.getTracks().forEach(track => track.stop());
+      }
+      
+      clearInterval(recordingTimer);
+      
+      // Update UI
+      document.getElementById('recordProfileBtn').disabled = false;
+      document.getElementById('recordingStatus').classList.remove('recording');
+    }
+    
+    async function analyzeAndCreateProfile() {
+      const name = document.getElementById('profileName').value.trim();
+      
+      // Show analyzing status
+      const statusEl = document.getElementById('profileStatus');
+      statusEl.style.display = 'block';
+      statusEl.className = 'status info';
+      statusEl.textContent = '🔬 Analyzing voice characteristics...';
+      
+      // Convert recorded audio to buffer
+      const audioBlob = new Blob(profileChunks, { type: 'audio/webm' });
+      const arrayBuffer = await audioBlob.arrayBuffer();
+      
+      // Create audio context for analysis
+      const analysisCtx = new (window.AudioContext || window.webkitAudioContext)();
+      
+      try {
+        const audioBuffer = await analysisCtx.decodeAudioData(arrayBuffer);
+        
+        // Extract voice characteristics
+        const characteristics = await extractVoiceCharacteristics(audioBuffer, analysisCtx);
+        
+        // Create profile
+        const profile = {
+          id: Date.now().toString(),
+          name: name,
+          created: new Date().toISOString(),
+          duration: recordingDuration,
+          sampleRate: analysisCtx.sampleRate,
+          characteristics: characteristics
+        };
+        
+        profiles.push(profile);
+        saveProfiles();
+        
+        // Update UI
+        statusEl.className = 'status success';
+        statusEl.textContent = '✅ Profile created successfully!';
+        
+        currentProfile = profile;
+        displayProfileDetails(profile);
+        updateProfileList();
+        
+        // Reset form
+        document.getElementById('profileName').value = '';
+        document.getElementById('analyzeBtn').disabled = true;
+        document.getElementById('recordingStatus').style.display = 'none';
+        
+        setTimeout(() => {
+          statusEl.style.display = 'none';
+        }, 3000);
+        
+      } catch (err) {
+        console.error('Analysis error:', err);
+        statusEl.className = 'status error';
+        statusEl.textContent = '❌ Error analyzing voice. Please try again.';
+      }
+    }
+    
+    async function extractVoiceCharacteristics(audioBuffer, ctx) {
+      const channelData = audioBuffer.getChannelData(0);
+      const sampleRate = audioBuffer.sampleRate;
+      const fftSize = 4096;
+      
+      // Analyze in chunks
+      const chunkSize = sampleRate * 0.05; // 50ms chunks
+      const numChunks = Math.floor(channelData.length / chunkSize);
+      
+      const pitches = [];
+      const formants = { f1: [], f2: [], f3: [] };
+      const centroids = [];
+      const hnrValues = [];
+      const jitters = [];
+      const shimmers = [];
+      const spectrums = [];
+      
+      // Create offline analyzer
+      const offlineCtx = new OfflineAudioContext(1, audioBuffer.length, sampleRate);
+      const source = offlineCtx.createBufferSource();
+      source.buffer = audioBuffer;
+      
+      const analyser = offlineCtx.createAnalyser();
+      analyser.fftSize = fftSize;
+      source.connect(analyser);
+      source.start();
+      
+      // Process each chunk
+      for (let i = 0; i < Math.min(numChunks, 200); i++) {
+        const startSample = i * chunkSize;
+        const chunk = channelData.slice(startSample, startSample + chunkSize);
+        
+        // Skip silent chunks
+        const rms = Math.sqrt(chunk.reduce((sum, val) => sum + val * val, 0) / chunk.length);
+        if (rms < 0.01) continue;
+        
+        const freqData = new Uint8Array(analyser.frequencyBinCount);
+        const timeData = new Uint8Array(analyser.fftSize);
+        
+        // Simulate getting data (in real scenario, we'd process actual FFT)
+        const fakeFreqData = simulateFFT(chunk, sampleRate, fftSize);
+        const features = analyzeChunk(chunk, fakeFreqData, sampleRate);
+        
+        if (features.pitch) pitches.push(features.pitch);
+        if (features.formants.f1) formants.f1.push(features.formants.f1);
+        if (features.formants.f2) formants.f2.push(features.formants.f2);
+        if (features.formants.f3) formants.f3.push(features.formants.f3);
+        centroids.push(features.centroid);
+        hnrValues.push(features.hnr);
+        jitters.push(features.jitter);
+        shimmers.push(features.shimmer);
+        spectrums.push(features.spectrum);
+      }
+      
+      // Calculate statistics
+      const avgPitch = average(pitches);
+      const pitchStd = standardDeviation(pitches, avgPitch);
+      
+      // Calculate spectral tilt (high freq energy / low freq energy)
+      const avgSpectrum = averageSpectrum(spectrums);
+      const spectralTilt = calculateSpectralTilt(avgSpectrum);
+      
+      return {
+        pitch: {
+          mean: avgPitch,
+          std: pitchStd,
+          min: Math.min(...pitches),
+          max: Math.max(...pitches)
+        },
+        formants: {
+          f1: average(formants.f1),
+          f2: average(formants.f2),
+          f3: average(formants.f3)
+        },
+        spectral: {
+          centroid: average(centroids),
+          tilt: spectralTilt,
+          spectrum: avgSpectrum
+        },
+        quality: {
+          hnr: average(hnrValues),
+          jitter: average(jitters),
+          shimmer: average(shimmers)
+        }
+      };
+    }
+    
+    function simulateFFT(timeData, sampleRate, fftSize) {
+      // Simple DFT implementation for analysis
+      const freqData = new Float32Array(fftSize / 2);
+      const N = Math.min(timeData.length, fftSize);
+      
+      for (let k = 0; k < fftSize / 2; k++) {
+        let real = 0;
+        let imag = 0;
+        
+        for (let n = 0; n < N; n++) {
+          const angle = -2 * Math.PI * k * n / N;
+          real += timeData[n] * Math.cos(angle);
+          imag += timeData[n] * Math.sin(angle);
+        }
+        
+        freqData[k] = Math.sqrt(real * real + imag * imag) / N;
+      }
+      
+      return freqData;
+    }
+    
+    function analyzeChunk(timeData, freqData, sampleRate) {
+      const freqRes = sampleRate / (freqData.length * 2);
+      
+      // Find pitch (fundamental frequency)
+      let maxVal = 0;
+      let maxIdx = 0;
+      for (let i = 5; i < freqData.length / 2; i++) { // Skip very low frequencies
+        if (freqData[i] > maxVal) {
+          maxVal = freqData[i];
+          maxIdx = i;
+        }
+      }
+      const pitch = maxIdx * freqRes;
+      
+      // Find formants (first 3 peaks)
+      const peaks = findPeaks(freqData, 10);
+      const formants = {
+        f1: peaks[0] ? peaks[0] * freqRes : 0,
+        f2: peaks[1] ? peaks[1] * freqRes : 0,
+        f3: peaks[2] ? peaks[2] * freqRes : 0
+      };
+      
+      // Spectral centroid
+      let sumWeighted = 0;
+      let sumAmp = 0;
+      for (let i = 0; i < freqData.length; i++) {
+        sumWeighted += freqData[i] * i * freqRes;
+        sumAmp += freqData[i];
+      }
+      const centroid = sumAmp > 0 ? sumWeighted / sumAmp : 0;
+      
+      // Simple HNR approximation
+      const hnr = maxVal > 0 ? 20 * Math.log10(maxVal / (sumAmp / freqData.length)) : 0;
+      
+      // Jitter and shimmer (simplified)
+      const jitter = Math.random() * 5; // Placeholder
+      const shimmer = Math.random() * 0.05; // Placeholder
+      
+      return {
+        pitch,
+        formants,
+        centroid,
+        hnr,
+        jitter,
+        shimmer,
+        spectrum: Array.from(freqData)
+      };
+    }
+    
+    function findPeaks(data, minDistance) {
+      const peaks = [];
+      
+      for (let i = minDistance; i < data.length - minDistance; i++) {
+        let isPeak = true;
+        
+        for (let j = 1; j <= minDistance; j++) {
+          if (data[i] <= data[i - j] || data[i] <= data[i + j]) {
+            isPeak = false;
+            break;
+          }
+        }
+        
+        if (isPeak && data[i] > 0.01) {
+          peaks.push(i);
+          i += minDistance; // Skip ahead
+        }
+      }
+      
+      return peaks.slice(0, 3); // Return top 3
+    }
+    
+    function calculateSpectralTilt(spectrum) {
+      const third = Math.floor(spectrum.length / 3);
+      const lowEnergy = spectrum.slice(0, third).reduce((a, b) => a + b, 0);
+      const highEnergy = spectrum.slice(third * 2).reduce((a, b) => a + b, 0);
+      
+      return highEnergy > 0 ? 20 * Math.log10(lowEnergy / highEnergy) : 0;
+    }
+    
+    function average(arr) {
+      return arr.length > 0 ? arr.reduce((a, b) => a + b, 0) / arr.length : 0;
+    }
+    
+    function standardDeviation(arr, mean) {
+      if (arr.length === 0) return 0;
+      const variance = arr.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / arr.length;
+      return Math.sqrt(variance);
+    }
+    
+    function averageSpectrum(spectrums) {
+      if (spectrums.length === 0) return [];
+      
+      const avgSpectrum = new Array(spectrums[0].length).fill(0);
+      
+      spectrums.forEach(spectrum => {
+        spectrum.forEach((val, i) => {
+          avgSpectrum[i] += val;
+        });
+      });
+      
+      return avgSpectrum.map(val => val / spectrums.length);
+    }
+    
+    // ============================================================================
+    // PROFILE DISPLAY
+    // ============================================================================
+    
+    function displayProfileDetails(profile) {
+      document.getElementById('noProfileMsg').style.display = 'none';
+      document.getElementById('profileDetails').style.display = 'block';
+      
+      const c = profile.characteristics;
+      
+      document.getElementById('currentProfileName').textContent = profile.name;
+      document.getElementById('avgPitch').textContent = c.pitch.mean.toFixed(1) + ' Hz';
+      document.getElementById('pitchRange').textContent = `${c.pitch.min.toFixed(0)} - ${c.pitch.max.toFixed(0)} Hz`;
+      document.getElementById('pitchVariance').textContent = c.pitch.std.toFixed(1) + ' Hz';
+      
+      document.getElementById('f1Value').textContent = c.formants.f1.toFixed(0) + ' Hz';
+      document.getElementById('f2Value').textContent = c.formants.f2.toFixed(0) + ' Hz';
+      document.getElementById('f3Value').textContent = c.formants.f3.toFixed(0) + ' Hz';
+      
+      document.getElementById('centroidValue').textContent = c.spectral.centroid.toFixed(0) + ' Hz';
+      document.getElementById('tiltValue').textContent = c.spectral.tilt.toFixed(1) + ' dB/oct';
+      
+      document.getElementById('hnrValue').textContent = c.quality.hnr.toFixed(1) + ' dB';
+      document.getElementById('jitterValue').textContent = c.quality.jitter.toFixed(2) + ' Hz';
+      document.getElementById('shimmerValue').textContent = c.quality.shimmer.toFixed(3);
+      
+      // Draw spectrum
+      drawSpectrum('profileSpectrum', c.spectral.spectrum);
+    }
+    
+    function drawSpectrum(canvasId, spectrum) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+      const width = canvas.width;
+      const height = canvas.height;
+      
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, width, height);
+      
+      if (!spectrum || spectrum.length === 0) return;
+      
+      const barWidth = width / spectrum.length;
+      const max = Math.max(...spectrum, 0.01);
+      
+      for (let i = 0; i < spectrum.length; i++) {
+        const barHeight = (spectrum[i] / max) * height;
+        const hue = (i / spectrum.length) * 240;
+        
+        ctx.fillStyle = `hsl(${hue}, 80%, 60%)`;
+        ctx.fillRect(i * barWidth, height - barHeight, barWidth, barHeight);
+      }
+    }
+    
+    function updateProfileList() {
+      const listEl = document.getElementById('profileList');
+      
+      if (profiles.length === 0) {
+        listEl.innerHTML = '<p style="color: #6c757d; text-align: center;">No profiles saved yet</p>';
+        return;
+      }
+      
+      listEl.innerHTML = '';
+      
+      profiles.forEach(profile => {
+        const item = document.createElement('div');
+        item.className = 'profile-item';
+        if (selectedProfile && selectedProfile.id === profile.id) {
+          item.classList.add('active');
+        }
+        
+        const date = new Date(profile.created).toLocaleDateString();
+        
+        item.innerHTML = `
+          <div class="name">${profile.name}</div>
+          <div class="meta">Created: ${date} | Duration: ${profile.duration}s</div>
+          <div class="params">
+            Pitch: ${profile.characteristics.pitch.mean.toFixed(0)} Hz | 
+            F1: ${profile.characteristics.formants.f1.toFixed(0)} Hz | 
+            F2: ${profile.characteristics.formants.f2.toFixed(0)} Hz
+          </div>
+        `;
+        
+        item.onclick = () => selectProfile(profile);
+        
+        listEl.appendChild(item);
+      });
+    }
+    
+    function selectProfile(profile) {
+      selectedProfile = profile;
+      currentProfile = profile;
+      displayProfileDetails(profile);
+      updateProfileList();
+      document.getElementById('deleteProfileBtn').disabled = false;
+    }
+    
+    function deleteSelectedProfile() {
+      if (!selectedProfile) return;
+      
+      if (!confirm(`Delete profile "${selectedProfile.name}"?`)) return;
+      
+      profiles = profiles.filter(p => p.id !== selectedProfile.id);
+      saveProfiles();
+      
+      selectedProfile = null;
+      currentProfile = null;
+      
+      document.getElementById('noProfileMsg').style.display = 'block';
+      document.getElementById('profileDetails').style.display = 'none';
+      document.getElementById('deleteProfileBtn').disabled = true;
+      
+      updateProfileList();
+    }
+    
+    function updateTargetProfileSelect() {
+      const select = document.getElementById('targetProfileSelect');
+      select.innerHTML = '<option value="">Select target profile...</option>';
+      
+      profiles.forEach(profile => {
+        const option = document.createElement('option');
+        option.value = profile.id;
+        option.textContent = profile.name;
+        select.appendChild(option);
+      });
+    }
+    
+    // ============================================================================
+    // IMPORT/EXPORT
+    // ============================================================================
+    
+    function exportProfile() {
+      if (!currentProfile) return;
+      
+      const json = JSON.stringify(currentProfile, null, 2);
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${currentProfile.name.replace(/\s+/g, '_')}_profile.json`;
+      a.click();
+      
+      URL.revokeObjectURL(url);
+    }
+    
+    function importProfile() {
+      document.getElementById('importFile').click();
+    }
+    
+    function handleImport(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        try {
+          const profile = JSON.parse(event.target.result);
+          
+          // Validate profile structure
+          if (!profile.characteristics || !profile.name) {
+            throw new Error('Invalid profile format');
+          }
+          
+          // Assign new ID to avoid conflicts
+          profile.id = Date.now().toString();
+          
+          profiles.push(profile);
+          saveProfiles();
+          updateProfileList();
+          
+          alert(`Profile "${profile.name}" imported successfully!`);
+        } catch (err) {
+          alert('Error importing profile: ' + err.message);
+        }
+      };
+      
+      reader.readAsText(file);
+      e.target.value = ''; // Reset input
+    }
+    
+    // ============================================================================
+    // VOICE TRANSFORMATION
+    // ============================================================================
+    
+    function startTransformation() {
+      if (!targetProfile) {
+        alert('Please select a target profile first');
+        return;
+      }
+      
+      navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(stream => {
+          currentStream = stream;
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          
+          // Create audio graph
+          microphone = audioCtx.createMediaStreamSource(stream);
+          analyser = audioCtx.createAnalyser();
+          analyser.fftSize = 2048;
+          
+          gainNode = audioCtx.createGain();
+          
+          // Create script processor for real-time analysis
+          scriptProcessor = audioCtx.createScriptProcessor(4096, 1, 1);
+          
+          scriptProcessor.onaudioprocess = processAudio;
+          
+          // Connect graph
+          microphone.connect(analyser);
+          analyser.connect(scriptProcessor);
+          scriptProcessor.connect(gainNode);
+          gainNode.connect(audioCtx.destination);
+          
+          transformActive = true;
+          
+          // Update UI
+          document.getElementById('startTransformBtn').style.display = 'none';
+          document.getElementById('stopTransformBtn').style.display = 'block';
+          document.getElementById('transformControls').style.display = 'block';
+          document.getElementById('trainingTips').style.display = 'block';
+          
+          // Start visualization
+          visualizeTransformation();
+        })
+        .catch(err => {
+          console.error('Microphone error:', err);
+          alert('Unable to access microphone');
+        });
+    }
+    
+    function stopTransformation() {
+      transformActive = false;
+      
+      if (scriptProcessor) {
+        scriptProcessor.disconnect();
+        scriptProcessor = null;
+      }
+      
+      if (microphone) {
+        microphone.disconnect();
+      }
+      
+      if (analyser) {
+        analyser.disconnect();
+      }
+      
+      if (gainNode) {
+        gainNode.disconnect();
+      }
+      
+      if (currentStream) {
+        currentStream.getTracks().forEach(track => track.stop());
+      }
+      
+      if (audioCtx) {
+        audioCtx.close();
+        audioCtx = null;
+      }
+      
+      if (vizAnimationId) {
+        cancelAnimationFrame(vizAnimationId);
+      }
+      
+      // Update UI
+      document.getElementById('startTransformBtn').style.display = 'block';
+      document.getElementById('stopTransformBtn').style.display = 'none';
+      document.getElementById('transformControls').style.display = 'none';
+      document.getElementById('trainingTips').style.display = 'none';
+    }
+    
+    function processAudio(e) {
+      const inputData = e.inputBuffer.getChannelData(0);
+      const outputData = e.outputBuffer.getChannelData(0);
+      
+      // Get transformation parameters
+      const pitchShift = parseFloat(document.getElementById('pitchShift').value);
+      const formantShift = parseFloat(document.getElementById('formantShift').value) / 100;
+      
+      // Simple pitch shifting (note: real implementation would use more sophisticated algorithm)
+      const shiftRatio = Math.pow(2, pitchShift / 12);
+      
+      // Copy and apply basic transformation
+      for (let i = 0; i < inputData.length; i++) {
+        const sourceIdx = Math.floor(i / shiftRatio);
+        if (sourceIdx < inputData.length) {
+          outputData[i] = inputData[sourceIdx];
+        } else {
+          outputData[i] = 0;
+        }
+      }
+    }
+    
+    function visualizeTransformation() {
+      if (!transformActive) return;
+      
+      const freqData = new Uint8Array(analyser.frequencyBinCount);
+      analyser.getByteFrequencyData(freqData);
+      
+      // Draw source visualization
+      drawRealtimeSpectrum('sourceViz', freqData);
+      
+      // Analyze current voice
+      const currentFeatures = analyzeRealtimeVoice(freqData);
+      updateSourceParams(currentFeatures);
+      
+      // Calculate match percentage
+      if (targetProfile) {
+        const matchScores = calculateMatchScores(currentFeatures, targetProfile.characteristics);
+        updateMatchDisplay(matchScores);
+        updateTrainingTips(matchScores);
+      }
+      
+      vizAnimationId = requestAnimationFrame(visualizeTransformation);
+    }
+    
+    function drawRealtimeSpectrum(canvasId, freqData) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+      const width = canvas.width;
+      const height = canvas.height;
+      
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, width, height);
+      
+      const barWidth = width / freqData.length;
+      
+      for (let i = 0; i < freqData.length; i++) {
+        const barHeight = (freqData[i] / 255) * height;
+        const hue = (i / freqData.length) * 240;
+        
+        ctx.fillStyle = `hsl(${hue}, 80%, 60%)`;
+        ctx.fillRect(i * barWidth, height - barHeight, barWidth, barHeight);
+      }
+    }
+    
+    function analyzeRealtimeVoice(freqData) {
+      const sampleRate = audioCtx.sampleRate;
+      const freqRes = sampleRate / (analyser.fftSize);
+      
+      // Find pitch
+      let maxVal = 0;
+      let maxIdx = 0;
+      for (let i = 5; i < freqData.length / 2; i++) {
+        if (freqData[i] > maxVal) {
+          maxVal = freqData[i];
+          maxIdx = i;
+        }
+      }
+      const pitch = maxIdx * freqRes;
+      
+      // Find formants
+      const peaks = findPeaks(Array.from(freqData), 10);
+      
+      // Spectral centroid
+      let sumWeighted = 0;
+      let sumAmp = 0;
+      for (let i = 0; i < freqData.length; i++) {
+        sumWeighted += freqData[i] * i * freqRes;
+        sumAmp += freqData[i];
+      }
+      const centroid = sumAmp > 0 ? sumWeighted / sumAmp : 0;
+      
+      return {
+        pitch,
+        formants: {
+          f1: peaks[0] ? peaks[0] * freqRes : 0,
+          f2: peaks[1] ? peaks[1] * freqRes : 0,
+          f3: peaks[2] ? peaks[2] * freqRes : 0
+        },
+        centroid
+      };
+    }
+    
+    function updateSourceParams(features) {
+      const params = document.getElementById('sourceParams');
+      params.innerHTML = `
+Pitch: ${features.pitch.toFixed(1)} Hz<br>
+F1: ${features.formants.f1.toFixed(0)} Hz<br>
+F2: ${features.formants.f2.toFixed(0)} Hz<br>
+F3: ${features.formants.f3.toFixed(0)} Hz<br>
+Centroid: ${features.centroid.toFixed(0)} Hz
+      `.trim();
+    }
+    
+    function updateTargetParams() {
+      if (!targetProfile) {
+        document.getElementById('targetParams').textContent = 'No target profile selected';
+        return;
+      }
+      
+      const c = targetProfile.characteristics;
+      const params = document.getElementById('targetParams');
+      params.innerHTML = `
+Pitch: ${c.pitch.mean.toFixed(1)} Hz<br>
+F1: ${c.formants.f1.toFixed(0)} Hz<br>
+F2: ${c.formants.f2.toFixed(0)} Hz<br>
+F3: ${c.formants.f3.toFixed(0)} Hz<br>
+Centroid: ${c.spectral.centroid.toFixed(0)} Hz
+      `.trim();
+    }
+    
+    function updateTargetVisualization() {
+      if (!targetProfile) return;
+      drawSpectrum('targetViz', targetProfile.characteristics.spectral.spectrum);
+    }
+    
+    function calculateMatchScores(current, target) {
+      // Pitch match (within 10%)
+      const pitchDiff = Math.abs(current.pitch - target.pitch.mean);
+      const pitchMatch = Math.max(0, 100 - (pitchDiff / target.pitch.mean) * 100);
+      
+      // Formant match
+      const f1Diff = Math.abs(current.formants.f1 - target.formants.f1);
+      const f2Diff = Math.abs(current.formants.f2 - target.formants.f2);
+      const formantMatch = Math.max(0, 100 - ((f1Diff + f2Diff) / (target.formants.f1 + target.formants.f2)) * 100);
+      
+      // Spectral match
+      const centroidDiff = Math.abs(current.centroid - target.spectral.centroid);
+      const spectralMatch = Math.max(0, 100 - (centroidDiff / target.spectral.centroid) * 100);
+      
+      // Quality match (placeholder - would need real-time jitter/shimmer)
+      const qualityMatch = 75; // Placeholder
+      
+      // Overall match
+      const overall = (pitchMatch + formantMatch + spectralMatch + qualityMatch) / 4;
+      
+      return {
+        pitch: Math.min(100, pitchMatch),
+        formant: Math.min(100, formantMatch),
+        spectral: Math.min(100, spectralMatch),
+        quality: qualityMatch,
+        overall: Math.min(100, overall)
+      };
+    }
+    
+    function updateMatchDisplay(scores) {
+      // Update overall match
+      document.getElementById('matchBar').style.width = scores.overall + '%';
+      document.getElementById('matchPercentage').textContent = scores.overall.toFixed(0) + '%';
+      
+      // Update individual metrics
+      updateProgressBar('pitchMatch', 'pitchMatchVal', scores.pitch);
+      updateProgressBar('formantMatch', 'formantMatchVal', scores.formant);
+      updateProgressBar('spectralMatch', 'spectralMatchVal', scores.spectral);
+      updateProgressBar('qualityMatch', 'qualityMatchVal', scores.quality);
+    }
+    
+    function updateProgressBar(barId, valueId, percentage) {
+      document.getElementById(barId).style.width = percentage + '%';
+      document.getElementById(valueId).textContent = percentage.toFixed(0) + '%';
+    }
+    
+    function updateTrainingTips(scores) {
+      const tips = [];
+      
+      if (scores.pitch < 80) {
+        const diff = Math.abs(analyser ? 0 : 0); // Placeholder
+        tips.push(`🎵 Pitch: Adjust your pitch ${diff > 0 ? 'higher' : 'lower'} to match target`);
+      }
+      
+      if (scores.formant < 80) {
+        tips.push('🗣️ Formants: Adjust tongue position and mouth opening');
+      }
+      
+      if (scores.spectral < 80) {
+        tips.push('✨ Brightness: Adjust voice resonance (more forward/backward)');
+      }
+      
+      if (scores.overall > 85) {
+        tips.push('✅ Excellent match! Keep practicing to maintain consistency');
+      } else if (scores.overall > 70) {
+        tips.push('👍 Good progress! Fine-tune the remaining parameters');
+      } else if (scores.overall > 50) {
+        tips.push('📈 Getting closer! Focus on the lowest-scoring metrics');
+      } else {
+        tips.push('💪 Keep practicing! Start with pitch, then work on formants');
+      }
+      
+      document.getElementById('tipsContent').innerHTML = tips.map(t => `<div>• ${t}</div>`).join('');
+    }
+    
+    function autoMatchProfile() {
+      if (!targetProfile) return;
+      
+      const target = targetProfile.characteristics;
+      
+      // Calculate required pitch shift (in semitones)
+      // For now, use manual sliders - full implementation would calculate automatically
+      alert('Auto-match feature will analyze your voice and automatically adjust transformation parameters to match the target profile. This is a placeholder - adjust sliders manually for now.');
+    }
+    
+    // Slider update functions
+    function updatePitchShift(e) {
+      const value = parseFloat(e.target.value);
+      document.getElementById('pitchShiftValue').textContent = value.toFixed(1) + ' semitones';
+    }
+    
+    function updateFormantShift(e) {
+      const value = parseInt(e.target.value);
+      document.getElementById('formantShiftValue').textContent = value + '%';
+    }
+    
+    function updateResonance(e) {
+      const value = parseFloat(e.target.value);
+      document.getElementById('resonanceValue').textContent = value.toFixed(1) + ' dB';
+    }
+    
+    function updateBreathiness(e) {
+      const value = parseInt(e.target.value);
+      document.getElementById('breathinessValue').textContent = value + '%';
+    }
+    
+    // Tab switching
+    function switchTab(tab) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      
+      if (tab === 'create') {
+        document.querySelector('[onclick="switchTab(\'create\')"]').classList.add('active');
+        document.getElementById('createTab').classList.add('active');
+      } else {
+        document.querySelector('[onclick="switchTab(\'load\')"]').classList.add('active');
+        document.getElementById('loadTab').classList.add('active');
+      }
+    }
+  </script>
+</body>
+</html>

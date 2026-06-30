@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Goeckoh — Your Account</title>
+<style>
+  :root{
+    --sage:#8da38b; --sage-bg:#f4f7f2; --sage-deep:#5f7a60;
+    --peach:#f4c9a8; --lavender:#cfc8e6; --gold:#e0c36a; --rose:#e6a6a1;
+    --ink:#3a3a38; --muted:#7d7d77; --line:#e6e3dc; --card:#fffdf8;
+    --ok:#6f9c6f; --warn:#c79a3e; --bad:#c47a72;
+    --radius:18px; --shadow:0 6px 24px rgba(80,90,70,.08);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:radial-gradient(1200px 600px at 70% -10%, #fbf3ea 0%, var(--sage-bg) 55%) fixed;
+    color:var(--ink); line-height:1.5; min-height:100vh;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:28px 20px 80px}
+  header.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px}
+  .brand{display:flex;align-items:center;gap:11px;font-weight:700;font-size:22px;letter-spacing:-.3px}
+  .logo{width:34px;height:34px;border-radius:11px;background:
+      conic-gradient(from 200deg,var(--sage),var(--peach),var(--gold),var(--lavender),var(--sage));
+      box-shadow:inset 0 0 0 4px rgba(255,255,255,.55)}
+  .hbadge{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);
+      background:var(--card);border:1px solid var(--line);padding:6px 12px;border-radius:999px}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--muted)}
+  .dot.up{background:var(--ok)} .dot.down{background:var(--bad)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+      padding:22px 22px;box-shadow:var(--shadow);margin-bottom:18px}
+  h1{font-size:26px;margin:.1em 0 .15em;letter-spacing:-.5px}
+  .sub{color:var(--muted);margin:0 0 22px}
+  h2{font-size:16px;margin:0 0 4px;letter-spacing:-.2px}
+  .hint{color:var(--muted);font-size:13.5px;margin:0 0 16px}
+  label{display:block;font-size:13px;font-weight:600;color:var(--sage-deep);margin:0 0 6px}
+  input[type=text],input[type=password]{
+      width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;
+      font-size:15px;font-family:inherit;background:#fff;color:var(--ink);letter-spacing:.5px}
+  input:focus{outline:none;border-color:var(--sage);box-shadow:0 0 0 3px rgba(141,163,139,.18)}
+  .row{display:flex;gap:10px;flex-wrap:wrap}
+  .row > *{flex:1;min-width:0}
+  button{
+      font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;border:none;
+      border-radius:12px;padding:12px 18px;transition:transform .05s ease,filter .15s ease}
+  button:active{transform:translateY(1px)}
+  button:disabled{opacity:.5;cursor:not-allowed}
+  .btn-primary{background:var(--sage);color:#fff}
+  .btn-primary:hover:not(:disabled){filter:brightness(1.05)}
+  .btn-soft{background:var(--sage-bg);color:var(--sage-deep);border:1px solid var(--line)}
+  .btn-soft:hover:not(:disabled){background:#eef3ea}
+  .btn-rose{background:#fbeeec;color:var(--bad);border:1px solid #f0d9d5}
+  .grid4{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+  .dl{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left}
+  .dl small{font-weight:500;opacity:.7}
+  .badge{display:inline-block;font-size:12.5px;font-weight:700;padding:4px 11px;border-radius:999px;letter-spacing:.3px}
+  .badge.active{background:#e8f1e6;color:var(--ok)}
+  .badge.grace_period{background:#fbf2dd;color:var(--warn)}
+  .badge.revoked,.badge.pending{background:#fbe9e6;color:var(--bad)}
+  .plan{text-transform:capitalize}
+  .kv{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px dashed var(--line);font-size:14.5px}
+  .kv:last-child{border-bottom:none}
+  .kv span:first-child{color:var(--muted)}
+  .kv span:last-child{font-weight:600;font-family:ui-monospace,Menlo,monospace}
+  .msg{font-size:14px;padding:11px 14px;border-radius:11px;margin-top:14px;display:none}
+  .msg.show{display:block}
+  .msg.ok{background:#e8f1e6;color:var(--ok)}
+  .msg.err{background:#fbe9e6;color:var(--bad)}
+  .msg.info{background:#f3f0fa;color:#6a5fa0}
+  details{margin-top:6px}
+  details > summary{cursor:pointer;font-size:13.5px;color:var(--muted);list-style:none;padding:6px 0;user-select:none}
+  details > summary::-webkit-details-marker{display:none}
+  details > summary::before{content:"⚙  ";opacity:.7}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin-top:12px}
+  th,td{text-align:left;padding:8px 8px;border-bottom:1px solid var(--line)}
+  th{color:var(--muted);font-weight:600}
+  td.key{font-family:ui-monospace,Menlo,monospace}
+  .hidden{display:none}
+  footer{text-align:center;color:var(--muted);font-size:12.5px;margin-top:30px}
+  .apibar{font-size:12.5px}
+  .apibar input{padding:8px 11px;font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand"><div class="logo"></div>Goeckoh</div>
+    <div class="hbadge"><span class="dot" id="healthDot"></span><span id="healthText">checking…</span></div>
+  </header>
+
+  <h1>Your account</h1>
+  <p class="sub">Activate your license, manage your devices, and download the app — all in your child's own voice, all on your device.</p>
+
+  <!-- ACTIVATE -->
+  <section class="card" id="activateCard">
+    <h2>Activate your license</h2>
+    <p class="hint">Enter the license key from your welcome email. We'll register this device.</p>
+    <label for="keyInput">License key</label>
+    <div class="row">
+      <input type="text" id="keyInput" placeholder="GOEK-XXXX-XXXX-XXXX" autocomplete="off" spellcheck="false" style="flex:3" />
+      <button class="btn-primary" id="activateBtn" style="flex:1;min-width:130px">Activate</button>
+    </div>
+    <div class="msg" id="activateMsg"></div>
+  </section>
+
+  <!-- STATUS (after activation) -->
+  <section class="card hidden" id="statusCard">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <h2 style="margin:0">License status</h2>
+      <span class="badge" id="statusBadge">—</span>
+    </div>
+    <div class="kv"><span>Plan</span><span class="plan" id="vPlan">—</span></div>
+    <div class="kv"><span>Token valid for</span><span id="vExpiry">—</span></div>
+    <div class="kv"><span>This device</span><span id="vDevice">—</span></div>
+    <div class="row" style="margin-top:16px">
+      <button class="btn-soft" id="refreshBtn">Refresh status</button>
+      <button class="btn-rose" id="deactivateBtn">Deactivate this device</button>
+    </div>
+    <div class="msg" id="statusMsg"></div>
+  </section>
+
+  <!-- DOWNLOADS -->
+  <section class="card hidden" id="downloadCard">
+    <h2>Download the app</h2>
+    <p class="hint">Downloads are unlocked by your active license. Pick your platform.</p>
+    <div class="grid4">
+      <button class="btn-soft dl" data-platform="mac"><strong>macOS</strong><small>.dmg</small></button>
+      <button class="btn-soft dl" data-platform="windows"><strong>Windows</strong><small>.exe</small></button>
+      <button class="btn-soft dl" data-platform="linux"><strong>Linux</strong><small>.deb</small></button>
+      <button class="btn-soft dl" data-platform="android"><strong>Android</strong><small>.apk</small></button>
+    </div>
+    <div class="msg" id="downloadMsg"></div>
+  </section>
+
+  <!-- SETTINGS -->
+  <details>
+    <summary>Settings &amp; admin</summary>
+    <div class="card" style="margin-top:10px">
+      <h2>API endpoint</h2>
+      <p class="hint apibar">Where this page talks to. Defaults to this server; change it to point at production.</p>
+      <div class="row">
+        <input type="text" id="apiInput" style="flex:4" />
+        <button class="btn-soft" id="apiSaveBtn" style="flex:1;min-width:90px">Save</button>
+      </div>
+
+      <h2 style="margin-top:22px">Admin — all licenses</h2>
+      <p class="hint">Internal use. Requires the admin secret (the <code>ADMIN_SECRET</code> from the server).</p>
+      <div class="row">
+        <input type="password" id="adminInput" placeholder="admin secret" style="flex:3" autocomplete="off" />
+        <button class="btn-soft" id="adminBtn" style="flex:1;min-width:110px">Load</button>
+      </div>
+      <div class="msg" id="adminMsg"></div>
+      <div id="adminTableWrap" class="hidden">
+        <table id="adminTable">
+          <thead><tr><th>Key</th><th>Email</th><th>Plan</th><th>Status</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </details>
+
+  <footer>Goeckoh · 100% offline speech therapy · no audio ever leaves the device</footer>
+</div>
+
+<script>
+(() => {
+  "use strict";
+  const $ = id => document.getElementById(id);
+
+  // ── persisted state ────────────────────────────────────────────────────
+  const LS = {
+    api:   () => localStorage.getItem("goeckoh_api") || (location.origin.startsWith("http") ? location.origin : "http://localhost:8000"),
+    setApi: v => localStorage.setItem("goeckoh_api", v),
+    key:   () => localStorage.getItem("goeckoh_key") || "",
+    setKey: v => localStorage.setItem("goeckoh_key", v),
+    clearKey: () => localStorage.removeItem("goeckoh_key"),
+  };
+  // Stable per-browser device fingerprint (a real app would hash hardware ids).
+  function deviceId(){
+    let d = localStorage.getItem("goeckoh_device");
+    if(!d){ d = "web-" + (crypto.randomUUID ? crypto.randomUUID() : Date.now()+"-"+Math.random()); localStorage.setItem("goeckoh_device", d); }
+    return d;
+  }
+  const shortDev = d => d.length > 14 ? d.slice(0,10) + "…" + d.slice(-4) : d;
+
+  function api(){ return LS.api().replace(/\/+$/,""); }
+  function msg(el, text, kind){ el.className = "msg show " + (kind||"info"); el.textContent = text; }
+  function hideMsg(el){ el.className = "msg"; }
+
+  async function call(path, opts){
+    const res = await fetch(api() + path, opts);
+    let body = null;
+    try { body = await res.json(); } catch(_) {}
+    return { ok: res.ok, status: res.status, body };
+  }
+
+  // ── health ─────────────────────────────────────────────────────────────
+  async function checkHealth(){
+    try{
+      const r = await call("/health", {});
+      if(r.ok){ $("healthDot").className = "dot up"; $("healthText").textContent = "server online"; }
+      else throw 0;
+    }catch(_){ $("healthDot").className = "dot down"; $("healthText").textContent = "server offline"; }
+  }
+
+  // ── render activated state ───────────────────────────────────────────────
+  function showActivated(data){
+    $("statusCard").classList.remove("hidden");
+    $("downloadCard").classList.remove("hidden");
+    const status = (data.status === "active" || data.status === "activated") ? "active" : data.status;
+    const badge = $("statusBadge");
+    badge.textContent = (status||"").replace("_"," ");
+    badge.className = "badge " + (["active","grace_period","revoked","pending"].includes(status) ? status : "");
+    $("vPlan").textContent = data.plan || "—";
+    $("vExpiry").textContent = data.expires_in_days ? data.expires_in_days + " day" + (data.expires_in_days==1?"":"s") : "—";
+    $("vDevice").textContent = shortDev(deviceId());
+    if(data.warning) msg($("statusMsg"), data.warning, "info"); else hideMsg($("statusMsg"));
+  }
+
+  // ── activate ──────────────────────────────────────────────────────────
+  async function activate(){
+    const key = $("keyInput").value.trim().toUpperCase();
+    if(!key){ msg($("activateMsg"), "Please enter your license key.", "err"); return; }
+    $("activateBtn").disabled = true;
+    msg($("activateMsg"), "Activating…", "info");
+    const r = await call("/license/activate", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ license_key:key, device_fingerprint:deviceId(), platform:"web" })
+    });
+    $("activateBtn").disabled = false;
+    if(r.ok){
+      LS.setKey(key);
+      msg($("activateMsg"), "Activated. Welcome to Goeckoh ✓", "ok");
+      showActivated(r.body);
+    } else {
+      msg($("activateMsg"), (r.body && r.body.detail) || ("Activation failed ("+r.status+")"), "err");
+    }
+  }
+
+  // ── refresh / validate ──────────────────────────────────────────────────
+  async function refresh(){
+    const key = LS.key(); if(!key) return;
+    msg($("statusMsg"), "Refreshing…", "info");
+    const r = await call("/license/validate", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ license_key:key, device_fingerprint:deviceId() })
+    });
+    if(r.ok){ showActivated(r.body); msg($("statusMsg"), "Up to date ✓", "ok"); }
+    else msg($("statusMsg"), (r.body && r.body.detail) || ("Could not refresh ("+r.status+")"), "err");
+  }
+
+  // ── deactivate ────────────────────────────────────────────────────────
+  async function deactivate(){
+    const key = LS.key(); if(!key) return;
+    if(!confirm("Deactivate Goeckoh on this device? You can re-activate any time with your key.")) return;
+    const r = await call("/license/deactivate", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ license_key:key, device_fingerprint:deviceId() })
+    });
+    if(r.ok){
+      LS.clearKey();
+      $("statusCard").classList.add("hidden"); $("downloadCard").classList.add("hidden");
+      $("keyInput").value = "";
+      msg($("activateMsg"), "This device has been deactivated.", "info");
+    } else msg($("statusMsg"), (r.body && r.body.detail) || "Deactivation failed", "err");
+  }
+
+  // ── download ──────────────────────────────────────────────────────────
+  async function download(platform){
+    const key = LS.key();
+    if(!key){ msg($("downloadMsg"), "Activate a license first.", "err"); return; }
+    msg($("downloadMsg"), "Preparing your " + platform + " download…", "info");
+    try{
+      const res = await fetch(api() + "/download/" + platform, { headers:{ "X-License-Key": key } });
+      if(!res.ok){
+        let detail = "Download unavailable ("+res.status+")";
+        try{ const j = await res.json(); if(j.detail) detail = j.detail; }catch(_){}
+        msg($("downloadMsg"), detail, res.status===503 ? "info" : "err");
+        return;
+      }
+      const blob = await res.blob();
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = res.headers.get("Content-Disposition")?.split("filename=")[1]?.replace(/"/g,"") || ("goeckoh-"+platform);
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(a.href);
+      msg($("downloadMsg"), "Download started ✓", "ok");
+    }catch(e){ msg($("downloadMsg"), "Network error — is the server running?", "err"); }
+  }
+
+  // ── admin ─────────────────────────────────────────────────────────────
+  async function loadAdmin(){
+    const secret = $("adminInput").value.trim();
+    if(!secret){ msg($("adminMsg"), "Enter the admin secret.", "err"); return; }
+    msg($("adminMsg"), "Loading…", "info");
+    const r = await call("/admin/licenses", { headers:{ "X-Admin-Secret": secret } });
+    if(!r.ok){ msg($("adminMsg"), r.status===403 ? "Forbidden — wrong or unset admin secret." : "Failed ("+r.status+")", "err"); $("adminTableWrap").classList.add("hidden"); return; }
+    const rows = r.body || [];
+    const tb = $("adminTable").querySelector("tbody");
+    tb.innerHTML = "";
+    rows.forEach(l => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td class="key">${l.key}</td><td>${l.email||""}</td><td class="plan">${l.plan}</td>`+
+                     `<td><span class="badge ${l.status}">${(l.status||"").replace("_"," ")}</span></td>`;
+      tb.appendChild(tr);
+    });
+    $("adminTableWrap").classList.remove("hidden");
+    msg($("adminMsg"), rows.length + " license" + (rows.length===1?"":"s") + " found.", "ok");
+  }
+
+  // ── wire up ───────────────────────────────────────────────────────────
+  $("apiInput").value = LS.api();
+  $("activateBtn").onclick = activate;
+  $("keyInput").addEventListener("keydown", e => { if(e.key==="Enter") activate(); });
+  $("refreshBtn").onclick = refresh;
+  $("deactivateBtn").onclick = deactivate;
+  document.querySelectorAll("[data-platform]").forEach(b => b.onclick = () => download(b.dataset.platform));
+  $("adminBtn").onclick = loadAdmin;
+  $("apiSaveBtn").onclick = () => { LS.setApi($("apiInput").value.trim()); checkHealth(); msg($("activateMsg"),"API endpoint saved.","info"); };
+
+  // boot
+  checkHealth();
+  if(LS.key()){ $("keyInput").value = LS.key(); refresh(); }
+})();
+</script>
+</body>
+</html>
