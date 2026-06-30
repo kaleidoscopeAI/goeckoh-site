@@ -52,9 +52,9 @@ _PLACEHOLDERS = ("placeholder", "replace_me", "dev_key", "changeme", "todo", "xx
 _DEV_JWT = "a7d2e9f1b4c6"
 
 PLATFORM_FILES = {
-    "mac": "goeckoh-latest-mac.dmg",
-    "windows": "goeckoh-latest-win.exe",
-    "linux": "goeckoh-latest-linux.deb",
+    "mac":     "goeckoh-latest-macos.tar.gz",
+    "windows": "goeckoh-latest-windows.zip",
+    "linux":   "goeckoh-latest-linux.tar.gz",
     "android": "goeckoh-latest-android.apk",
 }
 
