@@ -1,256 +1,238 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Download GOECKOH — Go Echo Speech Mirror</title>
-  <meta name="description" content="Download Goeckoh (Go Echo), the identity-matched speech mirror that corrects speech and replays it in the user's own voice.">
-  <meta property="og:title" content="Download GOECKOH — Go Echo Speech Mirror">
-  <meta property="og:description" content="Offline-first. Identity-matched. Sub-50ms latency.">
-  <meta property="og:type" content="website">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Early Access — Goeckoh</title>
+  <meta name="description" content="Join the Goeckoh early access program. $20/month. Real-time speech correction for ASD, dysarthria, and apraxia.">
   <link rel="stylesheet" href="goeckoh-shared.css">
   <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:var(--gk-font); background:var(--gk-bg); color:var(--gk-text); min-height:100vh; }
 
-    body {
-      font-family: var(--gk-font);
-      background: var(--gk-bg);
-      color: var(--gk-text);
+    .page-wrap {
       min-height: 100vh;
-    }
-
-    .page {
-      padding: calc(var(--gk-nav-h) + 4rem) 1.5rem 5rem;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .dl-hero { text-align: center; margin-bottom: 3.5rem; }
-    .dl-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: rgba(0,245,160,0.07);
-      border: 1px solid rgba(0,245,160,0.15);
-      color: var(--gk-green);
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 0.3rem 0.9rem;
-      border-radius: 999px;
-      margin-bottom: 1.25rem;
-    }
-    .dl-title {
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      font-weight: 800;
-      letter-spacing: -0.025em;
-      margin-bottom: 0.85rem;
-    }
-    .dl-title .g {
-      background: linear-gradient(130deg, var(--gk-green) 20%, var(--gk-blue) 80%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .dl-lead {
-      font-size: 1rem;
-      color: var(--gk-text-2);
-      line-height: 1.75;
-      max-width: 520px;
-      margin: 0 auto;
-    }
-
-    .platform-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .platform-card {
-      background: var(--gk-bg-card);
-      border: 1px solid var(--gk-border);
-      border-radius: var(--gk-radius);
-      padding: 1.75rem 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      text-align: center;
-      transition: border-color 0.2s, transform 0.2s;
-    }
-    .platform-card:hover { border-color: var(--gk-border-2); transform: translateY(-2px); }
-
-    .platform-icon { font-size: 2.2rem; }
-    .platform-name { font-size: 1rem; font-weight: 700; }
-    .platform-pkg  { font-size: 0.72rem; color: var(--gk-muted); font-family: var(--gk-mono); margin-bottom: 0.5rem; }
-
-    .dl-btn {
-      display: block;
-      width: 100%;
-      padding: 0.65rem;
-      border-radius: 999px;
-      background: var(--gk-green);
-      color: #080d18;
-      font-family: var(--gk-font);
-      font-size: 0.82rem;
-      font-weight: 700;
-      text-decoration: none;
-      text-align: center;
-      transition: opacity 0.15s, transform 0.15s;
-      margin-top: auto;
-    }
-    .dl-btn:hover { opacity: 0.88; transform: translateY(-1px); }
-
-    .android-row {
-      background: var(--gk-bg-card);
-      border: 1px solid var(--gk-border);
-      border-radius: var(--gk-radius);
-      padding: 1.5rem;
+      padding-top: var(--gk-nav-h);
       display: flex;
       align-items: center;
-      gap: 1.5rem;
-      margin-bottom: 2rem;
+      justify-content: center;
+      padding-bottom: 4rem;
+      position: relative;
+      overflow: hidden;
     }
-    .android-icon { font-size: 2rem; flex-shrink: 0; }
-    .android-info { flex: 1; }
-    .android-name { font-weight: 700; margin-bottom: 0.2rem; }
-    .android-meta { font-size: 0.75rem; color: var(--gk-muted); font-family: var(--gk-mono); }
+    .page-wrap::before {
+      content:'';
+      position:absolute; inset:0;
+      background:
+        radial-gradient(ellipse 70% 50% at 20% 40%, rgba(77,124,254,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 60% at 80% 60%, rgba(20,197,145,0.05) 0%, transparent 60%);
+      pointer-events:none;
+    }
 
-    @media (max-width: 520px) {
-      .android-row { flex-direction: column; text-align: center; }
+    .ea-card { max-width:680px; width:100%; margin:2rem 1.5rem; position:relative; }
+
+    .ea-header { text-align:center; margin-bottom:2.5rem; }
+    .ea-eyebrow {
+      display:inline-block; background:rgba(20,197,145,0.1); border:1px solid rgba(20,197,145,0.22);
+      color:var(--gk-teal); font-size:0.68rem; font-weight:700;
+      letter-spacing:0.15em; text-transform:uppercase;
+      padding:0.35rem 0.9rem; border-radius:999px; margin-bottom:1.5rem;
+    }
+    .ea-title { font-size:clamp(2rem,4vw,2.8rem); font-weight:900; letter-spacing:-0.03em; line-height:1.08; margin-bottom:1rem; }
+    .ea-sub { font-size:0.95rem; color:var(--gk-text-2); line-height:1.8; }
+
+    .ea-form-card {
+      background:var(--gk-bg-card); border:1.5px solid rgba(77,124,254,0.22);
+      border-radius:20px; padding:2.5rem;
+      box-shadow:0 0 50px rgba(77,124,254,0.1), 0 0 100px rgba(0,0,0,0.4);
     }
 
-    .callout {
-      background: rgba(0,195,255,0.05);
-      border: 1px solid rgba(0,195,255,0.18);
-      border-radius: var(--gk-radius-sm);
-      padding: 1.1rem 1.4rem;
-      font-size: 0.83rem;
-      color: var(--gk-text-2);
-      line-height: 1.7;
-    }
-    .callout strong { color: var(--gk-text); }
-    .callout a { color: var(--gk-blue); text-decoration: none; }
-    .callout a:hover { text-decoration: underline; }
+    .form-group { margin-bottom:1.25rem; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    @media(max-width:500px){ .form-row{ grid-template-columns:1fr; } }
 
-    .browser-notice { margin-top: 3rem; text-align: center; }
-    .browser-notice p { font-size: 0.82rem; color: var(--gk-muted); margin-bottom: 1rem; }
-    .tool-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.6rem; }
-    .tool-links a {
-      font-size: 0.78rem;
-      color: var(--gk-text-2);
-      text-decoration: none;
-      padding: 0.35rem 0.85rem;
-      border: 1px solid var(--gk-border);
-      border-radius: 999px;
-      transition: border-color 0.15s, color 0.15s;
+    .form-label {
+      display:block; font-size:0.72rem; font-weight:600; color:var(--gk-text-2);
+      text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.5rem;
     }
-    .tool-links a:hover { border-color: var(--gk-green); color: var(--gk-green); }
+    .form-input, .form-select {
+      width:100%; background:var(--gk-bg-raised); border:1.5px solid var(--gk-border-2);
+      border-radius:var(--gk-radius-sm); color:var(--gk-text); font-family:var(--gk-font);
+      font-size:0.9rem; padding:0.75rem 1rem; outline:none;
+      transition:border-color 0.15s; appearance:none;
+    }
+    .form-input:focus, .form-select:focus { border-color:var(--gk-primary); }
+    .form-input::placeholder { color:var(--gk-muted); }
+    .form-select option { background:var(--gk-bg-card); }
 
-    .site-footer {
-      border-top: 1px solid var(--gk-border);
-      padding: 2rem 1.5rem;
-      max-width: 900px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1rem;
+    .form-submit {
+      width:100%; padding:1rem; font-size:1rem; font-weight:700;
+      background:var(--gk-primary); color:#fff;
+      border:none; border-radius:999px; cursor:pointer;
+      font-family:var(--gk-font); transition:all 0.18s; margin-top:0.75rem;
     }
-    .footer-brand { font-size: 0.82rem; font-weight: 800; letter-spacing: 0.1em; color: var(--gk-text-2); }
-    .footer-brand span { color: var(--gk-green); }
-    .footer-links { display: flex; gap: 1.5rem; }
-    .footer-links a { font-size: 0.75rem; color: var(--gk-muted); text-decoration: none; }
-    .footer-links a:hover { color: var(--gk-text); }
-    .footer-year { font-size: 0.72rem; color: var(--gk-muted); }
+    .form-submit:hover { opacity:0.88; transform:translateY(-1px); box-shadow:0 8px 28px rgba(77,124,254,0.35); }
+    .form-submit:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+
+    .form-legal { font-size:0.7rem; color:var(--gk-muted); text-align:center; margin-top:1rem; line-height:1.6; }
+    .form-legal a { color:var(--gk-primary); text-decoration:none; }
+
+    .perks { display:grid; grid-template-columns:1fr 1fr; gap:0.6rem; margin:1.75rem 0; list-style:none; }
+    @media(max-width:480px){ .perks{ grid-template-columns:1fr; } }
+    .perk { display:flex; align-items:flex-start; gap:0.6rem; font-size:0.8rem; color:var(--gk-text-2); line-height:1.5; }
+    .perk::before { content:'✓'; color:var(--gk-teal); font-weight:800; font-size:0.75rem; flex-shrink:0; margin-top:0.1rem; }
+
+    .divider { border:none; border-top:1px solid var(--gk-border); margin:1.75rem 0; }
+
+    .price-line {
+      display:flex; align-items:center; justify-content:space-between;
+      background:rgba(20,197,145,0.06); border:1px solid rgba(20,197,145,0.15);
+      border-radius:var(--gk-radius-sm); padding:0.85rem 1.1rem; margin-bottom:1.5rem;
+    }
+    .price-desc { font-size:0.83rem; color:var(--gk-text-2); }
+    .price-amount { font-size:1.4rem; font-weight:900; color:var(--gk-teal); }
+
+    .success-msg { display:none; text-align:center; padding:2rem 1rem; }
+    .success-icon { font-size:3rem; margin-bottom:1rem; display:block; }
+    .success-title { font-size:1.4rem; font-weight:800; margin-bottom:0.6rem; }
+    .success-sub { font-size:0.9rem; color:var(--gk-text-2); line-height:1.75; }
+    .success-actions { margin-top:2rem; display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; }
   </style>
 </head>
 <body>
+<nav class="gk-nav">
+  <a href="index.html" class="gk-nav-brand">
+    <img src="images/logo-clean.png" alt="Goeckoh" class="gk-nav-logo">
+    <div>
+      <div class="gk-nav-brand-name">GOECK<span>OH</span></div>
+      <div class="gk-nav-brand-sub">Go Echo</div>
+    </div>
+  </a>
+  <div class="gk-nav-links" id="gkNav">
+    <a href="index.html#science"   class="gk-nav-link">The Science</a>
+    <a href="index.html#families"  class="gk-nav-link">For Families</a>
+    <a href="index.html#pricing"   class="gk-nav-link">Pricing</a>
+    <a href="demo.html"            class="gk-nav-link">Try the Demo</a>
+  </div>
+  <a href="download.html" class="gk-nav-cta">Get Early Access</a>
+  <button class="gk-nav-toggle" onclick="document.getElementById('gkNav').classList.toggle('gk-open')" aria-label="Menu">☰</button>
+</nav>
 
-  <nav class="gk-nav">
-    <a href="index.html" class="gk-nav-brand">
-      <img src="images/logo-clean.png" alt="Goeckoh" class="gk-nav-logo">
-      <div>
-        <div class="gk-nav-brand-name">GOECK<span>OH</span></div>
-        <div class="gk-nav-brand-sub">Go Echo</div>
+<div class="page-wrap">
+  <div class="ea-card">
+    <div class="ea-header">
+      <div class="ea-eyebrow">Limited Spots Available</div>
+      <h1 class="ea-title">Start Early Access Today</h1>
+      <p class="ea-sub">
+        Goeckoh is in early access for families, caregivers, and clinicians.
+        Reserve your spot below — we'll reach out within 48 hours with setup instructions.
+      </p>
+    </div>
+
+    <div class="ea-form-card">
+      <div class="price-line">
+        <div class="price-desc">One price. One person. Everything included.</div>
+        <div class="price-amount">$20 <span style="font-size:0.75rem;font-weight:500;color:var(--gk-text-2)">/mo</span></div>
       </div>
-    </a>
-    <div class="gk-nav-links" id="gkNav">
-      <a href="real_time_therapeutic_voice_cloning_system.html" class="gk-nav-link">Echo Therapy</a>
-      <a href="advanced_voice_visualizer_pro.html"              class="gk-nav-link">Visualizer</a>
-      <a href="voice_therapy_profile_transform.html"            class="gk-nav-link">Profile Lab</a>
-      <a href="goeckoh_dashboard.html"                          class="gk-nav-link">Dashboard</a>
-      <a href="observatory.html"                                 class="gk-nav-link">Observatory</a>
-      <a href="voice_setup.html"                                class="gk-nav-link">Setup</a>
-    </div>
-    <a href="download.html" class="gk-nav-cta" style="background:var(--gk-blue)!important">↓ Download</a>
-    <button class="gk-nav-toggle" onclick="document.getElementById('gkNav').classList.toggle('gk-open')" aria-label="Menu">☰</button>
-  </nav>
 
-  <main class="page">
-    <div class="dl-hero">
-      <div class="dl-pill">◈ Offline-First · Identity-Matched · Sub-50ms</div>
-      <h1 class="dl-title">Download <span class="g">Goeckoh</span></h1>
-      <p class="dl-lead">Get the Go Echo speech mirror for your platform. Corrected speech replayed in your own voice — entirely on-device, no cloud required.</p>
-    </div>
+      <ul class="perks">
+        <li class="perk">Unlimited sessions</li>
+        <li class="perk">Guardian monitoring</li>
+        <li class="perk">8 correction profiles</li>
+        <li class="perk">Voice games for kids</li>
+        <li class="perk">Real-time dashboard</li>
+        <li class="perk">Works on any device</li>
+        <li class="perk">Your data stays on-device</li>
+        <li class="perk">Cancel any time</li>
+      </ul>
 
-    <div class="platform-grid">
-      <div class="platform-card">
-        <div class="platform-icon">🪟</div>
-        <div class="platform-name">Windows</div>
-        <div class="platform-pkg">.exe installer</div>
-        <a href="downloads/goeckoh-windows.exe" class="dl-btn">Download</a>
+      <hr class="divider">
+
+      <form id="accessForm" onsubmit="handleSubmit(event)" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="firstName">First Name</label>
+            <input class="form-input" type="text" id="firstName" placeholder="Alex" required autocomplete="given-name">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="lastName">Last Name</label>
+            <input class="form-input" type="text" id="lastName" placeholder="Rivera" required autocomplete="family-name">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="email">Email Address</label>
+          <input class="form-input" type="email" id="email" placeholder="you@email.com" required autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="role">I am a…</label>
+          <select class="form-select" id="role" required>
+            <option value="" disabled selected>Select your role</option>
+            <option value="parent">Parent or Family Member</option>
+            <option value="caregiver">Caregiver or Support Person</option>
+            <option value="clinician">Speech-Language Pathologist</option>
+            <option value="researcher">Researcher or Academic</option>
+            <option value="educator">Special Education Teacher</option>
+            <option value="self">Person with a Speech Disorder</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="condition">Primary condition (optional)</label>
+          <select class="form-select" id="condition">
+            <option value="" selected>Select if applicable</option>
+            <option value="asd">Autism Spectrum Disorder (ASD)</option>
+            <option value="dysarthria">Dysarthria</option>
+            <option value="apraxia">Apraxia of Speech</option>
+            <option value="stroke">Post-stroke</option>
+            <option value="other-motor">Other motor speech disorder</option>
+            <option value="exploring">Just exploring</option>
+          </select>
+        </div>
+        <button type="submit" class="form-submit" id="submitBtn">Request Early Access →</button>
+        <p class="form-legal">
+          No credit card required. By submitting you agree to our
+          <a href="#">Privacy Policy</a> — your data is never sold or shared.
+          All voice data stays on your device.
+        </p>
+      </form>
+
+      <div class="success-msg" id="successMsg">
+        <span class="success-icon">✓</span>
+        <div class="success-title">You're in the queue!</div>
+        <p class="success-sub">
+          We'll reach out to the email you provided within 48 hours
+          with your setup instructions and first month details.
+          <br><br>
+          In the meantime, try the live demo — no signup required.
+        </p>
+        <div class="success-actions">
+          <a href="demo.html" class="gk-btn gk-btn-primary">Try the Demo →</a>
+          <a href="index.html" class="gk-btn gk-btn-secondary">Back to Home</a>
+        </div>
       </div>
-      <div class="platform-card">
-        <div class="platform-icon">🍎</div>
-        <div class="platform-name">macOS</div>
-        <div class="platform-pkg">.dmg installer</div>
-        <a href="downloads/goeckoh-macos.dmg" class="dl-btn">Download</a>
-      </div>
-      <div class="platform-card">
-        <div class="platform-icon">🐧</div>
-        <div class="platform-name">Linux</div>
-        <div class="platform-pkg">.AppImage</div>
-        <a href="downloads/goeckoh-linux.AppImage" class="dl-btn">Download</a>
-      </div>
     </div>
+  </div>
+</div>
 
-    <div class="android-row">
-      <div class="android-icon">🤖</div>
-      <div class="android-info">
-        <div class="android-name">Android</div>
-        <div class="android-meta">.apk · sideload install</div>
-      </div>
-      <a href="downloads/goeckoh-android.apk" class="dl-btn" style="min-width:140px;width:auto;padding:0.65rem 1.5rem">Download APK</a>
-    </div>
+<script>
+  function handleSubmit(e) {
+    e.preventDefault();
+    const first = document.getElementById('firstName').value.trim();
+    const last  = document.getElementById('lastName').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const role  = document.getElementById('role').value;
+    const cond  = document.getElementById('condition').value;
+    if (!email || !role || !first || !last) return;
 
-    <div class="callout">
-      <strong>Having trouble?</strong> Check our <a href="support.html">support page</a>, or try opening the tools directly in your browser — no install needed.
-    </div>
+    localStorage.setItem('gk_access', email);
+    localStorage.setItem('gk_access_name', first + ' ' + last);
+    localStorage.setItem('gk_access_role', role);
+    localStorage.setItem('gk_access_condition', cond);
+    localStorage.setItem('gk_access_ts', Date.now());
 
-    <div class="browser-notice">
-      <p>Or launch the browser tools right now — no download required:</p>
-      <div class="tool-links">
-        <a href="real_time_therapeutic_voice_cloning_system.html">Echo Therapy</a>
-        <a href="advanced_voice_visualizer_pro.html">Visualizer</a>
-        <a href="voice_therapy_profile_transform.html">Profile Lab</a>
-        <a href="goeckoh_dashboard.html">Dashboard</a>
-        <a href="observatory.html">Observatory</a>
-      </div>
-    </div>
-  </main>
-
-  <footer class="site-footer">
-    <div class="footer-brand">GOECK<span>OH</span> — "Go Echo"</div>
-    <div class="footer-links">
-      <a href="index.html">Home</a>
-      <a href="voice_setup.html">Setup</a>
-    </div>
-    <div class="footer-year">© <span id="year"></span> Goeckoh. All rights reserved.</div>
-  </footer>
-
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+    document.getElementById('accessForm').style.display = 'none';
+    document.getElementById('successMsg').style.display = 'block';
+  }
+</script>
 </body>
 </html>

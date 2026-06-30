@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voice Bubbles — Goeckoh Voice Game</title>
+  <meta name="description" content="A fun voice-controlled bubble-popping game designed for children with autism. Speak to pop the bubbles!">
+  <link rel="stylesheet" href="goeckoh-shared.css">
+  <script src="gate.js"></script>
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:var(--gk-font); background:#0a1428; color:var(--gk-text); overflow:hidden; height:100vh; }
+
+    /* === GAME CANVAS LAYER === */
+    #gameCanvas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      touch-action: none;
+    }
+
+    /* === UI OVERLAY === */
+    .ui {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* Top bar */
+    .top-bar {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 64px;
+      background: rgba(5,8,15,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      pointer-events: all;
+    }
+    .top-left { display:flex; align-items:center; gap:1rem; }
+    .back-link {
+      color:var(--gk-text-2); text-decoration:none; font-size:0.8rem;
+      display:flex; align-items:center; gap:0.4rem;
+      border:1px solid var(--gk-border-2); border-radius:999px;
+      padding:0.35rem 0.85rem; transition:all 0.15s;
+    }
+    .back-link:hover { color:var(--gk-text); border-color:var(--gk-primary); }
+    .game-title-bar { font-size:1rem; font-weight:800; letter-spacing:0.02em; }
+    .game-title-bar span { color:var(--gk-teal); }
+
+    /* Score / level */
+    .score-bar {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .score-item { text-align:center; }
+    .score-val  { font-size:1.4rem; font-weight:900; line-height:1; font-family:var(--gk-mono); }
+    .score-lbl  { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--gk-muted); margin-top:0.1rem; }
+
+    /* Mic button */
+    .mic-btn {
+      width: 48px; height: 48px; border-radius: 50%;
+      border: 2px solid var(--gk-border-2);
+      background: var(--gk-bg-raised);
+      cursor: pointer; color: var(--gk-text-2);
+      display: flex; align-items:center; justify-content:center;
+      font-size: 1.3rem; transition: all 0.2s;
+      pointer-events: all;
+    }
+    .mic-btn.active { background:rgba(240,80,96,0.2); border-color:var(--gk-red); color:var(--gk-red); }
+    .mic-btn.listening { background:rgba(20,197,145,0.15); border-color:var(--gk-teal); color:var(--gk-teal); animation: pulse-ring 1s ease-in-out infinite; }
+
+    @keyframes pulse-ring {
+      0%,100% { box-shadow: 0 0 0 0 rgba(20,197,145,0.4); }
+      50%      { box-shadow: 0 0 0 12px rgba(20,197,145,0); }
+    }
+
+    /* Volume meter */
+    .vol-bar {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(320px, 80vw);
+      height: 8px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .vol-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--gk-primary), var(--gk-teal));
+      transition: width 0.05s;
+    }
+
+    /* Start / pause overlay */
+    .start-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(5,8,15,0.88);
+      z-index: 20;
+      pointer-events: all;
+      text-align: center;
+      padding: 1.5rem;
+    }
+    .start-overlay.hidden { display:none; }
+    .start-emoji { font-size: 4rem; margin-bottom:1rem; animation: bob 2s ease-in-out infinite; }
+    @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+    .start-title { font-size: clamp(1.8rem,4vw,2.8rem); font-weight:900; margin-bottom:0.75rem; }
+    .start-sub   { font-size:1rem; color:var(--gk-text-2); line-height:1.7; max-width:380px; margin-bottom:2rem; }
+    .start-btn   {
+      font-size:1.1rem; padding:1rem 2.5rem; border-radius:999px;
+      background:var(--gk-teal); color:#05080f; font-weight:800; border:none;
+      cursor:pointer; transition:all 0.18s; font-family:var(--gk-font);
+    }
+    .start-btn:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(20,197,145,0.4); }
+
+    /* Combo indicator */
+    .combo-label {
+      position: absolute;
+      top: 80px; left:50%; transform:translateX(-50%);
+      font-size:1.5rem; font-weight:900; color:var(--gk-teal);
+      text-shadow: 0 0 24px rgba(20,197,145,0.6);
+      opacity: 0;
+      pointer-events:none;
+      transition: opacity 0.4s;
+      white-space:nowrap;
+    }
+    .combo-label.show { opacity:1; }
+  </style>
+</head>
+<body>
+
+<!-- START OVERLAY -->
+<div class="start-overlay" id="startOverlay">
+  <div class="start-emoji">🫧</div>
+  <h1 class="start-title">Voice Bubbles</h1>
+  <p class="start-sub">
+    Use your voice to pop the bubbles!<br>
+    Speak louder to pop faster.<br>
+    Match the color with your sound!
+  </p>
+  <button class="start-btn" onclick="startGame()">Tap to Play</button>
+  <p style="margin-top:1.5rem;font-size:0.75rem;color:var(--gk-muted)">
+    Microphone required · Nothing is recorded · All processing stays on your device
+  </p>
+</div>
+
+<!-- CANVAS -->
+<canvas id="gameCanvas"></canvas>
+
+<!-- UI OVERLAY -->
+<div class="ui">
+  <div class="top-bar">
+    <div class="top-left">
+      <a href="index.html" class="back-link">← Home</a>
+      <div class="game-title-bar">Voice <span>Bubbles</span></div>
+    </div>
+    <div class="score-bar">
+      <div class="score-item">
+        <div class="score-val" id="scoreVal">0</div>
+        <div class="score-lbl">Score</div>
+      </div>
+      <div class="score-item">
+        <div class="score-val" id="levelVal">1</div>
+        <div class="score-lbl">Level</div>
+      </div>
+      <button class="mic-btn" id="micBtn" onclick="toggleMic()" title="Microphone">🎤</button>
+    </div>
+  </div>
+  <div class="vol-bar"><div class="vol-fill" id="volFill"></div></div>
+  <div class="combo-label" id="comboLabel"></div>
+</div>
+
+<script>
+'use strict';
+
+/* ── Constants ── */
+const COLORS = [
+  { fill:'rgba(77,124,254,0.25)',  stroke:'#4d7cfe', glow:'rgba(77,124,254,0.5)'  },
+  { fill:'rgba(20,197,145,0.22)', stroke:'#14c591', glow:'rgba(20,197,145,0.5)'  },
+  { fill:'rgba(167,139,250,0.22)',stroke:'#a78bfa', glow:'rgba(167,139,250,0.5)' },
+  { fill:'rgba(240,168,40,0.2)',  stroke:'#f0a828', glow:'rgba(240,168,40,0.5)'  },
+  { fill:'rgba(240,80,96,0.2)',   stroke:'#f05060', glow:'rgba(240,80,96,0.5)'   },
+];
+const VOWELS = ['AH', 'EE', 'OO', 'OH', 'AY'];
+
+/* ── State ── */
+const canvas = document.getElementById('gameCanvas');
+const ctx    = canvas.getContext('2d');
+let W, H;
+let bubbles = [];
+let score = 0, level = 1, combo = 0;
+let running = false;
+let audioCtx, analyser, dataArr, micStream;
+let animId;
+let spawnTimer = 0;
+let lastTime   = 0;
+let volume     = 0; // 0–1
+
+/* ── Resize ── */
+function resize() {
+  W = canvas.width  = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
+
+/* ── Bubble class ── */
+function makeBubble() {
+  const col  = COLORS[Math.floor(Math.random() * COLORS.length)];
+  const vowel= VOWELS[Math.floor(Math.random() * VOWELS.length)];
+  const r    = 36 + Math.random() * 44 + level * 4;
+  return {
+    x:    Math.random() * (W - r*2) + r,
+    y:    H + r,
+    r,
+    col,
+    vowel,
+    vy:   -(0.4 + Math.random() * 0.5 + level * 0.08),
+    vx:   (Math.random() - 0.5) * 0.4,
+    alpha:1,
+    pop:  false,
+    popT: 0,
+  };
+}
+
+/* ── Popping ── */
+function popBubble(b) {
+  if (b.pop) return;
+  b.pop = true;
+  b.popT = 0;
+  score += 10 * level;
+  combo++;
+  if (combo >= 3) showCombo(combo);
+  document.getElementById('scoreVal').textContent = score;
+  if (score >= level * 100) {
+    level++;
+    document.getElementById('levelVal').textContent = level;
+  }
+}
+
+function showCombo(n) {
+  const el = document.getElementById('comboLabel');
+  el.textContent = '🔥 x' + n + ' Combo!';
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 1200);
+}
+
+/* ── Draw ── */
+function draw(ts) {
+  if (!running) return;
+  const dt = ts - lastTime;
+  lastTime  = ts;
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Spawn
+  spawnTimer += dt;
+  const interval = Math.max(600, 1800 - level * 80);
+  if (spawnTimer > interval) {
+    bubbles.push(makeBubble());
+    spawnTimer = 0;
+  }
+
+  // Read volume
+  if (analyser) {
+    analyser.getByteTimeDomainData(dataArr);
+    let sum = 0;
+    for (let i = 0; i < dataArr.length; i++) {
+      const s = (dataArr[i] - 128) / 128;
+      sum += s * s;
+    }
+    volume = Math.min(1, Math.sqrt(sum / dataArr.length) * 6);
+  }
+  document.getElementById('volFill').style.width = (volume * 100) + '%';
+
+  // Update + draw bubbles
+  for (let i = bubbles.length - 1; i >= 0; i--) {
+    const b = bubbles[i];
+
+    if (!b.pop) {
+      b.x += b.vx;
+      b.y += b.vy * (1 + volume * 1.8);
+
+      // Pop when voice is loud enough and bubble is in upper half
+      if (volume > 0.25 && b.y < H * 0.75 && Math.random() < volume * 0.12) {
+        popBubble(b);
+      }
+
+      // Miss — bubble escaped top
+      if (b.y < -b.r * 2) {
+        bubbles.splice(i, 1);
+        combo = 0;
+        continue;
+      }
+    } else {
+      b.popT += dt;
+      b.r    += dt * 0.08;
+      b.alpha = Math.max(0, 1 - b.popT / 280);
+      if (b.alpha <= 0) { bubbles.splice(i, 1); continue; }
+    }
+
+    drawBubble(b);
+  }
+
+  animId = requestAnimationFrame(draw);
+}
+
+function drawBubble(b) {
+  ctx.save();
+  ctx.globalAlpha = b.alpha;
+
+  // Glow
+  ctx.shadowColor  = b.col.glow;
+  ctx.shadowBlur   = b.pop ? 40 : 18;
+
+  // Fill
+  ctx.beginPath();
+  ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+  ctx.fillStyle = b.col.fill;
+  ctx.fill();
+
+  // Stroke
+  ctx.lineWidth   = 2;
+  ctx.strokeStyle = b.col.stroke;
+  ctx.stroke();
+
+  // Shine
+  const shine = ctx.createRadialGradient(b.x - b.r*0.3, b.y - b.r*0.35, b.r*0.05, b.x - b.r*0.1, b.y - b.r*0.2, b.r*0.55);
+  shine.addColorStop(0, 'rgba(255,255,255,0.35)');
+  shine.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = shine;
+  ctx.fill();
+
+  // Label
+  if (!b.pop) {
+    ctx.shadowBlur = 0;
+    ctx.fillStyle  = b.col.stroke;
+    ctx.font       = `bold ${Math.round(b.r * 0.42)}px 'Inter', sans-serif`;
+    ctx.textAlign  = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(b.vowel, b.x, b.y);
+  } else if (b.popT < 120) {
+    ctx.fillStyle = '#fff';
+    ctx.font      = `bold ${Math.round(b.r * 0.5)}px 'Inter', sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('✓', b.x, b.y);
+  }
+
+  ctx.restore();
+}
+
+/* ── Mic ── */
+async function startMic() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+    micStream = stream;
+    audioCtx  = new (window.AudioContext || window.webkitAudioContext)();
+    analyser  = audioCtx.createAnalyser();
+    analyser.fftSize = 256;
+    dataArr = new Uint8Array(analyser.fftSize);
+    audioCtx.createMediaStreamSource(stream).connect(analyser);
+    document.getElementById('micBtn').className = 'mic-btn listening';
+    return true;
+  } catch {
+    document.getElementById('micBtn').className = 'mic-btn';
+    return false;
+  }
+}
+
+function stopMic() {
+  if (micStream) { micStream.getTracks().forEach(t => t.stop()); micStream = null; }
+  if (audioCtx)  { audioCtx.close(); audioCtx = null; analyser = null; }
+  document.getElementById('micBtn').className = 'mic-btn';
+}
+
+async function toggleMic() {
+  if (analyser) { stopMic(); }
+  else          { await startMic(); }
+}
+
+/* ── Game start ── */
+async function startGame() {
+  document.getElementById('startOverlay').classList.add('hidden');
+  running   = true;
+  bubbles   = [];
+  score     = 0;
+  level     = 1;
+  combo     = 0;
+  spawnTimer= 0;
+  document.getElementById('scoreVal').textContent = '0';
+  document.getElementById('levelVal').textContent = '1';
+
+  await startMic();
+  lastTime = performance.now();
+  animId   = requestAnimationFrame(draw);
+}
+
+// Tap/click to pop bubble manually (for kids who can't use mic yet)
+canvas.addEventListener('pointerdown', function (e) {
+  if (!running) return;
+  const rect = canvas.getBoundingClientRect();
+  const cx   = e.clientX - rect.left;
+  const cy   = e.clientY - rect.top;
+  for (let i = bubbles.length - 1; i >= 0; i--) {
+    const b = bubbles[i];
+    if (!b.pop && Math.hypot(cx - b.x, cy - b.y) < b.r) {
+      popBubble(b);
+      break;
+    }
+  }
+});
+</script>
+</body>
+</html>

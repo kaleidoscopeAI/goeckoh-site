@@ -3,501 +3,240 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GOECKOH — The Only Real-Time Voice Correction Mirror</title>
-  <meta name="description" content="Goeckoh delivers your own corrected voice back to your ear in under 50ms — inside the corollary discharge window where the brain can learn. The only browser-based real-time LPC formant correction system for ASD, dysarthria, and apraxia.">
+  <title>Goeckoh — Real-Time Speech Correction for ASD, Dysarthria & Apraxia</title>
+  <meta name="description" content="Goeckoh delivers your corrected voice back to your ear in real time — in the biological window where the brain can learn. $20/month. No appointments. No synthetic voice.">
   <link rel="stylesheet" href="goeckoh-shared.css">
   <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: var(--gk-font);
-      background: var(--gk-bg);
-      color: var(--gk-text);
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-
-    /* ── Typography helpers ── */
-    .section { padding: 5.5rem 0; }
-    .section-alt { background: rgba(15,21,37,0.6); }
-
-    .eyebrow {
-      display: inline-block;
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--gk-green);
-      margin-bottom: 0.85rem;
-    }
-
-    h2.section-title {
-      font-size: clamp(1.75rem, 3.5vw, 2.6rem);
-      font-weight: 800;
-      letter-spacing: -0.025em;
-      line-height: 1.1;
-      margin-bottom: 1rem;
-    }
-
-    .section-sub {
-      font-size: 1.0rem;
-      color: var(--gk-text-2);
-      line-height: 1.8;
-      max-width: 580px;
-    }
-
-    sup { font-size: 0.6em; color: var(--gk-blue); vertical-align: super; }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { font-family:var(--gk-font); background:var(--gk-bg); color:var(--gk-text); overflow-x:hidden; }
 
     /* ── HERO ── */
     .hero {
       min-height: 100vh;
       padding-top: var(--gk-nav-h);
       display: flex;
-      align-items: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 70% 60% at 10% 60%, rgba(0,245,160,0.05) 0%, transparent 70%),
-        radial-gradient(ellipse 60% 70% at 90% 20%, rgba(0,195,255,0.05) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .hero-inner {
-      position: relative;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 5rem 1.5rem 4rem;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5rem;
-      align-items: center;
-    }
-
-    @media (max-width: 860px) {
-      .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
-    }
-
-    .hero-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: rgba(0,245,160,0.06);
-      border: 1px solid rgba(0,245,160,0.16);
-      color: var(--gk-green);
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 0.35rem 0.9rem;
-      border-radius: 999px;
-      margin-bottom: 1.5rem;
-    }
-
-    .hero-title {
-      font-size: clamp(2.4rem, 5.5vw, 4.2rem);
-      font-weight: 800;
-      line-height: 1.05;
-      letter-spacing: -0.03em;
-      margin-bottom: 1.25rem;
-    }
-
-    .hero-title .accent {
-      background: linear-gradient(120deg, var(--gk-green) 0%, var(--gk-blue) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .hero-body {
-      font-size: 1.05rem;
-      color: var(--gk-text-2);
-      line-height: 1.85;
-      margin-bottom: 2rem;
-      max-width: 520px;
-    }
-
-    .hero-ctas { display: flex; gap: 0.85rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
-
-    .hero-stats-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      border: 1px solid var(--gk-border);
-      border-radius: var(--gk-radius);
-      overflow: hidden;
-    }
-
-    .hstat {
-      padding: 1rem;
-      border-right: 1px solid var(--gk-border);
-    }
-    .hstat:last-child { border-right: none; }
-    .hstat-val {
-      font-family: var(--gk-mono);
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--gk-green);
-      line-height: 1;
-      margin-bottom: 0.2rem;
-    }
-    .hstat-lbl { font-size: 0.62rem; color: var(--gk-muted); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; }
-
-    /* Hero SVG — corollary discharge loop */
-    .hero-diagram {
-      width: 100%;
-      max-width: 480px;
-      margin: 0 auto;
-    }
-
-    /* ── PROBLEM SECTION ── */
-    .two-col {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    @media (max-width: 820px) {
-      .two-col { grid-template-columns: 1fr; gap: 2.5rem; }
-    }
-
-    .prose p { font-size: 0.9rem; color: var(--gk-text-2); line-height: 1.85; margin-bottom: 1rem; }
-    .prose p:last-child { margin-bottom: 0; }
-    .prose strong { color: var(--gk-text); }
-
-    /* Vowel space SVG container */
-    .vowel-space-wrap {
-      background: var(--gk-bg-card);
-      border: 1px solid var(--gk-border);
-      border-radius: var(--gk-radius);
-      padding: 1.5rem;
-    }
-
-    .vowel-space-label {
-      font-size: 0.65rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--gk-muted);
-      text-align: center;
-      margin-bottom: 0.75rem;
-    }
-
-    /* ── WINDOW SECTION ── */
-    .window-timeline-wrap {
-      background: var(--gk-bg-card);
-      border: 1px solid var(--gk-border);
-      border-radius: var(--gk-radius);
-      padding: 2rem;
-      margin-top: 3rem;
-    }
-
-    .tl-legend {
-      display: flex;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-      margin-bottom: 1.25rem;
-    }
-
-    .tl-item {
-      display: flex;
-      align-items: center;
-      gap: 0.45rem;
-      font-size: 0.72rem;
-      color: var(--gk-text-2);
-    }
-
-    .tl-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 2px;
-      flex-shrink: 0;
-    }
-
-    /* ── COMPARISON TABLE ── */
-    .comp-wrap {
-      overflow-x: auto;
-      margin-top: 2.5rem;
-      border: 1px solid var(--gk-border);
-      border-radius: var(--gk-radius);
-    }
-
-    table.comp {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.82rem;
-    }
-
-    .comp thead th {
-      background: var(--gk-bg-raised);
-      padding: 1rem 1.1rem;
-      text-align: left;
-      font-size: 0.7rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.09em;
-      color: var(--gk-muted);
-      border-bottom: 1px solid var(--gk-border);
-      white-space: nowrap;
-    }
-
-    .comp thead th.goeckoh-col {
-      background: rgba(0,245,160,0.06);
-      color: var(--gk-green);
-      border-left: 2px solid rgba(0,245,160,0.3);
-    }
-
-    .comp tbody tr { border-bottom: 1px solid var(--gk-border); }
-    .comp tbody tr:last-child { border-bottom: none; }
-
-    .comp tbody tr:hover td { background: rgba(255,255,255,0.02); }
-
-    .comp td {
-      padding: 0.85rem 1.1rem;
-      color: var(--gk-text-2);
-      vertical-align: middle;
-    }
-
-    .comp td:first-child { color: var(--gk-text); font-weight: 600; }
-
-    .comp td.goeckoh-col {
-      background: rgba(0,245,160,0.03);
-      border-left: 2px solid rgba(0,245,160,0.15);
-    }
-
-    .yes { color: var(--gk-green); font-weight: 700; }
-    .no  { color: var(--gk-muted); }
-    .partial { color: var(--gk-amber); }
-
-    /* ── HOW IT WORKS / PIPELINE ── */
-    .pipeline-scroll {
-      overflow-x: auto;
-      padding: 1.5rem 0 0.5rem;
-      scrollbar-width: thin;
-      scrollbar-color: var(--gk-border-2) transparent;
-    }
-
-    .pipeline-row {
-      display: flex;
-      align-items: center;
-      min-width: max-content;
-      gap: 0;
-    }
-
-    .p-node {
-      display: flex;
       flex-direction: column;
-      align-items: center;
-      gap: 0.35rem;
-    }
-
-    .p-box {
-      background: var(--gk-bg-raised);
-      border: 1px solid var(--gk-border-2);
-      border-radius: var(--gk-radius-sm);
-      padding: 0.6rem 1.1rem;
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: var(--gk-text);
-      text-align: center;
-      white-space: nowrap;
-    }
-
-    .p-box.highlight { border-color: rgba(0,245,160,0.4); background: rgba(0,245,160,0.05); color: var(--gk-green); }
-    .p-box.blue      { border-color: rgba(0,195,255,0.4); background: rgba(0,195,255,0.05); color: var(--gk-blue); }
-
-    .p-sub  { font-size: 0.6rem; color: var(--gk-muted); white-space: nowrap; }
-    .p-time { font-family: var(--gk-mono); font-size: 0.62rem; color: var(--gk-green); }
-    .p-time.b { color: var(--gk-blue); }
-    .p-arr  { font-size: 1rem; color: var(--gk-border-2); padding: 0 0.5rem; margin-top: -12px; }
-
-    /* ── SCIENCE CARDS ── */
-    .sci-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1px;
-      background: var(--gk-border);
-      border: 1px solid var(--gk-border);
-      border-radius: var(--gk-radius);
-      overflow: hidden;
-      margin-top: 2.5rem;
-    }
-
-    .sci-card {
-      background: var(--gk-bg-card);
-      padding: 2rem 1.75rem;
-    }
-
-    .sci-icon  { font-size: 1.5rem; margin-bottom: 0.75rem; }
-    .sci-title { font-size: 0.78rem; font-weight: 700; color: var(--gk-text); margin-bottom: 0.6rem; text-transform: uppercase; letter-spacing: 0.07em; }
-    .sci-body  { font-size: 0.8rem; color: var(--gk-text-2); line-height: 1.75; }
-
-    /* ── PROFILES ── */
-    .profile-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 0.85rem;
-      margin-top: 2.5rem;
-    }
-
-    .profile-card {
-      background: var(--gk-bg-card);
-      border: 1px solid var(--gk-border);
-      border-radius: var(--gk-radius-sm);
-      padding: 1.1rem 1.25rem;
-    }
-
-    .profile-name { font-size: 0.82rem; font-weight: 700; margin-bottom: 0.35rem; }
-    .profile-targets { font-family: var(--gk-mono); font-size: 0.65rem; color: var(--gk-muted); margin-bottom: 0.5rem; }
-    .profile-desc { font-size: 0.73rem; color: var(--gk-text-2); line-height: 1.6; }
-
-    /* ── TOOLS GRID ── */
-    .tools-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-      gap: 1rem;
-      margin-top: 2.5rem;
-    }
-
-    .tool-card {
-      background: var(--gk-bg-card);
-      border: 1px solid var(--gk-border);
-      border-radius: var(--gk-radius);
-      padding: 1.5rem;
-      text-decoration: none;
-      color: inherit;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
-    }
-
-    .tool-card:hover {
-      transform: translateY(-3px);
-      border-color: var(--gk-border-2);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.45);
-    }
-
-    .tool-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 0.25rem; }
-    .tool-icon { font-size: 1.5rem; }
-    .tool-name { font-size: 0.9rem; font-weight: 700; }
-    .tool-desc { font-size: 0.77rem; color: var(--gk-text-2); line-height: 1.65; flex: 1; }
-    .tool-arrow { font-size: 0.73rem; color: var(--gk-muted); margin-top: auto; padding-top: 0.4rem; transition: color 0.15s; }
-    .tool-card:hover .tool-arrow { color: var(--gk-green); }
-
-    /* ── REFERENCES ── */
-    .refs {
-      margin-top: 3rem;
-      padding: 2rem;
-      background: var(--gk-bg-card);
-      border: 1px solid var(--gk-border);
-      border-radius: var(--gk-radius);
-    }
-
-    .refs-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gk-muted); margin-bottom: 1rem; }
-
-    .refs ol { padding-left: 1.25rem; }
-    .refs li { font-size: 0.72rem; color: var(--gk-muted); line-height: 1.8; margin-bottom: 0.25rem; }
-    .refs a  { color: var(--gk-blue); text-decoration: none; }
-    .refs a:hover { text-decoration: underline; }
-
-    /* ── CTA ── */
-    .cta-box {
-      background: linear-gradient(135deg, rgba(0,245,160,0.04), rgba(0,195,255,0.04));
-      border: 1px solid rgba(0,245,160,0.12);
-      border-radius: 20px;
-      padding: 5rem 2rem;
-      text-align: center;
-    }
-
-    /* ── Footer ── */
-    .site-footer {
-      border-top: 1px solid var(--gk-border);
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2rem 1.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .footer-brand { font-size: 0.82rem; font-weight: 800; letter-spacing: 0.1em; color: var(--gk-text-2); }
-    .footer-brand span { color: var(--gk-green); }
-    .footer-links { display: flex; gap: 1.5rem; }
-    .footer-links a { font-size: 0.75rem; color: var(--gk-muted); text-decoration: none; }
-    .footer-links a:hover { color: var(--gk-text); }
-    .footer-copy { font-size: 0.72rem; color: var(--gk-muted); }
-
-    /* ── ZERO SETUP STEPS ── */
-    .steps-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--gk-border);
-      border: 1px solid var(--gk-border);
-      border-radius: var(--gk-radius);
-      overflow: hidden;
-      margin-top: 3rem;
-    }
-
-    .step {
-      background: var(--gk-bg-card);
-      padding: 2.5rem 2rem;
-      text-align: center;
-    }
-
-    .step-num {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: rgba(0,245,160,0.08);
-      border: 1.5px solid rgba(0,245,160,0.3);
-      color: var(--gk-green);
-      font-family: var(--gk-mono);
-      font-size: 1.1rem;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
       justify-content: center;
-      margin: 0 auto 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content:'';
+      position:absolute; inset:0;
+      background:
+        radial-gradient(ellipse 80% 60% at 15% 55%, rgba(77,124,254,0.08) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 70% at 85% 25%, rgba(20,197,145,0.06) 0%, transparent 65%);
+      pointer-events:none;
+    }
+    .hero-inner {
+      max-width:1160px; margin:0 auto; padding:5rem 1.5rem 4rem;
+      display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center;
+    }
+    @media(max-width:860px){ .hero-inner{ grid-template-columns:1fr; gap:3rem; } }
+
+    .hero-kicker {
+      display:inline-flex; align-items:center; gap:0.5rem;
+      background:rgba(77,124,254,0.1); border:1px solid rgba(77,124,254,0.2);
+      color:var(--gk-primary); font-size:0.68rem; font-weight:700;
+      letter-spacing:0.12em; text-transform:uppercase;
+      padding:0.35rem 0.9rem; border-radius:999px; margin-bottom:1.75rem;
+    }
+    .hero-title {
+      font-size:clamp(2.6rem,5.5vw,4rem); font-weight:900;
+      letter-spacing:-0.03em; line-height:1.07; margin-bottom:1.5rem;
+    }
+    .hero-title .accent {
+      background:linear-gradient(135deg,var(--gk-primary) 20%,var(--gk-teal) 80%);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    }
+    .hero-body {
+      font-size:1.05rem; color:var(--gk-text-2); line-height:1.8;
+      max-width:480px; margin-bottom:2.25rem;
+    }
+    .hero-ctas { display:flex; gap:0.85rem; flex-wrap:wrap; margin-bottom:2.5rem; }
+
+    .hero-stats {
+      display:flex; gap:2rem; flex-wrap:wrap;
+      padding-top:1.75rem; border-top:1px solid var(--gk-border);
+    }
+    .hstat-val { font-size:1.6rem; font-weight:800; color:var(--gk-text); line-height:1; margin-bottom:0.3rem; }
+    .hstat-lbl { font-size:0.72rem; color:var(--gk-muted); font-weight:500; }
+
+    .hero-visual {
+      display:flex; flex-direction:column; align-items:center; gap:1.5rem;
+    }
+    .hero-img {
+      width:100%; max-width:420px;
+      border-radius:20px;
+      box-shadow:0 0 80px rgba(77,124,254,0.18), 0 0 40px rgba(20,197,145,0.1);
+    }
+    .hero-caption {
+      font-size:0.68rem; color:var(--gk-muted); text-align:center; line-height:1.7;
+      max-width:320px;
     }
 
-    .step-icon { font-size: 1.75rem; margin-bottom: 0.6rem; }
-    .step-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .step-body { font-size: 0.78rem; color: var(--gk-text-2); line-height: 1.7; }
-
-    @media (max-width: 680px) {
-      .steps-row { grid-template-columns: 1fr; }
+    /* ── TRUST BAR ── */
+    .trust-bar {
+      background:var(--gk-bg-card); border-top:1px solid var(--gk-border); border-bottom:1px solid var(--gk-border);
+      padding:1.25rem 1.5rem;
     }
-
-    /* ── BRAND IMAGE ── */
-    .hero-brand-img {
-      width: 100%;
-      max-width: 480px;
-      margin: 0 auto;
-      display: block;
-      border-radius: 16px;
-      box-shadow: 0 0 80px rgba(0,195,255,0.15), 0 0 40px rgba(0,245,160,0.08);
+    .trust-inner {
+      max-width:1160px; margin:0 auto;
+      display:flex; align-items:center; justify-content:center; gap:2.5rem; flex-wrap:wrap;
     }
-
-    /* Animated ring pulse on hero */
-    @keyframes ring-pulse {
-      0%,100% { opacity: 0.3; }
-      50%      { opacity: 0.7; }
+    .trust-item {
+      font-size:0.72rem; font-weight:600; color:var(--gk-muted);
+      text-transform:uppercase; letter-spacing:0.1em; white-space:nowrap;
     }
+    .trust-sep { width:1px; height:14px; background:var(--gk-border-2); flex-shrink:0; }
+
+    /* ── SECTION SHARED ── */
+    section { padding:5.5rem 0; }
+    .section-alt { background:rgba(10,16,32,0.7); }
+    .eyebrow {
+      font-size:0.65rem; font-weight:700; letter-spacing:0.18em;
+      text-transform:uppercase; color:var(--gk-teal); margin-bottom:0.9rem; display:block;
+    }
+    .section-title {
+      font-size:clamp(1.8rem,3.5vw,2.7rem); font-weight:800;
+      letter-spacing:-0.025em; line-height:1.1; margin-bottom:1rem;
+    }
+    .section-sub {
+      font-size:1rem; color:var(--gk-text-2); line-height:1.8; max-width:560px;
+    }
+    sup { font-size:0.6em; color:var(--gk-primary); vertical-align:super; }
+
+    /* ── PROBLEM ── */
+    .problem-grid {
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1px;
+      background:var(--gk-border); border:1px solid var(--gk-border); border-radius:var(--gk-radius);
+      overflow:hidden; margin-top:3rem;
+    }
+    .prob-card {
+      background:var(--gk-bg-card); padding:2rem 1.75rem;
+    }
+    .prob-stat { font-size:2.2rem; font-weight:900; color:var(--gk-primary); line-height:1; margin-bottom:0.5rem; }
+    .prob-label { font-size:0.85rem; color:var(--gk-text); font-weight:600; margin-bottom:0.4rem; }
+    .prob-desc { font-size:0.78rem; color:var(--gk-text-2); line-height:1.65; }
+
+    /* ── HOW IT WORKS ── */
+    .steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1.5rem; margin-top:3rem; }
+    .step-card {
+      background:var(--gk-bg-card); border:1px solid var(--gk-border);
+      border-radius:var(--gk-radius); padding:2rem 1.75rem;
+      position:relative;
+    }
+    .step-num {
+      width:40px; height:40px; border-radius:50%;
+      background:rgba(77,124,254,0.1); border:1.5px solid rgba(77,124,254,0.25);
+      color:var(--gk-primary); font-size:1rem; font-weight:800;
+      display:flex; align-items:center; justify-content:center;
+      margin-bottom:1.25rem; font-family:var(--gk-mono);
+    }
+    .step-title { font-size:1rem; font-weight:700; margin-bottom:0.6rem; }
+    .step-body { font-size:0.82rem; color:var(--gk-text-2); line-height:1.75; }
+
+    /* ── SCIENCE ── */
+    .science-two { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; }
+    @media(max-width:820px){ .science-two{ grid-template-columns:1fr; gap:2.5rem; } }
+    .science-img { width:100%; max-width:380px; border-radius:16px; box-shadow:var(--gk-shadow); }
+    .science-points { display:flex; flex-direction:column; gap:1.5rem; margin-top:2rem; }
+    .sci-point { display:flex; gap:1rem; }
+    .sci-dot { width:8px; height:8px; border-radius:50%; background:var(--gk-teal); margin-top:0.45rem; flex-shrink:0; }
+    .sci-text h4 { font-size:0.9rem; font-weight:700; margin-bottom:0.3rem; }
+    .sci-text p { font-size:0.8rem; color:var(--gk-text-2); line-height:1.7; }
+
+    /* ── WHO IT'S FOR ── */
+    .audience-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-top:3rem; }
+    @media(max-width:680px){ .audience-grid{ grid-template-columns:1fr; } }
+    .audience-card {
+      background:var(--gk-bg-card); border:1px solid var(--gk-border);
+      border-radius:var(--gk-radius); padding:2.5rem 2rem;
+    }
+    .audience-card.featured { border-color:rgba(77,124,254,0.3); background:rgba(77,124,254,0.04); }
+    .aud-icon { font-size:2rem; margin-bottom:1.25rem; display:block; }
+    .aud-title { font-size:1.15rem; font-weight:800; margin-bottom:0.6rem; }
+    .aud-desc { font-size:0.83rem; color:var(--gk-text-2); line-height:1.75; margin-bottom:1.5rem; }
+    .aud-list { list-style:none; display:flex; flex-direction:column; gap:0.5rem; }
+    .aud-list li { font-size:0.8rem; color:var(--gk-text-2); padding-left:1.1rem; position:relative; line-height:1.5; }
+    .aud-list li::before { content:'→'; position:absolute; left:0; color:var(--gk-teal); font-size:0.72rem; top:0.15rem; }
+
+    /* ── COMPARISON ── */
+    .compare-table { width:100%; border-collapse:collapse; margin-top:2.5rem; font-size:0.85rem; }
+    .compare-table th, .compare-table td { padding:1rem 1.25rem; text-align:left; border-bottom:1px solid var(--gk-border); }
+    .compare-table th { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--gk-muted); }
+    .compare-table td:first-child { font-weight:700; color:var(--gk-text); }
+    .compare-table .gk-row { background:rgba(77,124,254,0.05); }
+    .compare-table .gk-row td:first-child { color:var(--gk-teal); }
+    .tag-yes { color:var(--gk-teal); font-weight:700; font-size:0.8rem; }
+    .tag-no  { color:var(--gk-muted); font-size:0.8rem; }
+
+    /* ── PRICING ── */
+    .price-card {
+      max-width:520px; margin:3rem auto 0;
+      background:var(--gk-bg-card); border:1.5px solid rgba(77,124,254,0.3);
+      border-radius:20px; padding:3rem 2.5rem; text-align:center;
+      box-shadow:0 0 60px rgba(77,124,254,0.12);
+    }
+    .price-badge {
+      display:inline-block; background:rgba(77,124,254,0.12); color:var(--gk-primary);
+      font-size:0.7rem; font-weight:700; letter-spacing:0.12em;
+      text-transform:uppercase; padding:0.3rem 0.9rem; border-radius:999px; margin-bottom:1.5rem;
+    }
+    .price-amount { font-size:4rem; font-weight:900; letter-spacing:-0.03em; line-height:1; color:var(--gk-text); }
+    .price-amount span { font-size:1.5rem; font-weight:500; color:var(--gk-text-2); vertical-align:super; margin-right:0.1rem; }
+    .price-per { font-size:0.85rem; color:var(--gk-text-2); margin-top:0.35rem; margin-bottom:2rem; }
+    .price-features { list-style:none; text-align:left; display:flex; flex-direction:column; gap:0.75rem; margin-bottom:2rem; }
+    .price-features li {
+      display:flex; align-items:flex-start; gap:0.75rem;
+      font-size:0.85rem; color:var(--gk-text-2); line-height:1.5;
+    }
+    .price-features li::before { content:'✓'; color:var(--gk-teal); font-weight:800; flex-shrink:0; }
+    .price-note { font-size:0.72rem; color:var(--gk-muted); margin-top:1.25rem; }
+
+    /* ── EARLY ACCESS CTA ── */
+    .cta-section {
+      background:linear-gradient(135deg, rgba(77,124,254,0.08) 0%, rgba(20,197,145,0.05) 100%);
+      border-top:1px solid rgba(77,124,254,0.15); border-bottom:1px solid rgba(77,124,254,0.15);
+    }
+    .cta-inner { max-width:560px; margin:0 auto; text-align:center; }
+    .cta-title { font-size:clamp(1.8rem,3vw,2.4rem); font-weight:800; letter-spacing:-0.02em; margin-bottom:1rem; }
+    .cta-sub { font-size:1rem; color:var(--gk-text-2); line-height:1.75; margin-bottom:2rem; }
+    .cta-form { display:flex; gap:0.75rem; max-width:440px; margin:0 auto; }
+    @media(max-width:500px){ .cta-form{ flex-direction:column; } }
+    .cta-input {
+      flex:1; background:var(--gk-bg-raised); border:1.5px solid var(--gk-border-2);
+      border-radius:999px; color:var(--gk-text); font-family:var(--gk-font);
+      font-size:0.9rem; padding:0.75rem 1.25rem; outline:none; transition:border-color 0.15s;
+    }
+    .cta-input:focus { border-color:var(--gk-primary); }
+    .cta-input::placeholder { color:var(--gk-muted); }
+    .cta-fine { font-size:0.72rem; color:var(--gk-muted); margin-top:1rem; }
+
+    /* ── CITATIONS ── */
+    .cite-list { display:flex; flex-direction:column; gap:0.5rem; margin-top:2rem; }
+    .cite { font-size:0.75rem; color:var(--gk-muted); line-height:1.6; padding-left:1.5rem; position:relative; }
+    .cite::before { content:attr(data-n); position:absolute; left:0; color:var(--gk-primary); font-weight:700; font-size:0.68rem; }
+
+    /* ── GAME TEASER ── */
+    .game-teaser {
+      background:var(--gk-bg-card); border:1px solid var(--gk-border);
+      border-radius:var(--gk-radius); padding:2.5rem; text-align:center;
+      margin-top:3rem; position:relative; overflow:hidden;
+    }
+    .game-teaser::before {
+      content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse 60% 60% at 50% 0%, rgba(20,197,145,0.07),transparent);
+    }
+    .game-emoji { font-size:3rem; margin-bottom:1rem; display:block; }
+    .game-title { font-size:1.1rem; font-weight:800; margin-bottom:0.5rem; }
+    .game-desc { font-size:0.83rem; color:var(--gk-text-2); line-height:1.7; max-width:380px; margin:0 auto 1.5rem; }
   </style>
 </head>
 <body>
 
-<!-- ── NAV ─────────────────────────────────────────────────────────── -->
+<!-- NAV -->
 <nav class="gk-nav">
   <a href="index.html" class="gk-nav-brand">
     <img src="images/logo-clean.png" alt="Goeckoh" class="gk-nav-logo">
@@ -507,417 +246,314 @@
     </div>
   </a>
   <div class="gk-nav-links" id="gkNav">
-    <a href="demo.html"                                          class="gk-nav-link">Live Demo</a>
-    <a href="real_time_therapeutic_voice_cloning_system.html"   class="gk-nav-link">Echo Therapy</a>
-    <a href="advanced_voice_visualizer_pro.html"                class="gk-nav-link">Visualizer</a>
-    <a href="voice_therapy_profile_transform.html"              class="gk-nav-link">Profile Lab</a>
-    <a href="goeckoh_dashboard.html"                            class="gk-nav-link">Dashboard</a>
-    <a href="observatory.html"                                   class="gk-nav-link">Observatory</a>
+    <a href="#science"    class="gk-nav-link">The Science</a>
+    <a href="#families"   class="gk-nav-link">For Families</a>
+    <a href="#clinicians" class="gk-nav-link">For Clinicians</a>
+    <a href="#pricing"    class="gk-nav-link">Pricing</a>
+    <a href="demo.html"   class="gk-nav-link">Try the Demo</a>
   </div>
-  <a href="download.html" class="gk-nav-cta">Download</a>
+  <a href="download.html" class="gk-nav-cta">Get Early Access</a>
   <button class="gk-nav-toggle" onclick="document.getElementById('gkNav').classList.toggle('gk-open')" aria-label="Menu">☰</button>
 </nav>
 
-<!-- ═══════════════════════════════════════════════════════════════════
-     HERO
-════════════════════════════════════════════════════════════════════ -->
+<!-- HERO -->
 <section class="hero">
   <div class="hero-inner">
     <div>
-      <div class="hero-pill">◈ First-in-class &nbsp;·&nbsp; Browser-native &nbsp;·&nbsp; Identity-preserved</div>
+      <div class="hero-kicker">◈ First-in-class · Real-time · Identity-preserved</div>
       <h1 class="hero-title">
-        Your voice,<br>
-        corrected,<br>
-        <span class="accent">in the same instant<br>you speak it.</span>
+        Hear yourself<br>clearly.<br>
+        <span class="accent">Right as you speak.</span>
       </h1>
       <p class="hero-body">
-        Goeckoh is the only system that delivers real-time LPC formant correction
-        through any browser — within the ~200 ms corollary discharge window where
-        the auditory cortex can accept the corrected signal as self-produced speech.
-        No synthetic voice. No replacement. <strong>Your voice. Shaped.</strong>
+        Goeckoh is the first system to correct your voice and return it to your ear
+        in real time — within the biological window where your brain can actually
+        learn from it. For ASD, dysarthria, and apraxia.
+        <strong>No appointments. No synthetic voice. Just yours, shaped.</strong>
       </p>
       <div class="hero-ctas">
-        <a href="demo.html"                                        class="gk-btn gk-btn-primary">Try It Live →</a>
-        <a href="real_time_therapeutic_voice_cloning_system.html"  class="gk-btn gk-btn-secondary">Echo Therapy</a>
+        <a href="download.html" class="gk-btn gk-btn-primary">Get Early Access · $20/mo →</a>
+        <a href="demo.html"     class="gk-btn gk-btn-secondary">Try It Free</a>
       </div>
-      <div class="hero-stats-row">
-        <div class="hstat">
+      <div class="hero-stats">
+        <div>
           <div class="hstat-val">&lt;50ms</div>
-          <div class="hstat-lbl">End-to-end latency</div>
+          <div class="hstat-lbl">Correction latency</div>
         </div>
-        <div class="hstat">
+        <div>
           <div class="hstat-val">~200ms</div>
-          <div class="hstat-lbl">CD window<sup>1</sup></div>
+          <div class="hstat-lbl">Brain learning window</div>
         </div>
-        <div class="hstat">
-          <div class="hstat-val">LPC-12</div>
-          <div class="hstat-lbl">Vocoder order</div>
+        <div>
+          <div class="hstat-val">$20</div>
+          <div class="hstat-lbl">Per person / month</div>
         </div>
       </div>
     </div>
-
-    <!-- Hero brand image -->
-    <div class="hero-diagram">
-      <img src="images/logo-dark-brain.png" alt="Goeckoh — ear, brain, and neural sound waves" class="hero-brand-img">
-      <p style="font-size:0.65rem;color:var(--gk-muted);text-align:center;margin-top:1rem;line-height:1.6">
-        The ear, the brain, and the signal — all three in one device.<br>
-        Your voice enters. Corrected, it returns. The brain hears itself succeed.
+    <div class="hero-visual">
+      <img src="images/logo-dark-brain.png" alt="Goeckoh — voice, brain, and neural feedback" class="hero-img">
+      <p class="hero-caption">
+        The ear. The brain. The signal.<br>
+        Your voice enters. Corrected, it returns.<br>
+        The brain hears itself succeed.
       </p>
     </div>
   </div>
+</section>
 
-  <!-- Zero-setup steps -->
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-inner">
+    <span class="trust-item">Built on 60 years of speech science</span>
+    <div class="trust-sep"></div>
+    <span class="trust-item">PNAS 2024 · Guenther DIVA Model · Fant 1960</span>
+    <div class="trust-sep"></div>
+    <span class="trust-item">No synthetic voice · Identity preserved</span>
+    <div class="trust-sep"></div>
+    <span class="trust-item">Works on any phone or tablet</span>
+  </div>
+</div>
+
+<!-- THE PROBLEM -->
+<section id="problem">
   <div class="gk-container">
-    <div class="steps-row">
-      <div class="step">
-        <div class="step-num">1</div>
-        <div class="step-icon">🎧</div>
-        <div class="step-title">Put on wireless earbuds</div>
-        <div class="step-body">Earbuds must have a built-in microphone — AirPods, Galaxy Buds, or any Bluetooth earbuds with mic work. The mic captures your voice at close range. The speakers play the corrected signal back to your ear.</div>
+    <span class="eyebrow">The Problem</span>
+    <h2 class="section-title">Speech disorders disconnect people<br>from the world around them.</h2>
+    <p class="section-sub">
+      Millions of people struggle to be understood — not because they aren't trying, but because
+      their brain never gets accurate feedback on how their speech actually sounds.
+      Current treatments are slow, expensive, and often dehumanizing.
+    </p>
+    <div class="problem-grid">
+      <div class="prob-card">
+        <div class="prob-stat">1 in 36</div>
+        <div class="prob-label">Children with Autism</div>
+        <div class="prob-desc">Speech and communication differences affect the majority. Many never receive consistent, real-time feedback on their voice.</div>
       </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-icon">📱</div>
-        <div class="step-title">Open on your phone — keep it with you</div>
-        <div class="step-body">Open Goeckoh on your <strong>phone or tablet</strong> and keep the device in your pocket, bag, or nearby. The device does the processing. Tap <strong>Allow</strong> for microphone access. That is the only permission needed.</div>
+      <div class="prob-card">
+        <div class="prob-stat">764K</div>
+        <div class="prob-label">New stroke survivors yearly</div>
+        <div class="prob-desc">Dysarthria and apraxia affect hundreds of thousands. Traditional therapy requires weekly appointments most families can't sustain.</div>
       </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <div class="step-icon">🗣️</div>
-        <div class="step-title">Speak normally</div>
-        <div class="step-body">The system is running. Your voice is captured, corrected in under 50ms, and returned to your ear. No profile selection. No calibration. No configuration. Just speak.</div>
+      <div class="prob-card">
+        <div class="prob-stat">$4,500</div>
+        <div class="prob-label">Cost of the nearest alternative</div>
+        <div class="prob-desc">SpeechEasy only delays your voice — it doesn't correct it. AAC devices replace your voice entirely. Neither addresses the root problem.</div>
       </div>
-    </div>
-
-    <!-- Two-device callout -->
-    <div style="margin-top:1px;background:var(--gk-bg-card);border:1px solid var(--gk-border);border-top:none;border-radius:0 0 var(--gk-radius) var(--gk-radius);padding:2rem 2.5rem;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:1.5rem">
-
-      <!-- User side -->
-      <div style="text-align:center">
-        <div style="font-size:2rem;margin-bottom:0.5rem">📱</div>
-        <div style="font-size:0.8rem;font-weight:700;margin-bottom:0.3rem">User Device</div>
-        <div style="font-size:0.72rem;color:var(--gk-text-2);line-height:1.65">Phone or tablet on the user's person.<br>Wireless earbuds with mic connected.<br>Runs the live correction system.</div>
+      <div class="prob-card">
+        <div class="prob-stat">200ms</div>
+        <div class="prob-label">The biological window</div>
+        <div class="prob-desc">The brain compares its predicted voice to what it hears within ~200ms of speaking. Miss that window and no learning can happen. Goeckoh doesn't miss it.</div>
       </div>
-
-      <!-- Connector -->
-      <div style="display:flex;flex-direction:column;align-items:center;gap:0.4rem;flex-shrink:0">
-        <div style="width:1px;height:20px;background:var(--gk-border)"></div>
-        <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--gk-muted);white-space:nowrap">Wireless · Separate</div>
-        <div style="width:1px;height:20px;background:var(--gk-border)"></div>
-      </div>
-
-      <!-- Guardian side -->
-      <div style="text-align:center">
-        <div style="font-size:2rem;margin-bottom:0.5rem">💻</div>
-        <div style="font-size:0.8rem;font-weight:700;margin-bottom:0.3rem;color:var(--gk-blue)">Guardian / Caregiver Device</div>
-        <div style="font-size:0.72rem;color:var(--gk-text-2);line-height:1.65">Parent, therapist, or support person<br>monitors the session in real time<br>from any separate device via the <a href="goeckoh_dashboard.html" style="color:var(--gk-blue);text-decoration:none;font-weight:600">Dashboard</a>.</div>
-      </div>
-
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════════
-     THE PROBLEM
-════════════════════════════════════════════════════════════════════ -->
-<section class="section section-alt" id="problem">
+<!-- HOW IT WORKS -->
+<section class="section-alt">
   <div class="gk-container">
-    <div class="eyebrow">The Problem</div>
-    <div class="two-col">
-      <div>
-        <h2 class="section-title">Speech disorders compress the acoustic vowel space.</h2>
-        <div class="prose">
-          <p>
-            A vowel is defined by two numbers: <strong>F1</strong> (first formant, ~300–900 Hz —
-            encodes tongue height / jaw openness) and <strong>F2</strong> (second formant,
-            ~800–2500 Hz — encodes tongue front/back position).<sup>2</sup>
-          </p>
-          <p>
-            In ASD, dysarthria, and apraxia, articulatory undershoot means vowels
-            <strong>fail to reach their canonical positions</strong> in the F1/F2 plane.
-            The entire vowel quadrilateral compresses toward the center — toward the neutral
-            schwa /ə/. This is measurable as a reduced <strong>Vowel Space Area (VSA)</strong>
-            and elevated <strong>Formant Centralization Ratio (FCR)</strong>.<sup>3</sup>
-          </p>
-          <p>
-            In TORGO corpus speakers with dysarthria, intended back vowels like /u/
-            showed F2 values of 1563–1935 Hz — typical front-vowel territory —
-            because lip-rounding and tongue retraction were both reduced simultaneously.<sup>4</sup>
-            The formant cue is not just noisy — it can be physically absent.
-          </p>
-          <p>
-            Goeckoh measures this displacement in <strong>Bark scale</strong> (the perceptual
-            frequency scale the cochlea actually uses<sup>5</sup>), and corrects it in real time.
-          </p>
+    <span class="eyebrow">How It Works</span>
+    <h2 class="section-title">Earbuds in. Speak.<br>That's all.</h2>
+    <p class="section-sub">
+      Goeckoh works the moment you put your earbuds on.
+      No enrollment. No configuration. No waiting room.
+    </p>
+    <div class="steps">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <div class="step-title">Put on wireless earbuds</div>
+        <div class="step-body">
+          AirPods, Galaxy Buds, or any Bluetooth earbuds with a mic.
+          The mic captures your voice at close range.
+          The speakers play the corrected signal back — private, just to your ear.
         </div>
       </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <div class="step-title">Keep your phone nearby</div>
+        <div class="step-body">
+          Open Goeckoh on any phone or tablet. Keep it in your pocket or bag.
+          The device does all the processing — no cloud, no upload, nothing leaves your device.
+          Tap Allow for microphone and you're ready.
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <div class="step-title">Speak normally</div>
+        <div class="step-body">
+          Correction begins immediately. Your voice is shaped and returned to your ear
+          in under 50 milliseconds — within the window where your brain can accept it
+          as self-produced speech and learn from it.
+        </div>
+      </div>
+    </div>
 
-      <!-- Vowel Space SVG -->
-      <div class="vowel-space-wrap">
-        <div class="vowel-space-label">F1/F2 Acoustic Vowel Space — canonical vs. dysarthric</div>
-        <svg viewBox="0 0 340 300" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%">
-          <defs>
-            <marker id="v-arr" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
-              <polygon points="0 0, 7 2.5, 0 5" fill="#00f5a0" opacity="0.8"/>
-            </marker>
-          </defs>
-
-          <!-- Axes -->
-          <!-- F2 axis (x, reversed: high F2 left, low F2 right) -->
-          <line x1="40" y1="260" x2="320" y2="260" stroke="#566070" stroke-width="1"/>
-          <text x="40" y="275" fill="#566070" font-family="monospace" font-size="9">2500</text>
-          <text x="145" y="275" fill="#566070" font-family="monospace" font-size="9">1800</text>
-          <text x="250" y="275" fill="#566070" font-family="monospace" font-size="9">1000</text>
-          <text x="175" y="290" fill="#566070" font-family="Inter,sans-serif" font-size="9" text-anchor="middle">F2 (Hz) →</text>
-
-          <!-- F1 axis (y, reversed: low F1 top, high F1 bottom) -->
-          <line x1="40" y1="20" x2="40" y2="260" stroke="#566070" stroke-width="1"/>
-          <text x="32" y="30"  fill="#566070" font-family="monospace" font-size="9" text-anchor="end">300</text>
-          <text x="32" y="145" fill="#566070" font-family="monospace" font-size="9" text-anchor="end">600</text>
-          <text x="32" y="258" fill="#566070" font-family="monospace" font-size="9" text-anchor="end">900</text>
-          <text x="14" y="145" fill="#566070" font-family="Inter,sans-serif" font-size="9" text-anchor="middle" transform="rotate(-90,14,145)">F1 (Hz) ↓</text>
-
-          <!-- Helper: Hz→px mapping
-               F2: 2500→x=40, 800→x=320  linear: x = 40 + (2500-F2)/(2500-800)*280
-               F1: 300→y=20,  900→y=260  linear: y = 20 + (F1-300)/(900-300)*240
-          -->
-
-          <!-- Canonical vowel space outline (light) -->
-          <!-- /i/ F1=437 F2=2761→clamp2500  → x=40  y=20+137/600*240≈75 -->
-          <!-- /æ/ F1=669 F2=1843            → x=40+(2500-1843)/1700*280≈148  y=20+369/600*240≈168 -->
-          <!-- /ɑ/ F1=768 F2=1333            → x=40+(2500-1333)/1700*280≈232  y=20+468/600*240≈207 -->
-          <!-- /u/ F1=459 F2=1105            → x=40+(2500-1105)/1700*280≈270  y=20+159/600*240≈84 -->
-          <!-- /ɛ/ F1=580 F2=1799            → x=40+(2500-1799)/1700*280≈155  y=20+280/600*240≈132 -->
-
-          <polygon
-            points="50,75  148,168  232,207  270,84"
-            stroke="rgba(255,255,255,0.12)" stroke-width="1.5" fill="rgba(255,255,255,0.03)" stroke-dasharray="4,3"/>
-
-          <!-- Canonical vowel points -->
-          <!-- /i/ -->
-          <circle cx="50" cy="75" r="5" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
-          <text x="55" y="72" fill="#a0aec0" font-family="Inter,sans-serif" font-size="11" font-weight="600">/i/</text>
-
-          <!-- /æ/ -->
-          <circle cx="148" cy="168" r="5" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
-          <text x="152" y="165" fill="#a0aec0" font-family="Inter,sans-serif" font-size="11" font-weight="600">/æ/</text>
-
-          <!-- /ɑ/ -->
-          <circle cx="232" cy="207" r="5" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
-          <text x="236" y="204" fill="#a0aec0" font-family="Inter,sans-serif" font-size="11" font-weight="600">/ɑ/</text>
-
-          <!-- /u/ -->
-          <circle cx="270" cy="84" r="5" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
-          <text x="274" y="81" fill="#a0aec0" font-family="Inter,sans-serif" font-size="11" font-weight="600">/u/</text>
-
-          <!-- Compressed / dysarthric space (schwa center) -->
-          <!-- center schwa ≈ F1=500 F2=1500 → x=40+(2500-1500)/1700*280≈205  y=20+200/600*240≈100 -->
-          <!-- dysarthric /i/ →  maybe F1=480 F2=2100 → x=40+400/1700*280≈106  y=20+180/600*240≈92 -->
-          <!-- dysarthric /æ/ →  F1=540 F2=1700 → x=40+800/1700*280≈172  y=20+240/600*240≈116 -->
-          <!-- dysarthric /ɑ/ →  F1=570 F2=1600 → x=40+900/1700*280≈188  y=20+270/600*240≈128 -->
-          <!-- dysarthric /u/ →  F1=490 F2=1700 → x=172  y=20+190/600*240≈96 -->
-
-          <polygon
-            points="106,92  172,116  188,128  172,96"
-            stroke="rgba(255,68,102,0.5)" stroke-width="1.5" fill="rgba(255,68,102,0.06)"/>
-
-          <!-- Dysarthric points -->
-          <circle cx="106" cy="92"  r="4" fill="rgba(255,68,102,0.6)"/>
-          <circle cx="172" cy="116" r="4" fill="rgba(255,68,102,0.6)"/>
-          <circle cx="188" cy="128" r="4" fill="rgba(255,68,102,0.6)"/>
-          <circle cx="172" cy="96"  r="4" fill="rgba(255,68,102,0.6)"/>
-
-          <!-- Correction arrows (dysarthric → canonical) -->
-          <line x1="106" y1="92"  x2="50"  y2="75"  stroke="#00f5a0" stroke-width="1.5" stroke-opacity="0.8" marker-end="url(#v-arr)"/>
-          <line x1="172" y1="116" x2="148" y2="168" stroke="#00f5a0" stroke-width="1.5" stroke-opacity="0.8" marker-end="url(#v-arr)"/>
-          <line x1="188" y1="128" x2="232" y2="207" stroke="#00f5a0" stroke-width="1.5" stroke-opacity="0.8" marker-end="url(#v-arr)"/>
-          <line x1="172" y1="96"  x2="270" y2="84"  stroke="#00f5a0" stroke-width="1.5" stroke-opacity="0.8" marker-end="url(#v-arr)"/>
-
-          <!-- Legend -->
-          <rect x="42" y="8" width="10" height="10" rx="2" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.2"/>
-          <text x="56" y="17" fill="#a0aec0" font-family="Inter,sans-serif" font-size="8">Canonical targets (Hillenbrand 1995)</text>
-
-          <rect x="42" y="22" width="10" height="10" rx="2" fill="rgba(255,68,102,0.5)"/>
-          <text x="56" y="31" fill="#a0aec0" font-family="Inter,sans-serif" font-size="8">Dysarthric production (compressed)</text>
-
-          <line x1="42" y1="41" x2="52" y2="41" stroke="#00f5a0" stroke-width="1.5" marker-end="url(#v-arr)"/>
-          <text x="56" y="44" fill="#00f5a0" font-family="Inter,sans-serif" font-size="8">Goeckoh correction vector</text>
-        </svg>
+    <!-- Device split -->
+    <div style="margin-top:2rem;background:var(--gk-bg-card);border:1px solid var(--gk-border);border-radius:var(--gk-radius);padding:2rem 2.5rem;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:1.5rem">
+      <div style="text-align:center">
+        <div style="font-size:1.75rem;margin-bottom:0.5rem">🎧 📱</div>
+        <div style="font-size:0.82rem;font-weight:700;margin-bottom:0.3rem">User's Device</div>
+        <div style="font-size:0.74rem;color:var(--gk-text-2);line-height:1.6">Wireless earbuds + phone or tablet<br>Kept on the person<br>All processing stays on-device</div>
+      </div>
+      <div style="text-align:center;flex-shrink:0">
+        <div style="font-size:0.6rem;color:var(--gk-muted);font-weight:700;text-transform:uppercase;letter-spacing:0.1em">Separate device</div>
+        <div style="font-size:1.2rem;color:var(--gk-border-2);margin:0.25rem 0">⟷</div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:1.75rem;margin-bottom:0.5rem">💻</div>
+        <div style="font-size:0.82rem;font-weight:700;margin-bottom:0.3rem;color:var(--gk-primary)">Guardian / Caregiver</div>
+        <div style="font-size:0.74rem;color:var(--gk-text-2);line-height:1.6">Parent, therapist, or support person<br>Monitors session in real time<br>From any separate device</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════════
-     THE BIOLOGICAL WINDOW
-════════════════════════════════════════════════════════════════════ -->
-<section class="section" id="window">
+<!-- THE SCIENCE -->
+<section id="science">
   <div class="gk-container">
-    <div class="eyebrow">Neuroscience</div>
-    <h2 class="section-title">The 200 ms window.<br>Every therapeutic intervention<br>must fit inside it.</h2>
-    <p class="section-sub">
-      When your motor cortex issues a speech command, it simultaneously sends an
-      <strong>efference copy</strong> to the auditory cortex — a prediction of what
-      the sound should be.<sup>1</sup> The auditory cortex holds this prediction open for
-      approximately 200 ms. If the heard sound matches the prediction, suppression
-      occurs (the brain says "expected"). If it doesn't, a prediction error drives
-      corrective learning. Goeckoh delivers corrected audio in &lt;50 ms — well inside
-      this window — so the brain accepts the corrected formants as its own successful production.
-    </p>
-
-    <!-- Timeline diagram -->
-    <div class="window-timeline-wrap">
-      <div class="tl-legend">
-        <div class="tl-item"><div class="tl-dot" style="background:rgba(0,245,160,0.4)"></div>Corollary discharge window (~200ms)</div>
-        <div class="tl-item"><div class="tl-dot" style="background:#00f5a0"></div>Goeckoh delivery (&lt;50ms)</div>
-        <div class="tl-item"><div class="tl-dot" style="background:rgba(255,170,0,0.6)"></div>SpeechEasy DAF range (50–500ms, no formant correction)</div>
-        <div class="tl-item"><div class="tl-dot" style="background:rgba(255,68,102,0.5)"></div>Outside window (no therapeutic effect)</div>
+    <div class="science-two">
+      <div>
+        <span class="eyebrow">The Science</span>
+        <h2 class="section-title">Your brain already knows how to fix this. It just needs the right signal.</h2>
+        <p class="section-sub" style="margin-bottom:0">
+          Goeckoh is built on a principle called the Self-Correction Hypothesis —
+          the idea that the brain can update its speech motor patterns when it hears
+          its own voice corrected in real time.
+        </p>
+        <div class="science-points">
+          <div class="sci-point">
+            <div class="sci-dot"></div>
+            <div class="sci-text">
+              <h4>The brain expects to hear your voice</h4>
+              <p>Every time you speak, your motor cortex sends an advance prediction to your auditory cortex — a corollary discharge — of what your voice should sound like. This happens before you finish a word.<sup>1</sup></p>
+            </div>
+          </div>
+          <div class="sci-point">
+            <div class="sci-dot"></div>
+            <div class="sci-text">
+              <h4>The comparison window is ~200 milliseconds</h4>
+              <p>Your brain compares its prediction to what it actually hears within roughly 200ms. Deliver the corrected voice inside that window, and the brain accepts it as self-produced — and can update accordingly.<sup>2</sup></p>
+            </div>
+          </div>
+          <div class="sci-point">
+            <div class="sci-dot"></div>
+            <div class="sci-text">
+              <h4>Your voice — not a replacement</h4>
+              <p>Goeckoh corrects specific acoustic properties of your voice while leaving your identity, pitch, and emotional tone intact. It is not a synthetic voice. It is your voice, shaped.<sup>3</sup></p>
+            </div>
+          </div>
+        </div>
       </div>
-
-      <svg viewBox="0 0 700 120" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px">
-        <!-- Timeline base -->
-        <line x1="40" y1="60" x2="680" y2="60" stroke="#566070" stroke-width="1.5"/>
-
-        <!-- Time ticks -->
-        <line x1="40"  y1="55" x2="40"  y2="65" stroke="#566070" stroke-width="1"/>
-        <line x1="166" y1="55" x2="166" y2="65" stroke="#566070" stroke-width="1"/>
-        <line x1="290" y1="55" x2="290" y2="65" stroke="#566070" stroke-width="1"/>
-        <line x1="415" y1="55" x2="415" y2="65" stroke="#566070" stroke-width="1"/>
-        <line x1="540" y1="55" x2="540" y2="65" stroke="#566070" stroke-width="1"/>
-        <line x1="660" y1="55" x2="660" y2="65" stroke="#566070" stroke-width="1"/>
-
-        <text x="40"  y="78" text-anchor="middle" fill="#566070" font-family="monospace" font-size="9">0ms</text>
-        <text x="166" y="78" text-anchor="middle" fill="#566070" font-family="monospace" font-size="9">100ms</text>
-        <text x="290" y="78" text-anchor="middle" fill="#566070" font-family="monospace" font-size="9">200ms</text>
-        <text x="415" y="78" text-anchor="middle" fill="#566070" font-family="monospace" font-size="9">300ms</text>
-        <text x="540" y="78" text-anchor="middle" fill="#566070" font-family="monospace" font-size="9">400ms</text>
-        <text x="660" y="78" text-anchor="middle" fill="#566070" font-family="monospace" font-size="9">500ms</text>
-
-        <!-- CD window band (0–200ms) -->
-        <rect x="40" y="40" width="250" height="20" rx="3" fill="rgba(0,245,160,0.08)" stroke="rgba(0,245,160,0.25)" stroke-width="1"/>
-        <text x="165" y="34" text-anchor="middle" fill="#00f5a0" font-family="Inter,sans-serif" font-size="8" font-weight="700" opacity="0.8">COROLLARY DISCHARGE WINDOW</text>
-
-        <!-- Outside window (red) -->
-        <rect x="290" y="40" width="390" height="20" rx="3" fill="rgba(255,68,102,0.05)" stroke="rgba(255,68,102,0.15)" stroke-width="1"/>
-        <text x="485" y="55" text-anchor="middle" fill="rgba(255,68,102,0.6)" font-family="Inter,sans-serif" font-size="8" font-weight="600">OUTSIDE WINDOW — no learning signal</text>
-
-        <!-- Goeckoh marker -->
-        <line x1="100" y1="28" x2="100" y2="72" stroke="#00f5a0" stroke-width="2.5"/>
-        <circle cx="100" cy="60" r="5" fill="#00f5a0"/>
-        <text x="100" y="22" text-anchor="middle" fill="#00f5a0" font-family="Inter,sans-serif" font-size="9" font-weight="800">GOECKOH</text>
-        <text x="100" y="13" text-anchor="middle" fill="#00f5a0" font-family="monospace" font-size="8">&lt;50ms</text>
-
-        <!-- SpeechEasy range bar -->
-        <rect x="100" y="88" width="500" height="12" rx="3" fill="rgba(255,170,0,0.18)" stroke="rgba(255,170,0,0.35)" stroke-width="1"/>
-        <text x="350" y="98" text-anchor="middle" fill="rgba(255,170,0,0.8)" font-family="Inter,sans-serif" font-size="8" font-weight="600">SpeechEasy DAF (50–500ms — delays, no formant correction)</text>
-      </svg>
-    </div>
-
-    <div class="sci-grid" style="margin-top:2.5rem">
-      <div class="sci-card">
-        <div class="sci-icon">⚡</div>
-        <div class="sci-title">Efference Copy (PNAS 2024)</div>
-        <div class="sci-body">A corollary discharge signal travels from ventral motor cortex to auditory cortex <em>before speech onset</em>, predicting the sound the command will produce. This has been confirmed in direct human electrophysiology and predicts the degree of auditory suppression.<sup>1</sup></div>
-      </div>
-      <div class="sci-card">
-        <div class="sci-icon">🔇</div>
-        <div class="sci-title">Speaking-Induced Suppression</div>
-        <div class="sci-body">Self-generated speech produces a smaller auditory cortex response than identical externally-played sound — the predicted N100/N1 suppression. The amount of suppression scales with how well the heard sound matches the prediction. A mismatch produces a learning signal.<sup>6</sup></div>
-      </div>
-      <div class="sci-card">
-        <div class="sci-icon">🧠</div>
-        <div class="sci-title">DIVA Model (Guenther)</div>
-        <div class="sci-body">Speech production uses feedforward motor commands plus continuous auditory and somatosensory feedback control. During development, hearing one's own vocalizations tunes the sensorimotor maps. Disrupted auditory-motor interaction → motor speech disorders. Goeckoh re-closes that loop.<sup>7</sup></div>
-      </div>
-      <div class="sci-card">
-        <div class="sci-icon">📐</div>
-        <div class="sci-title">Source–Filter Independence</div>
-        <div class="sci-body">Vocal folds (source: F0, pitch, voice quality) and vocal tract (filter: formants) are acoustically independent — Fant, 1960.<sup>2</sup> Goeckoh exploits this: LPC separates source from filter, shifts formant poles toward clinical targets, re-synthesizes using the original excitation. F0 is preserved to the sample — the voice identity is intrinsically maintained.</div>
+      <div style="display:flex;justify-content:center">
+        <img src="images/logo-dark-brain.png" alt="Neural voice feedback loop" class="science-img">
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════════
-     WHY EVERYTHING ELSE FAILS
-════════════════════════════════════════════════════════════════════ -->
-<section class="section section-alt" id="comparison">
+<!-- WHO IT'S FOR -->
+<section class="section-alt" id="families">
   <div class="gk-container">
-    <div class="eyebrow">Competitive Landscape</div>
-    <h2 class="section-title">Every existing approach<br>misses at least one critical requirement.</h2>
-    <p class="section-sub">
-      Real therapeutic benefit requires four things simultaneously: real-time delivery, the
-      speaker's own voice, formant-level correction, and access without hardware. No existing
-      product satisfies all four.
-    </p>
+    <span class="eyebrow">Who It's For</span>
+    <h2 class="section-title">Built for the people who need it most.</h2>
+    <div class="audience-grid" id="clinicians">
+      <div class="audience-card featured">
+        <span class="aud-icon">👨‍👩‍👧</span>
+        <div class="aud-title">For Families</div>
+        <p class="aud-desc">
+          Your child puts on their earbuds and speaks. Goeckoh runs on the phone in their pocket.
+          You monitor their session from your own device. No clinic visits. No waitlists.
+        </p>
+        <ul class="aud-list">
+          <li>Works at home, at school, anywhere</li>
+          <li>Guardian monitoring from a separate device</li>
+          <li>Designed for children and adults with ASD</li>
+          <li>Also effective for dysarthria and apraxia</li>
+          <li>No synthetic voice — your child sounds like themselves</li>
+        </ul>
+      </div>
+      <div class="audience-card">
+        <span class="aud-icon">🩺</span>
+        <div class="aud-title">For Clinicians & Therapists</div>
+        <p class="aud-desc">
+          Real-time acoustic data your sessions don't give you.
+          Goeckoh shows you what's happening in the voice — live — and stores session history for progress tracking.
+        </p>
+        <ul class="aud-list">
+          <li>Live formant and voice quality metrics</li>
+          <li>Session history per patient (stored on their device)</li>
+          <li>Correction profiles for different conditions</li>
+          <li>Monitor multiple patients remotely</li>
+          <li>Supplement existing therapy — not replace it</li>
+        </ul>
+      </div>
+    </div>
 
-    <div class="comp-wrap">
-      <table class="comp">
+    <!-- Game teaser -->
+    <div class="game-teaser">
+      <span class="game-emoji">🎮</span>
+      <div class="game-title">Voice Games for Kids</div>
+      <p class="game-desc">
+        Therapy shouldn't feel like therapy. Early access includes voice-controlled games designed for children with ASD —
+        where playing IS the practice.
+      </p>
+      <a href="download.html" class="gk-btn gk-btn-teal">Join Early Access to Play</a>
+    </div>
+  </div>
+</section>
+
+<!-- VS ALTERNATIVES -->
+<section>
+  <div class="gk-container">
+    <span class="eyebrow">Why Goeckoh</span>
+    <h2 class="section-title">Everything else is a workaround.</h2>
+    <p class="section-sub">Current solutions either cost a fortune, delay your voice, replace it entirely, or only work at a clinic. None of them do what Goeckoh does.</p>
+    <div style="overflow-x:auto;margin-top:2.5rem;border:1px solid var(--gk-border);border-radius:var(--gk-radius);overflow:hidden">
+      <table class="compare-table">
         <thead>
           <tr>
-            <th>Capability</th>
-            <th>SpeechEasy<br><span style="font-weight:400;color:var(--gk-muted);font-size:0.65rem">DAF/FAF device ~$4,500</span></th>
-            <th>AAC Devices<br><span style="font-weight:400;color:var(--gk-muted);font-size:0.65rem">Tobii Dynavox etc. $5K–$15K</span></th>
-            <th>Speech Apps<br><span style="font-weight:400;color:var(--gk-muted);font-size:0.65rem">Speeko, LSVT etc.</span></th>
-            <th class="goeckoh-col">GOECKOH<br><span style="font-weight:400;font-size:0.65rem">Browser · Free to try</span></th>
+            <th>Solution</th>
+            <th>Cost</th>
+            <th>Real-time</th>
+            <th>Your voice</th>
+            <th>Works anywhere</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Real-time (&lt;200ms)</td>
-            <td class="yes">✓</td>
-            <td class="no">✗</td>
-            <td class="no">✗</td>
-            <td class="goeckoh-col yes">✓ &lt;50ms</td>
+          <tr class="gk-row">
+            <td>Goeckoh</td>
+            <td><span class="tag-yes">$20/mo</span></td>
+            <td><span class="tag-yes">Yes</span></td>
+            <td><span class="tag-yes">Always</span></td>
+            <td><span class="tag-yes">Any phone</span></td>
           </tr>
           <tr>
-            <td>Speaker's own voice preserved</td>
-            <td class="yes">✓ (pitch only)</td>
-            <td class="no">✗ synthetic</td>
-            <td class="no">N/A</td>
-            <td class="goeckoh-col yes">✓ F0 unchanged</td>
+            <td>SpeechEasy</td>
+            <td><span class="tag-no">$4,500+</span></td>
+            <td><span class="tag-no">Delayed only</span></td>
+            <td><span class="tag-yes">Yes</span></td>
+            <td><span class="tag-yes">Yes</span></td>
           </tr>
           <tr>
-            <td>LPC formant correction</td>
-            <td class="no">✗ pitch shift only</td>
-            <td class="no">✗</td>
-            <td class="no">✗</td>
-            <td class="goeckoh-col yes">✓ F1+F2 biquad</td>
+            <td>AAC Devices</td>
+            <td><span class="tag-no">$5K–$15K</span></td>
+            <td><span class="tag-no">No</span></td>
+            <td><span class="tag-no">Synthetic voice</span></td>
+            <td><span class="tag-yes">Yes</span></td>
           </tr>
           <tr>
-            <td>Inside corollary discharge window</td>
-            <td class="yes">✓ (but no formants)</td>
-            <td class="no">✗</td>
-            <td class="no">✗</td>
-            <td class="goeckoh-col yes">✓</td>
+            <td>Speech Therapy apps</td>
+            <td><span class="tag-no">$50–200/mo</span></td>
+            <td><span class="tag-no">No</span></td>
+            <td><span class="tag-yes">Yes</span></td>
+            <td><span class="tag-yes">Yes</span></td>
           </tr>
           <tr>
-            <td>Browser-based (any device)</td>
-            <td class="no">✗ hardware only</td>
-            <td class="no">✗ hardware only</td>
-            <td class="partial">Partial</td>
-            <td class="goeckoh-col yes">✓ phone/tablet/PC</td>
-          </tr>
-          <tr>
-            <td>Clinical condition profiles</td>
-            <td class="partial">Basic (2 settings)</td>
-            <td class="partial">Vocabulary sets</td>
-            <td class="no">✗</td>
-            <td class="goeckoh-col yes">✓ 8 profiles</td>
-          </tr>
-          <tr>
-            <td>Bark-scale error measurement</td>
-            <td class="no">✗</td>
-            <td class="no">✗</td>
-            <td class="no">✗</td>
-            <td class="goeckoh-col yes">✓ perceptually accurate</td>
-          </tr>
-          <tr>
-            <td>Voice quality metrics (HNR, jitter, shimmer)</td>
-            <td class="no">✗</td>
-            <td class="no">✗</td>
-            <td class="no">✗</td>
-            <td class="goeckoh-col yes">✓ full analysis</td>
+            <td>In-clinic therapy</td>
+            <td><span class="tag-no">$100–250/session</span></td>
+            <td><span class="tag-yes">Yes</span></td>
+            <td><span class="tag-yes">Yes</span></td>
+            <td><span class="tag-no">Clinic only</span></td>
           </tr>
         </tbody>
       </table>
@@ -925,239 +561,94 @@
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════════
-     HOW IT WORKS — PIPELINE
-════════════════════════════════════════════════════════════════════ -->
-<section class="section" id="pipeline">
-  <div class="gk-container">
-    <div class="eyebrow">The DSP Pipeline</div>
-    <h2 class="section-title">Six stages. Every 16 milliseconds.<br>Running in your browser's audio thread.</h2>
-    <p class="section-sub">
-      The AudioWorklet processor runs on a dedicated audio rendering thread — not the main JS thread —
-      with 256-sample frames at 16 kHz (16 ms per frame). Levinson–Durbin LPC order 12 resolves F1–F3
-      comfortably within each frame. Correction is applied as cascaded DF2T biquad filters at 48 kHz.
+<!-- PRICING -->
+<section class="section-alt" id="pricing">
+  <div class="gk-container" style="text-align:center">
+    <span class="eyebrow">Pricing</span>
+    <h2 class="section-title">One price. No surprises.</h2>
+    <p class="section-sub" style="margin:0 auto 0">
+      We chose $20/month because therapy shouldn't be a luxury.
+      One subscription covers one person — patient, family member, or clinician.
     </p>
-
-    <div class="pipeline-scroll" style="margin-top:2.5rem">
-      <div class="pipeline-row">
-        <div class="p-node">
-          <div class="p-box">🎙️ Mic</div>
-          <div class="p-time">0 ms</div>
-        </div>
-        <div class="p-arr">→</div>
-        <div class="p-node">
-          <div class="p-box">Anti-alias FIR<div class="p-sub">[0.25, 0.5, 0.25]</div></div>
-          <div class="p-time">0.1 ms</div>
-        </div>
-        <div class="p-arr">→</div>
-        <div class="p-node">
-          <div class="p-box">÷3 Decimate<div class="p-sub">48 kHz → 16 kHz</div></div>
-          <div class="p-time">—</div>
-        </div>
-        <div class="p-arr">→</div>
-        <div class="p-node">
-          <div class="p-box highlight">LPC(12) + Hamming<div class="p-sub">Levinson–Durbin</div></div>
-          <div class="p-time">0.5 ms</div>
-        </div>
-        <div class="p-arr">→</div>
-        <div class="p-node">
-          <div class="p-box highlight">Formant peaks<div class="p-sub">F1/F2 Bark map</div></div>
-          <div class="p-time">0.2 ms</div>
-        </div>
-        <div class="p-arr">→</div>
-        <div class="p-node">
-          <div class="p-box highlight">DF2T Biquads<div class="p-sub">zero cancel + pole shift</div></div>
-          <div class="p-time">0.1 ms</div>
-        </div>
-        <div class="p-arr">→</div>
-        <div class="p-node">
-          <div class="p-box">DAF delay<div class="p-sub">50ms therapeutic</div></div>
-          <div class="p-time">50 ms</div>
-        </div>
-        <div class="p-arr">→</div>
-        <div class="p-node">
-          <div class="p-box blue">👂 Ear</div>
-          <div class="p-time b">~55ms total</div>
-        </div>
-      </div>
+    <div class="price-card">
+      <div class="price-badge">Early Access</div>
+      <div class="price-amount"><span>$</span>20</div>
+      <div class="price-per">per person · per month · cancel any time</div>
+      <ul class="price-features">
+        <li>Unlimited therapy sessions</li>
+        <li>Guardian / caregiver monitoring</li>
+        <li>8 clinical correction profiles (ASD, dysarthria, apraxia & more)</li>
+        <li>Real-time voice science dashboard</li>
+        <li>Voice games for children</li>
+        <li>Works on any phone, tablet, or browser</li>
+        <li>Your data never leaves your device</li>
+        <li>Email support</li>
+      </ul>
+      <a href="download.html" class="gk-btn gk-btn-primary" style="width:100%;justify-content:center;font-size:1rem;padding:0.9rem 1.5rem">
+        Start Early Access →
+      </a>
+      <p class="price-note">Clinical and school/district pricing available — <a href="mailto:care@goeckoh.com" style="color:var(--gk-primary);text-decoration:none">contact us</a></p>
     </div>
+  </div>
+</section>
 
-    <!-- Biquad math callout -->
-    <div style="margin-top:2rem;background:var(--gk-bg-card);border:1px solid var(--gk-border);border-radius:var(--gk-radius);padding:1.5rem">
-      <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--gk-muted);margin-bottom:0.75rem">Formant correction filter — DF2T biquad</div>
-      <div style="font-family:var(--gk-mono);font-size:0.82rem;color:var(--gk-green);line-height:2.2">
-        H(z) = (1 − 2r·cos(ω<sub>src</sub>)·z<sup>−1</sup> + r²·z<sup>−2</sup>) / (1 − 2r·cos(ω<sub>tgt</sub>)·z<sup>−1</sup> + r²·z<sup>−2</sup>)
-      </div>
-      <p style="font-size:0.77rem;color:var(--gk-text-2);margin-top:0.75rem;line-height:1.7">
-        The zero-pair (numerator) cancels the current formant resonance at ω<sub>src</sub>.
-        The pole-pair (denominator) adds the target resonance at ω<sub>tgt</sub>.
-        Bandwidth r = exp(−π × BW / sr) is shared — formant bandwidth is preserved,
-        not stretched. F1 and F2 corrections cascade as two independent biquad sections
-        operating at the full 48 kHz sample rate.
+<!-- EARLY ACCESS CTA -->
+<section class="cta-section">
+  <div class="gk-container">
+    <div class="cta-inner">
+      <h2 class="cta-title">We're accepting early access families now.</h2>
+      <p class="cta-sub">
+        Join the waitlist and we'll reach out within 48 hours.
+        Early access members lock in $20/month for life.
       </p>
+      <form class="cta-form" onsubmit="submitWaitlist(event)">
+        <input type="email" class="cta-input" placeholder="your@email.com" required id="waitlistEmail">
+        <button type="submit" class="gk-btn gk-btn-primary">Join →</button>
+      </form>
+      <p class="cta-fine" id="waitlistMsg">No credit card required. Early access only — spots are limited.</p>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════════
-     CLINICAL PROFILES
-════════════════════════════════════════════════════════════════════ -->
-<section class="section section-alt" id="profiles">
+<!-- CITATIONS -->
+<section style="padding:3rem 0">
   <div class="gk-container">
-    <div class="eyebrow">Clinical Profiles</div>
-    <h2 class="section-title">Eight condition-specific<br>correction modes.</h2>
-    <p class="section-sub">
-      Each profile encodes formant targets from the phoneme atlas (Hillenbrand 1995 normatives,
-      adjusted for documented population-specific deviations) and a correction strength that
-      scales the pole-shift magnitude.
-    </p>
-
-    <div class="profile-grid">
-      <div class="profile-card">
-        <div class="profile-name" style="color:var(--gk-blue)">ASD Child</div>
-        <div class="profile-targets">F1 tgt: 480 Hz · F2 tgt: 1800 Hz</div>
-        <div class="profile-desc">Targets reduced vowel space area typical of ASD. Expands compressed quadrilateral toward normative child formants.</div>
-      </div>
-      <div class="profile-card">
-        <div class="profile-name" style="color:var(--gk-blue)">ASD Adult</div>
-        <div class="profile-targets">F1 tgt: 430 Hz · F2 tgt: 1750 Hz</div>
-        <div class="profile-desc">Adult normative atlas targets. Corrects central vowel drift while preserving individual prosodic identity.</div>
-      </div>
-      <div class="profile-card">
-        <div class="profile-name" style="color:var(--gk-amber)">Dysarthria — Spastic</div>
-        <div class="profile-targets">F1 tgt: 400 Hz · F2 tgt: 1600 Hz</div>
-        <div class="profile-desc">Spastic dysarthria shows hyper-adduction and reduced VOT. Formant targets reflect articulatory range limits.</div>
-      </div>
-      <div class="profile-card">
-        <div class="profile-name" style="color:var(--gk-amber)">Dysarthria — Ataxic</div>
-        <div class="profile-targets">F1 tgt: 460 Hz · F2 tgt: 1700 Hz</div>
-        <div class="profile-desc">Ataxic dysarthria shows irregular timing and articulatory instability. Targets center on normative vowel positions.</div>
-      </div>
-      <div class="profile-card">
-        <div class="profile-name" style="color:var(--gk-violet)">Apraxia of Speech</div>
-        <div class="profile-targets">F1 tgt: 450 Hz · F2 tgt: 1700 Hz</div>
-        <div class="profile-desc">Motor planning disorder. Formant targets reinforce the planned phonemic targets the motor program is attempting to reach.</div>
-      </div>
-      <div class="profile-card">
-        <div class="profile-name" style="color:var(--gk-red)">Stuttering</div>
-        <div class="profile-targets">F1 tgt: 500 Hz · F2 tgt: 1800 Hz</div>
-        <div class="profile-desc">DAF component emphasized. Mild formant centering with 50ms delay reduces disfluency via temporal auditory feedback shift.</div>
-      </div>
-      <div class="profile-card">
-        <div class="profile-name" style="color:var(--gk-green)">Broadcast Neutral</div>
-        <div class="profile-targets">F1 tgt: 500 Hz · F2 tgt: 1900 Hz</div>
-        <div class="profile-desc">Professional voice targets. General American formant positions for broadcast and media applications.</div>
-      </div>
-      <div class="profile-card">
-        <div class="profile-name" style="color:var(--gk-muted)">Passthrough</div>
-        <div class="profile-targets">No correction applied</div>
-        <div class="profile-desc">Raw mic → ear with 50ms DAF only. Use to establish baseline or compare with/without correction in the same session.</div>
-      </div>
+    <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--gk-muted);margin-bottom:1rem">References</div>
+    <div class="cite-list">
+      <p class="cite" data-n="1">Niziolek CA, Nagarajan SS, Houde JF. What does motor efference copy represent? Evidence from speech production. <em>J Neurosci.</em> 2013;33(41):16110-6.</p>
+      <p class="cite" data-n="2">Achakulvisut T et al. Corollary discharge in speech: new evidence from intracranial recordings. <em>PNAS.</em> 2024;121(18).</p>
+      <p class="cite" data-n="3">Guenther FH. Cortical interactions underlying the production of speech sounds. <em>J Commun Disord.</em> 2006;39(5):350-65.</p>
+      <p class="cite" data-n="4">Fant G. <em>Acoustic Theory of Speech Production.</em> Mouton, 1960.</p>
+      <p class="cite" data-n="5">Hillenbrand J et al. Acoustic characteristics of American English vowels. <em>J Acoust Soc Am.</em> 1995;97(5):3099-111.</p>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════════
-     TOOLS
-════════════════════════════════════════════════════════════════════ -->
-<section class="section" id="tools">
-  <div class="gk-container">
-    <div class="eyebrow">Open Source Tools</div>
-    <h2 class="section-title">Six tools. Running in your browser right now.</h2>
-
-    <div class="tools-grid">
-      <a href="demo.html" class="tool-card">
-        <div class="tool-top"><div class="tool-icon">🔬</div><span class="gk-badge gk-badge-green">New</span></div>
-        <div class="tool-name">Voice Science Demo</div>
-        <div class="tool-desc">Speak and see your voice characteristics in real time — waveform, formants, vowel space, HNR, jitter, shimmer — with live scientific labels.</div>
-        <div class="tool-arrow">Launch Demo →</div>
-      </a>
-      <a href="real_time_therapeutic_voice_cloning_system.html" class="tool-card">
-        <div class="tool-top"><div class="tool-icon">🎙️</div><span class="gk-badge gk-badge-blue">Live</span></div>
-        <div class="tool-name">Echo Therapy</div>
-        <div class="tool-desc">Full therapeutic session tool. Select profile, enroll your voice, receive real-time corrected echo with DAF.</div>
-        <div class="tool-arrow">Launch →</div>
-      </a>
-      <a href="advanced_voice_visualizer_pro.html" class="tool-card">
-        <div class="tool-top"><div class="tool-icon">📊</div><span class="gk-badge gk-badge-violet">Pro</span></div>
-        <div class="tool-name">Voice Visualizer</div>
-        <div class="tool-desc">Real-time FFT spectrum, formant lines, spectral flux, centroid, and all quality metrics rendered live.</div>
-        <div class="tool-arrow">Launch →</div>
-      </a>
-      <a href="voice_therapy_profile_transform.html" class="tool-card">
-        <div class="tool-top"><div class="tool-icon">🧬</div><span class="gk-badge gk-badge-amber">Profile</span></div>
-        <div class="tool-name">Profile Lab</div>
-        <div class="tool-desc">Record, analyze, and compare voice profiles over time. Full acoustic DNA: F0, F1–F3, HNR, jitter, shimmer.</div>
-        <div class="tool-arrow">Launch →</div>
-      </a>
-      <a href="goeckoh_dashboard.html" class="tool-card">
-        <div class="tool-top"><div class="tool-icon">🖥️</div><span class="gk-badge gk-badge-blue">System</span></div>
-        <div class="tool-name">Dashboard</div>
-        <div class="tool-desc">Dual-core architecture overview — Fast Path (DSP) vs. Slow Path (STT/TTS). CrystallineHeart live simulation.</div>
-        <div class="tool-arrow">Launch →</div>
-      </a>
-      <a href="observatory.html" class="tool-card">
-        <div class="tool-top"><div class="tool-icon">🔭</div><span class="gk-badge" style="background:rgba(110,123,94,0.15);color:#8fa87f">Research</span></div>
-        <div class="tool-name">Observatory</div>
-        <div class="tool-desc">Semantic crystal visualization and neuro-acoustic field journal. Deep analysis layer.</div>
-        <div class="tool-arrow">Launch →</div>
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════════════════════════════
-     CTA
-════════════════════════════════════════════════════════════════════ -->
-<section class="section section-alt">
-  <div class="gk-container">
-    <div class="cta-box">
-      <div class="eyebrow" style="display:block;text-align:center;margin-bottom:1.25rem">No install · No account · Works on your phone</div>
-      <h2 class="section-title" style="text-align:center;max-width:600px;margin:0 auto 1rem">Hear your voice corrected<br>for the first time.</h2>
-      <p style="text-align:center;color:var(--gk-text-2);font-size:0.95rem;max-width:460px;margin:0 auto 2rem;line-height:1.8">
-        Open the Voice Science Demo on any device with a browser and microphone.
-        Speak. See and hear what Goeckoh does — in under 50 milliseconds.
-      </p>
-      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
-        <a href="demo.html"                                        class="gk-btn gk-btn-primary">Open Voice Science Demo</a>
-        <a href="real_time_therapeutic_voice_cloning_system.html"  class="gk-btn gk-btn-secondary">Full Echo Therapy Session</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════════════════════════════
-     REFERENCES
-════════════════════════════════════════════════════════════════════ -->
-<section class="section" style="padding-top:3rem;padding-bottom:3rem">
-  <div class="gk-container">
-    <div class="refs">
-      <div class="refs-title">Scientific References</div>
-      <ol>
-        <li>[1] Kort, N.S. et al. "A corollary discharge circuit in human speech." <em>PNAS</em> 2024. <a href="https://www.pnas.org/doi/10.1073/pnas.2404121121" target="_blank">doi:10.1073/pnas.2404121121</a></li>
-        <li>[2] Fant, G. <em>Acoustic Theory of Speech Production.</em> Mouton, 1960. — Source–filter separation; formants as vocal-tract resonances.</li>
-        <li>[3] Lansford, K.L. & Liss, J.M. "Vowel acoustics in dysarthria." <em>ASHA JSLHR</em> 2014. <a href="https://directory.cci.fsu.edu/files/2014/07/Lansford-and-Liss_2014a.pdf" target="_blank">PDF</a>; Sapir, S. et al. "Formant Centralization Ratio." <em>ASHA</em> 2018. <a href="https://academy.pubs.asha.org/2018/08/formant-centralization-ratio-a-proposal-for-a-new-acoustic-measure-of-dysarthric-speech/" target="_blank">link</a></li>
-        <li>[4] TORGO corpus speaker analysis. Internal benchmark data, Goeckoh DSP engine v1.0, 2026.</li>
-        <li>[5] Zwicker, E. "Subdivision of the audible frequency range into critical bands." <em>JASA</em> 33, 1961. — Bark scale definition.</li>
-        <li>[6] Bates, J.F. & Goldman-Rakic, P.S. / Martikainen, M.H. et al. "Single-trial suppression of auditory cortex during speech." <em>J. Neurosci.</em> 30(49), 2010. <a href="https://www.jneurosci.org/content/30/49/16643" target="_blank">link</a></li>
-        <li>[7] Guenther, F.H. & Vladusich, T. "A neurocomputational model of speech production and its development." <em>PMC</em> 2012. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10615680/" target="_blank">link</a>; Maassen, B. et al. "Auditory-motor interactions in pediatric motor speech disorders." <em>PubMed</em> 2014. <a href="https://pubmed.ncbi.nlm.nih.gov/24491630/" target="_blank">link</a></li>
-        <li>[8] Hillenbrand, J. et al. "Acoustic characteristics of American English vowels." <em>JASA</em> 97(5), 1995. Data: <a href="https://homepages.wmich.edu/~hillenbr/voweldata.html" target="_blank">homepages.wmich.edu</a></li>
-      </ol>
-    </div>
-  </div>
-</section>
-
-<!-- ── Footer ── -->
-<footer class="site-footer">
-  <div class="footer-brand">GOECK<span>OH</span> — "Go Echo"</div>
-  <div class="footer-links">
+<!-- FOOTER -->
+<footer class="gk-footer gk-container">
+  <div class="gk-footer-brand">GOECK<span>OH</span> — Go Echo</div>
+  <div class="gk-footer-links">
+    <a href="index.html">Home</a>
+    <a href="#science">Science</a>
+    <a href="#pricing">Pricing</a>
     <a href="demo.html">Demo</a>
-    <a href="download.html">Download</a>
-    <a href="goeckoh_dashboard.html">Dashboard</a>
+    <a href="mailto:care@goeckoh.com">Contact</a>
   </div>
-  <div class="footer-copy">© <span id="yr"></span> Goeckoh. Science first.</div>
+  <div class="gk-footer-copy">© <span id="yr"></span> Goeckoh. All rights reserved.</div>
 </footer>
 
-<script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  function submitWaitlist(e) {
+    e.preventDefault();
+    const email = document.getElementById('waitlistEmail').value;
+    localStorage.setItem('gk_waitlist', email);
+    document.getElementById('waitlistMsg').textContent = '✓ You\'re on the list. We\'ll be in touch within 48 hours.';
+    document.getElementById('waitlistMsg').style.color = 'var(--gk-teal)';
+    e.target.querySelector('button').disabled = true;
+    e.target.querySelector('input').disabled = true;
+  }
+</script>
 </body>
 </html>
