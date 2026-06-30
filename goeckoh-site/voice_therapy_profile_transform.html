@@ -961,71 +961,68 @@
     async function extractVoiceCharacteristics(audioBuffer, ctx) {
       const channelData = audioBuffer.getChannelData(0);
       const sampleRate = audioBuffer.sampleRate;
-      const fftSize = 4096;
-      
-      // Analyze in chunks
-      const chunkSize = sampleRate * 0.05; // 50ms chunks
+
+      // 50ms chunks at actual sample rate
+      const chunkSize = Math.floor(sampleRate * 0.05);
       const numChunks = Math.floor(channelData.length / chunkSize);
-      
-      const pitches = [];
+
+      const pitches  = [];
       const formants = { f1: [], f2: [], f3: [] };
       const centroids = [];
       const hnrValues = [];
-      const jitters = [];
-      const shimmers = [];
-      const spectrums = [];
-      
-      // Create offline analyzer
-      const offlineCtx = new OfflineAudioContext(1, audioBuffer.length, sampleRate);
-      const source = offlineCtx.createBufferSource();
-      source.buffer = audioBuffer;
-      
-      const analyser = offlineCtx.createAnalyser();
-      analyser.fftSize = fftSize;
-      source.connect(analyser);
-      source.start();
-      
-      // Process each chunk
+      const rmsValues = [];
+
       for (let i = 0; i < Math.min(numChunks, 200); i++) {
-        const startSample = i * chunkSize;
-        const chunk = channelData.slice(startSample, startSample + chunkSize);
-        
-        // Skip silent chunks
-        const rms = Math.sqrt(chunk.reduce((sum, val) => sum + val * val, 0) / chunk.length);
+        const start = i * chunkSize;
+        const chunk = channelData.slice(start, start + chunkSize);
+
+        // Skip silent frames
+        let rms = 0;
+        for (let s = 0; s < chunk.length; s++) rms += chunk[s] * chunk[s];
+        rms = Math.sqrt(rms / chunk.length);
         if (rms < 0.01) continue;
-        
-        const freqData = new Uint8Array(analyser.frequencyBinCount);
-        const timeData = new Uint8Array(analyser.fftSize);
-        
-        // Simulate getting data (in real scenario, we'd process actual FFT)
-        const fakeFreqData = simulateFFT(chunk, sampleRate, fftSize);
-        const features = analyzeChunk(chunk, fakeFreqData, sampleRate);
-        
-        if (features.pitch) pitches.push(features.pitch);
-        if (features.formants.f1) formants.f1.push(features.formants.f1);
-        if (features.formants.f2) formants.f2.push(features.formants.f2);
-        if (features.formants.f3) formants.f3.push(features.formants.f3);
+
+        const features = analyzeChunk(chunk, sampleRate);
+
+        if (features.pitch > 75 && features.pitch < 450) pitches.push(features.pitch);
+        if (features.formants.f1 > 150 && features.formants.f1 < 1100) formants.f1.push(features.formants.f1);
+        if (features.formants.f2 > 500 && features.formants.f2 < 3500) formants.f2.push(features.formants.f2);
+        if (features.formants.f3 > 1500)                                formants.f3.push(features.formants.f3);
         centroids.push(features.centroid);
         hnrValues.push(features.hnr);
-        jitters.push(features.jitter);
-        shimmers.push(features.shimmer);
-        spectrums.push(features.spectrum);
+        rmsValues.push(rms);
       }
-      
-      // Calculate statistics
+
+      // Real jitter: mean absolute F0 difference / mean F0 * 100
+      let jitter = 0;
+      if (pitches.length > 1) {
+        let dSum = 0;
+        for (let i = 1; i < pitches.length; i++) dSum += Math.abs(pitches[i] - pitches[i - 1]);
+        jitter = (dSum / (pitches.length - 1)) / average(pitches) * 100;
+      }
+
+      // Real shimmer: mean absolute amplitude difference / mean amplitude * 100
+      let shimmer = 0;
+      if (rmsValues.length > 1) {
+        let dSum = 0;
+        for (let i = 1; i < rmsValues.length; i++) dSum += Math.abs(rmsValues[i] - rmsValues[i - 1]);
+        shimmer = (dSum / (rmsValues.length - 1)) / average(rmsValues) * 100;
+      }
+
+      // Statistics
       const avgPitch = average(pitches);
       const pitchStd = standardDeviation(pitches, avgPitch);
-      
-      // Calculate spectral tilt (high freq energy / low freq energy)
-      const avgSpectrum = averageSpectrum(spectrums);
-      const spectralTilt = calculateSpectralTilt(avgSpectrum);
+
+      // Spectral tilt from LPC centroid distribution
+      const avgCentroid = average(centroids);
+      const spectralTilt = avgCentroid > 0 ? 20 * Math.log10(1000 / avgCentroid) : 0;
       
       return {
         pitch: {
           mean: avgPitch,
           std: pitchStd,
-          min: Math.min(...pitches),
-          max: Math.max(...pitches)
+          min: pitches.length ? Math.min(...pitches) : 0,
+          max: pitches.length ? Math.max(...pitches) : 0
         },
         formants: {
           f1: average(formants.f1),
@@ -1033,108 +1030,131 @@
           f3: average(formants.f3)
         },
         spectral: {
-          centroid: average(centroids),
+          centroid: avgCentroid,
           tilt: spectralTilt,
-          spectrum: avgSpectrum
+          spectrum: Array.from(centroids)  // centroid trend — used for visualization
         },
         quality: {
           hnr: average(hnrValues),
-          jitter: average(jitters),
-          shimmer: average(shimmers)
+          jitter: +jitter.toFixed(3),
+          shimmer: +shimmer.toFixed(3)
         }
       };
     }
     
-    function simulateFFT(timeData, sampleRate, fftSize) {
-      // Simple DFT implementation for analysis
-      const freqData = new Float32Array(fftSize / 2);
-      const N = Math.min(timeData.length, fftSize);
-      
-      for (let k = 0; k < fftSize / 2; k++) {
-        let real = 0;
-        let imag = 0;
-        
-        for (let n = 0; n < N; n++) {
-          const angle = -2 * Math.PI * k * n / N;
-          real += timeData[n] * Math.cos(angle);
-          imag += timeData[n] * Math.sin(angle);
-        }
-        
-        freqData[k] = Math.sqrt(real * real + imag * imag) / N;
+    // LPC-12 Levinson-Durbin (same algorithm as therapy page AudioWorklet)
+    function lpcAnalysis(frame, p) {
+      const n = frame.length;
+      const r = new Float64Array(p + 1);
+      for (let lag = 0; lag <= p; lag++) {
+        let s = 0;
+        for (let i = lag; i < n; i++) s += frame[i] * frame[i - lag];
+        r[lag] = s;
       }
-      
-      return freqData;
+      if (r[0] < 1e-12) return new Float64Array(p + 1);
+      const a = new Float64Array(p + 1), t = new Float64Array(p + 1);
+      let e = r[0];
+      for (let i = 1; i <= p; i++) {
+        let k = r[i];
+        for (let j = 1; j < i; j++) k += a[j] * r[i - j];
+        k = -k / e;
+        a[i] = k;
+        for (let j = 1; j < i; j++) t[j] = a[j] + k * a[i - j];
+        for (let j = 1; j < i; j++) a[j] = t[j];
+        e *= (1 - k * k);
+        if (e < 1e-20) break;
+      }
+      return a;
     }
-    
-    function analyzeChunk(timeData, freqData, sampleRate) {
-      const freqRes = sampleRate / (freqData.length * 2);
-      
-      // Find pitch (fundamental frequency)
-      let maxVal = 0;
-      let maxIdx = 0;
-      for (let i = 5; i < freqData.length / 2; i++) { // Skip very low frequencies
-        if (freqData[i] > maxVal) {
-          maxVal = freqData[i];
-          maxIdx = i;
-        }
-      }
-      const pitch = maxIdx * freqRes;
-      
-      // Find formants (first 3 peaks)
-      const peaks = findPeaks(freqData, 10);
-      const formants = {
-        f1: peaks[0] ? peaks[0] * freqRes : 0,
-        f2: peaks[1] ? peaks[1] * freqRes : 0,
-        f3: peaks[2] ? peaks[2] * freqRes : 0
-      };
-      
-      // Spectral centroid
-      let sumWeighted = 0;
-      let sumAmp = 0;
-      for (let i = 0; i < freqData.length; i++) {
-        sumWeighted += freqData[i] * i * freqRes;
-        sumAmp += freqData[i];
-      }
-      const centroid = sumAmp > 0 ? sumWeighted / sumAmp : 0;
-      
-      // Simple HNR approximation
-      const hnr = maxVal > 0 ? 20 * Math.log10(maxVal / (sumAmp / freqData.length)) : 0;
-      
-      // Jitter and shimmer (simplified)
-      const jitter = Math.random() * 5; // Placeholder
-      const shimmer = Math.random() * 0.05; // Placeholder
-      
-      return {
-        pitch,
-        formants,
-        centroid,
-        hnr,
-        jitter,
-        shimmer,
-        spectrum: Array.from(freqData)
-      };
-    }
-    
-    function findPeaks(data, minDistance) {
+
+    // LPC spectrum peak-picking -> F1, F2, F3
+    function lpcFormants(a, p, sr) {
+      const N = 512;
       const peaks = [];
-      
-      for (let i = minDistance; i < data.length - minDistance; i++) {
-        let isPeak = true;
-        
-        for (let j = 1; j <= minDistance; j++) {
-          if (data[i] <= data[i - j] || data[i] <= data[i + j]) {
-            isPeak = false;
-            break;
-          }
+      let pm = 0, ppm = 0;
+      for (let k = 0; k <= N; k++) {
+        const w = Math.PI * k / N;
+        let re = 1, im = 0;
+        for (let j = 1; j <= p; j++) {
+          re += a[j] * Math.cos(-j * w);
+          im += a[j] * Math.sin(-j * w);
         }
-        
-        if (isPeak && data[i] > 0.01) {
-          peaks.push(i);
-          i += minDistance; // Skip ahead
+        const m = 1.0 / (re * re + im * im + 1e-10);
+        if (k >= 2 && pm > ppm && pm > m) {
+          const f = (k - 1) * sr / (2 * N);
+          if (f > 80 && f < 4500) peaks.push([f, pm]);
         }
+        ppm = pm; pm = m;
       }
-      
-      return peaks.slice(0, 3); // Return top 3
+      peaks.sort((a, b) => b[1] - a[1]);
+      const top = peaks.slice(0, 5).sort((a, b) => a[0] - b[0]);
+      return [top[0]?.[0] ?? 500, top[1]?.[0] ?? 1500, top[2]?.[0] ?? 2500];
+    }
+
+    // Autocorrelation F0 (75-450 Hz)
+    function computeF0(buf, sr) {
+      const minP = Math.floor(sr / 450);
+      const maxP = Math.min(Math.floor(sr / 75), Math.floor(buf.length / 2));
+      let best = 0, bestP = 0;
+      for (let p = minP; p <= maxP; p++) {
+        let c = 0;
+        for (let i = 0; i < buf.length - p; i++) c += buf[i] * buf[i + p];
+        if (c > best) { best = c; bestP = p; }
+      }
+      return bestP > 0 ? sr / bestP : 0;
+    }
+
+    // HNR from autocorrelation at F0 lag
+    function computeHNR(buf, sr, f0) {
+      if (f0 < 75) return 0;
+      const lag = Math.round(sr / f0);
+      if (lag >= buf.length) return 0;
+      let r0 = 0, rT = 0;
+      for (let i = 0; i < buf.length - lag; i++) {
+        r0 += buf[i] * buf[i];
+        rT += buf[i] * buf[i + lag];
+      }
+      if (r0 < 1e-10 || rT <= 0) return 0;
+      return 10 * Math.log10(rT / Math.max(r0 - rT, 1e-10));
+    }
+
+    function analyzeChunk(timeData, sampleRate) {
+      const LPC_ORDER = 12;
+
+      // Pre-emphasis + Hamming window before LPC
+      const win = new Float32Array(timeData.length);
+      for (let i = 0; i < timeData.length; i++) {
+        const pe = i === 0 ? timeData[i] : timeData[i] - 0.97 * timeData[i - 1];
+        win[i] = pe * (0.54 - 0.46 * Math.cos(2 * Math.PI * i / (timeData.length - 1)));
+      }
+
+      const a = lpcAnalysis(win, LPC_ORDER);
+      const [f1, f2, f3] = lpcFormants(a, LPC_ORDER, sampleRate);
+      const f0 = computeF0(timeData, sampleRate);
+      const hnr = computeHNR(timeData, sampleRate, f0);
+
+      // RMS for shimmer accumulation
+      let rms = 0;
+      for (let i = 0; i < timeData.length; i++) rms += timeData[i] * timeData[i];
+      rms = Math.sqrt(rms / timeData.length);
+
+      // Spectral centroid from LPC spectrum (fast)
+      const BINS = 128;
+      let ws = 0, ts = 0;
+      for (let k = 1; k < BINS; k++) {
+        const w = Math.PI * k / BINS;
+        let re = 1, im = 0;
+        for (let j = 1; j <= LPC_ORDER; j++) {
+          re += a[j] * Math.cos(-j * w);
+          im += a[j] * Math.sin(-j * w);
+        }
+        const mag = 1.0 / (re * re + im * im + 1e-10);
+        const freq = k * sampleRate / (2 * BINS);
+        ws += mag * freq; ts += mag;
+      }
+      const centroid = ts > 0 ? ws / ts : 0;
+
+      return { pitch: f0, formants: { f1, f2, f3 }, centroid, hnr, rms };
     }
     
     function calculateSpectralTilt(spectrum) {
