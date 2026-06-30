@@ -197,6 +197,47 @@
                 </div>
             </div>
 
+            <!-- Historical analytics panel -->
+            <div id="statsPanel" style="margin-bottom:1.5rem">
+                <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#64748b;margin-bottom:0.75rem">
+                    Clinical Progress · <span id="statsDays">—</span> days recorded · <span id="statsPhase">—</span>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:0.6rem;margin-bottom:0.75rem">
+                    <div class="glass-panel p-3 text-center">
+                        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#64748b;margin-bottom:0.3rem">Total Utterances</div>
+                        <div id="statEvents" style="font-size:1.4rem;font-weight:800;color:#0f172a;font-family:monospace">—</div>
+                    </div>
+                    <div class="glass-panel p-3 text-center">
+                        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#64748b;margin-bottom:0.3rem">Spontaneity</div>
+                        <div id="statSpont" style="font-size:1.4rem;font-weight:800;color:#059669;font-family:monospace">—</div>
+                        <div style="font-size:0.6rem;color:#94a3b8">% unprompted</div>
+                    </div>
+                    <div class="glass-panel p-3 text-center">
+                        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#64748b;margin-bottom:0.3rem">VSA Now</div>
+                        <div id="statVsaNow" style="font-size:1.4rem;font-weight:800;color:#7c3aed;font-family:monospace">—</div>
+                        <div style="font-size:0.6rem;color:#94a3b8">vs <span id="statVsaBase">—</span> baseline · Hz²</div>
+                    </div>
+                    <div class="glass-panel p-3 text-center">
+                        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#64748b;margin-bottom:0.3rem">Effect Size</div>
+                        <div id="statCohens" style="font-size:1.4rem;font-weight:800;color:#0891b2;font-family:monospace">—</div>
+                        <div style="font-size:0.6rem;color:#94a3b8">Cohen's d · spontaneity</div>
+                    </div>
+                    <div class="glass-panel p-3 text-center">
+                        <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#64748b;margin-bottom:0.3rem">Median Latency</div>
+                        <div id="statLat" style="font-size:1.4rem;font-weight:800;color:#d97706;font-family:monospace">—</div>
+                        <div style="font-size:0.6rem;color:#94a3b8">ms · all sessions</div>
+                    </div>
+                </div>
+                <!-- F1/F2 formant scatter (last 200 utterances) -->
+                <div class="glass-panel p-3">
+                    <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#64748b;margin-bottom:0.5rem">Vowel Space (last 200 utterances)</div>
+                    <canvas id="formantScatter" width="600" height="200" style="width:100%;height:160px"></canvas>
+                </div>
+                <div id="statsNote" style="font-size:0.68rem;color:#94a3b8;margin-top:0.4rem;text-align:right">
+                    Historical data refreshes every 30 s · requires backend connection
+                </div>
+            </div>
+
             <!-- Guardian note -->
             <div style="background:#fefce8;border:1px solid #fde68a;border-radius:10px;padding:0.9rem 1.1rem;font-size:0.75rem;color:#78350f;line-height:1.65">
                 <strong>Note for caregivers:</strong> Metrics update in real time while the user's session is active. Normal HNR is ≥11 dB on sustained vowels. F1 and F2 positions indicate vowel space coverage — wider spread = better articulation. Latency under 50ms keeps the corrected signal within the brain's corollary discharge window.
@@ -322,6 +363,93 @@
                     document.getElementById('sessionCodeInput').value = urlCode.toUpperCase();
                     window.connectMonitor();
                 }
+            })();
+
+            // ── Historical stats panel ────────────────────────────────────────
+            (function() {
+                const BACKEND_HTTP = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+                    ? 'http://' + location.hostname + ':8000'
+                    : 'https://' + location.hostname;
+
+                let scatterCtx = null;
+                let scatterChart = null;
+
+                function initScatter() {
+                    const canvas = document.getElementById('formantScatter');
+                    if (!canvas || !window.Chart) return;
+                    scatterCtx = canvas.getContext('2d');
+                    scatterChart = new Chart(scatterCtx, {
+                        type: 'scatter',
+                        data: { datasets: [] },
+                        options: {
+                            responsive: true, maintainAspectRatio: false,
+                            plugins: { legend: { display: true, position: 'right',
+                                labels: { font: { size: 10 }, boxWidth: 10 } } },
+                            scales: {
+                                x: { title: { display: true, text: 'F2 (Hz)', font: { size: 10 } },
+                                     reverse: true, min: 500, max: 3000 },
+                                y: { title: { display: true, text: 'F1 (Hz)', font: { size: 10 } },
+                                     reverse: true, min: 200, max: 1000 }
+                            }
+                        }
+                    });
+                }
+
+                const VOWEL_COLORS = {
+                    iy:'#6366f1', ih:'#818cf8', eh:'#f59e0b', ae:'#ef4444',
+                    aa:'#dc2626', ah:'#f97316', ao:'#22c55e', uh:'#84cc16', uw:'#0ea5e9',
+                };
+
+                function updateScatter(scatter) {
+                    if (!scatterChart || !scatter.length) return;
+                    const byVowel = {};
+                    scatter.forEach(p => {
+                        if (!byVowel[p.v]) byVowel[p.v] = [];
+                        byVowel[p.v].push({ x: p.f2, y: p.f1 });
+                    });
+                    scatterChart.data.datasets = Object.entries(byVowel).map(([v, pts]) => ({
+                        label: v.toUpperCase(),
+                        data: pts,
+                        backgroundColor: (VOWEL_COLORS[v] || '#94a3b8') + '99',
+                        pointRadius: 4,
+                    }));
+                    scatterChart.update('none');
+                }
+
+                function applyStats(s) {
+                    const el = id => document.getElementById(id);
+                    el('statsDays').textContent  = s.days_recorded ?? '—';
+                    el('statsPhase').textContent = s.phase ?? '—';
+                    el('statEvents').textContent = s.total_events ?? '—';
+                    el('statSpont').textContent  = s.spontaneity_pct != null ? s.spontaneity_pct + '%' : '—';
+                    el('statVsaNow').textContent = s.vsa_current != null ? Number(s.vsa_current).toLocaleString() : '—';
+                    el('statVsaBase').textContent = s.vsa_baseline != null ? Number(s.vsa_baseline).toLocaleString() : '—';
+                    el('statCohens').textContent = s.cohens_d != null ? (s.cohens_d > 0 ? '+' : '') + s.cohens_d : '—';
+                    el('statLat').textContent    = s.median_latency_ms != null ? s.median_latency_ms + ' ms' : '—';
+                    if (s.formant_scatter) updateScatter(s.formant_scatter);
+                    el('statsNote').textContent = 'Updated ' + new Date().toLocaleTimeString() + ' · ' + s.total_events + ' utterances logged';
+                }
+
+                async function fetchStats() {
+                    try {
+                        const resp = await fetch(BACKEND_HTTP + '/session/stats');
+                        if (!resp.ok) return;
+                        const data = await resp.json();
+                        applyStats(data);
+                    } catch (_) {
+                        // backend offline — stats panel stays stale, no error shown
+                    }
+                }
+
+                // Init scatter chart once Chart.js is ready
+                if (window.Chart) {
+                    initScatter();
+                } else {
+                    window.addEventListener('load', initScatter);
+                }
+
+                fetchStats();
+                setInterval(fetchStats, 30000);  // refresh every 30s
             })();
             </script>
 

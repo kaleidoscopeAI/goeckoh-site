@@ -852,6 +852,40 @@ async def ws_monitor(websocket: WebSocket, code: str):
 
 
 # ---------------------------------------------------------------------------
+# Session analytics endpoint
+# ---------------------------------------------------------------------------
+# Default log path matches SessionLogger default in realtime_loop.py.
+# Override via SESSION_LOG_PATH environment variable.
+_SESSION_LOG_DEFAULT = Path.home() / ".goeckoh" / "sessions" / "session_log.jsonl"
+
+@app.get("/session/stats")
+async def session_stats(request: Request,
+                        log_path: Optional[str] = None):
+    """Return clinical session analytics as JSON (feeds guardian dashboard).
+
+    Reads the JSONL session log written by realtime_loop.SessionLogger.
+    Computes: total events, VSA (current vs baseline week), spontaneity %,
+    Cohen's d effect size, median latency, formant scatter for last 200 events.
+    Returns graceful empty payload when no data exists.
+    """
+    path = Path(log_path) if log_path else Path(
+        os.getenv("SESSION_LOG_PATH", str(_SESSION_LOG_DEFAULT)))
+
+    try:
+        import sys as _sys
+        _science_path = Path(__file__).parent.parent.parent / "goeckoh-speech-therapy" / "goeckoh"
+        if str(_science_path) not in _sys.path:
+            _sys.path.insert(0, str(_science_path))
+        from science import compute_stats_json
+        stats = compute_stats_json(log_path=str(path))
+    except Exception as exc:
+        log.warning("science.py stats failed: %s", exc)
+        stats = {"status": "error", "detail": str(exc), "total_events": 0}
+
+    return JSONResponse(content=stats)
+
+
+# ---------------------------------------------------------------------------
 # Entry point — production: `uvicorn main:app --host 0.0.0.0 --port 8000`
 # behind a reverse proxy (HTTPS). Or just `python main.py` for local/dev.
 # HOST/PORT configurable via environment.
