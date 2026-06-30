@@ -619,6 +619,14 @@
                     <span class="status-label">Quality: <strong id="qualityText">---</strong></span>
                 </div>
             </div>
+            <div class="status-info" id="guardianCodeBar" style="display:none">
+                <div class="status-item">
+                    <span class="status-label">Guardian Code: <strong id="guardianCodeText" style="color:#00c3ff;letter-spacing:0.15em;font-size:1.05em">------</strong></span>
+                </div>
+                <div class="status-item" style="font-size:0.75rem;color:var(--text-secondary)">
+                    Share with caregiver → <a href="goeckoh_dashboard.html" style="color:#00c3ff;text-decoration:none">Dashboard</a>
+                </div>
+            </div>
         </div>
 
         <div class="main-grid">
@@ -1166,6 +1174,10 @@ const PROFILES = {
                 this.sessionStart    = null;
                 this.sessionInterval = null;
 
+                // Guardian relay
+                this.guardianWs   = null;
+                this.guardianCode = null;
+
                 this.params = {
                     echoDelay:        50,
                     formantManual:     0,
@@ -1481,6 +1493,43 @@ const PROFILES = {
                     </div>`;
             }
 
+            // ── Guardian relay ────────────────────────────────────────────────
+
+            async _connectGuardian() {
+                try {
+                    const proto = location.protocol === 'https:' ? 'https' : 'http';
+                    const host  = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+                        ? `${location.hostname}:8000` : location.host;
+                    const res  = await fetch(`${proto}://${host}/session/new-code`);
+                    if (!res.ok) return;
+                    const data = await res.json();
+                    this.guardianCode = data.code;
+
+                    const wsProto = proto === 'https' ? 'wss' : 'ws';
+                    this.guardianWs = new WebSocket(`${wsProto}://${host}/ws/broadcast/${this.guardianCode}`);
+                    this.guardianWs.onopen = () => {
+                        document.getElementById('guardianCodeText').textContent = this.guardianCode;
+                        document.getElementById('guardianCodeBar').style.display = '';
+                    };
+                    this.guardianWs.onclose = () => {
+                        this.guardianWs = null;
+                    };
+                } catch (e) {
+                    // backend not available — silent fail, no data leaves device anyway
+                }
+            }
+
+            _broadcastMetrics(f0, f1, f2, hnr, latMs) {
+                if (!this.guardianWs || this.guardianWs.readyState !== WebSocket.OPEN) return;
+                this.guardianWs.send(JSON.stringify({
+                    latency_ms: +latMs.toFixed(1),
+                    f0:  +f0.toFixed(1),
+                    f1:  +f1.toFixed(0),
+                    f2:  +f2.toFixed(0),
+                    hnr: +hnr.toFixed(1)
+                }));
+            }
+
             // ── Echo therapy ──────────────────────────────────────────────────
 
             async startEchoTherapy() {
@@ -1496,6 +1545,7 @@ const PROFILES = {
                 this._updateStatus('echoing', 'LPC Echo Therapy Active');
                 this._updateButtons();
                 this.showAlert('success', 'LPC formant correction live. You hear your voice corrected in real time.');
+                this._connectGuardian();
 
                 this.sessionInterval = setInterval(() => {
                     const ms = Date.now() - this.sessionStart;
@@ -1508,6 +1558,13 @@ const PROFILES = {
             stop() {
                 this.state = 'idle';
                 if (this.sessionInterval) { clearInterval(this.sessionInterval); this.sessionInterval = null; }
+                if (this.guardianWs) {
+                    try { this.guardianWs.send(JSON.stringify({event:'session_ended'})); } catch(_) {}
+                    this.guardianWs.close();
+                    this.guardianWs = null;
+                }
+                document.getElementById('guardianCodeBar').style.display = 'none';
+                document.getElementById('guardianCodeText').textContent  = '------';
                 this._pushParams();
                 this._updateStatus('idle', 'Session Ended');
                 this._updateButtons();
@@ -1562,6 +1619,10 @@ const PROFILES = {
                     const avgLat = this.latencies.reduce((a,b)=>a+b,0) / this.latencies.length;
                     document.getElementById('latencyText').textContent  = avgLat.toFixed(1) + ' ms';
                     document.getElementById('footerLatency').textContent = avgLat.toFixed(1) + ' ms';
+
+                    if (this.state === 'echoing') {
+                        this._broadcastMetrics(f0, this.liveF1 || 0, this.liveF2 || 0, hnr, avgLat);
+                    }
 
                     setTimeout(loop, 50);  // 20 Hz
                 };

@@ -98,22 +98,47 @@
         <!-- ═══ GUARDIAN MONITOR HEADER ═══ -->
         <section id="guardian-monitor">
 
-            <!-- Role badge -->
+            <!-- Role badge + connection status -->
             <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.5rem;flex-wrap:wrap">
                 <img src="images/logo-clean.png" alt="Goeckoh" style="width:40px;height:40px;border-radius:8px;object-fit:cover">
                 <div>
                     <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#0891b2">Guardian / Caregiver View</div>
                     <div style="font-size:1.3rem;font-weight:800;color:#0f172a;letter-spacing:-0.02em">Session Monitor</div>
                 </div>
-                <div style="margin-left:auto;display:flex;align-items:center;gap:0.5rem;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:0.4rem 0.9rem">
-                    <div id="sessionDot" style="width:8px;height:8px;border-radius:50%;background:#22c55e;animation:pulse-g 2s ease-in-out infinite"></div>
-                    <span id="sessionStatus" style="font-size:0.72rem;font-weight:700;color:#15803d">Demo Mode — Live View Simulated</span>
+                <div id="statusBadge" style="margin-left:auto;display:flex;align-items:center;gap:0.5rem;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:0.4rem 0.9rem">
+                    <div id="sessionDot" style="width:8px;height:8px;border-radius:50%;background:#94a3b8"></div>
+                    <span id="sessionStatus" style="font-size:0.72rem;font-weight:700;color:#64748b">Not connected</span>
                 </div>
             </div>
 
             <style>
                 @keyframes pulse-g { 0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,0.4)} 50%{box-shadow:0 0 0 6px rgba(34,197,94,0)} }
+                @keyframes pulse-y { 0%,100%{box-shadow:0 0 0 0 rgba(234,179,8,0.4)}  50%{box-shadow:0 0 0 6px rgba(234,179,8,0)}  }
             </style>
+
+            <!-- Session code entry -->
+            <div style="background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:1.25rem 1.5rem;margin-bottom:1.5rem">
+                <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#64748b;margin-bottom:0.6rem">Session Code</div>
+                <div style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center">
+                    <input id="sessionCodeInput" type="text" placeholder="Enter 6-letter code from therapy device"
+                        maxlength="6" autocomplete="off" spellcheck="false"
+                        style="flex:1;min-width:200px;font-family:monospace;font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;background:#fff;border:1.5px solid #cbd5e1;border-radius:8px;padding:0.6rem 1rem;outline:none;color:#0f172a"
+                        oninput="this.value=this.value.toUpperCase()"
+                        onkeydown="if(event.key==='Enter') connectMonitor()">
+                    <button onclick="connectMonitor()" id="connectBtn"
+                        style="background:#0891b2;color:#fff;font-weight:700;font-size:0.85rem;border:none;border-radius:8px;padding:0.65rem 1.4rem;cursor:pointer;white-space:nowrap;transition:opacity 0.15s"
+                        onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+                        Connect →
+                    </button>
+                    <button onclick="disconnectMonitor()" id="disconnectBtn"
+                        style="display:none;background:#f1f5f9;color:#64748b;font-weight:600;font-size:0.85rem;border:1px solid #e2e8f0;border-radius:8px;padding:0.65rem 1.2rem;cursor:pointer">
+                        Disconnect
+                    </button>
+                </div>
+                <div style="font-size:0.7rem;color:#94a3b8;margin-top:0.6rem">
+                    The user's therapy device shows a 6-letter session code when a session starts. Enter it here to see live metrics.
+                </div>
+            </div>
 
             <!-- Setup context callout -->
             <div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #0891b2;border-radius:0 10px 10px 0;padding:1rem 1.25rem;margin-bottom:1.75rem;font-size:0.8rem;color:#475569;line-height:1.7">
@@ -128,7 +153,7 @@
                     <div style="font-size:0.68rem;color:#4b7a5c;line-height:1.55">Wireless earbuds + mic<br>Phone or tablet, kept with them<br>Running Echo Therapy</div>
                 </div>
                 <div style="text-align:center;flex-shrink:0">
-                    <div style="font-size:0.6rem;color:#94a3b8;font-weight:700;letter-spacing:0.1em;text-transform:uppercase">Wireless<br>Connection</div>
+                    <div style="font-size:0.6rem;color:#94a3b8;font-weight:700;letter-spacing:0.1em;text-transform:uppercase">Live<br>Relay</div>
                     <div style="font-size:1.1rem;color:#cbd5e1;margin:0.3rem 0">⟷</div>
                 </div>
                 <div style="background:#eff6ff;border:1.5px solid #93c5fd;border-radius:12px;padding:1.25rem;text-align:center">
@@ -139,7 +164,7 @@
             </div>
 
             <!-- Live metrics grid -->
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:0.75rem;margin-bottom:1.5rem">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:0.75rem;margin-bottom:1.5rem" id="metricsGrid">
                 <div class="glass-panel p-4 text-center">
                     <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#64748b;margin-bottom:0.5rem">Latency</div>
                     <div id="m-latency" style="font-size:1.6rem;font-weight:800;color:#0891b2;font-family:monospace">—</div>
@@ -174,31 +199,130 @@
 
             <!-- Guardian note -->
             <div style="background:#fefce8;border:1px solid #fde68a;border-radius:10px;padding:0.9rem 1.1rem;font-size:0.75rem;color:#78350f;line-height:1.65">
-                <strong>Note for caregivers:</strong> These metrics update in real time while the user's session is active. Normal HNR is ≥11 dB on sustained vowels. F1 and F2 positions indicate vowel space coverage — wider spread = better articulation. Latency under 50ms keeps the corrected signal within the brain's corollary discharge window.
+                <strong>Note for caregivers:</strong> Metrics update in real time while the user's session is active. Normal HNR is ≥11 dB on sustained vowels. F1 and F2 positions indicate vowel space coverage — wider spread = better articulation. Latency under 50ms keeps the corrected signal within the brain's corollary discharge window.
             </div>
 
             <script>
-                // Simulate live session metrics for demo mode
-                const sessionStart = Date.now();
-                function rnd(min, max, dec=0) {
-                    const v = min + Math.random() * (max - min);
-                    return dec ? v.toFixed(dec) : Math.round(v);
+            (function() {
+                'use strict';
+                const BACKEND = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+                    ? 'ws://' + location.hostname + ':8000'
+                    : 'wss://' + location.hostname;
+
+                let ws = null;
+                let sessionStart = null;
+                let tickInterval = null;
+
+                function setStatus(state) {
+                    const dot    = document.getElementById('sessionDot');
+                    const label  = document.getElementById('sessionStatus');
+                    const badge  = document.getElementById('statusBadge');
+                    const states = {
+                        idle:        { dot:'#94a3b8', label:'Not connected',          bg:'#f8fafc', border:'#e2e8f0', color:'#64748b', anim:'' },
+                        connecting:  { dot:'#eab308', label:'Connecting…',            bg:'#fefce8', border:'#fde68a', color:'#854d0e', anim:'pulse-y 1.5s infinite' },
+                        live:        { dot:'#22c55e', label:'Live — receiving data',  bg:'#f0fdf4', border:'#bbf7d0', color:'#15803d', anim:'pulse-g 2s ease-in-out infinite' },
+                        waiting:     { dot:'#eab308', label:'Waiting for session…',   bg:'#fefce8', border:'#fde68a', color:'#854d0e', anim:'pulse-y 2s ease-in-out infinite' },
+                        ended:       { dot:'#94a3b8', label:'Session ended',          bg:'#f8fafc', border:'#e2e8f0', color:'#64748b', anim:'' },
+                    };
+                    const s = states[state] || states.idle;
+                    dot.style.background  = s.dot;
+                    dot.style.animation   = s.anim;
+                    label.textContent     = s.label;
+                    label.style.color     = s.color;
+                    badge.style.background = s.bg;
+                    badge.style.border    = '1px solid ' + s.border;
                 }
-                function updateGuardianMetrics() {
-                    document.getElementById('m-latency').textContent = rnd(12, 38) + ' ms';
-                    document.getElementById('m-f0').textContent = rnd(110, 185);
-                    document.getElementById('m-f1').textContent = rnd(380, 820);
-                    document.getElementById('m-f2').textContent = rnd(950, 2400);
-                    const hnr = rnd(7, 15, 1);
-                    const hnrEl = document.getElementById('m-hnr');
-                    hnrEl.textContent = hnr;
-                    hnrEl.style.color = parseFloat(hnr) >= 11 ? '#059669' : '#dc2626';
+
+                function updateMetric(id, value, unit, warnFn) {
+                    const el = document.getElementById(id);
+                    if (!el) return;
+                    el.textContent = value !== undefined && value !== null ? (unit ? value + ' ' + unit : value) : '—';
+                    if (warnFn) el.style.color = warnFn(value);
+                }
+
+                function tickClock() {
+                    if (!sessionStart) return;
                     const elapsed = Math.floor((Date.now() - sessionStart) / 1000);
                     const m = Math.floor(elapsed / 60), s = elapsed % 60;
-                    document.getElementById('m-time').textContent = m + ':' + String(s).padStart(2,'0');
+                    const el = document.getElementById('m-time');
+                    if (el) el.textContent = m + ':' + String(s).padStart(2, '0');
                 }
-                updateGuardianMetrics();
-                setInterval(updateGuardianMetrics, 1200);
+
+                function applyMetrics(data) {
+                    if (!sessionStart) { sessionStart = Date.now(); tickInterval = setInterval(tickClock, 500); }
+                    updateMetric('m-latency', data.latency_ms !== undefined ? Math.round(data.latency_ms) : null, 'ms',
+                        v => v !== null && v < 50 ? '#0891b2' : '#dc2626');
+                    updateMetric('m-f0',  data.f0  !== undefined ? Math.round(data.f0)  : null, 'Hz');
+                    updateMetric('m-f1',  data.f1  !== undefined ? Math.round(data.f1)  : null, 'Hz');
+                    updateMetric('m-f2',  data.f2  !== undefined ? Math.round(data.f2)  : null, 'Hz');
+                    updateMetric('m-hnr', data.hnr !== undefined ? data.hnr.toFixed(1)  : null, 'dB',
+                        v => parseFloat(v) >= 11 ? '#059669' : '#dc2626');
+                    setStatus('live');
+                }
+
+                function resetMetrics() {
+                    ['m-latency','m-f0','m-f1','m-f2','m-hnr'].forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) el.textContent = '—';
+                    });
+                    const t = document.getElementById('m-time');
+                    if (t) t.textContent = '0:00';
+                    if (tickInterval) { clearInterval(tickInterval); tickInterval = null; }
+                    sessionStart = null;
+                }
+
+                window.connectMonitor = function() {
+                    const code = document.getElementById('sessionCodeInput').value.trim().toUpperCase();
+                    if (!code || code.length < 4) {
+                        document.getElementById('sessionCodeInput').style.borderColor = '#dc2626';
+                        setTimeout(() => document.getElementById('sessionCodeInput').style.borderColor = '#cbd5e1', 1500);
+                        return;
+                    }
+                    if (ws) ws.close();
+                    setStatus('connecting');
+                    resetMetrics();
+
+                    ws = new WebSocket(BACKEND + '/ws/monitor/' + code);
+
+                    ws.onopen = () => {
+                        setStatus('waiting');
+                        document.getElementById('connectBtn').style.display    = 'none';
+                        document.getElementById('disconnectBtn').style.display = '';
+                    };
+
+                    ws.onmessage = (evt) => {
+                        try {
+                            const data = JSON.parse(evt.data);
+                            if (data.event === 'session_ended') { setStatus('ended'); resetMetrics(); return; }
+                            applyMetrics(data);
+                        } catch (_) {}
+                    };
+
+                    ws.onerror = () => setStatus('idle');
+
+                    ws.onclose = () => {
+                        ws = null;
+                        if (document.getElementById('sessionStatus').textContent !== 'Session ended') setStatus('idle');
+                        document.getElementById('connectBtn').style.display    = '';
+                        document.getElementById('disconnectBtn').style.display = 'none';
+                    };
+                };
+
+                window.disconnectMonitor = function() {
+                    if (ws) { ws.close(); ws = null; }
+                    setStatus('idle');
+                    resetMetrics();
+                    document.getElementById('connectBtn').style.display    = '';
+                    document.getElementById('disconnectBtn').style.display = 'none';
+                };
+
+                // Auto-connect if session code is in URL params (?code=XXXXXX)
+                const urlCode = new URLSearchParams(location.search).get('code');
+                if (urlCode) {
+                    document.getElementById('sessionCodeInput').value = urlCode.toUpperCase();
+                    window.connectMonitor();
+                }
+            })();
             </script>
 
         </section>
