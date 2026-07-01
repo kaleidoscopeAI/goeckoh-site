@@ -480,18 +480,128 @@
     .timeline-note em { color: var(--d-silver-hi); font-style: italic; }
 
     /* ═══════════════════════════════════════════════════════
-       SCIENCE CARDS
+       SCIENCE SECTION
        ═══════════════════════════════════════════════════════ */
     .learn-section { margin-bottom: 2rem; }
     .learn-hdr {
       font-size: 0.58rem; font-weight: 700; letter-spacing: 0.18em;
       text-transform: uppercase; color: var(--d-silver);
-      margin-bottom: 1rem;
+      margin-bottom: 1.2rem;
     }
+
+    /* Inner dialogue hero block */
+    .sci-inner-dialogue {
+      background: var(--d-panel);
+      border: 1px solid var(--d-border);
+      border-top: 2px solid var(--d-cyan);
+      border-radius: 12px;
+      padding: 1.8rem 1.6rem 1.5rem;
+      margin-bottom: 1.2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .sci-inner-dialogue::before {
+      content: '';
+      position: absolute; top: 0; right: 0; width: 220px; height: 220px;
+      background: radial-gradient(circle, rgba(0,212,255,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .sci-title {
+      font-size: 0.88rem; font-weight: 700; color: var(--d-cyan);
+      margin-bottom: 0.6rem; letter-spacing: 0.04em;
+    }
+    .sci-lede {
+      font-size: 0.84rem; color: var(--d-text); line-height: 1.85;
+      margin-bottom: 1.1rem;
+    }
+    .sci-lede strong { color: var(--d-cyan); }
+    .sci-lede em { color: var(--d-lime); font-style: normal; font-weight: 600; }
+
+    /* Loop diagram steps */
+    .loop-diagram {
+      display: flex; flex-direction: column; gap: 0;
+      margin: 1rem 0 1.2rem;
+    }
+    .loop-step {
+      display: flex; align-items: flex-start; gap: 0.9rem;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid var(--d-border);
+    }
+    .loop-step:last-child { border-bottom: none; }
+    .ls-num {
+      flex-shrink: 0; width: 1.6rem; height: 1.6rem;
+      border-radius: 50%; background: rgba(0,212,255,0.12);
+      border: 1px solid rgba(0,212,255,0.4);
+      font-size: 0.62rem; font-weight: 700; color: var(--d-cyan);
+      font-family: var(--gk-mono);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .ls-body { flex: 1; }
+    .ls-label {
+      font-size: 0.71rem; font-weight: 700; color: var(--d-text);
+      margin-bottom: 0.2rem;
+    }
+    .ls-text {
+      font-size: 0.69rem; color: var(--d-silver); line-height: 1.72;
+    }
+    .ls-text strong { color: var(--d-text); }
+    .ls-break {
+      padding: 0.55rem 0; text-align: center;
+      font-family: var(--gk-mono); font-size: 0.6rem; color: var(--d-muted);
+    }
+
+    /* Two-column grid for mechanism + N1 */
+    .sci-two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+    }
+    @media (max-width: 640px) { .sci-two-col { grid-template-columns: 1fr; } }
+
+    .sci-card {
+      background: var(--d-panel);
+      border: 1px solid var(--d-border);
+      border-top: 1px solid var(--d-chrome-top);
+      border-radius: 10px;
+      padding: 1.3rem 1.2rem;
+    }
+    .sci-card.accent-lime { border-top-color: rgba(158,224,48,0.55); }
+    .sci-card.accent-amber { border-top-color: rgba(255,152,48,0.55); }
+    .sci-card.accent-violet { border-top-color: rgba(176,112,255,0.55); }
+
+    .sc-icon { font-size: 1.1rem; margin-bottom: 0.4rem; }
+    .sc-title {
+      font-size: 0.77rem; font-weight: 700; color: var(--d-text);
+      margin-bottom: 0.5rem;
+    }
+    .sc-body { font-size: 0.70rem; color: var(--d-silver); line-height: 1.78; }
+    .sc-body strong { color: var(--d-text); }
+    .sc-body em { color: var(--d-lime); font-style: normal; }
+    .sc-cite {
+      font-family: var(--gk-mono); font-size: 0.58rem;
+      color: var(--d-muted); margin-top: 0.75rem;
+      padding-top: 0.65rem; border-top: 1px solid var(--d-border);
+    }
+
+    /* The 200ms window highlight */
+    .window-callout {
+      background: rgba(0,212,255,0.06);
+      border: 1px solid rgba(0,212,255,0.22);
+      border-left: 3px solid var(--d-cyan);
+      border-radius: 0 8px 8px 0;
+      padding: 0.9rem 1.1rem;
+      margin: 1rem 0;
+      font-size: 0.73rem; color: var(--d-silver); line-height: 1.75;
+    }
+    .window-callout strong { color: var(--d-cyan); }
+
+    /* Live measurement grid */
     .learn-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 1rem;
+      margin-top: 1rem;
     }
     .learn-card {
       background: var(--d-panel);
@@ -626,6 +736,15 @@
     <div class="voiced-badge off" id="voicedBadge">Unvoiced</div>
   </div>
 </section>
+
+<!-- Mic help panel — shown only on error -->
+<div id="micHelp" style="display:none;max-width:640px;margin:1.2rem auto 0;background:rgba(255,80,80,0.07);border:1px solid rgba(255,80,80,0.25);border-radius:10px;padding:1.1rem 1.4rem;font-size:0.78rem;color:#D0B0B0;line-height:1.75;position:relative;z-index:1">
+  <strong style="color:#FF8080;display:block;margin-bottom:0.4rem">How to enable microphone access:</strong>
+  <b>Chrome / Edge:</b> Click the 🔒 lock in the address bar → "Site settings" → Microphone → "Allow" → refresh page.<br>
+  <b>Firefox:</b> Click the camera icon in the address bar → unblock microphone → refresh page.<br>
+  <b>Safari:</b> Safari menu → Settings for This Website → Microphone → Allow → refresh page.<br>
+  <b>Mobile Chrome:</b> Three-dot menu → Settings → Site Settings → Microphone → find goeckoh.com → Allow.
+</div>
 
 <!-- ══════════════════════ DEMO PAGE ══════════════════════ -->
 <div class="demo-page">
@@ -809,9 +928,135 @@
     </div>
   </div>
 
-  <!-- ══════════════════════ SCIENCE CARDS ══════════════════════ -->
+  <!-- ══════════════════════ SCIENCE ══════════════════════ -->
   <div class="learn-section">
-    <div class="learn-hdr">Acoustic Science — what each measurement means</div>
+    <div class="learn-hdr">The Neuroscience Behind the Correction</div>
+
+    <!-- THE INNER DIALOGUE PROBLEM -->
+    <div class="sci-inner-dialogue">
+      <div class="sci-title">The Inner Dialogue Problem</div>
+      <div class="sci-lede">
+        Before you say a single word, your brain has already <strong>heard</strong> it.<br><br>
+        The moment your motor cortex fires the command to speak, it simultaneously sends a copy of
+        that command — called an <strong>efference copy</strong> — to your auditory cortex. Your
+        auditory cortex uses that copy to generate a precise prediction of what the incoming sound
+        should be. This predicted signal is what neuroscientists believe underlies your
+        <em>inner voice</em> — the voice you "hear" in your head when you think in words.<br><br>
+        When real sound arrives 100–200 ms later, the brain compares it against the prediction.
+        If they match: the sound is tagged as self-produced and the comparison signal
+        (the N1 wave) is suppressed — the brain essentially says <em>"I expected this, move on."</em>
+        If they don't match: the comparison fires hard, generating a motor-learning error signal
+        that drives your articulators to self-correct.<br><br>
+        <strong>This is the loop Goeckoh targets.</strong> In children with ASD, dysarthria, or
+        apraxia, their distorted output is <em>accurately predicted</em> — because the brain has
+        learned to expect the distorted version. N1 is suppressed. No error signal fires.
+        No learning happens. The child practices the wrong pattern thousands of times.<br><br>
+        Goeckoh delivers a corrected signal within the brain's own comparison window — creating a
+        deliberate, therapeutic mismatch. The brain hears what the word <em>should</em> sound like
+        at the exact moment it is comparing prediction to reality. This forces the motor learning
+        loop open again.
+      </div>
+
+      <!-- STEP-BY-STEP LOOP -->
+      <div class="learn-hdr" style="margin-top:1.1rem">The corollary discharge loop — step by step</div>
+      <div class="loop-diagram">
+        <div class="loop-step">
+          <div class="ls-num">1</div>
+          <div class="ls-body">
+            <div class="ls-label">Motor cortex fires</div>
+            <div class="ls-text">You intend to say "cup." Motor cortex issues a movement sequence to your lips, tongue, jaw, and larynx — the precise articulatory commands for that word.</div>
+          </div>
+        </div>
+        <div class="loop-step">
+          <div class="ls-num">2</div>
+          <div class="ls-body">
+            <div class="ls-label">Efference copy dispatched</div>
+            <div class="ls-text">Simultaneously, a copy of the motor command — the <strong>efference copy</strong> — is forwarded to the cerebellum and then to auditory cortex. This is the same signal that generates your inner voice.</div>
+          </div>
+        </div>
+        <div class="loop-step">
+          <div class="ls-num">3</div>
+          <div class="ls-body">
+            <div class="ls-label">Auditory cortex generates prediction</div>
+            <div class="ls-text">Using the efference copy, auditory cortex generates a forward model: a prediction of exactly what acoustic signal should arrive when the articulators execute those commands.</div>
+          </div>
+        </div>
+        <div class="loop-step">
+          <div class="ls-num">4</div>
+          <div class="ls-body">
+            <div class="ls-label">Real sound arrives (~100–200 ms)</div>
+            <div class="ls-text">The actual speech signal arrives at the cochlea. Auditory cortex receives it and subtracts the prediction from the incoming signal.</div>
+          </div>
+        </div>
+        <div class="ls-break">── comparison window ──</div>
+        <div class="loop-step" style="border-left: 2px solid var(--d-lime); padding-left: 0.7rem; margin-left: -0.7rem;">
+          <div class="ls-num" style="background:rgba(158,224,48,0.12);border-color:rgba(158,224,48,0.45);color:var(--d-lime)">5a</div>
+          <div class="ls-body">
+            <div class="ls-label" style="color:var(--d-lime)">Match → N1 suppressed (healthy speech)</div>
+            <div class="ls-text">Prediction minus reality ≈ 0. The auditory N1 ERP is suppressed. The brain labels the sound "self-generated, expected" and discards it. The word is produced normally.</div>
+          </div>
+        </div>
+        <div class="loop-step" style="border-left: 2px solid #FF5050; padding-left: 0.7rem; margin-left: -0.7rem;">
+          <div class="ls-num" style="background:rgba(255,80,80,0.12);border-color:rgba(255,80,80,0.45);color:#FF8080">5b</div>
+          <div class="ls-body">
+            <div class="ls-label" style="color:#FF8080">Mismatch → N1 fires → motor learning (Goeckoh's target)</div>
+            <div class="ls-text">Prediction minus reality ≠ 0. N1 fires strongly. The cerebellum generates a correction signal. Motor cortex updates its forward model for the next attempt. This is how humans learn to speak correctly — and what is broken in dysarthria.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="window-callout">
+        <strong>The 200 ms window:</strong> Goeckoh's entire correction pipeline — LPC-12 analysis,
+        Bark-space formant mapping, Hillenbrand target interpolation, and LPC resynthesis — runs in
+        under 180 ms on the device. This is not arbitrary latency tolerance. It is specifically
+        engineered to deliver the corrected signal inside the auditory-motor comparison window, so
+        the brain receives the corrected token as if it were its own natural output.
+      </div>
+    </div>
+
+    <!-- N1 SUPPRESSION + DIVA -->
+    <div class="sci-two-col">
+      <div class="sci-card accent-lime">
+        <div class="sc-icon">⬡</div>
+        <div class="sc-title">N1 Suppression — The Neural Fingerprint</div>
+        <div class="sc-body">
+          The N1 is an EEG event-related potential (ERP) component that fires ~100 ms after a
+          sound reaches the ear. In neurotypical speakers, N1 is
+          <strong>suppressed by ~50% for self-produced speech</strong> — the brain has already
+          accounted for it via the efference copy.<br><br>
+          In many neurodiverse profiles this suppression is <strong>attenuated or absent</strong>,
+          disrupting the brain's ability to evaluate its own output. But the more clinically
+          significant problem is the inverse: in children who have practiced distorted speech
+          patterns for years, N1 <em>is</em> suppressed — the brain accurately predicts the
+          distortion and stops treating it as an error.<br><br>
+          Goeckoh creates a controlled, targeted mismatch. N1 fires. The error signal is real.
+          Motor learning resumes.
+        </div>
+        <div class="sc-cite">Niziolek, Nagarajan & Houde, J. Neurosci. 2013 · PNAS 2024</div>
+      </div>
+
+      <div class="sci-card accent-violet">
+        <div class="sc-icon">◎</div>
+        <div class="sc-title">DIVA Model — Two Feedback Loops</div>
+        <div class="sc-body">
+          The <strong>Directions Into Velocities of Articulators (DIVA)</strong> model
+          (Guenther, Boston University) describes speech motor control as two interacting systems:<br><br>
+          <strong>Feedforward:</strong> Motor programs stored in premotor cortex that execute
+          familiar words from memory, without monitoring.<br><br>
+          <strong>Feedback:</strong> Auditory and somatosensory loops that continuously compare
+          output against targets and issue corrections when they diverge.<br><br>
+          In dysarthria, feedforward programs are malformed (stored wrong). The feedback loop
+          cannot override them fast enough. Goeckoh operates entirely within the
+          <em>feedback integration window</em> — it doesn't change the feedforward program directly;
+          it changes what the feedback loop hears, forcing the system to re-derive the correct
+          feedforward program through repeated practice.
+        </div>
+        <div class="sc-cite">Guenther et al., Neural Computation 2006 · Tourville & Guenther, Lang. Cogn. Proc. 2011</div>
+      </div>
+    </div>
+
+    <!-- LIVE MEASUREMENTS -->
+    <div class="learn-hdr">Live Acoustic Measurements — what each signal means</div>
     <div class="learn-grid">
 
       <div class="learn-card">
@@ -819,12 +1064,12 @@
         <div class="lc-name">F0 — Fundamental Frequency (Pitch)</div>
         <div class="lc-value" id="learnF0">— Hz</div>
         <div class="lc-desc">
-          The rate at which your vocal folds open and snap shut. An adult male's folds close ~116
-          times per second; an adult female's ~205; a child's ~223. That repetition rate is what you
-          hear as <strong>pitch</strong>.
-          <br><br>
+          The rate at which your vocal folds open and snap shut. Each full open-and-close cycle
+          is one period of the glottal wave. Adult male folds close ~116× per second; adult female
+          ~205×; a child's ~223×. That repetition rate is what you hear as <strong>pitch</strong>.<br><br>
           Goeckoh measures F0 by <strong>autocorrelation in the 80–500 Hz range</strong> and
-          preserves it exactly — the correction never moves pitch. Your speaker identity lives in F0.
+          preserves it exactly. The correction never moves pitch — your speaker identity and
+          emotional tone live in F0, and Goeckoh does not touch them.
         </div>
         <div class="lc-range">Adult male: 93–135 Hz · Adult female: 162–238 Hz · Child: ~223 Hz</div>
       </div>
@@ -834,12 +1079,12 @@
         <div class="lc-name">F1 — First Formant (Tongue Height)</div>
         <div class="lc-value" id="learnF1">— Hz</div>
         <div class="lc-desc">
-          The lowest resonance peak of your vocal tract. F1 is controlled by <strong>jaw openness
-          and tongue height</strong>. Open your jaw wide — F1 rises. Raise your tongue toward the
-          palate — F1 falls.
-          <br><br>
-          In ASD and dysarthria, F1 often fails to reach its target because jaw excursion is reduced
-          (articulatory undershoot). This is one of the primary formant targets Goeckoh corrects.
+          The lowest resonance peak of your vocal tract. F1 is shaped by <strong>jaw openness
+          and tongue height</strong>. Drop your jaw — F1 rises. Raise your tongue toward the
+          palate — F1 falls. It's the acoustic signature of how open or closed your mouth is.<br><br>
+          In ASD and dysarthria, F1 frequently undershoots because jaw excursion is reduced —
+          articulatory undershoot. The vowel space collapses toward center.
+          <strong>F1 correction is the single highest-impact intervention Goeckoh makes.</strong>
         </div>
         <div class="lc-range">Typical range across vowels: 300–900 Hz</div>
       </div>
@@ -849,13 +1094,13 @@
         <div class="lc-name">F2 — Second Formant (Tongue Advancement)</div>
         <div class="lc-value" id="learnF2">— Hz</div>
         <div class="lc-desc">
-          The second resonance peak encodes <strong>tongue front/back position</strong>.
-          Push your tongue forward — F2 rises (front vowels like /i/).
-          Pull it back — F2 falls (back vowels like /u/).
-          <br><br>
-          In dysarthria, <strong>back vowels are the hardest to produce correctly</strong> — both
-          lip-rounding and tongue retraction are reduced simultaneously, pushing F2 into front-vowel
-          territory. This is measurable and correctable.
+          F2 encodes <strong>tongue front/back position</strong>. Push your tongue forward and F2
+          rises — this is how front vowels like /i/ get their "bright" quality. Pull it back and
+          F2 falls — the rounded /u/ of "boot."<br><br>
+          In dysarthria, <strong>back vowels are the hardest</strong>: both lip-rounding and tongue
+          retraction reduce simultaneously, collapsing F2 toward front-vowel territory. The acoustic
+          contrast between front and back vowels disappears. This is measurable in milliseconds and
+          correctable in real time.
         </div>
         <div class="lc-range">Typical range across vowels: 800–2500 Hz</div>
       </div>
@@ -865,12 +1110,14 @@
         <div class="lc-name">HNR — Harmonics-to-Noise Ratio</div>
         <div class="lc-value" id="learnHNR">— dB</div>
         <div class="lc-desc">
-          The ratio of <strong>periodic harmonic energy</strong> to <strong>turbulent noise</strong>
-          in your glottal signal. A high HNR means clean, regular vocal fold vibration. A low HNR
-          indicates breathy, rough, or pathological voice quality.
-          <br><br>
-          Computed from the autocorrelation peak at the F0 lag period. Goeckoh logs HNR continuously
-          during enrollment to characterise your baseline vocal health.
+          HNR is the ratio of <strong>periodic harmonic energy</strong> (clean vocal-fold
+          vibration) to <strong>aperiodic turbulent noise</strong> (breathiness, roughness).
+          A high HNR means your vocal folds are closing cleanly on every cycle. A low HNR
+          indicates irregular contact — often a sign of vocal fatigue, pathology, or high
+          emotional-stress state.<br><br>
+          Goeckoh's CrystallineHeart engine monitors HNR as part of neurological state
+          estimation — sustained low HNR is one marker for OVERLOAD state, which gates
+          correction intensity down to prevent sensory fatigue.
         </div>
         <div class="lc-range">Healthy adult on sustained vowel: ≥11 dB · Pathological threshold: ≤7.4 dB</div>
       </div>
@@ -996,7 +1243,20 @@ async function startDemo() {
       video: false,
     });
   } catch (e) {
-    setStatus('Microphone access denied', 'error');
+    let msg;
+    if (e.name === 'NotAllowedError' || e.name === 'PermissionDeniedError') {
+      msg = 'Microphone blocked by browser. Click the 🔒 lock icon in your address bar → Site settings → Microphone → Allow, then refresh this page.';
+    } else if (e.name === 'NotFoundError' || e.name === 'DevicesNotFoundError') {
+      msg = 'No microphone found. Connect a microphone or headset and try again.';
+    } else if (e.name === 'NotReadableError' || e.name === 'TrackStartError') {
+      msg = 'Microphone is in use by another app. Close other browser tabs or apps using the mic, then try again.';
+    } else if (e.name === 'SecurityError') {
+      msg = 'Microphone access requires HTTPS. This page is already served securely — try refreshing.';
+    } else {
+      msg = 'Could not access microphone: ' + (e.message || e.name);
+    }
+    setStatus(msg, 'error');
+    document.getElementById('micHelp').style.display = 'block';
     return;
   }
 
