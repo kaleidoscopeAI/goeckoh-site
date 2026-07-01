@@ -119,9 +119,11 @@ def run_checks() -> Report:
               "swap to sk_live_... before public launch")
     elif sk.startswith("sk_live_"):
         r.add("STRIPE_SECRET_KEY", OK, "live key present (sk_live_)")
+    elif sk.startswith("rk_live_"):
+        r.add("STRIPE_SECRET_KEY", OK, "live restricted key present (rk_live_)")
     else:
         r.add("STRIPE_SECRET_KEY", WARNING, "set but not a recognised Stripe key format",
-              "expected sk_live_... (or sk_test_... for sandbox)")
+              "expected sk_live_... or rk_live_... (or sk_test_... for sandbox)")
 
     whsec = os.environ.get("STRIPE_WEBHOOK_SECRET", "")
     if _is_placeholder(whsec):
