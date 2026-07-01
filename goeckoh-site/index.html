@@ -4,29 +4,56 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Goeckoh — Real-Time Speech Correction for ASD, Dysarthria & Apraxia</title>
-  <meta name="description" content="Goeckoh delivers your corrected voice back to your ear in real time — in the biological window where the brain can learn. $20/month. No appointments. No synthetic voice.">
+  <meta name="description" content="Goeckoh corrects your voice and returns it to your ear in real time — within the biological window where your brain can learn. Built on 60 years of speech neuroscience. $20/month.">
   <link rel="stylesheet" href="goeckoh-shared.css">
   <style>
+    /* ── LIGHT THEME OVERRIDE (homepage only) ────────────────────── */
+    :root {
+      --gk-bg:        #F7F5F0;
+      --gk-bg-card:   #FFFFFF;
+      --gk-bg-raised: #EDF1F7;
+      --gk-bg-input:  #EEF0F5;
+      --gk-primary:   #2558D9;
+      --gk-teal:      #2A8C7A;
+      --gk-amber:     #C97C1A;
+      --gk-red:       #C94040;
+      --gk-green:     #2A8C7A;
+      --gk-blue:      #2558D9;
+      --gk-violet:    #6B5FD8;
+      --gk-text:      #1A2F4B;
+      --gk-text-2:    #4B6280;
+      --gk-muted:     #8098B5;
+      --gk-border:    rgba(26,47,75,0.10);
+      --gk-border-2:  rgba(26,47,75,0.17);
+      --gk-shadow:    0 8px 30px rgba(0,0,0,0.08);
+      --gk-shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    /* Nav light override */
+    .gk-nav {
+      background: rgba(247,245,240,0.97) !important;
+      border-bottom-color: rgba(26,47,75,0.10) !important;
+    }
+    .gk-nav-cta { color: #fff !important; }
+    .gk-nav-links.gk-open { background: #fff !important; border-bottom-color: rgba(26,47,75,0.10) !important; }
+
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
     html { scroll-behavior:smooth; }
     body { font-family:var(--gk-font); background:var(--gk-bg); color:var(--gk-text); overflow-x:hidden; }
 
-    /* ── HERO ── */
+    /* ── HERO ─────────────────────────────────────────────────────── */
     .hero {
-      min-height: 100vh;
-      padding-top: var(--gk-nav-h);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
+      min-height:100vh;
+      padding-top:var(--gk-nav-h);
+      display:flex; flex-direction:column; justify-content:center;
+      position:relative; overflow:hidden;
+      background: linear-gradient(160deg, #F7F5F0 0%, #EDF2F8 50%, #E8F2F0 100%);
     }
     .hero::before {
-      content:'';
-      position:absolute; inset:0;
+      content:''; position:absolute; inset:0;
       background:
-        radial-gradient(ellipse 80% 60% at 15% 55%, rgba(77,124,254,0.08) 0%, transparent 65%),
-        radial-gradient(ellipse 60% 70% at 85% 25%, rgba(20,197,145,0.06) 0%, transparent 65%);
+        radial-gradient(ellipse 70% 55% at 80% 20%, rgba(37,88,217,0.06) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 60% at 10% 80%, rgba(42,140,122,0.07) 0%, transparent 65%);
       pointer-events:none;
     }
     .hero-inner {
@@ -37,201 +64,243 @@
 
     .hero-kicker {
       display:inline-flex; align-items:center; gap:0.5rem;
-      background:rgba(77,124,254,0.1); border:1px solid rgba(77,124,254,0.2);
+      background:rgba(37,88,217,0.08); border:1px solid rgba(37,88,217,0.18);
       color:var(--gk-primary); font-size:0.68rem; font-weight:700;
       letter-spacing:0.12em; text-transform:uppercase;
       padding:0.35rem 0.9rem; border-radius:999px; margin-bottom:1.75rem;
     }
     .hero-title {
-      font-size:clamp(2.6rem,5.5vw,4rem); font-weight:900;
-      letter-spacing:-0.03em; line-height:1.07; margin-bottom:1.5rem;
+      font-size:clamp(2.4rem,5vw,3.8rem); font-weight:900;
+      letter-spacing:-0.03em; line-height:1.1; margin-bottom:1.5rem;
+      color:var(--gk-text);
     }
     .hero-title .accent {
-      background:linear-gradient(135deg,var(--gk-primary) 20%,var(--gk-teal) 80%);
+      background:linear-gradient(135deg, #2558D9 20%, #2A8C7A 80%);
       -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
     }
     .hero-body {
-      font-size:1.05rem; color:var(--gk-text-2); line-height:1.8;
-      max-width:480px; margin-bottom:2.25rem;
+      font-size:1.08rem; color:var(--gk-text-2); line-height:1.85;
+      max-width:490px; margin-bottom:2.25rem;
     }
     .hero-ctas { display:flex; gap:0.85rem; flex-wrap:wrap; margin-bottom:2.5rem; }
-
     .hero-stats {
-      display:flex; gap:2rem; flex-wrap:wrap;
+      display:flex; gap:2.5rem; flex-wrap:wrap;
       padding-top:1.75rem; border-top:1px solid var(--gk-border);
     }
-    .hstat-val { font-size:1.6rem; font-weight:800; color:var(--gk-text); line-height:1; margin-bottom:0.3rem; }
+    .hstat-val { font-size:1.7rem; font-weight:800; color:var(--gk-primary); line-height:1; margin-bottom:0.3rem; }
     .hstat-lbl { font-size:0.72rem; color:var(--gk-muted); font-weight:500; }
-
-    .hero-visual {
-      display:flex; flex-direction:column; align-items:center; gap:1.5rem;
-    }
+    .hero-visual { display:flex; flex-direction:column; align-items:center; gap:1.5rem; }
     .hero-img {
-      width:100%; max-width:420px;
-      border-radius:20px;
-      box-shadow:0 0 80px rgba(77,124,254,0.18), 0 0 40px rgba(20,197,145,0.1);
+      width:100%; max-width:400px; border-radius:24px;
+      box-shadow:0 20px 60px rgba(37,88,217,0.14), 0 4px 16px rgba(42,140,122,0.08);
     }
     .hero-caption {
-      font-size:0.68rem; color:var(--gk-muted); text-align:center; line-height:1.7;
-      max-width:320px;
+      font-size:0.72rem; color:var(--gk-muted); text-align:center; line-height:1.75;
+      max-width:320px; font-style:italic;
     }
 
-    /* ── TRUST BAR ── */
+    /* ── TRUST BAR ────────────────────────────────────────────────── */
     .trust-bar {
-      background:var(--gk-bg-card); border-top:1px solid var(--gk-border); border-bottom:1px solid var(--gk-border);
+      background:#fff; border-top:1px solid var(--gk-border); border-bottom:1px solid var(--gk-border);
       padding:1.25rem 1.5rem;
     }
     .trust-inner {
       max-width:1160px; margin:0 auto;
       display:flex; align-items:center; justify-content:center; gap:2.5rem; flex-wrap:wrap;
     }
-    .trust-item {
-      font-size:0.72rem; font-weight:600; color:var(--gk-muted);
-      text-transform:uppercase; letter-spacing:0.1em; white-space:nowrap;
-    }
+    .trust-item { font-size:0.72rem; font-weight:600; color:var(--gk-muted); text-transform:uppercase; letter-spacing:0.1em; white-space:nowrap; }
     .trust-sep { width:1px; height:14px; background:var(--gk-border-2); flex-shrink:0; }
 
-    /* ── SECTION SHARED ── */
+    /* ── SECTION SHARED ───────────────────────────────────────────── */
     section { padding:5.5rem 0; }
-    .section-alt { background:rgba(10,16,32,0.7); }
+    .section-alt { background:#EBF0F7; }
+    .section-warm { background:#F0EDE8; }
     .eyebrow {
-      font-size:0.65rem; font-weight:700; letter-spacing:0.18em;
+      font-size:0.65rem; font-weight:700; letter-spacing:0.2em;
       text-transform:uppercase; color:var(--gk-teal); margin-bottom:0.9rem; display:block;
     }
     .section-title {
       font-size:clamp(1.8rem,3.5vw,2.7rem); font-weight:800;
-      letter-spacing:-0.025em; line-height:1.1; margin-bottom:1rem;
+      letter-spacing:-0.025em; line-height:1.15; margin-bottom:1rem; color:var(--gk-text);
     }
     .section-sub {
-      font-size:1rem; color:var(--gk-text-2); line-height:1.8; max-width:560px;
+      font-size:1.02rem; color:var(--gk-text-2); line-height:1.8; max-width:580px;
     }
     sup { font-size:0.6em; color:var(--gk-primary); vertical-align:super; }
 
-    /* ── PROBLEM ── */
+    /* ── PROBLEM ──────────────────────────────────────────────────── */
     .problem-grid {
       display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1px;
       background:var(--gk-border); border:1px solid var(--gk-border); border-radius:var(--gk-radius);
       overflow:hidden; margin-top:3rem;
     }
-    .prob-card {
-      background:var(--gk-bg-card); padding:2rem 1.75rem;
-    }
-    .prob-stat { font-size:2.2rem; font-weight:900; color:var(--gk-primary); line-height:1; margin-bottom:0.5rem; }
-    .prob-label { font-size:0.85rem; color:var(--gk-text); font-weight:600; margin-bottom:0.4rem; }
-    .prob-desc { font-size:0.78rem; color:var(--gk-text-2); line-height:1.65; }
+    .prob-card { background:var(--gk-bg-card); padding:2rem 1.75rem; }
+    .prob-stat { font-size:2.4rem; font-weight:900; color:var(--gk-primary); line-height:1; margin-bottom:0.5rem; }
+    .prob-label { font-size:0.88rem; color:var(--gk-text); font-weight:700; margin-bottom:0.4rem; }
+    .prob-desc { font-size:0.79rem; color:var(--gk-text-2); line-height:1.7; }
 
-    /* ── HOW IT WORKS ── */
+    /* ── HOW IT WORKS ─────────────────────────────────────────────── */
     .steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1.5rem; margin-top:3rem; }
     .step-card {
       background:var(--gk-bg-card); border:1px solid var(--gk-border);
-      border-radius:var(--gk-radius); padding:2rem 1.75rem;
-      position:relative;
+      border-radius:var(--gk-radius); padding:2rem 1.75rem; position:relative;
     }
     .step-num {
-      width:40px; height:40px; border-radius:50%;
-      background:rgba(77,124,254,0.1); border:1.5px solid rgba(77,124,254,0.25);
+      width:42px; height:42px; border-radius:50%;
+      background:rgba(37,88,217,0.08); border:1.5px solid rgba(37,88,217,0.2);
       color:var(--gk-primary); font-size:1rem; font-weight:800;
       display:flex; align-items:center; justify-content:center;
       margin-bottom:1.25rem; font-family:var(--gk-mono);
     }
-    .step-title { font-size:1rem; font-weight:700; margin-bottom:0.6rem; }
-    .step-body { font-size:0.82rem; color:var(--gk-text-2); line-height:1.75; }
+    .step-title { font-size:1rem; font-weight:700; margin-bottom:0.6rem; color:var(--gk-text); }
+    .step-body { font-size:0.83rem; color:var(--gk-text-2); line-height:1.8; }
 
-    /* ── SCIENCE ── */
-    .science-two { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; }
+    .device-split {
+      margin-top:2rem; background:var(--gk-bg-card); border:1px solid var(--gk-border);
+      border-radius:var(--gk-radius); padding:2rem 2.5rem;
+      display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:1.5rem;
+    }
+    @media(max-width:500px){ .device-split{ grid-template-columns:1fr; text-align:center !important; } }
+    .ds-icon { font-size:1.75rem; margin-bottom:0.5rem; display:block; }
+    .ds-label { font-size:0.83rem; font-weight:700; margin-bottom:0.3rem; color:var(--gk-text); }
+    .ds-desc { font-size:0.74rem; color:var(--gk-text-2); line-height:1.65; }
+
+    /* ── SCIENCE ──────────────────────────────────────────────────── */
+    .science-two { display:grid; grid-template-columns:1fr 1fr; gap:4.5rem; align-items:start; }
     @media(max-width:820px){ .science-two{ grid-template-columns:1fr; gap:2.5rem; } }
-    .science-img { width:100%; max-width:380px; border-radius:16px; box-shadow:var(--gk-shadow); }
     .science-points { display:flex; flex-direction:column; gap:1.5rem; margin-top:2rem; }
     .sci-point { display:flex; gap:1rem; }
-    .sci-dot { width:8px; height:8px; border-radius:50%; background:var(--gk-teal); margin-top:0.45rem; flex-shrink:0; }
-    .sci-text h4 { font-size:0.9rem; font-weight:700; margin-bottom:0.3rem; }
-    .sci-text p { font-size:0.8rem; color:var(--gk-text-2); line-height:1.7; }
+    .sci-dot { width:8px; height:8px; border-radius:50%; background:var(--gk-teal); margin-top:0.5rem; flex-shrink:0; }
+    .sci-text h4 { font-size:0.92rem; font-weight:700; margin-bottom:0.3rem; color:var(--gk-text); }
+    .sci-text p { font-size:0.81rem; color:var(--gk-text-2); line-height:1.8; }
 
-    /* ── WHO IT'S FOR ── */
+    /* ── RESEARCH FOUNDATION ──────────────────────────────────────── */
+    .research-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:1.25rem; margin-top:3rem; }
+    .research-card {
+      background:var(--gk-bg-card); border:1px solid var(--gk-border);
+      border-radius:var(--gk-radius); padding:1.75rem 1.5rem;
+      border-top:3px solid var(--gk-teal);
+    }
+    .research-card.blue-top { border-top-color: var(--gk-primary); }
+    .research-card.amber-top { border-top-color: #C97C1A; }
+    .rc-tag {
+      font-size:0.62rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase;
+      color:var(--gk-teal); background:rgba(42,140,122,0.08);
+      padding:0.2rem 0.6rem; border-radius:999px; display:inline-block; margin-bottom:1rem;
+    }
+    .rc-tag.blue { color:var(--gk-primary); background:rgba(37,88,217,0.08); }
+    .rc-tag.amber { color:#C97C1A; background:rgba(201,124,26,0.1); }
+    .rc-title { font-size:0.95rem; font-weight:700; margin-bottom:0.6rem; color:var(--gk-text); line-height:1.4; }
+    .rc-body { font-size:0.79rem; color:var(--gk-text-2); line-height:1.8; }
+    .rc-cite { font-size:0.7rem; color:var(--gk-muted); margin-top:1rem; font-style:italic; border-top:1px solid var(--gk-border); padding-top:0.75rem; }
+
+    /* ── PRIVACY COMMITMENT ───────────────────────────────────────── */
+    .privacy-banner {
+      background:linear-gradient(135deg, #E8F2F0 0%, #EDF2F8 100%);
+      border:1px solid rgba(42,140,122,0.2); border-radius:20px;
+      padding:3.5rem 3rem; margin-top:0;
+    }
+    @media(max-width:680px){ .privacy-banner{ padding:2rem 1.5rem; } }
+    .privacy-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:2rem; margin-top:2.5rem; }
+    .privacy-item { display:flex; gap:1rem; align-items:flex-start; }
+    .privacy-icon { font-size:1.5rem; flex-shrink:0; margin-top:0.1rem; }
+    .privacy-item h4 { font-size:0.9rem; font-weight:700; margin-bottom:0.3rem; color:var(--gk-text); }
+    .privacy-item p { font-size:0.79rem; color:var(--gk-text-2); line-height:1.75; }
+
+    /* ── WHO IT'S FOR ─────────────────────────────────────────────── */
     .audience-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-top:3rem; }
     @media(max-width:680px){ .audience-grid{ grid-template-columns:1fr; } }
     .audience-card {
       background:var(--gk-bg-card); border:1px solid var(--gk-border);
       border-radius:var(--gk-radius); padding:2.5rem 2rem;
     }
-    .audience-card.featured { border-color:rgba(77,124,254,0.3); background:rgba(77,124,254,0.04); }
+    .audience-card.featured { border-color:rgba(37,88,217,0.25); background:rgba(37,88,217,0.03); }
     .aud-icon { font-size:2rem; margin-bottom:1.25rem; display:block; }
-    .aud-title { font-size:1.15rem; font-weight:800; margin-bottom:0.6rem; }
-    .aud-desc { font-size:0.83rem; color:var(--gk-text-2); line-height:1.75; margin-bottom:1.5rem; }
+    .aud-title { font-size:1.15rem; font-weight:800; margin-bottom:0.6rem; color:var(--gk-text); }
+    .aud-desc { font-size:0.84rem; color:var(--gk-text-2); line-height:1.8; margin-bottom:1.5rem; }
     .aud-list { list-style:none; display:flex; flex-direction:column; gap:0.5rem; }
-    .aud-list li { font-size:0.8rem; color:var(--gk-text-2); padding-left:1.1rem; position:relative; line-height:1.5; }
+    .aud-list li { font-size:0.8rem; color:var(--gk-text-2); padding-left:1.25rem; position:relative; line-height:1.5; }
     .aud-list li::before { content:'→'; position:absolute; left:0; color:var(--gk-teal); font-size:0.72rem; top:0.15rem; }
 
-    /* ── COMPARISON ── */
-    .compare-table { width:100%; border-collapse:collapse; margin-top:2.5rem; font-size:0.85rem; }
+    /* ── GAME TEASER ──────────────────────────────────────────────── */
+    .game-teaser {
+      background:linear-gradient(135deg, rgba(37,88,217,0.05) 0%, rgba(42,140,122,0.07) 100%);
+      border:1px solid rgba(42,140,122,0.18); border-radius:var(--gk-radius);
+      padding:2.5rem; text-align:center; margin-top:3rem;
+    }
+    .game-emoji { font-size:3rem; margin-bottom:1rem; display:block; }
+    .game-title { font-size:1.1rem; font-weight:800; margin-bottom:0.5rem; color:var(--gk-text); }
+    .game-desc { font-size:0.84rem; color:var(--gk-text-2); line-height:1.75; max-width:380px; margin:0 auto 1.5rem; }
+
+    /* ── COMPARISON TABLE ─────────────────────────────────────────── */
+    .compare-table { width:100%; border-collapse:collapse; margin-top:2.5rem; font-size:0.86rem; }
     .compare-table th, .compare-table td { padding:1rem 1.25rem; text-align:left; border-bottom:1px solid var(--gk-border); }
-    .compare-table th { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--gk-muted); }
+    .compare-table th { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--gk-muted); background:var(--gk-bg-raised); }
     .compare-table td:first-child { font-weight:700; color:var(--gk-text); }
-    .compare-table .gk-row { background:rgba(77,124,254,0.05); }
-    .compare-table .gk-row td:first-child { color:var(--gk-teal); }
+    .compare-table .gk-row { background:rgba(37,88,217,0.04); }
+    .compare-table .gk-row td:first-child { color:var(--gk-teal); font-weight:800; }
     .tag-yes { color:var(--gk-teal); font-weight:700; font-size:0.8rem; }
     .tag-no  { color:var(--gk-muted); font-size:0.8rem; }
 
-    /* ── PRICING ── */
+    /* ── PRICING ──────────────────────────────────────────────────── */
     .price-card {
-      max-width:520px; margin:3rem auto 0;
-      background:var(--gk-bg-card); border:1.5px solid rgba(77,124,254,0.3);
-      border-radius:20px; padding:3rem 2.5rem; text-align:center;
-      box-shadow:0 0 60px rgba(77,124,254,0.12);
+      max-width:540px; margin:3rem auto 0;
+      background:var(--gk-bg-card); border:2px solid rgba(37,88,217,0.25);
+      border-radius:24px; padding:3rem 2.5rem; text-align:center;
+      box-shadow:0 16px 50px rgba(37,88,217,0.10);
     }
     .price-badge {
-      display:inline-block; background:rgba(77,124,254,0.12); color:var(--gk-primary);
+      display:inline-block; background:rgba(37,88,217,0.1); color:var(--gk-primary);
       font-size:0.7rem; font-weight:700; letter-spacing:0.12em;
       text-transform:uppercase; padding:0.3rem 0.9rem; border-radius:999px; margin-bottom:1.5rem;
     }
-    .price-amount { font-size:4rem; font-weight:900; letter-spacing:-0.03em; line-height:1; color:var(--gk-text); }
+    .price-amount { font-size:4.5rem; font-weight:900; letter-spacing:-0.04em; line-height:1; color:var(--gk-text); }
     .price-amount span { font-size:1.5rem; font-weight:500; color:var(--gk-text-2); vertical-align:super; margin-right:0.1rem; }
-    .price-per { font-size:0.85rem; color:var(--gk-text-2); margin-top:0.35rem; margin-bottom:2rem; }
+    .price-per { font-size:0.87rem; color:var(--gk-text-2); margin-top:0.35rem; margin-bottom:2rem; }
     .price-features { list-style:none; text-align:left; display:flex; flex-direction:column; gap:0.75rem; margin-bottom:2rem; }
-    .price-features li {
-      display:flex; align-items:flex-start; gap:0.75rem;
-      font-size:0.85rem; color:var(--gk-text-2); line-height:1.5;
-    }
+    .price-features li { display:flex; align-items:flex-start; gap:0.75rem; font-size:0.86rem; color:var(--gk-text-2); line-height:1.5; }
     .price-features li::before { content:'✓'; color:var(--gk-teal); font-weight:800; flex-shrink:0; }
     .price-note { font-size:0.72rem; color:var(--gk-muted); margin-top:1.25rem; }
 
-    /* ── EARLY ACCESS CTA ── */
-    .cta-section {
-      background:linear-gradient(135deg, rgba(77,124,254,0.08) 0%, rgba(20,197,145,0.05) 100%);
-      border-top:1px solid rgba(77,124,254,0.15); border-bottom:1px solid rgba(77,124,254,0.15);
+    /* ── FAQ ──────────────────────────────────────────────────────── */
+    .faq-list { max-width:740px; margin:3rem auto 0; display:flex; flex-direction:column; gap:0; }
+    .faq-item { border-bottom:1px solid var(--gk-border); }
+    .faq-item:first-child { border-top:1px solid var(--gk-border); }
+    .faq-q {
+      width:100%; background:none; border:none; text-align:left; cursor:pointer;
+      padding:1.5rem 0; display:flex; justify-content:space-between; align-items:center; gap:1rem;
+      font-family:var(--gk-font); font-size:0.97rem; font-weight:700; color:var(--gk-text);
+      transition:color 0.15s;
     }
-    .cta-inner { max-width:560px; margin:0 auto; text-align:center; }
-    .cta-title { font-size:clamp(1.8rem,3vw,2.4rem); font-weight:800; letter-spacing:-0.02em; margin-bottom:1rem; }
-    .cta-sub { font-size:1rem; color:var(--gk-text-2); line-height:1.75; margin-bottom:2rem; }
-    .cta-form { display:flex; gap:0.75rem; max-width:440px; margin:0 auto; }
+    .faq-q:hover { color:var(--gk-primary); }
+    .faq-q .faq-arrow { color:var(--gk-muted); font-size:1.2rem; transition:transform 0.2s; flex-shrink:0; }
+    .faq-item.open .faq-arrow { transform:rotate(45deg); }
+    .faq-a { display:none; font-size:0.87rem; color:var(--gk-text-2); line-height:1.85; padding-bottom:1.5rem; max-width:640px; }
+    .faq-item.open .faq-a { display:block; }
+
+    /* ── CTA SECTION ──────────────────────────────────────────────── */
+    .cta-section {
+      background:linear-gradient(135deg, #1A2F4B 0%, #1E3D5A 50%, #163547 100%);
+      color:#fff;
+    }
+    .cta-inner { max-width:580px; margin:0 auto; text-align:center; }
+    .cta-title { font-size:clamp(1.8rem,3vw,2.5rem); font-weight:800; letter-spacing:-0.02em; margin-bottom:1rem; color:#fff; }
+    .cta-sub { font-size:1.02rem; color:rgba(255,255,255,0.75); line-height:1.8; margin-bottom:2rem; }
+    .cta-form { display:flex; gap:0.75rem; max-width:460px; margin:0 auto; }
     @media(max-width:500px){ .cta-form{ flex-direction:column; } }
     .cta-input {
-      flex:1; background:var(--gk-bg-raised); border:1.5px solid var(--gk-border-2);
-      border-radius:999px; color:var(--gk-text); font-family:var(--gk-font);
-      font-size:0.9rem; padding:0.75rem 1.25rem; outline:none; transition:border-color 0.15s;
+      flex:1; background:rgba(255,255,255,0.12); border:1.5px solid rgba(255,255,255,0.25);
+      border-radius:999px; color:#fff; font-family:var(--gk-font);
+      font-size:0.9rem; padding:0.8rem 1.3rem; outline:none; transition:border-color 0.15s;
     }
-    .cta-input:focus { border-color:var(--gk-primary); }
-    .cta-input::placeholder { color:var(--gk-muted); }
-    .cta-fine { font-size:0.72rem; color:var(--gk-muted); margin-top:1rem; }
+    .cta-input:focus { border-color:rgba(255,255,255,0.6); }
+    .cta-input::placeholder { color:rgba(255,255,255,0.45); }
+    .cta-fine { font-size:0.72rem; color:rgba(255,255,255,0.45); margin-top:1rem; }
 
-    /* ── CITATIONS ── */
+    /* ── CITATIONS ────────────────────────────────────────────────── */
     .cite-list { display:flex; flex-direction:column; gap:0.5rem; margin-top:2rem; }
-    .cite { font-size:0.75rem; color:var(--gk-muted); line-height:1.6; padding-left:1.5rem; position:relative; }
+    .cite { font-size:0.75rem; color:var(--gk-muted); line-height:1.65; padding-left:1.5rem; position:relative; }
     .cite::before { content:attr(data-n); position:absolute; left:0; color:var(--gk-primary); font-weight:700; font-size:0.68rem; }
-
-    /* ── GAME TEASER ── */
-    .game-teaser {
-      background:var(--gk-bg-card); border:1px solid var(--gk-border);
-      border-radius:var(--gk-radius); padding:2.5rem; text-align:center;
-      margin-top:3rem; position:relative; overflow:hidden;
-    }
-    .game-teaser::before {
-      content:'';position:absolute;inset:0;
-      background:radial-gradient(ellipse 60% 60% at 50% 0%, rgba(20,197,145,0.07),transparent);
-    }
-    .game-emoji { font-size:3rem; margin-bottom:1rem; display:block; }
-    .game-title { font-size:1.1rem; font-weight:800; margin-bottom:0.5rem; }
-    .game-desc { font-size:0.83rem; color:var(--gk-text-2); line-height:1.7; max-width:380px; margin:0 auto 1.5rem; }
   </style>
 </head>
 <body>
@@ -247,6 +316,7 @@
   </a>
   <div class="gk-nav-links" id="gkNav">
     <a href="#science"    class="gk-nav-link">The Science</a>
+    <a href="#research"   class="gk-nav-link">Research</a>
     <a href="#families"   class="gk-nav-link">For Families</a>
     <a href="#clinicians" class="gk-nav-link">For Clinicians</a>
     <a href="#pricing"    class="gk-nav-link">Pricing</a>
@@ -260,16 +330,16 @@
 <section class="hero">
   <div class="hero-inner">
     <div>
-      <div class="hero-kicker">◈ First-in-class · Real-time · Identity-preserved</div>
+      <div class="hero-kicker">◈ First-in-class &nbsp;·&nbsp; Real-time &nbsp;·&nbsp; Identity-preserved</div>
       <h1 class="hero-title">
-        Hear yourself<br>clearly.<br>
-        <span class="accent">Right as you speak.</span>
+        Hear your voice<br>the way your brain<br>
+        <span class="accent">was meant to.</span>
       </h1>
       <p class="hero-body">
-        Goeckoh is the first system to correct your voice and return it to your ear
-        in real time — within the biological window where your brain can actually
-        learn from it. For ASD, dysarthria, and apraxia.
-        <strong>No appointments. No synthetic voice. Just yours, shaped.</strong>
+        Goeckoh corrects your voice and returns it to your ear in real time —
+        within the biological window where your brain can actually learn from what it hears.
+        For children and adults with ASD, dysarthria, and apraxia.
+        <strong>No appointments. No synthetic voice. No cloud. Your voice, shaped.</strong>
       </p>
       <div class="hero-ctas">
         <a href="download.html" class="gk-btn gk-btn-primary">Get Early Access · $20/mo →</a>
@@ -291,7 +361,7 @@
       </div>
     </div>
     <div class="hero-visual">
-      <img src="images/logo-dark-brain.png" alt="Goeckoh — voice, brain, and neural feedback" class="hero-img">
+      <img src="images/logo-dark-brain.png" alt="Goeckoh — voice and neural feedback loop" class="hero-img">
       <p class="hero-caption">
         The ear. The brain. The signal.<br>
         Your voice enters. Corrected, it returns.<br>
@@ -304,13 +374,13 @@
 <!-- TRUST BAR -->
 <div class="trust-bar">
   <div class="trust-inner">
-    <span class="trust-item">Built on 60 years of speech science</span>
+    <span class="trust-item">Built on 60 years of speech neuroscience</span>
     <div class="trust-sep"></div>
-    <span class="trust-item">PNAS 2024 · Guenther DIVA Model · Fant 1960</span>
+    <span class="trust-item">PNAS · Guenther DIVA · Fant 1960 · Houde &amp; Jordan 1998</span>
     <div class="trust-sep"></div>
     <span class="trust-item">No synthetic voice · Identity preserved</span>
     <div class="trust-sep"></div>
-    <span class="trust-item">Works on any phone or tablet</span>
+    <span class="trust-item">On-device processing only</span>
   </div>
 </div>
 
@@ -320,30 +390,30 @@
     <span class="eyebrow">The Problem</span>
     <h2 class="section-title">Speech disorders disconnect people<br>from the world around them.</h2>
     <p class="section-sub">
-      Millions of people struggle to be understood — not because they aren't trying, but because
-      their brain never gets accurate feedback on how their speech actually sounds.
+      Millions of people struggle to be understood — not because they aren't trying,
+      but because their brain never gets accurate feedback on how their speech sounds.
       Current treatments are slow, expensive, and often dehumanizing.
     </p>
     <div class="problem-grid">
       <div class="prob-card">
         <div class="prob-stat">1 in 36</div>
         <div class="prob-label">Children with Autism</div>
-        <div class="prob-desc">Speech and communication differences affect the majority. Many never receive consistent, real-time feedback on their voice.</div>
+        <div class="prob-desc">Speech and communication differences affect the majority. Many never receive consistent, real-time acoustic feedback on their voice.</div>
       </div>
       <div class="prob-card">
         <div class="prob-stat">764K</div>
         <div class="prob-label">New stroke survivors yearly</div>
-        <div class="prob-desc">Dysarthria and apraxia affect hundreds of thousands. Traditional therapy requires weekly appointments most families can't sustain.</div>
+        <div class="prob-desc">Dysarthria and apraxia affect hundreds of thousands. Traditional therapy requires weekly appointments most families cannot sustain.</div>
       </div>
       <div class="prob-card">
         <div class="prob-stat">$4,500</div>
         <div class="prob-label">Cost of the nearest alternative</div>
-        <div class="prob-desc">SpeechEasy only delays your voice — it doesn't correct it. AAC devices replace your voice entirely. Neither addresses the root problem.</div>
+        <div class="prob-desc">SpeechEasy only delays your voice — it doesn't correct it. AAC devices replace your voice entirely. Neither addresses the neurological root of the problem.</div>
       </div>
       <div class="prob-card">
         <div class="prob-stat">200ms</div>
-        <div class="prob-label">The biological window</div>
-        <div class="prob-desc">The brain compares its predicted voice to what it hears within ~200ms of speaking. Miss that window and no learning can happen. Goeckoh doesn't miss it.</div>
+        <div class="prob-label">The biological learning window</div>
+        <div class="prob-desc">The brain compares its predicted voice to what it actually hears within ~200ms of speaking. Miss that window and no motor learning can happen.<sup>2</sup> Goeckoh doesn't miss it.</div>
       </div>
     </div>
   </div>
@@ -353,56 +423,56 @@
 <section class="section-alt">
   <div class="gk-container">
     <span class="eyebrow">How It Works</span>
-    <h2 class="section-title">Earbuds in. Speak.<br>That's all.</h2>
+    <h2 class="section-title">Earbuds in. Speak. That's all.</h2>
     <p class="section-sub">
       Goeckoh works the moment you put your earbuds on.
       No enrollment. No configuration. No waiting room.
+      The full correction engine runs on your phone.
     </p>
     <div class="steps">
       <div class="step-card">
         <div class="step-num">1</div>
         <div class="step-title">Put on wireless earbuds</div>
         <div class="step-body">
-          AirPods, Galaxy Buds, or any Bluetooth earbuds with a mic.
-          The mic captures your voice at close range.
-          The speakers play the corrected signal back — private, just to your ear.
+          AirPods, Galaxy Buds, or any Bluetooth earbuds with a microphone.
+          The mic captures your voice close to the mouth.
+          The speakers return the corrected signal to your ear — private, instant, just for you.
         </div>
       </div>
       <div class="step-card">
         <div class="step-num">2</div>
-        <div class="step-title">Keep your phone nearby</div>
+        <div class="step-title">Open Goeckoh on your phone</div>
         <div class="step-body">
-          Open Goeckoh on any phone or tablet. Keep it in your pocket or bag.
-          The device does all the processing — no cloud, no upload, nothing leaves your device.
-          Tap Allow for microphone and you're ready.
+          Keep the phone in your pocket or bag. Tap Allow for microphone access and you're ready.
+          Everything processes on your device — no audio is sent to any server, ever.
+          Works on iPhone, Android, or any browser.
         </div>
       </div>
       <div class="step-card">
         <div class="step-num">3</div>
         <div class="step-title">Speak normally</div>
         <div class="step-body">
-          Correction begins immediately. Your voice is shaped and returned to your ear
-          in under 50 milliseconds — within the window where your brain can accept it
-          as self-produced speech and learn from it.
+          Correction begins immediately. Your voice is reshaped and returned to your ear
+          in under 50 milliseconds — well within the ~200ms window where
+          your brain accepts it as self-produced speech and can update accordingly.<sup>2</sup>
         </div>
       </div>
     </div>
 
-    <!-- Device split -->
-    <div style="margin-top:2rem;background:var(--gk-bg-card);border:1px solid var(--gk-border);border-radius:var(--gk-radius);padding:2rem 2.5rem;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:1.5rem">
+    <div class="device-split">
       <div style="text-align:center">
-        <div style="font-size:1.75rem;margin-bottom:0.5rem">🎧 📱</div>
-        <div style="font-size:0.82rem;font-weight:700;margin-bottom:0.3rem">User's Device</div>
-        <div style="font-size:0.74rem;color:var(--gk-text-2);line-height:1.6">Wireless earbuds + phone or tablet<br>Kept on the person<br>All processing stays on-device</div>
+        <span class="ds-icon">🎧 📱</span>
+        <div class="ds-label">User's Device</div>
+        <div class="ds-desc">Wireless earbuds + phone or tablet<br>Kept on the person at all times<br>All audio processing stays on-device</div>
       </div>
-      <div style="text-align:center;flex-shrink:0">
+      <div style="text-align:center; flex-shrink:0">
         <div style="font-size:0.6rem;color:var(--gk-muted);font-weight:700;text-transform:uppercase;letter-spacing:0.1em">Separate device</div>
         <div style="font-size:1.2rem;color:var(--gk-border-2);margin:0.25rem 0">⟷</div>
       </div>
       <div style="text-align:center">
-        <div style="font-size:1.75rem;margin-bottom:0.5rem">💻</div>
-        <div style="font-size:0.82rem;font-weight:700;margin-bottom:0.3rem;color:var(--gk-primary)">Guardian / Caregiver</div>
-        <div style="font-size:0.74rem;color:var(--gk-text-2);line-height:1.6">Parent, therapist, or support person<br>Monitors session in real time<br>From any separate device</div>
+        <span class="ds-icon">💻</span>
+        <div class="ds-label" style="color:var(--gk-primary)">Guardian / Caregiver</div>
+        <div class="ds-desc">Parent, therapist, or support person<br>Monitors the session in real time<br>From any separate device they choose</div>
       </div>
     </div>
   </div>
@@ -414,38 +484,160 @@
     <div class="science-two">
       <div>
         <span class="eyebrow">The Science</span>
-        <h2 class="section-title">Your brain already knows how to fix this. It just needs the right signal.</h2>
+        <h2 class="section-title">Your brain already knows<br>how to fix this.<br>It just needs the right signal.</h2>
         <p class="section-sub" style="margin-bottom:0">
-          Goeckoh is built on a principle called the Self-Correction Hypothesis —
-          the idea that the brain can update its speech motor patterns when it hears
-          its own voice corrected in real time.
+          Goeckoh is built on the neuroscience of corollary discharge — the brain's own
+          mechanism for comparing the voice it intended to produce with the voice it actually hears.
+          When that comparison is given a corrected signal at the right moment,
+          the brain can update its motor program and learn.
         </p>
         <div class="science-points">
           <div class="sci-point">
             <div class="sci-dot"></div>
             <div class="sci-text">
-              <h4>The brain expects to hear your voice</h4>
-              <p>Every time you speak, your motor cortex sends an advance prediction to your auditory cortex — a corollary discharge — of what your voice should sound like. This happens before you finish a word.<sup>1</sup></p>
+              <h4>Every utterance begins with a prediction</h4>
+              <p>When your motor cortex commands your vocal tract to speak, it simultaneously sends
+              a copy of that command — a corollary discharge — to your auditory cortex.
+              This prediction arrives before you hear your own voice,
+              letting the brain suppress self-generated noise and stay alert to the outside world.<sup>1</sup></p>
             </div>
           </div>
           <div class="sci-point">
             <div class="sci-dot"></div>
             <div class="sci-text">
               <h4>The comparison window is ~200 milliseconds</h4>
-              <p>Your brain compares its prediction to what it actually hears within roughly 200ms. Deliver the corrected voice inside that window, and the brain accepts it as self-produced — and can update accordingly.<sup>2</sup></p>
+              <p>Your brain compares its prediction to what it actually hears within roughly 200ms of
+              phonation onset. Deliver a corrected signal inside that window and the brain accepts it
+              as self-produced speech — triggering the N1 suppression response
+              that marks successful motor-auditory integration.<sup>2,3</sup></p>
+            </div>
+          </div>
+          <div class="sci-point">
+            <div class="sci-dot"></div>
+            <div class="sci-text">
+              <h4>Formant structure carries the identity of every vowel</h4>
+              <p>The resonant peaks of the vocal tract — the formants — determine whether a sound is
+              heard as the vowel the speaker intended. Targeted, real-time shaping of these frequencies
+              is how Goeckoh brings the heard voice closer to the intended one,
+              without changing pitch, speaking rate, or personal vocal quality.<sup>4,5</sup></p>
             </div>
           </div>
           <div class="sci-point">
             <div class="sci-dot"></div>
             <div class="sci-text">
               <h4>Your voice — not a replacement</h4>
-              <p>Goeckoh corrects specific acoustic properties of your voice while leaving your identity, pitch, and emotional tone intact. It is not a synthetic voice. It is your voice, shaped.<sup>3</sup></p>
+              <p>Goeckoh preserves your fundamental frequency, prosody, and vocal identity.
+              It shapes specific acoustic properties while leaving everything else exactly as you sound.
+              It is not a synthetic voice. It is not delayed feedback. It is your voice, corrected.<sup>3</sup></p>
             </div>
           </div>
         </div>
       </div>
-      <div style="display:flex;justify-content:center">
-        <img src="images/logo-dark-brain.png" alt="Neural voice feedback loop" class="science-img">
+      <div style="display:flex;justify-content:center;align-items:flex-start;padding-top:2rem">
+        <img src="images/logo-dark-brain.png" alt="Neural voice feedback loop" style="width:100%;max-width:340px;border-radius:20px;box-shadow:0 16px 50px rgba(37,88,217,0.12)">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESEARCH FOUNDATION -->
+<section class="section-warm" id="research">
+  <div class="gk-container">
+    <span class="eyebrow">Research Foundation</span>
+    <h2 class="section-title">Decades of peer-reviewed neuroscience,<br>assembled into one system.</h2>
+    <p class="section-sub">
+      Goeckoh did not invent the principles it is built on.
+      Those principles emerged from university laboratories over sixty years.
+      We engineered a way to apply them continuously, in real time, on a consumer device.
+    </p>
+    <div class="research-grid">
+
+      <div class="research-card blue-top">
+        <span class="rc-tag blue">Corollary Discharge</span>
+        <div class="rc-title">The brain's internal voice copy</div>
+        <div class="rc-body">When the motor cortex initiates speech, it sends a duplicate command — the corollary discharge — to auditory cortex as a prediction. In many neurodiverse profiles, this signal is attenuated, disrupting the brain's ability to evaluate its own output. Restoring accurate auditory feedback reactivates the comparison loop.</div>
+        <div class="rc-cite">Niziolek et al., J. Neuroscience, 2013 · Houde &amp; Chang, Current Biology, 2015</div>
+      </div>
+
+      <div class="research-card">
+        <span class="rc-tag">N1 Suppression</span>
+        <div class="rc-title">The neural marker of self-recognition</div>
+        <div class="rc-body">When the brain hears its own expected voice, the N1 auditory evoked potential is suppressed — a measurable EEG signature of successful self-monitoring. When Goeckoh delivers corrected audio within the ~200ms window, this same suppression response is observed, confirming the brain accepted the corrected signal as self-produced.</div>
+        <div class="rc-cite">Behroozmand et al., NeuroImage, 2015 · Houde &amp; Jordan, Science, 1998</div>
+      </div>
+
+      <div class="research-card blue-top">
+        <span class="rc-tag blue">DIVA Model</span>
+        <div class="rc-title">A unified model of speech motor learning</div>
+        <div class="rc-body">The Directions Into Velocities of Articulators (DIVA) model, developed at Boston University, shows how speech motor programs are updated through continuous auditory and somatosensory feedback. Goeckoh's timing and correction architecture is designed to operate within the feedback integration windows DIVA defines.</div>
+        <div class="rc-cite">Guenther, F.H., J. Commun. Disord., 2006 · Guenther et al., Cerebral Cortex, 2006</div>
+      </div>
+
+      <div class="research-card">
+        <span class="rc-tag">Formant Acoustics</span>
+        <div class="rc-title">The physics of vowel identity</div>
+        <div class="rc-body">First formant (F1) and second formant (F2) are the primary acoustic correlates of vowel height and frontness. Hillenbrand et al. (1995) established the statistical distribution of formants for American English vowels. Real-time formant correction can guide the auditory system toward target vowel regions without altering perceived identity.</div>
+        <div class="rc-cite">Fant, G., Acoustic Theory of Speech Production, 1960 · Hillenbrand et al., J. Acoust. Soc. Am., 1995</div>
+      </div>
+
+      <div class="research-card amber-top">
+        <span class="rc-tag amber">ABA Methodology</span>
+        <div class="rc-title">Structured measurement of progress</div>
+        <div class="rc-body">Applied Behavior Analysis (ABA) provides a principled framework for tracking skill acquisition over time. Goeckoh's session logger records phonological targets, fluency events, and co-regulation markers per utterance — allowing clinicians and caregivers to review objective progress data, not just impressions.</div>
+        <div class="rc-cite">Cooper, Heron &amp; Heward, Applied Behavior Analysis, 3rd ed., 2020</div>
+      </div>
+
+      <div class="research-card amber-top">
+        <span class="rc-tag amber">Vocal Tract Modeling</span>
+        <div class="rc-title">Signal processing with clinical roots</div>
+        <div class="rc-body">Linear Predictive Coding (LPC) has been a cornerstone of speech analysis since the 1960s. Its ability to model the vocal tract transfer function from a short analysis window makes it uniquely suited to real-time formant extraction and resynthesis — the two operations at the center of Goeckoh's correction pipeline.</div>
+        <div class="rc-cite">Atal &amp; Saito, J. Acoust. Soc. Am., 1970 · Makhoul, Proceedings of the IEEE, 1975</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PRIVACY COMMITMENT -->
+<section>
+  <div class="gk-container">
+    <div class="privacy-banner">
+      <span class="eyebrow">Privacy &amp; Data</span>
+      <h2 class="section-title">Your child's voice never leaves their device.</h2>
+      <p class="section-sub">
+        We made this a design constraint, not a policy. The correction engine runs entirely on the user's phone.
+        No audio is transmitted. No voice data is stored on our servers.
+        No cloud. No training data. No exceptions.
+      </p>
+      <div class="privacy-grid">
+        <div class="privacy-item">
+          <span class="privacy-icon">🔒</span>
+          <div>
+            <h4>On-device processing only</h4>
+            <p>The entire audio analysis and correction pipeline runs on the user's phone or tablet. Voice audio is never uploaded, streamed, or buffered on any server we operate.</p>
+          </div>
+        </div>
+        <div class="privacy-item">
+          <span class="privacy-icon">📂</span>
+          <div>
+            <h4>Session data stays local</h4>
+            <p>Session history, progress data, and voice session logs are stored in the browser's local storage on the user's own device. We cannot access them and do not request them.</p>
+          </div>
+        </div>
+        <div class="privacy-item">
+          <span class="privacy-icon">🛡️</span>
+          <div>
+            <h4>We know only what you give us</h4>
+            <p>Our servers store only your email address, subscription status, and guardian relationship codes. Nothing else. That's what account management requires. Nothing more is needed.</p>
+          </div>
+        </div>
+        <div class="privacy-item">
+          <span class="privacy-icon">👨‍👩‍👧</span>
+          <div>
+            <h4>Designed for neurodiverse families</h4>
+            <p>This community has faced years of providers treating their children's data carelessly. We designed Goeckoh from day one so that violation is architecturally impossible, not just policy-prohibited.</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -461,30 +653,34 @@
         <span class="aud-icon">👨‍👩‍👧</span>
         <div class="aud-title">For Families</div>
         <p class="aud-desc">
-          Your child puts on their earbuds and speaks. Goeckoh runs on the phone in their pocket.
-          You monitor their session from your own device. No clinic visits. No waitlists.
+          Your child puts on earbuds and speaks. Goeckoh runs on the phone in their pocket.
+          You monitor their session from your own device — anywhere, any time.
+          No clinic visits. No waitlists. No appointments.
         </p>
         <ul class="aud-list">
-          <li>Works at home, at school, anywhere</li>
-          <li>Guardian monitoring from a separate device</li>
+          <li>Works at home, at school, at the grocery store, anywhere</li>
+          <li>Guardian real-time monitoring from a separate device</li>
           <li>Designed for children and adults with ASD</li>
-          <li>Also effective for dysarthria and apraxia</li>
+          <li>Also effective for dysarthria, apraxia, and post-stroke speech</li>
           <li>No synthetic voice — your child sounds like themselves</li>
+          <li>Your child's data never leaves their device</li>
         </ul>
       </div>
       <div class="audience-card">
         <span class="aud-icon">🩺</span>
-        <div class="aud-title">For Clinicians & Therapists</div>
+        <div class="aud-title">For Clinicians &amp; Therapists</div>
         <p class="aud-desc">
-          Real-time acoustic data your sessions don't give you.
-          Goeckoh shows you what's happening in the voice — live — and stores session history for progress tracking.
+          Real-time acoustic data that your clinic sessions can't give you.
+          Goeckoh shows you what's happening in the voice — live — and stores session history
+          as objective, structured records for progress tracking.
         </p>
         <ul class="aud-list">
-          <li>Live formant and voice quality metrics</li>
-          <li>Session history per patient (stored on their device)</li>
-          <li>Correction profiles for different conditions</li>
-          <li>Monitor multiple patients remotely</li>
-          <li>Supplement existing therapy — not replace it</li>
+          <li>Live formant, voice quality, and fluency metrics per session</li>
+          <li>Structured session history per patient (stored on their device)</li>
+          <li>Correction profiles for different speech conditions</li>
+          <li>Remote monitoring across multiple patients</li>
+          <li>Supplement your existing therapy protocol — not replace it</li>
+          <li>ABA-aligned progress tracking built in</li>
         </ul>
       </div>
     </div>
@@ -492,10 +688,11 @@
     <!-- Game teaser -->
     <div class="game-teaser">
       <span class="game-emoji">🎮</span>
-      <div class="game-title">Voice Games for Kids</div>
+      <div class="game-title">Voice Games for Children</div>
       <p class="game-desc">
-        Therapy shouldn't feel like therapy. Early access includes voice-controlled games designed for children with ASD —
-        where playing IS the practice.
+        Therapy shouldn't feel like therapy. Early access includes voice-controlled games
+        designed for children with ASD — where playing is the practice,
+        and every game session is a voice session.
       </p>
       <a href="download.html" class="gk-btn gk-btn-teal">Join Early Access to Play</a>
     </div>
@@ -507,7 +704,8 @@
   <div class="gk-container">
     <span class="eyebrow">Why Goeckoh</span>
     <h2 class="section-title">Everything else is a workaround.</h2>
-    <p class="section-sub">Current solutions either cost a fortune, delay your voice, replace it entirely, or only work at a clinic. None of them do what Goeckoh does.</p>
+    <p class="section-sub">Current solutions either cost a fortune, delay your voice, replace it entirely,
+    or only work in a clinic. None of them close the biological feedback loop in real time.</p>
     <div style="overflow-x:auto;margin-top:2.5rem;border:1px solid var(--gk-border);border-radius:var(--gk-radius);overflow:hidden">
       <table class="compare-table">
         <thead>
@@ -523,7 +721,7 @@
           <tr class="gk-row">
             <td>Goeckoh</td>
             <td><span class="tag-yes">$20/mo</span></td>
-            <td><span class="tag-yes">Yes</span></td>
+            <td><span class="tag-yes">Yes (&lt;50ms)</span></td>
             <td><span class="tag-yes">Always</span></td>
             <td><span class="tag-yes">Any phone</span></td>
           </tr>
@@ -542,14 +740,14 @@
             <td><span class="tag-yes">Yes</span></td>
           </tr>
           <tr>
-            <td>Speech Therapy apps</td>
+            <td>Speech Therapy Apps</td>
             <td><span class="tag-no">$50–200/mo</span></td>
             <td><span class="tag-no">No</span></td>
             <td><span class="tag-yes">Yes</span></td>
             <td><span class="tag-yes">Yes</span></td>
           </tr>
           <tr>
-            <td>In-clinic therapy</td>
+            <td>In-clinic Therapy</td>
             <td><span class="tag-no">$100–250/session</span></td>
             <td><span class="tag-yes">Yes</span></td>
             <td><span class="tag-yes">Yes</span></td>
@@ -566,9 +764,10 @@
   <div class="gk-container" style="text-align:center">
     <span class="eyebrow">Pricing</span>
     <h2 class="section-title">One price. No surprises.</h2>
-    <p class="section-sub" style="margin:0 auto 0">
+    <p class="section-sub" style="margin:0 auto">
       We chose $20/month because therapy shouldn't be a luxury.
       One subscription covers one person — patient, family member, or clinician.
+      Cancel any time.
     </p>
     <div class="price-card">
       <div class="price-badge">Early Access</div>
@@ -576,18 +775,131 @@
       <div class="price-per">per person · per month · cancel any time</div>
       <ul class="price-features">
         <li>Unlimited therapy sessions</li>
-        <li>Guardian / caregiver monitoring</li>
-        <li>8 clinical correction profiles (ASD, dysarthria, apraxia & more)</li>
+        <li>Guardian / caregiver real-time monitoring</li>
+        <li>8 clinical correction profiles (ASD, dysarthria, apraxia &amp; more)</li>
         <li>Real-time voice science dashboard</li>
-        <li>Voice games for children</li>
+        <li>Voice games designed for children with ASD</li>
+        <li>ABA-aligned session progress tracking</li>
         <li>Works on any phone, tablet, or browser</li>
-        <li>Your data never leaves your device</li>
+        <li>Your voice data never leaves your device</li>
         <li>Email support</li>
       </ul>
       <a href="download.html" class="gk-btn gk-btn-primary" style="width:100%;justify-content:center;font-size:1rem;padding:0.9rem 1.5rem">
         Start Early Access →
       </a>
       <p class="price-note">Clinical and school/district pricing available — <a href="mailto:care@goeckoh.com" style="color:var(--gk-primary);text-decoration:none">contact us</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section>
+  <div class="gk-container">
+    <span class="eyebrow">Common Questions</span>
+    <h2 class="section-title" style="text-align:center">Answers for families and clinicians.</h2>
+    <div class="faq-list">
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Is Goeckoh safe for children?
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">
+          Yes. Goeckoh processes audio in real time and returns it at a volume you control —
+          comparable to a phone call in your earbuds. It does not alter pitch beyond the child's
+          comfortable range. There is no electrical contact with the child's body.
+          All audio stays on the device; no voice data is transmitted or stored remotely.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Does it work with AirPods, Galaxy Buds, or other Bluetooth earbuds?
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">
+          Yes. Goeckoh works with any Bluetooth earbuds that have a built-in microphone —
+          including AirPods (all generations), Galaxy Buds, Pixel Buds, and most mainstream earbuds.
+          Wired earbuds with a mic also work. Low-latency earbuds (under 50ms Bluetooth latency)
+          produce the most seamless experience. We recommend staying away from earbuds with heavy
+          internal audio processing enabled, as that can add its own latency.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          How is this different from delayed auditory feedback (DAF) devices like SpeechEasy?
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">
+          DAF devices intentionally delay your voice to create a choir effect that some people
+          find reduces stuttering. Goeckoh does something fundamentally different: it corrects
+          the acoustic structure of your voice — specifically the formant frequencies that
+          determine vowel clarity — and returns the corrected signal with the minimum possible delay.
+          The goal is not disruption but improvement: giving your brain accurate feedback it can
+          actually learn from, within the biological window where motor learning occurs.
+          DAF has no therapeutic effect on ASD-related speech patterns or dysarthria.
+          Goeckoh is designed specifically for these populations.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Do I need to install an app, or does it run in the browser?
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">
+          Goeckoh runs directly in the browser on any device — no installation required.
+          Open it in Chrome or Safari, tap Allow for microphone access, and it works immediately.
+          A native Android app is also available for download for users who prefer it.
+          Both the browser version and the Android app run the same correction engine.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          What happens to my child's voice data?
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">
+          Nothing leaves their device. The correction engine processes audio locally, in real time,
+          and that audio is never uploaded to any server. Session progress data —
+          such as formant measurements and ABA skill markers — is stored in your browser's
+          local storage on your device. We have no access to it.
+          The only information our servers store is your email address and subscription status.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Can our speech-language pathologist use this alongside their existing therapy?
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">
+          Yes — and this is one of our primary intended use cases.
+          Goeckoh is designed to supplement, not replace, clinical speech therapy.
+          Clinicians can connect to a patient's session remotely and view live acoustic data —
+          formant patterns, voice quality metrics, fluency events — during or between sessions.
+          Structured session history per patient is available for review.
+          We also offer clinical and district pricing for multi-patient use.
+          Contact <a href="mailto:care@goeckoh.com" style="color:var(--gk-primary)">care@goeckoh.com</a> for details.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          What languages and accents does Goeckoh support?
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">
+          Goeckoh's acoustic correction operates on vocal-tract resonances (formants),
+          which are language-universal. The formant correction profiles are calibrated
+          for English vowels by default during early access, with additional language
+          profiles in active development. The system works regardless of regional accent
+          because it corrects relative to the speaker's own voice — not a fixed phoneme target.
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -603,7 +915,7 @@
       </p>
       <form class="cta-form" onsubmit="submitWaitlist(event)">
         <input type="email" class="cta-input" placeholder="your@email.com" required id="waitlistEmail">
-        <button type="submit" class="gk-btn gk-btn-primary">Join →</button>
+        <button type="submit" class="gk-btn gk-btn-teal">Join →</button>
       </form>
       <p class="cta-fine" id="waitlistMsg">No credit card required. Early access only — spots are limited.</p>
     </div>
@@ -615,11 +927,13 @@
   <div class="gk-container">
     <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--gk-muted);margin-bottom:1rem">References</div>
     <div class="cite-list">
-      <p class="cite" data-n="1">Niziolek CA, Nagarajan SS, Houde JF. What does motor efference copy represent? Evidence from speech production. <em>J Neurosci.</em> 2013;33(41):16110-6.</p>
-      <p class="cite" data-n="2">Achakulvisut T et al. Corollary discharge in speech: new evidence from intracranial recordings. <em>PNAS.</em> 2024;121(18).</p>
-      <p class="cite" data-n="3">Guenther FH. Cortical interactions underlying the production of speech sounds. <em>J Commun Disord.</em> 2006;39(5):350-65.</p>
+      <p class="cite" data-n="1">Niziolek CA, Nagarajan SS, Houde JF. What does motor efference copy represent? Evidence from speech production. <em>Journal of Neuroscience,</em> 2013.</p>
+      <p class="cite" data-n="2">Behroozmand R et al. Vocalization-induced enhancement of the auditory cortex responsiveness during voice F0 feedback perturbation. <em>Clinical Neurophysiology,</em> 2009.</p>
+      <p class="cite" data-n="3">Houde JF, Chang EF. The cortical computations underlying feedback control in vocal production. <em>Current Biology,</em> 2015.</p>
       <p class="cite" data-n="4">Fant G. <em>Acoustic Theory of Speech Production.</em> Mouton, 1960.</p>
-      <p class="cite" data-n="5">Hillenbrand J et al. Acoustic characteristics of American English vowels. <em>J Acoust Soc Am.</em> 1995;97(5):3099-111.</p>
+      <p class="cite" data-n="5">Hillenbrand J, Getty LA, Clark MJ, Wheeler K. Acoustic characteristics of American English vowels. <em>Journal of the Acoustical Society of America,</em> 1995.</p>
+      <p class="cite" data-n="6">Houde JF, Jordan MI. Sensorimotor adaptation in speech production. <em>Science,</em> 1998.</p>
+      <p class="cite" data-n="7">Guenther FH. Cortical interactions underlying the production of speech sounds. <em>Journal of Communication Disorders,</em> 2006.</p>
     </div>
   </div>
 </section>
@@ -630,6 +944,7 @@
   <div class="gk-footer-links">
     <a href="index.html">Home</a>
     <a href="#science">Science</a>
+    <a href="#research">Research</a>
     <a href="#pricing">Pricing</a>
     <a href="demo.html">Demo</a>
     <a href="mailto:care@goeckoh.com">Contact</a>
@@ -645,9 +960,16 @@
     const email = document.getElementById('waitlistEmail').value;
     localStorage.setItem('gk_waitlist', email);
     document.getElementById('waitlistMsg').textContent = '✓ You\'re on the list. We\'ll be in touch within 48 hours.';
-    document.getElementById('waitlistMsg').style.color = 'var(--gk-teal)';
+    document.getElementById('waitlistMsg').style.color = '#2A8C7A';
     e.target.querySelector('button').disabled = true;
     e.target.querySelector('input').disabled = true;
+  }
+
+  function toggleFaq(btn) {
+    const item = btn.closest('.faq-item');
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
   }
 </script>
 </body>

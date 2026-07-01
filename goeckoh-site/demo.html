@@ -3,233 +3,315 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Voice Science Demo — GOECKOH</title>
-  <meta name="description" content="Speak and see your own voice characteristics in real time. Learn formants, pitch, HNR, jitter, and shimmer with live scientific labels.">
+  <title>Live Voice Analysis — GOECKOH</title>
+  <meta name="description" content="Speak and see your voice analyzed in real acoustic space. Watch the formant correction vector that Goeckoh applies — the precise shift that closes the auditory-motor prediction loop.">
   <link rel="stylesheet" href="goeckoh-shared.css">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
+    body { font-family: var(--gk-font); background: var(--gk-bg); color: var(--gk-text); overflow-x: hidden; }
 
-    body {
-      font-family: var(--gk-font);
-      background: var(--gk-bg);
-      color: var(--gk-text);
-      overflow-x: hidden;
-    }
-
-    .page {
-      padding-top: var(--gk-nav-h);
-      max-width: 1400px;
-      margin: 0 auto;
-      padding-left: 1.5rem;
-      padding-right: 1.5rem;
-      padding-bottom: 4rem;
-    }
-
-    /* ── Page header ── */
-    .page-head {
-      padding: 2.5rem 0 2rem;
+    /* ── Demo hero ── */
+    .demo-hero {
+      padding: calc(var(--gk-nav-h) + 3.5rem) 2rem 3rem;
+      background: linear-gradient(180deg, rgba(0,195,255,0.04) 0%, transparent 100%);
       border-bottom: 1px solid var(--gk-border);
-      margin-bottom: 2rem;
+      text-align: center;
+    }
+    .hero-label {
+      display: inline-block;
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em;
+      color: var(--gk-teal);
+      border: 1px solid rgba(20,197,145,0.3); border-radius: 999px;
+      padding: 0.3rem 1rem; margin-bottom: 1.5rem;
+    }
+    .demo-hero h1 {
+      font-size: clamp(2rem, 4vw, 2.9rem); font-weight: 800; letter-spacing: -0.03em;
+      line-height: 1.2; max-width: 720px; margin: 0 auto 1.25rem;
+    }
+    .demo-hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--gk-teal), var(--gk-blue));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .demo-hero p {
+      font-size: 0.93rem; color: var(--gk-text-2);
+      max-width: 560px; margin: 0 auto 2.5rem; line-height: 1.8;
     }
 
-    .page-head h1 {
-      font-size: clamp(1.6rem, 3vw, 2.4rem);
-      font-weight: 800;
-      letter-spacing: -0.025em;
-      margin-bottom: 0.5rem;
+    /* ── Controls ── */
+    .controls-bar {
+      display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; justify-content: center;
     }
-
-    .page-head h1 span {
-      background: linear-gradient(120deg, var(--gk-green), var(--gk-blue));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    .profile-select {
+      background: var(--gk-bg-card); border: 1px solid var(--gk-border);
+      color: var(--gk-text); padding: 0.6rem 1rem; border-radius: var(--gk-radius-sm);
+      font-size: 0.8rem; font-family: var(--gk-font); cursor: pointer; outline: none;
     }
-
-    .page-head p {
-      font-size: 0.88rem;
-      color: var(--gk-text-2);
-      max-width: 620px;
-      line-height: 1.75;
-    }
-
-    /* ── Start bar ── */
-    .start-bar {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-      margin-bottom: 2rem;
-    }
-
+    .profile-select:focus { border-color: var(--gk-blue); }
     .status-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      padding: 0.35rem 0.85rem;
-      border-radius: 999px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      border: 1px solid var(--gk-border);
-      color: var(--gk-muted);
-      background: var(--gk-bg-card);
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      padding: 0.5rem 1rem; border-radius: 999px;
+      font-size: 0.72rem; font-weight: 700;
+      border: 1px solid var(--gk-border); color: var(--gk-muted); background: var(--gk-bg-card);
     }
-
     .status-pill.active { border-color: rgba(0,245,160,0.3); color: var(--gk-green); background: rgba(0,245,160,0.06); }
     .status-pill.error  { border-color: rgba(255,68,102,0.3); color: var(--gk-red); background: rgba(255,68,102,0.06); }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+    .status-dot.pulse { animation: dot-pulse 1.1s ease-in-out infinite; }
+    @keyframes dot-pulse { 0%,100% { opacity:1; } 50% { opacity:0.25; } }
+    .voiced-badge {
+      font-size: 0.62rem; font-weight: 700; padding: 0.25rem 0.7rem;
+      border-radius: 999px; border: 1px solid;
+    }
+    .voiced-badge.on  { color: var(--gk-green); border-color: rgba(0,245,160,0.35); background: rgba(0,245,160,0.08); }
+    .voiced-badge.off { color: var(--gk-muted); border-color: var(--gk-border); background: transparent; }
 
-    .status-dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: currentColor;
+    /* ── Page body ── */
+    .demo-page {
+      max-width: 1400px; margin: 0 auto;
+      padding: 2.5rem 1.5rem 5rem;
     }
 
-    .status-dot.pulse { animation: dot-pulse 1s ease-in-out infinite; }
-
-    @keyframes dot-pulse {
-      0%,100% { opacity: 1; }
-      50%      { opacity: 0.3; }
+    /* ── Profile info banner ── */
+    .profile-banner {
+      display: none;
+      background: var(--gk-bg-card); border: 1px solid rgba(20,197,145,0.18);
+      border-radius: var(--gk-radius); padding: 1.1rem 1.5rem;
+      margin-bottom: 1.5rem;
     }
+    .profile-banner.visible { display: flex; align-items: flex-start; gap: 1rem; }
+    .pb-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
+    .pb-name {
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--gk-teal); margin-bottom: 0.3rem;
+    }
+    .pb-desc { font-size: 0.78rem; color: var(--gk-text-2); line-height: 1.65; }
+    .pb-correction {
+      font-size: 0.73rem; color: var(--gk-text-2); margin-top: 0.4rem;
+      padding-top: 0.4rem; border-top: 1px solid var(--gk-border);
+    }
+    .pb-correction strong { color: var(--gk-blue); }
+
+    /* ── Waveform strip ── */
+    .waveform-strip {
+      background: var(--gk-bg-card); border: 1px solid var(--gk-border);
+      border-radius: var(--gk-radius); overflow: hidden; margin-bottom: 1.5rem;
+    }
+    .strip-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.8rem 1.25rem; border-bottom: 1px solid var(--gk-border);
+    }
+    .strip-title {
+      font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--gk-text-2);
+    }
+    #waveCanvas { display: block; width: 100%; }
 
     /* ── Main grid ── */
-    .demo-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: auto auto auto;
-      gap: 1.25rem;
+    .demo-main-grid {
+      display: grid; grid-template-columns: 1.6fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;
+    }
+    @media (max-width: 920px) {
+      .demo-main-grid { grid-template-columns: 1fr; }
     }
 
-    @media (max-width: 900px) {
-      .demo-grid { grid-template-columns: 1fr; }
-    }
-
-    /* Cards */
+    /* ── Shared card ── */
     .card {
-      background: var(--gk-bg-card);
-      border: 1px solid var(--gk-border);
-      border-radius: var(--gk-radius);
-      overflow: hidden;
+      background: var(--gk-bg-card); border: 1px solid var(--gk-border);
+      border-radius: var(--gk-radius); overflow: hidden;
     }
-
     .card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.9rem 1.25rem;
-      border-bottom: 1px solid var(--gk-border);
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;
+      padding: 0.9rem 1.25rem; border-bottom: 1px solid var(--gk-border);
     }
-
     .card-title {
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--gk-text-2);
+      font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--gk-text-2);
     }
-
     .card-body { padding: 1.25rem; }
+    canvas { display: block; width: 100%; }
 
-    /* Canvas containers */
-    canvas {
-      display: block;
-      width: 100%;
-      border-radius: 4px;
-    }
-
-    /* ── Metric row ── */
-    .metric-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 0.75rem;
-    }
-
-    .metric {
-      background: var(--gk-bg-raised);
-      border: 1px solid var(--gk-border);
-      border-radius: var(--gk-radius-sm);
-      padding: 0.85rem 1rem;
-    }
-
-    .metric-label {
-      font-size: 0.62rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--gk-muted);
-      margin-bottom: 0.3rem;
-    }
-
-    .metric-value {
-      font-family: var(--gk-mono);
-      font-size: 1.35rem;
-      font-weight: 600;
-      color: var(--gk-text);
-      line-height: 1;
-      margin-bottom: 0.1rem;
-    }
-
-    .metric-unit { font-size: 0.62rem; color: var(--gk-muted); }
-
-    .metric-green .metric-value { color: var(--gk-green); }
-    .metric-blue  .metric-value { color: var(--gk-blue); }
-    .metric-amber .metric-value { color: var(--gk-amber); }
-    .metric-violet .metric-value { color: var(--gk-violet); }
-
-    /* ── Vowel plot ── */
-    #vowelCanvas {
-      cursor: default;
-    }
-
-    /* ── Learn panels ── */
-    .learn-grid {
-      grid-column: 1 / -1;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1px;
-      background: var(--gk-border);
-      border: 1px solid var(--gk-border);
-      border-radius: var(--gk-radius);
-      overflow: hidden;
-      margin-top: 1.25rem;
-    }
-
-    .learn-card {
-      background: var(--gk-bg-card);
-      padding: 1.5rem 1.5rem 1.75rem;
-    }
-
-    .learn-icon  { font-size: 1.4rem; margin-bottom: 0.65rem; }
-    .learn-name  { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gk-text); margin-bottom: 0.35rem; }
-    .learn-value {
-      font-family: var(--gk-mono);
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin-bottom: 0.65rem;
-      color: var(--gk-green);
-    }
-    .learn-desc { font-size: 0.78rem; color: var(--gk-text-2); line-height: 1.75; }
-    .learn-desc strong { color: var(--gk-text); }
-    .learn-range { font-family: var(--gk-mono); font-size: 0.68rem; color: var(--gk-muted); margin-top: 0.5rem; }
-
-    /* Full-width span */
-    .span-2 { grid-column: 1 / -1; }
-
-    /* Voiced indicator */
-    .voiced-badge {
-      font-size: 0.65rem;
-      font-weight: 700;
-      padding: 0.2rem 0.6rem;
-      border-radius: 999px;
-      border: 1px solid;
-    }
-
-    .voiced-badge.on  { color: var(--gk-green); border-color: rgba(0,245,160,0.35); background: rgba(0,245,160,0.08); }
-    .voiced-badge.off { color: var(--gk-muted); border-color: var(--gk-border); }
-
-    /* Legend dot */
+    /* Legend */
     .legend { display: flex; gap: 1rem; flex-wrap: wrap; }
-    .legend-item { display: flex; align-items: center; gap: 0.35rem; font-size: 0.68rem; color: var(--gk-text-2); }
-    .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .legend-item { display: flex; align-items: center; gap: 0.35rem; font-size: 0.63rem; color: var(--gk-text-2); }
+    .ld { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+    /* Vowel note */
+    .vowel-note {
+      font-size: 0.72rem; color: var(--gk-text-2); line-height: 1.7;
+      padding: 0.85rem 1.25rem 1rem; border-top: 1px solid var(--gk-border);
+    }
+    .vowel-note strong { color: var(--gk-text); }
+
+    /* Nearest vowel indicator */
+    .nearest-vowel {
+      display: flex; align-items: center; gap: 0.6rem;
+      padding: 0.6rem 1.25rem; border-top: 1px solid var(--gk-border);
+      background: rgba(0,195,255,0.03);
+    }
+    .nv-label { font-size: 0.62rem; color: var(--gk-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
+    .nv-vowel { font-family: var(--gk-mono); font-size: 1.1rem; font-weight: 700; color: var(--gk-blue); }
+    .nv-accuracy { font-family: var(--gk-mono); font-size: 0.78rem; color: var(--gk-text-2); }
+    .nv-bar-wrap { flex: 1; height: 4px; background: rgba(255,255,255,0.07); border-radius: 999px; overflow: hidden; }
+    .nv-bar { height: 100%; background: var(--gk-teal); border-radius: 999px; transition: width 0.3s; width: 0%; }
+
+    /* ── Right stack ── */
+    .right-stack { display: flex; flex-direction: column; gap: 1rem; }
+
+    /* ── Metrics ── */
+    .metrics-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem;
+    }
+    .metric {
+      background: var(--gk-bg-raised); border: 1px solid var(--gk-border);
+      border-radius: var(--gk-radius-sm); padding: 0.8rem 0.9rem;
+    }
+    .metric-label {
+      font-size: 0.58rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--gk-muted); margin-bottom: 0.25rem;
+    }
+    .metric-value {
+      font-family: var(--gk-mono); font-size: 1.25rem; font-weight: 600;
+      color: var(--gk-text); line-height: 1;
+    }
+    .metric-unit { font-size: 0.58rem; color: var(--gk-muted); }
+    .mg .metric-value { color: var(--gk-green); }
+    .mb .metric-value { color: var(--gk-blue); }
+    .ma .metric-value { color: var(--gk-amber); }
+    .mv .metric-value { color: var(--gk-violet); }
+
+    /* ── 200ms Window section ── */
+    .window-section {
+      background: var(--gk-bg-card); border: 1px solid var(--gk-border);
+      border-radius: var(--gk-radius); padding: 2rem 2.5rem; margin-bottom: 1.5rem;
+    }
+    @media (max-width: 640px) { .window-section { padding: 1.5rem; } }
+    .section-label {
+      font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.15em; color: var(--gk-teal); margin-bottom: 0.75rem;
+    }
+    .window-section h2 {
+      font-size: clamp(1.25rem, 2.5vw, 1.65rem); font-weight: 800;
+      letter-spacing: -0.02em; margin-bottom: 0.7rem;
+    }
+    .window-section > p {
+      font-size: 0.82rem; color: var(--gk-text-2); max-width: 680px; line-height: 1.8; margin-bottom: 2rem;
+    }
+
+    /* Timeline */
+    .timeline-outer { position: relative; padding: 0 0 2.5rem; }
+    .timeline-bg {
+      height: 10px; background: rgba(255,255,255,0.06); border-radius: 999px;
+      margin-bottom: 0; position: relative; overflow: hidden;
+    }
+    .tl-window-bar {
+      position: absolute; left: 0; top: 0; height: 100%;
+      width: 80%; /* 200ms of 250ms range */
+      background: rgba(77,124,254,0.18); border-radius: 999px;
+    }
+    .tl-goeckoh-bar {
+      position: absolute; left: 0; top: 0; height: 100%;
+      width: 20%; /* 50ms of 250ms range */
+      background: linear-gradient(90deg, var(--gk-teal), var(--gk-blue));
+      border-radius: 999px;
+      animation: tl-pulse 2.4s ease-in-out infinite;
+    }
+    @keyframes tl-pulse {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0.65; }
+    }
+
+    /* Marker pins */
+    .timeline-pins {
+      display: flex; position: relative; margin-top: 8px;
+    }
+    .tl-pin {
+      position: absolute; display: flex; flex-direction: column; align-items: center;
+      transform: translateX(-50%);
+    }
+    .tl-pin-tick { width: 1px; height: 10px; background: var(--gk-border); margin-bottom: 6px; }
+    .tl-pin-ms { font-family: var(--gk-mono); font-size: 0.7rem; font-weight: 700; color: var(--gk-text-2); margin-bottom: 3px; }
+    .tl-pin-lbl { font-size: 0.64rem; color: var(--gk-muted); text-align: center; max-width: 90px; line-height: 1.35; }
+    .tl-pin.green .tl-pin-ms { color: var(--gk-teal); }
+    .tl-pin.blue  .tl-pin-ms { color: var(--gk-blue); }
+
+    .timeline-note {
+      font-size: 0.7rem; color: var(--gk-muted); line-height: 1.65; margin-top: 3rem;
+      padding-top: 1.25rem; border-top: 1px solid var(--gk-border);
+    }
+    .timeline-note strong { color: var(--gk-text-2); }
+
+    /* ── Learn grid ── */
+    .learn-section { margin-bottom: 1.5rem; }
+    .learn-section-hdr {
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.12em; color: var(--gk-muted); margin-bottom: 1rem;
+    }
+    .learn-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1px; background: var(--gk-border);
+      border: 1px solid var(--gk-border); border-radius: var(--gk-radius); overflow: hidden;
+    }
+    .learn-card { background: var(--gk-bg-card); padding: 1.5rem 1.5rem 1.75rem; }
+    .lc-icon { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .lc-name {
+      font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--gk-text); margin-bottom: 0.3rem;
+    }
+    .lc-value {
+      font-family: var(--gk-mono); font-size: 1rem; font-weight: 600;
+      margin-bottom: 0.65rem; color: var(--gk-green);
+    }
+    .lc-desc { font-size: 0.77rem; color: var(--gk-text-2); line-height: 1.75; }
+    .lc-desc strong { color: var(--gk-text); }
+    .lc-range { font-family: var(--gk-mono); font-size: 0.63rem; color: var(--gk-muted); margin-top: 0.65rem; }
+
+    /* ── CTA ── */
+    .demo-cta {
+      text-align: center;
+      background: linear-gradient(135deg, #0a1a38 0%, #050e24 100%);
+      border: 1px solid rgba(77,124,254,0.18); border-radius: var(--gk-radius);
+      padding: 4rem 2rem 4.5rem;
+    }
+    .cta-eyebrow {
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em;
+      color: var(--gk-teal); margin-bottom: 1.25rem;
+    }
+    .demo-cta h2 {
+      font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 800; letter-spacing: -0.03em;
+      line-height: 1.25; max-width: 600px; margin: 0 auto 1rem;
+    }
+    .demo-cta h2 em { font-style: normal; color: var(--gk-teal); }
+    .demo-cta p {
+      font-size: 0.88rem; color: var(--gk-text-2); max-width: 500px;
+      margin: 0 auto 2.25rem; line-height: 1.8;
+    }
+    .cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .cta-primary {
+      display: inline-block; padding: 0.9rem 2.25rem;
+      background: var(--gk-teal); color: #05080f; font-weight: 700; font-size: 0.9rem;
+      border-radius: var(--gk-radius-sm); text-decoration: none; transition: opacity 0.2s;
+    }
+    .cta-primary:hover { opacity: 0.87; }
+    .cta-ghost {
+      display: inline-block; padding: 0.9rem 2rem;
+      border: 1px solid rgba(255,255,255,0.15); color: var(--gk-text-2);
+      font-weight: 600; font-size: 0.88rem; border-radius: var(--gk-radius-sm);
+      text-decoration: none; transition: border-color 0.2s, color 0.2s;
+    }
+    .cta-ghost:hover { border-color: var(--gk-blue); color: var(--gk-blue); }
+    .cta-privacy {
+      margin-top: 1.75rem; font-size: 0.69rem; color: var(--gk-muted); line-height: 1.6;
+    }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--gk-border); padding: 1.5rem;
+      text-align: center; font-size: 0.72rem; color: var(--gk-muted);
+    }
+    footer a { color: var(--gk-blue); text-decoration: none; }
+    footer a:hover { color: var(--gk-teal); }
   </style>
 </head>
 <body>
@@ -243,259 +325,361 @@
     </div>
   </a>
   <div class="gk-nav-links" id="gkNav">
-    <a href="demo.html"                                        class="gk-nav-link active">Live Demo</a>
-    <a href="real_time_therapeutic_voice_cloning_system.html"  class="gk-nav-link">Echo Therapy</a>
-    <a href="advanced_voice_visualizer_pro.html"               class="gk-nav-link">Visualizer</a>
-    <a href="voice_therapy_profile_transform.html"             class="gk-nav-link">Profile Lab</a>
-    <a href="goeckoh_dashboard.html"                           class="gk-nav-link">Dashboard</a>
-    <a href="index.html"                                       class="gk-nav-link">Science</a>
+    <a href="demo.html"                                       class="gk-nav-link active">Live Demo</a>
+    <a href="real_time_therapeutic_voice_cloning_system.html" class="gk-nav-link">Echo Therapy</a>
+    <a href="advanced_voice_visualizer_pro.html"              class="gk-nav-link">Visualizer</a>
+    <a href="voice_therapy_profile_transform.html"            class="gk-nav-link">Profile Lab</a>
+    <a href="goeckoh_dashboard.html"                          class="gk-nav-link">Dashboard</a>
+    <a href="index.html"                                      class="gk-nav-link">Science</a>
   </div>
   <a href="download.html" class="gk-nav-cta">Download</a>
   <button class="gk-nav-toggle" onclick="document.getElementById('gkNav').classList.toggle('gk-open')" aria-label="Menu">☰</button>
 </nav>
 
-<div class="page">
-  <div class="page-head">
-    <h1>Voice Science <span>Demo</span></h1>
-    <p>
-      Speak into your microphone and see your voice broken into its acoustic components in real time.
-      Every metric is labelled with what it means, why it matters, and what the healthy range is.
-    </p>
-  </div>
-
-  <!-- Start bar -->
-  <div class="start-bar">
+<!-- HERO -->
+<section class="demo-hero">
+  <div class="hero-label">Real-Time Voice Analysis</div>
+  <h1>Watch your voice become<br><em>what your brain expects</em></h1>
+  <p>
+    Speak into your microphone. Watch your formants appear in acoustic space. See the
+    correction vector Goeckoh applies — the precise shift that closes the auditory-motor
+    prediction loop.
+  </p>
+  <div class="controls-bar">
     <button id="startBtn" class="gk-btn gk-btn-primary" onclick="startDemo()">▶ Start Microphone</button>
     <button id="stopBtn"  class="gk-btn gk-btn-secondary" onclick="stopDemo()" disabled>⏹ Stop</button>
+    <select class="profile-select" id="profileSelect" onchange="updateProfile()">
+      <option value="asd">ASD Voice Profile</option>
+      <option value="dysarthria">Dysarthric Profile</option>
+      <option value="apraxia">Childhood Apraxia of Speech</option>
+    </select>
     <div class="status-pill" id="statusPill">
       <div class="status-dot" id="statusDot"></div>
-      <span id="statusTxt">Microphone off</span>
+      <span id="statusTxt">Microphone off — click Start to begin</span>
     </div>
-    <div class="voiced-badge off" id="voicedBadge">Unvoiced</div>
   </div>
+</section>
 
-  <!-- Visualizations grid -->
-  <div class="demo-grid">
+<!-- DEMO PAGE BODY -->
+<div class="demo-page">
 
-    <!-- Waveform -->
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">Waveform — raw pressure wave</span>
-        <span class="gk-badge gk-badge-green" style="font-size:0.6rem">48 kHz</span>
-      </div>
-      <div class="card-body">
-        <canvas id="waveCanvas" height="120"></canvas>
-        <p style="font-size:0.72rem;color:var(--gk-muted);margin-top:0.75rem;line-height:1.6">
-          Each peak and trough is one cycle of your vocal folds opening and closing.
-          The repetition rate = <strong style="color:var(--gk-text)">F0 (pitch)</strong>.
-          Amplitude = loudness. Regularity = voice quality.
-        </p>
-      </div>
-    </div>
-
-    <!-- FFT Spectrum -->
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">Spectrum — frequency content</span>
-        <div class="legend">
-          <div class="legend-item"><div class="legend-dot" style="background:var(--gk-green)"></div>F1</div>
-          <div class="legend-item"><div class="legend-dot" style="background:var(--gk-blue)"></div>F2</div>
-          <div class="legend-item"><div class="legend-dot" style="background:var(--gk-violet)"></div>F3</div>
-        </div>
-      </div>
-      <div class="card-body">
-        <canvas id="specCanvas" height="140"></canvas>
-        <p style="font-size:0.72rem;color:var(--gk-muted);margin-top:0.75rem;line-height:1.6">
-          The peaks above the harmonic "comb" are your <strong style="color:var(--gk-text)">formants</strong> — vocal tract resonances.
-          F1 and F2 together define which vowel you are producing. Moving your tongue shifts these peaks.
-        </p>
-      </div>
-    </div>
-
-    <!-- Metrics -->
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">Acoustic metrics — live</span>
-      </div>
-      <div class="card-body">
-        <div class="metric-row">
-          <div class="metric metric-green">
-            <div class="metric-label">F0 — Pitch</div>
-            <div class="metric-value" id="mF0">—</div>
-            <div class="metric-unit">Hz</div>
-          </div>
-          <div class="metric metric-green">
-            <div class="metric-label">F1</div>
-            <div class="metric-value" id="mF1">—</div>
-            <div class="metric-unit">Hz</div>
-          </div>
-          <div class="metric metric-blue">
-            <div class="metric-label">F2</div>
-            <div class="metric-value" id="mF2">—</div>
-            <div class="metric-unit">Hz</div>
-          </div>
-          <div class="metric metric-violet">
-            <div class="metric-label">F3</div>
-            <div class="metric-value" id="mF3">—</div>
-            <div class="metric-unit">Hz</div>
-          </div>
-          <div class="metric metric-amber">
-            <div class="metric-label">HNR</div>
-            <div class="metric-value" id="mHNR">—</div>
-            <div class="metric-unit">dB</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">RMS Level</div>
-            <div class="metric-value" id="mRMS">—</div>
-            <div class="metric-unit">dBFS</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Vowel space plot -->
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">F1/F2 Vowel Space — your voice plotted live</span>
-        <div class="legend">
-          <div class="legend-item"><div class="legend-dot" style="background:rgba(255,255,255,0.25)"></div>Canonical</div>
-          <div class="legend-item"><div class="legend-dot" style="background:var(--gk-green)"></div>Your voice</div>
-        </div>
-      </div>
-      <div class="card-body">
-        <canvas id="vowelCanvas" height="200"></canvas>
-        <p style="font-size:0.72rem;color:var(--gk-muted);margin-top:0.75rem;line-height:1.6">
-          Each dot is where your current vowel falls in <strong style="color:var(--gk-text)">acoustic space</strong>.
-          Dots near the grey labels = canonical production. Dots clustered in the center = vowel space compression.
-        </p>
-      </div>
-    </div>
-
-  </div><!-- /demo-grid -->
-
-  <!-- Learn panels -->
-  <div class="learn-grid">
-    <div class="learn-card">
-      <div class="learn-icon">🎵</div>
-      <div class="learn-name">F0 — Fundamental Frequency (Pitch)</div>
-      <div class="learn-value" id="learnF0">— Hz</div>
-      <div class="learn-desc">
-        The rate at which your vocal folds open and snap shut. Every second, an adult male's folds close <strong>~116 times</strong>; an adult female's ~205 times; a child's ~223 times. That repetition rate is what you hear as <strong>pitch</strong>.
-        <br><br>
-        Goeckoh measures F0 by <strong>autocorrelation</strong> in the 80–500 Hz range and preserves it exactly — the correction never moves pitch. Your speaker identity lives in F0.
-      </div>
-      <div class="learn-range">Normal adult male: 93–135 Hz · Female: 162–238 Hz · Child: ~223 Hz</div>
-    </div>
-
-    <div class="learn-card">
-      <div class="learn-icon">📍</div>
-      <div class="learn-name">F1 — First Formant (Tongue Height)</div>
-      <div class="learn-value" id="learnF1">— Hz</div>
-      <div class="learn-desc">
-        The lowest resonance peak of your vocal tract. F1 is controlled by <strong>jaw openness and tongue height</strong>. Open your jaw wide — F1 rises. Raise your tongue toward the palate — F1 falls.
-        <br><br>
-        In ASD and dysarthria, F1 often fails to reach its target because jaw excursion is reduced (articulatory undershoot). Goeckoh shifts F1's resonance pole toward the clinical target using a <strong>DF2T biquad filter</strong>.
-      </div>
-      <div class="learn-range">Typical range across vowels: 300–900 Hz</div>
-    </div>
-
-    <div class="learn-card">
-      <div class="learn-icon">↔️</div>
-      <div class="learn-name">F2 — Second Formant (Tongue Front/Back)</div>
-      <div class="learn-value" id="learnF2">— Hz</div>
-      <div class="learn-desc">
-        The second resonance peak. F2 encodes <strong>tongue advancement</strong>. Push your tongue forward — F2 rises (front vowels like /i/). Pull it back — F2 falls (back vowels like /u/).
-        <br><br>
-        In dysarthria, <strong>back vowels are the hardest to produce correctly</strong> — both lip-rounding and tongue retraction are reduced simultaneously, pushing F2 into front-vowel territory. This is measurable and correctable.
-      </div>
-      <div class="learn-range">Typical range across vowels: 800–2500 Hz</div>
-    </div>
-
-    <div class="learn-card">
-      <div class="learn-icon">〰️</div>
-      <div class="learn-name">HNR — Harmonics-to-Noise Ratio</div>
-      <div class="learn-value" id="learnHNR">— dB</div>
-      <div class="learn-desc">
-        The ratio of <strong>periodic (harmonic) energy</strong> to <strong>turbulent noise</strong> in your glottal signal. A high HNR means your vocal folds are vibrating cleanly and regularly. A low HNR means airflow is leaking turbulently — a breathy, rough, or pathological voice quality.
-        <br><br>
-        HNR is computed from the autocorrelation peak at the F0 lag period. Goeckoh logs HNR continuously during enrollment to characterize your baseline voice quality.
-      </div>
-      <div class="learn-range">Healthy adult on sustained vowel: ≥11 dB (minimum: ≥7.4 dB)</div>
-    </div>
-
-    <div class="learn-card">
-      <div class="learn-icon">🌊</div>
-      <div class="learn-name">What is a Formant?</div>
-      <div class="learn-value" style="color:var(--gk-blue)">Vocal tract resonance</div>
-      <div class="learn-desc">
-        Your throat, mouth, and nasal cavity form a <strong>~17 cm resonant tube</strong>. Like any tube, it has natural frequencies where sound energy is amplified — these are the formants.
-        <br><br>
-        When vocal fold buzz travels up through the tract, certain frequencies get boosted (at formants) and others get suppressed. The resulting spectral envelope — the shape drawn over the harmonic peaks — defines the vowel. Different mouth shapes = different formant positions = different vowels.
-        <br><br>
-        This is <strong>Fant's source-filter theory</strong> (1960): the folds produce the source; the tract is the filter. They are independent. Goeckoh corrects only the filter — never the source.
-      </div>
-      <div class="learn-range">F1 encodes height · F2 encodes front/back · F3 encodes rhotics + identity</div>
-    </div>
-
-    <div class="learn-card">
-      <div class="learn-icon">🧠</div>
-      <div class="learn-name">Why Hearing Yourself Matters</div>
-      <div class="learn-value" style="color:var(--gk-violet)">Corollary discharge</div>
-      <div class="learn-desc">
-        Every time your motor cortex sends a speech command, it simultaneously sends a copy — an <strong>efference copy</strong> — to your auditory cortex. The auditory cortex uses this copy to <strong>predict what you should sound like</strong>.
-        <br><br>
-        If the heard sound matches the prediction, the brain confirms success and suppresses further correction. If it doesn't match, a prediction error signal drives learning.
-        <br><br>
-        In ASD and dysarthria, the child produces a distorted vowel, the auditory cortex predicts a distorted vowel, the sounds match — and the broken pattern is reinforced. <strong>Goeckoh breaks this cycle</strong> by delivering a corrected signal inside the ~200 ms window before the prediction comparison closes. The brain hears itself succeed.
-      </div>
-      <div class="learn-range">Prediction window: ~200ms · Goeckoh delivery: &lt;50ms · Margin: 150ms+</div>
+  <!-- Profile info banner -->
+  <div class="profile-banner" id="profileBanner">
+    <div class="pb-icon" id="pbIcon">🧩</div>
+    <div>
+      <div class="pb-name" id="pbName">ASD Voice Profile</div>
+      <div class="pb-desc" id="pbDesc">Vowel space compression — formants cluster toward the center of acoustic space rather than reaching canonical vowel targets. Reduced jaw and tongue excursion is the primary driver.</div>
+      <div class="pb-correction" id="pbCorrection"><strong>Correction strategy:</strong> Expand toward canonical targets — nudge F1 down for high vowels, push F2 toward front and back extremes depending on the intended vowel.</div>
     </div>
   </div>
 
-</div><!-- /page -->
+  <!-- Waveform strip -->
+  <div class="waveform-strip">
+    <div class="strip-header">
+      <span class="strip-title">Acoustic Pressure Waveform — 48 kHz</span>
+      <div class="voiced-badge off" id="voicedBadge">Unvoiced</div>
+    </div>
+    <canvas id="waveCanvas" height="100"></canvas>
+  </div>
 
-<footer style="border-top:1px solid var(--gk-border);padding:1.5rem;text-align:center">
-  <span style="font-size:0.72rem;color:var(--gk-muted)">
-    GOECKOH Voice Science Demo · <a href="index.html" style="color:var(--gk-blue);text-decoration:none">Read the science</a> · <a href="real_time_therapeutic_voice_cloning_system.html" style="color:var(--gk-green);text-decoration:none">Open full therapy session →</a>
-  </span>
+  <!-- Main grid -->
+  <div class="demo-main-grid">
+
+    <!-- LEFT: Vowel Space — the centrepiece -->
+    <div class="card" style="display:flex;flex-direction:column">
+      <div class="card-header">
+        <span class="card-title">F1 / F2 Vowel Space — live position + correction vector</span>
+        <div class="legend">
+          <div class="legend-item"><div class="ld" style="background:rgba(255,255,255,0.2)"></div>Canonical</div>
+          <div class="legend-item"><div class="ld" style="background:#00f5a0"></div>Your voice</div>
+          <div class="legend-item"><div class="ld" style="background:#00c3ff"></div>Correction direction</div>
+        </div>
+      </div>
+      <canvas id="vowelCanvas" height="280" style="flex:1"></canvas>
+      <div class="nearest-vowel" id="nearestRow" style="display:none">
+        <span class="nv-label">Nearest vowel</span>
+        <span class="nv-vowel" id="nvVowel">/æ/</span>
+        <span class="nv-accuracy" id="nvAcc">—</span>
+        <div class="nv-bar-wrap"><div class="nv-bar" id="nvBar"></div></div>
+      </div>
+      <div class="vowel-note">
+        Each grey dot is a canonical American English vowel (Hillenbrand et al., <em>Journal of the Acoustical Society of America,</em> 1995).
+        Your <strong>green dot</strong> is where your F1/F2 lands right now.
+        The <strong>blue arrow</strong> shows the direction and fraction of the correction Goeckoh's engine applies — moving your formants toward the nearest canonical target.
+      </div>
+    </div>
+
+    <!-- RIGHT stack: Spectrum + Metrics -->
+    <div class="right-stack">
+
+      <!-- Spectrum -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Frequency Spectrum — formant markers</span>
+          <div class="legend">
+            <div class="legend-item"><div class="ld" style="background:#00f5a0"></div>F1</div>
+            <div class="legend-item"><div class="ld" style="background:#00c3ff"></div>F2</div>
+            <div class="legend-item"><div class="ld" style="background:#a78bfa"></div>F3</div>
+          </div>
+        </div>
+        <div class="card-body" style="padding:0">
+          <canvas id="specCanvas" height="140"></canvas>
+        </div>
+      </div>
+
+      <!-- Live metrics -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Acoustic metrics — live</span>
+        </div>
+        <div class="card-body">
+          <div class="metrics-grid">
+            <div class="metric mg">
+              <div class="metric-label">F0 Pitch</div>
+              <div class="metric-value" id="mF0">—</div>
+              <div class="metric-unit">Hz</div>
+            </div>
+            <div class="metric mg">
+              <div class="metric-label">F1 Height</div>
+              <div class="metric-value" id="mF1">—</div>
+              <div class="metric-unit">Hz</div>
+            </div>
+            <div class="metric mb">
+              <div class="metric-label">F2 Front/Back</div>
+              <div class="metric-value" id="mF2">—</div>
+              <div class="metric-unit">Hz</div>
+            </div>
+            <div class="metric mv">
+              <div class="metric-label">F3 Rhotics</div>
+              <div class="metric-value" id="mF3">—</div>
+              <div class="metric-unit">Hz</div>
+            </div>
+            <div class="metric ma">
+              <div class="metric-label">HNR Voice Quality</div>
+              <div class="metric-value" id="mHNR">—</div>
+              <div class="metric-unit">dB</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">RMS Level</div>
+              <div class="metric-value" id="mRMS">—</div>
+              <div class="metric-unit">dBFS</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /right-stack -->
+  </div><!-- /demo-main-grid -->
+
+  <!-- 200ms PREDICTION WINDOW SECTION -->
+  <div class="window-section">
+    <div class="section-label">Corollary Discharge Mechanism</div>
+    <h2>The 200 ms Prediction Window</h2>
+    <p>
+      Every time your motor cortex issues a speech command, it simultaneously sends an
+      <strong>efference copy</strong> — a prediction of what the resulting sound should sound like — to your
+      auditory cortex. The auditory cortex has roughly <strong>200 milliseconds</strong> to compare
+      what it actually hears against that prediction. If the heard sound arrives within this window
+      and matches the target, the motor program is reinforced. If the prediction fails or the signal
+      arrives late, the learning loop does not close.
+    </p>
+    <p>
+      In ASD and dysarthria, the child produces a distorted vowel, the brain predicts a distorted vowel,
+      the sounds match — and the broken pattern is reinforced every time. Goeckoh breaks this cycle by
+      delivering a corrected signal within the window.
+    </p>
+
+    <div class="timeline-outer">
+      <div class="timeline-bg">
+        <div class="tl-window-bar"></div>
+        <div class="tl-goeckoh-bar"></div>
+      </div>
+      <div class="timeline-pins" style="height:70px">
+        <div class="tl-pin" style="left:0%">
+          <div class="tl-pin-tick"></div>
+          <div class="tl-pin-ms">0 ms</div>
+          <div class="tl-pin-lbl">Motor command issued — you intend to speak</div>
+        </div>
+        <div class="tl-pin green" style="left:20%">
+          <div class="tl-pin-tick" style="background:var(--gk-teal)"></div>
+          <div class="tl-pin-ms">&lt;50 ms</div>
+          <div class="tl-pin-lbl">Goeckoh delivers corrected signal to earbuds*</div>
+        </div>
+        <div class="tl-pin blue" style="left:80%">
+          <div class="tl-pin-tick" style="background:var(--gk-blue)"></div>
+          <div class="tl-pin-ms">~200 ms</div>
+          <div class="tl-pin-lbl">Prediction window closes — brain finalises motor learning</div>
+        </div>
+        <div class="tl-pin" style="left:100%; transform:translateX(-100%)">
+          <div class="tl-pin-tick"></div>
+          <div class="tl-pin-ms">250 ms</div>
+          <div class="tl-pin-lbl">Learning window closed — no motor update possible</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-note">
+      * &lt;50 ms refers to the <strong>native on-device processing latency</strong> of Goeckoh's DSP engine
+      (Rust-compiled, running directly on the device's audio hardware). This demo shows analysis only;
+      the correction is delivered through the full application running natively.
+      Total perceived latency also includes Bluetooth earbud round-trip, which varies by hardware (typically
+      40–150 ms). Even at the upper range, correction arrives well within the 200 ms prediction window.
+      <br><br>
+      <strong>N1 Suppression:</strong> When the correction arrives on time, the auditory cortex suppresses
+      the N1 evoked potential — an EEG marker indicating the brain accepted the corrected voice as
+      self-produced. This is the measurable neural signature of the corollary discharge loop closing correctly.
+      (Niziolek, Nagarajan, Houde, <em>Journal of Neuroscience,</em> 2013.)
+    </div>
+  </div>
+
+  <!-- SCIENCE PANELS -->
+  <div class="learn-section">
+    <div class="learn-section-hdr">Acoustic science — what each metric means</div>
+    <div class="learn-grid">
+
+      <div class="learn-card">
+        <div class="lc-icon">🎵</div>
+        <div class="lc-name">F0 — Fundamental Frequency (Pitch)</div>
+        <div class="lc-value" id="learnF0">— Hz</div>
+        <div class="lc-desc">
+          The rate at which your vocal folds open and snap shut. Every second, an adult male's folds
+          close ~116 times; an adult female's ~205 times; a child's ~223 times. That repetition rate
+          is what you hear as <strong>pitch</strong>.
+          <br><br>
+          Goeckoh measures F0 by <strong>autocorrelation in the 80–500 Hz range</strong> and preserves
+          it exactly — the correction never moves pitch. Your speaker identity lives in F0.
+        </div>
+        <div class="lc-range">Adult male: 93–135 Hz · Adult female: 162–238 Hz · Child: ~223 Hz</div>
+      </div>
+
+      <div class="learn-card">
+        <div class="lc-icon">↕️</div>
+        <div class="lc-name">F1 — First Formant (Tongue Height)</div>
+        <div class="lc-value" id="learnF1">— Hz</div>
+        <div class="lc-desc">
+          The lowest resonance peak of your vocal tract. F1 is controlled by <strong>jaw openness and
+          tongue height</strong>. Open your jaw wide — F1 rises. Raise your tongue toward the palate
+          — F1 falls.
+          <br><br>
+          In ASD and dysarthria, F1 often fails to reach its target because jaw excursion is reduced
+          (articulatory undershoot). This is one of the primary formant targets Goeckoh corrects.
+        </div>
+        <div class="lc-range">Typical range across vowels: 300–900 Hz</div>
+      </div>
+
+      <div class="learn-card">
+        <div class="lc-icon">↔️</div>
+        <div class="lc-name">F2 — Second Formant (Tongue Advancement)</div>
+        <div class="lc-value" id="learnF2">— Hz</div>
+        <div class="lc-desc">
+          The second resonance peak. F2 encodes <strong>tongue front/back position</strong>.
+          Push your tongue forward — F2 rises (front vowels like /i/).
+          Pull it back — F2 falls (back vowels like /u/).
+          <br><br>
+          In dysarthria, <strong>back vowels are the hardest to produce correctly</strong> — both
+          lip-rounding and tongue retraction are reduced simultaneously, pushing F2 into
+          front-vowel territory. This is measurable and correctable.
+        </div>
+        <div class="lc-range">Typical range across vowels: 800–2500 Hz</div>
+      </div>
+
+      <div class="learn-card">
+        <div class="lc-icon">〰️</div>
+        <div class="lc-name">HNR — Harmonics-to-Noise Ratio</div>
+        <div class="lc-value" id="learnHNR">— dB</div>
+        <div class="lc-desc">
+          The ratio of <strong>periodic (harmonic) energy</strong> to <strong>turbulent noise</strong>
+          in your glottal signal. A high HNR means your vocal folds are vibrating cleanly and
+          regularly. A low HNR indicates breathy, rough, or pathological voice quality.
+          <br><br>
+          HNR is computed from the autocorrelation peak at the F0 lag period. Goeckoh logs
+          HNR continuously during enrollment to characterise your baseline vocal health.
+        </div>
+        <div class="lc-range">Healthy adult on sustained vowel: ≥11 dB · Pathological threshold: ≤7.4 dB</div>
+      </div>
+
+      <div class="learn-card">
+        <div class="lc-icon">🌊</div>
+        <div class="lc-name">What is a Formant?</div>
+        <div class="lc-value" style="color:var(--gk-blue)">Vocal tract resonance</div>
+        <div class="lc-desc">
+          Your throat, mouth, and nasal cavity form a <strong>~17 cm resonant tube</strong>. Like any
+          tube, it has natural frequencies where sound energy is amplified — these are the formants.
+          <br><br>
+          When vocal fold buzz travels up through the tract, certain frequencies get boosted (at
+          formants) and others get suppressed. The resulting spectral envelope defines the vowel.
+          Different mouth shapes = different formant positions = different vowels.
+          <br><br>
+          This is <strong>Fant's source-filter theory</strong> (1960): the folds produce the source;
+          the tract is the filter. They are independent. Goeckoh corrects only the filter — never the
+          source.
+        </div>
+        <div class="lc-range">F1 encodes height · F2 encodes front/back · F3 encodes rhotics + identity</div>
+      </div>
+
+      <div class="learn-card">
+        <div class="lc-icon">🧠</div>
+        <div class="lc-name">Why Hearing Yourself Matters</div>
+        <div class="lc-value" style="color:var(--gk-violet)">Auditory-motor loop</div>
+        <div class="lc-desc">
+          Every speech command your motor cortex issues comes with an <strong>efference copy</strong>
+          — a prediction of what the resulting sound should be. Your auditory cortex uses this copy to
+          evaluate what you actually heard.
+          <br><br>
+          In ASD and dysarthria, the child produces a distorted vowel, the auditory cortex predicts
+          a distorted vowel, the sounds match — and the broken pattern is reinforced. Goeckoh delivers
+          a corrected signal inside the ~200 ms window. The brain hears itself succeed. The motor
+          program updates accordingly.
+        </div>
+        <div class="lc-range">Prediction window: ~200 ms · Native engine delivery: &lt;50 ms · Margin: 150 ms+</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="demo-cta">
+    <div class="cta-eyebrow">What you've seen is the analysis</div>
+    <h2>The correction happens<br><em>on your device, in real time</em></h2>
+    <p>
+      Every frame of your voice — analysed, corrected, and returned to your ears before your brain
+      closes the prediction window. Trained to your child's voice. Calibrated to their condition
+      profile.
+    </p>
+    <div class="cta-btns">
+      <a href="download.html" class="cta-primary">Download Goeckoh</a>
+      <a href="index.html" class="cta-ghost">Read the research →</a>
+    </div>
+    <div class="cta-privacy">
+      All voice processing happens on-device. No audio ever leaves the device.
+      Your session data is stored only in your browser — not on our servers.
+    </div>
+  </div>
+
+</div><!-- /demo-page -->
+
+<footer>
+  GOECKOH · <a href="index.html">Science &amp; Research</a> · <a href="real_time_therapeutic_voice_cloning_system.html">Open Therapy Session →</a>
 </footer>
 
 <script>
 'use strict';
 
-/* ───────── State ───────── */
-let audioCtx, analyserNode, micStream, animId;
-let running = false;
-
-// LPC + analysis state
-const SR16 = 16000;
+/* ── DSP Constants ── */
+const SR16  = 16000;
 const ORDER = 12;
 const FRAME = 512;
-
-// History for vowel trail (last N points)
-const vowelHistory = [];
-const MAX_TRAIL = 60;
-
-// Smoothed metrics
-let smF0 = 0, smF1 = 0, smF2 = 0, smF3 = 0, smHNR = 0, smRMS = 0;
 const ALPHA = 0.15;
+const MAX_TRAIL = 70;
 
-/* ───────── DOM ───────── */
-const startBtn   = document.getElementById('startBtn');
-const stopBtn    = document.getElementById('stopBtn');
-const statusPill = document.getElementById('statusPill');
-const statusDot  = document.getElementById('statusDot');
-const statusTxt  = document.getElementById('statusTxt');
-const voicedBadge = document.getElementById('voicedBadge');
+/* ── State ── */
+let audioCtx, analyserNode, micStream, animId;
+let running = false;
+let smF0 = 0, smF1 = 0, smF2 = 0, smF3 = 0, smHNR = 0, smRMS = 0;
+const vowelHistory = [];
+let currentProfile = 'asd';
 
-const waveCanvas  = document.getElementById('waveCanvas');
-const specCanvas  = document.getElementById('specCanvas');
-const vowelCanvas = document.getElementById('vowelCanvas');
-const wCtx  = waveCanvas.getContext('2d');
-const sCtx  = specCanvas.getContext('2d');
-const vCtx  = vowelCanvas.getContext('2d');
-
-/* ───────── Canonical vowel targets (Hillenbrand 1995 adult mean) ───────── */
+/* ── Canonical vowel targets (Hillenbrand 1995 adult mean) ── */
 const VOWELS = [
   { label:'/i/',  F1: 437, F2: 2761 },
   { label:'/ɪ/',  F1: 483, F2: 2365 },
@@ -509,37 +693,94 @@ const VOWELS = [
   { label:'/ɛ/',  F1: 580, F2: 1799 },
 ];
 
-/* ─── Canvas sizing ─── */
+/* ── Profile definitions ── */
+const PROFILES = {
+  asd: {
+    icon: '🧩',
+    name: 'ASD Voice Profile',
+    desc: 'Vowel space compression — formants cluster toward the centre of acoustic space rather than reaching canonical vowel targets. Reduced jaw and tongue excursion (articulatory undershoot) is the primary driver.',
+    correction: 'Expand toward canonical targets — nudge F1 down for high vowels, push F2 toward front and back extremes depending on the intended vowel.',
+    arrowFraction: 0.28,
+  },
+  dysarthria: {
+    icon: '🎯',
+    name: 'Dysarthric Profile',
+    desc: 'Reduced muscle tone and coordination in the tongue, jaw, and lips leads to a compressed, centralised vowel space. Both F1 and F2 deviate from targets across all vowel categories.',
+    correction: 'Simultaneous F1 and F2 correction toward vowel-specific targets. Fundamental frequency (F0) and speaker identity are preserved throughout.',
+    arrowFraction: 0.35,
+  },
+  apraxia: {
+    icon: '🔄',
+    name: 'Childhood Apraxia of Speech',
+    desc: 'Inconsistent phoneme production — the same target sound varies substantially in acoustic space across successive attempts, revealing a breakdown in motor planning rather than muscle control.',
+    correction: 'Stabilise F1/F2 toward consistent canonical targets. Repeated exposure to the corrected signal reinforces the correct motor programme via the corollary discharge loop.',
+    arrowFraction: 0.22,
+  },
+};
+
+/* ── DOM refs ── */
+const startBtn    = document.getElementById('startBtn');
+const stopBtn     = document.getElementById('stopBtn');
+const statusPill  = document.getElementById('statusPill');
+const statusDot   = document.getElementById('statusDot');
+const statusTxt   = document.getElementById('statusTxt');
+const voicedBadge = document.getElementById('voicedBadge');
+const profileBanner = document.getElementById('profileBanner');
+const nearestRow  = document.getElementById('nearestRow');
+
+const waveCanvas  = document.getElementById('waveCanvas');
+const specCanvas  = document.getElementById('specCanvas');
+const vowelCanvas = document.getElementById('vowelCanvas');
+const wCtx  = waveCanvas.getContext('2d');
+const sCtx  = specCanvas.getContext('2d');
+const vCtx  = vowelCanvas.getContext('2d');
+
+/* ── Canvas sizing ── */
 function resize() {
   [waveCanvas, specCanvas, vowelCanvas].forEach(c => {
     c.width  = c.offsetWidth  * window.devicePixelRatio;
     c.height = c.offsetHeight * window.devicePixelRatio;
   });
 }
-
-window.addEventListener('resize', resize);
+window.addEventListener('resize', () => { resize(); if (!running) drawVowelSpace(); });
 resize();
 
-/* ─── Start / Stop ─── */
+/* ── Profile ── */
+function updateProfile() {
+  currentProfile = document.getElementById('profileSelect').value;
+  const p = PROFILES[currentProfile];
+  document.getElementById('pbIcon').textContent    = p.icon;
+  document.getElementById('pbName').textContent    = p.name;
+  document.getElementById('pbDesc').textContent    = p.desc;
+  document.getElementById('pbCorrection').innerHTML = '<strong>Correction strategy:</strong> ' + p.correction;
+  if (running) profileBanner.classList.add('visible');
+}
+updateProfile();
+
+/* ── Start / Stop ── */
 async function startDemo() {
   try {
-    micStream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false }, video: false });
+    micStream = await navigator.mediaDevices.getUserMedia({
+      audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false },
+      video: false
+    });
   } catch(e) {
-    setStatus('Mic access denied', 'error');
+    setStatus('Microphone access denied', 'error');
     return;
   }
 
-  audioCtx    = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 48000 });
+  audioCtx     = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 48000 });
   const source = audioCtx.createMediaStreamSource(micStream);
   analyserNode = audioCtx.createAnalyser();
   analyserNode.fftSize = 4096;
-  analyserNode.smoothingTimeConstant = 0.7;
+  analyserNode.smoothingTimeConstant = 0.72;
   source.connect(analyserNode);
 
   running = true;
   startBtn.disabled = true;
   stopBtn.disabled  = false;
-  setStatus('Listening…', 'active');
+  setStatus('Listening — speak to see your voice', 'active');
+  profileBanner.classList.add('visible');
   animId = requestAnimationFrame(drawLoop);
 }
 
@@ -547,35 +788,39 @@ function stopDemo() {
   running = false;
   cancelAnimationFrame(animId);
   micStream && micStream.getTracks().forEach(t => t.stop());
-  audioCtx && audioCtx.close();
+  audioCtx  && audioCtx.close();
   startBtn.disabled = false;
   stopBtn.disabled  = true;
-  setStatus('Microphone off', '');
-  voicedBadge.className = 'voiced-badge off';
+  setStatus('Microphone off — click Start to begin', '');
+  voicedBadge.className   = 'voiced-badge off';
   voicedBadge.textContent = 'Unvoiced';
+  profileBanner.classList.remove('visible');
+  nearestRow.style.display = 'none';
+  smF0 = smF1 = smF2 = smF3 = smHNR = smRMS = 0;
+  vowelHistory.length = 0;
+  drawVowelSpace();
 }
 
 function setStatus(txt, type) {
   statusTxt.textContent = txt;
   statusPill.className  = 'status-pill' + (type ? ' ' + type : '');
-  statusDot.className   = 'status-dot' + (type === 'active' ? ' pulse' : '');
+  statusDot.className   = 'status-dot'  + (type === 'active' ? ' pulse' : '');
 }
 
-/* ─── Draw loop ─── */
+/* ── Draw loop ── */
 function drawLoop() {
   if (!running) return;
   animId = requestAnimationFrame(drawLoop);
 
-  const bufLen  = analyserNode.frequencyBinCount; // 2048
   const timeBuf = new Float32Array(analyserNode.fftSize);
-  const freqBuf = new Float32Array(bufLen);
+  const freqBuf = new Float32Array(analyserNode.frequencyBinCount);
   analyserNode.getFloatTimeDomainData(timeBuf);
   analyserNode.getFloatFrequencyData(freqBuf);
 
   // RMS
   let rmsSum = 0;
   for (let i = 0; i < timeBuf.length; i++) rmsSum += timeBuf[i] * timeBuf[i];
-  const rms = Math.sqrt(rmsSum / timeBuf.length);
+  const rms  = Math.sqrt(rmsSum / timeBuf.length);
   const dbFS = rms > 1e-9 ? 20 * Math.log10(rms) : -100;
   smRMS = smRMS * (1 - ALPHA) + dbFS * ALPHA;
 
@@ -585,19 +830,18 @@ function drawLoop() {
   let f0 = 0;
   if (voiced) f0 = estimateF0(timeBuf, audioCtx.sampleRate);
 
-  // LPC formants on decimated signal
+  // LPC formants (16 kHz decimated)
   let f1 = 0, f2 = 0, f3 = 0, hnr = 0;
   if (voiced) {
-    const dec = decimate3(timeBuf);
-    const lpc = levDur(dec.slice(0, FRAME), ORDER);
+    const dec  = decimate3(timeBuf);
+    const lpc  = levDur(dec.slice(0, FRAME), ORDER);
     const fmts = formantPeaks(lpc, ORDER, SR16);
-    f1 = fmts[0] || 0;
-    f2 = fmts[1] || 0;
-    f3 = fmts[2] || 0;
+    f1  = fmts[0] || 0;
+    f2  = fmts[1] || 0;
+    f3  = fmts[2] || 0;
     hnr = estimateHNR(dec, SR16, f0);
   }
 
-  // Smooth
   if (voiced) {
     smF0  = smF0  * (1-ALPHA) + f0  * ALPHA;
     smF1  = smF1  * (1-ALPHA) + f1  * ALPHA;
@@ -606,48 +850,68 @@ function drawLoop() {
     smHNR = smHNR * (1-ALPHA) + hnr * ALPHA;
   }
 
-  // Update voiced badge
   voicedBadge.className   = 'voiced-badge ' + (voiced ? 'on' : 'off');
   voicedBadge.textContent = voiced ? 'Voiced' : 'Unvoiced';
 
-  // Update metric displays
   setMetric('mF0',  smF0,  voiced, 0);
   setMetric('mF1',  smF1,  voiced, 0);
   setMetric('mF2',  smF2,  voiced, 0);
   setMetric('mF3',  smF3,  voiced, 0);
   setMetric('mHNR', smHNR, voiced, 1);
-  document.getElementById('mRMS').textContent = smRMS.toFixed(1);
+  document.getElementById('mRMS').textContent = voiced ? smRMS.toFixed(1) : '—';
 
-  // Learn panel values
-  document.getElementById('learnF0').textContent = voiced ? smF0.toFixed(0) + ' Hz' : '— Hz';
-  document.getElementById('learnF1').textContent = voiced ? smF1.toFixed(0) + ' Hz' : '— Hz';
-  document.getElementById('learnF2').textContent = voiced ? smF2.toFixed(0) + ' Hz' : '— Hz';
+  document.getElementById('learnF0').textContent  = voiced ? smF0.toFixed(0) + ' Hz' : '— Hz';
+  document.getElementById('learnF1').textContent  = voiced ? smF1.toFixed(0) + ' Hz' : '— Hz';
+  document.getElementById('learnF2').textContent  = voiced ? smF2.toFixed(0) + ' Hz' : '— Hz';
   document.getElementById('learnHNR').textContent = voiced ? smHNR.toFixed(1) + ' dB' : '— dB';
 
-  // Draw
   drawWave(timeBuf);
   drawSpectrum(freqBuf, f1, f2, f3);
 
-  if (voiced && f1 > 100 && f2 > 400) {
+  if (voiced && smF1 > 100 && smF2 > 400) {
     vowelHistory.push({ f1: smF1, f2: smF2 });
     if (vowelHistory.length > MAX_TRAIL) vowelHistory.shift();
   }
   drawVowelSpace();
+  updateNearestVowel(voiced);
 }
 
 function setMetric(id, val, voiced, dp) {
   document.getElementById(id).textContent = voiced && val > 0 ? val.toFixed(dp) : '—';
 }
 
-/* ─── Waveform ─── */
+/* ── Nearest vowel indicator ── */
+function findNearestVowel(f1, f2) {
+  const F1_RANGE = 300, F2_RANGE = 1200;
+  let bestDist = Infinity, bestV = null;
+  for (const v of VOWELS) {
+    const d = Math.sqrt(((f1 - v.F1)/F1_RANGE)**2 + ((f2 - v.F2)/F2_RANGE)**2);
+    if (d < bestDist) { bestDist = d; bestV = v; }
+  }
+  return { vowel: bestV, dist: bestDist };
+}
+
+function updateNearestVowel(voiced) {
+  if (!voiced || smF1 < 100 || smF2 < 400) {
+    nearestRow.style.display = 'none';
+    return;
+  }
+  nearestRow.style.display = 'flex';
+  const { vowel, dist } = findNearestVowel(smF1, smF2);
+  const accuracy = Math.max(0, Math.min(100, Math.round((1 - dist / 1.5) * 100)));
+  document.getElementById('nvVowel').textContent = vowel.label;
+  document.getElementById('nvAcc').textContent   = accuracy + '% match';
+  document.getElementById('nvBar').style.width   = accuracy + '%';
+}
+
+/* ── Waveform ── */
 function drawWave(buf) {
   const w = waveCanvas.width, h = waveCanvas.height;
   wCtx.clearRect(0, 0, w, h);
-  wCtx.fillStyle = '#0f1525';
+  wCtx.fillStyle = '#0c1422';
   wCtx.fillRect(0, 0, w, h);
 
-  // Center line
-  wCtx.strokeStyle = 'rgba(86,96,112,0.3)';
+  wCtx.strokeStyle = 'rgba(86,96,112,0.25)';
   wCtx.lineWidth = 1;
   wCtx.beginPath(); wCtx.moveTo(0, h/2); wCtx.lineTo(w, h/2); wCtx.stroke();
 
@@ -657,56 +921,50 @@ function drawWave(buf) {
   const step = w / 2048;
   for (let i = 0; i < 2048; i++) {
     const x = i * step;
-    const y = h/2 - buf[i] * h * 0.45;
+    const y = h/2 - buf[i] * h * 0.44;
     i === 0 ? wCtx.moveTo(x, y) : wCtx.lineTo(x, y);
   }
   wCtx.stroke();
 }
 
-/* ─── Spectrum ─── */
+/* ── Spectrum ── */
 function drawSpectrum(buf, f1, f2, f3) {
   const w = specCanvas.width, h = specCanvas.height;
-  const sr = audioCtx.sampleRate;
+  const sr = audioCtx ? audioCtx.sampleRate : 48000;
   const bins = buf.length;
   const maxFreq = 5000;
   const maxBin  = Math.floor(maxFreq / sr * 2 * bins);
 
   sCtx.clearRect(0, 0, w, h);
-  sCtx.fillStyle = '#0f1525';
+  sCtx.fillStyle = '#0c1422';
   sCtx.fillRect(0, 0, w, h);
 
-  // Grid lines at 1000, 2000, 3000, 4000 Hz
   [1000,2000,3000,4000].forEach(f => {
     const x = (f / maxFreq) * w;
-    sCtx.strokeStyle = 'rgba(86,96,112,0.2)';
+    sCtx.strokeStyle = 'rgba(86,96,112,0.18)';
     sCtx.lineWidth = 1;
     sCtx.beginPath(); sCtx.moveTo(x, 0); sCtx.lineTo(x, h); sCtx.stroke();
     sCtx.fillStyle = '#566070';
-    sCtx.font = `${9 * window.devicePixelRatio}px monospace`;
+    sCtx.font = `${8.5 * window.devicePixelRatio}px monospace`;
     sCtx.fillText(`${f/1000}k`, x + 3, h - 4);
   });
 
-  // Spectrum bars
   const grad = sCtx.createLinearGradient(0, 0, 0, h);
-  grad.addColorStop(0, 'rgba(0,245,160,0.85)');
-  grad.addColorStop(1, 'rgba(0,245,160,0.15)');
+  grad.addColorStop(0, 'rgba(0,245,160,0.82)');
+  grad.addColorStop(1, 'rgba(0,245,160,0.12)');
   sCtx.fillStyle = grad;
-
   for (let i = 0; i < maxBin; i++) {
-    const db  = buf[i];
-    const norm = Math.max(0, (db + 100) / 100);
+    const norm = Math.max(0, (buf[i] + 100) / 100);
     const x = (i / maxBin) * w;
     const bw = Math.max(1, w / maxBin);
-    const bh = norm * h;
-    sCtx.fillRect(x, h - bh, bw, bh);
+    sCtx.fillRect(x, h - norm * h, bw, norm * h);
   }
 
-  // Formant markers
-  const drawFormant = (freq, color, label) => {
+  const drawFmt = (freq, color, label) => {
     if (!freq || freq < 50) return;
     const x = (freq / maxFreq) * w;
     sCtx.strokeStyle = color;
-    sCtx.lineWidth = 2;
+    sCtx.lineWidth = 1.5;
     sCtx.setLineDash([4, 3]);
     sCtx.beginPath(); sCtx.moveTo(x, 0); sCtx.lineTo(x, h); sCtx.stroke();
     sCtx.setLineDash([]);
@@ -714,82 +972,134 @@ function drawSpectrum(buf, f1, f2, f3) {
     sCtx.font = `bold ${10 * window.devicePixelRatio}px Inter,sans-serif`;
     sCtx.fillText(label, x + 3, 14 * window.devicePixelRatio);
   };
-
-  drawFormant(f1, '#00f5a0', 'F1');
-  drawFormant(f2, '#00c3ff', 'F2');
-  drawFormant(f3, '#a78bfa', 'F3');
+  drawFmt(f1, '#00f5a0', 'F1');
+  drawFmt(f2, '#00c3ff', 'F2');
+  drawFmt(f3, '#a78bfa', 'F3');
 }
 
-/* ─── Vowel Space ─── */
+/* ── Vowel Space ── */
 function drawVowelSpace() {
   const w = vowelCanvas.width, h = vowelCanvas.height;
+  const dpr = window.devicePixelRatio;
   vCtx.clearRect(0, 0, w, h);
-  vCtx.fillStyle = '#0f1525';
+  vCtx.fillStyle = '#0c1422';
   vCtx.fillRect(0, 0, w, h);
 
-  // Mapping: F2 x-axis reversed (2800 left → 700 right), F1 y-axis (200 top → 1000 bottom)
-  const F2_MAX = 2800, F2_MIN = 700;
-  const F1_MIN = 200,  F1_MAX = 1000;
-  const PAD = 28 * window.devicePixelRatio;
+  const F2_MAX = 2900, F2_MIN = 650;
+  const F1_MIN = 180,  F1_MAX = 1050;
+  const PAD = 32 * dpr;
 
   const xOf = f2 => PAD + (1 - (f2 - F2_MIN) / (F2_MAX - F2_MIN)) * (w - PAD*2);
   const yOf = f1 => PAD + ((f1 - F1_MIN) / (F1_MAX - F1_MIN)) * (h - PAD*2);
 
-  // Axes labels
-  vCtx.fillStyle = '#566070';
-  vCtx.font = `${8 * window.devicePixelRatio}px monospace`;
-  vCtx.fillText('F2 → low (back)', w - PAD - 60 * window.devicePixelRatio, h - 4);
-  vCtx.fillText('high (front) ←', PAD, h - 4);
-  vCtx.fillText('F1↓ open', 2, PAD + 10 * window.devicePixelRatio);
+  // Axis labels
+  vCtx.fillStyle = '#4a5568';
+  vCtx.font = `${7.5 * dpr}px monospace`;
+  vCtx.fillText('← high F2 (front vowels)', PAD, h - 5);
+  vCtx.fillText('low F2 (back vowels) →', w - 120 * dpr, h - 5);
+  vCtx.fillText('F1 low (closed)', 2, PAD + 10 * dpr);
+  vCtx.fillText('F1 high (open)', 2, h - PAD - 4);
 
-  // Canonical vowel points + labels
+  // Subtle vowel region background blobs
+  vCtx.globalAlpha = 0.04;
   VOWELS.forEach(v => {
-    const x = xOf(Math.min(v.F2, F2_MAX));
-    const y = yOf(v.F1);
-    vCtx.beginPath();
-    vCtx.arc(x, y, 4 * window.devicePixelRatio, 0, Math.PI*2);
-    vCtx.fillStyle = 'rgba(255,255,255,0.15)';
-    vCtx.fill();
-    vCtx.fillStyle = 'rgba(255,255,255,0.45)';
-    vCtx.font = `${9 * window.devicePixelRatio}px Inter,sans-serif`;
-    vCtx.fillText(v.label, x + 5 * window.devicePixelRatio, y - 3 * window.devicePixelRatio);
+    const x = xOf(v.F2), y = yOf(v.F1);
+    const grad = vCtx.createRadialGradient(x, y, 0, x, y, 35 * dpr);
+    grad.addColorStop(0, '#00c3ff');
+    grad.addColorStop(1, 'transparent');
+    vCtx.fillStyle = grad;
+    vCtx.beginPath(); vCtx.arc(x, y, 35 * dpr, 0, Math.PI*2); vCtx.fill();
+  });
+  vCtx.globalAlpha = 1;
+
+  // Canonical vowel points
+  VOWELS.forEach(v => {
+    const x = xOf(v.F2), y = yOf(v.F1);
+    vCtx.beginPath(); vCtx.arc(x, y, 4.5 * dpr, 0, Math.PI*2);
+    vCtx.fillStyle = 'rgba(255,255,255,0.14)'; vCtx.fill();
+    vCtx.strokeStyle = 'rgba(255,255,255,0.25)'; vCtx.lineWidth = 1; vCtx.stroke();
+    vCtx.fillStyle = 'rgba(255,255,255,0.5)';
+    vCtx.font = `${9 * dpr}px Inter,sans-serif`;
+    vCtx.fillText(v.label, x + 6 * dpr, y - 3 * dpr);
   });
 
-  // Vowel history trail
+  // Trail
   vowelHistory.forEach((pt, i) => {
     const x = xOf(Math.min(pt.f2, F2_MAX));
-    const y = yOf(pt.f1);
-    const alpha = (i / MAX_TRAIL) * 0.7;
-    vCtx.beginPath();
-    vCtx.arc(x, y, 3 * window.devicePixelRatio, 0, Math.PI*2);
-    vCtx.fillStyle = `rgba(0,245,160,${alpha})`;
-    vCtx.fill();
+    const y = yOf(Math.min(pt.f1, F1_MAX));
+    const alpha = (i / MAX_TRAIL) * 0.65;
+    vCtx.beginPath(); vCtx.arc(x, y, 2.5 * dpr, 0, Math.PI*2);
+    vCtx.fillStyle = `rgba(0,245,160,${alpha})`; vCtx.fill();
   });
 
-  // Current point (bright)
-  if (vowelHistory.length > 0) {
-    const cur = vowelHistory[vowelHistory.length - 1];
-    const x = xOf(Math.min(cur.f2, F2_MAX));
-    const y = yOf(cur.f1);
+  if (vowelHistory.length === 0) return;
+
+  const cur = vowelHistory[vowelHistory.length - 1];
+  const cx  = xOf(Math.min(cur.f2, F2_MAX));
+  const cy  = yOf(Math.min(cur.f1, F1_MAX));
+
+  // Current dot — green glow
+  vCtx.beginPath(); vCtx.arc(cx, cy, 14 * dpr, 0, Math.PI*2);
+  vCtx.fillStyle = 'rgba(0,245,160,0.10)'; vCtx.fill();
+  vCtx.beginPath(); vCtx.arc(cx, cy, 7 * dpr, 0, Math.PI*2);
+  vCtx.fillStyle = '#00f5a0'; vCtx.fill();
+
+  // Correction arrow — find nearest vowel and draw vector
+  const { vowel: nearest } = findNearestVowel(cur.f1, cur.f2);
+  const tx = xOf(nearest.F2);
+  const ty = yOf(nearest.F1);
+  const frac = PROFILES[currentProfile].arrowFraction;
+
+  // Arrow endpoint (fraction of the way toward canonical target)
+  const ax = cx + (tx - cx) * frac;
+  const ay = cy + (ty - cy) * frac;
+  const dist = Math.sqrt((tx-cx)**2 + (ty-cy)**2);
+
+  if (dist > 12 * dpr) {
+    // Dashed line: current → correction endpoint
+    vCtx.strokeStyle = 'rgba(0,195,255,0.6)';
+    vCtx.lineWidth = 1.5;
+    vCtx.setLineDash([5 * dpr, 3 * dpr]);
+    vCtx.beginPath(); vCtx.moveTo(cx, cy); vCtx.lineTo(ax, ay); vCtx.stroke();
+    vCtx.setLineDash([]);
+
+    // Arrowhead
+    const angle = Math.atan2(ay - cy, ax - cx);
+    const headLen = 8 * dpr;
+    vCtx.fillStyle = '#00c3ff';
     vCtx.beginPath();
-    vCtx.arc(x, y, 6 * window.devicePixelRatio, 0, Math.PI*2);
-    vCtx.fillStyle = '#00f5a0';
-    vCtx.fill();
-    // Glow
-    vCtx.beginPath();
-    vCtx.arc(x, y, 12 * window.devicePixelRatio, 0, Math.PI*2);
-    vCtx.fillStyle = 'rgba(0,245,160,0.15)';
-    vCtx.fill();
+    vCtx.moveTo(ax, ay);
+    vCtx.lineTo(ax - headLen * Math.cos(angle - 0.45), ay - headLen * Math.sin(angle - 0.45));
+    vCtx.lineTo(ax - headLen * Math.cos(angle + 0.45), ay - headLen * Math.sin(angle + 0.45));
+    vCtx.closePath(); vCtx.fill();
+
+    // Correction endpoint dot
+    vCtx.beginPath(); vCtx.arc(ax, ay, 5 * dpr, 0, Math.PI*2);
+    vCtx.fillStyle = '#00c3ff'; vCtx.fill();
+
+    // Faint line continuing to full target
+    vCtx.strokeStyle = 'rgba(0,195,255,0.12)';
+    vCtx.lineWidth = 1;
+    vCtx.setLineDash([3 * dpr, 5 * dpr]);
+    vCtx.beginPath(); vCtx.moveTo(ax, ay); vCtx.lineTo(tx, ty); vCtx.stroke();
+    vCtx.setLineDash([]);
+
+    // "Correction vector" label near the arrow
+    const midX = (cx + ax) / 2;
+    const midY = (cy + ay) / 2;
+    const perpX = -(ay - cy) / dist;
+    const perpY =  (ax - cx) / dist;
+    vCtx.fillStyle = 'rgba(0,195,255,0.75)';
+    vCtx.font = `${8 * dpr}px Inter,sans-serif`;
+    vCtx.fillText('correction vector', midX + perpX * 14 * dpr, midY + perpY * 14 * dpr);
   }
 }
 
-/* ─── DSP helpers ─── */
+/* ── DSP helpers (preserved) ── */
 
-// 3-tap anti-alias + decimate by 3
 function decimate3(buf) {
   const out = new Float32Array(Math.floor(buf.length / 3));
-  let prev1 = 0, prev2 = 0;
-  let j = 0;
+  let prev1 = 0, prev2 = 0, j = 0;
   for (let i = 0; i < buf.length - 2; i++) {
     const aa = 0.25 * prev2 + 0.5 * prev1 + 0.25 * buf[i];
     prev2 = prev1; prev1 = buf[i];
@@ -798,7 +1108,6 @@ function decimate3(buf) {
   return out;
 }
 
-// Levinson-Durbin LPC
 function levDur(x, p) {
   const r = new Float32Array(p + 1);
   for (let k = 0; k <= p; k++) {
@@ -807,7 +1116,6 @@ function levDur(x, p) {
     r[k] = s;
   }
   if (r[0] < 1e-10) return new Float32Array(p);
-
   const a = new Float32Array(p);
   const tmp = new Float32Array(p);
   let E = r[0];
@@ -823,7 +1131,6 @@ function levDur(x, p) {
   return a;
 }
 
-// LPC spectrum peaks → formants
 function formantPeaks(a, p, sr) {
   const N = 512;
   const peaks = [];
@@ -832,8 +1139,8 @@ function formantPeaks(a, p, sr) {
     const omega = Math.PI * k / N;
     let re = 1, im = 0;
     for (let j = 0; j < p; j++) {
-      const c = Math.cos((j+1)*omega), s = Math.sin((j+1)*omega);
-      re += a[j] * c; im += a[j] * s;
+      re += a[j] * Math.cos((j+1)*omega);
+      im += a[j] * Math.sin((j+1)*omega);
     }
     const mag = 1 / (re*re + im*im);
     if (k > 1) {
@@ -842,21 +1149,18 @@ function formantPeaks(a, p, sr) {
     }
     prev = cur; cur = mag;
   }
-  peaks.sort((a,b) => b.m - a.m);
-  const result = [];
-  const used = [];
+  peaks.sort((a, b) => b.m - a.m);
+  const result = [], used = [];
   for (const pk of peaks) {
     if (used.some(u => Math.abs(u - pk.f) < 80)) continue;
-    result.push(pk.f);
-    used.push(pk.f);
+    result.push(pk.f); used.push(pk.f);
     if (result.length === 3) break;
   }
-  result.sort((a,b) => a-b);
+  result.sort((a, b) => a - b);
   while (result.length < 3) result.push(0);
   return result;
 }
 
-// F0 by autocorrelation (80–500 Hz)
 function estimateF0(buf, sr) {
   const minLag = Math.floor(sr / 500);
   const maxLag = Math.floor(sr / 80);
@@ -872,7 +1176,6 @@ function estimateF0(buf, sr) {
   return bestR > 0.4 && bestLag > 0 ? sr / bestLag : 0;
 }
 
-// HNR from autocorrelation
 function estimateHNR(buf, sr, f0) {
   if (!f0 || f0 < 50) return 0;
   const lag = Math.round(sr / f0);
@@ -885,7 +1188,6 @@ function estimateHNR(buf, sr, f0) {
   return 10 * Math.log10(ratio / (1 - ratio));
 }
 
-// Init canvas sizes on load
 window.addEventListener('load', () => { resize(); drawVowelSpace(); });
 </script>
 </body>

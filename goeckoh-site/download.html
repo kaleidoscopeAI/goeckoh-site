@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Early Access — Goeckoh</title>
-  <meta name="description" content="Join the Goeckoh early access program. $20/month. Real-time speech correction for ASD, dysarthria, and apraxia.">
+  <title>Get Early Access — Goeckoh</title>
+  <meta name="description" content="Get early access to Goeckoh — real-time voice correction for ASD, dysarthria, and apraxia. $20/month.">
   <link rel="stylesheet" href="goeckoh-shared.css">
   <style>
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
@@ -13,93 +13,158 @@
     .page-wrap {
       min-height: 100vh;
       padding-top: var(--gk-nav-h);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding-bottom: 4rem;
-      position: relative;
-      overflow: hidden;
+      display: flex; align-items: flex-start; justify-content: center;
+      padding: calc(var(--gk-nav-h) + 3rem) 1.5rem 5rem;
+      position: relative; overflow: hidden;
     }
     .page-wrap::before {
-      content:'';
-      position:absolute; inset:0;
+      content:''; position:absolute; inset:0; pointer-events:none;
       background:
-        radial-gradient(ellipse 70% 50% at 20% 40%, rgba(77,124,254,0.07) 0%, transparent 60%),
-        radial-gradient(ellipse 55% 60% at 80% 60%, rgba(20,197,145,0.05) 0%, transparent 60%);
-      pointer-events:none;
+        radial-gradient(ellipse 80% 60% at 15% 30%, rgba(20,197,145,0.05) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 70% at 85% 70%, rgba(77,124,254,0.06) 0%, transparent 60%);
     }
 
-    .ea-card { max-width:680px; width:100%; margin:2rem 1.5rem; position:relative; }
+    /* ── Main card ── */
+    .ea-card {
+      max-width: 640px; width: 100%;
+      display: flex; flex-direction: column; gap: 1.5rem;
+      position: relative; z-index: 1;
+    }
 
-    .ea-header { text-align:center; margin-bottom:2.5rem; }
+    /* ── Header ── */
+    .ea-header { text-align: center; }
     .ea-eyebrow {
-      display:inline-block; background:rgba(20,197,145,0.1); border:1px solid rgba(20,197,145,0.22);
-      color:var(--gk-teal); font-size:0.68rem; font-weight:700;
-      letter-spacing:0.15em; text-transform:uppercase;
-      padding:0.35rem 0.9rem; border-radius:999px; margin-bottom:1.5rem;
+      display: inline-block;
+      background: rgba(20,197,145,0.1); border: 1px solid rgba(20,197,145,0.22);
+      color: var(--gk-teal); font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      padding: 0.3rem 0.9rem; border-radius: 999px; margin-bottom: 1.25rem;
     }
-    .ea-title { font-size:clamp(2rem,4vw,2.8rem); font-weight:900; letter-spacing:-0.03em; line-height:1.08; margin-bottom:1rem; }
-    .ea-sub { font-size:0.95rem; color:var(--gk-text-2); line-height:1.8; }
-
-    .ea-form-card {
-      background:var(--gk-bg-card); border:1.5px solid rgba(77,124,254,0.22);
-      border-radius:20px; padding:2.5rem;
-      box-shadow:0 0 50px rgba(77,124,254,0.1), 0 0 100px rgba(0,0,0,0.4);
+    .ea-title {
+      font-size: clamp(2rem, 4vw, 2.75rem); font-weight: 900;
+      letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 0.85rem;
+    }
+    .ea-sub {
+      font-size: 0.9rem; color: var(--gk-text-2); line-height: 1.8;
+      max-width: 480px; margin: 0 auto;
     }
 
-    .form-group { margin-bottom:1.25rem; }
-    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
-    @media(max-width:500px){ .form-row{ grid-template-columns:1fr; } }
+    /* ── Payment card ── */
+    .pay-card {
+      background: var(--gk-bg-card);
+      border: 1.5px solid rgba(77,124,254,0.22);
+      border-radius: 20px;
+      padding: 2.25rem 2.25rem 2rem;
+      box-shadow: 0 0 60px rgba(77,124,254,0.08), 0 0 120px rgba(0,0,0,0.35);
+    }
 
+    /* Price row */
+    .price-row {
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(20,197,145,0.06); border: 1px solid rgba(20,197,145,0.15);
+      border-radius: var(--gk-radius-sm); padding: 1rem 1.25rem;
+      margin-bottom: 1.75rem;
+    }
+    .price-name { font-size: 0.85rem; color: var(--gk-text-2); font-weight: 500; }
+    .price-amount { font-size: 1.5rem; font-weight: 900; color: var(--gk-teal); }
+    .price-amount span { font-size: 0.78rem; font-weight: 400; color: var(--gk-text-2); }
+
+    /* Perks */
+    .perks {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 0.6rem; margin-bottom: 2rem; list-style: none;
+    }
+    @media (max-width: 480px) { .perks { grid-template-columns: 1fr; } }
+    .perk {
+      display: flex; align-items: flex-start; gap: 0.55rem;
+      font-size: 0.8rem; color: var(--gk-text-2); line-height: 1.4;
+    }
+    .perk-check { color: var(--gk-teal); font-weight: 800; flex-shrink: 0; font-size: 0.78rem; }
+
+    /* Pay button */
+    .pay-btn {
+      display: block; width: 100%;
+      padding: 1.05rem 1.5rem;
+      background: var(--gk-primary);
+      color: #fff; font-family: var(--gk-font); font-size: 1rem; font-weight: 700;
+      border: none; border-radius: 999px; cursor: pointer; text-decoration: none;
+      text-align: center;
+      transition: all 0.18s;
+      box-shadow: 0 6px 24px rgba(77,124,254,0.3);
+    }
+    .pay-btn:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 10px 32px rgba(77,124,254,0.4); }
+
+    .pay-legal {
+      font-size: 0.69rem; color: var(--gk-muted); text-align: center;
+      margin-top: 1rem; line-height: 1.7;
+    }
+    .pay-legal a { color: var(--gk-primary); text-decoration: none; }
+
+    /* Divider */
+    .divider { border: none; border-top: 1px solid var(--gk-border); margin: 1.75rem 0; }
+
+    /* Already have a key */
+    .key-row {
+      display: flex; align-items: center; justify-content: center; gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .key-label { font-size: 0.8rem; color: var(--gk-text-2); }
+    .key-link {
+      font-size: 0.8rem; font-weight: 600; color: var(--gk-teal);
+      text-decoration: none; border: 1px solid rgba(20,197,145,0.3);
+      padding: 0.35rem 0.85rem; border-radius: 999px;
+      transition: background 0.15s;
+    }
+    .key-link:hover { background: rgba(20,197,145,0.08); }
+
+    /* ── Trust row ── */
+    .trust-row {
+      display: flex; align-items: center; justify-content: center;
+      gap: 1.5rem; flex-wrap: wrap;
+    }
+    .trust-item {
+      display: flex; align-items: center; gap: 0.4rem;
+      font-size: 0.72rem; color: var(--gk-muted);
+    }
+    .trust-icon { font-size: 0.85rem; }
+
+    /* ── Post-payment screen ── */
+    .success-screen {
+      display: none; text-align: center; padding: 1rem 0;
+    }
+    .success-icon { font-size: 3rem; display: block; margin-bottom: 1.1rem; }
+    .success-title { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.75rem; }
+    .success-body { font-size: 0.88rem; color: var(--gk-text-2); line-height: 1.8; max-width: 400px; margin: 0 auto 2rem; }
+    .success-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    /* ── Fallback / no Stripe configured ── */
+    .waitlist-fallback { display: none; }
+    .form-group { margin-bottom: 1.1rem; }
     .form-label {
-      display:block; font-size:0.72rem; font-weight:600; color:var(--gk-text-2);
-      text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.5rem;
+      display: block; font-size: 0.7rem; font-weight: 600; color: var(--gk-text-2);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.45rem;
     }
     .form-input, .form-select {
-      width:100%; background:var(--gk-bg-raised); border:1.5px solid var(--gk-border-2);
-      border-radius:var(--gk-radius-sm); color:var(--gk-text); font-family:var(--gk-font);
-      font-size:0.9rem; padding:0.75rem 1rem; outline:none;
-      transition:border-color 0.15s; appearance:none;
+      width: 100%; background: var(--gk-bg-raised); border: 1.5px solid var(--gk-border-2);
+      border-radius: var(--gk-radius-sm); color: var(--gk-text); font-family: var(--gk-font);
+      font-size: 0.9rem; padding: 0.75rem 1rem; outline: none;
+      transition: border-color 0.15s; appearance: none;
     }
-    .form-input:focus, .form-select:focus { border-color:var(--gk-primary); }
-    .form-input::placeholder { color:var(--gk-muted); }
-    .form-select option { background:var(--gk-bg-card); }
-
+    .form-input:focus, .form-select:focus { border-color: var(--gk-primary); }
+    .form-input::placeholder { color: var(--gk-muted); }
+    .form-select option { background: var(--gk-bg-card); }
     .form-submit {
-      width:100%; padding:1rem; font-size:1rem; font-weight:700;
-      background:var(--gk-primary); color:#fff;
-      border:none; border-radius:999px; cursor:pointer;
-      font-family:var(--gk-font); transition:all 0.18s; margin-top:0.75rem;
+      width: 100%; padding: 1rem; font-size: 1rem; font-weight: 700;
+      background: var(--gk-primary); color: #fff;
+      border: none; border-radius: 999px; cursor: pointer;
+      font-family: var(--gk-font); transition: all 0.18s; margin-top: 0.5rem;
     }
-    .form-submit:hover { opacity:0.88; transform:translateY(-1px); box-shadow:0 8px 28px rgba(77,124,254,0.35); }
-    .form-submit:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
-
-    .form-legal { font-size:0.7rem; color:var(--gk-muted); text-align:center; margin-top:1rem; line-height:1.6; }
-    .form-legal a { color:var(--gk-primary); text-decoration:none; }
-
-    .perks { display:grid; grid-template-columns:1fr 1fr; gap:0.6rem; margin:1.75rem 0; list-style:none; }
-    @media(max-width:480px){ .perks{ grid-template-columns:1fr; } }
-    .perk { display:flex; align-items:flex-start; gap:0.6rem; font-size:0.8rem; color:var(--gk-text-2); line-height:1.5; }
-    .perk::before { content:'✓'; color:var(--gk-teal); font-weight:800; font-size:0.75rem; flex-shrink:0; margin-top:0.1rem; }
-
-    .divider { border:none; border-top:1px solid var(--gk-border); margin:1.75rem 0; }
-
-    .price-line {
-      display:flex; align-items:center; justify-content:space-between;
-      background:rgba(20,197,145,0.06); border:1px solid rgba(20,197,145,0.15);
-      border-radius:var(--gk-radius-sm); padding:0.85rem 1.1rem; margin-bottom:1.5rem;
-    }
-    .price-desc { font-size:0.83rem; color:var(--gk-text-2); }
-    .price-amount { font-size:1.4rem; font-weight:900; color:var(--gk-teal); }
-
-    .success-msg { display:none; text-align:center; padding:2rem 1rem; }
-    .success-icon { font-size:3rem; margin-bottom:1rem; display:block; }
-    .success-title { font-size:1.4rem; font-weight:800; margin-bottom:0.6rem; }
-    .success-sub { font-size:0.9rem; color:var(--gk-text-2); line-height:1.75; }
-    .success-actions { margin-top:2rem; display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; }
+    .form-submit:hover { opacity: 0.88; transform: translateY(-1px); }
+    .form-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
   </style>
 </head>
 <body>
+
 <nav class="gk-nav">
   <a href="index.html" class="gk-nav-brand">
     <img src="images/logo-clean.png" alt="Goeckoh" class="gk-nav-logo">
@@ -109,130 +174,186 @@
     </div>
   </a>
   <div class="gk-nav-links" id="gkNav">
-    <a href="index.html#science"   class="gk-nav-link">The Science</a>
-    <a href="index.html#families"  class="gk-nav-link">For Families</a>
-    <a href="index.html#pricing"   class="gk-nav-link">Pricing</a>
-    <a href="demo.html"            class="gk-nav-link">Try the Demo</a>
+    <a href="index.html"  class="gk-nav-link">Science</a>
+    <a href="demo.html"   class="gk-nav-link">Demo</a>
   </div>
-  <a href="download.html" class="gk-nav-cta">Get Early Access</a>
+  <a href="download.html" class="gk-nav-cta">Get Access</a>
   <button class="gk-nav-toggle" onclick="document.getElementById('gkNav').classList.toggle('gk-open')" aria-label="Menu">☰</button>
 </nav>
 
 <div class="page-wrap">
   <div class="ea-card">
+
+    <!-- Header -->
     <div class="ea-header">
-      <div class="ea-eyebrow">Limited Spots Available</div>
-      <h1 class="ea-title">Start Early Access Today</h1>
+      <div class="ea-eyebrow">Limited Early Access</div>
+      <h1 class="ea-title">Start correcting today</h1>
       <p class="ea-sub">
-        Goeckoh is in early access for families, caregivers, and clinicians.
-        Reserve your spot below — we'll reach out within 48 hours with setup instructions.
+        Real-time voice correction for children with ASD, dysarthria, and apraxia.
+        Works on any device. Your data never leaves the device.
       </p>
     </div>
 
-    <div class="ea-form-card">
-      <div class="price-line">
-        <div class="price-desc">One price. One person. Everything included.</div>
-        <div class="price-amount">$20 <span style="font-size:0.75rem;font-weight:500;color:var(--gk-text-2)">/mo</span></div>
-      </div>
+    <!-- Payment card (shown by default) -->
+    <div class="pay-card" id="payCard">
 
-      <ul class="perks">
-        <li class="perk">Unlimited sessions</li>
-        <li class="perk">Guardian monitoring</li>
-        <li class="perk">8 correction profiles</li>
-        <li class="perk">Voice games for kids</li>
-        <li class="perk">Real-time dashboard</li>
-        <li class="perk">Works on any device</li>
-        <li class="perk">Your data stays on-device</li>
-        <li class="perk">Cancel any time</li>
-      </ul>
-
-      <hr class="divider">
-
-      <form id="accessForm" onsubmit="handleSubmit(event)" novalidate>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label" for="firstName">First Name</label>
-            <input class="form-input" type="text" id="firstName" placeholder="Alex" required autocomplete="given-name">
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="lastName">Last Name</label>
-            <input class="form-input" type="text" id="lastName" placeholder="Rivera" required autocomplete="family-name">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="email">Email Address</label>
-          <input class="form-input" type="email" id="email" placeholder="you@email.com" required autocomplete="email">
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="role">I am a…</label>
-          <select class="form-select" id="role" required>
-            <option value="" disabled selected>Select your role</option>
-            <option value="parent">Parent or Family Member</option>
-            <option value="caregiver">Caregiver or Support Person</option>
-            <option value="clinician">Speech-Language Pathologist</option>
-            <option value="researcher">Researcher or Academic</option>
-            <option value="educator">Special Education Teacher</option>
-            <option value="self">Person with a Speech Disorder</option>
-            <option value="other">Other</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="condition">Primary condition (optional)</label>
-          <select class="form-select" id="condition">
-            <option value="" selected>Select if applicable</option>
-            <option value="asd">Autism Spectrum Disorder (ASD)</option>
-            <option value="dysarthria">Dysarthria</option>
-            <option value="apraxia">Apraxia of Speech</option>
-            <option value="stroke">Post-stroke</option>
-            <option value="other-motor">Other motor speech disorder</option>
-            <option value="exploring">Just exploring</option>
-          </select>
-        </div>
-        <button type="submit" class="form-submit" id="submitBtn">Request Early Access →</button>
-        <p class="form-legal">
-          No credit card required. By submitting you agree to our
-          <a href="#">Privacy Policy</a> — your data is never sold or shared.
-          All voice data stays on your device.
-        </p>
-      </form>
-
-      <div class="success-msg" id="successMsg">
+      <!-- Success screen shown after Stripe redirect -->
+      <div class="success-screen" id="successScreen">
         <span class="success-icon">✓</span>
-        <div class="success-title">You're in the queue!</div>
-        <p class="success-sub">
-          We'll reach out to the email you provided within 48 hours
-          with your setup instructions and first month details.
-          <br><br>
-          In the meantime, try the live demo — no signup required.
+        <div class="success-title">Payment received — thank you</div>
+        <p class="success-body">
+          Your license key is on its way. Check the email you used at checkout —
+          it arrives within a few minutes. Use that key at the download portal to
+          get your app.
         </p>
         <div class="success-actions">
-          <a href="demo.html" class="gk-btn gk-btn-primary">Try the Demo →</a>
-          <a href="index.html" class="gk-btn gk-btn-secondary">Back to Home</a>
+          <a id="portalBtn" href="#" class="gk-btn gk-btn-primary" target="_blank">Download your app →</a>
+          <a href="demo.html" class="gk-btn gk-btn-secondary">Try the demo</a>
         </div>
       </div>
+
+      <!-- Waitlist fallback (shown when Stripe not yet configured) -->
+      <div class="waitlist-fallback" id="waitlistFallback">
+        <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--gk-teal);margin-bottom:1.25rem">Join the waitlist</div>
+        <div class="form-group">
+          <label class="form-label" for="wfName">Your name</label>
+          <input class="form-input" type="text" id="wfName" placeholder="First name" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="wfEmail">Email</label>
+          <input class="form-input" type="email" id="wfEmail" placeholder="you@email.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="wfRole">Your role</label>
+          <select class="form-select" id="wfRole" required>
+            <option value="" disabled selected>Select</option>
+            <option value="parent">Parent or family member</option>
+            <option value="caregiver">Caregiver</option>
+            <option value="slp">Speech-Language Pathologist</option>
+            <option value="educator">Special education teacher</option>
+            <option value="researcher">Researcher</option>
+            <option value="self">Person with a speech disorder</option>
+          </select>
+        </div>
+        <button type="button" class="form-submit" onclick="submitWaitlist()">Request early access →</button>
+        <p style="font-size:0.69rem;color:var(--gk-muted);text-align:center;margin-top:0.85rem;line-height:1.65">
+          No payment now. We'll reach out within 48 hours. All voice data stays on-device.
+        </p>
+      </div>
+
+      <!-- Normal payment flow (shown when Stripe is configured) -->
+      <div id="payFlow">
+        <div class="price-row">
+          <div class="price-name">Early access · everything included</div>
+          <div class="price-amount">$20 <span>/ month</span></div>
+        </div>
+
+        <ul class="perks">
+          <li class="perk"><span class="perk-check">✓</span> Unlimited sessions</li>
+          <li class="perk"><span class="perk-check">✓</span> Guardian dashboard</li>
+          <li class="perk"><span class="perk-check">✓</span> ASD, dysarthria &amp; apraxia profiles</li>
+          <li class="perk"><span class="perk-check">✓</span> Android, Windows, Mac, Linux</li>
+          <li class="perk"><span class="perk-check">✓</span> ABA progress tracking</li>
+          <li class="perk"><span class="perk-check">✓</span> Voice data stays on-device</li>
+          <li class="perk"><span class="perk-check">✓</span> Up to 2 devices per license</li>
+          <li class="perk"><span class="perk-check">✓</span> Cancel any time</li>
+        </ul>
+
+        <a id="stripeBtn" href="#" class="pay-btn">Get early access — $20/month</a>
+
+        <p class="pay-legal">
+          Secure checkout via Stripe. Cancel any time — no questions asked.
+          Your voice data is never sent to our servers.
+          <a href="mailto:care@goeckoh.com">Questions? care@goeckoh.com</a>
+        </p>
+
+        <hr class="divider">
+
+        <div class="key-row">
+          <span class="key-label">Already have a license key?</span>
+          <a id="portalLink" href="#" class="key-link" target="_blank">Download your app →</a>
+        </div>
+      </div>
+
+    </div><!-- /pay-card -->
+
+    <!-- Trust signals -->
+    <div class="trust-row">
+      <div class="trust-item"><span class="trust-icon">🔒</span> Voice stays on-device</div>
+      <div class="trust-item"><span class="trust-icon">↩</span> Cancel any time</div>
+      <div class="trust-item"><span class="trust-icon">📧</span> care@goeckoh.com</div>
     </div>
-  </div>
+
+  </div><!-- /ea-card -->
 </div>
 
 <script>
-  function handleSubmit(e) {
-    e.preventDefault();
-    const first = document.getElementById('firstName').value.trim();
-    const last  = document.getElementById('lastName').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const role  = document.getElementById('role').value;
-    const cond  = document.getElementById('condition').value;
-    if (!email || !role || !first || !last) return;
+  // ─────────────────────────────────────────────────────────────────────────
+  // CONFIGURE THESE TWO VALUES BEFORE LAUNCH
+  //
+  //   STRIPE_PAYMENT_LINK  — create at dashboard.stripe.com → Payment Links
+  //                          Set your product to "Goeckoh Early Access" at $20/mo
+  //                          In the link settings, add a redirect URL:
+  //                            https://goeckoh.com/download.html?payment=success
+  //                          Copy the buy.stripe.com/... URL here.
+  //
+  //   BACKEND_URL          — URL where the backend is running, e.g.
+  //                            https://api.goeckoh.com
+  //                          The download portal lives at BACKEND_URL/account
+  //
+  // ─────────────────────────────────────────────────────────────────────────
+  const STRIPE_PAYMENT_LINK = '';   // e.g. 'https://buy.stripe.com/abc123'
+  const BACKEND_URL          = '';  // e.g. 'https://api.goeckoh.com'
+  // ─────────────────────────────────────────────────────────────────────────
 
-    localStorage.setItem('gk_access', email);
-    localStorage.setItem('gk_access_name', first + ' ' + last);
-    localStorage.setItem('gk_access_role', role);
-    localStorage.setItem('gk_access_condition', cond);
-    localStorage.setItem('gk_access_ts', Date.now());
+  const portalURL = BACKEND_URL ? BACKEND_URL + '/account' : '#';
 
-    document.getElementById('accessForm').style.display = 'none';
-    document.getElementById('successMsg').style.display = 'block';
+  // Wire up portal links
+  document.getElementById('portalBtn').href  = portalURL;
+  document.getElementById('portalLink').href = portalURL;
+
+  // Check for post-payment redirect
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('payment') === 'success') {
+    document.getElementById('payFlow').style.display    = 'none';
+    document.getElementById('successScreen').style.display = 'block';
+  }
+
+  // Configure the page based on whether Stripe is set up
+  if (STRIPE_PAYMENT_LINK) {
+    document.getElementById('stripeBtn').href = STRIPE_PAYMENT_LINK;
+  } else {
+    // Stripe not yet configured — fall back to waitlist
+    document.getElementById('payFlow').style.display         = 'none';
+    document.getElementById('waitlistFallback').style.display = 'block';
+  }
+
+  function submitWaitlist() {
+    const name  = document.getElementById('wfName').value.trim();
+    const email = document.getElementById('wfEmail').value.trim();
+    const role  = document.getElementById('wfRole').value;
+    if (!name || !email || !role) return;
+
+    localStorage.setItem('gk_wl_name',  name);
+    localStorage.setItem('gk_wl_email', email);
+    localStorage.setItem('gk_wl_role',  role);
+    localStorage.setItem('gk_wl_ts',    Date.now());
+
+    document.getElementById('waitlistFallback').innerHTML = `
+      <div style="text-align:center;padding:1.5rem 0">
+        <div style="font-size:2.5rem;margin-bottom:1rem">✓</div>
+        <div style="font-size:1.1rem;font-weight:800;margin-bottom:0.6rem">You're on the list</div>
+        <p style="font-size:0.82rem;color:var(--gk-text-2);line-height:1.75">
+          We'll reach out to <strong style="color:var(--gk-text)">${email}</strong>
+          within 48 hours with setup instructions.
+        </p>
+        <a href="demo.html" class="gk-btn gk-btn-primary" style="display:inline-block;margin-top:1.5rem">
+          Try the demo →
+        </a>
+      </div>
+    `;
   }
 </script>
+
 </body>
 </html>
