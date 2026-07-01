@@ -1,0 +1,33 @@
+# Fly.io configuration for goeckoh-backend
+app = "goeckoh-backend"
+primary_region = "iad"
+
+[build]
+
+# Non-secret environment variables (secrets set via fly secrets)
+[env]
+  DATABASE_URL       = "sqlite:////data/goeckoh_licenses.db"
+  DOWNLOADS_DIR      = "/app/downloads"
+  SEND_EMAIL_ENABLED = "true"
+  SMTP_HOST          = "smtp.gmail.com"
+  SMTP_PORT          = "587"
+  SMTP_USER          = "jmgraham1000@gmail.com"
+  FROM_EMAIL         = "care@goeckoh.com"
+  ALLOWED_ORIGINS    = "https://goeckoh.com,https://www.goeckoh.com"
+
+[http_service]
+  internal_port        = 8000
+  force_https          = true
+  auto_stop_machines   = true
+  auto_start_machines  = true
+  min_machines_running = 0
+
+[[vm]]
+  memory   = "512mb"
+  cpu_kind = "shared"
+  cpus     = 1
+
+# Persistent volume for SQLite database
+[[mounts]]
+  source      = "goeckoh_data"
+  destination = "/data"
