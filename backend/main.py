@@ -123,7 +123,7 @@ init_db()
 # `python preflight.py` for the full report. Never prints secret values.
 try:
     from preflight import run_checks
-    _pf = run_checks()
+    _pf = run_checks(include_live_checks=False)
     log.info("Preflight: %s", _pf.summary_line())
     for _c in _pf.blockers:
         log.warning("Preflight BLOCKER — %s: %s", _c.name, _c.detail)

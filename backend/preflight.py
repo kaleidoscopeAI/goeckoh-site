@@ -8,11 +8,14 @@ intend to deploy on:
 
     python preflight.py            # human-readable report; exit 1 if any BLOCKER
     python preflight.py --json     # machine-readable (for monitoring / CI)
+    python preflight.py --offline  # format/config checks only, no Stripe/GitHub calls
 
-It is also imported by main.py to log a one-line readiness summary on startup,
-so a half-configured server announces itself in the logs instead of failing
-silently at the worst moment (e.g. payment succeeds but no license email goes
-out because SMTP was never set).
+It is also imported by main.py to log a one-line readiness summary on startup
+(offline mode — see run_checks() docstring for why), so a half-configured
+server announces itself in the logs instead of failing silently at the worst
+moment (e.g. payment succeeds but no license email goes out because SMTP was
+never set). Run it interactively with live checks for the full picture,
+including whether Stripe is actually configured correctly end-to-end.
 
 No secret VALUES are ever printed — only whether each one is present and
 plausible. Safe to run anywhere, safe to paste the output.
@@ -95,7 +98,42 @@ class Report:
                 f"{len(self.warnings)} warning(s). Run `python preflight.py`.")
 
 
-def run_checks() -> Report:
+class _BoundedStripeClient:
+    """Temporarily swaps in a short-timeout Stripe HTTP client for the
+    duration of the `with` block, then restores whatever was there before.
+    stripe-python's default timeout is 80s — fine for a webhook handler
+    mid-request, much too long for a preflight probe that must not stall."""
+
+    def __init__(self, seconds: float = 8):
+        self._seconds = seconds
+        self._previous = None
+
+    def __enter__(self):
+        import stripe as _stripe
+        from stripe._http_client import RequestsClient
+        self._previous = _stripe.default_http_client
+        _stripe.default_http_client = RequestsClient(timeout=self._seconds)
+        return self
+
+    def __exit__(self, *exc):
+        import stripe as _stripe
+        _stripe.default_http_client = self._previous
+
+
+def run_checks(include_live_checks: bool = True) -> Report:
+    """`include_live_checks=True` (the default, used by the `python
+    preflight.py` CLI) makes real Stripe/GitHub API calls to catch failures a
+    format check can't see — e.g. a restricted Stripe key that authenticates
+    but is scoped wrong, or a webhook endpoint that was never registered.
+
+    main.py runs this synchronously on every process boot to log a readiness
+    summary; with `include_live_checks=True` that would mean every cold
+    start (this app scales to zero — `min_machines_running = 0`) blocks on
+    two Stripe round-trips and a GitHub round-trip before the server can
+    accept the request that triggered the start. main.py passes
+    `include_live_checks=False` so boot stays a pure format/config check —
+    offline, fast, can't be slowed or wedged by a third party being slow.
+    """
     r = Report()
 
     # ── JWT signing secret ───────────────────────────────────────────────────
@@ -118,23 +156,29 @@ def run_checks() -> Report:
         r.add("STRIPE_SECRET_KEY", WARNING, "TEST key (sk_test_) — sandbox only, not real sales",
               "swap to sk_live_... before public launch")
     elif sk.startswith("sk_live_") or sk.startswith("rk_live_"):
-        # This app calls Checkout Session and Subscription reads (verify-session,
-        # webhook plan lookup). A restricted key (rk_live_) that's the wrong one
-        # or missing those scopes authenticates fine but 403s on exactly those
-        # calls — the prefix alone doesn't prove it works, so actually call it.
-        try:
-            import stripe as _stripe
-            _stripe.api_key = sk
-            _stripe.checkout.Session.list(limit=1)
-            _stripe.Subscription.list(limit=1)
-            kind = "restricted" if sk.startswith("rk_live_") else "full secret"
+        kind = "restricted" if sk.startswith("rk_live_") else "full secret"
+        if not include_live_checks:
             r.add("STRIPE_SECRET_KEY", OK,
-                  f"live {kind} key present and can read Checkout Sessions + Subscriptions")
-        except Exception as e:
-            r.add("STRIPE_SECRET_KEY", BLOCKER,
-                  f"live key present but the API rejected a real call: {e}",
-                  "if this is a restricted key (rk_live_), grant it Checkout Sessions: Read "
-                  "and Subscriptions: Read, or switch to the full sk_live_ secret key")
+                  f"live {kind} key present (format only — run `python preflight.py` "
+                  "for a live scope check)")
+        else:
+            # This app calls Checkout Session and Subscription reads (verify-session,
+            # webhook plan lookup). A restricted key (rk_live_) that's the wrong one
+            # or missing those scopes authenticates fine but 403s on exactly those
+            # calls — the prefix alone doesn't prove it works, so actually call it.
+            try:
+                import stripe as _stripe
+                with _BoundedStripeClient():
+                    _stripe.api_key = sk
+                    _stripe.checkout.Session.list(limit=1)
+                    _stripe.Subscription.list(limit=1)
+                r.add("STRIPE_SECRET_KEY", OK,
+                      f"live {kind} key present and can read Checkout Sessions + Subscriptions")
+            except Exception as e:
+                r.add("STRIPE_SECRET_KEY", BLOCKER,
+                      f"live key present but the API rejected a real call: {e}",
+                      "if this is a restricted key (rk_live_), grant it Checkout Sessions: Read "
+                      "and Subscriptions: Read, or switch to the full sk_live_ secret key")
     else:
         r.add("STRIPE_SECRET_KEY", WARNING, "set but not a recognised Stripe key format",
               "expected sk_live_... or rk_live_... (or sk_test_... for sandbox)")
@@ -153,37 +197,75 @@ def run_checks() -> Report:
     # A correct whsec_ doesn't prove an endpoint pointing at THIS deployment is
     # actually registered in Stripe — that's the failure mode that leaves every
     # real payment stuck (session verified, but no License row, no email, ever).
-    if not _is_placeholder(sk):
+    # Events actually consumed by main.py's webhook handler: checkout.session.completed
+    # creates the license; the rest reactivate/grace/revoke it on the billing lifecycle.
+    _CRITICAL_EVENT = "checkout.session.completed"
+    _LIFECYCLE_EVENTS = {
+        "invoice.payment_succeeded", "invoice.payment_failed",
+        "customer.subscription.updated", "customer.subscription.deleted",
+    }
+    if not include_live_checks:
+        r.add("Stripe webhook endpoint", OK,
+              "not checked in offline mode — run `python preflight.py` to verify "
+              "a live endpoint is registered")
+    elif not _is_placeholder(sk):
+        # FLY_APP_NAME is set automatically by the Fly runtime. Without it (e.g. a
+        # local run) we can't know this deployment's own hostname, so we fall back
+        # to path-only matching and say so explicitly rather than silently
+        # trusting any endpoint anywhere that happens to end in /webhook/stripe.
+        fly_app = os.environ.get("FLY_APP_NAME", "")
+        expected_host = os.environ.get("PUBLIC_BACKEND_HOST", f"{fly_app}.fly.dev" if fly_app else "")
         try:
             import stripe as _stripe
-            _stripe.api_key = sk
-            endpoints = _stripe.WebhookEndpoint.list(limit=20)
-            live_matches = [
+            with _BoundedStripeClient():
+                _stripe.api_key = sk
+                endpoints = _stripe.WebhookEndpoint.list(limit=20)
+            candidates = [
                 e for e in endpoints.data
                 if e.get("url", "").rstrip("/").endswith("/webhook/stripe")
                 and e.get("status") == "enabled"
             ]
+            live_matches = (
+                [e for e in candidates if expected_host and expected_host in e.get("url", "")]
+                if expected_host else candidates
+            )
             if not live_matches:
+                host_note = f" targeting {expected_host}" if expected_host else ""
                 r.add("Stripe webhook endpoint", BLOCKER,
-                      "no enabled endpoint in this Stripe account targets */webhook/stripe — "
-                      "checkout.session.completed will never reach this server",
+                      f"no enabled endpoint in this Stripe account{host_note} targets "
+                      "*/webhook/stripe — checkout.session.completed will never reach this server",
                       "dashboard.stripe.com → Developers → Webhooks → Add endpoint → "
                       "https://<this-host>/webhook/stripe, events: checkout.session.completed, "
                       "invoice.payment_succeeded, invoice.payment_failed, "
                       "customer.subscription.updated, customer.subscription.deleted")
             else:
-                needed = {"checkout.session.completed"}
+                best = None
                 for e in live_matches:
                     events = set(e.get("enabled_events", []))
-                    if "*" in events or needed <= events:
-                        r.add("Stripe webhook endpoint", OK,
-                              f"{e['url']} is enabled and subscribed to checkout.session.completed")
+                    if "*" in events or _CRITICAL_EVENT in events:
+                        best = (e, events)
                         break
-                else:
+                if not best:
                     r.add("Stripe webhook endpoint", BLOCKER,
                           f"endpoint {live_matches[0]['url']} exists but isn't subscribed to "
-                          "checkout.session.completed — licenses will never be created",
+                          f"{_CRITICAL_EVENT} — licenses will never be created",
                           "edit the endpoint in the Stripe dashboard and add that event")
+                else:
+                    e, events = best
+                    missing_lifecycle = _LIFECYCLE_EVENTS - events if "*" not in events else set()
+                    if not expected_host:
+                        r.add("Stripe webhook endpoint", WARNING,
+                              f"{e['url']} matches on path only — set FLY_APP_NAME or "
+                              "PUBLIC_BACKEND_HOST to confirm it's actually this deployment")
+                    elif missing_lifecycle:
+                        r.add("Stripe webhook endpoint", WARNING,
+                              f"{e['url']} handles new purchases but is missing "
+                              f"{', '.join(sorted(missing_lifecycle))} — renewals, failed "
+                              "payments, and cancellations won't update the license",
+                              "add the missing events to this endpoint in the Stripe dashboard")
+                    else:
+                        r.add("Stripe webhook endpoint", OK,
+                              f"{e['url']} is enabled and subscribed to all events the app handles")
         except Exception as e:
             r.add("Stripe webhook endpoint", WARNING,
                   f"could not list webhook endpoints to verify ({e})",
@@ -213,6 +295,10 @@ def run_checks() -> Report:
               "GITHUB_RELEASES_TOKEN not set — every /download returns 503",
               "create a fine-grained PAT with Contents:read on the releases repo, "
               "set GITHUB_RELEASES_TOKEN")
+    elif not include_live_checks:
+        r.add("Installer binaries", OK,
+              "GITHUB_RELEASES_TOKEN present (format only — run `python preflight.py` "
+              "to confirm the release and assets actually exist)")
     else:
         try:
             import requests
@@ -307,7 +393,7 @@ def _print_report(r: Report) -> None:
 
 
 def main() -> int:
-    r = run_checks()
+    r = run_checks(include_live_checks="--offline" not in sys.argv)
     if "--json" in sys.argv:
         print(json.dumps({
             "ready": r.ready,
