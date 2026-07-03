@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="images/logo-clean.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Voice Therapy - Profile & Transform</title>
   <style>
@@ -11,9 +12,9 @@
     
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #0a0e1a 0%, #131829 100%);
-      color: #fff;
+      font-family: var(--gk-font, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+      background: var(--gk-bg, #05080f);
+      color: var(--gk-text, #eef2ff);
       min-height: 100vh;
       padding: 80px 20px 20px;
     }
@@ -31,11 +32,12 @@
     h1 {
       font-size: 32px;
       margin: 0 0 10px 0;
+      color: var(--gk-text, #eef2ff);
     }
 
     .subtitle {
       font-size: 16px;
-      opacity: 0.9;
+      color: var(--gk-text-2, #8b9ec0);
     }
 
     .main-grid {
@@ -46,17 +48,18 @@
     }
 
     .card {
-      background: rgba(255, 255, 255, 0.95);
-      color: #333;
+      background: var(--gk-bg-card, #0a1020);
+      color: var(--gk-text, #eef2ff);
+      border: 1px solid var(--gk-border, rgba(255,255,255,0.07));
       border-radius: 12px;
       padding: 24px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
     }
 
     .card h2 {
       margin: 0 0 16px 0;
       font-size: 20px;
-      color: #667eea;
+      color: var(--gk-teal, #14c591);
       display: flex;
       align-items: center;
       gap: 8px;
@@ -68,7 +71,7 @@
     }
 
     .profile-item {
-      background: #f8f9fa;
+      background: var(--gk-bg-raised, #0f1830);
       padding: 12px;
       margin-bottom: 8px;
       border-radius: 6px;
@@ -78,29 +81,29 @@
     }
 
     .profile-item:hover {
-      background: #e9ecef;
+      background: var(--gk-bg-input, #131e34);
       transform: translateX(4px);
     }
 
     .profile-item.active {
-      border-color: #667eea;
-      background: #e7eaff;
+      border-color: var(--gk-teal, #14c591);
+      background: rgba(20,197,145,0.1);
     }
 
     .profile-item .name {
       font-weight: bold;
-      color: #667eea;
+      color: var(--gk-teal, #14c591);
       margin-bottom: 4px;
     }
 
     .profile-item .meta {
       font-size: 12px;
-      color: #6c757d;
+      color: var(--gk-muted, #48597a);
     }
 
     .profile-item .params {
       font-size: 11px;
-      color: #495057;
+      color: var(--gk-text-2, #8b9ec0);
       margin-top: 4px;
       font-family: 'Courier New', monospace;
     }
@@ -110,19 +113,19 @@
       font-size: 14px;
       border: none;
       border-radius: 8px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
+      background: linear-gradient(135deg, var(--gk-teal, #14c591) 0%, var(--gk-primary, #4d7cfe) 100%);
+      color: #fff;
       cursor: pointer;
       font-weight: 600;
       transition: all 0.3s;
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      box-shadow: 0 4px 12px rgba(77,124,254,0.35);
       width: 100%;
       margin-bottom: 8px;
     }
 
     button:hover:not(:disabled) {
       transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
+      box-shadow: 0 6px 16px rgba(77,124,254,0.45);
     }
 
     button:disabled {
@@ -132,11 +135,13 @@
     }
 
     button.danger {
-      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      background: linear-gradient(135deg, var(--gk-red, #f05060) 0%, #ff7a70 100%);
+      box-shadow: 0 4px 12px rgba(240,80,96,0.35);
     }
 
     button.success {
-      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      background: linear-gradient(135deg, var(--gk-teal, #14c591) 0%, #00e0c0 100%);
+      box-shadow: 0 4px 12px rgba(20,197,145,0.35);
     }
 
     .recording {
@@ -156,15 +161,15 @@
     }
 
     .param-box {
-      background: #f8f9fa;
+      background: var(--gk-bg-raised, #0f1830);
       padding: 12px;
       border-radius: 6px;
-      border-left: 3px solid #667eea;
+      border-left: 3px solid var(--gk-teal, #14c591);
     }
 
     .param-box .label {
       font-size: 11px;
-      color: #6c757d;
+      color: var(--gk-muted, #48597a);
       text-transform: uppercase;
       letter-spacing: 0.5px;
       margin-bottom: 4px;
@@ -173,28 +178,32 @@
     .param-box .value {
       font-size: 18px;
       font-weight: bold;
-      color: #667eea;
+      color: var(--gk-teal, #14c591);
     }
 
     .param-box .range {
       font-size: 10px;
-      color: #adb5bd;
+      color: var(--gk-muted, #48597a);
       margin-top: 2px;
     }
 
     input[type="text"] {
       width: 100%;
       padding: 12px;
-      border: 2px solid #dee2e6;
+      background: var(--gk-bg-input, #131e34);
+      color: var(--gk-text, #eef2ff);
+      border: 2px solid var(--gk-border-2, rgba(255,255,255,0.13));
       border-radius: 6px;
       font-size: 14px;
       margin-bottom: 12px;
       transition: border-color 0.3s;
     }
 
+    input[type="text"]::placeholder { color: var(--gk-muted, #48597a); }
+
     input[type="text"]:focus {
       outline: none;
-      border-color: #667eea;
+      border-color: var(--gk-primary, #4d7cfe);
     }
 
     .slider-container {
@@ -213,7 +222,7 @@
       width: 100%;
       height: 6px;
       border-radius: 3px;
-      background: #dee2e6;
+      background: var(--gk-border-2, rgba(255,255,255,0.13));
       outline: none;
       -webkit-appearance: none;
     }
@@ -223,19 +232,19 @@
       width: 18px;
       height: 18px;
       border-radius: 50%;
-      background: #667eea;
+      background: var(--gk-teal, #14c591);
       cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.35);
     }
 
     input[type="range"]::-moz-range-thumb {
       width: 18px;
       height: 18px;
       border-radius: 50%;
-      background: #667eea;
+      background: var(--gk-teal, #14c591);
       cursor: pointer;
       border: none;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.35);
     }
 
     .status {
@@ -247,29 +256,30 @@
     }
 
     .status.info {
-      background: #d1ecf1;
-      color: #0c5460;
+      background: rgba(77,124,254,0.12);
+      color: var(--gk-primary, #4d7cfe);
     }
 
     .status.success {
-      background: #d4edda;
-      color: #155724;
+      background: rgba(20,197,145,0.12);
+      color: var(--gk-teal, #14c591);
     }
 
     .status.warning {
-      background: #fff3cd;
-      color: #856404;
+      background: rgba(240,168,40,0.12);
+      color: var(--gk-amber, #f0a828);
     }
 
     .status.error {
-      background: #f8d7da;
-      color: #721c24;
+      background: rgba(240,80,96,0.12);
+      color: var(--gk-red, #f05060);
     }
 
     canvas {
       width: 100%;
       height: 200px;
-      background: #000;
+      background: var(--gk-bg, #05080f);
+      border: 1px solid var(--gk-border, rgba(255,255,255,0.07));
       border-radius: 6px;
       margin-top: 12px;
     }
@@ -282,21 +292,22 @@
     }
 
     .comparison-viz {
-      background: rgba(255, 255, 255, 0.95);
-      color: #333;
+      background: var(--gk-bg-card, #0a1020);
+      color: var(--gk-text, #eef2ff);
+      border: 1px solid var(--gk-border, rgba(255,255,255,0.07));
       border-radius: 12px;
       padding: 24px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
     }
 
     .comparison-viz h3 {
       margin: 0 0 12px 0;
       font-size: 16px;
-      color: #667eea;
+      color: var(--gk-teal, #14c591);
     }
 
     .match-meter {
-      background: #f8f9fa;
+      background: var(--gk-bg-raised, #0f1830);
       border-radius: 8px;
       padding: 16px;
       margin-top: 16px;
@@ -304,12 +315,12 @@
 
     .match-meter .label {
       font-size: 12px;
-      color: #6c757d;
+      color: var(--gk-muted, #48597a);
       margin-bottom: 8px;
     }
 
     .match-bar-container {
-      background: #dee2e6;
+      background: var(--gk-border-2, rgba(255,255,255,0.13));
       height: 24px;
       border-radius: 12px;
       overflow: hidden;
@@ -318,7 +329,7 @@
 
     .match-bar {
       height: 100%;
-      background: linear-gradient(90deg, #f093fb 0%, #667eea 50%, #4facfe 100%);
+      background: linear-gradient(90deg, var(--gk-red, #f05060) 0%, var(--gk-amber, #f0a828) 50%, var(--gk-teal, #14c591) 100%);
       transition: width 0.5s;
       border-radius: 12px;
     }
@@ -330,17 +341,18 @@
       transform: translate(-50%, -50%);
       font-weight: bold;
       font-size: 12px;
-      color: #333;
+      color: #fff;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.6);
     }
 
     .training-tips {
-      background: #fff3cd;
-      border-left: 4px solid #ffc107;
+      background: rgba(240,168,40,0.1);
+      border-left: 4px solid var(--gk-amber, #f0a828);
       padding: 12px;
       margin-top: 16px;
       border-radius: 4px;
       font-size: 13px;
-      color: #856404;
+      color: var(--gk-text-2, #8b9ec0);
     }
 
     .progress-tracker {
@@ -352,7 +364,7 @@
       justify-content: space-between;
       align-items: center;
       padding: 8px 0;
-      border-bottom: 1px solid #dee2e6;
+      border-bottom: 1px solid var(--gk-border, rgba(255,255,255,0.07));
     }
 
     .progress-item:last-child {
@@ -361,13 +373,13 @@
 
     .progress-item .metric-name {
       font-size: 12px;
-      color: #495057;
+      color: var(--gk-text-2, #8b9ec0);
     }
 
     .progress-item .metric-bar {
       flex: 1;
       margin: 0 12px;
-      background: #dee2e6;
+      background: var(--gk-border-2, rgba(255,255,255,0.13));
       height: 8px;
       border-radius: 4px;
       overflow: hidden;
@@ -375,7 +387,7 @@
 
     .progress-item .metric-fill {
       height: 100%;
-      background: #667eea;
+      background: var(--gk-teal, #14c591);
       border-radius: 4px;
       transition: width 0.3s;
     }
@@ -383,7 +395,7 @@
     .progress-item .metric-value {
       font-size: 11px;
       font-weight: bold;
-      color: #667eea;
+      color: var(--gk-teal, #14c591);
       min-width: 60px;
       text-align: right;
     }
@@ -399,8 +411,8 @@
       display: inline-block;
       width: 18px;
       height: 18px;
-      background: #667eea;
-      color: white;
+      background: var(--gk-teal, #14c591);
+      color: #05080f;
       border-radius: 50%;
       text-align: center;
       line-height: 18px;
@@ -413,7 +425,7 @@
       display: flex;
       gap: 8px;
       margin-bottom: 16px;
-      border-bottom: 2px solid #dee2e6;
+      border-bottom: 2px solid var(--gk-border, rgba(255,255,255,0.07));
     }
 
     .tab {
@@ -423,7 +435,7 @@
       border-bottom: 3px solid transparent;
       cursor: pointer;
       font-weight: 500;
-      color: #6c757d;
+      color: var(--gk-text-2, #8b9ec0);
       transition: all 0.3s;
       box-shadow: none;
       margin-bottom: 0;
@@ -431,13 +443,13 @@
     }
 
     .tab:hover {
-      color: #667eea;
+      color: var(--gk-teal, #14c591);
       transform: none;
     }
 
     .tab.active {
-      color: #667eea;
-      border-bottom-color: #667eea;
+      color: var(--gk-teal, #14c591);
+      border-bottom-color: var(--gk-teal, #14c591);
     }
 
     .tab-content {
@@ -449,14 +461,16 @@
     }
 
     .export-btn {
-      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      background: linear-gradient(135deg, var(--gk-teal, #14c591) 0%, #00e0c0 100%);
       margin-top: 8px;
     }
 
     textarea {
       width: 100%;
       padding: 12px;
-      border: 2px solid #dee2e6;
+      background: var(--gk-bg-input, #131e34);
+      color: var(--gk-text, #eef2ff);
+      border: 2px solid var(--gk-border-2, rgba(255,255,255,0.13));
       border-radius: 6px;
       font-size: 12px;
       font-family: 'Courier New', monospace;
@@ -520,7 +534,7 @@
         <!-- Load Profile Tab -->
         <div id="loadTab" class="tab-content">
           <div class="profile-list" id="profileList">
-            <p style="color: #6c757d; text-align: center;">No profiles saved yet</p>
+            <p style="color: var(--gk-muted, #48597a); text-align: center;">No profiles saved yet</p>
           </div>
           
           <button onclick="importProfile()">📥 Import Profile (JSON)</button>
@@ -536,13 +550,13 @@
       <div class="card">
         <h2>📊 Voice Characteristics <span class="help-icon" title="Unique parameters that define this voice">?</span></h2>
         
-        <div id="noProfileMsg" style="text-align: center; padding: 40px; color: #6c757d;">
+        <div id="noProfileMsg" style="text-align: center; padding: 40px; color: var(--gk-muted, #48597a);">
           <p>👆 Create or load a voice profile to see characteristics</p>
         </div>
 
         <div id="profileDetails" style="display: none;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-            <h3 style="margin: 0; color: #667eea;" id="currentProfileName">--</h3>
+            <h3 style="margin: 0; color: var(--gk-teal, #14c591);" id="currentProfileName">--</h3>
             <button class="export-btn" onclick="exportProfile()">💾 Export Profile</button>
           </div>
 
@@ -616,7 +630,7 @@
         </div>
         <div>
           <label style="display: block; margin-bottom: 8px; font-weight: 500;">Target Profile</label>
-          <select id="targetProfileSelect" style="width: 100%; padding: 12px; border-radius: 6px; border: 2px solid #dee2e6;">
+          <select id="targetProfileSelect" style="width: 100%; padding: 12px; border-radius: 6px; border: 2px solid var(--gk-border-2, rgba(255,255,255,0.13)); background: var(--gk-bg-input, #131e34); color: var(--gk-text, #eef2ff);">
             <option value="">Select target profile...</option>
           </select>
         </div>
@@ -624,7 +638,7 @@
 
       <!-- Manual Transformation Controls -->
       <div id="transformControls" style="display: none;">
-        <h3 style="margin: 16px 0 12px 0; color: #667eea;">Transformation Parameters</h3>
+        <h3 style="margin: 16px 0 12px 0; color: var(--gk-teal, #14c591);">Transformation Parameters</h3>
         
         <div class="slider-container">
           <label>
@@ -668,7 +682,7 @@
       <div class="comparison-viz">
         <h3>Your Voice (Source)</h3>
         <canvas id="sourceViz"></canvas>
-        <div id="sourceParams" style="margin-top: 12px; font-size: 12px; font-family: 'Courier New', monospace; color: #6c757d;">
+        <div id="sourceParams" style="margin-top: 12px; font-size: 12px; font-family: 'Courier New', monospace; color: var(--gk-text-2, #8b9ec0);">
           Waiting for audio input...
         </div>
       </div>
@@ -677,7 +691,7 @@
       <div class="comparison-viz">
         <h3>Target Voice Profile</h3>
         <canvas id="targetViz"></canvas>
-        <div id="targetParams" style="margin-top: 12px; font-size: 12px; font-family: 'Courier New', monospace; color: #6c757d;">
+        <div id="targetParams" style="margin-top: 12px; font-size: 12px; font-family: 'Courier New', monospace; color: var(--gk-text-2, #8b9ec0);">
           No target profile selected
         </div>
       </div>
@@ -1245,7 +1259,7 @@
       const listEl = document.getElementById('profileList');
       
       if (profiles.length === 0) {
-        listEl.innerHTML = '<p style="color: #6c757d; text-align: center;">No profiles saved yet</p>';
+        listEl.innerHTML = '<p style="color: var(--gk-muted, #48597a); text-align: center;">No profiles saved yet</p>';
         return;
       }
       
