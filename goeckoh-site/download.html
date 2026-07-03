@@ -342,7 +342,7 @@
     localStorage.setItem('gk_wl_email', email);
     localStorage.setItem('gk_wl_role',  role);
     localStorage.setItem('gk_wl_ts',    Date.now());
-    localStorage.setItem('gk_access',   email); // early-access signup unlocks the tool pages on this device
+    localStorage.setItem('gk_access',   'waitlist'); // early-access signup unlocks the tool pages on this device (non-PII marker)
 
     document.getElementById('waitlistFallback').innerHTML = `
       <div style="text-align:center;padding:1.5rem 0">
