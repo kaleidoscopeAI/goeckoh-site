@@ -9,13 +9,110 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="Goeckoh — Hear your voice the way your brain was meant to">
   <meta property="og:description" content="Real-time voice correction for ASD, dysarthria, and apraxia — returned to your ear within the biological window where your brain can learn. No appointments, no synthetic voice, no cloud. $20/month.">
-  <meta property="og:image" content="https://goeckoh.com/images/logo-dark-brain.png">
+  <meta property="og:image" content="https://goeckoh.com/images/logo-dark-brain.jpg">
   <meta property="og:url" content="https://goeckoh.com/">
   <meta property="og:site_name" content="Goeckoh">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Goeckoh — Hear your voice the way your brain was meant to">
   <meta name="twitter:description" content="Real-time voice correction for ASD, dysarthria, and apraxia. No appointments, no synthetic voice, no cloud. $20/month.">
-  <meta name="twitter:image" content="https://goeckoh.com/images/logo-dark-brain.png">
+  <meta name="twitter:image" content="https://goeckoh.com/images/logo-dark-brain.jpg">
+  <link rel="canonical" href="https://goeckoh.com/">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Goeckoh",
+    "url": "https://goeckoh.com/",
+    "logo": "https://goeckoh.com/images/logo-clean.png",
+    "description": "Goeckoh builds real-time voice correction software for people with autism (ASD), dysarthria, apraxia, and speech changes from stroke or traumatic brain injury (TBI).",
+    "email": "care@goeckoh.com"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Goeckoh",
+    "applicationCategory": "HealthApplication",
+    "operatingSystem": "Web, macOS, Windows, Linux, Android",
+    "description": "Real-time voice correction that returns a corrected version of your voice to your ear within the biological window where the brain can learn from it. For children and adults with ASD, dysarthria, apraxia, and speech changes from stroke or TBI.",
+    "offers": {
+      "@type": "Offer",
+      "price": "20.00",
+      "priceCurrency": "USD",
+      "priceSpecification": {
+        "@type": "UnitPriceSpecification",
+        "price": "20.00",
+        "priceCurrency": "USD",
+        "billingDuration": "P1M"
+      }
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is Goeckoh safe for children?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Goeckoh processes audio in real time and returns it at a volume you control — comparable to a phone call in your earbuds. It does not alter pitch beyond the child's comfortable range. There is no electrical contact with the child's body. All audio stays on the device; no voice data is transmitted or stored remotely."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does it work with AirPods, Galaxy Buds, or other Bluetooth earbuds?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Goeckoh works with any Bluetooth earbuds that have a built-in microphone — including AirPods (all generations), Galaxy Buds, Pixel Buds, and most mainstream earbuds. Wired earbuds with a mic also work. Low-latency earbuds (under 50ms Bluetooth latency) produce the most seamless experience."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How is this different from delayed auditory feedback (DAF) devices like SpeechEasy?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "DAF devices intentionally delay your voice to create a choir effect that some people find reduces stuttering. Goeckoh does something fundamentally different: it corrects the acoustic structure of your voice — specifically the formant frequencies that determine vowel clarity — and returns the corrected signal with the minimum possible delay. DAF has no therapeutic effect on ASD-related speech patterns or dysarthria; Goeckoh is designed specifically for these populations."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do I need to install an app, or does it run in the browser?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Goeckoh runs directly in the browser on any device — no installation required. Open it in Chrome or Safari, tap Allow for microphone access, and it works immediately. Native apps for desktop and mobile are also available for users who prefer an installed app."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What happens to my child's voice data?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Nothing leaves their device. The correction engine processes audio locally, in real time, and that audio is never uploaded to any server. Session progress data is stored in your browser's local storage on your device. The only information our servers store is your email address and subscription status."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can our speech-language pathologist use this alongside their existing therapy?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes — this is one of the primary intended use cases. Goeckoh is designed to supplement, not replace, clinical speech therapy. Clinicians can connect to a patient's session remotely and view live acoustic data during or between sessions, with structured session history per patient available for review."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What languages and accents does Goeckoh support?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Goeckoh's acoustic correction operates on vocal-tract resonances (formants), which are language-universal. The formant correction profiles are calibrated for English vowels by default during early access, with additional language profiles in active development. The system works regardless of regional accent because it corrects relative to the speaker's own voice, not a fixed phoneme target."
+        }
+      }
+    ]
+  }
+  </script>
   <link rel="stylesheet" href="goeckoh-shared.css">
   <style>
     /* ── LIGHT THEME OVERRIDE (homepage only) ────────────────────── */
@@ -393,7 +490,7 @@
       </div>
     </div>
     <div class="hero-visual">
-      <img src="images/logo-dark-brain.png" alt="Goeckoh — voice and neural feedback loop" class="hero-img">
+      <img src="images/logo-dark-brain.jpg" alt="Goeckoh — voice and neural feedback loop" class="hero-img">
       <p class="hero-caption">
         The ear. The brain. The signal.<br>
         Your voice enters. Corrected, it returns.<br>
@@ -610,7 +707,7 @@
         </div>
       </div>
       <div style="display:flex;justify-content:center;align-items:flex-start;padding-top:2rem">
-        <img src="images/logo-dark-brain.png" alt="Neural voice feedback loop" style="width:100%;max-width:340px;border-radius:20px;box-shadow:0 16px 50px rgba(37,88,217,0.12)">
+        <img src="images/logo-dark-brain.jpg" alt="Neural voice feedback loop" style="width:100%;max-width:340px;border-radius:20px;box-shadow:0 16px 50px rgba(37,88,217,0.12)">
       </div>
     </div>
   </div>
