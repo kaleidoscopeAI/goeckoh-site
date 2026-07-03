@@ -1361,6 +1361,7 @@ let vowelHistory = [];
 
 /* ── Hear-It state ─────────────────────────────────────────── */
 let workletNode = null, hearItActive = false, hearItTimer = null, hearItRemaining = 0;
+let hearItModuleLoaded = false; // registerProcessor() may only run once per AudioContext
 const hearItBtn         = document.getElementById('hearItBtn');
 const hearItCountdown   = document.getElementById('hearItCountdown');
 const hearItCountdownTxt= document.getElementById('hearItCountdownTxt');
@@ -1434,8 +1435,9 @@ async function startDemo() {
     return;
   }
 
-  audioCtx      = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 48000 });
-  micSourceNode = audioCtx.createMediaStreamSource(micStream);
+  audioCtx           = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 48000 });
+  hearItModuleLoaded = false; // fresh AudioContext = fresh AudioWorkletGlobalScope
+  micSourceNode      = audioCtx.createMediaStreamSource(micStream);
   analyserNode  = audioCtx.createAnalyser();
   analyserNode.fftSize               = 4096;
   analyserNode.smoothingTimeConstant = 0.72;
@@ -1610,10 +1612,16 @@ async function toggleHearIt() {
   }
 
   try {
-    const blob = new Blob([HEARIT_WORKLET], { type: 'application/javascript' });
-    const url  = URL.createObjectURL(blob);
-    await audioCtx.audioWorklet.addModule(url);
-    URL.revokeObjectURL(url);
+    if (!hearItModuleLoaded) {
+      // registerProcessor() throws (per spec — some browsers are stricter than
+      // others about it) if called twice in the same AudioContext, so this
+      // must only run once per context, not once per Hear-It session.
+      const blob = new Blob([HEARIT_WORKLET], { type: 'application/javascript' });
+      const url  = URL.createObjectURL(blob);
+      await audioCtx.audioWorklet.addModule(url);
+      URL.revokeObjectURL(url);
+      hearItModuleLoaded = true;
+    }
 
     workletNode = new AudioWorkletNode(audioCtx, 'goeckoh-demo-processor', {
       numberOfInputs: 1, numberOfOutputs: 1, outputChannelCount: [1],

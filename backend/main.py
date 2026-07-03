@@ -321,13 +321,16 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
 
 @app.get("/checkout/verify-session")
 @limiter.limit("30/minute")
-async def verify_checkout_session(request: Request, session_id: str):
+def verify_checkout_session(request: Request, session_id: str):
+    # Plain `def`, not `async def` — stripe-python's default client is
+    # synchronous, so FastAPI dispatches this to a worker thread instead of
+    # blocking the event loop for the Stripe round-trip.
     if not STRIPE_SECRET_KEY:
         raise HTTPException(500, "Stripe not configured")
     try:
         session = stripe.checkout.Session.retrieve(session_id)
-    except Exception:
-        raise HTTPException(404, "Session not found")
+    except stripe.error.InvalidRequestError as err:
+        raise HTTPException(404, "Session not found") from err
 
     paid = (
         session.get("status") == "complete"
@@ -591,8 +594,17 @@ async def health():
 DEMO_SESSION_SECONDS = 45
 
 
+def _demo_client_ip(request: Request) -> str:
+    # Behind Fly.io's edge proxy, request.client.host (what get_remote_address
+    # reads) is the proxy's own address, not the visitor's — every visitor
+    # would collapse into one shared 3/day bucket. Fly sets Fly-Client-IP on
+    # every request; it can't be spoofed by the client since Fly's edge is the
+    # only hop between the visitor and this app.
+    return request.headers.get("Fly-Client-IP") or get_remote_address(request)
+
+
 @app.post("/demo/session/start")
-@limiter.limit("3/day")
+@limiter.limit("3/day", key_func=_demo_client_ip)
 async def demo_session_start(request: Request):
     return {"allowed": True, "max_seconds": DEMO_SESSION_SECONDS}
 

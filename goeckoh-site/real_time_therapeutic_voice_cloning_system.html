@@ -1500,7 +1500,7 @@ const PROFILES = {
                 try {
                     const isLocal = (location.hostname === 'localhost' || location.hostname === '127.0.0.1');
                     const proto = isLocal ? (location.protocol === 'https:' ? 'https' : 'http') : 'https';
-                    const host  = isLocal ? `${location.hostname}:8000` : window.GOECKOH_BACKEND_HOST;
+                    const host  = isLocal ? `${location.hostname}:8000` : (window.GOECKOH_BACKEND_HOST || 'goeckoh-backend.fly.dev');
                     const res  = await fetch(`${proto}://${host}/session/new-code`);
                     if (!res.ok) return;
                     const data = await res.json();

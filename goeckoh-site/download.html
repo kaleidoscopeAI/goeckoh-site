@@ -309,8 +309,14 @@
   //
   //   STRIPE_PAYMENT_LINK  — create at dashboard.stripe.com → Payment Links
   //                          Set your product to "Goeckoh Early Access" at $20/mo
-  //                          In the link settings, add a redirect URL:
-  //                            https://goeckoh.com/download.html?payment=success
+  //                          In the link settings, set "After payment" to redirect to:
+  //                            https://goeckoh.com/download.html?payment=success&session_id={CHECKOUT_SESSION_ID}
+  //                          The {CHECKOUT_SESSION_ID} placeholder is required, verbatim —
+  //                          verifyAndUnlock() below needs the real session_id to confirm
+  //                          the payment with /checkout/verify-session before granting
+  //                          access; without it every checkout falls through to
+  //                          showUnverified(). (The live link below is already configured
+  //                          with this redirect — this note is for if you ever recreate it.)
   //                          Copy the buy.stripe.com/... URL here.
   //
   //   BACKEND_URL          — URL where the backend is running, e.g.
@@ -319,7 +325,7 @@
   //
   // ─────────────────────────────────────────────────────────────────────────
   const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/7sY14ncIM3e48sI9y9cbC00'; // LIVE — $20/mo goeckoh subscription
-  const BACKEND_URL          = 'https://' + window.GOECKOH_BACKEND_HOST; // see backend-config.js
+  const BACKEND_URL          = 'https://' + (window.GOECKOH_BACKEND_HOST || 'goeckoh-backend.fly.dev'); // see backend-config.js
   // ─────────────────────────────────────────────────────────────────────────
 
   const portalURL = BACKEND_URL ? BACKEND_URL + '/account' : '#';
