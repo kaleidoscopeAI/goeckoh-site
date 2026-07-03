@@ -6,6 +6,7 @@
   <title>Get Early Access — Goeckoh</title>
   <meta name="description" content="Get early access to Goeckoh — real-time voice correction for ASD, dysarthria, and apraxia. $20/month.">
   <link rel="stylesheet" href="goeckoh-shared.css">
+  <script src="backend-config.js"></script>
   <style>
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
     body { font-family:var(--gk-font); background:var(--gk-bg); color:var(--gk-text); min-height:100vh; }
@@ -200,13 +201,11 @@
       <!-- Success screen shown after Stripe redirect -->
       <div class="success-screen" id="successScreen">
         <span class="success-icon">✓</span>
-        <div class="success-title">Payment received — thank you</div>
-        <p class="success-body">
-          Your app is unlocked on this device right now — no install required, it runs
-          in the browser. A license key for the native app is also on its way to the
-          email you used at checkout, for when you want it on additional devices.
+        <div class="success-title" id="successTitle">Payment received — thank you</div>
+        <p class="success-body" id="successBody">
+          Confirming your payment…
         </p>
-        <div class="success-actions">
+        <div class="success-actions" id="successActions" style="display:none">
           <a id="portalBtn" href="#" class="gk-btn gk-btn-primary">Open Goeckoh →</a>
           <a href="demo.html" class="gk-btn gk-btn-secondary">Browse all tools</a>
         </div>
@@ -303,7 +302,7 @@
   //
   // ─────────────────────────────────────────────────────────────────────────
   const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/7sY14ncIM3e48sI9y9cbC00'; // LIVE — $20/mo goeckoh subscription
-  const BACKEND_URL          = 'https://goeckoh-backend.fly.dev';
+  const BACKEND_URL          = 'https://' + window.GOECKOH_BACKEND_HOST; // see backend-config.js
   // ─────────────────────────────────────────────────────────────────────────
 
   const portalURL = BACKEND_URL ? BACKEND_URL + '/account' : '#';
@@ -315,12 +314,45 @@
   // customers straight into it. Grant access on this device via the gate.
   document.getElementById('portalBtn').href = 'real_time_therapeutic_voice_cloning_system.html';
 
-  // Check for post-payment redirect
+  // Check for post-payment redirect. The URL alone proves nothing — anyone
+  // can type ?payment=success into the address bar. Only the Stripe session
+  // ID, confirmed server-side, is trusted to grant access.
   const params = new URLSearchParams(window.location.search);
   if (params.get('payment') === 'success') {
-    localStorage.setItem('gk_access', 'paid');
-    document.getElementById('payFlow').style.display    = 'none';
+    document.getElementById('payFlow').style.display       = 'none';
     document.getElementById('successScreen').style.display = 'block';
+    verifyAndUnlock(params.get('session_id'));
+  }
+
+  async function verifyAndUnlock(sessionId) {
+    if (!sessionId || !BACKEND_URL) {
+      showUnverified();
+      return;
+    }
+    try {
+      const resp = await fetch(BACKEND_URL + '/checkout/verify-session?session_id=' + encodeURIComponent(sessionId));
+      const data = resp.ok ? await resp.json() : { paid: false };
+      if (data.paid) {
+        localStorage.setItem('gk_access', 'paid');
+        document.getElementById('successBody').textContent =
+          'Your app is unlocked on this device right now — no install required, it runs ' +
+          'in the browser. A license key for the native app is also on its way to the ' +
+          'email you used at checkout, for when you want it on additional devices.';
+        document.getElementById('successActions').style.display = '';
+      } else {
+        showUnverified();
+      }
+    } catch (e) {
+      showUnverified();
+    }
+  }
+
+  function showUnverified() {
+    document.getElementById('successTitle').textContent = 'Payment received — confirming';
+    document.getElementById('successBody').innerHTML =
+      "We couldn't automatically verify this session on this device. If you completed " +
+      "checkout, your license key is on its way by email — it also unlocks the web app. " +
+      'Trouble? <a href="mailto:care@goeckoh.com" style="color:var(--gk-primary)">care@goeckoh.com</a>.';
   }
 
   // Configure the page based on whether Stripe is set up
