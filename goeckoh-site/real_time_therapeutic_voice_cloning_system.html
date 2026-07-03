@@ -1497,9 +1497,9 @@ const PROFILES = {
 
             async _connectGuardian() {
                 try {
-                    const proto = location.protocol === 'https:' ? 'https' : 'http';
-                    const host  = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
-                        ? `${location.hostname}:8000` : location.host;
+                    const isLocal = (location.hostname === 'localhost' || location.hostname === '127.0.0.1');
+                    const proto = isLocal ? (location.protocol === 'https:' ? 'https' : 'http') : 'https';
+                    const host  = isLocal ? `${location.hostname}:8000` : 'goeckoh-backend.fly.dev';
                     const res  = await fetch(`${proto}://${host}/session/new-code`);
                     if (!res.ok) return;
                     const data = await res.json();

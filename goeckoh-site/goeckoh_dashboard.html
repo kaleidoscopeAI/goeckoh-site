@@ -260,7 +260,7 @@
                 'use strict';
                 const BACKEND = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
                     ? 'ws://' + location.hostname + ':8000'
-                    : 'wss://' + location.hostname;
+                    : 'wss://goeckoh-backend.fly.dev';
 
                 let ws = null;
                 let sessionStart = null;
@@ -381,7 +381,7 @@
             (function() {
                 const BACKEND_HTTP = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
                     ? 'http://' + location.hostname + ':8000'
-                    : 'https://' + location.hostname;
+                    : 'https://goeckoh-backend.fly.dev';
 
                 let scatterCtx = null;
                 let scatterChart = null;

@@ -202,13 +202,13 @@
         <span class="success-icon">✓</span>
         <div class="success-title">Payment received — thank you</div>
         <p class="success-body">
-          Your license key is on its way. Check the email you used at checkout —
-          it arrives within a few minutes. Use that key at the download portal to
-          get your app.
+          Your app is unlocked on this device right now — no install required, it runs
+          in the browser. A license key for the native app is also on its way to the
+          email you used at checkout, for when you want it on additional devices.
         </p>
         <div class="success-actions">
-          <a id="portalBtn" href="#" class="gk-btn gk-btn-primary" target="_blank">Download your app →</a>
-          <a href="demo.html" class="gk-btn gk-btn-secondary">Try the demo</a>
+          <a id="portalBtn" href="#" class="gk-btn gk-btn-primary">Open Goeckoh →</a>
+          <a href="demo.html" class="gk-btn gk-btn-secondary">Browse all tools</a>
         </div>
       </div>
 
@@ -302,19 +302,23 @@
   //                          The download portal lives at BACKEND_URL/account
   //
   // ─────────────────────────────────────────────────────────────────────────
-  const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/test_9B65kD7os5mc6kA25HcbC01';
+  const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/7sY14ncIM3e48sI9y9cbC00'; // LIVE — $20/mo goeckoh subscription
   const BACKEND_URL          = 'https://goeckoh-backend.fly.dev';
   // ─────────────────────────────────────────────────────────────────────────
 
   const portalURL = BACKEND_URL ? BACKEND_URL + '/account' : '#';
 
-  // Wire up portal links
-  document.getElementById('portalBtn').href  = portalURL;
+  // Wire up portal link (native-app license management — separate from the web app below)
   document.getElementById('portalLink').href = portalURL;
+
+  // The web app already works today (no native install needed) — send paying
+  // customers straight into it. Grant access on this device via the gate.
+  document.getElementById('portalBtn').href = 'real_time_therapeutic_voice_cloning_system.html';
 
   // Check for post-payment redirect
   const params = new URLSearchParams(window.location.search);
   if (params.get('payment') === 'success') {
+    localStorage.setItem('gk_access', 'paid');
     document.getElementById('payFlow').style.display    = 'none';
     document.getElementById('successScreen').style.display = 'block';
   }
@@ -338,17 +342,18 @@
     localStorage.setItem('gk_wl_email', email);
     localStorage.setItem('gk_wl_role',  role);
     localStorage.setItem('gk_wl_ts',    Date.now());
+    localStorage.setItem('gk_access',   email); // early-access signup unlocks the tool pages on this device
 
     document.getElementById('waitlistFallback').innerHTML = `
       <div style="text-align:center;padding:1.5rem 0">
         <div style="font-size:2.5rem;margin-bottom:1rem">✓</div>
-        <div style="font-size:1.1rem;font-weight:800;margin-bottom:0.6rem">You're on the list</div>
+        <div style="font-size:1.1rem;font-weight:800;margin-bottom:0.6rem">You're on the list — and unlocked</div>
         <p style="font-size:0.82rem;color:var(--gk-text-2);line-height:1.75">
           We'll reach out to <strong style="color:var(--gk-text)">${email}</strong>
-          within 48 hours with setup instructions.
+          within 48 hours. In the meantime the full tool set is open on this device.
         </p>
-        <a href="demo.html" class="gk-btn gk-btn-primary" style="display:inline-block;margin-top:1.5rem">
-          Try the demo →
+        <a href="real_time_therapeutic_voice_cloning_system.html" class="gk-btn gk-btn-primary" style="display:inline-block;margin-top:1.5rem">
+          Open Goeckoh →
         </a>
       </div>
     `;
