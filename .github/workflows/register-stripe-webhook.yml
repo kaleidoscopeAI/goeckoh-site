@@ -1,0 +1,78 @@
+name: Register Stripe webhook endpoint
+
+# One-time (idempotent, safe to re-run) setup: creates the live-mode Stripe
+# webhook endpoint that goeckoh-backend needs to turn a completed checkout
+# into a license + email, and pushes the resulting signing secret straight to
+# Fly. Run manually from the Actions tab whenever the backend's hostname
+# changes or you need to confirm the endpoint is still correctly configured.
+#
+# Requires two GitHub Actions secrets (Settings → Secrets and variables →
+# Actions): STRIPE_SECRET_KEY (the live sk_live_/rk_live_ key — if restricted,
+# it needs Webhook Endpoints: Write) and FLY_API_TOKEN.
+
+on:
+  workflow_dispatch:
+    inputs:
+      backend_host:
+        description: "Backend hostname the webhook should point at"
+        required: true
+        default: "goeckoh-backend.fly.dev"
+
+jobs:
+  register:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup flyctl
+        uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: Create or verify webhook endpoint, sync signing secret to Fly
+        env:
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          BACKEND_HOST: ${{ github.event.inputs.backend_host }}
+        run: |
+          pip install --quiet stripe
+          python3 - <<'PYEOF'
+          import os, subprocess, sys
+          import stripe
+
+          stripe.api_key = os.environ["STRIPE_SECRET_KEY"]
+          host = os.environ["BACKEND_HOST"]
+          target_url = f"https://{host}/webhook/stripe"
+          needed_events = [
+              "checkout.session.completed",
+              "invoice.payment_succeeded",
+              "invoice.payment_failed",
+              "customer.subscription.updated",
+              "customer.subscription.deleted",
+          ]
+
+          existing = [
+              e for e in stripe.WebhookEndpoint.list(limit=100).auto_paging_iter()
+              if e["url"] == target_url and e["status"] == "enabled"
+          ]
+
+          if existing:
+              ep = existing[0]
+              missing = set(needed_events) - set(ep.get("enabled_events", []))
+              if missing and "*" not in ep.get("enabled_events", []):
+                  stripe.WebhookEndpoint.modify(
+                      ep["id"],
+                      enabled_events=sorted(set(ep["enabled_events"]) | set(needed_events)),
+                  )
+                  print(f"Updated existing endpoint {ep['id']} — added missing events: {sorted(missing)}")
+              else:
+                  print(f"Endpoint {ep['id']} already targets {target_url} with all needed events. Nothing to do.")
+              print("No new signing secret to push (endpoint already existed — its whsec_ was set when it was first created).")
+              sys.exit(0)
+
+          ep = stripe.WebhookEndpoint.create(url=target_url, enabled_events=needed_events)
+          secret = ep["secret"]  # only ever returned once, at creation
+          print(f"Created webhook endpoint {ep['id']} for {target_url}")
+
+          subprocess.run(
+              ["flyctl", "secrets", "set", f"STRIPE_WEBHOOK_SECRET={secret}", "-a", "goeckoh-backend"],
+              check=True,
+          )
+          print("Pushed the new signing secret to goeckoh-backend as STRIPE_WEBHOOK_SECRET.")
+          PYEOF
