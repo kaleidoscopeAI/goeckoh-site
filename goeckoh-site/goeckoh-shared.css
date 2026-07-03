@@ -262,7 +262,7 @@
 }
 .gk-footer-brand { font-size: 0.82rem; font-weight: 700; letter-spacing: 0.08em; color: var(--gk-text-2); }
 .gk-footer-brand span { color: var(--gk-teal); }
-.gk-footer-links { display: flex; gap: 1.75rem; }
+.gk-footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem 1.75rem; }
 .gk-footer-links a { font-size: 0.78rem; color: var(--gk-muted); text-decoration: none; transition: color 0.15s; }
 .gk-footer-links a:hover { color: var(--gk-text); }
 .gk-footer-copy { font-size: 0.72rem; color: var(--gk-muted); }

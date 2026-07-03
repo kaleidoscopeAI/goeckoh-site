@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /goeckoh_dashboard.html
+Disallow: /real_time_therapeutic_voice_cloning_system.html
+Disallow: /voice_setup.html
+Disallow: /voice_therapy_profile_transform.html
+Disallow: /advanced_voice_visualizer_pro.html
+Disallow: /voice_game.html
+Disallow: /observatory.html
+
+Sitemap: https://goeckoh.com/sitemap.xml
