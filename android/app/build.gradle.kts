@@ -14,11 +14,15 @@ android {
         versionName = "1.0.0"
     }
 
+    val signingEnvVars = listOf(
+        "GOECKOH_KEYSTORE_PATH", "GOECKOH_KEYSTORE_PASSWORD", "GOECKOH_KEY_ALIAS", "GOECKOH_KEY_PASSWORD"
+    )
+    val hasReleaseSigning = signingEnvVars.all { !System.getenv(it).isNullOrEmpty() }
+
     signingConfigs {
         create("release") {
-            val storeFilePath = System.getenv("GOECKOH_KEYSTORE_PATH")
-            if (storeFilePath != null) {
-                storeFile = file(storeFilePath)
+            if (hasReleaseSigning) {
+                storeFile = file(System.getenv("GOECKOH_KEYSTORE_PATH"))
                 storePassword = System.getenv("GOECKOH_KEYSTORE_PASSWORD")
                 keyAlias = System.getenv("GOECKOH_KEY_ALIAS")
                 keyPassword = System.getenv("GOECKOH_KEY_PASSWORD")
@@ -29,7 +33,7 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            if (System.getenv("GOECKOH_KEYSTORE_PATH") != null) {
+            if (hasReleaseSigning) {
                 signingConfig = signingConfigs.getByName("release")
             }
         }

@@ -2,11 +2,21 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Required on Android 11+ (API 30) package-visibility rules so LauncherActivity can
+         find Chrome/other Custom Tabs-capable browsers via queryIntentServices. -->
+    <queries>
+        <intent>
+            <action android:name="android.support.customtabs.action.CustomTabsService" />
+        </intent>
+    </queries>
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!-- Declared so Chrome can delegate the site's getUserMedia mic request to this
-         app's already-granted runtime permission instead of showing its own prompt. -->
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- No RECORD_AUDIO permission here: the app never requests it at runtime, so declaring
+         it would grant nothing (dangerous permissions require an explicit runtime request on
+         API 23+) and Chrome would not delegate it anyway. The site's mic access is handled by
+         Chrome's own in-page getUserMedia prompt, same as visiting goeckoh.com in mobile
+         Chrome directly. -->
 
     <application
         android:allowBackup="true"
