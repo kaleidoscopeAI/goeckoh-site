@@ -35,9 +35,10 @@ for _envpath in (Path(__file__).resolve().parent / ".env",
 
 import jwt
 import stripe
+import requests
 from fastapi import FastAPI, Request, Depends, HTTPException, Header, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from passlib.context import CryptContext
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
@@ -61,7 +62,8 @@ JWT_SECRET = os.environ.get("JWT_SECRET_KEY", "")
 JWT_ALGORITHM = "HS256"
 JWT_EXPIRY_DAYS = 1
 
-DOWNLOADS_DIR = Path(os.environ.get("DOWNLOADS_DIR", "./downloads"))
+GITHUB_RELEASES_REPO = os.environ.get("GITHUB_RELEASES_REPO", "kaleidoscopeAI/goeckoh-releases")
+GITHUB_RELEASES_TOKEN = os.environ.get("GITHUB_RELEASES_TOKEN", "")
 SEND_EMAIL = os.environ.get("SEND_EMAIL_ENABLED", "false").lower() == "true"
 
 # Email configuration (optional — any SMTP provider)
@@ -499,7 +501,10 @@ async def deactivate_device(request: Request, body: DeactivateRequest, db: Sessi
 
 
 # ---------------------------------------------------------------------------
-# Gated Binary Downloads
+# Gated Binary Downloads — the binaries themselves live in a private GitHub
+# release (kaleidoscopeAI/goeckoh-releases), not on this server. We validate
+# the license exactly as before, then hand back the short-lived signed URL
+# GitHub issues for a private release asset.
 # ---------------------------------------------------------------------------
 
 PLATFORM_FILES = {
@@ -510,8 +515,43 @@ PLATFORM_FILES = {
 }
 
 
+def _github_asset_stream(filename: str) -> requests.Response:
+    """Locate `filename` in the latest goeckoh-releases release and return an
+    open, streaming requests.Response for its bytes. `requests` follows the
+    GitHub API's redirect to the signed blob URL transparently and (per its
+    default cross-host redirect behavior) drops our Authorization header
+    before doing so, which is what we want — the blob URL is pre-signed."""
+    headers = {
+        "Authorization": f"Bearer {GITHUB_RELEASES_TOKEN}",
+        "Accept": "application/vnd.github+json",
+    }
+    resp = requests.get(
+        f"https://api.github.com/repos/{GITHUB_RELEASES_REPO}/releases/latest",
+        headers=headers, timeout=10,
+    )
+    if resp.status_code != 200:
+        log.error("GitHub releases lookup failed: %s %s", resp.status_code, resp.text[:200])
+        raise HTTPException(503, "Binary not yet available — check back soon.")
+
+    asset = next((a for a in resp.json().get("assets", []) if a["name"] == filename), None)
+    if not asset:
+        log.error("Asset %s not found in latest goeckoh-releases release", filename)
+        raise HTTPException(503, "Binary not yet available — check back soon.")
+
+    stream_resp = requests.get(
+        f"https://api.github.com/repos/{GITHUB_RELEASES_REPO}/releases/assets/{asset['id']}",
+        headers={**headers, "Accept": "application/octet-stream"},
+        stream=True, timeout=30,
+    )
+    if stream_resp.status_code != 200:
+        log.error("GitHub asset fetch failed: %s", stream_resp.status_code)
+        raise HTTPException(503, "Binary not yet available — check back soon.")
+
+    return stream_resp
+
+
 @app.get("/download/{platform}")
-async def download_binary(
+def download_binary(
     platform: str,
     db: Session = Depends(get_db),
     license_key: str = Header(..., alias="X-License-Key"),
@@ -532,17 +572,17 @@ async def download_binary(
         raise HTTPException(403, "License not yet active")
 
     filename = PLATFORM_FILES[platform]
-    filepath = DOWNLOADS_DIR / filename
-
-    if not filepath.exists():
-        log.error("Download file not found: %s", filepath)
-        raise HTTPException(503, "Binary not yet available — check back soon.")
+    stream_resp = _github_asset_stream(filename)
 
     log.info("Download: %s for license %s (%s)", filename, key[:12], lic.plan.value)
-    return FileResponse(
-        path=str(filepath),
-        filename=filename,
+    response_headers = {"Content-Disposition": f'attachment; filename="{filename}"'}
+    if content_length := stream_resp.headers.get("Content-Length"):
+        response_headers["Content-Length"] = content_length
+
+    return StreamingResponse(
+        stream_resp.iter_content(chunk_size=1 << 16),
         media_type="application/octet-stream",
+        headers=response_headers,
     )
 
 

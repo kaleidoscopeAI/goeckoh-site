@@ -10,14 +10,13 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY *.py ./
 COPY static/ ./static/
 
-# Copy installer binaries (bundled into image — ~16 MB)
-COPY downloads/ ./downloads/
+# Installer binaries are NOT bundled here — served via a private GitHub
+# release (kaleidoscopeAI/goeckoh-releases), fetched on demand by /download.
 
 # Persistent SQLite lives on a mounted volume at /data
 RUN mkdir -p /data
 
 ENV DATABASE_URL=sqlite:////data/goeckoh_licenses.db
-ENV DOWNLOADS_DIR=/app/downloads
 
 EXPOSE 8000
 
