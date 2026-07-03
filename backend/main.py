@@ -3,6 +3,7 @@ Goeckoh License & Download Server
 ----------------------------------
 Handles:
   POST /webhook/stripe           — Stripe subscription lifecycle events
+  GET  /checkout/verify-session  — Confirms a Checkout Session actually completed
   POST /license/activate         — First-time key activation (device registers)
   POST /license/validate         — Refresh JWT token (called on every app startup)
   GET  /download/{platform}      — Gated binary download (requires active license key)
@@ -313,6 +314,34 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
 
 
 # ---------------------------------------------------------------------------
+# Checkout Session Verification (post-payment redirect confirmation)
+# ---------------------------------------------------------------------------
+# The download page's success screen must not trust its own query string —
+# anyone can type ?payment=success into the URL. This endpoint asks Stripe
+# directly whether the given session actually completed, so the frontend can
+# safely grant on-device access only after a trusted answer.
+
+@app.get("/checkout/verify-session")
+@limiter.limit("30/minute")
+def verify_checkout_session(request: Request, session_id: str):
+    # Plain `def`, not `async def` — stripe-python's default client is
+    # synchronous, so FastAPI dispatches this to a worker thread instead of
+    # blocking the event loop for the Stripe round-trip.
+    if not STRIPE_SECRET_KEY:
+        raise HTTPException(500, "Stripe not configured")
+    try:
+        session = stripe.checkout.Session.retrieve(session_id)
+    except stripe.error.InvalidRequestError as err:
+        raise HTTPException(404, "Session not found") from err
+
+    paid = (
+        session.get("status") == "complete"
+        and session.get("payment_status") in ("paid", "no_payment_required")
+    )
+    return {"paid": paid}
+
+
+# ---------------------------------------------------------------------------
 # License Activation (first-time device registration)
 # ---------------------------------------------------------------------------
 
@@ -593,6 +622,31 @@ def download_binary(
 @app.get("/health")
 async def health():
     return {"status": "ok", "service": "goeckoh-license", "version": "1.0.0"}
+
+
+# ---------------------------------------------------------------------------
+# Public Demo Quota (unauthenticated — the free live-correction demo)
+# ---------------------------------------------------------------------------
+# demo.html's "Hear The Correction" mode plays real formant-corrected audio
+# back to the visitor, unauthenticated. That's the core paid feature, so it's
+# rate-limited per IP rather than per account. Each allowed session is capped
+# client-side at DEMO_SESSION_SECONDS.
+DEMO_SESSION_SECONDS = 45
+
+
+def _demo_client_ip(request: Request) -> str:
+    # Behind Fly.io's edge proxy, request.client.host (what get_remote_address
+    # reads) is the proxy's own address, not the visitor's — every visitor
+    # would collapse into one shared 3/day bucket. Fly sets Fly-Client-IP on
+    # every request; it can't be spoofed by the client since Fly's edge is the
+    # only hop between the visitor and this app.
+    return request.headers.get("Fly-Client-IP") or get_remote_address(request)
+
+
+@app.post("/demo/session/start")
+@limiter.limit("3/day", key_func=_demo_client_ip)
+async def demo_session_start(request: Request):
+    return {"allowed": True, "max_seconds": DEMO_SESSION_SECONDS}
 
 
 # ---------------------------------------------------------------------------

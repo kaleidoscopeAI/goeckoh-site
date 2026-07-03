@@ -2,10 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="images/logo-clean.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Get Early Access — Goeckoh</title>
   <meta name="description" content="Get early access to Goeckoh — real-time voice correction for ASD, dysarthria, and apraxia. $20/month.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Get Early Access — Goeckoh">
+  <meta property="og:description" content="Real-time voice correction for ASD, dysarthria, and apraxia. $20/month, cancel any time. Your voice data never leaves your device.">
+  <meta property="og:image" content="https://goeckoh.com/images/logo-dark-brain.png">
+  <meta property="og:url" content="https://goeckoh.com/download.html">
+  <meta property="og:site_name" content="Goeckoh">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Get Early Access — Goeckoh">
+  <meta name="twitter:description" content="Real-time voice correction for ASD, dysarthria, and apraxia. $20/month, cancel any time.">
+  <meta name="twitter:image" content="https://goeckoh.com/images/logo-dark-brain.png">
   <link rel="stylesheet" href="goeckoh-shared.css">
+  <script src="backend-config.js"></script>
   <style>
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
     body { font-family:var(--gk-font); background:var(--gk-bg); color:var(--gk-text); min-height:100vh; }
@@ -133,6 +145,12 @@
       display: none; text-align: center; padding: 1rem 0;
     }
     .success-icon { font-size: 3rem; display: block; margin-bottom: 1.1rem; }
+    .success-icon.spinner {
+      width: 2.5rem; height: 2.5rem; margin: 0 auto 1.1rem;
+      border: 3px solid rgba(37,88,217,0.15); border-top-color: var(--gk-primary);
+      border-radius: 50%; animation: gk-spin 0.8s linear infinite;
+    }
+    @keyframes gk-spin { to { transform: rotate(360deg); } }
     .success-title { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.75rem; }
     .success-body { font-size: 0.88rem; color: var(--gk-text-2); line-height: 1.8; max-width: 400px; margin: 0 auto 2rem; }
     .success-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
@@ -199,16 +217,14 @@
 
       <!-- Success screen shown after Stripe redirect -->
       <div class="success-screen" id="successScreen">
-        <span class="success-icon">✓</span>
-        <div class="success-title">Payment received — thank you</div>
-        <p class="success-body">
-          Your license key is on its way. Check the email you used at checkout —
-          it arrives within a few minutes. Use that key at the download portal to
-          get your app.
+        <span class="success-icon spinner" id="successIcon"></span>
+        <div class="success-title" id="successTitle">Confirming your payment…</div>
+        <p class="success-body" id="successBody">
+          One moment — checking your checkout session with Stripe.
         </p>
-        <div class="success-actions">
-          <a id="portalBtn" href="#" class="gk-btn gk-btn-primary" target="_blank">Download your app →</a>
-          <a href="demo.html" class="gk-btn gk-btn-secondary">Try the demo</a>
+        <div class="success-actions" id="successActions" style="display:none">
+          <a id="portalBtn" href="#" class="gk-btn gk-btn-primary">Open Goeckoh →</a>
+          <a href="demo.html" class="gk-btn gk-btn-secondary">Browse all tools</a>
         </div>
       </div>
 
@@ -252,7 +268,7 @@
           <li class="perk"><span class="perk-check">✓</span> Unlimited sessions</li>
           <li class="perk"><span class="perk-check">✓</span> Guardian dashboard</li>
           <li class="perk"><span class="perk-check">✓</span> ASD, dysarthria &amp; apraxia profiles</li>
-          <li class="perk"><span class="perk-check">✓</span> Android, Windows, Mac, Linux</li>
+          <li class="perk"><span class="perk-check">✓</span> Works instantly in any browser</li>
           <li class="perk"><span class="perk-check">✓</span> ABA progress tracking</li>
           <li class="perk"><span class="perk-check">✓</span> Voice data stays on-device</li>
           <li class="perk"><span class="perk-check">✓</span> Up to 2 devices per license</li>
@@ -293,8 +309,14 @@
   //
   //   STRIPE_PAYMENT_LINK  — create at dashboard.stripe.com → Payment Links
   //                          Set your product to "Goeckoh Early Access" at $20/mo
-  //                          In the link settings, add a redirect URL:
-  //                            https://goeckoh.com/download.html?payment=success
+  //                          In the link settings, set "After payment" to redirect to:
+  //                            https://goeckoh.com/download.html?payment=success&session_id={CHECKOUT_SESSION_ID}
+  //                          The {CHECKOUT_SESSION_ID} placeholder is required, verbatim —
+  //                          verifyAndUnlock() below needs the real session_id to confirm
+  //                          the payment with /checkout/verify-session before granting
+  //                          access; without it every checkout falls through to
+  //                          showUnverified(). (The live link below is already configured
+  //                          with this redirect — this note is for if you ever recreate it.)
   //                          Copy the buy.stripe.com/... URL here.
   //
   //   BACKEND_URL          — URL where the backend is running, e.g.
@@ -302,21 +324,65 @@
   //                          The download portal lives at BACKEND_URL/account
   //
   // ─────────────────────────────────────────────────────────────────────────
-  const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/test_9B65kD7os5mc6kA25HcbC01';
-  const BACKEND_URL          = 'https://goeckoh-backend.fly.dev';
+  const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/7sY14ncIM3e48sI9y9cbC00'; // LIVE — $20/mo goeckoh subscription
+  const BACKEND_URL          = 'https://' + (window.GOECKOH_BACKEND_HOST || 'goeckoh-backend.fly.dev'); // see backend-config.js
   // ─────────────────────────────────────────────────────────────────────────
 
   const portalURL = BACKEND_URL ? BACKEND_URL + '/account' : '#';
 
-  // Wire up portal links
-  document.getElementById('portalBtn').href  = portalURL;
+  // Wire up portal link (native-app license management — separate from the web app below)
   document.getElementById('portalLink').href = portalURL;
 
-  // Check for post-payment redirect
+  // The web app already works today (no native install needed) — send paying
+  // customers straight into it. Grant access on this device via the gate.
+  document.getElementById('portalBtn').href = 'real_time_therapeutic_voice_cloning_system.html';
+
+  // Check for post-payment redirect. The URL alone proves nothing — anyone
+  // can type ?payment=success into the address bar. Only the Stripe session
+  // ID, confirmed server-side, is trusted to grant access.
   const params = new URLSearchParams(window.location.search);
   if (params.get('payment') === 'success') {
-    document.getElementById('payFlow').style.display    = 'none';
+    document.getElementById('payFlow').style.display       = 'none';
     document.getElementById('successScreen').style.display = 'block';
+    verifyAndUnlock(params.get('session_id'));
+  }
+
+  async function verifyAndUnlock(sessionId) {
+    if (!sessionId || !BACKEND_URL) {
+      showUnverified();
+      return;
+    }
+    try {
+      const resp = await fetch(BACKEND_URL + '/checkout/verify-session?session_id=' + encodeURIComponent(sessionId));
+      const data = resp.ok ? await resp.json() : { paid: false };
+      if (data.paid) {
+        localStorage.setItem('gk_access', 'paid');
+        const icon = document.getElementById('successIcon');
+        icon.classList.remove('spinner');
+        icon.textContent = '✓';
+        document.getElementById('successTitle').textContent = 'Payment received — thank you';
+        document.getElementById('successBody').textContent =
+          'Your app is unlocked on this device right now — no install required, it runs ' +
+          'in the browser. A license key for the native app is also on its way to the ' +
+          'email you used at checkout, for when you want it on additional devices.';
+        document.getElementById('successActions').style.display = '';
+      } else {
+        showUnverified();
+      }
+    } catch (e) {
+      showUnverified();
+    }
+  }
+
+  function showUnverified() {
+    const icon = document.getElementById('successIcon');
+    icon.classList.remove('spinner');
+    icon.textContent = '⏳';
+    document.getElementById('successTitle').textContent = 'Payment received — confirming';
+    document.getElementById('successBody').innerHTML =
+      "We couldn't automatically verify this session on this device. If you completed " +
+      "checkout, your license key is on its way by email — it also unlocks the web app. " +
+      'Trouble? <a href="mailto:care@goeckoh.com" style="color:var(--gk-primary)">care@goeckoh.com</a>.';
   }
 
   // Configure the page based on whether Stripe is set up
@@ -338,17 +404,18 @@
     localStorage.setItem('gk_wl_email', email);
     localStorage.setItem('gk_wl_role',  role);
     localStorage.setItem('gk_wl_ts',    Date.now());
+    localStorage.setItem('gk_access',   'waitlist'); // early-access signup unlocks the tool pages on this device (non-PII marker)
 
     document.getElementById('waitlistFallback').innerHTML = `
       <div style="text-align:center;padding:1.5rem 0">
         <div style="font-size:2.5rem;margin-bottom:1rem">✓</div>
-        <div style="font-size:1.1rem;font-weight:800;margin-bottom:0.6rem">You're on the list</div>
+        <div style="font-size:1.1rem;font-weight:800;margin-bottom:0.6rem">You're on the list — and unlocked</div>
         <p style="font-size:0.82rem;color:var(--gk-text-2);line-height:1.75">
           We'll reach out to <strong style="color:var(--gk-text)">${email}</strong>
-          within 48 hours with setup instructions.
+          within 48 hours. In the meantime the full tool set is open on this device.
         </p>
-        <a href="demo.html" class="gk-btn gk-btn-primary" style="display:inline-block;margin-top:1.5rem">
-          Try the demo →
+        <a href="real_time_therapeutic_voice_cloning_system.html" class="gk-btn gk-btn-primary" style="display:inline-block;margin-top:1.5rem">
+          Open Goeckoh →
         </a>
       </div>
     `;

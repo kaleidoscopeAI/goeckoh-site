@@ -2,10 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="images/logo-clean.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Live Voice Analysis — GOECKOH</title>
   <meta name="description" content="Speak and see your voice in acoustic space. Goeckoh's LPC-12 engine maps your vowels in real time and calculates the formant correction vector that closes the neurological learning loop.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="See what Goeckoh hears — live voice demo">
+  <meta property="og:description" content="Speak into your microphone and watch LPC-12 formant analysis map your voice in real time — free, no signup, runs entirely in your browser.">
+  <meta property="og:image" content="https://goeckoh.com/images/logo-dark-energy.png">
+  <meta property="og:url" content="https://goeckoh.com/demo.html">
+  <meta property="og:site_name" content="Goeckoh">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="See what Goeckoh hears — live voice demo">
+  <meta name="twitter:description" content="Speak into your microphone and watch LPC-12 formant analysis map your voice in real time — free, no signup.">
+  <meta name="twitter:image" content="https://goeckoh.com/images/logo-dark-energy.png">
   <link rel="stylesheet" href="goeckoh-shared.css">
+  <script src="backend-config.js"></script>
   <style>
     /* ════════════════════════════════════════════════════════
        GOECKOH DEMO — Chrome / Graphite Instrument Aesthetic
@@ -668,6 +680,112 @@
       display: block; margin-top: 1rem;
       font-size: 0.68rem; color: var(--d-muted);
     }
+
+    /* ═══════════════════════════════════════════════════════
+       EARBUDS NOTICE
+       ═══════════════════════════════════════════════════════ */
+    .earbuds-notice {
+      display: flex; align-items: center; gap: 0.85rem;
+      max-width: 640px; margin: 0 auto 2rem;
+      background: rgba(255,152,48,0.07); border: 1px solid rgba(255,152,48,0.28);
+      border-radius: 10px; padding: 0.9rem 1.3rem;
+      position: relative; z-index: 1;
+      text-align: left;
+    }
+    .earbuds-notice .eb-icon { font-size: 1.4rem; flex-shrink: 0; }
+    .earbuds-notice .eb-text { font-size: 0.76rem; line-height: 1.65; color: var(--d-silver); }
+    .earbuds-notice .eb-text strong { color: var(--d-amber); }
+
+    /* ═══════════════════════════════════════════════════════
+       HEAR-IT CONTROLS
+       ═══════════════════════════════════════════════════════ */
+    #hearItBtn {
+      font-family: var(--gk-font);
+      font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 0.75rem 2rem; border-radius: 7px;
+      cursor: pointer; border: none; outline: none;
+      transition: all 0.18s;
+      background: linear-gradient(135deg, var(--d-lime) 0%, #7DC020 100%);
+      color: #050C04;
+      box-shadow: 0 4px 22px rgba(158,224,48,0.38);
+    }
+    #hearItBtn:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 7px 30px rgba(158,224,48,0.55);
+    }
+    #hearItBtn:disabled { opacity: 0.38; cursor: not-allowed; }
+    #hearItBtn.playing {
+      background: transparent; border: 1px solid rgba(158,224,48,0.5) !important;
+      color: var(--d-lime); box-shadow: none;
+      animation: hearit-pulse 1.4s ease-in-out infinite;
+    }
+    @keyframes hearit-pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(158,224,48,0.3); }
+      50%      { box-shadow: 0 0 0 8px rgba(158,224,48,0); }
+    }
+    .hearit-countdown {
+      font-family: var(--gk-mono, monospace);
+      font-size: 0.7rem; color: var(--d-lime);
+      display: none; align-items: center; gap: 0.4rem;
+    }
+    .hearit-countdown.visible { display: inline-flex; }
+    .quota-msg {
+      display: none; max-width: 560px; margin: 1.2rem auto 0;
+      background: rgba(0,212,255,0.06); border: 1px solid rgba(0,212,255,0.22);
+      border-radius: 10px; padding: 1rem 1.3rem;
+      font-size: 0.78rem; color: var(--d-silver); line-height: 1.7;
+      position: relative; z-index: 1; text-align: center;
+    }
+    .quota-msg.visible { display: block; }
+    .quota-msg a {
+      color: var(--d-cyan); font-weight: 700; text-decoration: none;
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       SIGNAL PATH DIAGRAM
+       ═══════════════════════════════════════════════════════ */
+    .signal-path {
+      max-width: 900px; margin: 2.6rem auto 0;
+      display: grid; grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+      align-items: center; gap: 0.4rem;
+      position: relative; z-index: 1;
+    }
+    @media(max-width:760px) {
+      .signal-path { grid-template-columns: 1fr; }
+      .sp-arrow { transform: rotate(90deg); margin: -0.3rem auto; }
+    }
+    .sp-stage {
+      background: var(--d-panel); border: 1px solid var(--d-border);
+      border-top: 1px solid var(--d-chrome-top);
+      border-radius: 10px; padding: 1rem 0.85rem; text-align: center;
+      transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+    }
+    .sp-stage .sp-icon { font-size: 1.3rem; margin-bottom: 0.45rem; display: block; }
+    .sp-stage .sp-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.03em; color: var(--d-text); margin-bottom: 0.25rem; }
+    .sp-stage .sp-desc { font-size: 0.6rem; color: var(--d-muted); line-height: 1.5; }
+    .sp-stage.on {
+      border-color: var(--d-cyan); border-top-color: var(--d-cyan);
+      background: rgba(0,212,255,0.07);
+      box-shadow: 0 0 20px rgba(0,212,255,0.16), inset 0 1px 0 rgba(0,212,255,0.15);
+    }
+    .sp-stage.on .sp-icon { color: var(--d-cyan); }
+    .sp-stage.correct.on {
+      border-color: var(--d-lime); border-top-color: var(--d-lime);
+      background: rgba(158,224,48,0.07);
+      box-shadow: 0 0 20px rgba(158,224,48,0.16), inset 0 1px 0 rgba(158,224,48,0.15);
+    }
+    .sp-arrow {
+      font-size: 1.1rem; color: var(--d-border-hi);
+      transition: color 0.25s;
+    }
+    .sp-arrow.on { color: var(--d-cyan); }
+    .sp-latency {
+      text-align: center; margin-top: 0.9rem;
+      font-size: 0.66rem; color: var(--d-muted);
+      letter-spacing: 0.04em;
+    }
+    .sp-latency b { color: var(--d-lime); font-family: var(--gk-mono, monospace); }
   </style>
 </head>
 <body>
@@ -707,6 +825,16 @@
     the 200 ms window where your brain finalises its motor learning.
   </p>
 
+  <div class="earbuds-notice">
+    <span class="eb-icon">🎧</span>
+    <span class="eb-text">
+      <strong>Earbuds required to hear the correction.</strong>
+      Goeckoh plays your corrected voice back into your ear while your microphone is listening —
+      on laptop or phone speakers that loop straight back into the mic, causing feedback squeal.
+      The analysis-only mode below works fine without earbuds; "Hear The Correction" needs them.
+    </span>
+  </div>
+
   <!-- Profile selector cards -->
   <div class="profile-switcher">
     <button class="ps-btn active" data-p="asd" onclick="selectProfile('asd', this)">
@@ -729,12 +857,47 @@
   <div class="hero-controls">
     <button id="startBtn" onclick="startDemo()">◉&nbsp; Activate Analysis</button>
     <button id="stopBtn"  onclick="stopDemo()" disabled>◻&nbsp; Stop</button>
+    <button id="hearItBtn" onclick="toggleHearIt()">🎧&nbsp; Hear The Correction</button>
+    <div class="hearit-countdown" id="hearItCountdown">
+      <span class="status-dot pulse" style="background:var(--d-lime)"></span>
+      <span id="hearItCountdownTxt">45s left</span>
+    </div>
     <div class="status-pill" id="statusPill">
       <div class="status-dot" id="statusDot"></div>
       <span id="statusTxt">Microphone off — click Activate to begin</span>
     </div>
     <div class="voiced-badge off" id="voicedBadge">Unvoiced</div>
   </div>
+
+  <div class="quota-msg" id="quotaMsg"></div>
+
+  <!-- Signal path — lights up live as audio flows through the correction loop -->
+  <div class="signal-path">
+    <div class="sp-stage" id="spMic">
+      <span class="sp-icon">🎙️</span>
+      <div class="sp-label">Your Mic</div>
+      <div class="sp-desc">48kHz raw input, no noise suppression</div>
+    </div>
+    <div class="sp-arrow" id="spArrow1">→</div>
+    <div class="sp-stage" id="spAnalyze">
+      <span class="sp-icon">📊</span>
+      <div class="sp-label">LPC-12 Analysis</div>
+      <div class="sp-desc">Vocal tract modeled every ~16ms</div>
+    </div>
+    <div class="sp-arrow" id="spArrow2">→</div>
+    <div class="sp-stage correct" id="spCorrect">
+      <span class="sp-icon">🎯</span>
+      <div class="sp-label">Formant Shift</div>
+      <div class="sp-desc">Biquad filter nudges F1/F2 to target</div>
+    </div>
+    <div class="sp-arrow" id="spArrow3">→</div>
+    <div class="sp-stage" id="spEar">
+      <span class="sp-icon">👂</span>
+      <div class="sp-label">Your Ear</div>
+      <div class="sp-desc">Corrected voice, your identity intact</div>
+    </div>
+  </div>
+  <div class="sp-latency" id="spLatency">Round-trip audio latency: <b>—</b></div>
 </section>
 
 <!-- Mic help panel — shown only on error -->
@@ -1169,6 +1332,7 @@ const PROFILES = {
     desc: 'Vowel space compression — formants cluster toward the centre of acoustic space rather than reaching canonical vowel targets. Reduced jaw and tongue excursion (articulatory undershoot) is the primary driver.',
     correction: 'Expand toward canonical targets — nudge F1 down for high vowels, push F2 toward front and back extremes depending on the intended vowel.',
     arrowFraction: 0.28,
+    f1: 530, f2: 1800, // live correction target, Hz — matches the paid Echo Therapy engine's ASD Child profile
   },
   dysarthria: {
     icon: '◉',
@@ -1176,6 +1340,7 @@ const PROFILES = {
     desc: 'Reduced muscle tone and coordination in the tongue, jaw, and lips leads to a compressed, centralised vowel space. Both F1 and F2 deviate from targets across all vowel categories.',
     correction: 'Simultaneous F1 and F2 correction toward vowel-specific targets. Fundamental frequency (F0) and speaker identity are preserved throughout.',
     arrowFraction: 0.35,
+    f1: 560, f2: 1380,
   },
   apraxia: {
     icon: '⟳',
@@ -1183,15 +1348,24 @@ const PROFILES = {
     desc: 'Inconsistent phoneme production — the same target sound varies substantially in acoustic space across successive attempts, revealing a breakdown in motor planning rather than muscle control.',
     correction: 'Stabilise F1/F2 toward consistent canonical targets. Repeated exposure to the corrected signal reinforces the correct motor programme via the corollary discharge loop.',
     arrowFraction: 0.22,
+    f1: 510, f2: 1680,
   },
 };
 
 /* ── State ─────────────────────────────────────────────────── */
 let currentProfile = 'asd';
 let running = false, animId = null;
-let audioCtx = null, micStream = null, analyserNode = null;
+let audioCtx = null, micStream = null, analyserNode = null, micSourceNode = null;
 let smF0 = 0, smF1 = 0, smF2 = 0, smF3 = 0, smHNR = 0, smRMS = 0;
 let vowelHistory = [];
+
+/* ── Hear-It state ─────────────────────────────────────────── */
+let workletNode = null, hearItActive = false, hearItTimer = null, hearItRemaining = 0;
+let hearItModuleLoaded = false; // registerProcessor() may only run once per AudioContext
+const hearItBtn         = document.getElementById('hearItBtn');
+const hearItCountdown   = document.getElementById('hearItCountdown');
+const hearItCountdownTxt= document.getElementById('hearItCountdownTxt');
+const quotaMsg          = document.getElementById('quotaMsg');
 
 /* ── DOM refs ───────────────────────────────────────────────── */
 const startBtn      = document.getElementById('startBtn');
@@ -1232,6 +1406,7 @@ function selectProfile(name, btn) {
   document.getElementById('pbCorrection').innerHTML =
     '<strong>Correction strategy:</strong> ' + p.correction;
   if (running) profileBanner.classList.add('visible');
+  if (hearItActive) pushHearItParams();
 }
 selectProfile('asd', document.querySelector('.ps-btn[data-p="asd"]'));
 
@@ -1260,12 +1435,13 @@ async function startDemo() {
     return;
   }
 
-  audioCtx     = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 48000 });
-  const source = audioCtx.createMediaStreamSource(micStream);
-  analyserNode = audioCtx.createAnalyser();
+  audioCtx           = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 48000 });
+  hearItModuleLoaded = false; // fresh AudioContext = fresh AudioWorkletGlobalScope
+  micSourceNode      = audioCtx.createMediaStreamSource(micStream);
+  analyserNode  = audioCtx.createAnalyser();
   analyserNode.fftSize               = 4096;
   analyserNode.smoothingTimeConstant = 0.72;
-  source.connect(analyserNode);
+  micSourceNode.connect(analyserNode);
 
   running = true;
   startBtn.disabled = true;
@@ -1276,10 +1452,12 @@ async function startDemo() {
 }
 
 function stopDemo() {
+  if (hearItActive) stopHearIt();
   running = false;
   cancelAnimationFrame(animId);
   micStream && micStream.getTracks().forEach(t => t.stop());
   audioCtx  && audioCtx.close();
+  micSourceNode = null;
   startBtn.disabled = false;
   stopBtn.disabled  = true;
   setStatus('Microphone off — click Activate to begin', '');
@@ -1291,6 +1469,215 @@ function stopDemo() {
   vowelHistory.length = 0;
   drawVowelSpace();
 }
+
+/* ── Hear-It: real formant-correction playback ───────────────
+   Same LPC-12 + biquad engine as the paid Echo Therapy tool —
+   not a simulation. Rate-limited server-side by IP via
+   POST /demo/session/start (see backend/main.py). ──────────── */
+const HEARIT_WORKLET = `
+class GoeckohDemoProcessor extends AudioWorkletProcessor {
+  constructor() {
+    super();
+    this.ORDER = 12; this.FRAME = 256; this.HOP = 128; this.DEC = 3;
+    this.aaZ = new Float32Array(2); this.decPh = 0;
+    this.frm = new Float32Array(this.FRAME); this.frmN = 0; this.peZ = 0;
+    this.sF1 = 500; this.sF2 = 1500; this.AL = 0.88;
+    this.bq1s = new Float32Array(2); this.bq2s = new Float32Array(2);
+    this.bq1c = null; this.bq2c = null;
+    this.tF1 = null; this.tF2 = null; this.str = 0.6; this.wet = 1.0; this.active = false;
+    this.port.onmessage = ev => {
+      const d = ev.data;
+      this.tF1 = d.tF1; this.tF2 = d.tF2; this.str = d.str; this.wet = d.wet; this.active = d.active;
+      if (!d.active) { this.bq1c = null; this.bq2c = null; }
+    };
+  }
+  aaDec(x) {
+    const y = 0.25 * x + 0.5 * this.aaZ[0] + 0.25 * this.aaZ[1];
+    this.aaZ[1] = this.aaZ[0]; this.aaZ[0] = x;
+    return y;
+  }
+  ldLPC(f, p) {
+    const n = f.length;
+    const r = new Float64Array(p + 1);
+    for (let lag = 0; lag <= p; lag++) { let s = 0; for (let i = lag; i < n; i++) s += f[i] * f[i - lag]; r[lag] = s; }
+    if (r[0] < 1e-12) return new Float64Array(p + 1);
+    const a = new Float64Array(p + 1), t = new Float64Array(p + 1);
+    let e = r[0];
+    for (let i = 1; i <= p; i++) {
+      let k = r[i];
+      for (let j = 1; j < i; j++) k += a[j] * r[i - j];
+      k = -k / e; a[i] = k;
+      for (let j = 1; j < i; j++) t[j] = a[j] + k * a[i - j];
+      for (let j = 1; j < i; j++) a[j] = t[j];
+      e *= (1 - k * k);
+      if (e < 1e-20) break;
+    }
+    return a;
+  }
+  formants(a, p, sr) {
+    const N = 512; const peaks = []; let pm = 0, ppm = 0;
+    for (let k = 0; k <= N; k++) {
+      const w = Math.PI * k / N; let re = 1, im = 0;
+      for (let j = 1; j <= p; j++) { re += a[j] * Math.cos(-j * w); im += a[j] * Math.sin(-j * w); }
+      const m = 1.0 / (re * re + im * im + 1e-10);
+      if (k >= 2 && pm > ppm && pm > m) { const f = (k - 1) * sr / (2 * N); if (f > 80 && f < 4500) peaks.push([f, pm]); }
+      ppm = pm; pm = m;
+    }
+    peaks.sort((a, b) => b[1] - a[1]);
+    const top = peaks.slice(0, 5).sort((a, b) => a[0] - b[0]);
+    return [top[0]?.[0] ?? 500, top[1]?.[0] ?? 1500];
+  }
+  bqMake(fSrc, fTgt, sr, bwHz) {
+    const r = Math.exp(-Math.PI * bwHz / sr);
+    const wS = 2 * Math.PI * fSrc / sr, wT = 2 * Math.PI * fTgt / sr;
+    return { b0: 1, b1: -2 * r * Math.cos(wS), b2: r * r, a1: -2 * r * Math.cos(wT), a2: r * r };
+  }
+  bqTick(x, s, c) {
+    const y = c.b0 * x + s[0];
+    s[0] = c.b1 * x - c.a1 * y + s[1];
+    s[1] = c.b2 * x - c.a2 * y;
+    return y;
+  }
+  analyzeFrame(frm) {
+    const n = frm.length;
+    let rms = 0; for (let i = 0; i < n; i++) rms += frm[i] * frm[i]; rms = Math.sqrt(rms / n);
+    if (rms < 5e-5) return;
+    const w = new Float32Array(n);
+    w[0] = (frm[0] - 0.97 * this.peZ) * 0.08;
+    for (let i = 1; i < n; i++) { const hw = 0.54 - 0.46 * Math.cos(2 * Math.PI * i / (n - 1)); w[i] = (frm[i] - 0.97 * frm[i - 1]) * hw; }
+    this.peZ = frm[n - 1];
+    const a = this.ldLPC(w, this.ORDER);
+    const [F1, F2] = this.formants(a, this.ORDER, 16000);
+    this.sF1 = this.AL * this.sF1 + (1 - this.AL) * F1;
+    this.sF2 = this.AL * this.sF2 + (1 - this.AL) * F2;
+    if (this.active && this.tF1 != null && this.tF2 != null) {
+      const c1 = this.sF1 + this.str * (this.tF1 - this.sF1);
+      const c2 = this.sF2 + this.str * (this.tF2 - this.sF2);
+      this.bq1c = Math.abs(this.sF1 - c1) > 15 ? this.bqMake(this.sF1, c1, 48000, 90)  : null;
+      this.bq2c = Math.abs(this.sF2 - c2) > 15 ? this.bqMake(this.sF2, c2, 48000, 120) : null;
+    } else { this.bq1c = null; this.bq2c = null; }
+  }
+  process(inputs, outputs) {
+    const inp = inputs[0]?.[0], out = outputs[0]?.[0];
+    if (!inp || !out) return true;
+    for (let i = 0; i < inp.length; i++) {
+      const x = inp[i];
+      const aa = this.aaDec(x);
+      if (++this.decPh >= this.DEC) {
+        this.decPh = 0; this.frm[this.frmN++] = aa;
+        if (this.frmN >= this.FRAME) { this.analyzeFrame(this.frm); this.frm.copyWithin(0, this.HOP); this.frmN = this.HOP; }
+      }
+      let y = x;
+      if (this.bq1c) y = this.bqTick(y, this.bq1s, this.bq1c);
+      if (this.bq2c) y = this.bqTick(y, this.bq2s, this.bq2c);
+      out[i] = this.wet * y + (1 - this.wet) * x;
+    }
+    return true;
+  }
+}
+registerProcessor('goeckoh-demo-processor', GoeckohDemoProcessor);
+`;
+
+async function toggleHearIt() {
+  if (hearItActive) { stopHearIt(); return; }
+
+  hearItBtn.disabled = true;
+  hearItBtn.textContent = 'Checking availability…';
+
+  let quota;
+  try {
+    const resp = await fetch((window.GOECKOH_BACKEND_HOST ? 'https://' + window.GOECKOH_BACKEND_HOST : '') + '/demo/session/start', { method: 'POST' });
+    if (resp.status === 429) {
+      showQuotaMessage(
+        "You've used today's free live-correction demos on this connection. " +
+        'The silent analysis mode above still works with no limit. ' +
+        '<a href="download.html">Get unlimited access — $20/mo →</a>'
+      );
+      hearItBtn.disabled = false;
+      hearItBtn.textContent = '🎧  Hear The Correction';
+      return;
+    }
+    quota = resp.ok ? await resp.json() : { allowed: true, max_seconds: 45 };
+  } catch (e) {
+    // Backend unreachable — fail open on duration but keep the feature usable offline/dev
+    quota = { allowed: true, max_seconds: 45 };
+  }
+
+  hideQuotaMessage();
+  if (!running) await startDemo();
+  if (!audioCtx || !micSourceNode) {
+    hearItBtn.disabled = false;
+    hearItBtn.textContent = '🎧  Hear The Correction';
+    return;
+  }
+
+  try {
+    if (!hearItModuleLoaded) {
+      // registerProcessor() throws (per spec — some browsers are stricter than
+      // others about it) if called twice in the same AudioContext, so this
+      // must only run once per context, not once per Hear-It session.
+      const blob = new Blob([HEARIT_WORKLET], { type: 'application/javascript' });
+      const url  = URL.createObjectURL(blob);
+      await audioCtx.audioWorklet.addModule(url);
+      URL.revokeObjectURL(url);
+      hearItModuleLoaded = true;
+    }
+
+    workletNode = new AudioWorkletNode(audioCtx, 'goeckoh-demo-processor', {
+      numberOfInputs: 1, numberOfOutputs: 1, outputChannelCount: [1],
+    });
+    micSourceNode.connect(workletNode);
+    workletNode.connect(audioCtx.destination);
+    pushHearItParams();
+
+    hearItActive = true;
+    hearItRemaining = quota.max_seconds || 45;
+    hearItBtn.classList.add('playing');
+    hearItBtn.textContent = '◻  Stop Correction';
+    hearItBtn.disabled = false;
+    hearItCountdown.classList.add('visible');
+    updateSignalPath(true);
+    document.getElementById('spLatency').innerHTML =
+      'Round-trip audio latency: <b>~' + Math.round((audioCtx.baseLatency || 0.01) * 1000 + 16) + 'ms</b>';
+
+    hearItTimer = setInterval(() => {
+      hearItRemaining--;
+      hearItCountdownTxt.textContent = hearItRemaining + 's left';
+      if (hearItRemaining <= 0) stopHearIt();
+    }, 1000);
+    hearItCountdownTxt.textContent = hearItRemaining + 's left';
+  } catch (e) {
+    console.error(e);
+    hearItBtn.disabled = false;
+    hearItBtn.textContent = '🎧  Hear The Correction';
+    showQuotaMessage('Could not start live correction: ' + (e.message || e.name) + '. Try Chrome, Edge, or Safari.');
+  }
+}
+
+function pushHearItParams() {
+  if (!workletNode) return;
+  const p = PROFILES[currentProfile];
+  workletNode.port.postMessage({ tF1: p.f1, tF2: p.f2, str: 0.6, wet: 1.0, active: true });
+}
+
+function stopHearIt() {
+  clearInterval(hearItTimer);
+  hearItTimer = null;
+  if (workletNode) { try { workletNode.disconnect(); } catch (e) {} workletNode = null; }
+  hearItActive = false;
+  hearItBtn.classList.remove('playing');
+  hearItBtn.textContent = '🎧  Hear The Correction';
+  hearItCountdown.classList.remove('visible');
+  updateSignalPath(false);
+}
+
+function updateSignalPath(on) {
+  ['spMic', 'spAnalyze', 'spCorrect', 'spEar'].forEach(id => document.getElementById(id).classList.toggle('on', on));
+  ['spArrow1', 'spArrow2', 'spArrow3'].forEach(id => document.getElementById(id).classList.toggle('on', on));
+}
+
+function showQuotaMessage(html) { quotaMsg.innerHTML = html; quotaMsg.classList.add('visible'); }
+function hideQuotaMessage() { quotaMsg.classList.remove('visible'); }
 
 function setStatus(txt, type) {
   statusTxt.textContent = txt;

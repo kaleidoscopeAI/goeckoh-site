@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="images/logo-clean.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Real-Time Therapeutic Voice Cloning System</title>
     <style>
@@ -536,6 +537,7 @@
     </style>
   <link rel="stylesheet" href="goeckoh-shared.css">
   <script src="gate.js"></script>
+  <script src="backend-config.js"></script>
 </head>
 <body>
   <nav class="gk-nav">
@@ -551,7 +553,6 @@
       <a href="advanced_voice_visualizer_pro.html"              class="gk-nav-link">Visualizer</a>
       <a href="voice_therapy_profile_transform.html"            class="gk-nav-link">Profile Lab</a>
       <a href="goeckoh_dashboard.html"                          class="gk-nav-link">Dashboard</a>
-      <a href="observatory.html"                                 class="gk-nav-link">Observatory</a>
       <a href="voice_game.html" class="gk-nav-link">Voice Game</a>
       <a href="voice_setup.html" class="gk-nav-link">Setup</a>
     </div>
@@ -1497,9 +1498,9 @@ const PROFILES = {
 
             async _connectGuardian() {
                 try {
-                    const proto = location.protocol === 'https:' ? 'https' : 'http';
-                    const host  = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
-                        ? `${location.hostname}:8000` : location.host;
+                    const isLocal = (location.hostname === 'localhost' || location.hostname === '127.0.0.1');
+                    const proto = isLocal ? (location.protocol === 'https:' ? 'https' : 'http') : 'https';
+                    const host  = isLocal ? `${location.hostname}:8000` : (window.GOECKOH_BACKEND_HOST || 'goeckoh-backend.fly.dev');
                     const res  = await fetch(`${proto}://${host}/session/new-code`);
                     if (!res.ok) return;
                     const data = await res.json();
