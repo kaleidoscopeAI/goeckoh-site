@@ -81,6 +81,16 @@ PLAN_MAX_DEVICES = {
     PlanTier.CLINICIAN: 10,
 }
 
+# The account portal is served by this app at /account (see account_portal()
+# below) — it is NOT at goeckoh.com/account, which doesn't exist (goeckoh.com
+# is static GitHub Pages hosting with no server-side routing). Same
+# PUBLIC_BACKEND_HOST fallback preflight.py uses, so this stays correct
+# without a second hardcoded value if the backend ever moves to a custom
+# domain in front of Fly.
+PUBLIC_ACCOUNT_URL = "https://" + os.environ.get(
+    "PUBLIC_BACKEND_HOST", os.environ.get("FLY_APP_NAME", "goeckoh-backend") + ".fly.dev"
+) + "/account"
+
 if not STRIPE_SECRET_KEY:
     logging.warning("STRIPE_SECRET_KEY not set — Stripe operations will fail")
 if not JWT_SECRET:
@@ -382,7 +392,7 @@ async def activate_license(request: Request, body: ActivateRequest, db: Session 
             raise HTTPException(
                 403,
                 f"Device limit reached ({lic.max_devices} devices for {lic.plan.value} plan). "
-                "Deactivate a device at goeckoh.com/account or upgrade your plan."
+                f"Deactivate a device at {PUBLIC_ACCOUNT_URL} or upgrade your plan."
             )
         device = Device(
             license_id=lic.id,
@@ -450,7 +460,7 @@ async def validate_license(request: Request, body: ValidateRequest, db: Session 
             "plan": lic.plan.value,
             "expires_in_days": 3,
             "status": "grace_period",
-            "warning": "Payment failed. Please update your payment method at goeckoh.com/account.",
+            "warning": f"Payment failed. Please update your payment method at {PUBLIC_ACCOUNT_URL}.",
         }
 
     # Enforce device limit — same logic as activate so validate can't bypass it
@@ -473,7 +483,7 @@ async def validate_license(request: Request, body: ValidateRequest, db: Session 
             raise HTTPException(
                 403,
                 f"Device limit reached ({lic.max_devices} devices for {lic.plan.value} plan). "
-                "Deactivate a device at goeckoh.com/account or upgrade your plan."
+                f"Deactivate a device at {PUBLIC_ACCOUNT_URL} or upgrade your plan."
             )
         device = Device(
             license_id=lic.id,
