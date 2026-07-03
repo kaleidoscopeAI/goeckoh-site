@@ -582,6 +582,22 @@ async def health():
 
 
 # ---------------------------------------------------------------------------
+# Public Demo Quota (unauthenticated — the free live-correction demo)
+# ---------------------------------------------------------------------------
+# demo.html's "Hear The Correction" mode plays real formant-corrected audio
+# back to the visitor, unauthenticated. That's the core paid feature, so it's
+# rate-limited per IP rather than per account. Each allowed session is capped
+# client-side at DEMO_SESSION_SECONDS.
+DEMO_SESSION_SECONDS = 45
+
+
+@app.post("/demo/session/start")
+@limiter.limit("3/day")
+async def demo_session_start(request: Request):
+    return {"allowed": True, "max_seconds": DEMO_SESSION_SECONDS}
+
+
+# ---------------------------------------------------------------------------
 # Account portal (customer-facing frontend) — served same-origin so the
 # browser calls /license/* and /download/* without CORS friction.
 # ---------------------------------------------------------------------------
