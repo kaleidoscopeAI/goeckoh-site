@@ -117,10 +117,24 @@ def run_checks() -> Report:
     elif sk.startswith("sk_test_"):
         r.add("STRIPE_SECRET_KEY", WARNING, "TEST key (sk_test_) — sandbox only, not real sales",
               "swap to sk_live_... before public launch")
-    elif sk.startswith("sk_live_"):
-        r.add("STRIPE_SECRET_KEY", OK, "live key present (sk_live_)")
-    elif sk.startswith("rk_live_"):
-        r.add("STRIPE_SECRET_KEY", OK, "live restricted key present (rk_live_)")
+    elif sk.startswith("sk_live_") or sk.startswith("rk_live_"):
+        # This app calls Checkout Session and Subscription reads (verify-session,
+        # webhook plan lookup). A restricted key (rk_live_) that's the wrong one
+        # or missing those scopes authenticates fine but 403s on exactly those
+        # calls — the prefix alone doesn't prove it works, so actually call it.
+        try:
+            import stripe as _stripe
+            _stripe.api_key = sk
+            _stripe.checkout.Session.list(limit=1)
+            _stripe.Subscription.list(limit=1)
+            kind = "restricted" if sk.startswith("rk_live_") else "full secret"
+            r.add("STRIPE_SECRET_KEY", OK,
+                  f"live {kind} key present and can read Checkout Sessions + Subscriptions")
+        except Exception as e:
+            r.add("STRIPE_SECRET_KEY", BLOCKER,
+                  f"live key present but the API rejected a real call: {e}",
+                  "if this is a restricted key (rk_live_), grant it Checkout Sessions: Read "
+                  "and Subscriptions: Read, or switch to the full sk_live_ secret key")
     else:
         r.add("STRIPE_SECRET_KEY", WARNING, "set but not a recognised Stripe key format",
               "expected sk_live_... or rk_live_... (or sk_test_... for sandbox)")
@@ -135,6 +149,45 @@ def run_checks() -> Report:
               "verify it is the endpoint's signing secret")
     else:
         r.add("STRIPE_WEBHOOK_SECRET", OK, "set (whsec_)")
+
+    # A correct whsec_ doesn't prove an endpoint pointing at THIS deployment is
+    # actually registered in Stripe — that's the failure mode that leaves every
+    # real payment stuck (session verified, but no License row, no email, ever).
+    if not _is_placeholder(sk):
+        try:
+            import stripe as _stripe
+            _stripe.api_key = sk
+            endpoints = _stripe.WebhookEndpoint.list(limit=20)
+            live_matches = [
+                e for e in endpoints.auto_paging_iter()
+                if e.get("url", "").rstrip("/").endswith("/webhook/stripe")
+                and e.get("status") == "enabled"
+            ]
+            if not live_matches:
+                r.add("Stripe webhook endpoint", BLOCKER,
+                      "no enabled endpoint in this Stripe account targets */webhook/stripe — "
+                      "checkout.session.completed will never reach this server",
+                      "dashboard.stripe.com → Developers → Webhooks → Add endpoint → "
+                      "https://<this-host>/webhook/stripe, events: checkout.session.completed, "
+                      "invoice.payment_succeeded, invoice.payment_failed, "
+                      "customer.subscription.updated, customer.subscription.deleted")
+            else:
+                needed = {"checkout.session.completed"}
+                for e in live_matches:
+                    events = set(e.get("enabled_events", []))
+                    if "*" in events or needed <= events:
+                        r.add("Stripe webhook endpoint", OK,
+                              f"{e['url']} is enabled and subscribed to checkout.session.completed")
+                        break
+                else:
+                    r.add("Stripe webhook endpoint", BLOCKER,
+                          f"endpoint {live_matches[0]['url']} exists but isn't subscribed to "
+                          "checkout.session.completed — licenses will never be created",
+                          "edit the endpoint in the Stripe dashboard and add that event")
+        except Exception as e:
+            r.add("Stripe webhook endpoint", WARNING,
+                  f"could not list webhook endpoints to verify ({e})",
+                  "this key may lack Webhook Endpoints: Read — check manually in the dashboard")
 
     # ── Email delivery (license keys reach buyers) ───────────────────────────
     send = os.environ.get("SEND_EMAIL_ENABLED", "false").lower() == "true"
@@ -152,22 +205,48 @@ def run_checks() -> Report:
     else:
         r.add("Email delivery", OK, f"enabled via {smtp_host}")
 
-    # ── Installer binaries ───────────────────────────────────────────────────
-    downloads = Path(os.environ.get("DOWNLOADS_DIR", "./downloads"))
-    if not downloads.is_absolute():
-        downloads = (Path(__file__).resolve().parent / downloads).resolve()
-    present = [p for p, f in PLATFORM_FILES.items() if (downloads / f).exists()]
-    missing = [p for p in PLATFORM_FILES if p not in present]
-    if not present:
+    # ── Installer binaries (served from a private GitHub release, not disk) ──
+    gh_repo = os.environ.get("GITHUB_RELEASES_REPO", "kaleidoscopeAI/goeckoh-releases")
+    gh_token = os.environ.get("GITHUB_RELEASES_TOKEN", "")
+    if _is_placeholder(gh_token):
         r.add("Installer binaries", BLOCKER,
-              f"none present in {downloads} — every /download returns 503",
-              f"stage at least one of: {', '.join(PLATFORM_FILES.values())}")
-    elif missing:
-        r.add("Installer binaries", WARNING,
-              f"present: {', '.join(present)}; missing: {', '.join(missing)}",
-              "those platforms' downloads will 503 until staged")
+              "GITHUB_RELEASES_TOKEN not set — every /download returns 503",
+              "create a fine-grained PAT with Contents:read on the releases repo, "
+              "set GITHUB_RELEASES_TOKEN")
     else:
-        r.add("Installer binaries", OK, "all four platforms staged")
+        try:
+            import requests
+            resp = requests.get(
+                f"https://api.github.com/repos/{gh_repo}/releases/latest",
+                headers={"Authorization": f"Bearer {gh_token}",
+                         "Accept": "application/vnd.github+json"},
+                timeout=10,
+            )
+            if resp.status_code != 200:
+                r.add("Installer binaries", BLOCKER,
+                      f"GitHub releases lookup failed ({resp.status_code}) for {gh_repo} — "
+                      "every /download returns 503",
+                      "check GITHUB_RELEASES_TOKEN has Contents:read on that repo, and that "
+                      "GITHUB_RELEASES_REPO is correct")
+            else:
+                names = {a["name"] for a in resp.json().get("assets", [])}
+                present = [p for p, f in PLATFORM_FILES.items() if f in names]
+                missing = [p for p in PLATFORM_FILES if p not in present]
+                if not present:
+                    r.add("Installer binaries", BLOCKER,
+                          f"latest release in {gh_repo} has none of the expected assets",
+                          f"upload: {', '.join(PLATFORM_FILES.values())}")
+                elif missing:
+                    r.add("Installer binaries", WARNING,
+                          f"present: {', '.join(present)}; missing: {', '.join(missing)}",
+                          "those platforms' downloads will 503 until uploaded")
+                else:
+                    r.add("Installer binaries", OK,
+                          f"all four platforms found in {gh_repo} latest release")
+        except Exception as e:
+            r.add("Installer binaries", WARNING,
+                  f"could not reach GitHub to verify ({e})",
+                  "check network egress to api.github.com from this host")
 
     # ── Admin endpoint guard ─────────────────────────────────────────────────
     admin = os.environ.get("ADMIN_SECRET", "")
