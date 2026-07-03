@@ -8,7 +8,7 @@ name: Register Stripe webhook endpoint
 #
 # Requires two GitHub Actions secrets (Settings → Secrets and variables →
 # Actions): STRIPE_SECRET_KEY (the live sk_live_/rk_live_ key — if restricted,
-# it needs Webhook Endpoints: Write) and FLY_API_TOKEN.
+# it needs Webhook Endpoints: Read+Write) and FLY_API_TOKEN.
 
 on:
   workflow_dispatch:
@@ -21,9 +21,11 @@ on:
 jobs:
   register:
     runs-on: ubuntu-latest
+    env:
+      FLY_APP: ${{ vars.FLY_APP_NAME || 'goeckoh-backend' }}
     steps:
       - name: Setup flyctl
-        uses: superfly/flyctl-actions/setup-flyctl@master
+        uses: superfly/flyctl-actions/setup-flyctl@v1
 
       - name: Create or verify webhook endpoint, sync signing secret to Fly
         env:
@@ -31,6 +33,12 @@ jobs:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
           BACKEND_HOST: ${{ github.event.inputs.backend_host }}
         run: |
+          for name in STRIPE_SECRET_KEY FLY_API_TOKEN BACKEND_HOST FLY_APP; do
+            if [ -z "${!name}" ]; then
+              echo "::error::$name is not set — add it under Settings > Secrets and variables > Actions (repo secret for STRIPE_SECRET_KEY/FLY_API_TOKEN, repo variable for FLY_APP_NAME if you want to override the default)."
+              exit 1
+            fi
+          done
           pip install --quiet stripe
           python3 - <<'PYEOF'
           import os, subprocess, sys
@@ -38,6 +46,7 @@ jobs:
 
           stripe.api_key = os.environ["STRIPE_SECRET_KEY"]
           host = os.environ["BACKEND_HOST"]
+          fly_app = os.environ["FLY_APP"]
           target_url = f"https://{host}/webhook/stripe"
           needed_events = [
               "checkout.session.completed",
@@ -46,6 +55,15 @@ jobs:
               "customer.subscription.updated",
               "customer.subscription.deleted",
           ]
+
+          def fly_has_secret(name: str) -> bool:
+              # `flyctl secrets list` only ever prints secret NAMES + digests,
+              # never values — safe to shell out to and safe to log.
+              out = subprocess.run(
+                  ["flyctl", "secrets", "list", "-a", fly_app],
+                  check=True, capture_output=True, text=True,
+              ).stdout
+              return any(line.split()[0] == name for line in out.splitlines()[1:] if line.split())
 
           existing = [
               e for e in stripe.WebhookEndpoint.list(limit=100).auto_paging_iter()
@@ -62,17 +80,48 @@ jobs:
                   )
                   print(f"Updated existing endpoint {ep['id']} — added missing events: {sorted(missing)}")
               else:
-                  print(f"Endpoint {ep['id']} already targets {target_url} with all needed events. Nothing to do.")
-              print("No new signing secret to push (endpoint already existed — its whsec_ was set when it was first created).")
-              sys.exit(0)
+                  print(f"Endpoint {ep['id']} already targets {target_url} with all needed events.")
+
+              # Stripe never re-exposes a signing secret after creation, so if this
+              # endpoint was created some other way (dashboard, a different CI run
+              # that failed after the Stripe call but before the Fly push) there is
+              # no way to recover it here. Reporting success without checking would
+              # be exactly the false-OK failure mode preflight.py was fixed to catch
+              # on the Fly side — check the same thing here instead of assuming it.
+              if fly_has_secret("STRIPE_WEBHOOK_SECRET"):
+                  print(f"{fly_app} already has STRIPE_WEBHOOK_SECRET set. Nothing further to do.")
+                  sys.exit(0)
+              else:
+                  print(
+                      f"::error::Endpoint {ep['id']} exists in Stripe, but {fly_app} has no "
+                      "STRIPE_WEBHOOK_SECRET set — Stripe can't re-issue the signing secret for "
+                      "an existing endpoint. Delete this endpoint in the Stripe dashboard "
+                      "(dashboard.stripe.com > Developers > Webhooks) and re-run this workflow "
+                      "to create a fresh one and push its secret automatically."
+                  )
+                  sys.exit(1)
 
           ep = stripe.WebhookEndpoint.create(url=target_url, enabled_events=needed_events)
           secret = ep["secret"]  # only ever returned once, at creation
+          print(f"::add-mask::{secret}")  # generated at runtime, not a registered
+                                            # GitHub secret — mask it explicitly so it
+                                            # can never appear in this log, including
+                                            # in a failure traceback below.
           print(f"Created webhook endpoint {ep['id']} for {target_url}")
 
-          subprocess.run(
-              ["flyctl", "secrets", "set", f"STRIPE_WEBHOOK_SECRET={secret}", "-a", "goeckoh-backend"],
-              check=True,
-          )
-          print("Pushed the new signing secret to goeckoh-backend as STRIPE_WEBHOOK_SECRET.")
+          try:
+              # `secrets import` reads KEY=VALUE from stdin, keeping the secret out
+              # of argv entirely (unlike `secrets set KEY=VALUE ...` as an arg).
+              subprocess.run(
+                  ["flyctl", "secrets", "import", "-a", fly_app],
+                  input=f"STRIPE_WEBHOOK_SECRET={secret}\n",
+                  text=True, check=True, capture_output=True,
+              )
+          except subprocess.CalledProcessError as e:
+              print("::error::flyctl secrets import failed — see stdout/stderr above (secret is masked).")
+              print(e.stdout)
+              print(e.stderr)
+              sys.exit(1)
+
+          print(f"Pushed the new signing secret to {fly_app} as STRIPE_WEBHOOK_SECRET.")
           PYEOF
