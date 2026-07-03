@@ -159,7 +159,7 @@ def run_checks() -> Report:
             _stripe.api_key = sk
             endpoints = _stripe.WebhookEndpoint.list(limit=20)
             live_matches = [
-                e for e in endpoints.auto_paging_iter()
+                e for e in endpoints.data
                 if e.get("url", "").rstrip("/").endswith("/webhook/stripe")
                 and e.get("status") == "enabled"
             ]
@@ -222,12 +222,23 @@ def run_checks() -> Report:
                          "Accept": "application/vnd.github+json"},
                 timeout=10,
             )
-            if resp.status_code != 200:
+            if resp.status_code in (401, 403):
+                r.add("Installer binaries", BLOCKER,
+                      f"GitHub rejected GITHUB_RELEASES_TOKEN ({resp.status_code}) for {gh_repo} — "
+                      "every /download returns 503",
+                      "token is invalid, expired, or lacks Contents:read on that repo — "
+                      "regenerate a fine-grained PAT scoped to it")
+            elif resp.status_code == 404:
+                r.add("Installer binaries", BLOCKER,
+                      f"{gh_repo} or its latest release was not found (404) — "
+                      "every /download returns 503",
+                      "check GITHUB_RELEASES_REPO is correct and a release has been published, "
+                      "and that the token can see this repo (private repos need explicit access)")
+            elif resp.status_code != 200:
                 r.add("Installer binaries", BLOCKER,
                       f"GitHub releases lookup failed ({resp.status_code}) for {gh_repo} — "
                       "every /download returns 503",
-                      "check GITHUB_RELEASES_TOKEN has Contents:read on that repo, and that "
-                      "GITHUB_RELEASES_REPO is correct")
+                      "check GitHub's status and retry; if persistent, check GITHUB_RELEASES_REPO")
             else:
                 names = {a["name"] for a in resp.json().get("assets", [])}
                 present = [p for p, f in PLATFORM_FILES.items() if f in names]
