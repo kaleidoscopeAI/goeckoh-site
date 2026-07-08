@@ -131,7 +131,8 @@
     <a href="demo.html" class="gk-nav-link">Try the Demo</a>
   </div>
   <a href="download.html" class="gk-nav-cta">Get Early Access</a>
-  <button class="gk-nav-toggle" onclick="document.getElementById('gkNav').classList.toggle('gk-open')" aria-label="Menu">☰</button>
+  <button class="gk-nav-toggle" aria-label="Menu" aria-controls="gkNav" aria-expanded="false"
+    onclick="const nav=document.getElementById('gkNav'); this.setAttribute('aria-expanded', nav.classList.toggle('gk-open'))">☰</button>
 </nav>
 
 <!-- HERO -->

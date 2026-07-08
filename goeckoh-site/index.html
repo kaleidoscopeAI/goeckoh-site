@@ -350,7 +350,11 @@
       border-top:3px solid var(--gk-teal); text-decoration:none;
       transition:transform 0.15s, box-shadow 0.15s, border-color 0.15s;
     }
-    .research-card:hover { transform:translateY(-2px); box-shadow:var(--gk-shadow-sm); border-color:var(--gk-border-2); }
+    .research-card:hover,
+    .research-card:focus-visible {
+      transform:translateY(-2px); box-shadow:var(--gk-shadow-sm); border-color:var(--gk-border-2);
+    }
+    .research-card:focus-visible { outline:2px solid var(--gk-primary); outline-offset:2px; }
     .research-card.blue-top { border-top-color: var(--gk-primary); }
     .research-card.amber-top { border-top-color: #C97C1A; }
     .rc-more { font-size:0.76rem; font-weight:700; color:var(--gk-primary); margin-top:1rem; }
