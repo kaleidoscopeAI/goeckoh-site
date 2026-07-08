@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="images/logo-light.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Research Behind Goeckoh — Corollary Discharge, N1 Suppression, DIVA & More</title>
+  <meta name="description" content="The full research foundation behind Goeckoh's real-time voice correction: corollary discharge, N1 suppression, the DIVA model, formant acoustics, linear predictive coding, and ABA measurement — with sources, so you can read the actual science, not a summary of it.">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="The Research Behind Goeckoh">
+  <meta property="og:description" content="Sixty years of speech neuroscience, acoustics, and clinical measurement — organized, sourced, and written in full, not simplified.">
+  <meta property="og:image" content="https://goeckoh.com/images/logo-light.png">
+  <meta property="og:url" content="https://goeckoh.com/research.html">
+  <meta property="og:site_name" content="Goeckoh">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The Research Behind Goeckoh">
+  <meta name="twitter:description" content="Sixty years of speech neuroscience, acoustics, and clinical measurement — organized, sourced, and written in full.">
+  <meta name="twitter:image" content="https://goeckoh.com/images/logo-light.png">
+  <link rel="canonical" href="https://goeckoh.com/research.html">
+  <link rel="stylesheet" href="goeckoh-shared.css">
+  <style>
+    :root {
+      --gk-bg:        #F7F5F0;
+      --gk-bg-card:   #FFFFFF;
+      --gk-bg-raised: #EDF1F7;
+      --gk-bg-input:  #EEF0F5;
+      --gk-primary:   #2558D9;
+      --gk-teal:      #2A8C7A;
+      --gk-amber:     #C97C1A;
+      --gk-amber-dark: #B8622C;
+      --gk-amber-light: #D98A4E;
+      --gk-red:       #C94040;
+      --gk-green:     #2A8C7A;
+      --gk-blue:      #2558D9;
+      --gk-violet:    #6B5FD8;
+      --gk-text:      #1A2F4B;
+      --gk-text-2:    #4B6280;
+      --gk-muted:     #8098B5;
+      --gk-border:    rgba(26,47,75,0.10);
+      --gk-border-2:  rgba(26,47,75,0.17);
+    }
+    .gk-nav { background: rgba(247,245,240,0.97) !important; border-bottom-color: rgba(26,47,75,0.10) !important; }
+    .gk-nav-cta { color: #fff !important; }
+    .gk-nav-links.gk-open { background: #fff !important; border-bottom-color: rgba(26,47,75,0.10) !important; }
+    .gk-nav-link.active { color: var(--gk-primary) !important; background: rgba(37,88,217,0.08) !important; }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { font-family:var(--gk-font); background:var(--gk-bg); color:var(--gk-text); overflow-x:hidden; }
+
+    .rp-hero { padding: calc(var(--gk-nav-h) + 4rem) 0 3rem; }
+    .rp-eyebrow {
+      font-size:0.68rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase;
+      color:var(--gk-teal); margin-bottom:1rem; display:block;
+    }
+    .rp-title { font-size:clamp(2rem,4.5vw,3.2rem); font-weight:900; letter-spacing:-0.03em; line-height:1.12; color:var(--gk-text); margin-bottom:1.25rem; max-width:820px; }
+    .rp-intro { font-size:1.05rem; color:var(--gk-text-2); line-height:1.85; max-width:740px; margin-bottom:1.25rem; }
+    .rp-intro strong { color: var(--gk-text); }
+    .rp-honesty {
+      background:#fff; border:1px solid var(--gk-border); border-left:3px solid var(--gk-primary);
+      border-radius:12px; padding:1.4rem 1.6rem; max-width:740px; margin-top:1.5rem;
+      font-size:0.9rem; color:var(--gk-text-2); line-height:1.8;
+    }
+    .rp-honesty strong { color: var(--gk-text); }
+
+    .rp-toc { background:#fff; border:1px solid var(--gk-border); border-radius:16px; padding:1.75rem 2rem; margin-top:2.5rem; max-width:740px; }
+    .rp-toc-label { font-size:0.68rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--gk-muted); margin-bottom:1rem; display:block; }
+    .rp-toc ol { list-style:none; counter-reset:rp; display:flex; flex-direction:column; gap:0.65rem; }
+    .rp-toc li { counter-increment:rp; }
+    .rp-toc a {
+      display:flex; align-items:baseline; gap:0.75rem; text-decoration:none; color:var(--gk-text);
+      font-size:0.93rem; font-weight:600; transition:color 0.15s;
+    }
+    .rp-toc a:hover { color:var(--gk-primary); }
+    .rp-toc a::before {
+      content: counter(rp); font-family:var(--gk-mono); font-size:0.78rem; font-weight:700;
+      color:var(--gk-primary); flex-shrink:0; width:1.4rem;
+    }
+
+    .rp-section { padding:4.5rem 0; border-top:1px solid var(--gk-border); }
+    .rp-section:nth-child(odd) { background:#fff; }
+    .rp-tag {
+      display:inline-block; font-size:0.66rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase;
+      padding:0.3rem 0.8rem; border-radius:999px; margin-bottom:1.25rem;
+    }
+    .rp-tag.blue   { color:var(--gk-primary); background:rgba(37,88,217,0.08); }
+    .rp-tag.teal   { color:var(--gk-teal); background:rgba(42,140,122,0.08); }
+    .rp-tag.amber  { color:var(--gk-amber); background:rgba(201,124,26,0.1); }
+    .rp-tag.violet { color:var(--gk-violet); background:rgba(107,95,216,0.08); }
+    .rp-h2 { font-size:clamp(1.5rem,3vw,2.1rem); font-weight:800; letter-spacing:-0.02em; color:var(--gk-text); margin-bottom:0.5rem; max-width:760px; }
+    .rp-h2-sub { font-size:1rem; color:var(--gk-text-2); margin-bottom:2rem; max-width:700px; }
+    .rp-body { max-width:760px; }
+    .rp-body p { font-size:0.98rem; color:var(--gk-text-2); line-height:1.9; margin-bottom:1.3rem; }
+    .rp-body p:last-child { margin-bottom:0; }
+    .rp-body h4 { font-size:0.98rem; font-weight:700; color:var(--gk-text); margin:1.75rem 0 0.6rem; }
+    .rp-body strong { color: var(--gk-text); }
+    .rp-goeckoh {
+      background:var(--gk-bg-raised); border-radius:14px; padding:1.5rem 1.75rem; margin:1.75rem 0;
+      font-size:0.93rem; color:var(--gk-text-2); line-height:1.85; max-width:760px;
+    }
+    .rp-goeckoh strong { color:var(--gk-primary); }
+
+    .rp-refs { max-width:760px; margin-top:2.25rem; padding-top:1.75rem; border-top:1px solid var(--gk-border); }
+    .rp-refs-label { font-size:0.68rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--gk-muted); margin-bottom:0.9rem; display:block; }
+    .rp-refs ul { list-style:none; display:flex; flex-direction:column; gap:0.75rem; }
+    .rp-refs li { font-size:0.83rem; color:var(--gk-text-2); line-height:1.7; padding-left:1.1rem; position:relative; }
+    .rp-refs li::before { content:'—'; position:absolute; left:0; color:var(--gk-muted); }
+    .rp-refs .note { font-size:0.78rem; color:var(--gk-muted); font-style:italic; margin-top:0.4rem; }
+
+    .rp-cta { background:linear-gradient(135deg, #1A2F4B 0%, #1E3D5A 50%, #163547 100%); color:#fff; text-align:center; }
+    .rp-cta h2 { font-size:clamp(1.6rem,3vw,2.2rem); font-weight:800; margin-bottom:1rem; color:#fff; }
+    .rp-cta p { font-size:1rem; color:rgba(255,255,255,0.75); line-height:1.8; max-width:560px; margin:0 auto 1.75rem; }
+  </style>
+</head>
+<body>
+
+<nav class="gk-nav">
+  <a href="index.html" class="gk-nav-brand">
+    <img src="images/logo-light.png" alt="Goeckoh" class="gk-nav-logo">
+    <div>
+      <div class="gk-nav-brand-name">GOECK<span>OH</span></div>
+      <div class="gk-nav-brand-sub">Go Echo</div>
+    </div>
+  </a>
+  <div class="gk-nav-links" id="gkNav">
+    <a href="index.html#science" class="gk-nav-link">The Science</a>
+    <a href="research.html" class="gk-nav-link active">Research</a>
+    <a href="index.html#families" class="gk-nav-link">For Families</a>
+    <a href="index.html#clinicians" class="gk-nav-link">For Clinicians</a>
+    <a href="index.html#pricing" class="gk-nav-link">Pricing</a>
+    <a href="demo.html" class="gk-nav-link">Try the Demo</a>
+  </div>
+  <a href="download.html" class="gk-nav-cta">Get Early Access</a>
+  <button class="gk-nav-toggle" onclick="document.getElementById('gkNav').classList.toggle('gk-open')" aria-label="Menu">☰</button>
+</nav>
+
+<!-- HERO -->
+<section class="rp-hero">
+  <div class="gk-container">
+    <span class="rp-eyebrow">The Research Foundation</span>
+    <h1 class="rp-title">Sixty years of speech science, in full — not a highlight reel.</h1>
+    <p class="rp-intro">
+      Goeckoh is built on published, peer-reviewed research spanning motor control theory,
+      auditory neuroscience, acoustic phonetics, digital signal processing, and applied
+      behavior analysis. This page is that research, presented completely: the mechanism,
+      the specific studies, what they actually found, and how each piece connects to what
+      the product does. <strong>Nothing here is simplified for marketing.</strong> If you want
+      the short version, the homepage has it. If you want to actually evaluate the science —
+      as a parent, a clinician, or anyone deciding whether to trust a product that touches
+      your child's voice — this is that page.
+    </p>
+    <div class="rp-honesty">
+      <strong>How to read this page:</strong> each section below separates two different
+      things — <strong>the established science</strong> (what's been published, replicated,
+      and is not in serious scientific dispute) from <strong>Goeckoh's engineering
+      application</strong> of it (how we built a consumer product around these principles,
+      which is our work, not a peer-reviewed claim in itself). We think that distinction
+      matters. A product that touches something as personal as a child's voice should tell
+      you plainly which parts are borrowed from decades of university research and which
+      parts are ours to stand behind.
+    </div>
+
+    <div class="rp-toc">
+      <span class="rp-toc-label">Six pillars, in order</span>
+      <ol>
+        <li><a href="#corollary-discharge">Corollary discharge — the brain's prediction of its own voice</a></li>
+        <li><a href="#n1-suppression">N1 suppression — the measurable evidence that prediction exists</a></li>
+        <li><a href="#diva-model">The DIVA model — how the brain learns to speak, computationally</a></li>
+        <li><a href="#formant-acoustics">Formant acoustics — what physically carries a vowel's identity</a></li>
+        <li><a href="#vocal-tract-modeling">Linear predictive coding — extracting and reshaping formants in real time</a></li>
+        <li><a href="#aba-methodology">Applied Behavior Analysis — how progress gets measured, not guessed at</a></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- 1. COROLLARY DISCHARGE -->
+<section class="rp-section" id="corollary-discharge">
+  <div class="gk-container">
+    <span class="rp-tag blue">01 · Motor Control Theory</span>
+    <h2 class="rp-h2">Corollary discharge: the brain's internal copy of its own voice</h2>
+    <p class="rp-h2-sub">Why the brain needs to predict what it's about to hear before it hears it.</p>
+    <div class="rp-body">
+      <p>
+        Every voluntary movement your body makes is accompanied by a second, invisible signal.
+        When your motor cortex sends a command to your muscles — reach for a cup, blink, speak
+        a word — it simultaneously routes a copy of that same command to the sensory areas of
+        your brain that will process the movement's consequences. This copy is called an
+        <strong>efference copy</strong>, and the prediction it generates about incoming sensory
+        input is the <strong>corollary discharge</strong>. The concept predates modern
+        neuroscience: it was proposed independently by Erich von Holst and Horst Mittelstaedt
+        in 1950, and by Roger Sperry the same year, to explain a basic puzzle — how animals
+        tell the difference between the world moving and themselves moving through it.
+      </p>
+      <p>
+        In speech, this mechanism has a very specific job. Before you hear a single sound of
+        your own voice, your brain has already generated a prediction of exactly what that
+        sound should be — its pitch, its loudness, its formant structure — based on the motor
+        command it just sent to your lips, tongue, jaw, and larynx. When the actual sound
+        arrives at your ears a few milliseconds later, your auditory cortex doesn't process it
+        from scratch. It compares what arrived against what was predicted. If the two match,
+        the auditory response is dampened — your brain already "knew" what it was about to
+        hear, so there's less new information to process. If the two don't match, that
+        mismatch is itself a signal: something about the intended movement didn't come out
+        right, and the motor system has a chance to correct it before the next attempt.
+      </p>
+      <h4>What the research specifically shows</h4>
+      <p>
+        Katherine Niziolek, Srikantan Nagarajan, and John Houde published a key piece of this
+        picture in 2013 in the <em>Journal of Neuroscience</em>. Using a paradigm that
+        perturbed speakers' formant feedback in real time, they showed that the brain's
+        efference copy isn't a coarse, generic "I'm about to talk" signal — it carries fine
+        acoustic detail specific to the exact vowel being produced. Speakers whose own
+        productions were more variable showed correspondingly more variable neural responses
+        to feedback perturbation, meaning the prediction is precise enough to track
+        trial-by-trial differences in a person's own articulation. This matters because it
+        rules out a simpler explanation (that the brain just suppresses all self-generated
+        sound equally) and supports a model where the comparison between prediction and
+        reality is acoustically detailed enough to drive genuine motor learning.
+      </p>
+      <p>
+        John Houde and Edward Chang's 2015 review in <em>Current Biology</em>, "The cortical
+        computations underlying feedback control in vocal production," lays out how this
+        predictive loop is implemented across the speech motor and auditory cortical
+        networks — not as a single switch, but as a distributed system that continuously
+        updates its predictions as a person learns, adapts, or compensates for a change in
+        their own vocal tract or hearing.
+      </p>
+      <div class="rp-goeckoh">
+        <strong>Why this matters for Goeckoh:</strong> in several neurodivergent and
+        neurological presentations — including profiles associated with autism, and speech
+        changes following stroke or traumatic brain injury — this predictive comparison loop
+        is theorized to be attenuated or less reliably engaged, which would make it harder for
+        the brain to detect and correct its own speech errors from feedback alone. Goeckoh's
+        entire design rationale is to give that comparison loop better raw material to work
+        with: an auditory signal that has already been corrected toward the intended target,
+        delivered back to the ear fast enough to still participate in the same predictive
+        window the brain is already using.
+      </div>
+    </div>
+    <div class="rp-refs">
+      <span class="rp-refs-label">References</span>
+      <ul>
+        <li>Niziolek, C.A., Nagarajan, S.S., &amp; Houde, J.F. (2013). What does motor efference copy represent? Evidence from speech production. <em>Journal of Neuroscience, 33</em>(41), 16110–16116.</li>
+        <li>Houde, J.F., &amp; Chang, E.F. (2015). The cortical computations underlying feedback control in vocal production. <em>Current Biology, 25</em>(21), R1024–R1035.</li>
+        <li>von Holst, E., &amp; Mittelstaedt, H. (1950). Das Reafferenzprinzip. <em>Naturwissenschaften, 37</em>, 464–476.</li>
+        <li class="note">The von Holst &amp; Mittelstaedt and Sperry papers are the foundational, decades-old origin of the corollary discharge concept in general motor control — cited here for completeness, not as speech-specific evidence.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 2. N1 SUPPRESSION -->
+<section class="rp-section" id="n1-suppression">
+  <div class="gk-container">
+    <span class="rp-tag teal">02 · Auditory Neuroscience</span>
+    <h2 class="rp-h2">N1 suppression: the measurable signature of self-recognition</h2>
+    <p class="rp-h2-sub">How corollary discharge shows up as an actual, recordable brain signal.</p>
+    <div class="rp-body">
+      <p>
+        Corollary discharge is a theoretical mechanism. N1 suppression is the evidence that it
+        actually happens, measured directly from the brain. The N1 (sometimes called N100) is
+        a negative-going deflection in the electroencephalogram (EEG) or magnetoencephalogram
+        (MEG) that occurs roughly 100 milliseconds after any auditory event — a click, a tone,
+        a syllable. Its amplitude reflects how much the auditory cortex "reacts" to that sound.
+      </p>
+      <p>
+        The consistent finding across decades of research is this: the N1 response to a sound
+        is smaller when that sound is self-generated than when an identical sound is played
+        back to a passive listener. Speak a vowel, and your auditory cortex's N1 response to
+        hearing your own voice is measurably suppressed compared to the N1 response if that
+        exact same recording were played to you a moment later while you sat silently. This is
+        the auditory system doing exactly what the corollary discharge model predicts — using
+        an internal prediction to partially "explain away" expected sensory input, freeing up
+        neural resources to flag anything unexpected instead.
+      </p>
+      <h4>What the research specifically shows</h4>
+      <p>
+        John Houde, Srikantan Nagarajan, Kensuke Sekihara, and Michael Merzenich demonstrated
+        this using MEG in a foundational 2002 study, showing the magnetic equivalent of N1
+        suppression (the M100 component) during speaking compared to passive listening to
+        playback of one's own voice. Ramesh Behroozmand and colleagues have extended this line
+        of work extensively using ERP methods, including studies examining how the N1/P2
+        complex changes when a speaker's own pitch or formant feedback is artificially
+        perturbed in real time — directly testing how the suppression response depends on
+        whether the returned sound matches what was predicted.
+      </p>
+      <p>
+        A separate but closely related and highly influential study is John Houde and Michael
+        Jordan's 1998 paper in <em>Science</em>, "Sensorimotor adaptation in speech
+        production." Rather than measuring N1 directly, this study demonstrated something that
+        depends on the same underlying comparison mechanism: when speakers hear their own vowel
+        formants shifted in real time through headphones, they unconsciously adjust their
+        articulation to compensate — moving their formants in the opposite direction of the
+        shift, over repeated trials, without being told to do anything differently. This is
+        direct behavioral proof that the brain uses corrected auditory feedback to update its
+        motor commands for speech, which is the exact mechanism Goeckoh's correction loop is
+        designed to engage deliberately, rather than by accident of a lab perturbation
+        experiment.
+      </p>
+      <div class="rp-goeckoh">
+        <strong>Why this matters for Goeckoh:</strong> the Houde &amp; Jordan finding is arguably
+        the single most direct piece of evidence that real-time formant-shifted feedback
+        changes what a speaker does next. It's also the reason correction speed matters so
+        much: the adaptation effect depends on the corrected signal arriving close enough to
+        natural speech timing that the brain treats it as feedback about its own voice, not as
+        a separate, delayed sound. That's the entire reason Goeckoh is built around a sub-50
+        millisecond correction latency rather than a system that corrects speech after the
+        fact.
+      </div>
+    </div>
+    <div class="rp-refs">
+      <span class="rp-refs-label">References</span>
+      <ul>
+        <li>Houde, J.F., Nagarajan, S.S., Sekihara, K., &amp; Merzenich, M.M. (2002). Modulation of the auditory cortex during speech: an MEG study. <em>Journal of Cognitive Neuroscience, 14</em>(8), 1125–1138.</li>
+        <li>Behroozmand, R., Karvelis, L., Liu, H., &amp; Larson, C.R. (2009). Vocalization-induced enhancement of the auditory cortex responsiveness during voice F0 feedback perturbation. <em>Clinical Neurophysiology, 120</em>(7), 1303–1312.</li>
+        <li>Houde, J.F., &amp; Jordan, M.I. (1998). Sensorimotor adaptation in speech production. <em>Science, 279</em>(5354), 1213–1216.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 3. DIVA MODEL -->
+<section class="rp-section" id="diva-model">
+  <div class="gk-container">
+    <span class="rp-tag violet">03 · Computational Neuroscience</span>
+    <h2 class="rp-h2">The DIVA model: a unified account of how speech is learned</h2>
+    <p class="rp-h2-sub">Turning the prediction-and-comparison loop into a working, testable model of the whole speech system.</p>
+    <div class="rp-body">
+      <p>
+        Corollary discharge and N1 suppression describe a mechanism. The <strong>Directions
+        Into Velocities of Articulators</strong> (DIVA) model, developed by Frank Guenther and
+        colleagues at Boston University over several decades, is an attempt to describe the
+        entire system that mechanism operates within — a neural network model, grounded in
+        known brain anatomy, of how a person acquires and continuously fine-tunes the motor
+        skill of speaking.
+      </p>
+      <p>
+        DIVA proposes that speech is controlled by two parallel systems working together: a
+        <strong>feedforward</strong> system, which stores learned motor commands for producing
+        familiar sounds efficiently and quickly, and a <strong>feedback</strong> system, which
+        monitors auditory and somatosensory (touch and proprioceptive) consequences of speech
+        in real time and corrects the feedforward commands when they drift off target. Early in
+        life — or whenever adapting to a change, such as a growing vocal tract, a new set of
+        teeth, or a neurological change following injury — the feedback system does most of the
+        work, actively listening and correcting. Over time, successful corrections get folded
+        back into the feedforward system, making the skill increasingly automatic. This is the
+        same basic architecture used to explain motor learning in reaching and other skilled
+        movements, applied specifically to the vocal tract.
+      </p>
+      <h4>What the research specifically shows</h4>
+      <p>
+        Guenther's 2006 paper in the <em>Journal of Communication Disorders</em>, "Cortical
+        interactions underlying the production of speech sounds," lays out the model's
+        architecture and maps its components onto specific brain regions — including
+        Broca's area, premotor cortex, and superior temporal auditory regions — rather than
+        treating it as a purely abstract computational diagram. A companion body of work,
+        including fMRI studies published in <em>Cerebral Cortex</em>, has tested DIVA's
+        predictions against real brain-imaging data collected while participants spoke, finding
+        activation patterns broadly consistent with the model's proposed feedback and
+        feedforward pathways.
+      </p>
+      <p>
+        DIVA has since been used to model and explain a range of speech disorders by
+        simulating what happens when specific components of the model are disrupted —
+        including stuttering, apraxia of speech, and hearing-impairment-related speech
+        changes — by degrading or removing specific feedback pathways in simulation and
+        observing whether the resulting model output resembles the disordered speech pattern
+        seen clinically.
+      </p>
+      <div class="rp-goeckoh">
+        <strong>Why this matters for Goeckoh:</strong> DIVA is the reason Goeckoh is designed
+        as a feedback-correction tool rather than a feedforward-replacement tool. The model
+        predicts that if you improve the accuracy and timeliness of the auditory feedback
+        someone receives about their own speech, you strengthen the same natural learning loop
+        that gradually shapes feedforward motor programs — rather than trying to override or
+        replace a person's speech motor system from the outside. That's a meaningfully
+        different goal than devices that generate or synthesize speech on someone's behalf.
+      </div>
+    </div>
+    <div class="rp-refs">
+      <span class="rp-refs-label">References</span>
+      <ul>
+        <li>Guenther, F.H. (2006). Cortical interactions underlying the production of speech sounds. <em>Journal of Communication Disorders, 39</em>(5), 350–365.</li>
+        <li>Guenther, F.H., Ghosh, S.S., &amp; Tourville, J.A. (2006). Neural modeling and imaging of the cortical interactions underlying syllable production. <em>Brain and Language, 96</em>(3), 280–301.</li>
+        <li>Golfinopoulos, E., Tourville, J.A., &amp; Guenther, F.H. (2010). The integration of large-scale neural network modeling and functional brain imaging in speech motor control. <em>NeuroImage, 52</em>(3), 862–874.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 4. FORMANT ACOUSTICS -->
+<section class="rp-section" id="formant-acoustics">
+  <div class="gk-container">
+    <span class="rp-tag amber">04 · Acoustic Phonetics</span>
+    <h2 class="rp-h2">Formant acoustics: the physical substrate of a vowel's identity</h2>
+    <p class="rp-h2-sub">What Goeckoh is actually measuring and correcting, at the level of sound waves.</p>
+    <div class="rp-body">
+      <p>
+        Everything above describes a neural loop. This section describes the acoustic signal
+        that loop is actually processing. When air is pushed from the lungs through the vocal
+        folds, it produces a buzzing source sound rich in harmonics. The vocal tract — throat,
+        mouth, tongue position, lip shape — acts as a resonant filter on that source sound,
+        amplifying certain frequency bands and damping others. Those amplified frequency bands
+        are called <strong>formants</strong>, and this description of speech production as a
+        source (the vocal folds) filtered by a resonator (the vocal tract) is known as
+        <strong>source-filter theory</strong>, formalized by Gunnar Fant in his 1960 book
+        <em>Acoustic Theory of Speech Production</em> — still the foundational text of modern
+        acoustic phonetics.
+      </p>
+      <p>
+        The first two formants, F1 and F2, are what your brain uses to identify which vowel
+        it's hearing, almost independent of who is speaking. F1 corresponds inversely to
+        tongue height (a low F1 corresponds to a high tongue position, as in "ee"; a high F1
+        corresponds to a low tongue position, as in "ah"). F2 corresponds to tongue frontness
+        (a high F2 corresponds to a front vowel like "ee"; a low F2 corresponds to a back
+        vowel like "oo"). Plot F1 against F2 for every vowel a speaker produces, and you get
+        that speaker's personal <strong>vowel space</strong> — a map of exactly where their
+        vocal tract places each vowel acoustically.
+      </p>
+      <h4>What the research specifically shows</h4>
+      <p>
+        James Hillenbrand, Laura Getty, Michael Clark, and Kimberlee Wheeler published the
+        modern normative reference for American English vowels in 1995 in the <em>Journal of
+        the Acoustical Society of America</em>: "Acoustic characteristics of American English
+        vowels." Using recordings from 139 speakers (men, women, and children) producing a
+        standard set of vowels, they established the statistical distribution of formant
+        frequencies for each vowel category — in effect, a map of where a given vowel "should"
+        sit acoustically, and how much natural variation exists around that target across
+        speakers of different ages, sexes, and vocal tract sizes. This dataset (and its
+        extensions) remains the standard reference point for what counts as a clearly
+        identifiable vowel versus one that has drifted toward a neighboring vowel's acoustic
+        territory.
+      </p>
+      <p>
+        This is directly clinically relevant: many of the speech differences associated with
+        dysarthria, apraxia, and some ASD-related speech patterns show up acoustically as
+        vowels that have drifted from their expected F1/F2 territory — a centralized or
+        compressed vowel space, where distinct vowels acoustically overlap and become harder
+        for a listener to tell apart, even though the intended word was correct.
+      </p>
+      <div class="rp-goeckoh">
+        <strong>Why this matters for Goeckoh:</strong> "correcting a voice" is a vague phrase
+        until it's grounded in formant space. What Goeckoh's engine actually does, moment to
+        moment, is estimate a speaker's current formant positions and reshape them toward the
+        target vowel region for the sound the person is producing — without altering pitch,
+        speaking rate, or the broader spectral qualities that make a voice recognizably that
+        person's own. Formant correction, not voice replacement, is the specific acoustic
+        operation happening in real time.
+      </div>
+    </div>
+    <div class="rp-refs">
+      <span class="rp-refs-label">References</span>
+      <ul>
+        <li>Fant, G. (1960). <em>Acoustic Theory of Speech Production</em>. Mouton, The Hague.</li>
+        <li>Hillenbrand, J., Getty, L.A., Clark, M.J., &amp; Wheeler, K. (1995). Acoustic characteristics of American English vowels. <em>Journal of the Acoustical Society of America, 97</em>(5), 3099–3111.</li>
+        <li>Kent, R.D., &amp; Kim, Y.J. (2003). Toward an acoustic typology of motor speech disorders. <em>Clinical Linguistics &amp; Phonetics, 17</em>(6), 427–445.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 5. VOCAL TRACT MODELING / LPC -->
+<section class="rp-section" id="vocal-tract-modeling">
+  <div class="gk-container">
+    <span class="rp-tag blue">05 · Digital Signal Processing</span>
+    <h2 class="rp-h2">Linear predictive coding: extracting and reshaping formants fast enough to matter</h2>
+    <p class="rp-h2-sub">The engineering method that turns formant theory into something that can run in real time on a phone.</p>
+    <div class="rp-body">
+      <p>
+        Knowing that formants exist and knowing where they should sit doesn't, by itself, give
+        you a way to measure and change them in the roughly 20-millisecond windows available
+        during live conversation. That's a signal-processing problem, and the dominant
+        solution — used in telephony, speech coding, and speech analysis since the 1970s — is
+        <strong>linear predictive coding</strong> (LPC).
+      </p>
+      <p>
+        LPC works by modeling the vocal tract as an "all-pole" filter: a mathematical system
+        where each sample of the speech waveform can be predicted as a weighted sum of the
+        samples immediately before it. Solving for the weights that best predict a short
+        window of real speech gives you a set of filter coefficients that describe the shape
+        of the vocal tract's resonances at that instant — which is mathematically equivalent
+        to recovering the formant frequencies directly from the waveform, without needing a
+        separate acoustic model of the throat and mouth. Because the underlying math (solving
+        a linear system) is computationally cheap, LPC analysis can run on a short sliding
+        window of audio fast enough for real-time use, which is precisely why it became the
+        backbone of both mid-20th-century telephone compression and modern real-time speech
+        analysis.
+      </p>
+      <h4>What the research specifically shows</h4>
+      <p>
+        Bishnu Atal's foundational work at Bell Labs in the late 1960s and early 1970s
+        established both the analysis method (extracting LPC coefficients from a speech
+        signal) and the synthesis method (using those coefficients, plus a simplified source
+        signal, to regenerate intelligible speech) — the same two operations, analysis and
+        resynthesis, that sit at the center of any real-time formant-correction pipeline. John
+        Makhoul's widely cited 1975 tutorial in the <em>Proceedings of the IEEE</em>, "Linear
+        Prediction: A Tutorial Review," remains the standard reference explaining why this
+        particular mathematical approach became the dominant method in the field, and how its
+        coefficients map back onto genuine acoustic properties of the vocal tract rather than
+        being an arbitrary compression trick.
+      </p>
+      <p>
+        Because LPC coefficients correspond to actual resonance frequencies, they can be
+        manipulated directly — shifted toward a target formant position — and then used to
+        resynthesize the speech signal with the original source (pitch, voicing, timing)
+        preserved but the resonant filter shape corrected. This is what makes LPC-based
+        methods suited to formant correction specifically, as opposed to other voice
+        modification techniques that operate on pitch or timing instead.
+      </p>
+      <div class="rp-goeckoh">
+        <strong>Why this matters for Goeckoh:</strong> this is the actual engineering
+        underneath the product. Goeckoh's correction pipeline analyzes short windows of live
+        microphone audio using LPC-family techniques to estimate current formant positions,
+        computes the adjustment needed to move them toward the target vowel region established
+        by acoustic-phonetics research (see Formant Acoustics, above), and resynthesizes the
+        corrected signal — all inside a latency budget small enough to stay within the
+        biological feedback window described in the corollary discharge and N1 suppression
+        sections. Every other section on this page describes why that correction should help;
+        this section is how it's technically possible to do it live.
+      </div>
+    </div>
+    <div class="rp-refs">
+      <span class="rp-refs-label">References</span>
+      <ul>
+        <li>Atal, B.S., &amp; Hanauer, S.L. (1971). Speech analysis and synthesis by linear prediction of the speech wave. <em>Journal of the Acoustical Society of America, 50</em>(2B), 637–655.</li>
+        <li>Makhoul, J. (1975). Linear prediction: A tutorial review. <em>Proceedings of the IEEE, 63</em>(4), 561–580.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 6. ABA METHODOLOGY -->
+<section class="rp-section" id="aba-methodology">
+  <div class="gk-container">
+    <span class="rp-tag teal">06 · Clinical Measurement</span>
+    <h2 class="rp-h2">Applied Behavior Analysis: measuring progress instead of guessing at it</h2>
+    <p class="rp-h2-sub">Why session data is structured the way it is, and what it's actually tracking.</p>
+    <div class="rp-body">
+      <p>
+        Everything above explains why real-time formant correction should help. It doesn't, by
+        itself, tell a family or a clinician whether it's actually working for a specific
+        person over time. That's a measurement problem, and Goeckoh's answer to it is
+        structured around <strong>Applied Behavior Analysis</strong> (ABA) — not as a therapy
+        method Goeckoh delivers, but as the measurement discipline behind how session data is
+        recorded.
+      </p>
+      <p>
+        ABA's core methodological contribution, independent of any specific intervention
+        technique, is insisting that target behaviors be defined operationally (specific,
+        observable, and countable) and tracked systematically over time, so that whether a
+        skill is actually improving is a question answered by data rather than by subjective
+        impression. Cooper, Heron, and Heward's textbook <em>Applied Behavior Analysis</em>
+        (now in its third edition, 2020) is the standard graduate-level reference for this
+        methodology and is used broadly across special education and clinical behavior
+        analysis training.
+      </p>
+      <h4>What this looks like in practice</h4>
+      <p>
+        Applied to Goeckoh specifically: every session logs concrete, countable events rather
+        than a vague sense of "it seemed to go well" — which specific phonological targets
+        (vowel or consonant productions) were attempted and how close each landed to its
+        acoustic target, discrete fluency events (hesitations, self-corrections, successful
+        productions), and co-regulation markers relevant to emotional state during a session.
+        This turns each session into structured, comparable data points rather than an isolated
+        anecdote, so a caregiver or clinician can look at a trend across weeks instead of
+        relying on memory of how last Tuesday went.
+      </p>
+      <div class="rp-goeckoh">
+        <strong>Why this matters for Goeckoh:</strong> this is the difference between a
+        product that claims to help and a product that shows its work. Because every session's
+        acoustic targets, attempts, and outcomes are logged as structured data on-device, a
+        parent or a speech-language pathologist can review actual progress over time —
+        whether a specific vowel contrast is stabilizing, whether fluency events are
+        decreasing, whether a particular correction profile is or isn't producing change — the
+        same way any accountable clinical intervention should be reviewable, instead of asking
+        a family to simply trust that something is working.
+      </div>
+    </div>
+    <div class="rp-refs">
+      <span class="rp-refs-label">References</span>
+      <ul>
+        <li>Cooper, J.O., Heron, T.E., &amp; Heward, W.L. (2020). <em>Applied Behavior Analysis</em> (3rd ed.). Pearson.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING CTA -->
+<section class="rp-cta">
+  <div class="gk-container">
+    <h2>That's the full foundation. Now hear it work.</h2>
+    <p>
+      Every mechanism on this page is what the live demo is actually running — not a
+      simulation of it. Try it with your own voice, free, no account required.
+    </p>
+    <div style="display:flex; gap:0.85rem; justify-content:center; flex-wrap:wrap">
+      <a href="demo.html" class="gk-btn gk-btn-teal">Try the Demo →</a>
+      <a href="index.html#pricing" class="gk-btn gk-btn-secondary" style="color:#fff;border-color:rgba(255,255,255,0.3)">See Pricing</a>
+    </div>
+  </div>
+</section>
+
+<footer class="gk-footer gk-container">
+  <div class="gk-footer-brand">GOECK<span>OH</span> — Go Echo</div>
+  <div class="gk-footer-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#science">Science</a>
+    <a href="research.html">Research</a>
+    <a href="index.html#pricing">Pricing</a>
+    <a href="demo.html">Demo</a>
+    <a href="mailto:care@goeckoh.com">Contact</a>
+  </div>
+  <div class="gk-footer-copy">© <span id="yr"></span> Goeckoh. All rights reserved.</div>
+</footer>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

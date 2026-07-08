@@ -345,12 +345,15 @@
     /* ── RESEARCH FOUNDATION ──────────────────────────────────────── */
     .research-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:1.25rem; margin-top:3rem; }
     .research-card {
-      background:var(--gk-bg-card); border:1px solid var(--gk-border);
+      display:block; background:var(--gk-bg-card); border:1px solid var(--gk-border);
       border-radius:var(--gk-radius); padding:1.75rem 1.5rem;
-      border-top:3px solid var(--gk-teal);
+      border-top:3px solid var(--gk-teal); text-decoration:none;
+      transition:transform 0.15s, box-shadow 0.15s, border-color 0.15s;
     }
+    .research-card:hover { transform:translateY(-2px); box-shadow:var(--gk-shadow-sm); border-color:var(--gk-border-2); }
     .research-card.blue-top { border-top-color: var(--gk-primary); }
     .research-card.amber-top { border-top-color: #C97C1A; }
+    .rc-more { font-size:0.76rem; font-weight:700; color:var(--gk-primary); margin-top:1rem; }
     .rc-tag {
       font-size:0.62rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase;
       color:var(--gk-teal); background:rgba(42,140,122,0.08);
@@ -510,7 +513,7 @@
   </a>
   <div class="gk-nav-links" id="gkNav">
     <a href="#science"    class="gk-nav-link">The Science</a>
-    <a href="#research"   class="gk-nav-link">Research</a>
+    <a href="research.html" class="gk-nav-link">Research</a>
     <a href="#families"   class="gk-nav-link">For Families</a>
     <a href="#clinicians" class="gk-nav-link">For Clinicians</a>
     <a href="#pricing"    class="gk-nav-link">Pricing</a>
@@ -869,48 +872,58 @@
     </p>
     <div class="research-grid">
 
-      <div class="research-card blue-top">
+      <a class="research-card blue-top" href="research.html#corollary-discharge">
         <span class="rc-tag blue">Corollary Discharge</span>
         <div class="rc-title">The brain's internal voice copy</div>
-        <div class="rc-body">When the motor cortex initiates speech, it sends a duplicate command — the corollary discharge — to auditory cortex as a prediction. In many neurodiverse profiles, this signal is attenuated, disrupting the brain's ability to evaluate its own output. Restoring accurate auditory feedback reactivates the comparison loop.</div>
+        <div class="rc-body">When the motor cortex initiates speech, it sends a duplicate command — the corollary discharge — to auditory cortex as a prediction. In many neurodiverse profiles, this signal is theorized to be attenuated, disrupting the brain's ability to evaluate its own output. Restoring accurate auditory feedback reactivates the comparison loop.</div>
         <div class="rc-cite">Niziolek et al., J. Neuroscience, 2013 · Houde &amp; Chang, Current Biology, 2015</div>
-      </div>
+        <div class="rc-more">Read the full report →</div>
+      </a>
 
-      <div class="research-card">
+      <a class="research-card" href="research.html#n1-suppression">
         <span class="rc-tag">N1 Suppression</span>
         <div class="rc-title">The neural marker of self-recognition</div>
-        <div class="rc-body">When the brain hears its own expected voice, the N1 auditory evoked potential is suppressed — a measurable EEG signature of successful self-monitoring. When Goeckoh delivers corrected audio within the ~200ms window, this same suppression response is observed, confirming the brain accepted the corrected signal as self-produced.</div>
-        <div class="rc-cite">Behroozmand et al., NeuroImage, 2015 · Houde &amp; Jordan, Science, 1998</div>
-      </div>
+        <div class="rc-body">When the brain hears its own expected voice, the N1 auditory evoked potential is suppressed — a measurable EEG signature of successful self-monitoring. Real-time formant-corrected feedback engages the same predictive comparison this response depends on.</div>
+        <div class="rc-cite">Houde et al., J. Cogn. Neuroscience, 2002 · Houde &amp; Jordan, Science, 1998</div>
+        <div class="rc-more">Read the full report →</div>
+      </a>
 
-      <div class="research-card blue-top">
+      <a class="research-card blue-top" href="research.html#diva-model">
         <span class="rc-tag blue">DIVA Model</span>
         <div class="rc-title">A unified model of speech motor learning</div>
         <div class="rc-body">The Directions Into Velocities of Articulators (DIVA) model, developed at Boston University, shows how speech motor programs are updated through continuous auditory and somatosensory feedback. Goeckoh's timing and correction architecture is designed to operate within the feedback integration windows DIVA defines.</div>
-        <div class="rc-cite">Guenther, F.H., J. Commun. Disord., 2006 · Guenther et al., Cerebral Cortex, 2006</div>
-      </div>
+        <div class="rc-cite">Guenther, F.H., J. Commun. Disord., 2006 · Guenther et al., Brain &amp; Language, 2006</div>
+        <div class="rc-more">Read the full report →</div>
+      </a>
 
-      <div class="research-card">
+      <a class="research-card" href="research.html#formant-acoustics">
         <span class="rc-tag">Formant Acoustics</span>
         <div class="rc-title">The physics of vowel identity</div>
         <div class="rc-body">First formant (F1) and second formant (F2) are the primary acoustic correlates of vowel height and frontness. Hillenbrand et al. (1995) established the statistical distribution of formants for American English vowels. Real-time formant correction can guide the auditory system toward target vowel regions without altering perceived identity.</div>
         <div class="rc-cite">Fant, G., Acoustic Theory of Speech Production, 1960 · Hillenbrand et al., J. Acoust. Soc. Am., 1995</div>
-      </div>
+        <div class="rc-more">Read the full report →</div>
+      </a>
 
-      <div class="research-card amber-top">
+      <a class="research-card amber-top" href="research.html#vocal-tract-modeling">
+        <span class="rc-tag amber">Vocal Tract Modeling</span>
+        <div class="rc-title">Signal processing with clinical roots</div>
+        <div class="rc-body">Linear Predictive Coding (LPC) has been a cornerstone of speech analysis since the 1970s. Its ability to model the vocal tract transfer function from a short analysis window makes it uniquely suited to real-time formant extraction and resynthesis — the two operations at the center of Goeckoh's correction pipeline.</div>
+        <div class="rc-cite">Atal &amp; Hanauer, J. Acoust. Soc. Am., 1971 · Makhoul, Proceedings of the IEEE, 1975</div>
+        <div class="rc-more">Read the full report →</div>
+      </a>
+
+      <a class="research-card amber-top" href="research.html#aba-methodology">
         <span class="rc-tag amber">ABA Methodology</span>
         <div class="rc-title">Structured measurement of progress</div>
         <div class="rc-body">Applied Behavior Analysis (ABA) provides a principled framework for tracking skill acquisition over time. Goeckoh's session logger records phonological targets, fluency events, and co-regulation markers per utterance — allowing clinicians and caregivers to review objective progress data, not just impressions.</div>
         <div class="rc-cite">Cooper, Heron &amp; Heward, Applied Behavior Analysis, 3rd ed., 2020</div>
-      </div>
+        <div class="rc-more">Read the full report →</div>
+      </a>
 
-      <div class="research-card amber-top">
-        <span class="rc-tag amber">Vocal Tract Modeling</span>
-        <div class="rc-title">Signal processing with clinical roots</div>
-        <div class="rc-body">Linear Predictive Coding (LPC) has been a cornerstone of speech analysis since the 1960s. Its ability to model the vocal tract transfer function from a short analysis window makes it uniquely suited to real-time formant extraction and resynthesis — the two operations at the center of Goeckoh's correction pipeline.</div>
-        <div class="rc-cite">Atal &amp; Saito, J. Acoust. Soc. Am., 1970 · Makhoul, Proceedings of the IEEE, 1975</div>
-      </div>
+    </div>
 
+    <div style="text-align:center;margin-top:2.75rem">
+      <a href="research.html" class="gk-btn gk-btn-primary">Read All Six Full Reports →</a>
     </div>
   </div>
 </section>
@@ -1270,7 +1283,7 @@
   <div class="gk-footer-links">
     <a href="index.html">Home</a>
     <a href="#science">Science</a>
-    <a href="#research">Research</a>
+    <a href="research.html">Research</a>
     <a href="#pricing">Pricing</a>
     <a href="demo.html">Demo</a>
     <a href="mailto:care@goeckoh.com">Contact</a>
