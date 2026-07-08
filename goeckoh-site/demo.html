@@ -1370,7 +1370,7 @@ let hearItGainNode = null, hearItLimiterNode = null;
 // app, since nothing else boosts it. Made up for on the OUTPUT side only: a fixed gain
 // boost, followed by a soft-clip curve so a loud talker doesn't produce harsh digital
 // clipping instead of just louder correction.
-const HEARIT_OUTPUT_GAIN = 3.5;
+const HEARIT_OUTPUT_GAIN = 3.5; // linear pre-shaper boost — see makeSoftClipCurve() below
 const hearItBtn         = document.getElementById('hearItBtn');
 const hearItCountdown   = document.getElementById('hearItCountdown');
 const hearItCountdownTxt= document.getElementById('hearItCountdownTxt');
@@ -1638,7 +1638,7 @@ async function toggleHearIt() {
     hearItGainNode = audioCtx.createGain();
     hearItGainNode.gain.value = HEARIT_OUTPUT_GAIN;
     hearItLimiterNode = audioCtx.createWaveShaper();
-    hearItLimiterNode.curve = makeSoftClipCurve();
+    hearItLimiterNode.curve = HEARIT_SOFTCLIP_CURVE;
     hearItLimiterNode.oversample = '2x';
 
     micSourceNode.connect(workletNode);
@@ -1677,9 +1677,15 @@ function pushHearItParams() {
   workletNode.port.postMessage({ tF1: p.f1, tF2: p.f2, str: 0.6, wet: 1.0, active: true });
 }
 
-// Symmetric tanh soft-clip: near-linear (≈unity slope) well below full scale, rolling off
-// smoothly into ±1 instead of hard-clipping — so HEARIT_OUTPUT_GAIN can be generous for
-// quiet talkers without loud talkers getting harsh digital clipping artifacts.
+// Symmetric tanh soft-clip, normalized so tanh(1.5)/tanh(1.5) = 1 at full scale. Note this
+// does NOT have unity slope at the origin — the derivative at x=0 is 1.5/tanh(1.5) ≈ 1.66,
+// so quiet input gets a further ≈1.66x boost on top of HEARIT_OUTPUT_GAIN (≈5.8x combined
+// low-level gain), tapering smoothly toward ±1 as input approaches full scale. That extra
+// low-level boost is wanted here, not a bug — the whole point of this chain is quiet mic
+// input (autoGainControl is off) reading as too faint; the curve just keeps a loud talker
+// from hitting a hard digital ceiling instead of a smooth one.
+// Built once at module scope — the shape never changes, so no reason to reallocate a
+// Float32Array every time Hear-It starts.
 function makeSoftClipCurve(samples = 1024) {
   const curve = new Float32Array(samples);
   for (let i = 0; i < samples; i++) {
@@ -1688,10 +1694,16 @@ function makeSoftClipCurve(samples = 1024) {
   }
   return curve;
 }
+const HEARIT_SOFTCLIP_CURVE = makeSoftClipCurve();
 
 function stopHearIt() {
   clearInterval(hearItTimer);
   hearItTimer = null;
+  // micSourceNode.connect(workletNode) (in toggleHearIt) is an upstream connection from a
+  // node that outlives Hear-It sessions — disconnecting workletNode's own output doesn't
+  // remove it, so without this, each start/stop cycle leaves another orphaned worklet
+  // hanging off micSourceNode, still processing audio it can no longer be heard from.
+  if (workletNode && micSourceNode) { try { micSourceNode.disconnect(workletNode); } catch (e) {} }
   if (workletNode)       { try { workletNode.disconnect(); }       catch (e) {} workletNode = null; }
   if (hearItGainNode)    { try { hearItGainNode.disconnect(); }    catch (e) {} hearItGainNode = null; }
   if (hearItLimiterNode) { try { hearItLimiterNode.disconnect(); } catch (e) {} hearItLimiterNode = null; }
