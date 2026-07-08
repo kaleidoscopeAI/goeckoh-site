@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="images/logo-light.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How Goeckoh Works — The Full Signal Pipeline, Explained</title>
+  <meta name="description" content="How Goeckoh actually works: the real-time correction pipeline from microphone to ear, the millisecond-by-millisecond latency budget, what formant correction changes and what it leaves alone, and why on-device processing is a hard architectural constraint, not a policy.">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How Goeckoh Works">
+  <meta property="og:description" content="The full signal pipeline, the latency budget, and the engineering decisions behind real-time voice correction — explained in full, not simplified.">
+  <meta property="og:image" content="https://goeckoh.com/images/logo-light.png">
+  <meta property="og:url" content="https://goeckoh.com/science.html">
+  <meta property="og:site_name" content="Goeckoh">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How Goeckoh Works">
+  <meta name="twitter:description" content="The full signal pipeline, the latency budget, and the engineering decisions behind real-time voice correction.">
+  <meta name="twitter:image" content="https://goeckoh.com/images/logo-light.png">
+  <link rel="canonical" href="https://goeckoh.com/science.html">
+  <link rel="stylesheet" href="goeckoh-shared.css">
+  <style>
+    :root {
+      --gk-bg:        #F7F5F0;
+      --gk-bg-card:   #FFFFFF;
+      --gk-bg-raised: #EDF1F7;
+      --gk-bg-input:  #EEF0F5;
+      --gk-primary:   #2558D9;
+      --gk-teal:      #2A8C7A;
+      --gk-amber:     #C97C1A;
+      --gk-amber-dark: #B8622C;
+      --gk-amber-light: #D98A4E;
+      --gk-red:       #C94040;
+      --gk-green:     #2A8C7A;
+      --gk-blue:      #2558D9;
+      --gk-violet:    #6B5FD8;
+      --gk-text:      #1A2F4B;
+      --gk-text-2:    #4B6280;
+      --gk-muted:     #8098B5;
+      --gk-border:    rgba(26,47,75,0.10);
+      --gk-border-2:  rgba(26,47,75,0.17);
+    }
+    .gk-nav { background: rgba(247,245,240,0.97) !important; border-bottom-color: rgba(26,47,75,0.10) !important; }
+    .gk-nav-cta { color: #fff !important; }
+    .gk-nav-links.gk-open { background: #fff !important; border-bottom-color: rgba(26,47,75,0.10) !important; }
+    .gk-nav-link.active { color: var(--gk-primary) !important; background: rgba(37,88,217,0.08) !important; }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { font-family:var(--gk-font); background:var(--gk-bg); color:var(--gk-text); overflow-x:hidden; }
+
+    .rp-hero { padding: calc(var(--gk-nav-h) + 4rem) 0 3rem; }
+    .rp-eyebrow { font-size:0.68rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:var(--gk-teal); margin-bottom:1rem; display:block; }
+    .rp-title { font-size:clamp(2rem,4.5vw,3.2rem); font-weight:900; letter-spacing:-0.03em; line-height:1.12; color:var(--gk-text); margin-bottom:1.25rem; max-width:820px; }
+    .rp-intro { font-size:1.05rem; color:var(--gk-text-2); line-height:1.85; max-width:740px; margin-bottom:1.25rem; }
+    .rp-intro strong { color: var(--gk-text); }
+    .rp-honesty {
+      background:#fff; border:1px solid var(--gk-border); border-left:3px solid var(--gk-primary);
+      border-radius:12px; padding:1.4rem 1.6rem; max-width:740px; margin-top:1.5rem;
+      font-size:0.9rem; color:var(--gk-text-2); line-height:1.8;
+    }
+    .rp-honesty strong { color: var(--gk-text); }
+
+    .rp-toc { background:#fff; border:1px solid var(--gk-border); border-radius:16px; padding:1.75rem 2rem; margin-top:2.5rem; max-width:740px; }
+    .rp-toc-label { font-size:0.68rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--gk-muted); margin-bottom:1rem; display:block; }
+    .rp-toc ol { list-style:none; counter-reset:rp; display:flex; flex-direction:column; gap:0.65rem; }
+    .rp-toc li { counter-increment:rp; }
+    .rp-toc a { display:flex; align-items:baseline; gap:0.75rem; text-decoration:none; color:var(--gk-text); font-size:0.93rem; font-weight:600; transition:color 0.15s; }
+    .rp-toc a:hover { color:var(--gk-primary); }
+    .rp-toc a::before { content: counter(rp); font-family:var(--gk-mono); font-size:0.78rem; font-weight:700; color:var(--gk-primary); flex-shrink:0; width:1.4rem; }
+
+    .rp-section { padding:4.5rem 0; border-top:1px solid var(--gk-border); }
+    .rp-section:nth-child(odd) { background:#fff; }
+    .rp-tag { display:inline-block; font-size:0.66rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; padding:0.3rem 0.8rem; border-radius:999px; margin-bottom:1.25rem; }
+    .rp-tag.blue   { color:var(--gk-primary); background:rgba(37,88,217,0.08); }
+    .rp-tag.teal   { color:var(--gk-teal); background:rgba(42,140,122,0.08); }
+    .rp-tag.amber  { color:var(--gk-amber); background:rgba(201,124,26,0.1); }
+    .rp-tag.violet { color:var(--gk-violet); background:rgba(107,95,216,0.08); }
+    .rp-h2 { font-size:clamp(1.5rem,3vw,2.1rem); font-weight:800; letter-spacing:-0.02em; color:var(--gk-text); margin-bottom:0.5rem; max-width:760px; }
+    .rp-h2-sub { font-size:1rem; color:var(--gk-text-2); margin-bottom:2rem; max-width:700px; }
+    .rp-body { max-width:760px; }
+    .rp-body p { font-size:0.98rem; color:var(--gk-text-2); line-height:1.9; margin-bottom:1.3rem; }
+    .rp-body p:last-child { margin-bottom:0; }
+    .rp-body h4 { font-size:0.98rem; font-weight:700; color:var(--gk-text); margin:1.75rem 0 0.6rem; }
+    .rp-body strong { color: var(--gk-text); }
+    .rp-goeckoh { background:var(--gk-bg-raised); border-radius:14px; padding:1.5rem 1.75rem; margin:1.75rem 0; font-size:0.93rem; color:var(--gk-text-2); line-height:1.85; max-width:760px; }
+    .rp-goeckoh strong { color:var(--gk-primary); }
+
+    /* Latency budget table */
+    .lat-table { width:100%; max-width:760px; border-collapse:collapse; margin:1.75rem 0; font-size:0.88rem; }
+    .lat-table th, .lat-table td { padding:0.85rem 1rem; text-align:left; border-bottom:1px solid var(--gk-border); }
+    .lat-table th { font-size:0.66rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--gk-muted); background:var(--gk-bg-raised); }
+    .lat-table td:first-child { font-weight:700; color:var(--gk-text); }
+    .lat-table td:last-child { font-family:var(--gk-mono); color:var(--gk-primary); font-weight:700; white-space:nowrap; }
+    .lat-table .lat-total td { border-top:2px solid var(--gk-border-2); border-bottom:none; font-weight:800; color:var(--gk-text); }
+    .lat-table .lat-total td:last-child { color:var(--gk-teal); }
+
+    .compare-table { width:100%; max-width:760px; border-collapse:collapse; margin:1.75rem 0; font-size:0.86rem; }
+    .compare-table th, .compare-table td { padding:0.9rem 1rem; text-align:left; border-bottom:1px solid var(--gk-border); vertical-align:top; }
+    .compare-table th { font-size:0.64rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--gk-muted); background:var(--gk-bg-raised); }
+    .compare-table td:first-child { font-weight:700; color:var(--gk-text); white-space:nowrap; }
+    .compare-table .gk-row td:first-child { color:var(--gk-teal); }
+
+    .rp-refs { max-width:760px; margin-top:2.25rem; padding-top:1.75rem; border-top:1px solid var(--gk-border); }
+    .rp-refs-label { font-size:0.68rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--gk-muted); margin-bottom:0.9rem; display:block; }
+    .rp-refs ul { list-style:none; display:flex; flex-direction:column; gap:0.5rem; }
+    .rp-refs li { font-size:0.83rem; color:var(--gk-text-2); line-height:1.7; padding-left:1.1rem; position:relative; }
+    .rp-refs li::before { content:'→'; position:absolute; left:0; color:var(--gk-teal); }
+
+    .rp-cta { background:linear-gradient(135deg, #1A2F4B 0%, #1E3D5A 50%, #163547 100%); color:#fff; text-align:center; }
+    .rp-cta h2 { font-size:clamp(1.6rem,3vw,2.2rem); font-weight:800; margin-bottom:1rem; color:#fff; }
+    .rp-cta p { font-size:1rem; color:rgba(255,255,255,0.75); line-height:1.8; max-width:560px; margin:0 auto 1.75rem; }
+  </style>
+</head>
+<body>
+
+<nav class="gk-nav">
+  <a href="index.html" class="gk-nav-brand">
+    <img src="images/logo-light.png" alt="Goeckoh" class="gk-nav-logo">
+    <div>
+      <div class="gk-nav-brand-name">GOECK<span>OH</span></div>
+      <div class="gk-nav-brand-sub">Go Echo</div>
+    </div>
+  </a>
+  <div class="gk-nav-links" id="gkNav">
+    <a href="science.html" class="gk-nav-link active">The Science</a>
+    <a href="research.html" class="gk-nav-link">Research</a>
+    <a href="index.html#families" class="gk-nav-link">For Families</a>
+    <a href="index.html#clinicians" class="gk-nav-link">For Clinicians</a>
+    <a href="index.html#pricing" class="gk-nav-link">Pricing</a>
+    <a href="demo.html" class="gk-nav-link">Try the Demo</a>
+  </div>
+  <a href="download.html" class="gk-nav-cta">Get Early Access</a>
+  <button class="gk-nav-toggle" aria-label="Menu" aria-controls="gkNav" aria-expanded="false"
+    onclick="const nav=document.getElementById('gkNav'); this.setAttribute('aria-expanded', nav.classList.toggle('gk-open'))">☰</button>
+</nav>
+
+<!-- HERO -->
+<section class="rp-hero">
+  <div class="gk-container">
+    <span class="rp-eyebrow">How It Works</span>
+    <h1 class="rp-title">The full signal pipeline, from microphone to ear.</h1>
+    <p class="rp-intro">
+      "Real-time voice correction" is a phrase that can mean almost anything. This page is
+      what it specifically means for Goeckoh: the exact stages a sound passes through between
+      leaving your mouth and returning to your ear, where every millisecond of the latency
+      budget goes, what gets changed and what's left completely alone, and why the whole
+      pipeline has to run on your own device rather than a server. For the peer-reviewed
+      science this design is built on, see the <a href="research.html" style="color:var(--gk-primary)">Research page</a> —
+      this page is the engineering, not the citations.
+    </p>
+  </div>
+</section>
+
+<!-- TOC -->
+<section style="padding-bottom:2rem">
+  <div class="gk-container">
+    <div class="rp-toc">
+      <span class="rp-toc-label">Five stages, in order</span>
+      <ol>
+        <li><a href="#pipeline">The pipeline — what happens between speaking and hearing the result</a></li>
+        <li><a href="#latency-budget">The latency budget — where every millisecond goes, and why it must stay under ~50ms</a></li>
+        <li><a href="#formant-correction">What formant correction actually changes — and what it never touches</a></li>
+        <li><a href="#not-alternatives">Why this isn't DAF, autotune, or synthetic speech</a></li>
+        <li><a href="#on-device">Why the entire pipeline runs on your device, not a server</a></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- 1. THE PIPELINE -->
+<section class="rp-section" id="pipeline">
+  <div class="gk-container">
+    <span class="rp-tag blue">01 · Signal Chain</span>
+    <h2 class="rp-h2">The pipeline: five stages between speaking and hearing the result</h2>
+    <p class="rp-h2-sub">Every word that gets corrected passes through the same five stages, every time.</p>
+    <div class="rp-body">
+      <p>
+        <strong>Stage 1 — Capture.</strong> Your device's microphone captures raw audio
+        continuously in small frames (short slices of a few milliseconds each). Goeckoh
+        explicitly disables the browser's automatic gain control on this input. That's a
+        deliberate tradeoff: automatic gain control makes casual recordings sound more even,
+        but it does so by compressing and warping the exact acoustic detail — the formant
+        structure — that the correction engine needs to measure accurately. Raw, unprocessed
+        input is a harder signal to listen to but a truthful one to analyze.
+      </p>
+      <p>
+        <strong>Stage 2 — Analysis.</strong> Each frame is analyzed to estimate its current
+        formant positions — the resonant frequencies of the vocal tract that determine which
+        vowel a listener will perceive (see the Formant Acoustics section of the
+        <a href="research.html#formant-acoustics" style="color:var(--gk-primary)">Research page</a>
+        for the acoustic theory this rests on). This is done using linear-predictive
+        techniques that model the vocal tract as a filter and solve for that filter's shape
+        directly from the waveform, frame by frame.
+      </p>
+      <p>
+        <strong>Stage 3 — Correction.</strong> The measured formant positions are compared
+        against a target vowel region for the sound being produced, and an adjustment is
+        computed — how far, and in which direction, the formants need to shift to land closer
+        to that target. This adjustment is scaled by the active correction profile (see below)
+        so the correction is calibrated to the acoustic pattern it's designed for, rather than
+        applying one generic correction to every speaker.
+      </p>
+      <p>
+        <strong>Stage 4 — Resynthesis.</strong> The frame is regenerated with the corrected
+        formant structure applied, while its pitch, timing, amplitude envelope, and voice
+        quality are carried through unchanged from the original recording. This is the step
+        that keeps the corrected voice sounding like the speaker's own voice rather than a
+        replacement — see "What Formant Correction Actually Changes," below, for exactly where
+        that line is drawn.
+      </p>
+      <p>
+        <strong>Stage 5 — Playback.</strong> The corrected frame is sent to an output gain
+        stage and a soft-limiter (so that louder speech is gently compressed rather than
+        clipped) and played back through the earbuds. This entire chain runs inside the
+        browser's real-time audio processing thread — an AudioWorklet — specifically because
+        that's the only part of a modern browser's audio stack guaranteed to run on a
+        dedicated, high-priority thread instead of competing with the rest of the page's
+        JavaScript for CPU time.
+      </p>
+      <div class="rp-goeckoh">
+        <strong>Why a dedicated audio thread matters:</strong> if formant analysis and
+        resynthesis ran on the browser's regular JavaScript thread, a moment of page
+        rendering, layout, or garbage collection could stall the audio pipeline and produce an
+        audible glitch or dropout — worse, an inconsistent delay that would break the timing
+        precision the entire correction depends on. Running the pipeline on its own audio
+        thread is what makes a stable, predictable latency budget possible at all.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. LATENCY BUDGET -->
+<section class="rp-section" id="latency-budget">
+  <div class="gk-container">
+    <span class="rp-tag teal">02 · Timing</span>
+    <h2 class="rp-h2">The latency budget: where every millisecond goes</h2>
+    <p class="rp-h2-sub">Why "under 50 milliseconds" isn't a marketing number — it's a hard engineering constraint with no slack in it.</p>
+    <div class="rp-body">
+      <p>
+        The <a href="research.html#n1-suppression" style="color:var(--gk-primary)">research
+        page</a> covers why roughly 200 milliseconds is the outer edge of the window in which
+        the brain still treats corrected auditory feedback as information about its own
+        speech. Goeckoh's engineering target isn't to just squeeze under that ceiling — it's
+        to stay under roughly a quarter of it, so that normal, unavoidable variation in device
+        performance never risks pushing a correction outside the window entirely. The table
+        below is a representative breakdown of where that budget goes on typical modern
+        mobile hardware.
+      </p>
+      <table class="lat-table">
+        <thead><tr><th>Stage</th><th>Typical cost</th></tr></thead>
+        <tbody>
+          <tr><td>Microphone buffering</td><td>~5–10ms</td></tr>
+          <tr><td>Formant analysis window</td><td>~10–15ms</td></tr>
+          <tr><td>Correction computation</td><td>&lt;2ms</td></tr>
+          <tr><td>Resynthesis</td><td>~5–10ms</td></tr>
+          <tr><td>Output buffering &amp; device audio latency</td><td>~5–15ms</td></tr>
+          <tr class="lat-total"><td>Total, typical device</td><td>&lt;50ms</td></tr>
+        </tbody>
+      </table>
+      <p>
+        The two largest, least compressible line items are the analysis window (formant
+        estimation needs a minimum slice of audio to work from — too short a window and the
+        estimate becomes unreliable) and device audio buffering, which is set by the
+        operating system and the specific Bluetooth earbuds in use, not by Goeckoh's own code.
+        This is also why the demo and the product both recommend low-latency Bluetooth
+        earbuds specifically: earbuds with heavy internal audio processing of their own can
+        add tens of additional milliseconds entirely outside Goeckoh's control, eating into a
+        budget that has very little room to spare.
+      </p>
+      <div class="rp-goeckoh">
+        <strong>Why this budget is a design constraint, not a feature to tune later:</strong>
+        every architectural decision in the pipeline — analyzing short frames instead of
+        longer, more "accurate" windows; running on a dedicated audio thread; choosing
+        linear-predictive analysis specifically for its computational cheapness over slower,
+        more elaborate spectral modeling techniques — exists because of this budget. A more
+        computationally expensive correction algorithm might produce a marginally cleaner
+        formant estimate, but if it can't run inside this window, it produces a delayed
+        correction that arrives too late to be biologically useful. Speed and accuracy trade
+        off against each other here, and the latency budget is the constraint everything else
+        is designed around.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. FORMANT CORRECTION -->
+<section class="rp-section" id="formant-correction">
+  <div class="gk-container">
+    <span class="rp-tag violet">03 · What Changes</span>
+    <h2 class="rp-h2">What formant correction actually changes — and what it never touches</h2>
+    <p class="rp-h2-sub">The specific acoustic line between "corrected" and "replaced."</p>
+    <div class="rp-body">
+      <p>
+        A voice is made of several acoustic properties layered on top of each other: pitch
+        (fundamental frequency, or F0), loudness, timing and rhythm, voice quality (breathy,
+        creaky, tense), and the resonant formant structure that determines vowel identity.
+        Goeckoh's correction operates on exactly one of these — formant structure — and
+        deliberately leaves the rest untouched.
+      </p>
+      <h4>Changed</h4>
+      <p>
+        The frequencies of the first and second formants (F1 and F2) are shifted toward the
+        target region for the vowel being produced, when the engine detects that they've
+        drifted enough to risk being perceived as a different or unclear vowel. The correction
+        is proportional — a vowel that's only slightly off target receives a small nudge; one
+        that's centralized or significantly displaced receives a larger correction, up to the
+        limits defined by the active correction profile.
+      </p>
+      <h4>Never changed</h4>
+      <p>
+        Fundamental frequency (pitch) is carried through from the original recording
+        unmodified — Goeckoh does not raise, lower, or flatten anyone's pitch. Speaking rate
+        and rhythm are untouched — nothing is slowed down, sped up, or time-stretched.
+        Amplitude envelope and voice quality (the breathiness, tension, or roughness that
+        makes a voice recognizably an individual's own) pass through unaltered. No synthetic
+        voice model, text-to-speech engine, or voice-cloning technology is used anywhere in
+        the pipeline — there is no "target voice" being approximated other than a cleaner
+        version of the same speaker's own vowel space.
+      </p>
+      <div class="rp-goeckoh">
+        <strong>Why this distinction is the whole point:</strong> a system that corrected
+        pitch, rhythm, and formants all together would eventually just be reconstructing a
+        different voice — at which point it stops being feedback the speaker's own brain can
+        use to improve its own motor control, and starts being a replacement the speaker
+        depends on permanently. Restricting the correction to formant structure only is what
+        keeps this a training signal for the speaker's own auditory-motor loop, consistent
+        with the corollary discharge and DIVA-model mechanisms described on the
+        <a href="research.html" style="color:var(--gk-primary)">Research page</a>, rather than
+        a permanent acoustic prosthesis standing in for the speaker's voice.
+      </div>
+      <h4>Correction profiles</h4>
+      <p>
+        Because different conditions distort the vowel space in different, characteristic
+        ways — the acoustic signature of dysarthria following a stroke is not the same as the
+        signature associated with apraxia or with certain ASD-related speech patterns — the
+        target vowel regions and the strength of correction are calibrated per condition
+        rather than using one universal target. Selecting a correction profile tells the
+        engine which calibration to use; it does not change any of the underlying pipeline
+        stages described above.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- 4. WHY NOT ALTERNATIVES -->
+<section class="rp-section" id="not-alternatives">
+  <div class="gk-container">
+    <span class="rp-tag amber">04 · Mechanism Comparison</span>
+    <h2 class="rp-h2">Why this isn't DAF, autotune, or synthetic speech</h2>
+    <p class="rp-h2-sub">Three existing technologies get compared to Goeckoh constantly. Mechanically, none of them do the same thing.</p>
+    <div class="rp-body">
+      <table class="compare-table">
+        <thead><tr><th>Technology</th><th>What it actually does to the signal</th><th>What it doesn't do</th></tr></thead>
+        <tbody>
+          <tr class="gk-row"><td>Goeckoh</td><td>Measures current formant positions, shifts them toward a calibrated target, resynthesizes with pitch/timing/voice quality untouched, delivers in &lt;50ms.</td><td>Does not delay, replace, or alter pitch/rhythm.</td></tr>
+          <tr><td>DAF devices</td><td>Delays the speaker's own unmodified voice by a fixed interval (often 50–200ms) before returning it to the ear.</td><td>Does not analyze or correct any acoustic property — the signal returned is unmodified, just late.</td></tr>
+          <tr><td>Pitch correction / "autotune"</td><td>Detects fundamental frequency and snaps it toward the nearest note in a scale.</td><td>Does not touch formant structure — vowel clarity is unaffected either way.</td></tr>
+          <tr><td>Synthetic speech / voice cloning</td><td>Generates an entirely new audio signal from a model of a target voice, typically from text or a different reference recording.</td><td>Does not preserve the speaker's own real-time vocal tract output at all — the "voice" is model-generated, not the speaker's own corrected signal.</td></tr>
+        </tbody>
+      </table>
+      <p>
+        The practical consequence: DAF can reduce stuttering-like disfluencies for some
+        speakers through a disruption effect, but because it never analyzes or corrects
+        anything, it has no mechanism to improve vowel clarity in dysarthria or ASD-associated
+        speech patterns — there's no corrective signal in an unmodified, delayed copy of the
+        same speech. Autotune-style pitch correction targets a completely different acoustic
+        property than the one responsible for vowel intelligibility. And full voice synthesis
+        solves a different problem entirely — it can produce clear speech, but it isn't the
+        speaker's own real-time vocal tract output being trained, so it can't function as
+        auditory feedback for the speaker's own motor system in the way corollary
+        discharge-based learning requires.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- 5. ON-DEVICE -->
+<section class="rp-section" id="on-device">
+  <div class="gk-container">
+    <span class="rp-tag blue">05 · Architecture</span>
+    <h2 class="rp-h2">Why the entire pipeline runs on your device, not a server</h2>
+    <p class="rp-h2-sub">Two independent reasons converge on the same architecture: physics, and privacy.</p>
+    <div class="rp-body">
+      <p>
+        <strong>The latency reason.</strong> Round-trip network latency to any server — even a
+        fast, nearby one — is typically 20–100ms or more each way, before any processing even
+        happens. Sending audio to a server for analysis and waiting for a corrected signal to
+        come back would, on its own, very likely exceed the entire biological feedback window
+        described in the latency-budget section above, before a single frame of correction
+        has even been computed. A cloud-based architecture is not a viable way to hit this
+        specific timing target, independent of any other consideration.
+      </p>
+      <p>
+        <strong>The privacy reason.</strong> Because the entire pipeline — capture, analysis,
+        correction, resynthesis, playback — runs inside the browser's local audio processing
+        thread on the user's own device, there is no point in the signal chain where raw voice
+        audio needs to be transmitted anywhere. This isn't a privacy policy layered on top of
+        a system that could technically upload audio; it's a consequence of an architecture
+        that was never built with a server-side audio path to begin with.
+      </p>
+      <div class="rp-goeckoh">
+        <strong>What does leave the device:</strong> account-level information needed to
+        operate the product — an email address, subscription/license status, and (for
+        guardian-linked accounts) session metric summaries a caregiver or clinician has
+        explicitly chosen to monitor. Raw audio is not part of that data at any point.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING CTA -->
+<section class="rp-cta">
+  <div class="gk-container">
+    <h2>That's the engineering. Now hear what it produces.</h2>
+    <p>
+      The demo runs the same pipeline described on this page — not a simplified preview of it.
+      Try it with your own voice, free, no account required.
+    </p>
+    <div style="display:flex; gap:0.85rem; justify-content:center; flex-wrap:wrap">
+      <a href="demo.html" class="gk-btn gk-btn-teal">Try the Demo →</a>
+      <a href="research.html" class="gk-btn gk-btn-secondary" style="color:#fff;border-color:rgba(255,255,255,0.3)">Read the Research →</a>
+    </div>
+  </div>
+</section>
+
+<footer class="gk-footer gk-container">
+  <div class="gk-footer-brand">GOECK<span>OH</span> — Go Echo</div>
+  <div class="gk-footer-links">
+    <a href="index.html">Home</a>
+    <a href="science.html">Science</a>
+    <a href="research.html">Research</a>
+    <a href="index.html#pricing">Pricing</a>
+    <a href="demo.html">Demo</a>
+    <a href="mailto:care@goeckoh.com">Contact</a>
+  </div>
+  <div class="gk-footer-copy">© <span id="yr"></span> Goeckoh. All rights reserved.</div>
+</footer>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
