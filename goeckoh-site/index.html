@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <link rel="icon" type="image/png" href="images/logo-clean.png">
+  <link rel="icon" type="image/png" href="images/logo-light-icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Goeckoh — Real-Time Speech Correction for ASD, Dysarthria & Apraxia</title>
   <meta name="description" content="Goeckoh corrects your voice and returns it to your ear in real time — within the biological window where your brain can learn. Built on 60 years of speech neuroscience. $20/month.">
@@ -23,7 +23,7 @@
     "@type": "Organization",
     "name": "Goeckoh",
     "url": "https://goeckoh.com/",
-    "logo": "https://goeckoh.com/images/logo-clean.png",
+    "logo": "https://goeckoh.com/images/logo-light-icon.png",
     "description": "Goeckoh builds real-time voice correction software for people with autism (ASD), dysarthria, apraxia, and speech changes from stroke or traumatic brain injury (TBI).",
     "email": "care@goeckoh.com"
   }
@@ -122,6 +122,8 @@
       --gk-primary:   #2558D9;
       --gk-teal:      #2A8C7A;
       --gk-amber:     #C97C1A;
+      --gk-amber-dark: #B8622C;
+      --gk-amber-light: #D98A4E;
       --gk-red:       #C94040;
       --gk-green:     #2A8C7A;
       --gk-blue:      #2558D9;
@@ -196,14 +198,40 @@
     .hstat-val { font-size:1.7rem; font-weight:800; color:var(--gk-primary); line-height:1; margin-bottom:0.3rem; }
     .hstat-lbl { font-size:0.72rem; color:var(--gk-muted); font-weight:500; }
     .hero-visual { display:flex; flex-direction:column; align-items:center; gap:1.5rem; }
-    .hero-img {
-      width:100%; max-width:400px; border-radius:24px;
-      box-shadow:0 20px 60px rgba(37,88,217,0.14), 0 4px 16px rgba(42,140,122,0.08);
-    }
     .hero-caption {
       font-size:0.72rem; color:var(--gk-muted); text-align:center; line-height:1.75;
       max-width:320px; font-style:italic;
     }
+
+    /* ── VOICE PANEL (before/after correction visual) ────────────────── */
+    .voice-panel {
+      width:100%; max-width:400px; background:#fff; border:1px solid var(--gk-border);
+      border-radius:24px; padding:2.25rem 2rem;
+      box-shadow:0 20px 60px rgba(37,88,217,0.14), 0 4px 16px rgba(42,140,122,0.08);
+    }
+    .voice-panel-row + .voice-panel-row { margin-top:0.25rem; }
+    .voice-panel-tag {
+      display:inline-flex; align-items:center; gap:0.4rem; font-size:0.68rem; font-weight:700;
+      letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.6rem;
+    }
+    .voice-panel-tag.spoken { color:var(--gk-amber-dark); }
+    .voice-panel-tag.heard  { color:var(--gk-teal); }
+    .voice-panel-tag .dot { width:7px; height:7px; border-radius:50%; background:currentColor; }
+    .voice-wave { width:100%; height:46px; display:block; }
+    .voice-wave.spoken-wave polyline { fill:none; stroke:var(--gk-amber-light); stroke-width:2; stroke-linejoin:round; stroke-linecap:round; }
+    .voice-wave.heard-wave path { fill:none; stroke:var(--gk-teal); stroke-width:2.5; stroke-linecap:round; }
+    @media (prefers-reduced-motion: no-preference) {
+      .voice-wave.heard-wave path { animation:gk-wave-glow 3s ease-in-out infinite; }
+    }
+    @keyframes gk-wave-glow {
+      0%, 100% { filter:drop-shadow(0 0 0 rgba(42,140,122,0)); }
+      50%      { filter:drop-shadow(0 0 5px rgba(42,140,122,0.45)); }
+    }
+    .voice-panel-arrow {
+      text-align:center; font-size:0.66rem; font-weight:700; letter-spacing:0.08em;
+      text-transform:uppercase; color:var(--gk-muted); margin:0.9rem 0;
+    }
+    .voice-panel-arrow b { color:var(--gk-primary); }
 
     /* ── TRUST BAR ────────────────────────────────────────────────── */
     .trust-bar {
@@ -254,15 +282,20 @@
       display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1.5rem; margin-top:3rem;
     }
     .moment-card {
-      background:var(--gk-bg-card); border:1px solid var(--gk-border);
+      background:var(--gk-bg-card); border:1px solid var(--gk-border); border-top:3px solid transparent;
       border-radius:var(--gk-radius); padding:2.1rem 1.85rem;
     }
+    .moment-card.warm-teal   { border-top-color:var(--gk-teal); }
+    .moment-card.warm-amber  { border-top-color:var(--gk-amber); }
+    .moment-card.warm-violet { border-top-color:var(--gk-violet); }
     .moment-tag {
       display:inline-block; font-size:0.66rem; font-weight:700; letter-spacing:0.09em;
       text-transform:uppercase; color:var(--gk-teal); background:rgba(20,197,145,0.1);
       border:1px solid rgba(20,197,145,0.22); border-radius:999px; padding:0.25rem 0.7rem;
       margin-bottom:1.1rem;
     }
+    .moment-tag.amber  { color:var(--gk-amber); background:rgba(201,124,26,0.1); border-color:rgba(201,124,26,0.22); }
+    .moment-tag.violet { color:var(--gk-violet); background:rgba(107,95,216,0.1); border-color:rgba(107,95,216,0.22); }
     .moment-title { font-size:1.08rem; font-weight:800; color:var(--gk-text); margin-bottom:0.65rem; line-height:1.3; }
     .moment-desc { font-size:0.85rem; color:var(--gk-text-2); line-height:1.8; }
 
@@ -293,8 +326,16 @@
     .ds-desc { font-size:0.74rem; color:var(--gk-text-2); line-height:1.65; }
 
     /* ── SCIENCE ──────────────────────────────────────────────────── */
-    .science-two { display:grid; grid-template-columns:1fr 1fr; gap:4.5rem; align-items:start; }
-    @media(max-width:820px){ .science-two{ grid-template-columns:1fr; gap:2.5rem; } }
+    .science-two { display:grid; grid-template-columns:1fr 1fr; gap:4.5rem; }
+    .gk-sticky-visual {
+      display:flex; justify-content:center; align-items:flex-start;
+      padding-top:2rem; position:sticky; top:6.5rem;
+    }
+    .gk-sticky-visual .voice-panel { max-width:340px; }
+    @media(max-width:820px){
+      .science-two{ grid-template-columns:1fr; gap:2.5rem; }
+      .gk-sticky-visual{ position:static; padding-top:0; }
+    }
     .science-points { display:flex; flex-direction:column; gap:1.5rem; margin-top:2rem; }
     .sci-point { display:flex; gap:1rem; }
     .sci-dot { width:8px; height:8px; border-radius:50%; background:var(--gk-teal); margin-top:0.5rem; flex-shrink:0; }
@@ -320,6 +361,32 @@
     .rc-title { font-size:0.95rem; font-weight:700; margin-bottom:0.6rem; color:var(--gk-text); line-height:1.4; }
     .rc-body { font-size:0.79rem; color:var(--gk-text-2); line-height:1.8; }
     .rc-cite { font-size:0.7rem; color:var(--gk-muted); margin-top:1rem; font-style:italic; border-top:1px solid var(--gk-border); padding-top:0.75rem; }
+
+    /* ── FOUNDER STORY ────────────────────────────────────────────── */
+    .story-section { background:#fff; border-top:1px solid var(--gk-border); border-bottom:1px solid var(--gk-border); }
+    .story-wrap { max-width:680px; margin:0 auto; }
+    .story-wrap .eyebrow { text-align:center; display:block; }
+    .story-title { font-size:clamp(1.6rem,3vw,2.1rem); font-weight:800; letter-spacing:-0.02em;
+      text-align:center; color:var(--gk-text); margin-bottom:2.25rem;
+    }
+    .story-body p { font-size:1rem; color:var(--gk-text-2); line-height:1.95; margin-bottom:1.5rem; }
+    .story-body p:last-child { margin-bottom:0; }
+    .story-sign { margin-top:2.25rem; font-size:0.78rem; font-weight:700; letter-spacing:0.08em;
+      text-transform:uppercase; color:var(--gk-muted); text-align:center;
+    }
+
+    /* ── MISSION PULL-QUOTE ───────────────────────────────────────── */
+    .mission-quote {
+      max-width:700px; margin:0 auto; text-align:center;
+      padding:0 1.5rem;
+    }
+    .mission-quote p {
+      font-size:clamp(1.2rem,2.2vw,1.55rem); font-weight:600; font-style:italic;
+      color:var(--gk-text); line-height:1.5; letter-spacing:-0.01em;
+    }
+    .mission-quote span { display:block; margin-top:1rem; font-size:0.72rem; font-weight:700;
+      letter-spacing:0.12em; text-transform:uppercase; color:var(--gk-muted); font-style:normal;
+    }
 
     /* ── PRIVACY COMMITMENT ───────────────────────────────────────── */
     .privacy-banner {
@@ -435,7 +502,7 @@
 <!-- NAV -->
 <nav class="gk-nav">
   <a href="index.html" class="gk-nav-brand">
-    <img src="images/logo-clean.png" alt="Goeckoh" class="gk-nav-logo">
+    <img src="images/logo-light-icon.png" alt="Goeckoh" class="gk-nav-logo">
     <div>
       <div class="gk-nav-brand-name">GOECK<span>OH</span></div>
       <div class="gk-nav-brand-sub">Go Echo</div>
@@ -488,12 +555,77 @@
       </div>
     </div>
     <div class="hero-visual">
-      <img src="images/logo-dark-brain.jpg" alt="Goeckoh — voice and neural feedback loop" class="hero-img">
+      <div class="voice-panel" role="img" aria-label="A jagged waveform labeled 'what you say' straightens into a smooth waveform labeled 'what you hear', illustrating real-time correction">
+        <div class="voice-panel-row">
+          <span class="voice-panel-tag spoken"><span class="dot"></span>What you say</span>
+          <svg class="voice-wave spoken-wave" viewBox="0 0 300 50" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            <polyline points="0,28 14,12 28,40 42,15 56,36 70,8 84,32 98,44 112,14 126,34 140,20 154,42 168,10 182,30 196,38 210,16 224,33 238,22 252,40 266,18 280,32 300,26" />
+          </svg>
+        </div>
+        <div class="voice-panel-arrow">&lt;50ms correction <b>&darr;</b></div>
+        <div class="voice-panel-row">
+          <span class="voice-panel-tag heard"><span class="dot"></span>What you hear</span>
+          <svg class="voice-wave heard-wave" viewBox="0 0 300 50" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            <path d="M0,25 C25,3 50,3 75,25 C100,47 125,47 150,25 C175,3 200,3 225,25 C250,47 275,47 300,25" />
+          </svg>
+        </div>
+      </div>
       <p class="hero-caption">
         The ear. The brain. The signal.<br>
         Your voice enters. Corrected, it returns.<br>
         The brain hears itself succeed.
       </p>
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDER STORY -->
+<section class="story-section">
+  <div class="gk-container">
+    <div class="story-wrap">
+      <span class="eyebrow">Why We Built This</span>
+      <h2 class="story-title">Why I Built Goeckoh</h2>
+      <div class="story-body">
+        <p>
+          I'm an analytical person. My son has autism, and while his mother became the
+          expert — she went on to become a special needs teacher — I did what I know how
+          to do. I watched him. Not to diagnose him, but to find the pattern. To understand
+          how he was thinking, so I could actually reach him instead of just talking at him.
+        </p>
+        <p>
+          The pattern showed up in pieces. Things most people never think twice about —
+          getting an arm into a sleeve, telling a question from a statement — were
+          genuinely hard for him. When he melted down, the only thing that reliably
+          brought him back was seeing us show real emotion. And when he spoke, he often
+          wasn't speaking as himself — he'd become characters from TV, repeating their
+          lines back almost obsessively, reaching for their words because his own were
+          harder to get to.
+        </p>
+        <p>
+          Put together, those pieces pointed to one thing: he couldn't reason his way
+          through a problem in his own head the way the rest of us do without noticing.
+          The mimicking wasn't a phase. It was how he gave himself a voice, because he
+          didn't have reliable access to his own.
+        </p>
+        <p>
+          I didn't know how to code. That didn't matter. I locked myself in the house,
+          collected computers, and started failing — over and over, for years — teaching
+          myself Linux, the terminal, every trick I could find, one failure at a time,
+          until there was only one way left that hadn't failed yet.
+        </p>
+        <p>
+          The wall I kept hitting was 200 milliseconds: the window the brain has to hear
+          a correction and accept it as its own voice. I only broke through it once I
+          stopped treating voice as sound and started treating it as a mold — something
+          with a shape you could measure and correct, piece by piece, in real time.
+        </p>
+        <p>
+          I've never been good at succeeding on the first try. I'm good at failing
+          upward — failing until only the right way is left standing. I did that for my
+          son, for as long as it took. Now I'm sharing it with everyone who needs it.
+        </p>
+      </div>
+      <div class="story-sign">— Founder, Goeckoh</div>
     </div>
   </div>
 </section>
@@ -509,7 +641,7 @@
       about it. Goeckoh closes that loop, in the moment it's needed.
     </p>
     <div class="moments-grid">
-      <div class="moment-card">
+      <div class="moment-card warm-teal">
         <span class="moment-tag">Autism</span>
         <h3 class="moment-title">Not repeating yourself five times</h3>
         <p class="moment-desc">
@@ -518,8 +650,8 @@
           Goeckoh works in the moment the words are spoken, not after the fact.
         </p>
       </div>
-      <div class="moment-card">
-        <span class="moment-tag">Stroke &amp; TBI</span>
+      <div class="moment-card warm-amber">
+        <span class="moment-tag amber">Stroke &amp; TBI</span>
         <h3 class="moment-title">Getting a voice back, not a new one</h3>
         <p class="moment-desc">
           After a stroke or traumatic brain injury (TBI), speech is often the last thing to
@@ -528,8 +660,8 @@
           a therapy session provides, available every time you speak, not once a week.
         </p>
       </div>
-      <div class="moment-card">
-        <span class="moment-tag">Apraxia</span>
+      <div class="moment-card warm-violet">
+        <span class="moment-tag violet">Apraxia</span>
         <h3 class="moment-title">The gap between meaning it and saying it</h3>
         <p class="moment-desc">
           Apraxia isn't about knowing the word — it's the signal from brain to mouth
@@ -704,8 +836,22 @@
           </div>
         </div>
       </div>
-      <div style="display:flex;justify-content:center;align-items:flex-start;padding-top:2rem">
-        <img src="images/logo-dark-brain.jpg" alt="Neural voice feedback loop" style="width:100%;max-width:340px;border-radius:20px;box-shadow:0 16px 50px rgba(37,88,217,0.12)">
+      <div class="gk-sticky-visual">
+        <div class="voice-panel" role="img" aria-label="A jagged waveform labeled 'what you say' straightens into a smooth waveform labeled 'what you hear', illustrating the correction loop">
+          <div class="voice-panel-row">
+            <span class="voice-panel-tag spoken"><span class="dot"></span>Spoken</span>
+            <svg class="voice-wave spoken-wave" viewBox="0 0 300 50" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <polyline points="0,28 14,12 28,40 42,15 56,36 70,8 84,32 98,44 112,14 126,34 140,20 154,42 168,10 182,30 196,38 210,16 224,33 238,22 252,40 266,18 280,32 300,26" />
+            </svg>
+          </div>
+          <div class="voice-panel-arrow">corollary discharge compares <b>&darr;</b></div>
+          <div class="voice-panel-row">
+            <span class="voice-panel-tag heard"><span class="dot"></span>Heard</span>
+            <svg class="voice-wave heard-wave" viewBox="0 0 300 50" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <path d="M0,25 C25,3 50,3 75,25 C100,47 125,47 150,25 C175,3 200,3 225,25 C250,47 275,47 300,25" />
+            </svg>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -766,6 +912,14 @@
       </div>
 
     </div>
+  </div>
+</section>
+
+<!-- MISSION PULL-QUOTE -->
+<section style="padding:4rem 0">
+  <div class="mission-quote">
+    <p>"None of this matters unless it means a word gets understood the first time it's spoken — not the fourth."</p>
+    <span>Why we built Goeckoh</span>
   </div>
 </section>
 
