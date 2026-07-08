@@ -42,6 +42,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from passlib.context import CryptContext
 from pydantic import BaseModel
+from sqlalchemy import update
 from sqlalchemy.orm import Session
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
@@ -220,6 +221,16 @@ Questions: {FROM_EMAIL}
         smtp.login(SMTP_USER, SMTP_PASS)
         smtp.send_message(msg)
     log.info("License email sent to %s", email)
+
+
+def _demo_client_ip(request: Request) -> str:
+    # Behind Fly.io's edge proxy, request.client.host (what get_remote_address
+    # reads) is the proxy's own address, not the visitor's — every visitor
+    # would collapse into one shared bucket. Fly sets Fly-Client-IP on every
+    # request; it can't be spoofed by the client since Fly's edge is the only
+    # hop between the visitor and this app. Used for any unauthenticated,
+    # per-visitor rate limit (demo sessions, promo redemption).
+    return request.headers.get("Fly-Client-IP") or get_remote_address(request)
 
 
 # ---------------------------------------------------------------------------
@@ -553,7 +564,7 @@ class RedeemPromoRequest(BaseModel):
 
 
 @app.post("/promo/redeem")
-@limiter.limit("5/minute")
+@limiter.limit("5/minute", key_func=_demo_client_ip)
 async def redeem_promo_code(request: Request, body: RedeemPromoRequest, db: Session = Depends(get_db)):
     code = body.code.strip().upper()
     email = body.email.strip().lower()
@@ -563,7 +574,20 @@ async def redeem_promo_code(request: Request, body: RedeemPromoRequest, db: Sess
     promo = db.query(PromoCode).filter(PromoCode.code == code).first()
     if not promo or not promo.active:
         raise HTTPException(404, "Invalid or inactive promo code")
-    if promo.redemption_count >= promo.max_redemptions:
+
+    # Atomic conditional increment: the WHERE re-checks the cap in the same
+    # statement that increments it, so two concurrent requests racing past
+    # the read above can't both commit an increment and overshoot the cap.
+    result = db.execute(
+        update(PromoCode)
+        .where(
+            PromoCode.id == promo.id,
+            PromoCode.redemption_count < PromoCode.max_redemptions,
+        )
+        .values(redemption_count=PromoCode.redemption_count + 1)
+    )
+    if result.rowcount == 0:
+        db.rollback()
         raise HTTPException(410, "This code has reached its redemption limit")
 
     lic = License(
@@ -576,12 +600,18 @@ async def redeem_promo_code(request: Request, body: RedeemPromoRequest, db: Sess
         notes=f"promo:{code}",
     )
     db.add(lic)
-    promo.redemption_count += 1
     db.commit()
     db.refresh(lic)
     log.info("Promo code %s redeemed by %s -> license %s", code, email, lic.license_key)
 
-    _send_license_email(email, lic.license_key, promo.plan.value)
+    try:
+        _send_license_email(email, lic.license_key, promo.plan.value)
+    except Exception:
+        # The license already exists and the redemption slot is already
+        # consumed — an SMTP failure here shouldn't 500 the response or
+        # strand the user's redemption. They still get the key back below.
+        log.warning("Promo redemption email failed for %s (license %s issued)", email, lic.license_key, exc_info=True)
+
     return {"paid": True, "license_key": lic.license_key, "plan": promo.plan.value}
 
 
@@ -690,15 +720,6 @@ async def health():
 DEMO_SESSION_SECONDS = 45
 
 
-def _demo_client_ip(request: Request) -> str:
-    # Behind Fly.io's edge proxy, request.client.host (what get_remote_address
-    # reads) is the proxy's own address, not the visitor's — every visitor
-    # would collapse into one shared 3/day bucket. Fly sets Fly-Client-IP on
-    # every request; it can't be spoofed by the client since Fly's edge is the
-    # only hop between the visitor and this app.
-    return request.headers.get("Fly-Client-IP") or get_remote_address(request)
-
-
 @app.post("/demo/session/start")
 @limiter.limit("3/day", key_func=_demo_client_ip)
 async def demo_session_start(request: Request):
@@ -779,7 +800,10 @@ async def create_promo_code(
     if body.max_redemptions < 1:
         raise HTTPException(422, "max_redemptions must be at least 1")
 
-    tier = PlanTier(body.plan) if body.plan in PlanTier._value2member_map_ else PlanTier.STARTER
+    if body.plan not in PlanTier._value2member_map_:
+        valid = ", ".join(p.value for p in PlanTier)
+        raise HTTPException(422, f"Unknown plan '{body.plan}' — must be one of: {valid}")
+    tier = PlanTier(body.plan)
     promo = PromoCode(
         code=code,
         plan=tier,
