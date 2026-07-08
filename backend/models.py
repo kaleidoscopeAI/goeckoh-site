@@ -57,6 +57,25 @@ class License(Base):
     notes = Column(Text, nullable=True)
 
 
+class PromoCode(Base):
+    """
+    Shared promo/comp codes (press, conferences, partner clinics) — each
+    redemption creates a real License row via /promo/redeem, just without a
+    Stripe subscription behind it. max_redemptions caps how many people can
+    use the same code; redemption_count tracks usage so far.
+    """
+    __tablename__ = "promo_codes"
+
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    code = Column(String(64), unique=True, nullable=False, index=True)
+    plan = Column(SAEnum(PlanTier), nullable=False, default=PlanTier.STARTER)
+    max_redemptions = Column(Integer, nullable=False, default=1)
+    redemption_count = Column(Integer, nullable=False, default=0)
+    active = Column(Boolean, nullable=False, default=True)
+    created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
+    notes = Column(Text, nullable=True)
+
+
 class Device(Base):
     __tablename__ = "devices"
 
