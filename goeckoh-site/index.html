@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <link rel="icon" type="image/png" href="images/logo-clean.png">
+  <link rel="icon" type="image/png" href="images/logo-light-icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Goeckoh — Real-Time Speech Correction for ASD, Dysarthria & Apraxia</title>
   <meta name="description" content="Goeckoh corrects your voice and returns it to your ear in real time — within the biological window where your brain can learn. Built on 60 years of speech neuroscience. $20/month.">
@@ -23,7 +23,7 @@
     "@type": "Organization",
     "name": "Goeckoh",
     "url": "https://goeckoh.com/",
-    "logo": "https://goeckoh.com/images/logo-clean.png",
+    "logo": "https://goeckoh.com/images/logo-light-icon.png",
     "description": "Goeckoh builds real-time voice correction software for people with autism (ASD), dysarthria, apraxia, and speech changes from stroke or traumatic brain injury (TBI).",
     "email": "care@goeckoh.com"
   }
@@ -122,6 +122,8 @@
       --gk-primary:   #2558D9;
       --gk-teal:      #2A8C7A;
       --gk-amber:     #C97C1A;
+      --gk-amber-dark: #B8622C;
+      --gk-amber-light: #D98A4E;
       --gk-red:       #C94040;
       --gk-green:     #2A8C7A;
       --gk-blue:      #2558D9;
@@ -212,11 +214,11 @@
       display:inline-flex; align-items:center; gap:0.4rem; font-size:0.68rem; font-weight:700;
       letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.6rem;
     }
-    .voice-panel-tag.spoken { color:#B8622C; }
+    .voice-panel-tag.spoken { color:var(--gk-amber-dark); }
     .voice-panel-tag.heard  { color:var(--gk-teal); }
     .voice-panel-tag .dot { width:7px; height:7px; border-radius:50%; background:currentColor; }
     .voice-wave { width:100%; height:46px; display:block; }
-    .voice-wave.spoken-wave polyline { fill:none; stroke:#D98A4E; stroke-width:2; stroke-linejoin:round; stroke-linecap:round; }
+    .voice-wave.spoken-wave polyline { fill:none; stroke:var(--gk-amber-light); stroke-width:2; stroke-linejoin:round; stroke-linecap:round; }
     .voice-wave.heard-wave path { fill:none; stroke:var(--gk-teal); stroke-width:2.5; stroke-linecap:round; }
     @media (prefers-reduced-motion: no-preference) {
       .voice-wave.heard-wave path { animation:gk-wave-glow 3s ease-in-out infinite; }
@@ -284,7 +286,7 @@
       border-radius:var(--gk-radius); padding:2.1rem 1.85rem;
     }
     .moment-card.warm-teal   { border-top-color:var(--gk-teal); }
-    .moment-card.warm-amber  { border-top-color:#C97C1A; }
+    .moment-card.warm-amber  { border-top-color:var(--gk-amber); }
     .moment-card.warm-violet { border-top-color:var(--gk-violet); }
     .moment-tag {
       display:inline-block; font-size:0.66rem; font-weight:700; letter-spacing:0.09em;
@@ -292,7 +294,7 @@
       border:1px solid rgba(20,197,145,0.22); border-radius:999px; padding:0.25rem 0.7rem;
       margin-bottom:1.1rem;
     }
-    .moment-tag.amber  { color:#C97C1A; background:rgba(201,124,26,0.1); border-color:rgba(201,124,26,0.22); }
+    .moment-tag.amber  { color:var(--gk-amber); background:rgba(201,124,26,0.1); border-color:rgba(201,124,26,0.22); }
     .moment-tag.violet { color:var(--gk-violet); background:rgba(107,95,216,0.1); border-color:rgba(107,95,216,0.22); }
     .moment-title { font-size:1.08rem; font-weight:800; color:var(--gk-text); margin-bottom:0.65rem; line-height:1.3; }
     .moment-desc { font-size:0.85rem; color:var(--gk-text-2); line-height:1.8; }
@@ -500,7 +502,7 @@
 <!-- NAV -->
 <nav class="gk-nav">
   <a href="index.html" class="gk-nav-brand">
-    <img src="images/logo-clean.png" alt="Goeckoh" class="gk-nav-logo">
+    <img src="images/logo-light-icon.png" alt="Goeckoh" class="gk-nav-logo">
     <div>
       <div class="gk-nav-brand-name">GOECK<span>OH</span></div>
       <div class="gk-nav-brand-sub">Go Echo</div>
