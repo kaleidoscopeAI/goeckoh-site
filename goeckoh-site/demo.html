@@ -1556,14 +1556,20 @@ class GoeckohDemoProcessor extends AudioWorkletProcessor {
     for (let i = 1; i < n; i++) { const hw = 0.54 - 0.46 * Math.cos(2 * Math.PI * i / (n - 1)); w[i] = (frm[i] - 0.97 * frm[i - 1]) * hw; }
     this.peZ = frm[n - 1];
     const a = this.ldLPC(w, this.ORDER);
-    const [F1, F2] = this.formants(a, this.ORDER, 16000);
+    const [F1, F2] = this.formants(a, this.ORDER, sampleRate / this.DEC);
     this.sF1 = this.AL * this.sF1 + (1 - this.AL) * F1;
     this.sF2 = this.AL * this.sF2 + (1 - this.AL) * F2;
     if (this.active && this.tF1 != null && this.tF2 != null) {
       const c1 = this.sF1 + this.str * (this.tF1 - this.sF1);
       const c2 = this.sF2 + this.str * (this.tF2 - this.sF2);
-      this.bq1c = Math.abs(this.sF1 - c1) > 15 ? this.bqMake(this.sF1, c1, 48000, 90)  : null;
-      this.bq2c = Math.abs(this.sF2 - c2) > 15 ? this.bqMake(this.sF2, c2, 48000, 120) : null;
+      // bqMake's frequency math is relative to whatever sample rate this
+      // AudioWorklet is actually running at — hardcoding 48000 here silently
+      // placed the correction filter's pole/zero at the wrong frequencies on
+      // any device/browser that didn't grant the requested 48kHz context rate
+      // (common over Bluetooth, where HFP mic profiles often force 16kHz),
+      // which sounds like added resonant coloration instead of a clean shift.
+      this.bq1c = Math.abs(this.sF1 - c1) > 15 ? this.bqMake(this.sF1, c1, sampleRate, 90)  : null;
+      this.bq2c = Math.abs(this.sF2 - c2) > 15 ? this.bqMake(this.sF2, c2, sampleRate, 120) : null;
     } else { this.bq1c = null; this.bq2c = null; }
   }
   process(inputs, outputs) {
