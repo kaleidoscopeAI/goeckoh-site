@@ -290,6 +290,23 @@
           <span class="key-label">Already have a license key?</span>
           <a id="portalLink" href="#" class="key-link" target="_blank">Download your app →</a>
         </div>
+
+        <div class="key-row" style="margin-top:0.6rem">
+          <a href="#" class="key-link" onclick="event.preventDefault();togglePromoForm()" id="promoToggle">Have a promo code?</a>
+        </div>
+
+        <div id="promoForm" style="display:none;margin-top:1.1rem">
+          <div class="form-group">
+            <label class="form-label" for="promoEmail">Email</label>
+            <input class="form-input" type="email" id="promoEmail" placeholder="you@email.com" autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="promoCode">Promo code</label>
+            <input class="form-input" type="text" id="promoCode" placeholder="e.g. ASHA2026" autocomplete="off" style="text-transform:uppercase">
+          </div>
+          <button type="button" class="form-submit" id="promoSubmitBtn" onclick="submitPromo()">Redeem code →</button>
+          <p id="promoMsg" style="display:none;font-size:0.78rem;margin-top:0.85rem;text-align:center;line-height:1.6"></p>
+        </div>
       </div>
 
     </div><!-- /pay-card -->
@@ -420,6 +437,76 @@
         </a>
       </div>
     `;
+  }
+
+  function togglePromoForm() {
+    const form = document.getElementById('promoForm');
+    const open = form.style.display !== 'none';
+    form.style.display = open ? 'none' : 'block';
+    document.getElementById('promoToggle').textContent = open ? 'Have a promo code?' : 'Have a promo code? ▲';
+  }
+
+  async function submitPromo() {
+    const email = document.getElementById('promoEmail').value.trim();
+    const code  = document.getElementById('promoCode').value.trim();
+    const msg   = document.getElementById('promoMsg');
+    const btn   = document.getElementById('promoSubmitBtn');
+
+    if (!email || !code) {
+      msg.style.display = 'block';
+      msg.style.color = 'var(--gk-red)';
+      msg.textContent = 'Enter both your email and the code.';
+      return;
+    }
+    if (!BACKEND_URL) {
+      msg.style.display = 'block';
+      msg.style.color = 'var(--gk-red)';
+      msg.textContent = "Can't reach the server right now — try again shortly.";
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Checking…';
+    msg.style.display = 'none';
+
+    try {
+      const resp = await fetch(BACKEND_URL + '/promo/redeem', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code, email }),
+      });
+      const data = await resp.json().catch(() => ({}));
+
+      if (resp.ok && data.paid) {
+        localStorage.setItem('gk_access', 'paid');
+        document.getElementById('promoForm').innerHTML = `
+          <div style="text-align:center;padding:0.5rem 0">
+            <div style="font-size:2.2rem;margin-bottom:0.75rem">✓</div>
+            <div style="font-size:1rem;font-weight:800;margin-bottom:0.5rem">Code redeemed — you're unlocked</div>
+            <p style="font-size:0.8rem;color:var(--gk-text-2);line-height:1.7">
+              The web app is open on this device now. Your license key
+              (for the native app, or additional devices) is also on its way to
+              <strong style="color:var(--gk-text)">${email}</strong>.
+            </p>
+            <a href="real_time_therapeutic_voice_cloning_system.html" class="gk-btn gk-btn-primary" style="display:inline-block;margin-top:1.25rem">
+              Open Goeckoh →
+            </a>
+          </div>
+        `;
+      } else {
+        btn.disabled = false;
+        btn.textContent = 'Redeem code →';
+        msg.style.display = 'block';
+        msg.style.color = 'var(--gk-red)';
+        msg.textContent = (data && data.detail) || 'That code is invalid, inactive, or fully redeemed.';
+      }
+    } catch (e) {
+      btn.disabled = false;
+      btn.textContent = 'Redeem code →';
+      msg.style.display = 'block';
+      msg.style.color = 'var(--gk-red)';
+      msg.textContent = "Couldn't reach the server — try again shortly.";
+    }
   }
 </script>
 

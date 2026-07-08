@@ -49,7 +49,7 @@ from slowapi.errors import RateLimitExceeded
 
 from models import (
     init_db, get_db, generate_license_key,
-    License, Device, StripeEvent,
+    License, Device, StripeEvent, PromoCode,
     LicenseStatus, PlanTier,
     User, GuardianLink, UserRole,
 )
@@ -540,6 +540,52 @@ async def deactivate_device(request: Request, body: DeactivateRequest, db: Sessi
 
 
 # ---------------------------------------------------------------------------
+# Promo code redemption — press, conferences, partner clinics. Creates a real
+# License exactly like a Stripe purchase would (same activate/validate/
+# download flow), just with no stripe_subscription_id behind it. Rate-limited
+# tighter than most endpoints here since a valid code is effectively a
+# shared password — this is the endpoint someone would try to brute-force.
+# ---------------------------------------------------------------------------
+
+class RedeemPromoRequest(BaseModel):
+    code: str
+    email: str
+
+
+@app.post("/promo/redeem")
+@limiter.limit("5/minute")
+async def redeem_promo_code(request: Request, body: RedeemPromoRequest, db: Session = Depends(get_db)):
+    code = body.code.strip().upper()
+    email = body.email.strip().lower()
+    if not email or "@" not in email:
+        raise HTTPException(422, "A valid email is required")
+
+    promo = db.query(PromoCode).filter(PromoCode.code == code).first()
+    if not promo or not promo.active:
+        raise HTTPException(404, "Invalid or inactive promo code")
+    if promo.redemption_count >= promo.max_redemptions:
+        raise HTTPException(410, "This code has reached its redemption limit")
+
+    lic = License(
+        license_key=generate_license_key(),
+        customer_email=email,
+        plan=promo.plan,
+        status=LicenseStatus.ACTIVE,
+        activated_at=datetime.utcnow(),
+        max_devices=PLAN_MAX_DEVICES[promo.plan],
+        notes=f"promo:{code}",
+    )
+    db.add(lic)
+    promo.redemption_count += 1
+    db.commit()
+    db.refresh(lic)
+    log.info("Promo code %s redeemed by %s -> license %s", code, email, lic.license_key)
+
+    _send_license_email(email, lic.license_key, promo.plan.value)
+    return {"paid": True, "license_key": lic.license_key, "plan": promo.plan.value}
+
+
+# ---------------------------------------------------------------------------
 # Gated Binary Downloads — the binaries themselves live in a private GitHub
 # release (kaleidoscopeAI/goeckoh-releases), not on this server. We validate
 # the license exactly as before, then hand back the short-lived signed URL
@@ -702,6 +748,89 @@ async def list_licenses(
         }
         for lic in licenses
     ]
+
+
+# ---------------------------------------------------------------------------
+# Admin: promo codes (press, conferences, partner clinics — free access,
+# no Stripe subscription behind it). Same ADMIN_SECRET gate as /admin/licenses.
+# ---------------------------------------------------------------------------
+
+class CreatePromoCodeRequest(BaseModel):
+    code: str
+    max_redemptions: int = 1
+    plan: str = "starter"
+    notes: Optional[str] = None
+
+
+@app.post("/admin/promo-codes")
+async def create_promo_code(
+    body: CreatePromoCodeRequest,
+    x_admin_secret: str = Header(default=""),
+    db: Session = Depends(get_db),
+):
+    if not ADMIN_SECRET or x_admin_secret != ADMIN_SECRET:
+        raise HTTPException(403, "Forbidden")
+
+    code = body.code.strip().upper()
+    if not code:
+        raise HTTPException(422, "Code cannot be empty")
+    if db.query(PromoCode).filter(PromoCode.code == code).first():
+        raise HTTPException(409, f"Code '{code}' already exists")
+    if body.max_redemptions < 1:
+        raise HTTPException(422, "max_redemptions must be at least 1")
+
+    tier = PlanTier(body.plan) if body.plan in PlanTier._value2member_map_ else PlanTier.STARTER
+    promo = PromoCode(
+        code=code,
+        plan=tier,
+        max_redemptions=body.max_redemptions,
+        notes=body.notes,
+    )
+    db.add(promo)
+    db.commit()
+    log.info("Promo code created: %s (max %d redemptions, %s plan)", code, body.max_redemptions, tier.value)
+    return {"code": code, "max_redemptions": body.max_redemptions, "plan": tier.value}
+
+
+@app.get("/admin/promo-codes")
+async def list_promo_codes(
+    x_admin_secret: str = Header(default=""),
+    db: Session = Depends(get_db),
+):
+    if not ADMIN_SECRET or x_admin_secret != ADMIN_SECRET:
+        raise HTTPException(403, "Forbidden")
+
+    codes = db.query(PromoCode).order_by(PromoCode.created_at.desc()).all()
+    return [
+        {
+            "code": p.code,
+            "plan": p.plan.value,
+            "redeemed": p.redemption_count,
+            "max_redemptions": p.max_redemptions,
+            "active": p.active,
+            "created": p.created_at.isoformat(),
+            "notes": p.notes,
+        }
+        for p in codes
+    ]
+
+
+@app.post("/admin/promo-codes/{code}/deactivate")
+async def deactivate_promo_code(
+    code: str,
+    x_admin_secret: str = Header(default=""),
+    db: Session = Depends(get_db),
+):
+    if not ADMIN_SECRET or x_admin_secret != ADMIN_SECRET:
+        raise HTTPException(403, "Forbidden")
+
+    promo = db.query(PromoCode).filter(PromoCode.code == code.strip().upper()).first()
+    if not promo:
+        raise HTTPException(404, "Code not found")
+    promo.active = False
+    db.commit()
+    log.info("Promo code deactivated: %s", promo.code)
+    return {"code": promo.code, "active": False}
 
 
 # ---------------------------------------------------------------------------
