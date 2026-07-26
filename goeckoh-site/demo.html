@@ -1307,7 +1307,6 @@
 'use strict';
 
 /* ── Constants ─────────────────────────────────────────────── */
-const SR16     = 16000;
 const ORDER    = 12;
 const FRAME    = 512;
 const ALPHA    = 0.15;
@@ -1757,16 +1756,18 @@ function drawLoop() {
   let f0 = 0;
   if (voiced) f0 = estimateF0(timeBuf, audioCtx.sampleRate);
 
-  /* LPC formants (16 kHz decimated) */
+  /* LPC formants (nominally ~16 kHz decimated — actually audioCtx.sampleRate / 3,
+     since browsers don't guarantee the 48000 requested at context creation) */
   let f1 = 0, f2 = 0, f3 = 0, hnr = 0;
   if (voiced) {
+    const decSR = audioCtx.sampleRate / 3;
     const dec  = decimate3(timeBuf);
     const lpc  = levDur(dec.slice(0, FRAME), ORDER);
-    const fmts = formantPeaks(lpc, ORDER, SR16);
+    const fmts = formantPeaks(lpc, ORDER, decSR);
     f1  = fmts[0] || 0;
     f2  = fmts[1] || 0;
     f3  = fmts[2] || 0;
-    hnr = estimateHNR(dec, SR16, f0);
+    hnr = estimateHNR(dec, decSR, f0);
   }
 
   if (voiced) {
