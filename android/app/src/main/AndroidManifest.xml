@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Required on Android 11+ (API 30) package-visibility rules so LauncherActivity can
+         find Chrome/other Custom Tabs-capable browsers via queryIntentServices. -->
+    <queries>
+        <intent>
+            <action android:name="android.support.customtabs.action.CustomTabsService" />
+        </intent>
+    </queries>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- No RECORD_AUDIO permission here: the app never requests it at runtime, so declaring
+         it would grant nothing (dangerous permissions require an explicit runtime request on
+         API 23+) and Chrome would not delegate it anyway. The site's mic access is handled by
+         Chrome's own in-page getUserMedia prompt, same as visiting goeckoh.com in mobile
+         Chrome directly. -->
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:manageSpaceActivity="com.google.androidbrowserhelper.trusted.ManageDataLauncherActivity"
+        android:theme="@style/Theme.Goeckoh">
+
+        <activity
+            android:name="com.google.androidbrowserhelper.trusted.ManageDataLauncherActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.customtabs.trusted.MANAGE_SPACE_URL"
+                android:value="@string/launch_url" />
+        </activity>
+
+        <activity
+            android:name="com.google.androidbrowserhelper.trusted.LauncherActivity"
+            android:label="@string/app_name"
+            android:exported="true">
+
+            <meta-data
+                android:name="android.support.customtabs.trusted.DEFAULT_URL"
+                android:value="@string/launch_url" />
+
+            <meta-data
+                android:name="android.support.customtabs.trusted.STATUS_BAR_COLOR"
+                android:resource="@color/gk_bg" />
+
+            <meta-data
+                android:name="android.support.customtabs.trusted.NAVIGATION_BAR_COLOR"
+                android:resource="@color/gk_bg" />
+
+            <meta-data
+                android:name="android.support.customtabs.trusted.SCREEN_ORIENTATION"
+                android:value="portrait" />
+
+            <meta-data
+                android:name="android.support.customtabs.trusted.SPLASH_IMAGE_DRAWABLE"
+                android:resource="@mipmap/ic_launcher" />
+
+            <meta-data
+                android:name="android.support.customtabs.trusted.SPLASH_SCREEN_BACKGROUND_COLOR"
+                android:resource="@color/gk_bg" />
+
+            <meta-data
+                android:name="android.support.customtabs.trusted.SPLASH_SCREEN_FADE_OUT_DURATION"
+                android:value="300" />
+
+            <meta-data
+                android:name="android.support.customtabs.trusted.FILE_PROVIDER_AUTHORITY"
+                android:value="${applicationId}.fileprovider" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- Verified Links: opening goeckoh.com URLs from outside the app (e.g. a
+                 shared link, a search result) reopens this app instead of the browser,
+                 once assetlinks.json on the site verifies ownership. -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="https"
+                    android:host="@string/launch_host" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.google.androidbrowserhelper.trusted.FocusActivity"
+            android:exported="false" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+
+        <service
+            android:name="com.google.androidbrowserhelper.trusted.DelegationService"
+            android:exported="true"
+            tools:ignore="ExportedService">
+            <intent-filter>
+                <action android:name="android.support.customtabs.trusted.TRUSTED_WEB_ACTIVITY_SERVICE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+    </application>
+</manifest>
