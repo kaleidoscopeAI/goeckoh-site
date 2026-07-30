@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Goeckoh</string>
+    <string name="launch_url" translatable="false">https://goeckoh.com/real_time_therapeutic_voice_cloning_system.html</string>
+    <string name="launch_host" translatable="false">goeckoh.com</string>
+</resources>

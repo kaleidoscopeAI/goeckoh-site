@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.goeckoh.voicecorrection",
+      "sha256_cert_fingerprints": [
+        "F8:9E:B7:36:1B:91:B1:02:96:61:7B:DC:98:35:BD:5D:FE:79:5D:5C:C3:90:DF:BE:46:89:15:23:AF:D6:E3:76"
+      ]
+    }
+  }
+]

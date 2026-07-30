@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Goeckoh" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/gk_bg</item>
+        <item name="colorPrimary">@color/gk_primary</item>
+        <item name="colorPrimaryDark">@color/gk_bg</item>
+        <item name="colorAccent">@color/gk_teal</item>
+    </style>
+</resources>
