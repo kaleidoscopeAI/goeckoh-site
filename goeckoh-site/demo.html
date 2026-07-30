@@ -1081,8 +1081,8 @@
       DSP engine (Rust-compiled, running directly on the device's audio hardware). This demo shows
       analysis only; the correction is delivered through the full application running natively.
       Total perceived latency also includes Bluetooth earbud round-trip, which varies by hardware
-      (typically 40–150 ms). Even at the upper range, correction arrives well within the 200 ms
-      prediction window.
+      (typically 40–150 ms). Even at the upper range, correction arrives inside the 200 ms
+      prediction window, with margin remaining before the 250 ms hard cutoff below.
       <br><br>
       <strong>N1 Suppression:</strong> When the correction arrives on time, the auditory cortex
       suppresses the N1 evoked potential — an EEG marker indicating the brain accepted the corrected
@@ -1172,7 +1172,7 @@
       <div class="window-callout">
         <strong>The 200 ms window:</strong> Goeckoh's entire correction pipeline — LPC-12 analysis,
         Bark-space formant mapping, Hillenbrand target interpolation, and LPC resynthesis — runs in
-        under 180 ms on the device. This is not arbitrary latency tolerance. It is specifically
+        under 50 ms on the device. This is not arbitrary latency tolerance. It is specifically
         engineered to deliver the corrected signal inside the auditory-motor comparison window, so
         the brain receives the corrected token as if it were its own natural output.
       </div>
