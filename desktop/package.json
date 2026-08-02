@@ -1,0 +1,34 @@
+{
+  "name": "goeckoh-desktop",
+  "version": "1.0.0",
+  "description": "Goeckoh offline desktop app — Electron shell around the same real-time voice correction engine used at goeckoh.com",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "electron": "^43.2.0"
+  },
+  "devDependencies": {
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.goeckoh.desktop",
+    "productName": "Goeckoh",
+    "files": ["main.js", "preload.js", "activation.html", "app/**/*"],
+    "linux": {
+      "target": ["tar.gz"],
+      "category": "Utility"
+    },
+    "mac": {
+      "target": ["dmg"],
+      "category": "public.app-category.medical"
+    },
+    "win": {
+      "target": ["zip"]
+    }
+  }
+}

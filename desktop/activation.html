@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Activate Goeckoh</title>
+<style>
+  body { font-family: system-ui, sans-serif; background:#0B1220; color:#EAF0FA; display:flex; align-items:center; justify-content:center; height:100vh; margin:0; }
+  .card { width:380px; padding:2rem; background:#121A2B; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,0.4); }
+  h1 { font-size:1.2rem; margin:0 0 0.5rem; }
+  p { font-size:0.85rem; color:#9AB0CE; line-height:1.5; }
+  input { width:100%; box-sizing:border-box; padding:0.7rem 0.9rem; margin:1rem 0 0.75rem; border-radius:8px; border:1px solid #2A3B57; background:#0B1220; color:#EAF0FA; font-size:0.95rem; text-transform:uppercase; }
+  button { width:100%; padding:0.7rem; border-radius:8px; border:none; background:#2558D9; color:#fff; font-weight:700; cursor:pointer; font-size:0.9rem; }
+  button:disabled { opacity:0.6; cursor:default; }
+  .err { color:#E07A5F; font-size:0.8rem; margin-top:0.75rem; min-height:1.2em; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>Activate Goeckoh</h1>
+    <p>Enter your license key. This only needs internet the first time — after activation, Goeckoh runs fully offline on this device.</p>
+    <input id="key" placeholder="e.g. GK-XXXX-XXXX-XXXX" autofocus>
+    <button id="go">Activate</button>
+    <div class="err" id="err"></div>
+  </div>
+  <script>
+    const keyInput = document.getElementById('key');
+    const btn = document.getElementById('go');
+    const err = document.getElementById('err');
+    window.goeckohDesktop.onActivationError((msg) => { err.textContent = msg; });
+    btn.addEventListener('click', async () => {
+      err.textContent = '';
+      btn.disabled = true;
+      btn.textContent = 'Activating…';
+      const res = await window.goeckohDesktop.activateLicense(keyInput.value);
+      if (!res.ok) {
+        err.textContent = res.error || 'Activation failed.';
+        btn.disabled = false;
+        btn.textContent = 'Activate';
+      }
+    });
+    keyInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') btn.click(); });
+  </script>
+</body>
+</html>
