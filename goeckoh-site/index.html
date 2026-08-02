@@ -203,35 +203,67 @@
       max-width:320px; font-style:italic;
     }
 
-    /* ── VOICE PANEL (before/after correction visual) ────────────────── */
+    /* ── VOICE PANEL (base card) ─────────────────────────────────────── */
     .voice-panel {
       width:100%; max-width:400px; background:#fff; border:1px solid var(--gk-border);
-      border-radius:24px; padding:2.25rem 2rem;
+      border-radius:24px; padding:1.9rem 1.8rem 1.8rem;
       box-shadow:0 20px 60px rgba(37,88,217,0.14), 0 4px 16px rgba(42,140,122,0.08);
     }
-    .voice-panel-row + .voice-panel-row { margin-top:0.25rem; }
-    .voice-panel-tag {
-      display:inline-flex; align-items:center; gap:0.4rem; font-size:0.68rem; font-weight:700;
-      letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.6rem;
+
+    /* ── VOICE SCOPE (interactive with/without-correction comparison) ── */
+    .vs-head { display:flex; align-items:center; justify-content:space-between; gap:0.75rem; margin-bottom:0.9rem; flex-wrap:wrap; }
+    .vs-eyebrow { font-size:0.6rem; font-weight:800; letter-spacing:0.13em; text-transform:uppercase; color:var(--gk-muted); }
+    .vs-toggle { display:inline-flex; background:var(--gk-bg-raised); border:1px solid var(--gk-border); border-radius:999px; padding:3px; gap:2px; }
+    .vs-toggle-btn {
+      border:none; background:transparent; font-family:var(--gk-font); font-size:0.62rem; font-weight:700;
+      color:var(--gk-text-2); padding:0.32rem 0.6rem; border-radius:999px; cursor:pointer;
+      transition:background .18s ease, color .18s ease; white-space:nowrap;
     }
-    .voice-panel-tag.spoken { color:var(--gk-amber-dark); }
-    .voice-panel-tag.heard  { color:var(--gk-teal); }
-    .voice-panel-tag .dot { width:7px; height:7px; border-radius:50%; background:currentColor; }
-    .voice-wave { width:100%; height:46px; display:block; }
-    .voice-wave.spoken-wave polyline { fill:none; stroke:var(--gk-amber-light); stroke-width:2; stroke-linejoin:round; stroke-linecap:round; }
-    .voice-wave.heard-wave path { fill:none; stroke:var(--gk-teal); stroke-width:2.5; stroke-linecap:round; }
-    @media (prefers-reduced-motion: no-preference) {
-      .voice-wave.heard-wave path { animation:gk-wave-glow 3s ease-in-out infinite; }
+    .vs-toggle-btn[aria-selected="true"] { background:var(--gk-primary); color:#fff; }
+    .vs-toggle-btn:not([aria-selected="true"]):hover { color:var(--gk-text); }
+
+    .vs-screen {
+      position:relative; border-radius:14px; background:#0B1220; overflow:hidden;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,0.07);
+      padding:1.7rem 0.9rem 0.7rem;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.055) 1px, transparent 1px);
+      background-size:100% 25%, 8.33% 100%;
     }
-    @keyframes gk-wave-glow {
-      0%, 100% { filter:drop-shadow(0 0 0 rgba(42,140,122,0)); }
-      50%      { filter:drop-shadow(0 0 5px rgba(42,140,122,0.45)); }
+    .vs-canvas { display:block; width:100%; height:76px; }
+    .vs-tag {
+      position:absolute; top:0.6rem; left:0.9rem; font-size:0.58rem; font-weight:700;
+      letter-spacing:0.05em; text-transform:uppercase; color:rgba(255,255,255,0.55);
     }
-    .voice-panel-arrow {
-      text-align:center; font-size:0.66rem; font-weight:700; letter-spacing:0.08em;
-      text-transform:uppercase; color:var(--gk-muted); margin:0.9rem 0;
+    .vs-readout {
+      position:absolute; top:0.6rem; right:0.9rem; font-family:var(--gk-mono); font-size:0.58rem;
+      font-weight:600; color:rgba(255,255,255,0.72); letter-spacing:0.01em;
     }
-    .voice-panel-arrow b { color:var(--gk-primary); }
+    .vs-noscript-fallback { width:100%; height:76px; display:block; }
+
+    .vs-path { display:flex; align-items:center; gap:0.6rem; margin-top:1.1rem; }
+    .vs-path-node { flex-shrink:0; font-size:1.05rem; line-height:1; }
+    .vs-path-line { flex:1; height:2px; border-radius:2px; position:relative; background:repeating-linear-gradient(90deg, var(--gk-border-2) 0 6px, transparent 6px 11px); }
+    .vs-path-line::after {
+      content:''; position:absolute; top:50%; left:0; width:10px; height:10px; margin-top:-5px;
+      border-radius:50%; background:var(--gk-amber); box-shadow:0 0 0 4px rgba(201,124,26,0.18);
+      transition:left .7s cubic-bezier(.45,0,.2,1), background .3s ease, box-shadow .3s ease;
+    }
+    .voice-scope[data-vs-state="on"] .vs-path-line::after {
+      left:calc(100% - 10px); background:var(--gk-teal); box-shadow:0 0 0 4px rgba(42,140,122,0.18);
+    }
+
+    .vs-status {
+      display:flex; align-items:center; gap:0.5rem; margin-top:0.8rem; padding:0.55rem 0.75rem;
+      border-radius:10px; font-size:0.7rem; font-weight:600; line-height:1.4;
+      background:rgba(201,124,26,0.08); border:1px solid rgba(201,124,26,0.22); color:var(--gk-amber-dark);
+      transition:background .3s ease, border-color .3s ease, color .3s ease;
+    }
+    .vs-status-dot { flex-shrink:0; width:7px; height:7px; border-radius:50%; background:currentColor; }
+    .voice-scope[data-vs-state="on"] .vs-status {
+      background:rgba(42,140,122,0.08); border-color:rgba(42,140,122,0.22); color:var(--gk-teal);
+    }
 
     /* ── TRUST BAR ────────────────────────────────────────────────── */
     .trust-bar {
@@ -562,19 +594,33 @@
       </div>
     </div>
     <div class="hero-visual">
-      <div class="voice-panel" role="img" aria-label="A jagged waveform labeled 'what you say' straightens into a smooth waveform labeled 'what you hear', illustrating real-time correction">
-        <div class="voice-panel-row">
-          <span class="voice-panel-tag spoken"><span class="dot"></span>What you say</span>
-          <svg class="voice-wave spoken-wave" viewBox="0 0 300 50" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-            <polyline points="0,28 14,12 28,40 42,15 56,36 70,8 84,32 98,44 112,14 126,34 140,20 154,42 168,10 182,30 196,38 210,16 224,33 238,22 252,40 266,18 280,32 300,26" />
-          </svg>
+      <div class="voice-panel voice-scope" data-vs-state="off" role="group" aria-label="Interactive comparison of your voice arriving at your ear with and without Goeckoh's real-time correction">
+        <div class="vs-head">
+          <span class="vs-eyebrow">Live signal monitor</span>
+          <div class="vs-toggle">
+            <button type="button" class="vs-toggle-btn" data-state="off" aria-selected="true">Without Goeckoh</button>
+            <button type="button" class="vs-toggle-btn" data-state="on" aria-selected="false">With Goeckoh</button>
+          </div>
         </div>
-        <div class="voice-panel-arrow">&lt;50ms correction <b>&darr;</b></div>
-        <div class="voice-panel-row">
-          <span class="voice-panel-tag heard"><span class="dot"></span>What you hear</span>
-          <svg class="voice-wave heard-wave" viewBox="0 0 300 50" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-            <path d="M0,25 C25,3 50,3 75,25 C100,47 125,47 150,25 C175,3 200,3 225,25 C250,47 275,47 300,25" />
-          </svg>
+        <div class="vs-screen">
+          <canvas class="vs-canvas" width="600" height="160" aria-hidden="true"></canvas>
+          <span class="vs-tag">&#127908; Mic input</span>
+          <span class="vs-readout" data-readout>Jitter: 38% &middot; F1 error: 340Hz</span>
+          <noscript>
+            <style>.voice-scope .vs-canvas{display:none}</style>
+            <svg viewBox="0 0 300 60" class="vs-noscript-fallback" preserveAspectRatio="none" aria-hidden="true">
+              <polyline points="0,34 14,16 28,50 42,19 56,44 70,10 84,38 98,52 112,17 126,41 140,24 154,50 168,12 182,36 196,46 210,19 224,40 238,26 252,48 266,22 280,38 300,31" fill="none" stroke="#D98A4E" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+            </svg>
+          </noscript>
+        </div>
+        <div class="vs-path">
+          <span class="vs-path-node" aria-hidden="true">&#127908;</span>
+          <span class="vs-path-line"></span>
+          <span class="vs-path-node" aria-hidden="true">&#129504;</span>
+        </div>
+        <div class="vs-status">
+          <span class="vs-status-dot" aria-hidden="true"></span>
+          <span data-status-text>No match &mdash; the brain can&rsquo;t confirm this is its own voice.</span>
         </div>
       </div>
       <p class="hero-caption">
@@ -845,19 +891,33 @@
         <a href="science.html" class="gk-btn gk-btn-secondary" style="margin-top:2rem">See the Full Signal Pipeline &amp; Latency Budget →</a>
       </div>
       <div class="gk-sticky-visual">
-        <div class="voice-panel" role="img" aria-label="A jagged waveform labeled 'what you say' straightens into a smooth waveform labeled 'what you hear', illustrating the correction loop">
-          <div class="voice-panel-row">
-            <span class="voice-panel-tag spoken"><span class="dot"></span>Spoken</span>
-            <svg class="voice-wave spoken-wave" viewBox="0 0 300 50" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-              <polyline points="0,28 14,12 28,40 42,15 56,36 70,8 84,32 98,44 112,14 126,34 140,20 154,42 168,10 182,30 196,38 210,16 224,33 238,22 252,40 266,18 280,32 300,26" />
-            </svg>
+        <div class="voice-panel voice-scope" data-vs-state="off" role="group" aria-label="Interactive comparison of a spoken voice arriving at the brain with and without Goeckoh's real-time formant correction">
+          <div class="vs-head">
+            <span class="vs-eyebrow">Live signal monitor</span>
+            <div class="vs-toggle">
+              <button type="button" class="vs-toggle-btn" data-state="off" aria-selected="true">Without</button>
+              <button type="button" class="vs-toggle-btn" data-state="on" aria-selected="false">With Goeckoh</button>
+            </div>
           </div>
-          <div class="voice-panel-arrow">corollary discharge compares <b>&darr;</b></div>
-          <div class="voice-panel-row">
-            <span class="voice-panel-tag heard"><span class="dot"></span>Heard</span>
-            <svg class="voice-wave heard-wave" viewBox="0 0 300 50" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-              <path d="M0,25 C25,3 50,3 75,25 C100,47 125,47 150,25 C175,3 200,3 225,25 C250,47 275,47 300,25" />
-            </svg>
+          <div class="vs-screen">
+            <canvas class="vs-canvas" width="600" height="160" aria-hidden="true"></canvas>
+            <span class="vs-tag">&#127908; Spoken</span>
+            <span class="vs-readout" data-readout>Jitter: 38% &middot; F1 error: 340Hz</span>
+            <noscript>
+              <style>.voice-scope .vs-canvas{display:none}</style>
+              <svg viewBox="0 0 300 60" class="vs-noscript-fallback" preserveAspectRatio="none" aria-hidden="true">
+                <polyline points="0,34 14,16 28,50 42,19 56,44 70,10 84,38 98,52 112,17 126,41 140,24 154,50 168,12 182,36 196,46 210,19 224,40 238,26 252,48 266,22 280,38 300,31" fill="none" stroke="#D98A4E" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+              </svg>
+            </noscript>
+          </div>
+          <div class="vs-path">
+            <span class="vs-path-node" aria-hidden="true">&#127908;</span>
+            <span class="vs-path-line"></span>
+            <span class="vs-path-node" aria-hidden="true">&#129504;</span>
+          </div>
+          <div class="vs-status">
+            <span class="vs-status-dot" aria-hidden="true"></span>
+            <span data-status-text>No match &mdash; the brain can&rsquo;t confirm this is its own voice.</span>
           </div>
         </div>
       </div>
@@ -1322,6 +1382,166 @@
     document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
     if (!wasOpen) item.classList.add('open');
   }
+
+  /* ── VOICE SCOPE: interactive with/without-correction signal monitor ── */
+  (function () {
+    const scopes = document.querySelectorAll('.voice-scope');
+    if (!scopes.length) return;
+
+    function seededRandom(seed) {
+      let s = seed;
+      return function () {
+        s = (s * 9301 + 49297) % 233280;
+        return s / 233280;
+      };
+    }
+
+    function generateWave(kind, n) {
+      const rand = seededRandom(kind === 'off' ? 11 : 47);
+      const pts = new Array(n);
+      for (let i = 0; i < n; i++) {
+        const t = i / (n - 1);
+        let v;
+        if (kind === 'off') {
+          v = Math.sin(t * Math.PI * 2 * 7.4) * 0.5
+            + Math.sin(t * Math.PI * 2 * 13.2 + 1.1) * 0.22
+            + (rand() - 0.5) * 0.42;
+          const env = 0.5 + 0.5 * Math.sin(t * Math.PI * 2 * 2.3 + 0.4);
+          v *= (0.45 + env * (0.55 + rand() * 0.3));
+        } else {
+          v = Math.sin(t * Math.PI * 2 * 6) * 0.52
+            + Math.sin(t * Math.PI * 2 * 12 + 0.5) * 0.16
+            + Math.sin(t * Math.PI * 2 * 18 + 1.0) * 0.07;
+          const env2 = 0.78 + 0.22 * Math.sin(t * Math.PI * 2 * 1 + 0.25);
+          v *= env2;
+        }
+        pts[i] = v;
+      }
+      return pts;
+    }
+
+    const lerp = (a, b, t) => a + (b - a) * t;
+    const hexToRgb = hex => {
+      const v = parseInt(hex.slice(1), 16);
+      return [(v >> 16) & 255, (v >> 8) & 255, v & 255];
+    };
+    const AMBER = hexToRgb('#D98A4E');
+    const TEAL = hexToRgb('#2A8C7A');
+    const N = 160;
+    const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    scopes.forEach(scope => {
+      const canvas = scope.querySelector('.vs-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const waveOff = generateWave('off', N);
+      const waveOn = generateWave('on', N);
+      const readout = scope.querySelector('[data-readout]');
+      const statusText = scope.querySelector('[data-status-text]');
+      const btns = scope.querySelectorAll('.vs-toggle-btn');
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      let current = 0;
+      let raf = null;
+
+      function resize() {
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = Math.max(1, Math.round(rect.width * dpr));
+        canvas.height = Math.max(1, Math.round(rect.height * dpr));
+      }
+
+      function draw(mix) {
+        const w = canvas.width, h = canvas.height;
+        ctx.clearRect(0, 0, w, h);
+        const midY = h / 2, ampY = h * 0.38;
+        const color = [
+          Math.round(lerp(AMBER[0], TEAL[0], mix)),
+          Math.round(lerp(AMBER[1], TEAL[1], mix)),
+          Math.round(lerp(AMBER[2], TEAL[2], mix))
+        ];
+        const stroke = `rgb(${color.join(',')})`;
+        ctx.lineWidth = 2 * dpr;
+        ctx.lineJoin = 'round';
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = stroke;
+        ctx.shadowColor = stroke;
+        ctx.shadowBlur = 8 * dpr;
+        ctx.beginPath();
+        for (let i = 0; i < N; i++) {
+          const v = lerp(waveOff[i], waveOn[i], mix);
+          const x = (i / (N - 1)) * w;
+          const y = midY - v * ampY;
+          if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      }
+
+      function setReadout(mix) {
+        if (!readout) return;
+        const jitter = Math.round(lerp(38, 3, mix));
+        const f1err = Math.round(lerp(340, 12, mix));
+        readout.textContent = `Jitter: ${jitter}% · F1 error: ${f1err}Hz`;
+      }
+
+      function setState(target, animate) {
+        const from = current;
+        scope.setAttribute('data-vs-state', target === 1 ? 'on' : 'off');
+        btns.forEach(b => {
+          const isOn = b.getAttribute('data-state') === (target === 1 ? 'on' : 'off');
+          b.setAttribute('aria-selected', isOn ? 'true' : 'false');
+        });
+        if (statusText) {
+          statusText.textContent = target === 1
+            ? 'Matched in under 50ms — accepted as self-produced speech.'
+            : 'No match — the brain can’t confirm this is its own voice.';
+        }
+        if (raf) cancelAnimationFrame(raf);
+        if (!animate || reduceMotion) {
+          current = target;
+          draw(target);
+          setReadout(target);
+          return;
+        }
+        let start = null;
+        const duration = 750;
+        function step(ts) {
+          if (start === null) start = ts;
+          const p = Math.min(1, (ts - start) / duration);
+          const eased = 1 - Math.pow(1 - p, 3);
+          const mix = lerp(from, target, eased);
+          draw(mix);
+          setReadout(mix);
+          if (p < 1) { raf = requestAnimationFrame(step); }
+          else { current = target; }
+        }
+        raf = requestAnimationFrame(step);
+      }
+
+      btns.forEach(b => {
+        b.addEventListener('click', () => {
+          const target = b.getAttribute('data-state') === 'on' ? 1 : 0;
+          if (target === current) return;
+          setState(target, true);
+        });
+      });
+
+      resize();
+      draw(0);
+      setReadout(0);
+
+      window.addEventListener('resize', () => { resize(); draw(current); });
+
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) { setState(1, true); io.unobserve(scope); }
+          });
+        }, { threshold: 0.45 });
+        io.observe(scope);
+      } else {
+        setState(1, false);
+      }
+    });
+  })();
 </script>
 </body>
 </html>
