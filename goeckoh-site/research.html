@@ -514,11 +514,15 @@
         underneath the product. Goeckoh's correction pipeline analyzes short windows of live
         microphone audio using LPC-family techniques to estimate current formant positions,
         computes the adjustment needed to move them toward the target vowel region established
-        by acoustic-phonetics research (see Formant Acoustics, above), and resynthesizes the
-        corrected signal — all inside a latency budget small enough to stay within the
-        biological feedback window described in the corollary discharge and N1 suppression
-        sections. Every other section on this page describes why that correction should help;
-        this section is how it's technically possible to do it live.
+        by acoustic-phonetics research (see Formant Acoustics, above), and applies that
+        adjustment as a direct real-time filter on the original signal — rather than
+        regenerating it from scratch — so pitch, voicing, and timing are preserved
+        automatically. Audio pass-through adds only a few milliseconds; locking onto a newly
+        changed target formant takes longer, typically well under 150ms (see the Science
+        page's latency budget for the full breakdown), still comfortably inside the biological
+        feedback window described in the corollary discharge and N1 suppression sections below.
+        Every other section on this page describes why that correction should help; this
+        section is how it's technically possible to do it live.
       </div>
     </div>
     <div class="rp-refs">
