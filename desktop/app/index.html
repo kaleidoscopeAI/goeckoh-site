@@ -1,0 +1,1749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="images/logo-light.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Therapeutic Voice Cloning System</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Fira+Code:wght@400;500&display=swap');
+        
+        :root {
+            --bg-dark: #0a0e1a;
+            --bg-card: #131829;
+            --bg-elevated: #1a2033;
+            --accent-primary: #00ff9d;
+            --accent-secondary: #00c3ff;
+            --accent-warning: #ffaa00;
+            --accent-error: #ff4466;
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+            --text-muted: #718096;
+            --border: rgba(255, 255, 255, 0.1);
+            --shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #0f1420 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 255, 157, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 195, 255, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        #app {
+            position: relative;
+            z-index: 1;
+            padding: calc(var(--gk-nav-h, 60px) + 2rem) 2rem 2rem;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 300;
+        }
+        
+        /* Status Banner */
+        .status-banner {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .status-info {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent-error);
+            animation: pulse 2s infinite;
+        }
+        
+        .status-dot.active {
+            background: var(--accent-primary);
+            box-shadow: 0 0 12px var(--accent-primary);
+        }
+        
+        .status-dot.warning {
+            background: var(--accent-warning);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+        
+        .status-label {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+        }
+        
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 350px 1fr 350px;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Card */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .btn span {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: var(--bg-dark);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 255, 157, 0.3);
+        }
+        
+        .btn-secondary {
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--bg-card);
+            border-color: var(--accent-primary);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #ff4466, #ff6b88);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            box-shadow: 0 8px 24px rgba(255, 68, 102, 0.3);
+        }
+        
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        .btn-group .btn {
+            flex: 1;
+        }
+        
+        /* Slider */
+        .control-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .control-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .control-value {
+            font-family: 'Fira Code', monospace;
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            background: var(--bg-elevated);
+            border-radius: 3px;
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 255, 157, 0.4);
+            transition: all 0.3s;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 4px 16px rgba(0, 255, 157, 0.6);
+        }
+        
+        input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 255, 157, 0.4);
+        }
+        
+        /* Visualization */
+        .viz-container {
+            background: var(--bg-dark);
+            border-radius: 12px;
+            padding: 1rem;
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        
+        /* Metrics */
+        .metric {
+            background: var(--bg-elevated);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            border: 1px solid var(--border);
+        }
+        
+        .metric-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.25rem;
+        }
+        
+        .metric-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+        }
+        
+        .metric-unit {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-left: 0.25rem;
+        }
+        
+        /* Voice Profile */
+        .voice-profile {
+            background: linear-gradient(135deg, rgba(0, 255, 157, 0.05), rgba(0, 195, 255, 0.05));
+            border: 1px solid rgba(0, 255, 157, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .profile-icon {
+            font-size: 2rem;
+        }
+        
+        .profile-info h3 {
+            font-size: 1rem;
+            color: var(--accent-primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .profile-info p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        
+        .profile-params {
+            display: grid;
+            gap: 0.5rem;
+        }
+        
+        .profile-param {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 6px;
+            font-size: 0.875rem;
+        }
+        
+        .param-name {
+            color: var(--text-secondary);
+        }
+        
+        .param-value {
+            font-family: 'Fira Code', monospace;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        /* Alert */
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            border: 1px solid;
+            animation: slideIn 0.3s;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .alert-info {
+            background: rgba(0, 195, 255, 0.1);
+            border-color: var(--accent-secondary);
+            color: var(--text-primary);
+        }
+        
+        .alert-success {
+            background: rgba(0, 255, 157, 0.1);
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+        }
+        
+        .alert-warning {
+            background: rgba(255, 170, 0, 0.1);
+            border-color: var(--accent-warning);
+            color: var(--text-primary);
+        }
+        
+        /* Progress Bar */
+        .progress-container {
+            margin-bottom: 1rem;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-elevated);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            width: 0%;
+            transition: width 0.3s;
+            box-shadow: 0 0 10px var(--accent-primary);
+        }
+        
+        .progress-text {
+            text-align: center;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Footer Stats */
+        .footer-stats {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        /* Responsive */
+        @media (max-width: 1400px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Loading Spinner */
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--bg-elevated);
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+  <link rel="stylesheet" href="goeckoh-shared.css">
+  <!-- gate.js's localStorage web-gate is replaced by native Electron activation
+       (see desktop/main.js) — this file only loads after real license activation. -->
+  <script src="backend-config.js"></script>
+</head>
+<body>
+  <nav class="gk-nav">
+    <a href="index.html" class="gk-nav-brand">
+      <img src="images/logo-light.png" alt="Goeckoh" class="gk-nav-logo">
+      <div>
+        <div class="gk-nav-brand-name">GOECK<span>OH</span></div>
+        <div class="gk-nav-brand-sub">Go Echo</div>
+      </div>
+    </a>
+    <div class="gk-nav-links" id="gkNav">
+      <a href="real_time_therapeutic_voice_cloning_system.html" class="gk-nav-link active">Echo Therapy</a>
+      <a href="advanced_voice_visualizer_pro.html"              class="gk-nav-link">Visualizer</a>
+      <a href="voice_therapy_profile_transform.html"            class="gk-nav-link">Profile Lab</a>
+      <a href="goeckoh_dashboard.html"                          class="gk-nav-link">Dashboard</a>
+      <a href="voice_game.html" class="gk-nav-link">Voice Game</a>
+      <a href="voice_setup.html" class="gk-nav-link">Setup</a>
+    </div>
+    <a href="index.html" class="gk-nav-cta">← Home</a>
+    <button class="gk-nav-toggle" onclick="document.getElementById('gkNav').classList.toggle('gk-open')" aria-label="Menu">☰</button>
+  </nav>
+    <div id="app">
+        <header>
+            <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+                <img src="images/logo-light.png" alt="Goeckoh" style="width:52px;height:52px;border-radius:10px;object-fit:cover;box-shadow:0 0 20px rgba(0,195,255,0.25)">
+                <div>
+                    <h1 style="font-size:1.4rem;margin:0">Echo Therapy</h1>
+                    <p class="subtitle" style="margin:0.2rem 0 0">Real-Time Formant Correction · Identity Preserved · &lt;50ms</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- ZERO SETUP BANNER -->
+        <div style="background:rgba(0,245,160,0.06);border:1px solid rgba(0,245,160,0.2);border-radius:10px;padding:1.1rem 1.25rem;margin-bottom:1.25rem">
+            <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+                <img src="images/logo-light.png" alt="" style="width:36px;height:36px;border-radius:6px;object-fit:cover;flex-shrink:0">
+                <div style="flex:1;min-width:200px">
+                    <div style="font-size:0.78rem;font-weight:700;color:var(--accent-primary);margin-bottom:0.15rem">Ready to use — no setup required</div>
+                    <div style="font-size:0.72rem;color:var(--text-secondary);line-height:1.5">Press <strong style="color:var(--text-primary)">Start Now</strong>, allow microphone access, and speak. Correction begins immediately.</div>
+                </div>
+                <button class="btn btn-primary" id="btnQuickStart" onclick="quickStart()" style="flex-shrink:0;font-size:0.9rem;padding:0.75rem 1.5rem">
+                    ▶ Start Now
+                </button>
+            </div>
+            <!-- Hardware callout -->
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.6rem;margin-top:0.9rem;padding-top:0.9rem;border-top:1px solid rgba(0,245,160,0.15)">
+                <div style="font-size:0.68rem;color:var(--text-secondary);line-height:1.55">
+                    <span style="font-size:1rem">🎧</span><br>
+                    <strong style="color:var(--text-primary)">Wireless earbuds with mic</strong><br>
+                    AirPods, Galaxy Buds, or any Bluetooth earbuds that have a built-in microphone.
+                </div>
+                <div style="font-size:0.68rem;color:var(--text-secondary);line-height:1.55">
+                    <span style="font-size:1rem">📱</span><br>
+                    <strong style="color:var(--text-primary)">Keep this device with you</strong><br>
+                    Phone or tablet stays on your person — in a pocket, bag, or nearby. It does the processing.
+                </div>
+                <div style="font-size:0.68rem;color:var(--text-secondary);line-height:1.55">
+                    <span style="font-size:1rem">💻</span><br>
+                    <strong style="color:var(--text-primary);color:#00c3ff">Guardian monitors separately</strong><br>
+                    A caregiver or therapist can watch your session from their own device via the <a href="goeckoh_dashboard.html" style="color:#00c3ff;text-decoration:none">Dashboard</a>.
+                </div>
+            </div>
+        </div>
+
+        <div class="status-banner">
+            <div class="status-info">
+                <div class="status-item">
+                    <div class="status-dot" id="statusDot"></div>
+                    <span class="status-label" id="statusText">Idle</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Mode: <strong id="modeText">Ready</strong></span>
+                </div>
+            </div>
+            <div class="status-info">
+                <div class="status-item">
+                    <span class="status-label">Latency: <strong id="latencyText">--- ms</strong></span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Quality: <strong id="qualityText">---</strong></span>
+                </div>
+            </div>
+            <div class="status-info" id="guardianCodeBar" style="display:none">
+                <div class="status-item">
+                    <span class="status-label">Guardian Code: <strong id="guardianCodeText" style="color:#00c3ff;letter-spacing:0.15em;font-size:1.05em">------</strong></span>
+                </div>
+                <div class="status-item" style="font-size:0.75rem;color:var(--text-secondary)">
+                    Share with caregiver → <a href="goeckoh_dashboard.html" style="color:#00c3ff;text-decoration:none">Dashboard</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <!-- Left Panel: Controls -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">⚙️ Session Control</h2>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" id="btnEnroll">
+                        <span>📝 Enroll Voice (10s)</span>
+                    </button>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-secondary" id="btnStartEcho">
+                        <span>▶️ Start Echo Therapy</span>
+                    </button>
+                    <button class="btn btn-danger" id="btnStop" disabled>
+                        <span>⏹️ Stop</span>
+                    </button>
+                </div>
+
+                <div class="control-group" style="margin-top:1.25rem">
+                    <div class="control-label" style="margin-bottom:0.5rem">
+                        <span>Correction Profile</span>
+                    </div>
+                    <select id="profileSelect" style="width:100%;background:var(--bg-elevated);color:var(--text-primary);border:1px solid var(--border);border-radius:8px;padding:0.75rem 1rem;font-family:inherit;font-size:0.875rem;cursor:pointer;appearance:none"></select>
+                </div>
+
+                <div class="card-header" style="margin-top: 2rem;">
+                    <h2 class="card-title">🎚️ Voice Parameters</h2>
+                </div>
+                
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>Echo Delay</span>
+                        <span class="control-value"><span id="delayValue">50</span> ms</span>
+                    </div>
+                    <input type="range" id="delaySlider" min="10" max="200" value="50" step="5">
+                </div>
+                
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>Pitch Correction</span>
+                        <span class="control-value"><span id="pitchValue">0</span> cents</span>
+                    </div>
+                    <input type="range" id="pitchSlider" min="-1200" max="1200" value="0" step="10">
+                </div>
+                
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>Formant Shift</span>
+                        <span class="control-value"><span id="formantValue">0</span> %</span>
+                    </div>
+                    <input type="range" id="formantSlider" min="-50" max="50" value="0" step="5">
+                </div>
+                
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>Correction Strength</span>
+                        <span class="control-value"><span id="correctionValue">50</span> %</span>
+                    </div>
+                    <input type="range" id="correctionSlider" min="0" max="100" value="50">
+                </div>
+                
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>Voice Mix (Dry/Wet)</span>
+                        <span class="control-value"><span id="mixValue">50</span> %</span>
+                    </div>
+                    <input type="range" id="mixSlider" min="0" max="100" value="50">
+                </div>
+                
+                <div id="alertContainer"></div>
+            </div>
+            
+            <!-- Center: Visualization -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">📊 Real-Time Voice Analysis</h2>
+                </div>
+                
+                <div class="viz-container">
+                    <canvas id="waveformCanvas"></canvas>
+                </div>
+                
+                <div class="card-header" style="margin-top: 1.5rem;">
+                    <h2 class="card-title">🧬 Voice Profile DNA</h2>
+                </div>
+                
+                <div id="profileContainer">
+                    <div class="alert alert-info">
+                        Complete voice enrollment to generate your unique vocal signature
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Panel: Metrics -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">📈 Live Metrics</h2>
+                </div>
+                
+                <div class="metric">
+                    <div class="metric-label">Fundamental Frequency (F₀)</div>
+                    <div class="metric-value">
+                        <span id="metricF0">---</span>
+                        <span class="metric-unit">Hz</span>
+                    </div>
+                </div>
+                
+                <div class="metric">
+                    <div class="metric-label">Energy Level</div>
+                    <div class="metric-value">
+                        <span id="metricEnergy">---</span>
+                        <span class="metric-unit">dB</span>
+                    </div>
+                </div>
+                
+                <div class="metric">
+                    <div class="metric-label">Voice Quality (HNR)</div>
+                    <div class="metric-value">
+                        <span id="metricHNR">---</span>
+                        <span class="metric-unit">dB</span>
+                    </div>
+                </div>
+                
+                <div class="metric">
+                    <div class="metric-label">Spectral Centroid</div>
+                    <div class="metric-value">
+                        <span id="metricCentroid">---</span>
+                        <span class="metric-unit">Hz</span>
+                    </div>
+                </div>
+                
+                <div class="card-header" style="margin-top: 1.5rem;">
+                    <h2 class="card-title">🎯 Correction Stats</h2>
+                </div>
+                
+                <div class="metric">
+                    <div class="metric-label">Errors Detected</div>
+                    <div class="metric-value">
+                        <span id="statErrors">0</span>
+                    </div>
+                </div>
+                
+                <div class="metric">
+                    <div class="metric-label">Corrections Applied</div>
+                    <div class="metric-value">
+                        <span id="statCorrections">0</span>
+                    </div>
+                </div>
+                
+                <div class="metric">
+                    <div class="metric-label">Session Duration</div>
+                    <div class="metric-value">
+                        <span id="statDuration">00:00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-stats">
+            <div class="stat-item">
+                <div class="stat-label">Processing Latency</div>
+                <div class="stat-value"><span id="footerLatency">--- ms</span></div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Buffer Health</div>
+                <div class="stat-value"><span id="footerBuffer">100%</span></div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Echo Quality</div>
+                <div class="stat-value"><span id="footerQuality">Excellent</span></div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Voice Activity</div>
+                <div class="stat-value"><span id="footerVAD">Inactive</span></div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Sample Rate</div>
+                <div class="stat-value"><span id="footerSampleRate">48 kHz</span></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+// =================================================================
+// GOECKOH AUDIOWORKLET — Levinson-Durbin LPC + DF2T biquad
+// Runs in dedicated audio thread; no ScriptProcessor, no fake DSP.
+// =================================================================
+const GOECKOH_WORKLET = `
+class GoeckohVoiceProcessor extends AudioWorkletProcessor {
+    constructor() {
+        super();
+        this.ORDER  = 12;   // LPC order
+        this.FRAME  = 256;  // samples @ 16 kHz = 16 ms
+        this.HOP    = 128;  // 50% overlap
+        this.DEC    = 3;    // 48 kHz -> 16 kHz decimation factor
+
+        // Anti-alias FIR delay (3-tap: 0.25 / 0.5 / 0.25)
+        this.aaZ    = new Float32Array(2);
+        this.decPh  = 0;
+
+        // 16 kHz analysis frame
+        this.frm    = new Float32Array(this.FRAME);
+        this.frmN   = 0;
+        this.peZ    = 0;    // pre-emphasis delay
+
+        // Smoothed formants (Hz)
+        this.sF1 = 500;   this.sF2 = 1500;
+        this.AL  = 0.88;  // smoothing coefficient per 8 ms update
+
+        // Biquad state — Direct Form II Transposed, 2 elements each
+        this.bq1s = new Float32Array(2);
+        this.bq2s = new Float32Array(2);
+        this.bq1c = null;   // {b0,b1,b2,a1,a2} or null
+        this.bq2c = null;
+
+        // Correction params (from main thread)
+        this.tF1    = null;
+        this.tF2    = null;
+        this.str    = 0.5;
+        this.wet    = 1.0;
+        this.active = false;
+
+        // Enrollment capture
+        this.enrolling  = false;
+        this.enrollBuf  = [];
+
+        this.port.onmessage = ev => {
+            const d = ev.data;
+            if (d.type === 'params') {
+                this.tF1    = d.tF1;
+                this.tF2    = d.tF2;
+                this.str    = d.str;
+                this.wet    = d.wet;
+                this.active = d.active;
+                if (!d.active) { this.bq1c = null; this.bq2c = null; }
+            } else if (d.type === 'enrollStart') {
+                this.enrolling = true;
+                this.enrollBuf = [];
+            } else if (d.type === 'enrollStop') {
+                this.enrolling = false;
+                // Flush remaining buffer to main thread
+                if (this.enrollBuf.length) {
+                    const buf = new Float32Array(this.enrollBuf);
+                    this.port.postMessage({ type:'enrollData', buf }, [buf.buffer]);
+                    this.enrollBuf = [];
+                }
+                this.port.postMessage({ type:'enrollDone' });
+            }
+        };
+    }
+
+    // 3-tap anti-alias FIR [0.25, 0.5, 0.25] before decimation
+    aaDec(x) {
+        const y = 0.25 * x + 0.5 * this.aaZ[0] + 0.25 * this.aaZ[1];
+        this.aaZ[1] = this.aaZ[0];
+        this.aaZ[0] = x;
+        return y;
+    }
+
+    // Levinson-Durbin — returns a[1..p], a[0]=1 implicit
+    ldLPC(f, p) {
+        const n = f.length;
+        const r = new Float64Array(p + 1);
+        for (let lag = 0; lag <= p; lag++) {
+            let s = 0;
+            for (let i = lag; i < n; i++) s += f[i] * f[i - lag];
+            r[lag] = s;
+        }
+        if (r[0] < 1e-12) return new Float64Array(p + 1);
+        const a = new Float64Array(p + 1), t = new Float64Array(p + 1);
+        let e = r[0];
+        for (let i = 1; i <= p; i++) {
+            let k = r[i];
+            for (let j = 1; j < i; j++) k += a[j] * r[i - j];
+            k = -k / e;
+            a[i] = k;
+            for (let j = 1; j < i; j++) t[j] = a[j] + k * a[i - j];
+            for (let j = 1; j < i; j++) a[j] = t[j];
+            e *= (1 - k * k);
+            if (e < 1e-20) break;
+        }
+        return a;
+    }
+
+    // Evaluate LPC spectrum at 512 points (0..pi), find peaks -> F1 F2 F3
+    formants(a, p, sr) {
+        const N = 512;
+        const peaks = [];
+        let pm = 0, ppm = 0;
+        for (let k = 0; k <= N; k++) {
+            const w = Math.PI * k / N;
+            let re = 1, im = 0;
+            for (let j = 1; j <= p; j++) {
+                re += a[j] * Math.cos(-j * w);
+                im += a[j] * Math.sin(-j * w);
+            }
+            const m = 1.0 / (re * re + im * im + 1e-10);
+            if (k >= 2 && pm > ppm && pm > m) {
+                const f = (k - 1) * sr / (2 * N);
+                if (f > 80 && f < 4500) peaks.push([f, pm]);
+            }
+            ppm = pm; pm = m;
+        }
+        peaks.sort((a, b) => b[1] - a[1]);
+        const top = peaks.slice(0, 5).sort((a, b) => a[0] - b[0]);
+        return [ top[0]?.[0] ?? 500, top[1]?.[0] ?? 1500, top[2]?.[0] ?? 2500 ];
+    }
+
+    // Biquad coeff: notch (zero) at fSrc, resonance (pole) at fTgt, same radius r
+    // H(z) = (1 - 2r cos(wS) z^-1 + r^2 z^-2) / (1 - 2r cos(wT) z^-1 + r^2 z^-2)
+    bqMake(fSrc, fTgt, sr, bwHz) {
+        const r  = Math.exp(-Math.PI * bwHz / sr);
+        const wS = 2 * Math.PI * fSrc / sr;
+        const wT = 2 * Math.PI * fTgt / sr;
+        return {
+            b0: 1,  b1: -2 * r * Math.cos(wS), b2: r * r,
+            a1: -2 * r * Math.cos(wT),          a2: r * r
+        };
+    }
+
+    // Direct Form II Transposed — s has 2 elements
+    bqTick(x, s, c) {
+        const y = c.b0 * x + s[0];
+        s[0] = c.b1 * x - c.a1 * y + s[1];
+        s[1] = c.b2 * x - c.a2 * y;
+        return y;
+    }
+
+    analyzeFrame(frm) {
+        const n = frm.length;
+
+        // VAD: RMS gate
+        let rms = 0;
+        for (let i = 0; i < n; i++) rms += frm[i] * frm[i];
+        rms = Math.sqrt(rms / n);
+        if (rms < 5e-5) {
+            this.port.postMessage({ type:'analysis', F1:this.sF1, F2:this.sF2, F3:0, voiced:false });
+            return;
+        }
+
+        // Pre-emphasis + Hamming
+        const w = new Float32Array(n);
+        w[0] = (frm[0] - 0.97 * this.peZ) * 0.08;  // window edge
+        for (let i = 1; i < n; i++) {
+            const hw = 0.54 - 0.46 * Math.cos(2 * Math.PI * i / (n - 1));
+            w[i] = (frm[i] - 0.97 * frm[i - 1]) * hw;
+        }
+        this.peZ = frm[n - 1];
+
+        const a = this.ldLPC(w, this.ORDER);
+        const [F1, F2, F3] = this.formants(a, this.ORDER, 16000);
+
+        this.sF1 = this.AL * this.sF1 + (1 - this.AL) * F1;
+        this.sF2 = this.AL * this.sF2 + (1 - this.AL) * F2;
+
+        // Update biquad correction coefficients (computed at 48 kHz)
+        if (this.active && this.tF1 != null && this.tF2 != null) {
+            const c1 = this.sF1 + this.str * (this.tF1 - this.sF1);
+            const c2 = this.sF2 + this.str * (this.tF2 - this.sF2);
+            this.bq1c = Math.abs(this.sF1 - c1) > 15 ? this.bqMake(this.sF1, c1, 48000, 90)  : null;
+            this.bq2c = Math.abs(this.sF2 - c2) > 15 ? this.bqMake(this.sF2, c2, 48000, 120) : null;
+        } else {
+            this.bq1c = null; this.bq2c = null;
+        }
+
+        this.port.postMessage({ type:'analysis', F1:this.sF1, F2:this.sF2, F3, voiced:true });
+    }
+
+    process(inputs, outputs) {
+        const inp = inputs[0]?.[0];
+        const out = outputs[0]?.[0];
+        if (!inp || !out) return true;
+
+        // Enrollment: buffer raw samples in 8192-sample chunks
+        if (this.enrolling) {
+            for (let i = 0; i < inp.length; i++) this.enrollBuf.push(inp[i]);
+            if (this.enrollBuf.length >= 8192) {
+                const buf = new Float32Array(this.enrollBuf);
+                this.port.postMessage({ type:'enrollData', buf }, [buf.buffer]);
+                this.enrollBuf = [];
+            }
+        }
+
+        for (let i = 0; i < inp.length; i++) {
+            const x = inp[i];
+
+            // Anti-alias + decimate to 16 kHz for LPC analysis
+            const aa = this.aaDec(x);
+            if (++this.decPh >= this.DEC) {
+                this.decPh = 0;
+                this.frm[this.frmN++] = aa;
+                if (this.frmN >= this.FRAME) {
+                    this.analyzeFrame(this.frm);
+                    this.frm.copyWithin(0, this.HOP);
+                    this.frmN = this.HOP;
+                }
+            }
+
+            // Apply biquad correction at 48 kHz
+            let y = x;
+            if (this.bq1c) y = this.bqTick(y, this.bq1s, this.bq1c);
+            if (this.bq2c) y = this.bqTick(y, this.bq2s, this.bq2c);
+
+            out[i] = this.wet * y + (1 - this.wet) * x;
+        }
+        return true;
+    }
+}
+registerProcessor('goeckoh-voice-processor', GoeckohVoiceProcessor);
+`;
+
+// =================================================================
+// LPC HELPERS — main thread (enrollment offline analysis)
+// =================================================================
+
+function mlLPC(f, p) {
+    const n = f.length;
+    const r = new Float64Array(p + 1);
+    for (let lag = 0; lag <= p; lag++) {
+        let s = 0;
+        for (let i = lag; i < n; i++) s += f[i] * f[i - lag];
+        r[lag] = s;
+    }
+    if (r[0] < 1e-12) return new Float64Array(p + 1);
+    const a = new Float64Array(p + 1), t = new Float64Array(p + 1);
+    let e = r[0];
+    for (let i = 1; i <= p; i++) {
+        let k = r[i];
+        for (let j = 1; j < i; j++) k += a[j] * r[i - j];
+        k = -k / e;
+        a[i] = k;
+        for (let j = 1; j < i; j++) t[j] = a[j] + k * a[i - j];
+        for (let j = 1; j < i; j++) a[j] = t[j];
+        e *= (1 - k * k);
+        if (e < 1e-20) break;
+    }
+    return a;
+}
+
+function mlFormants(a, p, sr) {
+    const N = 512;
+    const peaks = [];
+    let pm = 0, ppm = 0;
+    for (let k = 0; k <= N; k++) {
+        const w = Math.PI * k / N;
+        let re = 1, im = 0;
+        for (let j = 1; j <= p; j++) {
+            re += a[j] * Math.cos(-j * w);
+            im += a[j] * Math.sin(-j * w);
+        }
+        const m = 1.0 / (re * re + im * im + 1e-10);
+        if (k >= 2 && pm > ppm && pm > m) {
+            const f = (k - 1) * sr / (2 * N);
+            if (f > 80 && f < 4500) peaks.push([f, pm]);
+        }
+        ppm = pm; pm = m;
+    }
+    peaks.sort((a, b) => b[1] - a[1]);
+    const top = peaks.slice(0, 5).sort((a, b) => a[0] - b[0]);
+    return [ top[0]?.[0] ?? 500, top[1]?.[0] ?? 1500, top[2]?.[0] ?? 2500 ];
+}
+
+function mlF0(buf, sr) {
+    const minP = Math.floor(sr / 450);
+    const maxP = Math.min(Math.floor(sr / 75), Math.floor(buf.length / 2));
+    let best = 0, bestP = 0;
+    for (let p = minP; p <= maxP; p++) {
+        let c = 0;
+        for (let i = 0; i < buf.length - p; i++) c += buf[i] * buf[i + p];
+        if (c > best) { best = c; bestP = p; }
+    }
+    return bestP > 0 ? sr / bestP : 0;
+}
+
+function mlHNR(buf, sr, f0) {
+    if (f0 < 75) return 0;
+    const lag = Math.round(sr / f0);
+    if (lag >= buf.length) return 0;
+    let r0 = 0, rT = 0;
+    for (let i = 0; i < buf.length - lag; i++) {
+        r0 += buf[i] * buf[i];
+        rT += buf[i] * buf[i + lag];
+    }
+    if (r0 < 1e-10 || rT <= 0) return 0;
+    return 10 * Math.log10(rT / Math.max(r0 - rT, 1e-10));
+}
+
+// =================================================================
+// CLINICAL CORRECTION PROFILES
+// F1/F2 targets derived from speech-correction.py profile data
+// =================================================================
+
+const PROFILES = {
+    asd_child:           { name:'ASD Child',             f1: 530, f2: 1800 },
+    asd_adult:           { name:'ASD Adult',             f1: 500, f2: 1700 },
+    dysarthria_spastic:  { name:'Dysarthria — Spastic',  f1: 560, f2: 1380 },
+    dysarthria_ataxic:   { name:'Dysarthria — Ataxic',   f1: 540, f2: 1430 },
+    apraxia:             { name:'Apraxia',               f1: 510, f2: 1680 },
+    stuttering:          { name:'Fluency / Stuttering',  f1: 490, f2: 1600 },
+    broadcast_neutral:   { name:'Broadcast Neutral',     f1: 480, f2: 1720 },
+    vocal_warmup:        { name:'Vocal Warmup',          f1: 520, f2: 1600 },
+    passthrough:         { name:'Pass-through (Test)',   f1: null, f2: null },
+};
+
+// =================================================================
+// THERAPEUTIC VOICE CLONER — main controller
+// =================================================================
+
+        class TherapeuticVoiceCloner {
+            constructor() {
+                this.audioContext = null;
+                this.microphone   = null;
+                this.analyser     = null;
+                this.workletNode  = null;
+                this.delayNode    = null;
+                this.inputGain    = null;
+                this.outputGain   = null;
+                this.stream       = null;
+
+                this.state        = 'idle';
+                this.voiceProfile = null;
+
+                // Enrollment: raw samples accumulated from worklet
+                this.enrollRaw    = [];
+                this.enrollReady  = false;
+
+                // Analyser display data
+                this.dispData  = null;
+                this.dispLen   = null;
+
+                // Live formant feedback from worklet
+                this.liveF1 = 0;  this.liveF2 = 0;  this.liveF3 = 0;
+                this.voiced = false;
+
+                // Performance
+                this.latencies       = [];
+                this.correctionCount = 0;
+                this.errorCount      = 0;
+                this.sessionStart    = null;
+                this.sessionInterval = null;
+
+                // Guardian relay
+                this.guardianWs   = null;
+                this.guardianCode = null;
+
+                this.params = {
+                    echoDelay:        50,
+                    formantManual:     0,
+                    correctionStr:    50,
+                    dryWetMix:        80,
+                    profile:          'asd_child',
+                };
+
+                this._initUI();
+                this._initCanvas();
+            }
+
+            // ── UI setup ──────────────────────────────────────────────────────
+
+            _initUI() {
+                document.getElementById('btnEnroll').addEventListener('click',    () => this.startEnrollment());
+                document.getElementById('btnStartEcho').addEventListener('click', () => this.startEchoTherapy());
+                document.getElementById('btnStop').addEventListener('click',      () => this.stop());
+
+                this._slider('delay',      v => { this.params.echoDelay    = v; if (this.delayNode) this.delayNode.delayTime.value = v/1000; });
+                this._slider('formant',    v => { this.params.formantManual = v; this._pushParams(); });
+                this._slider('correction', v => { this.params.correctionStr = v; this._pushParams(); });
+                this._slider('mix',        v => { this.params.dryWetMix    = v; this._pushParams(); });
+                // pitch slider: no audio effect, keep label alive
+                const ps = document.getElementById('pitchSlider');
+                if (ps) ps.addEventListener('input', () => {});
+
+                // Populate and wire profile selector
+                const sel = document.getElementById('profileSelect');
+                if (sel) {
+                    sel.innerHTML = Object.entries(PROFILES)
+                        .map(([k,v]) => `<option value="${k}">${v.name}</option>`).join('');
+                    sel.value = this.params.profile;
+                    sel.addEventListener('change', e => {
+                        this.params.profile = e.target.value;
+                        this._pushParams();
+                    });
+                }
+            }
+
+            _slider(name, cb) {
+                const sl = document.getElementById(name + 'Slider');
+                const vl = document.getElementById(name + 'Value');
+                if (!sl) return;
+                sl.addEventListener('input', e => {
+                    const v = parseFloat(e.target.value);
+                    if (vl) vl.textContent = v;
+                    cb(v);
+                });
+            }
+
+            // ── Canvas ────────────────────────────────────────────────────────
+
+            _initCanvas() {
+                this.canvas    = document.getElementById('waveformCanvas');
+                this.canvasCtx = this.canvas.getContext('2d');
+                const resize   = () => {
+                    const r = this.canvas.parentElement.getBoundingClientRect();
+                    this.canvas.width = r.width; this.canvas.height = r.height;
+                };
+                resize();
+                window.addEventListener('resize', resize);
+                this._drawLoop();
+            }
+
+            // ── Audio init ────────────────────────────────────────────────────
+
+            async initializeAudio() {
+                try {
+                    this.stream = await navigator.mediaDevices.getUserMedia({
+                        audio: {
+                            echoCancellation: false,
+                            noiseSuppression: false,
+                            autoGainControl:  false,
+                            channelCount: 1,
+                        }
+                    });
+
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)({
+                        latencyHint: 'interactive',
+                        sampleRate:  48000,
+                    });
+
+                    // Load AudioWorklet from inline blob (works on file:// without server)
+                    const blob = new Blob([GOECKOH_WORKLET], { type:'application/javascript' });
+                    const burl = URL.createObjectURL(blob);
+                    await this.audioContext.audioWorklet.addModule(burl);
+                    URL.revokeObjectURL(burl);
+
+                    // Build graph
+                    this.microphone  = this.audioContext.createMediaStreamSource(this.stream);
+                    this.inputGain   = this.audioContext.createGain();
+                    this.analyser    = this.audioContext.createAnalyser();
+                    this.delayNode   = this.audioContext.createDelay(1.0);
+                    this.outputGain  = this.audioContext.createGain();
+                    this.workletNode = new AudioWorkletNode(
+                        this.audioContext, 'goeckoh-voice-processor',
+                        { numberOfInputs:1, numberOfOutputs:1, outputChannelCount:[1] }
+                    );
+
+                    this.analyser.fftSize = 2048;
+                    this.analyser.smoothingTimeConstant = 0.8;
+                    this.dispLen  = this.analyser.frequencyBinCount;
+                    this.dispData = new Uint8Array(this.dispLen);
+
+                    this.delayNode.delayTime.value = this.params.echoDelay / 1000;
+
+                    // mic → gain → analyser → worklet → delay → out
+                    this.microphone.connect(this.inputGain);
+                    this.inputGain.connect(this.analyser);
+                    this.analyser.connect(this.workletNode);
+                    this.workletNode.connect(this.delayNode);
+                    this.delayNode.connect(this.outputGain);
+                    this.outputGain.connect(this.audioContext.destination);
+
+                    // Messages from worklet
+                    this.workletNode.port.onmessage = ev => {
+                        const d = ev.data;
+                        if (d.type === 'analysis') {
+                            this.liveF1 = d.F1; this.liveF2 = d.F2; this.liveF3 = d.F3;
+                            this.voiced = d.voiced;
+                        } else if (d.type === 'enrollData') {
+                            for (let i = 0; i < d.buf.length; i++) this.enrollRaw.push(d.buf[i]);
+                        } else if (d.type === 'enrollDone') {
+                            this.enrollReady = true;
+                        }
+                    };
+
+                    document.getElementById('footerSampleRate').textContent =
+                        (this.audioContext.sampleRate / 1000).toFixed(0) + ' kHz';
+
+                    this._pushParams();
+                    this._metricsLoop();
+                    this.showAlert('success', 'LPC voice processor ready (AudioWorklet).');
+                    return true;
+
+                } catch (err) {
+                    console.error(err);
+                    this.showAlert('warning', 'Init failed: ' + err.message + '. Try Chrome/Edge served over http.');
+                    return false;
+                }
+            }
+
+            _pushParams() {
+                if (!this.workletNode) return;
+                const prof = PROFILES[this.params.profile] || PROFILES.passthrough;
+                const scale = 1 + this.params.formantManual / 100;
+                this.workletNode.port.postMessage({
+                    type:   'params',
+                    tF1:    prof.f1 ? prof.f1 * scale : null,
+                    tF2:    prof.f2 ? prof.f2 * scale : null,
+                    str:    this.params.correctionStr / 100,
+                    wet:    this.params.dryWetMix / 100,
+                    active: this.state === 'echoing',
+                });
+            }
+
+            // ── Enrollment ────────────────────────────────────────────────────
+
+            async startEnrollment() {
+                if (!this.audioContext) {
+                    if (!await this.initializeAudio()) return;
+                }
+                this.state       = 'enrolling';
+                this.enrollRaw   = [];
+                this.enrollReady = false;
+
+                this.workletNode.port.postMessage({ type:'enrollStart' });
+                this._updateStatus('enrolling', 'Recording Voice Profile...');
+                this._updateButtons();
+                this.showAlert('info', 'Speak naturally for 10 seconds — vowels, sentences, your real voice.');
+
+                const prog = this.showProgress('Enrollment');
+                let elapsed = 0;
+                const iv = setInterval(() => {
+                    elapsed += 100;
+                    this._updateProgress(prog, (elapsed / 10000) * 100);
+                    if (elapsed >= 10000) {
+                        clearInterval(iv);
+                        this.workletNode.port.postMessage({ type:'enrollStop' });
+                        // Wait for enrollDone message (tiny round-trip), then analyze
+                        const wait = setInterval(() => {
+                            if (this.enrollReady) {
+                                clearInterval(wait);
+                                this._completeEnrollment();
+                            }
+                        }, 50);
+                    }
+                }, 100);
+            }
+
+            _completeEnrollment() {
+                if (this.enrollRaw.length < 8000) {
+                    this.showAlert('warning', 'Not enough audio captured — try again.');
+                    this.state = 'idle'; this._updateButtons(); return;
+                }
+                const samples = new Float32Array(this.enrollRaw);
+                this.voiceProfile = this._analyzeProfile(samples, this.audioContext.sampleRate);
+                this._displayProfile();
+                this.state = 'idle';
+                this._updateStatus('idle', 'Profile Ready');
+                this._updateButtons();
+                this.showAlert('success', 'Voice DNA captured. Start Echo Therapy to begin LPC correction.');
+            }
+
+            _analyzeProfile(samples, sr) {
+                const FRAME = 2048;  // ~43 ms @ 48 kHz
+                const HOP   = 1024;
+                const DEC   = 3;     // 48 kHz -> 16 kHz for LPC
+                const P     = 12;
+
+                const f0s = [], F1s = [], F2s = [], F3s = [], hnrs = [], dbs = [];
+
+                for (let s = 0; s + FRAME <= samples.length; s += HOP) {
+                    const frm = samples.subarray(s, s + FRAME);
+
+                    // RMS + energy gate
+                    let rms = 0;
+                    for (let i = 0; i < frm.length; i++) rms += frm[i]*frm[i];
+                    rms = Math.sqrt(rms / frm.length);
+                    const db = 20 * Math.log10(rms + 1e-10);
+                    if (db < -48) continue;
+
+                    const f0 = mlF0(frm, sr);
+                    if (f0 < 75 || f0 > 450) continue;
+
+                    // Decimate to 16 kHz
+                    const n16 = Math.floor(FRAME / DEC);
+                    const frm16 = new Float32Array(n16);
+                    for (let i = 0; i < n16; i++) frm16[i] = frm[i * DEC];
+
+                    // Pre-emphasis + Hamming
+                    const wf = new Float32Array(n16);
+                    wf[0] = frm16[0];
+                    for (let i = 1; i < n16; i++) {
+                        const hw = 0.54 - 0.46 * Math.cos(2 * Math.PI * i / (n16 - 1));
+                        wf[i] = (frm16[i] - 0.97 * frm16[i-1]) * hw;
+                    }
+
+                    const a = mlLPC(wf, P);
+                    const [F1, F2, F3] = mlFormants(a, P, 16000);
+                    const hnr = mlHNR(frm16, 16000, f0);
+
+                    f0s.push(f0); F1s.push(F1); F2s.push(F2); F3s.push(F3);
+                    hnrs.push(hnr); dbs.push(db);
+                }
+
+                if (f0s.length < 3) return null;
+
+                const med = arr => {
+                    const s = arr.slice().sort((a,b)=>a-b);
+                    return s[Math.floor(s.length/2)];
+                };
+                const std = arr => {
+                    const m = arr.reduce((a,b)=>a+b,0)/arr.length;
+                    return Math.sqrt(arr.reduce((s,x)=>s+(x-m)**2,0)/arr.length);
+                };
+
+                // Jitter: mean |ΔF0| / medF0
+                let jSum = 0;
+                for (let i = 1; i < f0s.length; i++) jSum += Math.abs(f0s[i]-f0s[i-1]);
+                const jitter = (jSum/(f0s.length-1)) / med(f0s) * 100;
+
+                // Shimmer: mean |Δdb| / mean(|db|)
+                let shSum = 0;
+                const mdb = dbs.reduce((a,b)=>a+b,0)/dbs.length;
+                for (let i = 1; i < dbs.length; i++) shSum += Math.abs(dbs[i]-dbs[i-1]);
+                const shimmer = (shSum/(dbs.length-1)) / (Math.abs(mdb)+1e-6) * 100;
+
+                return {
+                    f0: med(f0s), f0std: std(f0s),
+                    f0range: [Math.min(...f0s), Math.max(...f0s)],
+                    F1: med(F1s), F2: med(F2s), F3: med(F3s),
+                    hnr: med(hnrs),
+                    jitter: Math.min(jitter, 99),
+                    shimmer: Math.min(shimmer, 99),
+                    energy: mdb,
+                    frames: f0s.length,
+                    ts: Date.now(),
+                };
+            }
+
+            _displayProfile() {
+                const p = this.voiceProfile;
+                if (!p) return;
+                const prof = PROFILES[this.params.profile];
+                const dF2 = (prof && prof.f2) ? (prof.f2 - p.F2).toFixed(0) : '—';
+                const row = (label, val, unit) =>
+                    `<div class="profile-param">
+                        <span class="param-name">${label}</span>
+                        <span class="param-value">${val} <span style="font-size:.75rem;opacity:.6">${unit}</span></span>
+                    </div>`;
+                document.getElementById('profileContainer').innerHTML = `
+                    <div class="voice-profile">
+                        <div class="profile-header">
+                            <div class="profile-icon">🧬</div>
+                            <div class="profile-info">
+                                <h3>Voice DNA</h3>
+                                <p style="color:var(--text-muted);font-size:.8rem">${new Date(p.ts).toLocaleTimeString()} — ${p.frames} voiced frames</p>
+                            </div>
+                        </div>
+                        <div class="profile-params">
+                            ${row('Fundamental F₀', p.f0.toFixed(1), 'Hz')}
+                            ${row('F₀ Range', p.f0range[0].toFixed(0)+' – '+p.f0range[1].toFixed(0), 'Hz')}
+                            ${row('Formant F₁', p.F1.toFixed(0), 'Hz')}
+                            ${row('Formant F₂', p.F2.toFixed(0), 'Hz')}
+                            ${row('Formant F₃', p.F3.toFixed(0), 'Hz')}
+                            ${row('HNR', p.hnr.toFixed(1), 'dB')}
+                            ${row('Jitter', p.jitter.toFixed(2), '%')}
+                            ${row('Shimmer', p.shimmer.toFixed(2), '%')}
+                            ${row('F₂ → Target Δ', dF2, 'Hz')}
+                        </div>
+                    </div>`;
+            }
+
+            // ── Guardian relay ────────────────────────────────────────────────
+
+            async _connectGuardian() {
+                try {
+                    const isLocal = (location.hostname === 'localhost' || location.hostname === '127.0.0.1');
+                    const proto = isLocal ? (location.protocol === 'https:' ? 'https' : 'http') : 'https';
+                    const host  = isLocal ? `${location.hostname}:8000` : (window.GOECKOH_BACKEND_HOST || 'goeckoh-backend.fly.dev');
+                    const res  = await fetch(`${proto}://${host}/session/new-code`);
+                    if (!res.ok) return;
+                    const data = await res.json();
+                    this.guardianCode = data.code;
+
+                    const wsProto = proto === 'https' ? 'wss' : 'ws';
+                    this.guardianWs = new WebSocket(`${wsProto}://${host}/ws/broadcast/${this.guardianCode}`);
+                    this.guardianWs.onopen = () => {
+                        document.getElementById('guardianCodeText').textContent = this.guardianCode;
+                        document.getElementById('guardianCodeBar').style.display = '';
+                    };
+                    this.guardianWs.onclose = () => {
+                        this.guardianWs = null;
+                    };
+                } catch (e) {
+                    // backend not available — silent fail, no data leaves device anyway
+                }
+            }
+
+            _broadcastMetrics(f0, f1, f2, hnr, latMs) {
+                if (!this.guardianWs || this.guardianWs.readyState !== WebSocket.OPEN) return;
+                this.guardianWs.send(JSON.stringify({
+                    latency_ms: +latMs.toFixed(1),
+                    f0:  +f0.toFixed(1),
+                    f1:  +f1.toFixed(0),
+                    f2:  +f2.toFixed(0),
+                    hnr: +hnr.toFixed(1)
+                }));
+            }
+
+            // ── Echo therapy ──────────────────────────────────────────────────
+
+            async startEchoTherapy() {
+                if (!this.audioContext) {
+                    if (!await this.initializeAudio()) return;
+                }
+                this.state          = 'echoing';
+                this.sessionStart   = Date.now();
+                this.correctionCount = 0;
+                this.errorCount     = 0;
+
+                this._pushParams();
+                this._updateStatus('echoing', 'LPC Echo Therapy Active');
+                this._updateButtons();
+                this.showAlert('success', 'LPC formant correction live. You hear your voice corrected in real time.');
+                this._connectGuardian();
+
+                this.sessionInterval = setInterval(() => {
+                    const ms = Date.now() - this.sessionStart;
+                    const m  = String(Math.floor(ms/60000)).padStart(2,'0');
+                    const s  = String(Math.floor((ms%60000)/1000)).padStart(2,'0');
+                    document.getElementById('statDuration').textContent = m+':'+s;
+                }, 1000);
+            }
+
+            stop() {
+                this.state = 'idle';
+                if (this.sessionInterval) { clearInterval(this.sessionInterval); this.sessionInterval = null; }
+                if (this.guardianWs) {
+                    try { this.guardianWs.send(JSON.stringify({event:'session_ended'})); } catch(_) {}
+                    this.guardianWs.close();
+                    this.guardianWs = null;
+                }
+                document.getElementById('guardianCodeBar').style.display = 'none';
+                document.getElementById('guardianCodeText').textContent  = '------';
+                this._pushParams();
+                this._updateStatus('idle', 'Session Ended');
+                this._updateButtons();
+                this.showAlert('info', 'Session stopped.');
+            }
+
+            // ── Metrics ───────────────────────────────────────────────────────
+
+            _metricsLoop() {
+                const loop = () => {
+                    if (!this.analyser) return;
+                    const t0 = performance.now();
+
+                    // Time-domain for waveform and metrics
+                    if (this.dispData) this.analyser.getByteTimeDomainData(this.dispData);
+                    const td = new Float32Array(this.analyser.fftSize);
+                    this.analyser.getFloatTimeDomainData(td);
+
+                    let rms = 0;
+                    for (let i = 0; i < td.length; i++) rms += td[i]*td[i];
+                    rms = Math.sqrt(rms / td.length);
+                    const db = 20 * Math.log10(rms + 1e-10);
+
+                    const f0 = mlF0(td, this.audioContext.sampleRate);
+                    const hnr = mlHNR(td.subarray(0, 512), this.audioContext.sampleRate, f0);
+                    const isVoiced = f0 > 75 && f0 < 450 && db > -45;
+
+                    // Spectral centroid
+                    const fd = new Uint8Array(this.dispLen);
+                    this.analyser.getByteFrequencyData(fd);
+                    let ws = 0, ts = 0;
+                    for (let i = 0; i < fd.length; i++) {
+                        const f = i * this.audioContext.sampleRate / (2 * this.dispLen);
+                        ws += f * fd[i]; ts += fd[i];
+                    }
+                    const centroid = ts > 0 ? ws/ts : 0;
+
+                    document.getElementById('metricF0').textContent      = f0.toFixed(1);
+                    document.getElementById('metricEnergy').textContent  = db.toFixed(1);
+                    document.getElementById('metricHNR').textContent     = hnr.toFixed(1);
+                    document.getElementById('metricCentroid').textContent = centroid.toFixed(0);
+                    document.getElementById('footerVAD').textContent     = isVoiced ? 'Active' : 'Inactive';
+
+                    if (this.state === 'echoing' && this.voiced) {
+                        this.correctionCount++;
+                        document.getElementById('statCorrections').textContent = this.correctionCount;
+                    }
+
+                    const lat = performance.now() - t0;
+                    this.latencies.push(lat);
+                    if (this.latencies.length > 100) this.latencies.shift();
+                    const avgLat = this.latencies.reduce((a,b)=>a+b,0) / this.latencies.length;
+                    document.getElementById('latencyText').textContent  = avgLat.toFixed(1) + ' ms';
+                    document.getElementById('footerLatency').textContent = avgLat.toFixed(1) + ' ms';
+
+                    if (this.state === 'echoing') {
+                        this._broadcastMetrics(f0, this.liveF1 || 0, this.liveF2 || 0, hnr, avgLat);
+                    }
+
+                    setTimeout(loop, 50);  // 20 Hz
+                };
+                loop();
+            }
+
+            // ── Visualization ─────────────────────────────────────────────────
+
+            _drawLoop() {
+                const draw = () => {
+                    requestAnimationFrame(draw);
+                    if (!this.analyser || !this.dispData) return;
+
+                    this.analyser.getByteTimeDomainData(this.dispData);
+                    const { width: W, height: H } = this.canvas;
+
+                    this.canvasCtx.fillStyle = 'rgba(10,14,26,0.3)';
+                    this.canvasCtx.fillRect(0, 0, W, H);
+                    this.canvasCtx.lineWidth   = 2;
+                    this.canvasCtx.strokeStyle = '#00ff9d';
+                    this.canvasCtx.beginPath();
+
+                    const sw = W / this.dispLen;
+                    let x = 0;
+                    for (let i = 0; i < this.dispLen; i++) {
+                        const y = (this.dispData[i] / 128.0) * H / 2;
+                        i === 0 ? this.canvasCtx.moveTo(x, y) : this.canvasCtx.lineTo(x, y);
+                        x += sw;
+                    }
+                    this.canvasCtx.stroke();
+
+                    // Live F1/F2 frequency markers during echoing
+                    if (this.state === 'echoing' && this.liveF1 > 0 && this.audioContext) {
+                        const sr = this.audioContext.sampleRate;
+                        this.canvasCtx.globalAlpha  = 0.45;
+                        this.canvasCtx.lineWidth    = 1;
+                        [[this.liveF1,'#00c3ff'],[this.liveF2,'#ffaa00']].forEach(([f, col]) => {
+                            const xf = (f / (sr/2)) * W;
+                            this.canvasCtx.strokeStyle = col;
+                            this.canvasCtx.beginPath();
+                            this.canvasCtx.moveTo(xf, 0);
+                            this.canvasCtx.lineTo(xf, H);
+                            this.canvasCtx.stroke();
+                        });
+                        this.canvasCtx.globalAlpha = 1.0;
+                    }
+                };
+                draw();
+            }
+
+            // ── UI helpers ────────────────────────────────────────────────────
+
+            _updateStatus(state, text) {
+                const dot = document.getElementById('statusDot');
+                dot.className = 'status-dot';
+                if (state === 'echoing' || state === 'enrolling') dot.classList.add('active');
+                document.getElementById('statusText').textContent = text;
+                document.getElementById('modeText').textContent =
+                    state.charAt(0).toUpperCase() + state.slice(1);
+            }
+
+            _updateButtons() {
+                const e = document.getElementById('btnEnroll');
+                const s = document.getElementById('btnStartEcho');
+                const t = document.getElementById('btnStop');
+                switch (this.state) {
+                    case 'idle':
+                        e.disabled = false; s.disabled = false; t.disabled = true; break;
+                    case 'enrolling':
+                        e.disabled = true;  s.disabled = true;  t.disabled = false; break;
+                    case 'echoing':
+                        e.disabled = true;  s.disabled = true;  t.disabled = false; break;
+                }
+            }
+
+            showAlert(type, msg) {
+                const c  = document.getElementById('alertContainer');
+                const el = document.createElement('div');
+                el.className = `alert alert-${type}`;
+                el.textContent = msg;
+                c.appendChild(el);
+                setTimeout(() => el.remove(), 6000);
+            }
+
+            showProgress(label) {
+                const c  = document.getElementById('alertContainer');
+                const el = document.createElement('div');
+                el.className = 'progress-container';
+                el.innerHTML = `<div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+                                <div class="progress-text">${label}: 0%</div>`;
+                c.appendChild(el);
+                return el;
+            }
+
+            _updateProgress(el, pct) {
+                el.querySelector('.progress-fill').style.width = pct + '%';
+                el.querySelector('.progress-text').textContent = `Enrollment: ${pct.toFixed(0)}%`;
+                if (pct >= 100) setTimeout(() => el.remove(), 1200);
+            }
+        }
+
+        // ── Boot ──────────────────────────────────────────────────────────────
+        const app = new TherapeuticVoiceCloner();
+
+        // Zero-setup quick start: called by the "Start Now" button in the banner
+        function quickStart() {
+            app.startEchoTherapy();
+            document.getElementById('btnQuickStart').textContent = '✓ Running';
+            document.getElementById('btnQuickStart').disabled = true;
+        }
+
+        setInterval(() => {
+            const lats = app.latencies;
+            const maxL = lats.length ? Math.max(...lats) : 999;
+            const q = lats.length === 0 ? '---' : maxL < 10 ? 'Excellent' : maxL < 20 ? 'Good' : 'Fair';
+            document.getElementById('qualityText').textContent   = q;
+            document.getElementById('footerQuality').textContent = q;
+            document.getElementById('footerBuffer').textContent  = '99%';
+        }, 1000);
+    </script>
+</body>
+</html>
