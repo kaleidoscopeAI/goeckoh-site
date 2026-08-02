@@ -503,11 +503,13 @@
       </p>
       <p>
         Because LPC coefficients correspond to actual resonance frequencies, they can be
-        manipulated directly — shifted toward a target formant position — and then used to
-        resynthesize the speech signal with the original source (pitch, voicing, timing)
-        preserved but the resonant filter shape corrected. This is what makes LPC-based
-        methods suited to formant correction specifically, as opposed to other voice
-        modification techniques that operate on pitch or timing instead.
+        manipulated directly — shifted toward a target formant position. One classical
+        approach, dating back to Atal's original work, is to then resynthesize the speech
+        signal from those adjusted coefficients plus a modeled source signal. This is what
+        makes LPC-based methods suited to formant correction specifically, as opposed to
+        other voice modification techniques that operate on pitch or timing instead — though
+        as the next section explains, Goeckoh itself uses a simpler, more direct variant of
+        this idea rather than full resynthesis.
       </p>
       <div class="rp-goeckoh">
         <strong>Why this matters for Goeckoh:</strong> this is the actual engineering
