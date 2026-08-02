@@ -801,15 +801,16 @@
     </div>
   </a>
   <div class="gk-nav-links" id="gkNav">
-    <a href="demo.html"                                       class="gk-nav-link active">Live Demo</a>
-    <a href="real_time_therapeutic_voice_cloning_system.html" class="gk-nav-link">Echo Therapy</a>
-    <a href="advanced_voice_visualizer_pro.html"              class="gk-nav-link">Visualizer</a>
-    <a href="voice_therapy_profile_transform.html"            class="gk-nav-link">Profile Lab</a>
-    <a href="goeckoh_dashboard.html"                          class="gk-nav-link">Dashboard</a>
-    <a href="index.html"                                      class="gk-nav-link">Science</a>
+    <a href="demo.html"       class="gk-nav-link active">Live Demo</a>
+    <a href="science.html"    class="gk-nav-link">The Science</a>
+    <a href="research.html"   class="gk-nav-link">Research</a>
+    <a href="families.html"   class="gk-nav-link">For Families</a>
+    <a href="clinicians.html" class="gk-nav-link">For Clinicians</a>
+    <a href="pricing.html"    class="gk-nav-link">Pricing</a>
   </div>
-  <a href="download.html" class="gk-nav-cta">Download</a>
-  <button class="gk-nav-toggle" onclick="document.getElementById('gkNav').classList.toggle('gk-open')" aria-label="Menu">☰</button>
+  <a href="download.html" class="gk-nav-cta">Get Early Access</a>
+  <button class="gk-nav-toggle" aria-label="Menu" aria-controls="gkNav" aria-expanded="false"
+    onclick="const nav=document.getElementById('gkNav'); this.setAttribute('aria-expanded', nav.classList.toggle('gk-open'))">☰</button>
 </nav>
 
 <!-- ══════════════════════ HERO ══════════════════════ -->
@@ -1077,12 +1078,14 @@
     </div>
 
     <div class="timeline-note">
-      * &lt;50 ms refers to the <strong>native on-device processing latency</strong> of Goeckoh's
-      DSP engine (Rust-compiled, running directly on the device's audio hardware). This demo shows
-      analysis only; the correction is delivered through the full application running natively.
-      Total perceived latency also includes Bluetooth earbud round-trip, which varies by hardware
-      (typically 40–150 ms). Even at the upper range, correction arrives inside the 200 ms
-      prediction window, with margin remaining before the 250 ms hard cutoff below.
+      * &lt;50 ms refers to the processing latency of Goeckoh's correction pipeline itself —
+      the same LPC-12 formant analysis and biquad correction engine described in full on the
+      <a href="science.html" style="color:inherit;text-decoration:underline">Science page</a>,
+      running in "Hear The Correction" above exactly as it runs in the full application; this
+      demo is not a simulation of it. Total perceived latency also includes Bluetooth earbud
+      round-trip, which varies by hardware (typically 40–150 ms). Even at the upper range,
+      correction arrives inside the 200 ms prediction window, with margin remaining before the
+      250 ms hard cutoff below.
       <br><br>
       <strong>N1 Suppression:</strong> When the correction arrives on time, the auditory cortex
       suppresses the N1 evoked potential — an EEG marker indicating the brain accepted the corrected
