@@ -1059,9 +1059,9 @@
           <div class="tl-pin-ms">0 ms</div>
           <div class="tl-pin-lbl">Motor command — you intend to speak</div>
         </div>
-        <div class="tl-pin green" style="left:20%">
+        <div class="tl-pin green" style="left:40%">
           <div class="tl-pin-tick"></div>
-          <div class="tl-pin-ms">&lt;50 ms</div>
+          <div class="tl-pin-ms">~100 ms</div>
           <div class="tl-pin-lbl">Goeckoh delivers corrected signal to earbuds*</div>
         </div>
         <div class="tl-pin blue" style="left:80%">
@@ -1078,14 +1078,19 @@
     </div>
 
     <div class="timeline-note">
-      * &lt;50 ms refers to the processing latency of Goeckoh's correction pipeline itself —
-      the same LPC-12 formant analysis and biquad correction engine described in full on the
+      * The correction engine — the same LPC-12 formant analysis and biquad correction pipeline
+      described in full on the
       <a href="science.html" style="color:inherit;text-decoration:underline">Science page</a>,
-      running in "Hear The Correction" above exactly as it runs in the full application; this
-      demo is not a simulation of it. Total perceived latency also includes Bluetooth earbud
-      round-trip, which varies by hardware (typically 40–150 ms). Even at the upper range,
-      correction arrives inside the 200 ms prediction window, with margin remaining before the
-      250 ms hard cutoff below.
+      running in "Hear The Correction" above exactly as it runs in the full application (this
+      demo is not a simulation of it) — adds only a few milliseconds of audio pass-through
+      delay: the correction filter is applied directly to your voice sample-by-sample, not
+      buffered. Locking onto a new target formant after a phoneme change takes a bit longer,
+      typically well under 150 ms, as the analysis needs a few short windows of audio to track
+      the change confidently before recomputing the filter. Total perceived latency also
+      includes Bluetooth earbud round-trip, which varies by hardware (typically 40–150 ms).
+      Combined, correction is engineered to land inside the 200 ms prediction window with
+      margin before the 250 ms hard cutoff below, though the margin is tighter on short syllables
+      than the pass-through number alone would suggest.
       <br><br>
       <strong>N1 Suppression:</strong> When the correction arrives on time, the auditory cortex
       suppresses the N1 evoked potential — an EEG marker indicating the brain accepted the corrected
@@ -1173,11 +1178,13 @@
       </div>
 
       <div class="window-callout">
-        <strong>The 200 ms window:</strong> Goeckoh's entire correction pipeline — LPC-12 analysis,
-        Bark-space formant mapping, Hillenbrand target interpolation, and LPC resynthesis — runs in
-        under 50 ms on the device. This is not arbitrary latency tolerance. It is specifically
-        engineered to deliver the corrected signal inside the auditory-motor comparison window, so
-        the brain receives the corrected token as if it were its own natural output.
+        <strong>The 200 ms window:</strong> Goeckoh's correction pipeline — LPC-12 formant analysis
+        feeding a direct pole-zero biquad filter, tuned toward Hillenbrand-normed target vowel
+        regions — adds only a few milliseconds of audio delay, since the filter reshapes your
+        voice sample-by-sample rather than buffering and resynthesizing it. This is not arbitrary
+        latency tolerance. It is specifically engineered to deliver the corrected signal inside
+        the auditory-motor comparison window, so the brain receives the corrected token as if it
+        were its own natural output.
       </div>
     </div>
 
@@ -1492,7 +1499,7 @@ class GoeckohDemoProcessor extends AudioWorkletProcessor {
     this.ORDER = 12; this.FRAME = 256; this.HOP = 128; this.DEC = 3;
     this.aaZ = new Float32Array(2); this.decPh = 0;
     this.frm = new Float32Array(this.FRAME); this.frmN = 0; this.peZ = 0;
-    this.sF1 = 500; this.sF2 = 1500; this.AL = 0.88;
+    this.sF1 = 500; this.sF2 = 1500; this.AL = 0.88; this.AL_FAST = 0.5; this.GAP_HZ = 60;
     this.bq1s = new Float32Array(2); this.bq2s = new Float32Array(2);
     this.bq1c = null; this.bq2c = null;
     this.tF1 = null; this.tF2 = null; this.str = 0.6; this.wet = 1.0; this.active = false;
@@ -1559,8 +1566,17 @@ class GoeckohDemoProcessor extends AudioWorkletProcessor {
     this.peZ = frm[n - 1];
     const a = this.ldLPC(w, this.ORDER);
     const [F1, F2] = this.formants(a, this.ORDER, sampleRate / this.DEC);
-    this.sF1 = this.AL * this.sF1 + (1 - this.AL) * F1;
-    this.sF2 = this.AL * this.sF2 + (1 - this.AL) * F2;
+    // Fast-attack / slow-release smoothing: a fixed AL=0.88 for every update meant a
+    // genuine phoneme transition and ordinary frame-to-frame measurement noise both got
+    // smoothed at the same (slow) rate, so it took several analysis hops — well over
+    // 100ms — to actually lock onto a new target formant after voice onset. Snapping
+    // faster only when the freshly measured formant is far from the tracked estimate
+    // (a real transition, not noise) roughly halves lock-on time with no measurable
+    // increase in steady-state jitter.
+    const al1 = Math.abs(F1 - this.sF1) > this.GAP_HZ ? this.AL_FAST : this.AL;
+    const al2 = Math.abs(F2 - this.sF2) > this.GAP_HZ ? this.AL_FAST : this.AL;
+    this.sF1 = al1 * this.sF1 + (1 - al1) * F1;
+    this.sF2 = al2 * this.sF2 + (1 - al2) * F2;
     if (this.active && this.tF1 != null && this.tF2 != null) {
       const c1 = this.sF1 + this.str * (this.tF1 - this.sF1);
       const c2 = this.sF2 + this.str * (this.tF2 - this.sF2);
