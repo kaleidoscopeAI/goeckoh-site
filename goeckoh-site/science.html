@@ -159,7 +159,7 @@
       <span class="rp-toc-label">Five stages, in order</span>
       <ol>
         <li><a href="#pipeline">The pipeline — what happens between speaking and hearing the result</a></li>
-        <li><a href="#latency-budget">The latency budget — where every millisecond goes, and why it must stay under ~50ms</a></li>
+        <li><a href="#latency-budget">The latency budget — where every millisecond goes, and the two very different numbers that matter</a></li>
         <li><a href="#formant-correction">What formant correction actually changes — and what it never touches</a></li>
         <li><a href="#not-alternatives">Why this isn't DAF, autotune, or synthetic speech</a></li>
         <li><a href="#on-device">Why the entire pipeline runs on your device, not a server</a></li>
@@ -202,12 +202,14 @@
         applying one generic correction to every speaker.
       </p>
       <p>
-        <strong>Stage 4 — Resynthesis.</strong> The frame is regenerated with the corrected
-        formant structure applied, while its pitch, timing, amplitude envelope, and voice
-        quality are carried through unchanged from the original recording. This is the step
-        that keeps the corrected voice sounding like the speaker's own voice rather than a
-        replacement — see "What Formant Correction Actually Changes," below, for exactly where
-        that line is drawn.
+        <strong>Stage 4 — Correction filtering.</strong> Rather than regenerating the waveform
+        from scratch, the correction is applied as a direct filter — reshaping the frequencies
+        the vocal tract already emphasized, sample by sample, as the audio passes through.
+        Pitch, timing, amplitude envelope, and voice quality are carried through unchanged
+        automatically, simply because the filter only reshapes formant structure and never
+        touches anything else in the signal. This is the step that keeps the corrected voice
+        sounding like the speaker's own voice rather than a replacement — see "What Formant
+        Correction Actually Changes," below, for exactly where that line is drawn.
       </p>
       <p>
         <strong>Stage 5 — Playback.</strong> The corrected frame is sent to an output gain
@@ -220,7 +222,7 @@
       </p>
       <div class="rp-goeckoh">
         <strong>Why a dedicated audio thread matters:</strong> if formant analysis and
-        resynthesis ran on the browser's regular JavaScript thread, a moment of page
+        correction filtering ran on the browser's regular JavaScript thread, a moment of page
         rendering, layout, or garbage collection could stall the audio pipeline and produce an
         audible glitch or dropout — worse, an inconsistent delay that would break the timing
         precision the entire correction depends on. Running the pipeline on its own audio
@@ -235,50 +237,50 @@
   <div class="gk-container">
     <span class="rp-tag teal">02 · Timing</span>
     <h2 class="rp-h2">The latency budget: where every millisecond goes</h2>
-    <p class="rp-h2-sub">Why "under 50 milliseconds" isn't a marketing number — it's a hard engineering constraint with no slack in it.</p>
+    <p class="rp-h2-sub">Two different numbers matter here, and conflating them overstates how fast the correction actually locks on.</p>
     <div class="rp-body">
       <p>
         The <a href="research.html#n1-suppression" style="color:var(--gk-primary)">research
         page</a> covers why roughly 200 milliseconds is the outer edge of the window in which
         the brain still treats corrected auditory feedback as information about its own
-        speech. Goeckoh's engineering target isn't to just squeeze under that ceiling — it's
-        to stay under roughly a quarter of it, so that normal, unavoidable variation in device
-        performance never risks pushing a correction outside the window entirely. The table
-        below is a representative breakdown of where that budget goes on typical modern
-        mobile hardware.
+        speech, with a 250ms hard cutoff beyond which the correction is too late to be useful.
+        Two very different things eat into that budget, and it's worth being precise about
+        which is which:
       </p>
       <table class="lat-table">
         <thead><tr><th>Stage</th><th>Typical cost</th></tr></thead>
         <tbody>
           <tr><td>Microphone buffering</td><td>~5–10ms</td></tr>
-          <tr><td>Formant analysis window</td><td>~10–15ms</td></tr>
-          <tr><td>Correction computation</td><td>&lt;2ms</td></tr>
-          <tr><td>Resynthesis</td><td>~5–10ms</td></tr>
+          <tr><td>Correction filtering (audio pass-through)</td><td>&lt;3ms</td></tr>
           <tr><td>Output buffering &amp; device audio latency</td><td>~5–15ms</td></tr>
-          <tr class="lat-total"><td>Total, typical device</td><td>&lt;50ms</td></tr>
+          <tr class="lat-total"><td>Signal path total, typical device</td><td>&lt;30ms</td></tr>
+          <tr><td>Formant-lock time after a phoneme changes</td><td>~50–150ms</td></tr>
         </tbody>
       </table>
       <p>
-        The two largest, least compressible line items are the analysis window (formant
-        estimation needs a minimum slice of audio to work from — too short a window and the
-        estimate becomes unreliable) and device audio buffering, which is set by the
-        operating system and the specific Bluetooth earbuds in use, not by Goeckoh's own code.
-        This is also why the demo and the product both recommend low-latency Bluetooth
-        earbuds specifically: earbuds with heavy internal audio processing of their own can
-        add tens of additional milliseconds entirely outside Goeckoh's control, eating into a
-        budget that has very little room to spare.
+        The audio itself is never held up: correction is applied directly to the signal,
+        sample by sample, as it passes through — there's no buffering step waiting on
+        analysis to finish. What does take real time is the analysis catching up to a
+        <em>new</em> target after the vowel changes: formant estimation needs a short run of
+        audio frames to lock onto the new position confidently, so the correction filter
+        eases toward the target over roughly 50–150ms rather than snapping to it instantly.
+        This is deliberate — reacting to every single noisy frame-to-frame estimate instead
+        of a few consecutive ones would make the filter chase measurement noise instead of
+        real speech. Device audio buffering, set by the operating system and the specific
+        Bluetooth earbuds in use rather than by Goeckoh's own code, is the other place real
+        time goes; heavy on-earbud audio processing can add tens of additional milliseconds
+        entirely outside Goeckoh's control, which is why the demo and product both recommend
+        low-latency Bluetooth hardware.
       </p>
       <div class="rp-goeckoh">
-        <strong>Why this budget is a design constraint, not a feature to tune later:</strong>
-        every architectural decision in the pipeline — analyzing short frames instead of
-        longer, more "accurate" windows; running on a dedicated audio thread; choosing
-        linear-predictive analysis specifically for its computational cheapness over slower,
-        more elaborate spectral modeling techniques — exists because of this budget. A more
-        computationally expensive correction algorithm might produce a marginally cleaner
-        formant estimate, but if it can't run inside this window, it produces a delayed
-        correction that arrives too late to be biologically useful. Speed and accuracy trade
-        off against each other here, and the latency budget is the constraint everything else
-        is designed around.
+        <strong>Being honest about the margin:</strong> in the best case — audio pass-through
+        plus a formant that's already close to its target — total latency is comfortably
+        under 50ms. In the worst realistic case — a large phoneme transition taking the full
+        ~150ms to lock on, stacked with higher-latency Bluetooth hardware at the upper end of
+        its typical 40–150ms round trip — combined latency can approach or exceed the 250ms
+        hard cutoff. That's a real engineering constraint the team is actively working against
+        (see below), not a solved problem, and it's why low-latency earbuds and shorter
+        formant-lock times both matter more than any single "under 50ms" headline number.
       </div>
     </div>
   </div>
@@ -353,7 +355,7 @@
       <table class="compare-table">
         <thead><tr><th>Technology</th><th>What it actually does to the signal</th><th>What it doesn't do</th></tr></thead>
         <tbody>
-          <tr class="gk-row"><td>Goeckoh</td><td>Measures current formant positions, shifts them toward a calibrated target, resynthesizes with pitch/timing/voice quality untouched, delivers in &lt;50ms.</td><td>Does not delay, replace, or alter pitch/rhythm.</td></tr>
+          <tr class="gk-row"><td>Goeckoh</td><td>Measures current formant positions, shifts them toward a calibrated target via a direct real-time filter, pitch/timing/voice quality untouched. Audio pass-through adds under 3ms; locking onto a newly changed target takes roughly 50–150ms.</td><td>Does not delay, replace, or alter pitch/rhythm.</td></tr>
           <tr><td>DAF devices</td><td>Delays the speaker's own unmodified voice by a fixed interval (often 50–200ms) before returning it to the ear.</td><td>Does not analyze or correct any acoustic property — the signal returned is unmodified, just late.</td></tr>
           <tr><td>Pitch correction / "autotune"</td><td>Detects fundamental frequency and snaps it toward the nearest note in a scale.</td><td>Does not touch formant structure — vowel clarity is unaffected either way.</td></tr>
           <tr><td>Synthetic speech / voice cloning</td><td>Generates an entirely new audio signal from a model of a target voice, typically from text or a different reference recording.</td><td>Does not preserve the speaker's own real-time vocal tract output at all — the "voice" is model-generated, not the speaker's own corrected signal.</td></tr>
@@ -393,7 +395,7 @@
       </p>
       <p>
         <strong>The privacy reason.</strong> Because the entire pipeline — capture, analysis,
-        correction, resynthesis, playback — runs inside the browser's local audio processing
+        correction filtering, playback — runs inside the browser's local audio processing
         thread on the user's own device, there is no point in the signal chain where raw voice
         audio needs to be transmitted anywhere. This isn't a privacy policy layered on top of
         a system that could technically upload audio; it's a consequence of an architecture
