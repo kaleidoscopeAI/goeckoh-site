@@ -10,7 +10,8 @@
   "author": "",
   "license": "UNLICENSED",
   "dependencies": {
-    "electron": "^43.2.0"
+    "electron": "^43.2.0",
+    "ws": "^8.21.1"
   },
   "devDependencies": {
     "electron-builder": "^25.1.8"
@@ -18,17 +19,28 @@
   "build": {
     "appId": "com.goeckoh.desktop",
     "productName": "Goeckoh",
-    "files": ["main.js", "preload.js", "activation.html", "app/**/*"],
+    "files": [
+      "main.js",
+      "preload.js",
+      "activation.html",
+      "app/**/*"
+    ],
     "linux": {
-      "target": ["tar.gz"],
+      "target": [
+        "tar.gz"
+      ],
       "category": "Utility"
     },
     "mac": {
-      "target": ["dmg"],
+      "target": [
+        "dmg"
+      ],
       "category": "public.app-category.medical"
     },
     "win": {
-      "target": ["zip"]
+      "target": [
+        "zip"
+      ]
     }
   }
 }
