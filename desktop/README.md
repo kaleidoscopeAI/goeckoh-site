@@ -17,6 +17,21 @@ A real, tested offline shell around the same correction engine that runs at
 - **Real mic permission grant** — Electron denies `getUserMedia` by default;
   without the permission handler in `main.js`, the app would silently fail
   for every user on first use.
+- **Working local progress backend** (`local-backend.js`, port 8000) — the
+  bundled page already has `isLocal` / `localhost:8000` branches for
+  guardian relay and session stats; nothing previously ran anything there.
+  This implements it for real: session metrics (F0, HNR, latency, voiced
+  ratio, correction count) logged locally as they happen and served back
+  via `/session/stats`, plus the ephemeral live-relay endpoints
+  (`/session/new-code`, `/ws/broadcast/:code`, `/ws/monitor/:code`) ported
+  faithfully from `backend/main.py`'s design — same no-storage relay, just
+  running on-device instead of nonexistent. Consistent with the product's
+  stated architecture (`backend/models.py`'s `User` docstring: "no voice
+  data, no session metrics, no PHI... all therapeutic data lives on the
+  user's device") — nothing here is sent anywhere.
+  `/session/aba-progress` honestly returns `not_implemented` rather than
+  fabricating skill-mastery numbers — that needs a real skill-prompt UI
+  that doesn't exist in this build yet, not guessed statistics.
 
 ## Verified, not assumed
 
@@ -33,6 +48,13 @@ Playwright's Electron support, real fake-audio input via Chromium's
 - Auto-start: Quick Start button reaches "✓ Running" with zero clicks.
 - Close-to-tray: after `window.close()`, the process is still alive and the
   window still exists (just hidden) — not destroyed, not quit.
+- Local progress backend: ran a real 6-second session with synthesized
+  voice input, then queried `/session/stats` directly — returned real
+  computed numbers (F0 in the raw log matched the synthesized signal's
+  actual 110Hz pitch exactly), not placeholders. Confirmed the live relay
+  end-to-end (broadcaster message received by a connected monitor through
+  `/ws/broadcast` → `/ws/monitor`). Confirmed `/session/aba-progress`
+  returns an honest `not_implemented` instead of fake data.
 
 ## Known limitations — stated plainly, not glossed over
 
@@ -55,6 +77,20 @@ Playwright's Electron support, real fake-audio input via Chromium's
 - **Google Fonts and the Guardian relay WebSocket both fail gracefully
   offline** (already designed that way in the original page) — cosmetic
   font fallback and no remote monitoring, not a functional break.
+- **The live relay only works when the guardian's device can reach
+  `ws://<patient-device-ip>:8000` directly** — same local network / VPN,
+  same as the original design. This is not a remote-guardian cloud feature
+  and isn't meant to become one without a real, separate conversation about
+  whether any cross-device sync should exist given the product's current
+  "nothing leaves the device" privacy design.
+- **`/session/aba-progress` is genuinely not implemented**, not just
+  incomplete — there is no UI anywhere in this app for prompting a skill
+  attempt and recording success/fail, which is what that data would
+  actually require. Building it means designing that UI first, not just
+  wiring an endpoint.
+- **The local session log grows unbounded** (`sessions/session_log.jsonl`)
+  — fine for MVP verification, worth adding rotation/pruning before this
+  sees real extended daily use.
 
 ## Building
 
