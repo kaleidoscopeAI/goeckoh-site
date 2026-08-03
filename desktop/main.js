@@ -11,6 +11,9 @@ const fs = require('fs');
 const http = require('http');
 const crypto = require('crypto');
 const https = require('https');
+const { startLocalBackend } = require('./local-backend');
+
+let localBackend = null;
 
 let tray = null;
 let powerBlockerId = null;
@@ -172,6 +175,16 @@ async function createWindow() {
       `userData=${app.getPath('userData')} licenseExists=${fs.existsSync(LICENSE_FILE())} argv=${JSON.stringify(process.argv)}\n`);
   }
   const port = await startLocalServer();
+  try {
+    localBackend = await startLocalBackend(app.getPath('userData'));
+  } catch (e) {
+    // Port 8000 already in use (e.g. a real local Python backend already
+    // running there for dev/testing) — session logging just won't be
+    // available this run rather than crashing the whole app over it.
+    if (process.env.GOECKOH_DEBUG_LOG) {
+      fs.appendFileSync(process.env.GOECKOH_DEBUG_LOG, `local backend on :8000 failed to start: ${e.message}\n`);
+    }
+  }
 
   const startHidden = process.argv.includes('--hidden');
   mainWindow = new BrowserWindow({
@@ -230,6 +243,12 @@ async function createWindow() {
       return { ok: true };
     } catch (e) {
       return { ok: false, error: e.body?.detail || e.message };
+    }
+  });
+
+  ipcMain.on('log-metric', (_evt, metric) => {
+    if (localBackend) {
+      try { localBackend.appendMetric(metric); } catch (e) {}
     }
   });
 

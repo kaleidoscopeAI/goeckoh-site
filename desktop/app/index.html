@@ -1624,6 +1624,20 @@ const PROFILES = {
 
                     if (this.state === 'echoing') {
                         this._broadcastMetrics(f0, this.liveF1 || 0, this.liveF2 || 0, hnr, avgLat);
+                        // Local-only progress logging (desktop app only — window.goeckohDesktop
+                        // doesn't exist in a plain browser tab, so this is a no-op there).
+                        // Throttled to ~1/s; the metrics loop itself runs at 20Hz and logging
+                        // every sample would be both unnecessary and a lot of disk I/O for no
+                        // real benefit to session-level stats.
+                        if (window.goeckohDesktop && (!this._lastMetricLog || performance.now() - this._lastMetricLog > 1000)) {
+                            this._lastMetricLog = performance.now();
+                            window.goeckohDesktop.logMetric({
+                                sessionId: this.sessionStart,
+                                f0, hnr, avgLat,
+                                isVoiced: !!isVoiced,
+                                correctionCount: this.correctionCount,
+                            });
+                        }
                     }
 
                     setTimeout(loop, 50);  // 20 Hz
