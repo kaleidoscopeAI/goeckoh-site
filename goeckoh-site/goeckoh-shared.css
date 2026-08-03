@@ -5,35 +5,40 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500&display=swap');
 
 :root {
-  /* Surfaces */
-  --gk-bg:        #05080f;
-  --gk-bg-card:   #0a1020;
-  --gk-bg-raised: #0f1830;
-  --gk-bg-input:  #131e34;
+  /* Surfaces — clean, neutral, light. This used to be a near-black "cyber"
+     palette that every tool page inherited by default unless it happened
+     to define its own local override (as index.html/demo.html/science.html
+     did). Making the light palette the actual shared default instead of a
+     per-page opt-in is what makes the product consistent instead of some
+     pages being clean and others neon-on-black by accident. */
+  --gk-bg:        #F7F5F0;
+  --gk-bg-card:   #FFFFFF;
+  --gk-bg-raised: #EDF1F7;
+  --gk-bg-input:  #EEF0F5;
 
   /* Brand — calm blue + soft teal. No neon. */
-  --gk-primary: #4d7cfe;
-  --gk-teal:    #14c591;
-  --gk-amber:   #f0a828;
-  --gk-red:     #f05060;
+  --gk-primary: #2558D9;
+  --gk-teal:    #2A8C7A;
+  --gk-amber:   #C97C1A;
+  --gk-red:     #C94040;
 
   /* Backward-compat aliases used in tool pages */
-  --gk-green:  #14c591;
-  --gk-blue:   #4d7cfe;
-  --gk-violet: #a78bfa;
+  --gk-green:  #2A8C7A;
+  --gk-blue:   #2558D9;
+  --gk-violet: #6B5FD8;
 
   /* Text */
-  --gk-text:   #eef2ff;
-  --gk-text-2: #8b9ec0;
-  --gk-muted:  #48597a;
+  --gk-text:   #1A2F4B;
+  --gk-text-2: #4B6280;
+  --gk-muted:  #8098B5;
 
   /* Borders */
-  --gk-border:   rgba(255,255,255,0.07);
-  --gk-border-2: rgba(255,255,255,0.13);
+  --gk-border:   rgba(26,47,75,0.10);
+  --gk-border-2: rgba(26,47,75,0.17);
 
   /* Shadow */
-  --gk-shadow:    0 12px 40px rgba(0,0,0,0.55);
-  --gk-shadow-sm: 0 2px 10px rgba(0,0,0,0.35);
+  --gk-shadow:    0 8px 30px rgba(0,0,0,0.08);
+  --gk-shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
 
   /* Shape */
   --gk-radius:    14px;
@@ -51,7 +56,7 @@
   top: 0; left: 0; right: 0;
   height: var(--gk-nav-h);
   z-index: 9999;
-  background: rgba(5,8,15,0.94);
+  background: rgba(247,245,240,0.94);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--gk-border);
@@ -112,11 +117,11 @@
   transition: color 0.15s, background 0.15s;
   white-space: nowrap;
 }
-.gk-nav-link:hover  { color: var(--gk-text); background: rgba(255,255,255,0.05); }
-.gk-nav-link.active { color: var(--gk-teal); background: rgba(20,197,145,0.08); }
+.gk-nav-link:hover  { color: var(--gk-text); background: rgba(26,47,75,0.05); }
+.gk-nav-link.active { color: var(--gk-teal); background: rgba(42,140,122,0.1); }
 
 .gk-nav-cta {
-  color: #05080f !important;
+  color: #fff !important;
   background: var(--gk-primary) !important;
   font-family: var(--gk-font);
   font-size: 0.8rem;
@@ -193,11 +198,11 @@
   line-height: 1;
 }
 .gk-btn-primary  { background: var(--gk-primary); color: #fff; }
-.gk-btn-primary:hover  { opacity: 0.88; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(77,124,254,0.35); }
-.gk-btn-teal     { background: var(--gk-teal); color: #05080f; }
+.gk-btn-primary:hover  { opacity: 0.88; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(37,88,217,0.35); }
+.gk-btn-teal     { background: var(--gk-teal); color: #fff; }
 .gk-btn-teal:hover     { opacity: 0.88; transform: translateY(-1px); }
 .gk-btn-secondary { background: transparent; color: var(--gk-text); border: 1px solid var(--gk-border-2); }
-.gk-btn-secondary:hover { background: rgba(255,255,255,0.05); }
+.gk-btn-secondary:hover { background: rgba(26,47,75,0.05); }
 .gk-btn-sm { padding: 0.48rem 1rem; font-size: 0.8rem; }
 
 /* ── Badges ─────────────────────────────────────────────────────── */
