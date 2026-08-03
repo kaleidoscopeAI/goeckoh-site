@@ -9,18 +9,24 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Fira+Code:wght@400;500&display=swap');
         
         :root {
-            --bg-dark: #0a0e1a;
-            --bg-card: #131829;
-            --bg-elevated: #1a2033;
-            --accent-primary: #00ff9d;
-            --accent-secondary: #00c3ff;
-            --accent-warning: #ffaa00;
-            --accent-error: #ff4466;
-            --text-primary: #ffffff;
-            --text-secondary: #a0aec0;
-            --text-muted: #718096;
-            --border: rgba(255, 255, 255, 0.1);
-            --shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            /* Clean, neutral light palette — was a near-black "cyber" theme
+               with neon green/cyan/amber accents, inconsistent with the
+               rest of the product and inappropriate for a tool used by
+               children with sensory sensitivities. Variable names kept
+               identical so every var(--...) reference below picks up the
+               new values automatically. */
+            --bg-dark: #F7F5F0;
+            --bg-card: #FFFFFF;
+            --bg-elevated: #EDF1F7;
+            --accent-primary: #2A8C7A;
+            --accent-secondary: #2558D9;
+            --accent-warning: #C97C1A;
+            --accent-error: #C94040;
+            --text-primary: #1A2F4B;
+            --text-secondary: #4B6280;
+            --text-muted: #8098B5;
+            --border: rgba(26, 47, 75, 0.10);
+            --shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
         }
         
         * {
@@ -31,7 +37,7 @@
         
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, var(--bg-dark) 0%, #0f1420 100%);
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #F0EDE8 100%);
             color: var(--text-primary);
             min-height: 100vh;
             overflow-x: hidden;
@@ -230,7 +236,7 @@
         }
         
         .btn-danger {
-            background: linear-gradient(135deg, #ff4466, #ff6b88);
+            background: linear-gradient(135deg, #C94040, #E07A5F);
             color: white;
         }
         
@@ -596,8 +602,8 @@
                 </div>
                 <div style="font-size:0.68rem;color:var(--text-secondary);line-height:1.55">
                     <span style="font-size:1rem">💻</span><br>
-                    <strong style="color:var(--text-primary);color:#00c3ff">Guardian monitors separately</strong><br>
-                    A caregiver or therapist can watch your session from their own device via the <a href="goeckoh_dashboard.html" style="color:#00c3ff;text-decoration:none">Dashboard</a>.
+                    <strong style="color:var(--text-primary);color:#2558D9">Guardian monitors separately</strong><br>
+                    A caregiver or therapist can watch your session from their own device via the <a href="goeckoh_dashboard.html" style="color:#2558D9;text-decoration:none">Dashboard</a>.
                 </div>
             </div>
         </div>
@@ -622,10 +628,10 @@
             </div>
             <div class="status-info" id="guardianCodeBar" style="display:none">
                 <div class="status-item">
-                    <span class="status-label">Guardian Code: <strong id="guardianCodeText" style="color:#00c3ff;letter-spacing:0.15em;font-size:1.05em">------</strong></span>
+                    <span class="status-label">Guardian Code: <strong id="guardianCodeText" style="color:#2558D9;letter-spacing:0.15em;font-size:1.05em">------</strong></span>
                 </div>
                 <div class="status-item" style="font-size:0.75rem;color:var(--text-secondary)">
-                    Share with caregiver → <a href="goeckoh_dashboard.html" style="color:#00c3ff;text-decoration:none">Dashboard</a>
+                    Share with caregiver → <a href="goeckoh_dashboard.html" style="color:#2558D9;text-decoration:none">Dashboard</a>
                 </div>
             </div>
         </div>
@@ -1643,7 +1649,7 @@ const PROFILES = {
                     this.canvasCtx.fillStyle = 'rgba(10,14,26,0.3)';
                     this.canvasCtx.fillRect(0, 0, W, H);
                     this.canvasCtx.lineWidth   = 2;
-                    this.canvasCtx.strokeStyle = '#00ff9d';
+                    this.canvasCtx.strokeStyle = '#2A8C7A';
                     this.canvasCtx.beginPath();
 
                     const sw = W / this.dispLen;
@@ -1660,7 +1666,7 @@ const PROFILES = {
                         const sr = this.audioContext.sampleRate;
                         this.canvasCtx.globalAlpha  = 0.45;
                         this.canvasCtx.lineWidth    = 1;
-                        [[this.liveF1,'#00c3ff'],[this.liveF2,'#ffaa00']].forEach(([f, col]) => {
+                        [[this.liveF1,'#2558D9'],[this.liveF2,'#C97C1A']].forEach(([f, col]) => {
                             const xf = (f / (sr/2)) * W;
                             this.canvasCtx.strokeStyle = col;
                             this.canvasCtx.beginPath();
