@@ -197,6 +197,27 @@
     }
     .hstat-val { font-size:1.7rem; font-weight:800; color:var(--gk-primary); line-height:1; margin-bottom:0.3rem; }
     .hstat-lbl { font-size:0.72rem; color:var(--gk-muted); font-weight:500; }
+
+    /* ── HERO EXPLORE LINKS ────────────────────────────────────────
+       Always visible, no tap required — on mobile the main nav collapses
+       into a hamburger and the only other way to find these pages used to
+       be the small footer at the very bottom of the page. */
+    .hero-explore { margin-top:1.75rem; padding-top:1.5rem; border-top:1px solid var(--gk-border); }
+    .hero-explore-label {
+      display:block; font-size:0.65rem; font-weight:700; letter-spacing:0.12em;
+      text-transform:uppercase; color:var(--gk-muted); margin-bottom:0.7rem;
+    }
+    .hero-explore-links { display:flex; flex-wrap:wrap; gap:0.55rem; }
+    .hero-explore-links a {
+      font-size:0.8rem; font-weight:600; color:var(--gk-text-2);
+      text-decoration:none; padding:0.4rem 0.9rem; border-radius:999px;
+      background:var(--gk-bg-raised); border:1px solid var(--gk-border);
+      transition:color 0.15s, border-color 0.15s, background 0.15s;
+      white-space:nowrap;
+    }
+    .hero-explore-links a:hover {
+      color:var(--gk-primary); border-color:rgba(37,88,217,0.3); background:#fff;
+    }
     .hero-visual { display:flex; flex-direction:column; align-items:center; gap:1.5rem; }
     .hero-caption {
       font-size:0.72rem; color:var(--gk-muted); text-align:center; line-height:1.75;
@@ -590,6 +611,17 @@
         <div>
           <div class="hstat-val">$20</div>
           <div class="hstat-lbl">Per person / month</div>
+        </div>
+      </div>
+      <div class="hero-explore">
+        <span class="hero-explore-label">Explore the site</span>
+        <div class="hero-explore-links">
+          <a href="science.html">The Science</a>
+          <a href="research.html">Research</a>
+          <a href="families.html">For Families</a>
+          <a href="clinicians.html">For Clinicians</a>
+          <a href="pricing.html">Pricing</a>
+          <a href="demo.html">Try the Demo</a>
         </div>
       </div>
     </div>
