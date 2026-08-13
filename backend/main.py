@@ -165,9 +165,15 @@ def _get_or_create_license_for_subscription(
     customer_email: str,
     plan_name: str,
 ) -> License:
-    lic = db.query(License).filter(License.stripe_subscription_id == subscription_id).first()
-    if lic:
-        return lic
+    # Only match an existing license when there's a real subscription ID to
+    # match on — querying with subscription_id=None would translate to
+    # `stripe_subscription_id IS NULL`, which matches *any* license without
+    # a Stripe subscription behind it (e.g. every promo-redeemed license),
+    # silently handing an unrelated customer's license key to a new buyer.
+    if subscription_id:
+        lic = db.query(License).filter(License.stripe_subscription_id == subscription_id).first()
+        if lic:
+            return lic
 
     tier = PlanTier(plan_name) if plan_name in PlanTier._value2member_map_ else PlanTier.STARTER
     lic = License(
@@ -1111,63 +1117,34 @@ async def ws_monitor(websocket: WebSocket, code: str):
 # ---------------------------------------------------------------------------
 # Session analytics endpoint
 # ---------------------------------------------------------------------------
-# Default log path matches SessionLogger default in realtime_loop.py.
-# Override via SESSION_LOG_PATH environment variable.
-_SESSION_LOG_DEFAULT = Path.home() / ".goeckoh" / "sessions" / "session_log.jsonl"
+# By design, this cloud backend never receives raw session/voice metrics —
+# no page or app POSTs them here, matching the product's stated privacy
+# architecture ("All therapeutic data lives ... on the user's device",
+# models.py's User docstring). Historical analytics (Cohen's d, VSA,
+# formant scatter, ABA mastery) are computed entirely on-device by the
+# desktop app's local companion backend (desktop/local-backend.js), which
+# runs on the same machine as the therapy session and never sends this data
+# off the device either. These two endpoints exist so a browser-only
+# guardian dashboard (no desktop app installed) gets an honest answer
+# instead of a silent, misleading "0 events" — not a promise of cloud-side
+# history that was never built and never should be, given that promise.
 
 @app.get("/session/aba-progress")
-async def session_aba_progress(request: Request,
-                               aba_path: Optional[str] = None):
-    """Return ABA skill mastery report as JSON.
-
-    Reads ~/.goeckoh/aba_progress.json written by AbaTracker in realtime_loop.
-    Returns per-skill attempts, successes, mastery %, level (1/2/3).
-    """
-    _aba_default = Path.home() / ".goeckoh" / "aba_progress.json"
-    path = Path(aba_path) if aba_path else Path(
-        os.getenv("ABA_PROGRESS_PATH", str(_aba_default)))
-
-    if not path.exists():
-        return JSONResponse(content={
-            "status": "no_data",
-            "skills": {},
-            "session": {}
-        })
-
-    try:
-        data = json.loads(path.read_text())
-        data["status"] = "ok"
-        return JSONResponse(content=data)
-    except Exception as exc:
-        log.warning("ABA progress read failed: %s", exc)
-        return JSONResponse(content={"status": "error", "detail": str(exc)})
+async def session_aba_progress(request: Request):
+    return JSONResponse(content={
+        "status": "on_device_only",
+        "detail": "ABA skill-mastery tracking runs on-device and isn't sent to this server. Install the Goeckoh desktop app to see it here.",
+        "skills": {},
+    })
 
 
 @app.get("/session/stats")
-async def session_stats(request: Request,
-                        log_path: Optional[str] = None):
-    """Return clinical session analytics as JSON (feeds guardian dashboard).
-
-    Reads the JSONL session log written by realtime_loop.SessionLogger.
-    Computes: total events, VSA (current vs baseline week), spontaneity %,
-    Cohen's d effect size, median latency, formant scatter for last 200 events.
-    Returns graceful empty payload when no data exists.
-    """
-    path = Path(log_path) if log_path else Path(
-        os.getenv("SESSION_LOG_PATH", str(_SESSION_LOG_DEFAULT)))
-
-    try:
-        import sys as _sys
-        _science_path = Path(__file__).parent.parent.parent / "goeckoh-speech-therapy" / "goeckoh"
-        if str(_science_path) not in _sys.path:
-            _sys.path.insert(0, str(_science_path))
-        from science import compute_stats_json
-        stats = compute_stats_json(log_path=str(path))
-    except Exception as exc:
-        log.warning("science.py stats failed: %s", exc)
-        stats = {"status": "error", "detail": str(exc), "total_events": 0}
-
-    return JSONResponse(content=stats)
+async def session_stats(request: Request):
+    return JSONResponse(content={
+        "status": "on_device_only",
+        "detail": "Historical session analytics (trends, formant scatter) run on-device and aren't sent to this server. Install the Goeckoh desktop app to see them here.",
+        "total_events": 0,
+    })
 
 
 # ---------------------------------------------------------------------------

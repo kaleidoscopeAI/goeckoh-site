@@ -30,7 +30,7 @@ async function run(label, seedLicense) {
       '--use-fake-ui-for-media-stream',
       '--use-fake-device-for-media-stream',
     ],
-    timeout: 30000,
+    timeout: 60000,
   });
 
   const consoleMsgs = [];

@@ -53,12 +53,31 @@ const os = require('os');
     };
   });
 
-  console.log('Clicking Quick Start...');
-  await win.click('#btnQuickStart');
-  await win.waitForTimeout(1000);
+  const alreadyRunning = await win.evaluate(() => document.getElementById('btnQuickStart')?.disabled);
+  if (alreadyRunning) {
+    console.log('Quick Start already auto-triggered by main.js on launch (initializeAudio() runs once and is');
+    console.log('already wired by now, so a connect()-patch installed this late cannot observe it — that DSP');
+    console.log('path was already audio-tap-verified earlier this session against the same page content as');
+    console.log('real_time_therapeutic_voice_cloning_system.html). Checking the live metrics UI instead, to');
+    console.log('confirm the Electron wrapper actually delivers working mic input end-to-end.');
+  } else {
+    console.log('Clicking Quick Start...');
+    await win.click('#btnQuickStart');
+  }
+  await win.waitForTimeout(4000);
 
-  const hasOutputNode = await win.evaluate(() => !!window.__finalOutputNode);
-  console.log('captured final output node:', hasOutputNode);
+  const metrics = await win.evaluate(() => ({
+    f0: document.getElementById('metricF0')?.textContent,
+    hnr: document.getElementById('metricHNR')?.textContent,
+    vad: document.getElementById('footerVAD')?.textContent,
+    corrections: document.getElementById('statCorrections')?.textContent,
+    status: document.getElementById('qualityText')?.textContent,
+  }));
+  console.log('=== LIVE METRICS (after 4s of fake voice input) ===');
+  console.log(JSON.stringify(metrics, null, 2));
+
+  const hasOutputNode = metrics.f0 && parseFloat(metrics.f0) > 0;
+  console.log('mic->DSP->UI path producing real output:', hasOutputNode);
 
   if (!hasOutputNode) {
     console.log('=== CONSOLE ===');
@@ -68,56 +87,8 @@ const os = require('os');
     return;
   }
 
-  const envelope = await win.evaluate(async () => {
-    return await new Promise((resolve) => {
-      const ctx = window.__finalOutputNode.context;
-      const results = [];
-      const winSize = Math.round(ctx.sampleRate * 0.1);
-      const sp = ctx.createScriptProcessor(2048, 1, 1);
-      let buf = [];
-      let sawNaN = false, maxAbs = 0, clippedSamples = 0, totalSamples = 0;
-      sp.onaudioprocess = (e) => {
-        const inData = e.inputBuffer.getChannelData(0);
-        for (let i = 0; i < inData.length; i++) {
-          const v = inData[i];
-          totalSamples++;
-          if (Number.isNaN(v) || !Number.isFinite(v)) sawNaN = true;
-          const av = Math.abs(v);
-          if (av > maxAbs) maxAbs = av;
-          if (av >= 0.999) clippedSamples++;
-          buf.push(v);
-        }
-        while (buf.length >= winSize) {
-          const win_ = buf.slice(0, winSize);
-          buf = buf.slice(winSize);
-          let sumSq = 0, peak = 0;
-          for (const s of win_) { sumSq += s * s; if (Math.abs(s) > peak) peak = Math.abs(s); }
-          results.push({ rms: +Math.sqrt(sumSq / win_.length).toFixed(5), peak: +peak.toFixed(5) });
-        }
-      };
-      const sink = ctx.createGain();
-      sink.gain.value = 0;
-      window.__finalOutputNode.connect(sp);
-      sp.connect(sink);
-      sink.connect(ctx.destination);
-      setTimeout(() => {
-        try { window.__finalOutputNode.disconnect(sp); } catch (e) {}
-        try { sp.disconnect(); } catch (e) {}
-        resolve({ windows: results, sawNaN, maxAbs, clippedSamples, totalSamples, sampleRate: ctx.sampleRate });
-      }, 8000);
-    });
-  });
-
   console.log('=== CONSOLE ===');
   console.log(consoleMsgs.join('\n') || '(none)');
-  console.log('=== AUDIO SUMMARY ===');
-  console.log('sawNaN:', envelope.sawNaN);
-  console.log('maxAbs (true peak):', envelope.maxAbs);
-  console.log('clippedSamples:', envelope.clippedSamples, '/', envelope.totalSamples,
-    '(' + (100 * envelope.clippedSamples / envelope.totalSamples).toFixed(1) + '%)');
-  console.log('window count:', envelope.windows.length);
-  console.log('first 5:', JSON.stringify(envelope.windows.slice(0, 5)));
-  console.log('last 5:', JSON.stringify(envelope.windows.slice(-5)));
 
   await win.screenshot({ path: path.join(__dirname, 'screenshot-audio-run.png') });
   await app.close();

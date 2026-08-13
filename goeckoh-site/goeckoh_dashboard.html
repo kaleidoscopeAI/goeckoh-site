@@ -433,6 +433,18 @@
 
                 function applyStats(s) {
                     const el = id => document.getElementById(id);
+                    if (s.status === 'on_device_only') {
+                        el('statsDays').textContent  = '—';
+                        el('statsPhase').textContent = 'On-device only';
+                        el('statEvents').textContent = '—';
+                        el('statSpont').textContent  = '—';
+                        el('statVsaNow').textContent = '—';
+                        el('statVsaBase').textContent = '—';
+                        el('statCohens').textContent = '—';
+                        el('statLat').textContent    = '—';
+                        el('statsNote').textContent  = s.detail || 'Historical analytics run on-device only.';
+                        return;
+                    }
                     el('statsDays').textContent  = s.days_recorded ?? '—';
                     el('statsPhase').textContent = s.phase ?? '—';
                     el('statEvents').textContent = s.total_events ?? '—';
@@ -472,7 +484,12 @@
 
                 function renderAba(data) {
                     const grid = document.getElementById('abaGrid');
-                    if (!grid || data.status === 'no_data' || !data.skills) return;
+                    if (!grid) return;
+                    if (data.status === 'on_device_only') {
+                        grid.innerHTML = `<div class="glass-panel p-3" style="color:#94a3b8;font-size:0.75rem;text-align:center">${data.detail || 'ABA progress tracking runs on-device only.'}</div>`;
+                        return;
+                    }
+                    if (data.status === 'no_data' || !data.skills) return;
                     const cards = [];
                     for (const [cat, skills] of Object.entries(data.skills)) {
                         for (const [sk, p] of Object.entries(skills)) {
